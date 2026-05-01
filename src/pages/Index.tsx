@@ -11,6 +11,7 @@ import { Partners } from "@/components/sections/Partners";
 import { InsightsTeaser } from "@/components/sections/InsightsTeaser";
 import { FAQs } from "@/components/sections/FAQs";
 import { Contact } from "@/components/sections/Contact";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -27,16 +28,36 @@ const Index = () => {
       <Nav />
       <main>
         <Hero />
-        <About />
-        <Dubai />
-        <Batumi />
-        <Participate />
-        <HowItWorks />
-        <Team />
-        <Partners />
-        <InsightsTeaser />
-        <FAQs />
-        <Contact />
+        <ScrollReveal>
+          <About />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Dubai />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Batumi />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Participate />
+        </ScrollReveal>
+        <ScrollReveal>
+          <HowItWorks />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Team />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Partners />
+        </ScrollReveal>
+        <ScrollReveal>
+          <InsightsTeaser />
+        </ScrollReveal>
+        <ScrollReveal>
+          <FAQs />
+        </ScrollReveal>
+        <ScrollReveal>
+          <Contact />
+        </ScrollReveal>
       </main>
       <Footer />
     </>

@@ -6,18 +6,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
 import { Modals } from "@/components/Modals";
-import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import Index from "./pages/Index.tsx";
 import Insights from "./pages/Insights.tsx";
 import Article from "./pages/Article.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
-
-function ScrollRevealController() {
-  useScrollReveal();
-  return null;
-}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -33,7 +27,6 @@ const App = () => (
               <Route path="/insights/:slug" element={<Article />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-            <ScrollRevealController />
             <Modals />
           </BrowserRouter>
         </TooltipProvider>

@@ -1,13 +1,13 @@
 import { team } from "@/data/site";
 import { useUI } from "../ui-state";
-import benjamin from "@/assets/team-benjamin.jpg";
-import owais from "@/assets/team-owais.jpg";
-import walter from "@/assets/team-walter.jpg";
+import { motion } from "framer-motion";
+import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
+import { aixcoLiveImages } from "@/lib/aixco-live-assets";
 
 const imageMap: Record<string, string> = {
-  "team-benjamin": benjamin,
-  "team-owais": owais,
-  "team-walter": walter,
+  "team-benjamin": aixcoLiveImages.teamBenjamin,
+  "team-owais": aixcoLiveImages.teamOwais,
+  "team-walter": aixcoLiveImages.teamWalter,
 };
 
 export function Team() {
@@ -27,10 +27,12 @@ export function Team() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {team.map((m) => (
-            <button
+            <motion.button
               key={m.name}
               onClick={() => openTeam(m)}
               className="scroll-reveal mac-card group overflow-hidden text-left"
+              whileHover={premiumSurfaceHover}
+              whileTap={premiumPress}
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-muted">
                 <img
@@ -46,7 +48,7 @@ export function Team() {
                 <p className="font-display text-2xl">{m.name}</p>
                 <p className="text-sm text-primary mt-1">{m.role}</p>
               </div>
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>

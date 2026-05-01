@@ -2,6 +2,8 @@ import { useState } from "react";
 import { z } from "zod";
 import { Mail, MapPin, Check, Loader2 } from "lucide-react";
 import { company } from "@/data/site";
+import { motion } from "framer-motion";
+import { premiumPress } from "@/lib/motion";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(100),
@@ -97,9 +99,15 @@ export function Contact() {
                 <textarea id="message" name="message" rows={5} className="form-control mt-1.5 resize-none" />
                 {errors.message && <p className="mt-1 text-xs text-destructive">{errors.message}</p>}
               </div>
-              <button type="submit" disabled={state === "submitting"} className="btn-gold justify-self-start">
+              <motion.button
+                type="submit"
+                disabled={state === "submitting"}
+                className="btn-gold justify-self-start"
+                whileHover={{ y: -2, scale: 1.012 }}
+                whileTap={premiumPress}
+              >
                 {state === "submitting" ? (<><Loader2 className="h-4 w-4 animate-spin" /> Sending…</>) : "Send message"}
-              </button>
+              </motion.button>
               <p className="text-[11px] text-muted-foreground">We never sell personal data. By submitting you accept our Privacy Policy.</p>
             </form>
           )}
