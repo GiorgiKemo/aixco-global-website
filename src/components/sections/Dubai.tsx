@@ -1,11 +1,13 @@
 import { dubaiFunds } from "@/data/site";
-import edenHouse from "@/assets/dubai-eden-house.jpg";
-import healthcare from "@/assets/dubai-healthcare.jpg";
 import { ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { CountUpText } from "@/components/CountUpText";
+import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
+import { aixcoLiveImages } from "@/lib/aixco-live-assets";
 
 const imageMap: Record<string, string> = {
-  "dubai-eden": edenHouse,
-  "dubai-healthcare": healthcare,
+  "dubai-eden": aixcoLiveImages.dubaiEdenHouse,
+  "dubai-healthcare": aixcoLiveImages.dubaiHealthcare,
 };
 
 export function Dubai() {
@@ -27,7 +29,12 @@ export function Dubai() {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {dubaiFunds.map((f, idx) => (
-            <article key={f.id} className="scroll-reveal mac-card group relative overflow-hidden">
+            <motion.article
+              key={f.id}
+              className="scroll-reveal mac-card group relative overflow-hidden"
+              whileHover={premiumSurfaceHover}
+              whileTap={premiumPress}
+            >
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
                   src={imageMap[f.image]}
@@ -49,18 +56,22 @@ export function Dubai() {
                 <div className="mt-6 grid grid-cols-2 gap-4 border-t border-border/60 pt-5">
                   <div>
                     <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Target return</p>
-                    <p className="font-display text-xl text-gold mt-1">{f.targetReturn}</p>
+                    <p className="font-display text-xl text-gold mt-1">
+                      <CountUpText value={f.targetReturn} />
+                    </p>
                   </div>
                   <div>
                     <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Horizon</p>
-                    <p className="font-display text-xl mt-1">{f.horizon}</p>
+                    <p className="font-display text-xl mt-1">
+                      <CountUpText value={f.horizon} />
+                    </p>
                   </div>
                 </div>
                 <a href="#contact" className="mt-6 inline-flex items-center gap-2 text-sm text-primary link-underline">
                   Request the prospectus <ArrowUpRight className="h-4 w-4" />
                 </a>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>

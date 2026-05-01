@@ -1,6 +1,8 @@
 import { journeys } from "@/data/site";
 import { useUI } from "../ui-state";
 import { ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 
 export function HowItWorks() {
   const { openJourney } = useUI();
@@ -14,10 +16,12 @@ export function HowItWorks() {
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {journeys.map((j, i) => (
-            <button
+            <motion.button
               key={j.role}
               onClick={() => openJourney(j)}
               className="scroll-reveal mac-card group flex min-h-[260px] flex-col justify-between p-7 text-left"
+              whileHover={premiumSurfaceHover}
+              whileTap={premiumPress}
             >
               <div>
                 <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Journey 0{i + 1}</p>
@@ -28,7 +32,7 @@ export function HowItWorks() {
                 <span className="text-xs text-primary uppercase tracking-widest">View 6 steps</span>
                 <ArrowUpRight className="h-4 w-4 text-primary transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </div>
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>

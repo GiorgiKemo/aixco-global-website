@@ -2,6 +2,13 @@ import { useEffect } from "react";
 import { X } from "lucide-react";
 import { useUI } from "./ui-state";
 import { company } from "@/data/site";
+import { aixcoLiveImages } from "@/lib/aixco-live-assets";
+
+const teamImageMap: Record<string, string> = {
+  "team-benjamin": aixcoLiveImages.teamBenjamin,
+  "team-owais": aixcoLiveImages.teamOwais,
+  "team-walter": aixcoLiveImages.teamWalter,
+};
 
 export function Modals() {
   const { modal, modalData, close } = useUI();
@@ -135,7 +142,7 @@ function JourneyDetail({ data }: { data: { role: string; summary: string; steps:
 function TeamDetail({ data }: { data: { name: string; role: string; bio: string; image: string } }) {
   return (
     <div className="grid sm:grid-cols-[180px_1fr] gap-6">
-      <img src={`/src/assets/${data.image}.jpg`} alt={data.name} className="w-full aspect-[4/5] object-cover rounded-lg grayscale" loading="lazy" />
+      <img src={teamImageMap[data.image]} alt={data.name} className="w-full aspect-[4/5] object-cover rounded-lg grayscale" loading="lazy" />
       <div>
         <p className="eyebrow mb-3">Leadership</p>
         <h3 className="heading-section mb-1">{data.name}</h3>
