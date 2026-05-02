@@ -1,4 +1,12 @@
-const liveImageBase = "/aixco-global-op2/images";
+const withBaseUrl = (path: string) => {
+  const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const normalizedPath = path.replace(/^\//, "");
+  return `${baseUrl}/${normalizedPath}`;
+};
+
+export const aixcoLivePath = (path: string) => withBaseUrl(`aixco-global-op2/${path}`);
+
+const liveImageBase = aixcoLivePath("images");
 
 export const aixcoLiveImages = {
   aboutArchitecture: `${liveImageBase}/batumip.jpg`,
