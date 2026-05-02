@@ -1,45 +1,46 @@
-import { Link } from "react-router-dom";
-import { articles } from "@/data/articles";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { CountUpText } from "@/components/CountUpText";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
+import { useI18n } from "@/i18n/I18nProvider";
 
-const MotionLink = motion.create(Link);
+const articleLinks = [
+  { title: "7% Annual Property Growth", href: "/aixco-global-op2/annual-property-growth-batumi.html" },
+  { title: "Rise of the Black Sea Corridor", href: "/aixco-global-op2/black-sea-corridor-batumi-report.html" },
+  { title: "From Volatility to Opportunity", href: "/aixco-global-op2/from-volatility-to-opportunity-batumi.html" },
+  { title: "40% Down Payment Guide", href: "/aixco-global-op2/batumi-property-40-percent-down-v2.html" },
+  { title: "Short-Term Rentals in Batumi", href: "/aixco-global-op2/short-term-rentals-batumi-full.html" },
+  { title: "$50K Gateway Property", href: "/aixco-global-op2/50k-gateway-european-coastal-property.html" },
+  { title: "Tourism-Led Real Estate", href: "/aixco-global-op2/tourism-led-real-estate-batumi.html" },
+  { title: "8–12% Rental Yield", href: "/aixco-global-op2/high-rental-yield-coastal-real-estate.html" },
+  { title: "Secondary Coastal Cities", href: "/aixco-global-op2/why-capital-secondary-coastal-cities.html" },
+  { title: "Batumi Rental Market", href: "/aixco-global-op2/batumi-short-term-rentals.html" },
+];
 
 export function InsightsTeaser() {
-  const featured = articles.slice(0, 3);
+  const { tx } = useI18n();
+
   return (
     <section className="relative py-28 md:py-36 bg-surface/40">
       <div className="container-x">
-        <div className="scroll-reveal flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-          <div>
-            <p className="eyebrow">Insights</p>
-            <h2 className="heading-section mt-5 max-w-2xl">Research. Long-form. <span className="text-gold italic">Honest</span>.</h2>
-          </div>
-          <MotionLink to="/insights" className="btn-ghost-gold" whileHover={{ y: -2, scale: 1.01 }} whileTap={premiumPress}>
-            View all insights
-          </MotionLink>
+        <div className="scroll-reveal mb-14 max-w-3xl">
+          <p className="eyebrow">{tx("Batumi")}</p>
+          <h2 className="heading-section mt-5">{tx("Batumi")}</h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {featured.map((a) => (
-            <MotionLink
-              key={a.slug}
-              to={`/insights/${a.slug}`}
-              className="scroll-reveal mac-card group flex flex-col p-7"
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          {articleLinks.map((article, index) => (
+            <motion.a
+              key={article.href}
+              href={article.href}
+              className="scroll-reveal mac-card group flex min-h-[150px] flex-col justify-between p-6"
               whileHover={premiumSurfaceHover}
               whileTap={premiumPress}
             >
-              <div className={`mb-6 aspect-[4/3] rounded-lg bg-gradient-to-br ${a.hero} relative overflow-hidden`}>
-                <span className="absolute top-3 left-3 rounded-full bg-background/80 px-2.5 py-1 text-[10px] uppercase tracking-widest shadow-soft backdrop-blur">{a.tag}</span>
-                <span className="absolute bottom-3 right-3 font-display text-5xl text-primary/40">
-                  <CountUpText value={`${a.readTime}'`} />
-                </span>
-              </div>
-              <h3 className="font-display text-xl leading-snug">{a.title}</h3>
-              <p className="mt-3 text-sm text-muted-foreground line-clamp-3">{a.excerpt}</p>
-              <span className="mt-5 inline-flex items-center gap-1 text-xs text-primary uppercase tracking-widest">Read article <ArrowUpRight className="h-3 w-3" /></span>
-            </MotionLink>
+              <span className="font-display text-4xl text-primary/30">{String(index + 1).padStart(2, "0")}</span>
+              <h3 className="mt-5 font-display text-xl leading-snug">{article.title}</h3>
+              <span className="mt-5 inline-flex items-center gap-1 text-xs uppercase tracking-widest text-primary">
+                <ArrowUpRight className="h-3 w-3" />
+              </span>
+            </motion.a>
           ))}
         </div>
       </div>

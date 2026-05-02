@@ -1,7 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useState } from "react";
-import { CountUpText } from "@/components/CountUpText";
+import { useI18n } from "@/i18n/I18nProvider";
 import heroBatumiCity from "@/assets/hero-batumi-city.jpg";
 
 const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -60,6 +60,7 @@ const amountVariants: Variants = {
 export function Hero() {
   const shouldReduceMotion = useReducedMotion();
   const [isHeroReady, setIsHeroReady] = useState(false);
+  const { tx } = useI18n();
   const hiddenTextState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: "blur(10px)" };
 
   const reducedLineVariants: Variants = {
@@ -71,7 +72,7 @@ export function Hero() {
   };
 
   return (
-    <section className="relative isolate min-h-[100svh] overflow-hidden bg-background">
+    <section className="hero-reference-font relative isolate min-h-[100svh] overflow-hidden bg-background">
       <motion.img
         src={heroBatumiCity}
         alt="Panoramic city view of Batumi, Georgia"
@@ -96,8 +97,16 @@ export function Hero() {
       />
 
       <div className="relative z-10 flex min-h-[100svh] flex-col items-center px-6 pt-[45vh] text-center md:pt-[48vh]">
+        <motion.p
+          className="mb-4 text-xs font-medium uppercase tracking-normal text-[#f0bd5d] drop-shadow-[0_3px_14px_rgb(0_0_0/0.5)]"
+          initial={hiddenTextState}
+          animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
+          transition={{ duration: shouldReduceMotion ? 0.6 : 0.9, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: 0.12 }}
+        >
+          {tx("Quality Real Estate Participation")}
+        </motion.p>
         <motion.h1
-          className="max-w-[82rem] text-4xl font-semibold leading-[1.04] tracking-[-0.035em] text-white drop-shadow-[0_8px_28px_rgb(0_0_0/0.46)] [perspective:900px] sm:text-5xl md:text-6xl lg:text-[5rem]"
+          className="hero-reference-font max-w-[82rem] text-4xl font-semibold leading-[0.95] tracking-normal text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)] [perspective:900px] sm:text-5xl md:text-6xl lg:text-[5rem]"
           initial="hidden"
           animate={isHeroReady ? "visible" : "hidden"}
           variants={shouldReduceMotion ? { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } } : headlineVariants}
@@ -107,34 +116,31 @@ export function Hero() {
               className="block origin-bottom will-change-[opacity,transform,filter]"
               variants={shouldReduceMotion ? reducedLineVariants : headlineLineVariants}
             >
-              Quality real-estate participation,
+              {tx("AIXCO Global")}
             </motion.span>
           </span>
           <span className="block pb-[0.08em]">
             <motion.span
-              className="block origin-bottom will-change-[opacity,transform,filter]"
+              className="hero-reference-font block text-2xl font-normal tracking-normal text-white/88 md:text-4xl origin-bottom will-change-[opacity,transform,filter]"
               variants={shouldReduceMotion ? reducedLineVariants : headlineLineVariants}
             >
-              opened from{" "}
               <motion.span
-                className="relative inline-block whitespace-nowrap font-serif-display italic font-normal text-[#f0bd5d]"
+                className="hero-reference-font relative inline-block whitespace-nowrap italic font-normal text-[#f0bd5d]"
                 variants={shouldReduceMotion ? reducedLineVariants : amountVariants}
               >
-                <CountUpText value={"\u20ac1,000"} delay={isHeroReady ? 0.7 : 999} duration={1.25} />
+                {tx("Starting from €1,000")}
               </motion.span>
-              .
             </motion.span>
           </span>
         </motion.h1>
 
         <motion.p
-          className="mt-7 max-w-2xl text-base leading-relaxed text-white/85 drop-shadow-[0_3px_18px_rgb(0_0_0/0.42)] md:text-lg"
+          className="hero-reference-font mt-7 max-w-2xl text-base leading-7 text-white/85 drop-shadow-[0_3px_18px_rgb(0_0_0/0.42)] md:text-lg"
           initial={hiddenTextState}
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.7 : 1.02, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.42 : 1.02 }}
         >
-          Selected projects in Dubai and Batumi, structured to institutional
-          standards. One platform. Two routes. Sixteen years of execution.
+          {tx("Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects, starting from €1,000.")}
         </motion.p>
 
         <motion.a

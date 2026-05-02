@@ -104,6 +104,11 @@
     letter-spacing: -0.01em;
   }
 
+  .hero-reference-font {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, "Segoe UI", system-ui, sans-serif;
+    letter-spacing: 0;
+  }
+
   .font-mono {
     font-family: "SFMono-Regular", ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
   }

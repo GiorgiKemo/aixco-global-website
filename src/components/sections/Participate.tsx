@@ -1,78 +1,85 @@
-import { Check, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { participationRoutes } from "@/data/site";
 import { useUI } from "../ui-state";
 import { motion } from "framer-motion";
-import { CountUpText } from "@/components/CountUpText";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
+import { useI18n } from "@/i18n/I18nProvider";
+import { aixcoLiveVideos } from "@/lib/aixco-live-assets";
+import { LiveVideo } from "@/components/LiveVideo";
+
+const videoMap: Record<string, string> = {
+  bonds: aixcoLiveVideos.bonds,
+  batumiBuy: aixcoLiveVideos.batumiBuy,
+};
 
 export function Participate() {
   const { openRegister } = useUI();
+  const { tx } = useI18n();
+
   return (
     <section id="participate" className="relative py-28 md:py-36 scroll-mt-24 bg-surface/40 noise-overlay overflow-hidden">
       <div className="motion-accent-line absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="container-x">
-        <div className="scroll-reveal max-w-3xl mb-16">
-          <p className="eyebrow">Ways to Participate</p>
-          <h2 className="heading-section mt-5">Two routes. One platform. <span className="text-gold italic">Your fit</span>.</h2>
+        <div className="scroll-reveal mb-16 max-w-3xl">
+          <p className="eyebrow">{tx("Ways to Participate")}</p>
+          <h2 className="heading-section mt-5">
+            <span className="text-gold">{tx("How")}</span> {tx("Customers/Partners Profit")}
+          </h2>
           <p className="mt-6 text-foreground/80 leading-relaxed">
-            Choose the structure that matches your horizon, ticket size and risk appetite — bond income from €1,000, or freehold property from €50,000.
+            {tx("Choose the route that fits your goals. Customers can either subscribe to the AIXCO 6% bond, secured by underlying property, or purchase an apartment directly and benefit from rental income potential, capital appreciation, and Batumi’s favorable tax environment.")}
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {participationRoutes.map((r, i) => (
+        <div className="grid gap-6 md:grid-cols-2">
+          {participationRoutes.map((route, index) => (
             <motion.article
-              key={r.id}
-              className="scroll-reveal mac-card group relative p-8 md:p-10"
+              key={route.id}
+              className="scroll-reveal mac-card group relative overflow-hidden"
               whileHover={premiumSurfaceHover}
               whileTap={premiumPress}
             >
-              <div className="flex items-baseline justify-between mb-6">
-                <span className="font-display text-6xl text-primary/30">0{i + 1}</span>
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                  <CountUpText value={r.term} />
-                </span>
+              <LiveVideo
+                src={videoMap[route.video]}
+                title={tx(route.title)}
+                className="aspect-[16/10] rounded-none shadow-none"
+              />
+              <div className="p-8 md:p-10">
+              <div className="mb-6 flex items-baseline justify-between">
+                <span className="font-display text-6xl text-primary/30">0{index + 1}</span>
               </div>
-              <h3 className="font-display text-3xl md:text-4xl">{r.title}</h3>
-              <div className="mt-5 flex items-end gap-6 border-y border-border/60 py-5">
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Yield</p>
-                  <p className="font-display text-3xl text-gold mt-1">
-                    <CountUpText value={r.coupon} />
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">From</p>
-                  <p className="font-display text-3xl mt-1">
-                    <CountUpText value={r.minTicket} />
-                  </p>
-                </div>
-              </div>
-              <ul className="mt-6 space-y-3">
-                {r.bullets.map((b) => (
-                  <li key={b} className="flex gap-3 text-sm text-foreground/85">
-                    <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                    {b}
-                  </li>
-                ))}
-              </ul>
+              <h3 className="font-display text-3xl md:text-4xl">{tx(route.title)}</h3>
+              <p className="mt-5 text-sm leading-relaxed text-foreground/85">
+                {route.id === "bond" ? (
+                  <>
+                    {tx("Customers sign up, complete onboarding, and invest in the AIXCO bond through a seamless digital process.")}{" "}
+                    <strong>{tx("Purchase the AIXCO Bond with a guaranteed 30% return over 5 years")}</strong>{" "}
+                    {tx("— combining structured security with strong, predictable growth. Backed by property as collateral, the bond provides investors with an added layer of asset-linked confidence.")}
+                  </>
+                ) : (
+                  tx(route.body)
+                )}
+              </p>
               <motion.button
                 onClick={openRegister}
                 className="btn-gold mt-8 w-full sm:w-auto"
                 whileHover={{ y: -2, scale: 1.012 }}
                 whileTap={premiumPress}
               >
-                {r.cta} <ArrowRight className="h-4 w-4" />
+                {tx(route.cta)} <ArrowRight className="h-4 w-4" />
               </motion.button>
+              </div>
             </motion.article>
           ))}
         </div>
 
-        <p className="scroll-reveal mt-10 max-w-3xl rounded-lg border border-border/40 bg-background/60 p-4 text-xs leading-relaxed text-muted-foreground shadow-soft backdrop-blur">
-          <strong className="text-foreground/80">Important:</strong> Real-estate participation involves risk, including possible loss of capital. Returns are
-          not guaranteed and depend on market conditions, project execution, individual tax situation and regulatory suitability.
-          Please review the relevant prospectus and obtain advice from a regulated financial advisor before participating.
-        </p>
+        <div className="scroll-reveal mt-10 flex flex-wrap gap-3">
+          <button type="button" onClick={openRegister} className="btn-gold">
+            {tx("Register")}
+          </button>
+          <a href="#how" className="btn-ghost-gold">
+            {tx("How AIXCO Works")}
+          </a>
+        </div>
       </div>
     </section>
   );

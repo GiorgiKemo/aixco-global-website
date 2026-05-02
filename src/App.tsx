@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
 import { Modals } from "@/components/Modals";
+import { ChatWidget } from "@/components/ChatWidget";
 import Index from "./pages/Index.tsx";
 import Insights from "./pages/Insights.tsx";
 import Article from "./pages/Article.tsx";
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Modals />
+            <ChatWidget />
           </BrowserRouter>
         </TooltipProvider>
       </UIProvider>

@@ -6,13 +6,14 @@ import { useI18n, LANGS } from "@/i18n/I18nProvider";
 import { useUI } from "@/components/ui-state";
 
 const NAV = [
+  { key: "nav.home", to: "/", hash: "" },
   { key: "nav.about", to: "/", hash: "#about" },
   { key: "nav.dubai", to: "/", hash: "#dubai" },
   { key: "nav.batumi", to: "/", hash: "#batumi" },
   { key: "nav.participate", to: "/", hash: "#participate" },
   { key: "nav.how", to: "/", hash: "#how" },
   { key: "nav.team", to: "/", hash: "#team" },
-  { key: "nav.insights", to: "/insights", hash: "" },
+  { key: "nav.partners", to: "/", hash: "#partners" },
   { key: "nav.faqs", to: "/", hash: "#faqs" },
   { key: "nav.contact", to: "/", hash: "#contact" },
 ];
@@ -66,7 +67,7 @@ export function Nav() {
 
         <nav aria-label="Primary" className="hidden min-w-0 flex-1 items-center justify-center gap-2.5 px-4 2xl:flex">
           {NAV.map((item) => {
-            const isActive = item.hash ? active === item.hash : location.pathname === item.to;
+            const isActive = item.hash ? active === item.hash : location.pathname === item.to && !active;
             const href = `${item.to}${item.hash}`;
             return (
               <Link
@@ -109,6 +110,7 @@ export function Nav() {
                   <li key={l.code}>
                     <button
                       role="option"
+                      data-lang={l.code}
                       aria-selected={l.code === lang}
                       onClick={() => { setLang(l.code); setLangOpen(false); }}
                       className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${l.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70"}`}

@@ -3,6 +3,7 @@ import { useUI } from "../ui-state";
 import { motion } from "framer-motion";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { aixcoLiveImages } from "@/lib/aixco-live-assets";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const imageMap: Record<string, string> = {
   "team-benjamin": aixcoLiveImages.teamBenjamin,
@@ -12,16 +13,18 @@ const imageMap: Record<string, string> = {
 
 export function Team() {
   const { openTeam } = useUI();
+  const { tx } = useI18n();
+
   return (
     <section id="team" className="relative py-28 md:py-36 scroll-mt-24 bg-surface/40">
       <div className="container-x">
         <div className="scroll-reveal grid lg:grid-cols-2 gap-10 items-end mb-14">
           <div>
-            <p className="eyebrow">Team</p>
-            <h2 className="heading-section mt-5">The people behind <span className="text-gold italic">AIXCO</span>.</h2>
+            <p className="eyebrow">{tx("Our Team")}</p>
+            <h2 className="heading-section mt-5">{tx("Our Team")}</h2>
           </div>
           <p className="text-foreground/80 leading-relaxed max-w-md">
-            A small senior team with deep European real-estate finance experience, supported by 85+ specialists across Vienna, Dubai and Batumi.
+            {tx("Meet the leadership team shaping AIXCO’s strategic direction, partnerships, and distribution platform.")}
           </p>
         </div>
 
@@ -46,7 +49,9 @@ export function Team() {
               </div>
               <div className="p-6">
                 <p className="font-display text-2xl">{m.name}</p>
-                <p className="text-sm text-primary mt-1">{m.role}</p>
+                <p className="text-sm text-primary mt-1">{tx(m.role)}</p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{tx(m.summary)}</p>
+                <span className="mt-5 inline-flex text-xs uppercase tracking-widest text-primary">{tx("View profile")}</span>
               </div>
             </motion.button>
           ))}
