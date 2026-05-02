@@ -36,7 +36,7 @@ export function Logo({
       to="/"
       aria-label="AIXCO Global home"
       onClick={handleClick}
-      className={`inline-flex shrink-0 items-center gap-2.5 text-foreground ${className}`}
+      className={`inline-flex min-h-11 shrink-0 items-center gap-2.5 text-foreground ${className}`}
     >
       <img
         src={aixcoLiveLogos.aixcoMark}

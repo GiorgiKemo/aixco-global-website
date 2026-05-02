@@ -86,13 +86,6 @@
     scroll-behavior: smooth;
   }
 
-  @supports (content-visibility: auto) {
-    main section[id] {
-      content-visibility: auto;
-      contain-intrinsic-size: 900px;
-    }
-  }
-
   body {
     @apply bg-background text-foreground antialiased;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
@@ -191,7 +184,7 @@
   .btn-gold {
     background: var(--gradient-gold);
     color: hsl(var(--primary-foreground));
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold tracking-normal transition-all duration-300;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold tracking-normal transition-all duration-300;
     box-shadow: 0 0 0 1px hsl(var(--primary) / 0.28), 0 14px 30px -18px hsl(var(--primary) / 0.68), 0 1px 0 hsl(0 0% 100% / 0.32) inset;
     transition-timing-function: var(--ease-apple);
   }
@@ -209,7 +202,7 @@
   }
 
   .btn-ghost-gold {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold tracking-normal transition-all duration-300 border border-primary/30 text-primary;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold tracking-normal transition-all duration-300 border border-primary/30 text-primary;
     background: hsl(var(--surface-glass) / 0.58);
     box-shadow: 0 1px 0 hsl(0 0% 100% / 0.7) inset, 0 12px 26px -22px hsl(220 28% 18% / 0.32);
     backdrop-filter: blur(18px) saturate(150%);

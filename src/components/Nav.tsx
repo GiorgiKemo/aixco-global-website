@@ -82,8 +82,8 @@ export function Nav() {
     const updateCompactMode = () => {
       if (typeof window === "undefined") return;
 
-      if (window.innerWidth < 1536) {
-        setCompactNav(false);
+      if (window.innerWidth < 1280) {
+        setCompactNav(true);
         return;
       }
 
@@ -98,7 +98,9 @@ export function Nav() {
         row.clientWidth - Number.parseFloat(rowStyle.paddingLeft) - Number.parseFloat(rowStyle.paddingRight);
       const logoWidth = logo.getBoundingClientRect().width;
       const navWidth = measuredNav.scrollWidth;
-      const controlsWidth = measuredControls.scrollWidth;
+      const persistentControls = measuredControls.querySelector<HTMLElement>("[data-nav-persistent]");
+      const controlsWidth =
+        window.innerWidth >= 1536 ? measuredControls.scrollWidth : persistentControls?.scrollWidth ?? measuredControls.scrollWidth;
       const horizontalGaps = 32;
       const reserve = 28;
 
@@ -133,7 +135,7 @@ export function Nav() {
 
         <nav
           aria-label="Primary"
-          className={`${fullNavAvailable ? "hidden 2xl:flex" : "hidden"} min-w-0 flex-1 items-center justify-center gap-2 px-3`}
+          className={`${fullNavAvailable ? "hidden xl:flex" : "hidden"} min-w-0 flex-1 items-center justify-center gap-2 px-3`}
         >
           {NAV.map((item) => {
             const isActive = item.hash ? active === item.hash : location.pathname === item.to && !active;
@@ -170,7 +172,7 @@ export function Nav() {
               aria-haspopup="listbox"
               aria-expanded={langOpen}
               aria-label="Change language"
-              className={`${controlClass} inline-flex min-w-0 items-center gap-1.5 px-2.5 py-1.5 text-[11px] uppercase tracking-widest ${controlTextClass}`}
+              className={`${controlClass} inline-flex min-h-11 min-w-0 items-center gap-1.5 px-2.5 py-1.5 text-[11px] uppercase tracking-widest ${controlTextClass}`}
             >
               <Globe className="h-3.5 w-3.5" />
               {LANGS.find((l) => l.code === lang)?.native}
@@ -198,20 +200,20 @@ export function Nav() {
 
           <button
             onClick={openLogin}
-            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap px-3 py-2 text-[13px] tracking-wide transition-colors ${controlTextClass}`}
+            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} min-h-11 whitespace-nowrap px-3 py-2 text-[13px] tracking-wide transition-colors ${controlTextClass}`}
           >
             {t("cta.login")}
           </button>
           <button
             onClick={openRegister}
-            className={`${fullNavAvailable ? "hidden xl:inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !py-2 !px-4 text-[12px]`}
+            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !py-2 !px-4 text-[12px]`}
           >
             {t("cta.register")}
           </button>
           <Link
             to="/#participate"
             onClick={(event) => handleNavClick(event, NAV[4])}
-            className={`${fullNavAvailable ? "hidden xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-[12px]`}
+            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-[12px]`}
           >
             {t("cta.start")}
           </Link>
@@ -221,7 +223,7 @@ export function Nav() {
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className={`${controlClass} ${compactNav ? "" : "2xl:hidden"} h-10 w-10 shrink-0`}
+            className={`${controlClass} ${compactNav ? "" : "xl:hidden"} h-11 w-11 shrink-0`}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -240,7 +242,7 @@ export function Nav() {
           ))}
         </nav>
         <div ref={controlsMeasureRef} className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] uppercase tracking-widest">
+          <span data-nav-persistent className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] uppercase tracking-widest">
             <Globe className="h-3.5 w-3.5" />
             {LANGS.find((l) => l.code === lang)?.native}
             <ChevronDown className="h-3 w-3" />

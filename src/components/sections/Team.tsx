@@ -16,7 +16,7 @@ export function Team() {
   const { tx } = useI18n();
 
   return (
-    <section id="team" className="relative py-28 md:py-36 scroll-mt-24 bg-surface/40">
+    <section id="team" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0 bg-surface/40">
       <div className="container-x">
         <div className="scroll-reveal grid lg:grid-cols-2 gap-10 items-end mb-14">
           <div>

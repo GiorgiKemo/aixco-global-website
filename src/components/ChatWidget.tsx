@@ -246,13 +246,13 @@ export function ChatWidget() {
         type="button"
         aria-label={tx(isOpen ? "Close live chat" : "Open live chat")}
         onClick={() => setIsOpen((open) => !open)}
-        className="group relative flex h-14 w-14 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-gold transition hover:brightness-105"
+        className="group relative flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-gold transition hover:brightness-105 md:h-14 md:w-14"
         whileHover={{ y: -2, scale: 1.03 }}
         whileTap={premiumPress}
       >
-        <MessageCircle className="h-6 w-6" />
+        <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
         {!isOpen && (
-          <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-background bg-success" aria-hidden />
+          <span className="absolute right-0 top-0 h-3 w-3 rounded-full border-2 border-background bg-success" aria-hidden />
         )}
       </motion.button>
     </div>

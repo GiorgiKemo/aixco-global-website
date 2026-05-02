@@ -7,7 +7,7 @@ export function About() {
   const { tx } = useI18n();
 
   return (
-    <section id="about" className="relative py-28 md:py-36 scroll-mt-24">
+    <section id="about" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0">
       <div className="motion-accent-line absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
       <div className="container-x grid gap-16 lg:grid-cols-12">
         <div className="scroll-reveal lg:col-span-5 lg:sticky lg:top-28 self-start">

@@ -156,7 +156,7 @@ export function Hero() {
           href="#about"
           onClick={handleAboutClick}
           aria-label="Scroll to About section"
-          className="mt-8 inline-flex h-8 w-8 items-center justify-center text-[#f0bd5d] drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] transition hover:text-[#ffd47a]"
+          className="mt-7 inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/10 text-[#f0bd5d] drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] backdrop-blur-sm transition hover:bg-black/15 hover:text-[#ffd47a]"
           initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
           animate={isHeroReady ? (shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, 7, 0] }) : { opacity: 0, y: 0 }}
           transition={

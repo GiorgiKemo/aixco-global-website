@@ -19,7 +19,7 @@ export function HowItWorks() {
   };
 
   return (
-    <section id="how" className="relative py-28 md:py-36 scroll-mt-24">
+    <section id="how" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0">
       <div className="container-x">
         <div className="scroll-reveal mb-16 grid gap-10 lg:grid-cols-[1fr_0.72fr] lg:items-end">
           <div className="max-w-3xl">
