@@ -1,38 +1,53 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { attributeTranslations, languageOptions, textTranslations, type Lang } from "./translations";
 
-export type Lang = "en" | "de" | "ru" | "ka" | "tr" | "ar";
+export const LANGS = languageOptions;
 
-export const LANGS: { code: Lang; label: string; native: string }[] = [
-  { code: "en", label: "English", native: "EN" },
-  { code: "de", label: "Deutsch", native: "DE" },
-  { code: "ru", label: "Русский", native: "RU" },
-  { code: "ka", label: "ქართული", native: "KA" },
-  { code: "tr", label: "Türkçe", native: "TR" },
-  { code: "ar", label: "العربية", native: "AR" },
-];
-
-type Dict = Record<string, Partial<Record<Lang, string>>>;
-
-// Minimal nav/CTA dictionary. Body content stays in English in this v1.
-const dict: Dict = {
-  "nav.home": { en: "Home", de: "Start", ru: "Главная", ka: "მთავარი", tr: "Ana Sayfa", ar: "الرئيسية" },
-  "nav.about": { en: "About", de: "Über uns", ru: "О нас", ka: "შესახებ", tr: "Hakkımızda", ar: "عن أيكسكو" },
-  "nav.dubai": { en: "Dubai", de: "Dubai", ru: "Дубай", ka: "დუბაი", tr: "Dubai", ar: "دبي" },
-  "nav.batumi": { en: "Batumi", de: "Batumi", ru: "Батуми", ka: "ბათუმი", tr: "Batum", ar: "باتومي" },
-  "nav.participate": { en: "Participate", de: "Mitwirken", ru: "Участие", ka: "მონაწილეობა", tr: "Katılım", ar: "المشاركة" },
-  "nav.how": { en: "How it works", de: "Funktionsweise", ru: "Как работает", ka: "როგორ მუშაობს", tr: "Nasıl Çalışır", ar: "كيف نعمل" },
-  "nav.team": { en: "Team", de: "Team", ru: "Команда", ka: "გუნდი", tr: "Ekip", ar: "الفريق" },
-  "nav.partners": { en: "Partners", de: "Partner", ru: "Партнёры", ka: "პარტნიორები", tr: "Ortaklar", ar: "الشركاء" },
-  "nav.insights": { en: "Insights", de: "Insights", ru: "Аналитика", ka: "ანალიტიკა", tr: "İçgörüler", ar: "رؤى" },
-  "nav.faqs": { en: "FAQs", de: "FAQs", ru: "Вопросы", ka: "FAQ", tr: "SSS", ar: "الأسئلة" },
-  "nav.contact": { en: "Contact", de: "Kontakt", ru: "Контакты", ka: "კონტაქტი", tr: "İletişim", ar: "اتصل" },
-  "cta.login": { en: "Login", de: "Anmelden", ru: "Войти", ka: "შესვლა", tr: "Giriş", ar: "دخول" },
-  "cta.register": { en: "Register", de: "Registrieren", ru: "Регистрация", ka: "რეგისტრაცია", tr: "Kayıt", ar: "تسجيل" },
-  "cta.start": { en: "Start from €1,000", de: "Ab €1.000 starten", ru: "Старт от €1 000", ka: "დაიწყე €1,000-დან", tr: "€1.000'den başla", ar: "ابدأ من €1,000" },
-  "cta.contact": { en: "Contact AIXCO", de: "AIXCO kontaktieren", ru: "Связаться", ka: "დაგვიკავშირდი", tr: "Bize Ulaşın", ar: "تواصل معنا" },
+const keyedText: Record<string, string> = {
+  "nav.home": "Home",
+  "nav.about": "About AIXCO",
+  "nav.dubai": "Dubai",
+  "nav.batumi": "Batumi",
+  "nav.participate": "Ways to Participate",
+  "nav.how": "How AIXCO Works",
+  "nav.team": "Our Team",
+  "nav.partners": "Partners",
+  "nav.insights": "Batumi",
+  "nav.faqs": "FAQs",
+  "nav.contact": "Contact",
+  "cta.login": "Login",
+  "cta.register": "Register",
+  "cta.start": "Starting from €1,000",
+  "cta.contact": "Contact AIXCO",
+};
+const pageTitle = "AIXCO Global | Global Real Estate Participation";
+const pageDescription = "Participate in selected Batumi real estate projects starting from €1,000. Transparent structure, euro-based pricing, and long-term value creation.";
+const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
+  Start: { de: "Starten Sie", ru: "Начните", ka: "დაიწყეთ", tr: "Başlatın", ar: "ابدأ" },
+  How: { de: "Wie", ru: "Как", ka: "როგორ", tr: "Nasıl", ar: "كيف" },
+  "Developments Underway": {
+    de: "Laufende Entwicklungen",
+    ru: "Проекты в разработке",
+    ka: "მიმდინარე განვითარებები",
+    tr: "Devam Eden Projeler",
+    ar: "مشاريع قيد التطوير",
+  },
+  "Customer Real Estate Buyer": {
+    de: "Kunde Immobilienkäufer",
+    ru: "Клиент-покупатель недвижимости",
+    ka: "კლიენტი უძრავი ქონების მყიდველი",
+    tr: "Gayrimenkul Alıcısı Müşteri",
+    ar: "عميل مشتري عقار",
+  },
 };
 
-type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (key: string) => string; dir: "ltr" | "rtl" };
+type Ctx = {
+  lang: Lang;
+  setLang: (l: Lang) => void;
+  t: (key: string) => string;
+  tx: (text: string) => string;
+  dir: "ltr" | "rtl";
+};
 const I18nCtx = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -42,6 +57,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
+    document.title = lang === "en" ? pageTitle : attributeTranslations.title[pageTitle]?.[lang] ?? pageTitle;
+    const description = document.querySelector('meta[name="description"]');
+    if (description) {
+      description.setAttribute(
+        "content",
+        lang === "en" ? pageDescription : attributeTranslations.content[pageDescription]?.[lang] ?? pageDescription,
+      );
+    }
     try { localStorage.setItem("aixco-lang", lang); } catch {}
   }, [lang, dir]);
 
@@ -49,7 +72,23 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     lang,
     setLang,
     dir,
-    t: (key) => dict[key]?.[lang] ?? dict[key]?.en ?? key,
+    tx: (text) => {
+      if (lang === "en") return text;
+      const supplementalValue = supplementalTranslations[text]?.[lang];
+      if (supplementalValue) return supplementalValue;
+      const textValue = textTranslations[text as keyof typeof textTranslations]?.[lang];
+      if (textValue) return textValue;
+      const placeholderValue = attributeTranslations.placeholder[text as keyof typeof attributeTranslations.placeholder]?.[lang];
+      if (placeholderValue) return placeholderValue;
+      const contentValue = attributeTranslations.content[text as keyof typeof attributeTranslations.content]?.[lang];
+      if (contentValue) return contentValue;
+      const titleValue = attributeTranslations.title[text as keyof typeof attributeTranslations.title]?.[lang];
+      return titleValue ?? text;
+    },
+    t: (key) => {
+      const text = keyedText[key] ?? key;
+      return lang === "en" ? text : textTranslations[text as keyof typeof textTranslations]?.[lang] ?? text;
+    },
   }), [lang, dir]);
 
   return <I18nCtx.Provider value={value}>{children}</I18nCtx.Provider>;

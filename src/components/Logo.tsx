@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import aixcoIcon from "@/assets/aixco-icon.png";
+import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 
 type LogoProps = {
   className?: string;
@@ -19,7 +19,7 @@ export function Logo({
       className={`inline-flex shrink-0 items-center gap-2.5 text-foreground ${className}`}
     >
       <img
-        src={aixcoIcon}
+        src={aixcoLiveLogos.aixcoMark}
         alt=""
         aria-hidden
         className={`h-8 w-8 shrink-0 object-contain md:h-9 md:w-9 ${iconClassName}`}

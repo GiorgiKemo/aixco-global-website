@@ -1,4 +1,4 @@
-// Single source of truth for the AIXCO website content.
+// Canonical copy from https://www.aixco.global/op2/index.html#page1.
 export const company = {
   name: "AIXCO Global",
   tagline: "Quality Real Estate Participation",
@@ -13,161 +13,157 @@ export const company = {
     x: "https://x.com/aixcoglobal",
   },
   portals: {
-    customer: "https://workw.com/aixco",
-    broker: "https://workw.com/aixco/broker",
-    developer: "https://workw.com/aixco/developer",
+    customerLogin: "https://workw.com/realestate/customer/login",
+    brokerLogin: "https://workw.com/realestate/broker/login",
+    developerLogin: "https://workw.com/realestate/developer/login",
+    customerSignup: "https://workw.com/realestate/customer/signup",
+    brokerSignup: "https://workw.com/realestate/broker/signup",
+    developerSignup: "https://workw.com/realestate/developer/signup",
   },
 };
 
 export const metrics = [
-  { value: "5,000+", label: "Trusted clients" },
-  { value: "$400M", label: "Gross development value" },
-  { value: "500+", label: "Transactions closed" },
-  { value: "85+", label: "Employees worldwide" },
-  { value: "$4.2B", label: "Capital raised" },
-  { value: "$2B", label: "Developments underway" },
-  { value: "4.2x", label: "Avg. investment return" },
-  { value: "2009", label: "Founded in Vienna" },
+  { value: "5,000+", label: "Trusted Clients" },
+  { value: "$400M", label: "Gross Development Value (GDV)" },
+  { value: "500+", label: "Total Transactions" },
+  { value: "2009", label: "In Business Since" },
+  { value: "85+", label: "Employees" },
+  { value: "$4.2B", label: "Raised Capital" },
+  { value: "$2B", label: "Developments Underway" },
+  { value: "4.2X", label: "Investment Returns" },
 ];
 
 export const dubaiFunds = [
   {
     id: "fund-1",
-    name: "Fund I — Eden House",
-    location: "The Canal & The Park, Dubai",
-    status: "Live",
-    targetReturn: "12–15% IRR",
-    horizon: "5 years",
-    summary:
-      "Branded ultra-prime residences along the Dubai Water Canal, anchored by world-class hospitality and serviced amenities.",
+    name: "Fund I Eden House The Canal & Eden House The Park",
     image: "dubai-eden",
+    video: "fundOne",
+    details: [
+      "Units: 600+",
+      "Total: USD 462m",
+      "Performance: 4.9x",
+      "Revenues: Successfully generated returns with 4.9x multiple",
+      "Exit: Realized successfully with distributions",
+      "Highlights: Prime canal-front location, strong partnerships, premium delivery",
+    ],
   },
   {
     id: "fund-2",
-    name: "Fund II — Healthcare City",
-    location: "Dubai Healthcare City",
-    status: "Funding",
-    targetReturn: "10–13% IRR",
-    horizon: "4 years",
-    summary:
-      "Mixed-use medical and residential development inside the regulated Dubai Healthcare City free zone.",
+    name: "Fund II Dubai Healthcare City",
     image: "dubai-healthcare",
+    video: "fundTwo",
+    details: [
+      "Total Equity: USD 350m",
+      "Performance: Projected 4.3x",
+      "Revenues: Positioned in a high demand healthcare driven community",
+      "Exit: Successfully positioned in healthcare-driven developments",
+      "Highlights: Specialized assets catering to healthcare professionals and clients",
+    ],
   },
 ];
 
 export const batumiBenefits = [
-  { stat: "8%+", label: "Rental yields", note: "Net of management fees" },
-  { stat: "12%", label: "Annual price growth", note: "Up to, prime stock" },
-  { stat: "€50K", label: "Entry price", note: "Studios, branded buildings" },
-  { stat: "100%", label: "Foreign ownership", note: "No restrictions" },
-  { stat: "1%", label: "Rental tax", note: "Up to €180k/year revenue" },
-  { stat: "0%", label: "Capital gains", note: "After 2 years of holding" },
-  { stat: "60%", label: "LTV financing", note: "International programs" },
+  "Net rental yields starting from 8%",
+  "Annual price growth of up to 12%",
+  "Property prices starting from €50,000",
+  "Full foreign ownership permitted",
+  "Low rental tax of 1% (up to €180,000/year)",
+  "Capital gains tax exemption after 2 years",
+  "Financing 60% of property value",
 ];
 
 export const batumiProperties = [
   {
     id: "queens",
     name: "Queens",
-    location: "Old Boulevard, Batumi",
-    priceFrom: "€68,000",
-    yield: "9.1%",
-    delivery: "Q4 2025",
+    url: "https://tempoholding.ge/apartments#/",
     image: "batumi-queens",
-    description:
-      "An elegant beachfront residence at the heart of the historical boulevard. Branded interiors, private rental program, sea-view balconies.",
+    video: "tempo",
   },
   {
     id: "serenade",
     name: "Serenade",
-    location: "New Boulevard, Batumi",
-    priceFrom: "€54,000",
-    yield: "10.2%",
-    delivery: "Q2 2026",
+    url: "https://tempoholding.ge/serenade/apartments#/",
     image: "batumi-serenade",
-    description:
-      "Contemporary architecture by the Black Sea coast. Hotel-grade lobby, rooftop infinity pool, full furniture & rental management.",
+    video: "guru",
   },
 ];
 
 export const participationRoutes = [
   {
     id: "bond",
-    title: "AIXCO 6% Bond",
-    coupon: "6.0% p.a.",
-    minTicket: "€1,000",
-    term: "5 years, fixed coupon",
-    bullets: [
-      "Fixed annual coupon of 6%, paid yearly",
-      "Senior corporate bond issued by AIXCO Global",
-      "Diversified across Dubai & Batumi developments",
-      "Public ISIN, custodied with European brokers",
-    ],
-    cta: "Subscribe to the bond",
+    title: "Buy the AIXCO 6% Bond",
+    video: "bonds",
+    body:
+      "Customers sign up, complete onboarding, and invest in the AIXCO bond through a seamless digital process. Purchase the AIXCO Bond with a guaranteed 30% return over 5 years — combining structured security with strong, predictable growth. Backed by property as collateral, the bond provides investors with an added layer of asset-linked confidence.",
+    cta: "Register",
   },
   {
     id: "apartment",
-    title: "Apartment in Batumi",
-    coupon: "8–10% net yield",
-    minTicket: "€50,000",
-    term: "Title ownership, freehold",
-    bullets: [
-      "Direct title in your name, no fund layer",
-      "Fully managed rental program (optional)",
-      "Capital gains exemption after 2 years",
-      "Financing up to 60% via partner banks",
-    ],
-    cta: "Explore apartments",
+    title: "Buy an Apartment in Batumi",
+    video: "batumiBuy",
+    body:
+      "Customers sign up, book a tour, and visit the apartment in person. This route is designed for buyers seeking direct ownership and exposure to Batumi’s long-term growth story.",
+    cta: "Register",
   },
 ];
 
 export const journeys = [
   {
-    role: "Real Estate Buyer",
-    summary: "Acquire a branded apartment in Batumi with full advisory.",
+    tag: "Journey 01",
+    role: "Customer Real Estate Buyer",
+    summary: "For clients looking to access selected real estate opportunities through a guided digital process.",
+    intro: "A guided process for clients participating in selected real estate opportunities.",
     steps: [
-      "Register and verify identity",
-      "Discovery call with an AIXCO advisor",
-      "Curated shortlist matched to your goals",
-      "Reservation, due diligence and SPA review",
-      "Notarized purchase, financing & furnishing",
-      "Hand-over, rental program & quarterly reporting",
+      { title: "Create your account", text: "Register and access your secure client portal." },
+      { title: "Complete Profile", text: "Fill out the registration form to create your porfile and access dashboard" },
+      { title: "Review opportunities", text: "Browse available real estate projects, pricing, and supporting materials." },
+      { title: "Select and reserve", text: "Choose the preferred investment or property participation option." },
+      { title: "Sign digitally", text: "Complete documentation online and finalize onboarding." },
+      { title: "Track updates", text: "Monitor project progress, documents, and reporting through the portal." },
     ],
   },
   {
-    role: "Bond Buyer",
-    summary: "Subscribe to the AIXCO 6% Bond from €1,000.",
+    tag: "Journey 02",
+    role: "Customer Bond Buyer",
+    summary: "For investors seeking fixed-income style opportunities with clear onboarding and documentation.",
+    intro: "A streamlined subscription path for investors participating in bond offerings.",
     steps: [
-      "Register and complete suitability questionnaire",
-      "Receive the prospectus and term sheet",
-      "Open or link a custody account",
-      "Place order via your broker (ISIN-based)",
-      "Settlement and electronic confirmation",
-      "Annual coupon payments and investor reports",
+      { title: "Register", text: "Create your account with Bluerock and access the investor dashboard." },
+      { title: "Complete compliance", text: "Finish KYC and suitability checks required for onboarding." },
+      { title: "Review bond materials", text: "Access the term sheet, risk disclosures, and key documentation." },
+      { title: "Subscribe", text: "Select ticket size and confirm subscription instructions." },
+      { title: "Execute documentation", text: "Sign digitally and complete settlement steps." },
+      { title: "Receive reporting", text: "Track performance, coupon events, and investor communications online." },
     ],
   },
   {
+    tag: "Journey 03",
     role: "Broker",
-    summary: "Distribute AIXCO products to your client base.",
+    summary: "For intermediaries and distribution partners introducing clients and managing deal flow.",
+    intro: "A partner workflow built for referral, distribution, and client onboarding support.",
     steps: [
-      "Apply for partnership and KYB review",
-      "Sign distribution agreement",
-      "Onboarding & product certification",
-      "Access to marketing kit and CRM",
-      "Co-branded campaigns & lead routing",
-      "Transparent commission tracking & payouts",
+      { title: "Apply as partner", text: "Submit broker or intermediary details for review." },
+      { title: "Complete due diligence", text: "Finalize compliance, agreements, and partner onboarding." },
+      { title: "Access product materials", text: "Receive marketing packs, documentation, and platform access." },
+      { title: "Introduce clients", text: "Submit leads or onboard clients through the approved journey." },
+      { title: "Track pipeline", text: "Monitor progress, status, and active opportunities." },
+      { title: "Coordinate execution", text: "Support the transaction process through to completion and reporting." },
     ],
   },
   {
+    tag: "Journey 04",
     role: "Developer",
-    summary: "Co-finance and co-deliver projects with AIXCO.",
+    summary: "For developers seeking structuring, placement, distribution, and investor market access.",
+    intro: "A capital and distribution pathway for developers seeking market access and investor reach.",
     steps: [
-      "Submit project for screening",
-      "Technical, legal and market due diligence",
-      "Capital structuring & term sheet",
-      "Joint venture or mezzanine agreement",
-      "Construction monitoring and milestones",
-      "Exit, distribution and reporting",
+      { title: "Initial project submission", text: "Share project information, structure, and investment requirements." },
+      { title: "Evaluation and fit", text: "Review commercial viability, positioning, and investor suitability." },
+      { title: "Structure the opportunity", text: "Align capital format, documentation, and route to market." },
+      { title: "Prepare launch materials", text: "Create the presentation, data room, and supporting documents." },
+      { title: "Distribution and placement", text: "Connect the project to brokers, clients, and investor networks." },
+      { title: "Ongoing reporting", text: "Provide updates, milestones, and investor communications post-launch." },
     ],
   },
 ];
@@ -175,57 +171,155 @@ export const journeys = [
 export const team = [
   {
     name: "Benjamin Fischer",
-    role: "Chief Executive Officer",
+    role: "Founder",
     image: "team-benjamin",
-    bio: "Benjamin leads AIXCO Global's strategy and capital markets activity. With 20+ years across European real-estate finance and private markets, he has structured over €1.2B of cross-border transactions.",
+    summary: "Leadership, vision, and overall group direction.",
+    bio:
+      "Benjamin Fischer is presented in the AIXCO team section as Founder, reflecting his leadership role across the group’s strategic direction and overall platform development.",
+    points: [
+      { title: "Primary role", text: "Leadership and group-level strategic direction." },
+      { title: "Focus", text: "Vision, growth, partnerships, and long-term platform positioning." },
+    ],
   },
   {
     name: "Owais Shaikh",
-    role: "Chief Investment Officer",
+    role: "Partner",
     image: "team-owais",
-    bio: "Owais oversees the AIXCO investment platform across Dubai and Batumi, leading underwriting, asset management and partner due diligence with a focus on risk-adjusted returns.",
+    summary: "Capital markets, banking relationships, and financial structuring.",
+    bio:
+      "Owais Shaikh is listed in the AIXCO team section as Partner covering Banking and Finance, positioning him around financing relationships, capital structuring, and institutional financial coordination.",
+    points: [
+      { title: "Primary role", text: "Banking and finance leadership across transactions and structuring." },
+      { title: "Focus", text: "Capital access, financial coordination, and execution support." },
+    ],
   },
   {
     name: "Walter Schuster",
-    role: "Chairman & Founder",
+    role: "Partner",
     image: "team-walter",
-    bio: "Walter founded AIXCO in 2009. A veteran of central-European real-estate development, he chairs the investment committee and stewards AIXCO's institutional partnerships.",
+    summary: "Product positioning, channel development, and distribution strategy.",
+    bio:
+      "Walter Schuster is listed in the AIXCO team section as Partner responsible for Products and Distribution, reflecting his role in product strategy, market positioning, and channel development.",
+    points: [
+      { title: "Primary role", text: "Products and distribution leadership." },
+      { title: "Focus", text: "Go-to-market strategy, product positioning, and partner distribution." },
+    ],
   },
 ];
 
 export const partners = [
-  { name: "Global Partners", featured: true, summary: "Lead distribution partner across DACH and CEE markets." },
-  { name: "ISP Group", summary: "Independent service provider for fund administration and reporting." },
-  { name: "Workwise", summary: "Digital operations and broker portal infrastructure." },
-  { name: "Clean Elements", summary: "Sustainability and ESG advisory across the AIXCO portfolio." },
-  { name: "Revanta Capital", summary: "Co-investor on selected Dubai branded-residence projects." },
-  { name: "Groupe GTI", summary: "European structuring and tax advisory partner." },
-  { name: "Bluerock", summary: "Real-estate research and Black Sea market intelligence." },
-  { name: "Daewoo E&C", summary: "International EPC partner on large-scale developments." },
+  {
+    name: "Global Partners",
+    group: "Group companies",
+    featured: true,
+    logo: "globalPartners",
+    summary: "Real estate investment and development platform.",
+    detail: [
+      "Global Partners is presented by AIXCO as a premier real estate investment firm focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+      "The positioning emphasizes value creation through strategic asset selection, operational excellence, development, redevelopment, and property management.",
+    ],
+    leaders: [
+      { name: "H.H Sheikh Maktoum Butti Maktoum Juma Al Maktoum", role: "Chairman", image: "butti" },
+      { name: "H.H. Sheikh Rashid Butti Maktoum Juma Al Maktoum", role: "Director", image: "rashid" },
+      { name: "Bader Hareb", role: "Executive Chairman – Fund II", image: "bader" },
+      { name: "Warren Blore", role: "Chief Financial Officer", image: "warren" },
+    ],
+  },
+  {
+    name: "ISP Group",
+    group: "Group companies",
+    logo: "isp",
+    summary: "Diversified investment and services business.",
+    detail: [
+      "ISP Group is described in the AIXCO source as a diversified investment and services firm specializing in the acquisition, management, and transformation of businesses across multiple industries.",
+    ],
+  },
+  {
+    name: "Workwise",
+    group: "Group companies",
+    logo: "workwise",
+    summary: "Enterprise SaaS and fintech operating platform.",
+    detail: [
+      "Workwise is described as a next-generation enterprise SaaS and fintech platform built to unify communication, HR, finance, project management, approvals, documents, and digital lending in one ecosystem.",
+      "The uploaded materials say the platform is designed to eliminate fragmented systems, reduce costs, improve productivity, and support localized enterprise requirements.",
+    ],
+  },
+  {
+    name: "Clean Elements",
+    group: "Group companies",
+    logo: "cleanElements",
+    summary: "Clean-tech and lithium asset exposure.",
+    detail: [
+      "Clean Elements is described in the AIXCO source as a clean-products and lithium asset story, positioned as an environmental and investment opportunity.",
+    ],
+  },
+  {
+    name: "Revanta Capital",
+    group: "Strategic partners",
+    logo: "revanta",
+    summary: "DFSA-regulated financial services firm in DIFC.",
+    detail: [
+      "Revanta Capital is described in the AIXCO source as a DFSA-regulated financial services firm based in the Dubai International Financial Centre.",
+    ],
+  },
+  {
+    name: "Groupe GTI",
+    group: "Strategic partners",
+    logo: "gti",
+    summary: "Investment and advisory collective for growth businesses.",
+    detail: [
+      "Groupe GTI is presented as an investment and advisory collective focused on accelerating growth-oriented enterprises, especially across technology, infrastructure, and industrial sectors.",
+    ],
+  },
+  {
+    name: "Bluerock",
+    group: "Strategic partners",
+    logo: "bluerock",
+    summary: "Financial consultancy focused on planning and advisory.",
+    detail: [
+      "Bluerock is described as a financial consultancy delivering data-driven strategies in planning, investment, and advisory, with a client-focused approach aimed at sustainable growth.",
+    ],
+  },
+  {
+    name: "Daewoo E&C",
+    group: "Strategic partners",
+    logo: "daewoo",
+    summary: "Large-scale infrastructure and urban development partner.",
+    detail: [
+      "Daewoo Engineering and Construction is described as a leading South Korean company specializing in large-scale infrastructure, industrial plants, and urban development projects worldwide.",
+    ],
+  },
 ];
 
 export const faqGroups = [
   {
     group: "Customer",
+    description: "Buying property or entering selected investment opportunities.",
     items: [
-      { q: "What is the minimum to participate?", a: "You can participate in the AIXCO 6% Bond from €1,000. Direct apartment purchases in Batumi typically start at €50,000." },
-      { q: "How are returns paid?", a: "Bond coupons are paid annually to your custody account. Apartment rental income is paid monthly net of management fees, depending on your selected program." },
-      { q: "Is my capital guaranteed?", a: "No real-estate investment is risk-free. Returns depend on market conditions, project execution, and your individual situation. Please review the prospectus and consult a regulated advisor." },
-      { q: "Which currencies do you accept?", a: "Subscriptions are settled in EUR. Property purchases in Batumi are denominated in USD or EUR depending on the building." },
+      { q: "What is the minimum investment amount?", a: "The entry point starts from €1,000, depending on the selected opportunity." },
+      { q: "Can I buy property directly?", a: "Yes. Customers may pursue direct purchase, structured participation, or both." },
+      { q: "Are returns fixed?", a: "No. Returns are performance-based and depend on market conditions and project success." },
+      { q: "Will I receive reporting?", a: "Yes. Reporting, documents, and project updates are available through the portal." },
+      { q: "Can foreigners buy property in Batumi?", a: "Yes. Foreigners can purchase and own real estate with minimal restrictions." },
     ],
   },
   {
     group: "Broker",
+    description: "For intermediaries managing clients, tours, and deal flow.",
     items: [
-      { q: "How does the broker program work?", a: "Approved brokers receive a co-branded portal, marketing kit and a transparent commission structure based on settled volume." },
-      { q: "Where is broker activity managed?", a: "Through the AIXCO broker portal hosted on workw.com, with full lead, deal and payout tracking." },
+      { q: "What are the benefits for brokers?", a: "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination." },
+      { q: "Can I book a tour for my customer?", a: "Yes. The platform supports tour coordination and a smoother customer journey." },
+      { q: "Do login and registration do different things?", a: "Yes. Login opens the relevant portal. Register starts the onboarding process for access approval." },
+      { q: "What support is available after sign-up?", a: "AIXCO provides follow-up support, coordination, and a more guided service model rather than simple self-service." },
     ],
   },
   {
     group: "Developer",
+    description: "For developers listing projects and using AIXCO as a sales channel.",
     items: [
-      { q: "What projects do you co-finance?", a: "Branded residential, mixed-use, and hospitality assets in Dubai and Batumi with strong cash-flow visibility." },
-      { q: "What is the typical ticket size?", a: "AIXCO typically participates with €5–25M of equity or mezzanine per project, alongside trusted local partners." },
+      { q: "What do developers gain by registering?", a: "Developers gain stronger project exposure, better inquiry handling, coordinated tours, and a more premium end-to-end sales flow." },
+      { q: "Can AIXCO help distribute projects?", a: "Yes. AIXCO can function as a structured distribution and presentation channel for selected listings." },
+      { q: "Does AIXCO support the sales process?", a: "Yes. Support can include project visibility, lead handling, tours, and documentation flow." },
     ],
   },
 ];
