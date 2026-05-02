@@ -47,7 +47,7 @@ export function Partners() {
             <div>
               <p className="eyebrow">{tx("Featured highlight")}</p>
               <h3 className="mt-4 font-display text-4xl">{featured.name}</h3>
-              {featured.detail.slice(0, 2).map((paragraph) => (
+              {(featured.featuredDetail ?? featured.detail.slice(0, 2)).map((paragraph) => (
                 <p key={paragraph} className="mt-4 text-sm leading-relaxed text-foreground/80">
                   {tx(paragraph)}
                 </p>

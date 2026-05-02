@@ -211,9 +211,14 @@ export const partners = [
   {
     name: "Global Partners",
     group: "Group companies",
+    modalLabel: "Featured highlight \u00b7 UAE focus",
     featured: true,
     logo: "globalPartners",
     summary: "Real estate investment and development platform.",
+    featuredDetail: [
+      "A premier real estate investment platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+      "The business is positioned around value creation through strategic asset selection, operational excellence, redevelopment, and property management.",
+    ],
     detail: [
       "Global Partners is presented by AIXCO as a premier real estate investment firm focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
       "The positioning emphasizes value creation through strategic asset selection, operational excellence, development, redevelopment, and property management.",
@@ -228,34 +233,50 @@ export const partners = [
   {
     name: "ISP Group",
     group: "Group companies",
+    modalLabel: "Group company",
     logo: "isp",
     summary: "Diversified investment and services business.",
     detail: [
       "ISP Group is described in the AIXCO source as a diversified investment and services firm specializing in the acquisition, management, and transformation of businesses across multiple industries.",
     ],
+    facts: [
+      { title: "Positioning", text: "Diversified investment and services platform." },
+      { title: "Role", text: "Business acquisition, management, and transformation across sectors." },
+    ],
   },
   {
     name: "Workwise",
     group: "Group companies",
+    modalLabel: "Group company",
     logo: "workwise",
     summary: "Enterprise SaaS and fintech operating platform.",
     detail: [
       "Workwise is described as a next-generation enterprise SaaS and fintech platform built to unify communication, HR, finance, project management, approvals, documents, and digital lending in one ecosystem.",
       "The uploaded materials say the platform is designed to eliminate fragmented systems, reduce costs, improve productivity, and support localized enterprise requirements.",
     ],
+    facts: [
+      { title: "Core modules", text: "Communication, approvals, finance, document tools, HR, projects, and fintech workflows." },
+      { title: "Market angle", text: "Built for underserved SMEs and enterprise users, with a stated path to high recurring revenue at scale." },
+    ],
   },
   {
     name: "Clean Elements",
     group: "Group companies",
+    modalLabel: "Group company",
     logo: "cleanElements",
     summary: "Clean-tech and lithium asset exposure.",
     detail: [
       "Clean Elements is described in the AIXCO source as a clean-products and lithium asset story, positioned as an environmental and investment opportunity.",
     ],
+    facts: [
+      { title: "Theme", text: "Clean products and environmental transition exposure." },
+      { title: "Positioning", text: "Presented as a fast-growing lithium asset holding company." },
+    ],
   },
   {
     name: "Revanta Capital",
     group: "Strategic partners",
+    modalLabel: "Strategic partner",
     logo: "revanta",
     summary: "DFSA-regulated financial services firm in DIFC.",
     detail: [
@@ -265,6 +286,7 @@ export const partners = [
   {
     name: "Groupe GTI",
     group: "Strategic partners",
+    modalLabel: "Strategic partner",
     logo: "gti",
     summary: "Investment and advisory collective for growth businesses.",
     detail: [
@@ -274,6 +296,7 @@ export const partners = [
   {
     name: "Bluerock",
     group: "Strategic partners",
+    modalLabel: "Strategic partner",
     logo: "bluerock",
     summary: "Financial consultancy focused on planning and advisory.",
     detail: [
@@ -283,6 +306,7 @@ export const partners = [
   {
     name: "Daewoo E&C",
     group: "Strategic partners",
+    modalLabel: "Strategic partner",
     logo: "daewoo",
     summary: "Large-scale infrastructure and urban development partner.",
     detail: [
