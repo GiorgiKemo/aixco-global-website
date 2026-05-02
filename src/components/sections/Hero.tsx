@@ -1,9 +1,11 @@
 import { ChevronDown } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { useState, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/i18n/I18nProvider";
 import heroBatumiCity from "@/assets/hero-batumi-city.jpg";
+
+const gatewayHeroVideo = "https://giorgikemo.github.io/aixco-gateway-main/videos/batumi-hero.mp4";
 
 const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -42,14 +44,14 @@ const amountVariants: Variants = {
     y: 8,
     scale: 0.985,
     filter: "blur(14px)",
-    textShadow: "0 0 0 rgb(240 189 93 / 0)",
+    textShadow: "0 0 0 rgb(255 255 255 / 0)",
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     filter: "blur(0px)",
-    textShadow: "0 10px 36px rgb(240 189 93 / 0.28)",
+    textShadow: "0 10px 36px rgb(255 255 255 / 0.18)",
     transition: {
       duration: 1.05,
       ease: heroEase,
@@ -70,6 +72,11 @@ export function Hero() {
     navigate("/#about");
   };
 
+  useEffect(() => {
+    const fallbackTimer = window.setTimeout(() => setIsHeroReady(true), 1400);
+    return () => window.clearTimeout(fallbackTimer);
+  }, []);
+
   const reducedLineVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -80,21 +87,24 @@ export function Hero() {
 
   return (
     <section className="hero-reference-font relative isolate min-h-[100svh] overflow-hidden bg-background">
-      <motion.img
-        src={heroBatumiCity}
-        alt="Panoramic city view of Batumi, Georgia"
+      <motion.video
         className="absolute inset-0 h-full w-full object-cover object-center"
-        width={5630}
-        height={2999}
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
-        onLoad={() => setIsHeroReady(true)}
+        poster={heroBatumiCity}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        onLoadedData={() => setIsHeroReady(true)}
+        onCanPlay={() => setIsHeroReady(true)}
         onError={() => setIsHeroReady(true)}
         initial={shouldReduceMotion ? { scale: 1.006, opacity: 0.98 } : { scale: 1.055, opacity: 0.92 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: shouldReduceMotion ? 0.25 : 1.35, ease: heroEase }}
-      />
+      >
+        <source src={gatewayHeroVideo} type="video/mp4" />
+      </motion.video>
 
       <div
         className="absolute inset-0 bg-[linear-gradient(180deg,rgb(0_0_0/0.03)_0%,rgb(0_0_0/0.04)_22%,rgb(0_0_0/0.18)_42%,rgb(0_0_0/0.42)_70%,rgb(0_0_0/0.24)_100%)]"
@@ -107,7 +117,7 @@ export function Hero() {
 
       <div className="relative z-10 flex min-h-[100svh] flex-col items-center px-6 pt-[45vh] text-center md:pt-[48vh]">
         <motion.p
-          className="mb-4 text-xs font-medium uppercase tracking-normal text-[#f0bd5d] drop-shadow-[0_3px_14px_rgb(0_0_0/0.5)]"
+          className="mb-4 text-xs font-medium uppercase tracking-normal text-white/80 drop-shadow-[0_3px_14px_rgb(0_0_0/0.5)]"
           initial={hiddenTextState}
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.6 : 0.9, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: 0.12 }}
@@ -134,7 +144,7 @@ export function Hero() {
               variants={shouldReduceMotion ? reducedLineVariants : headlineLineVariants}
             >
               <motion.span
-                className="hero-reference-font relative inline-block whitespace-nowrap italic font-normal text-[#f0bd5d]"
+                className="hero-reference-font relative inline-block whitespace-nowrap italic font-normal text-white/90"
                 variants={shouldReduceMotion ? reducedLineVariants : amountVariants}
               >
                 {tx("Starting from €1,000")}
@@ -156,7 +166,7 @@ export function Hero() {
           href="#about"
           onClick={handleAboutClick}
           aria-label="Scroll to About section"
-          className="mt-7 inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/10 text-[#f0bd5d] drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] backdrop-blur-sm transition hover:bg-black/15 hover:text-[#ffd47a]"
+          className="mt-7 inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/10 text-white/80 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] backdrop-blur-sm transition hover:bg-black/15 hover:text-white"
           initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
           animate={isHeroReady ? (shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, 7, 0] }) : { opacity: 0, y: 0 }}
           transition={
