@@ -2,13 +2,21 @@ import { journeys } from "@/data/site";
 import { useUI } from "../ui-state";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { type MouseEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveImages } from "@/lib/aixco-live-assets";
 
 export function HowItWorks() {
-  const { openJourney } = useUI();
+  const { openJourney, openRegister } = useUI();
   const { tx } = useI18n();
+  const navigate = useNavigate();
+
+  const handlePartnersClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    navigate("/#partners");
+  };
 
   return (
     <section id="how" className="relative py-28 md:py-36 scroll-mt-24">
@@ -54,6 +62,15 @@ export function HowItWorks() {
               </div>
             </motion.button>
           ))}
+        </div>
+
+        <div className="scroll-reveal mt-10 flex flex-wrap gap-3">
+          <a href="#partners" onClick={handlePartnersClick} className="btn-ghost-gold">
+            {tx("Our Partners")}
+          </a>
+          <button type="button" onClick={openRegister} className="btn-gold">
+            {tx("Register")}
+          </button>
         </div>
       </div>
     </section>
