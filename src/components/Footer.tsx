@@ -14,16 +14,7 @@ export function Footer() {
       <div className="container-x flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
         <div>
           <Logo />
-          <img
-            src={aixcoLiveLogos.aixcoGlobal}
-            alt="AIXCO Global"
-            loading="lazy"
-            decoding="async"
-            width={420}
-            height={120}
-            className="mt-4 h-9 w-auto object-contain opacity-80 [filter:brightness(0)_saturate(100%)]"
-          />
-          <p className="mt-4 text-xs text-muted-foreground">© AIXCO Global 2026. All Rights Reserved.</p>
+          <p className="mt-4 text-xs text-muted-foreground">&copy; AIXCO Global 2026. All Rights Reserved.</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-4 text-sm text-foreground/80">
