@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { useState } from "react";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform, type Variants } from "framer-motion";
+import { useState, type MouseEvent } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import heroBatumiCity from "@/assets/hero-batumi-city.jpg";
 
@@ -19,17 +19,21 @@ const headlineVariants: Variants = {
 const headlineLineVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 12,
-    scale: 0.992,
-    filter: "blur(16px)",
+    y: 32,
+    z: -72,
+    rotateX: 11,
+    scale: 0.94,
+    filter: "blur(18px)",
   },
   visible: {
     opacity: 1,
     y: 0,
+    z: 42,
+    rotateX: 0,
     scale: 1,
     filter: "blur(0px)",
     transition: {
-      duration: 1.18,
+      duration: 1.22,
       ease: heroEase,
     },
   },
@@ -38,17 +42,21 @@ const headlineLineVariants: Variants = {
 const amountVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 8,
-    scale: 0.985,
+    y: 22,
+    z: -44,
+    rotateX: 9,
+    scale: 0.92,
     filter: "blur(14px)",
     textShadow: "0 0 0 rgb(240 189 93 / 0)",
   },
   visible: {
     opacity: 1,
     y: 0,
+    z: 58,
+    rotateX: 0,
     scale: 1,
     filter: "blur(0px)",
-    textShadow: "0 10px 36px rgb(240 189 93 / 0.28)",
+    textShadow: "0 4px 0 rgb(122 76 18 / 0.22), 0 16px 42px rgb(240 189 93 / 0.38), 0 34px 76px rgb(0 0 0 / 0.5)",
     transition: {
       duration: 1.05,
       ease: heroEase,
@@ -61,7 +69,30 @@ export function Hero() {
   const shouldReduceMotion = useReducedMotion();
   const [isHeroReady, setIsHeroReady] = useState(false);
   const { tx } = useI18n();
+  const kickerText = tx("Quality Real Estate Participation");
+  const headlineText = tx("AIXCO Global");
+  const popoutAmountText = tx("Starting from \u20ac1,000");
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const smoothPointerX = useSpring(pointerX, { stiffness: 100, damping: 24, mass: 0.35 });
+  const smoothPointerY = useSpring(pointerY, { stiffness: 100, damping: 24, mass: 0.35 });
+  const heroRotateY = useTransform(smoothPointerX, [-1, 1], shouldReduceMotion ? [0, 0] : [-5, 5]);
+  const heroRotateX = useTransform(smoothPointerY, [-1, 1], shouldReduceMotion ? [0, 0] : [4, -4]);
+  const heroLift = useTransform(smoothPointerY, [-1, 1], shouldReduceMotion ? [0, 0] : [10, -10]);
   const hiddenTextState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: "blur(10px)" };
+
+  const handleHeroMouseMove = (event: MouseEvent<HTMLElement>) => {
+    if (shouldReduceMotion) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    pointerX.set(((event.clientX - rect.left) / rect.width - 0.5) * 2);
+    pointerY.set(((event.clientY - rect.top) / rect.height - 0.5) * 2);
+  };
+
+  const handleHeroMouseLeave = () => {
+    pointerX.set(0);
+    pointerY.set(0);
+  };
 
   const reducedLineVariants: Variants = {
     hidden: { opacity: 0 },
@@ -72,7 +103,11 @@ export function Hero() {
   };
 
   return (
-    <section className="hero-reference-font relative isolate min-h-[100svh] overflow-hidden bg-background">
+    <section
+      className="hero-reference-font relative isolate min-h-[100svh] overflow-hidden bg-background"
+      onMouseMove={handleHeroMouseMove}
+      onMouseLeave={handleHeroMouseLeave}
+    >
       <motion.img
         src={heroBatumiCity}
         alt="Panoramic city view of Batumi, Georgia"
@@ -97,38 +132,44 @@ export function Hero() {
       />
 
       <div className="relative z-10 flex min-h-[100svh] flex-col items-center px-6 pt-[45vh] text-center md:pt-[48vh]">
+        <motion.div
+          className="hero-popout-stage"
+          style={shouldReduceMotion ? undefined : { rotateX: heroRotateX, rotateY: heroRotateY, y: heroLift }}
+        >
         <motion.p
           className="mb-4 text-xs font-medium uppercase tracking-normal text-[#f0bd5d] drop-shadow-[0_3px_14px_rgb(0_0_0/0.5)]"
           initial={hiddenTextState}
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.6 : 0.9, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: 0.12 }}
         >
-          {tx("Quality Real Estate Participation")}
+          {kickerText}
         </motion.p>
         <motion.h1
-          className="hero-reference-font max-w-[82rem] text-4xl font-semibold leading-[0.95] tracking-normal text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)] [perspective:900px] sm:text-5xl md:text-6xl lg:text-[5rem]"
+          className="hero-popout-title hero-reference-font max-w-[82rem] text-4xl font-semibold leading-[0.95] tracking-normal text-white sm:text-5xl md:text-6xl lg:text-[5rem]"
           initial="hidden"
           animate={isHeroReady ? "visible" : "hidden"}
           variants={shouldReduceMotion ? { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } } : headlineVariants}
         >
           <span className="block pb-[0.04em]">
             <motion.span
-              className="block origin-bottom will-change-[opacity,transform,filter]"
+              className="hero-popout-line block origin-bottom will-change-[opacity,transform,filter]"
+              data-popout-text={headlineText}
               variants={shouldReduceMotion ? reducedLineVariants : headlineLineVariants}
             >
-              {tx("AIXCO Global")}
+              {headlineText}
             </motion.span>
           </span>
           <span className="block pb-[0.08em]">
             <motion.span
-              className="hero-reference-font block text-2xl font-normal tracking-normal text-white/88 md:text-4xl origin-bottom will-change-[opacity,transform,filter]"
+              className="hero-reference-font block origin-bottom text-2xl font-normal tracking-normal text-white/88 will-change-[opacity,transform,filter] md:text-4xl"
               variants={shouldReduceMotion ? reducedLineVariants : headlineLineVariants}
             >
               <motion.span
-                className="hero-reference-font relative inline-block whitespace-nowrap italic font-normal text-[#f0bd5d]"
+                className="hero-popout-line hero-popout-line-gold hero-reference-font relative inline-block whitespace-nowrap italic font-normal text-[#f0bd5d]"
+                data-popout-text={popoutAmountText}
                 variants={shouldReduceMotion ? reducedLineVariants : amountVariants}
               >
-                {tx("Starting from €1,000")}
+                {popoutAmountText}
               </motion.span>
             </motion.span>
           </span>
@@ -142,6 +183,7 @@ export function Hero() {
         >
           {tx("Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects, starting from €1,000.")}
         </motion.p>
+        </motion.div>
 
         <motion.a
           href="#about"

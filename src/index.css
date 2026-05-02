@@ -242,6 +242,67 @@
     box-shadow: var(--shadow-elegant);
   }
 
+  .hero-popout-stage {
+    transform-style: preserve-3d;
+    transform-origin: 50% 62%;
+    perspective: 1200px;
+    will-change: transform;
+  }
+
+  .hero-popout-title {
+    position: relative;
+    transform-style: preserve-3d;
+    text-shadow:
+      0 2px 0 rgb(255 255 255 / 0.16),
+      0 12px 30px rgb(0 0 0 / 0.48),
+      0 34px 78px rgb(0 0 0 / 0.58);
+  }
+
+  .hero-popout-line {
+    position: relative;
+    isolation: isolate;
+    transform-style: preserve-3d;
+    -webkit-text-stroke: 0.35px rgb(255 255 255 / 0.34);
+    paint-order: stroke fill;
+  }
+
+  .hero-popout-line::before,
+  .hero-popout-line::after {
+    content: attr(data-popout-text);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transform-origin: 50% 62%;
+  }
+
+  .hero-popout-line::before {
+    z-index: -2;
+    color: rgb(2 6 14 / 0.42);
+    -webkit-text-stroke: 2px rgb(2 6 14 / 0.24);
+    filter: blur(5px);
+    transform: translate3d(14px, 20px, -92px) scale(0.985);
+  }
+
+  .hero-popout-line::after {
+    z-index: -1;
+    color: rgb(255 255 255 / 0.16);
+    filter: blur(1.4px);
+    transform: translate3d(5px, 8px, -34px) scale(0.995);
+  }
+
+  .hero-popout-line-gold {
+    -webkit-text-stroke: 0.3px rgb(255 225 161 / 0.48);
+  }
+
+  .hero-popout-line-gold::before {
+    color: rgb(64 34 4 / 0.52);
+    -webkit-text-stroke: 2px rgb(90 48 7 / 0.28);
+  }
+
+  .hero-popout-line-gold::after {
+    color: rgb(255 214 126 / 0.24);
+  }
+
   .mac-tile {
     @apply bg-background/70 transition-all duration-500;
     box-shadow: 0 1px 0 hsl(0 0% 100% / 0.58) inset;
@@ -433,6 +494,18 @@
 
     .partner-marquee-track {
       animation-duration: 70s !important;
+    }
+
+    .hero-popout-stage,
+    .hero-popout-title,
+    .hero-popout-line {
+      transform: none !important;
+    }
+
+    .hero-popout-line::before,
+    .hero-popout-line::after {
+      opacity: 0.55;
+      transform: translate3d(4px, 7px, 0) scale(1) !important;
     }
 
   }
