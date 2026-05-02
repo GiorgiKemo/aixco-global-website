@@ -1,5 +1,5 @@
 import { dubaiFunds } from "@/data/site";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { aixcoFundGallery, aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -21,8 +21,14 @@ const fundVideos = [
   { src: aixcoLiveVideos.fundThree, title: "Fund I Eden House The Canal & Eden House The Park" },
 ];
 
+const galleryColumns = [
+  aixcoFundGallery.filter((_, index) => index % 2 === 0),
+  aixcoFundGallery.filter((_, index) => index % 2 === 1),
+];
+
 export function Dubai() {
   const { tx } = useI18n();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <section id="dubai" className="relative py-28 md:py-36 scroll-mt-24 bg-surface/40">
@@ -75,23 +81,40 @@ export function Dubai() {
           ))}
         </div>
 
-        <div className="scroll-reveal mt-10 grid gap-4 lg:grid-cols-[1fr_0.88fr]">
-          <div className="mac-card overflow-hidden p-4">
-            <div className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:thin]" aria-label="Fund I Eden House gallery">
-              {aixcoFundGallery.map((src, index) => (
-                <img
-                  key={src}
-                  src={src}
-                  alt={`Fund I Eden House gallery ${index + 1}`}
-                  loading="lazy"
-                  width={320}
-                  height={220}
-                  className="h-40 w-64 shrink-0 rounded-md object-cover shadow-soft md:h-48 md:w-80"
-                />
-              ))}
-            </div>
+        <div className="scroll-reveal mt-10 grid gap-6 lg:grid-cols-[minmax(0,1.18fr)_minmax(300px,0.82fr)] lg:items-start">
+          <div className="grid gap-4 sm:grid-cols-2" aria-label="Fund I Eden House gallery">
+            {galleryColumns.map((column, columnIndex) => (
+              <div key={columnIndex} className={`grid gap-4 ${columnIndex === 1 ? "sm:pt-16" : ""}`}>
+                {column.map((src, index) => {
+                  const imageIndex = index * 2 + columnIndex + 1;
+                  return (
+                    <motion.figure
+                      key={src}
+                      className="group overflow-hidden rounded-lg bg-background shadow-soft"
+                      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 28, scale: 0.985 }}
+                      whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, amount: 0.22, margin: "0px 0px -10% 0px" }}
+                      transition={{
+                        duration: shouldReduceMotion ? 0.35 : 0.72,
+                        ease: shouldReduceMotion ? "easeOut" : [0.16, 1, 0.3, 1],
+                        delay: shouldReduceMotion ? 0 : (index % 3) * 0.05,
+                      }}
+                    >
+                      <img
+                        src={src}
+                        alt={`Fund I Eden House gallery ${imageIndex}`}
+                        loading="lazy"
+                        width={640}
+                        height={440}
+                        className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+                      />
+                    </motion.figure>
+                  );
+                })}
+              </div>
+            ))}
           </div>
-          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+          <div className="grid gap-3 sm:grid-cols-3 lg:sticky lg:top-24 lg:grid-cols-1">
             {fundVideos.map((video) => (
               <LiveVideo
                 key={video.src}
