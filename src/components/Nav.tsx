@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import { Logo } from "./Logo";
@@ -26,8 +26,14 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [active, setActive] = useState<string>("");
+  const [compactNav, setCompactNav] = useState(false);
+  const navRowRef = useRef<HTMLDivElement | null>(null);
+  const logoSlotRef = useRef<HTMLDivElement | null>(null);
+  const navMeasureRef = useRef<HTMLDivElement | null>(null);
+  const controlsMeasureRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
   const solidNav = scrolled || open || langOpen;
+  const fullNavAvailable = !compactNav;
   const topControlClass =
     "inline-flex items-center justify-center rounded-lg border border-white/25 bg-white/[0.06] text-white/90 shadow-[0_8px_28px_rgb(0_0_0/0.16)] backdrop-blur-md transition-all duration-300 hover:border-[#f0bd5d]/55 hover:bg-white/[0.12] hover:text-[#f0bd5d]";
   const controlClass = solidNav ? "icon-button-glass" : topControlClass;
@@ -72,24 +78,74 @@ export function Nav() {
 
   useEffect(() => { setOpen(false); }, [location.pathname, location.hash]);
 
-  return (
-    <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${solidNav ? "border-b border-border/50 bg-background/[0.78] shadow-soft backdrop-blur-2xl" : "border-b border-transparent bg-transparent"}`}>
-      <div className="mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10">
-        <Logo
-          className={solidNav ? "" : "text-white drop-shadow-[0_3px_14px_rgb(0_0_0/0.34)]"}
-          iconClassName={solidNav ? undefined : "[filter:brightness(0)_invert(1)]"}
-        />
+  useLayoutEffect(() => {
+    const updateCompactMode = () => {
+      if (typeof window === "undefined") return;
 
-        <nav aria-label="Primary" className="hidden min-w-0 flex-1 items-center justify-center gap-2.5 px-4 2xl:flex">
+      if (window.innerWidth < 1536) {
+        setCompactNav(false);
+        return;
+      }
+
+      const row = navRowRef.current;
+      const logo = logoSlotRef.current;
+      const measuredNav = navMeasureRef.current;
+      const measuredControls = controlsMeasureRef.current;
+      if (!row || !logo || !measuredNav || !measuredControls) return;
+
+      const rowStyle = window.getComputedStyle(row);
+      const availableWidth =
+        row.clientWidth - Number.parseFloat(rowStyle.paddingLeft) - Number.parseFloat(rowStyle.paddingRight);
+      const logoWidth = logo.getBoundingClientRect().width;
+      const navWidth = measuredNav.scrollWidth;
+      const controlsWidth = measuredControls.scrollWidth;
+      const horizontalGaps = 32;
+      const reserve = 28;
+
+      setCompactNav(logoWidth + navWidth + controlsWidth + horizontalGaps + reserve > availableWidth);
+    };
+
+    updateCompactMode();
+
+    const observer = new ResizeObserver(updateCompactMode);
+    [navRowRef.current, logoSlotRef.current, navMeasureRef.current, controlsMeasureRef.current].forEach((element) => {
+      if (element) observer.observe(element);
+    });
+
+    window.addEventListener("resize", updateCompactMode);
+    document.fonts?.ready.then(updateCompactMode).catch(() => undefined);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateCompactMode);
+    };
+  }, [lang]);
+
+  return (
+    <header dir="ltr" className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${solidNav ? "border-b border-border/50 bg-background/[0.78] shadow-soft backdrop-blur-2xl" : "border-b border-transparent bg-transparent"}`}>
+      <div ref={navRowRef} className="mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10">
+        <div ref={logoSlotRef} className="shrink-0">
+          <Logo
+            className={solidNav ? "" : "text-white drop-shadow-[0_3px_14px_rgb(0_0_0/0.34)]"}
+            iconClassName={solidNav ? undefined : "[filter:brightness(0)_invert(1)]"}
+          />
+        </div>
+
+        <nav
+          aria-label="Primary"
+          className={`${fullNavAvailable ? "hidden 2xl:flex" : "hidden"} min-w-0 flex-1 items-center justify-center gap-2 px-3`}
+        >
           {NAV.map((item) => {
             const isActive = item.hash ? active === item.hash : location.pathname === item.to && !active;
             const href = `${item.to}${item.hash}`;
+            const label = t(item.key);
             return (
               <Link
                 key={item.key}
                 to={href}
+                title={label}
                 onClick={(event) => handleNavClick(event, item)}
-                className={`shrink-0 rounded-full px-2.5 py-1.5 text-[12px] tracking-wide transition-all duration-300 ${
+                className={`shrink-0 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[clamp(10.5px,0.68vw,12px)] leading-none tracking-wide transition-all duration-300 ${
                   solidNav
                     ? isActive
                       ? "bg-primary/10 text-primary"
@@ -99,7 +155,7 @@ export function Nav() {
                       : "text-white/90 drop-shadow-[0_2px_10px_rgb(0_0_0/0.34)] hover:bg-white/[0.08] hover:text-[#f0bd5d]"
                 }`}
               >
-                {t(item.key)}
+                {label}
               </Link>
             );
           })}
@@ -114,7 +170,7 @@ export function Nav() {
               aria-haspopup="listbox"
               aria-expanded={langOpen}
               aria-label="Change language"
-              className={`${controlClass} inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] uppercase tracking-widest ${controlTextClass}`}
+              className={`${controlClass} inline-flex min-w-0 items-center gap-1.5 px-2.5 py-1.5 text-[11px] uppercase tracking-widest ${controlTextClass}`}
             >
               <Globe className="h-3.5 w-3.5" />
               {LANGS.find((l) => l.code === lang)?.native}
@@ -142,17 +198,20 @@ export function Nav() {
 
           <button
             onClick={openLogin}
-            className={`hidden px-3 py-2 text-[13px] tracking-wide transition-colors 2xl:inline-flex ${controlTextClass}`}
+            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap px-3 py-2 text-[13px] tracking-wide transition-colors ${controlTextClass}`}
           >
             {t("cta.login")}
           </button>
-          <button onClick={openRegister} className="hidden xl:inline-flex btn-ghost-gold !py-2 !px-4 text-[12px]">
+          <button
+            onClick={openRegister}
+            className={`${fullNavAvailable ? "hidden xl:inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !py-2 !px-4 text-[12px]`}
+          >
             {t("cta.register")}
           </button>
           <Link
             to="/#participate"
             onClick={(event) => handleNavClick(event, NAV[4])}
-            className="hidden xl:inline-flex btn-gold !py-2 !px-4 text-[12px]"
+            className={`${fullNavAvailable ? "hidden xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-[12px]`}
           >
             {t("cta.start")}
           </Link>
@@ -162,15 +221,42 @@ export function Nav() {
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className={`${controlClass} 2xl:hidden h-10 w-10`}
+            className={`${controlClass} ${compactNav ? "" : "2xl:hidden"} h-10 w-10 shrink-0`}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
+      <div
+        aria-hidden
+        className="pointer-events-none invisible fixed -left-[9999px] top-0 flex items-center gap-4 whitespace-nowrap"
+      >
+        <nav ref={navMeasureRef} className="flex items-center justify-center gap-2 px-3">
+          {NAV.map((item) => (
+            <span key={item.key} className="rounded-full px-2.5 py-1.5 text-[12px] leading-none tracking-wide">
+              {t(item.key)}
+            </span>
+          ))}
+        </nav>
+        <div ref={controlsMeasureRef} className="flex items-center gap-3">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] uppercase tracking-widest">
+            <Globe className="h-3.5 w-3.5" />
+            {LANGS.find((l) => l.code === lang)?.native}
+            <ChevronDown className="h-3 w-3" />
+          </span>
+          <span className="px-3 py-2 text-[13px] tracking-wide">{t("cta.login")}</span>
+          <span className="px-4 py-2 text-[12px] tracking-wide">{t("cta.register")}</span>
+          <span className="px-4 py-2 text-[12px] tracking-wide">{t("cta.start")}</span>
+        </div>
+      </div>
+
       {/* Mobile drawer */}
-      <div className={`lg:hidden overflow-hidden transition-[max-height] duration-500 ${open ? "max-h-[80vh]" : "max-h-0"}`}>
+      <div
+        className={`${compactNav ? "" : "2xl:hidden"} transition-[max-height] duration-500 ${
+          open ? "max-h-[calc(100svh-4rem)] overflow-y-auto" : "max-h-0 overflow-hidden"
+        }`}
+      >
         <div className="container-x pb-6 pt-2">
           <nav aria-label="Mobile" className="glass grid gap-1 rounded-lg p-2">
             {NAV.map((item) => (
@@ -178,15 +264,15 @@ export function Nav() {
                 key={item.key}
                 to={`${item.to}${item.hash}`}
                 onClick={(event) => handleNavClick(event, item)}
-                className="rounded-md px-3 py-3 text-base text-foreground/85 hover:bg-muted/70 hover:text-foreground"
+                className="rounded-md px-3 py-3 text-base leading-snug text-foreground/85 transition hover:bg-muted/70 hover:text-foreground"
               >
                 {t(item.key)}
               </Link>
             ))}
           </nav>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <button onClick={openLogin} className="btn-ghost-gold">{t("cta.login")}</button>
-            <button onClick={openRegister} className="btn-gold">{t("cta.register")}</button>
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <button onClick={openLogin} className="btn-ghost-gold w-full justify-center text-center leading-tight">{t("cta.login")}</button>
+            <button onClick={openRegister} className="btn-gold w-full justify-center text-center leading-tight">{t("cta.register")}</button>
           </div>
         </div>
       </div>
