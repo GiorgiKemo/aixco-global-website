@@ -69,60 +69,97 @@ export function Partners() {
           </motion.button>
         )}
 
-        <PartnerGrid title="Group companies" partners={groupCompanies} openPartner={openPartner} tx={tx} />
-        <PartnerGrid title="Strategic partners" partners={strategicPartners} openPartner={openPartner} tx={tx} />
+        <PartnerMarquee title="Group companies" partners={groupCompanies} openPartner={openPartner} tx={tx} />
+        <PartnerMarquee
+          title="Strategic partners"
+          partners={strategicPartners}
+          openPartner={openPartner}
+          tx={tx}
+          reverse
+        />
       </div>
     </section>
   );
 }
 
-function PartnerGrid({
+function PartnerMarquee({
   title,
   partners: items,
   openPartner,
   tx,
+  reverse = false,
 }: {
   title: string;
   partners: Partner[];
   openPartner: (partner: Partner) => void;
   tx: (text: string) => string;
+  reverse?: boolean;
 }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="mb-10 last:mb-0">
+    <div className="mb-12 last:mb-0">
       <h3 className="scroll-reveal mb-5 font-display text-2xl">{tx(title)}</h3>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {items.map((partner) => (
-          <motion.button
-            key={partner.name}
-            onClick={() => openPartner(partner)}
-            className={`scroll-reveal mac-card group flex min-h-[180px] flex-col justify-between p-7 text-left ${partner.featured ? "ring-1 ring-primary/35" : ""}`}
-            whileHover={premiumSurfaceHover}
-            whileTap={premiumPress}
-          >
-            <div>
-              {partner.logo && (
-                <div className="mb-6 flex h-16 items-center justify-start rounded-md bg-surface-elevated/70 p-3">
-                  <img
-                    src={logoMap[partner.logo]}
-                    alt={partner.name}
-                    loading="lazy"
-                    width={180}
-                    height={80}
-                    className="max-h-10 w-full object-contain object-left"
-                  />
-                </div>
-              )}
-              <p className="font-display text-xl">{partner.name}</p>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{tx(partner.summary)}</p>
+      <div className="partner-marquee scroll-reveal" aria-label={tx(title)}>
+        <div className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""}`}>
+          {[0, 1].map((setIndex) => (
+            <div key={setIndex} className="partner-marquee-set" aria-hidden={setIndex === 1 ? "true" : undefined}>
+              {items.map((partner) => (
+                <PartnerCard
+                  key={`${setIndex}-${partner.name}`}
+                  partner={partner}
+                  openPartner={openPartner}
+                  tx={tx}
+                  isClone={setIndex === 1}
+                />
+              ))}
             </div>
-            <span className="mt-4 inline-block text-[11px] uppercase tracking-widest text-primary">
-              {tx("Open profile")}
-            </span>
-          </motion.button>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
+  );
+}
+
+function PartnerCard({
+  partner,
+  openPartner,
+  tx,
+  isClone,
+}: {
+  partner: Partner;
+  openPartner: (partner: Partner) => void;
+  tx: (text: string) => string;
+  isClone: boolean;
+}) {
+  return (
+    <motion.button
+      type="button"
+      onClick={() => openPartner(partner)}
+      tabIndex={isClone ? -1 : undefined}
+      className={`mac-card group flex h-[264px] w-[min(78vw,300px)] shrink-0 flex-col justify-between p-7 text-left md:w-[300px] ${partner.featured ? "ring-1 ring-primary/35" : ""}`}
+      whileHover={premiumSurfaceHover}
+      whileTap={premiumPress}
+    >
+      <div>
+        {partner.logo && (
+          <div className="mb-6 flex h-16 items-center justify-start rounded-md bg-surface-elevated/70 p-3">
+            <img
+              src={logoMap[partner.logo]}
+              alt={partner.name}
+              loading="lazy"
+              width={180}
+              height={80}
+              className="max-h-10 w-full object-contain object-left"
+            />
+          </div>
+        )}
+        <p className="font-display text-xl">{partner.name}</p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{tx(partner.summary)}</p>
+      </div>
+      <span className="mt-4 inline-block text-[11px] uppercase tracking-widest text-primary">
+        {tx("Open profile")}
+      </span>
+    </motion.button>
   );
 }
