@@ -28,7 +28,7 @@ export function About() {
                 <p className="font-display text-4xl md:text-5xl text-gold leading-none">
                   <CountUpText value={m.value} />
                 </p>
-                <p className="mt-3 text-xs uppercase tracking-[0.22em] text-muted-foreground">{tx(m.label)}</p>
+                <p className="mt-3 text-[11px] uppercase leading-relaxed tracking-[0.08em] text-muted-foreground [overflow-wrap:anywhere] md:text-xs md:tracking-[0.12em] 2xl:tracking-[0.2em]">{tx(m.label)}</p>
               </div>
             ))}
           </div>

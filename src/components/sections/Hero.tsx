@@ -115,14 +115,14 @@ export function Hero() {
           {tx("Quality Real Estate Participation")}
         </motion.p>
         <motion.h1
-          className="hero-reference-font max-w-[90rem] text-5xl font-semibold leading-[0.95] tracking-normal text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)] [perspective:900px] sm:text-6xl md:text-7xl lg:text-[5.75rem]"
+          className="hero-reference-font max-w-[90rem] text-[clamp(2.55rem,13vw,3.75rem)] font-semibold leading-[0.95] tracking-normal text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)] [perspective:900px] sm:text-6xl md:text-7xl lg:text-[5.75rem]"
           initial="hidden"
           animate={isHeroReady ? "visible" : "hidden"}
           variants={shouldReduceMotion ? { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } } : headlineVariants}
         >
           <span className="block pb-[0.04em]">
             <motion.span
-              className="block origin-bottom will-change-[opacity,transform,filter]"
+              className="block origin-bottom whitespace-nowrap will-change-[opacity,transform,filter]"
               variants={shouldReduceMotion ? reducedLineVariants : headlineLineVariants}
             >
               {tx("AIXCO Global")}
