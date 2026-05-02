@@ -25,6 +25,8 @@ export function Logo({
         className={`h-8 w-8 shrink-0 object-contain md:h-9 md:w-9 ${iconClassName}`}
         width={780}
         height={704}
+        decoding="async"
+        fetchPriority="high"
       />
       <span className={`whitespace-nowrap text-sm font-medium tracking-[-0.02em] md:text-[15px] ${textClassName}`}>
         AIXCO.GLOBAL

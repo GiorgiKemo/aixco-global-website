@@ -60,6 +60,7 @@ export function Partners() {
                   src={logoMap[featured.logo]}
                   alt={featured.name}
                   loading="lazy"
+                  decoding="async"
                   width={420}
                   height={220}
                   className="max-h-36 w-full object-contain"
@@ -148,6 +149,7 @@ function PartnerCard({
               src={logoMap[partner.logo]}
               alt={partner.name}
               loading="lazy"
+              decoding="async"
               width={180}
               height={80}
               className="max-h-10 w-full object-contain object-left"
