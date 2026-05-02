@@ -86,7 +86,9 @@ export function ChatWidget() {
   useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-    } catch {}
+    } catch {
+      // Storage can be disabled in private browsing or hardened browser settings.
+    }
   }, [messages]);
 
   useEffect(() => {

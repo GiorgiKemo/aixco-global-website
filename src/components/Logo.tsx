@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import type { MouseEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { scrollToPageTop } from "@/lib/smooth-scroll";
 
 type LogoProps = {
   className?: string;
@@ -12,10 +14,28 @@ export function Logo({
   iconClassName = "[filter:brightness(0)_saturate(100%)]",
   textClassName = "",
 }: LogoProps) {
+  const navigate = useNavigate();
+
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button !== 0 || event.metaKey || event.altKey || event.ctrlKey || event.shiftKey) return;
+
+    const homePath = new URL(import.meta.env.BASE_URL, window.location.origin).pathname;
+
+    if (window.location.pathname === homePath && !window.location.hash) {
+      event.preventDefault();
+      scrollToPageTop();
+      return;
+    }
+
+    event.preventDefault();
+    navigate("/");
+  };
+
   return (
     <Link
       to="/"
       aria-label="AIXCO Global home"
+      onClick={handleClick}
       className={`inline-flex shrink-0 items-center gap-2.5 text-foreground ${className}`}
     >
       <img
@@ -26,7 +46,7 @@ export function Logo({
         width={780}
         height={704}
         decoding="async"
-        fetchPriority="high"
+        fetchpriority="high"
       />
       <span className={`whitespace-nowrap text-sm font-medium tracking-[-0.02em] md:text-[15px] ${textClassName}`}>
         AIXCO.GLOBAL

@@ -1,8 +1,9 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { lazy, Suspense, useEffect, useRef } from "react";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
 import { ChatWidget } from "@/components/ChatWidget";
+import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 
 const Index = lazy(() => import("./pages/Index.tsx"));
 const Insights = lazy(() => import("./pages/Insights.tsx"));
@@ -25,10 +26,53 @@ function DeferredModals() {
   );
 }
 
+function ScrollManager() {
+  const location = useLocation();
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("scrollRestoration" in window.history)) return;
+
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    return () => {
+      window.history.scrollRestoration = previous;
+    };
+  }, []);
+
+  useEffect(() => {
+    const firstRender = isFirstRender.current;
+    isFirstRender.current = false;
+
+    let frameId = 0;
+
+    const runScroll = (attemptsLeft = 12) => {
+      if (location.hash) {
+        const didScroll = scrollToHash(location.hash, firstRender ? "auto" : undefined);
+        if (!didScroll && attemptsLeft > 0) {
+          frameId = window.requestAnimationFrame(() => runScroll(attemptsLeft - 1));
+        }
+        return;
+      }
+
+      if (!firstRender) {
+        scrollToPageTop();
+      }
+    };
+
+    frameId = window.requestAnimationFrame(() => runScroll());
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [location.hash, location.pathname]);
+
+  return null;
+}
+
 const App = () => (
   <I18nProvider>
     <UIProvider>
       <BrowserRouter basename={import.meta.env.BASE_URL}>
+        <ScrollManager />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />

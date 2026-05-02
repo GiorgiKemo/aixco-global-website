@@ -1,6 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/i18n/I18nProvider";
 import heroBatumiCity from "@/assets/hero-batumi-city.jpg";
 
@@ -61,7 +62,13 @@ export function Hero() {
   const shouldReduceMotion = useReducedMotion();
   const [isHeroReady, setIsHeroReady] = useState(false);
   const { tx } = useI18n();
+  const navigate = useNavigate();
   const hiddenTextState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: "blur(10px)" };
+
+  const handleAboutClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    navigate("/#about");
+  };
 
   const reducedLineVariants: Variants = {
     hidden: { opacity: 0 },
@@ -81,7 +88,7 @@ export function Hero() {
         height={2999}
         loading="eager"
         decoding="async"
-        fetchPriority="high"
+        fetchpriority="high"
         onLoad={() => setIsHeroReady(true)}
         onError={() => setIsHeroReady(true)}
         initial={shouldReduceMotion ? { scale: 1.006, opacity: 0.98 } : { scale: 1.055, opacity: 0.92 }}
@@ -147,6 +154,7 @@ export function Hero() {
 
         <motion.a
           href="#about"
+          onClick={handleAboutClick}
           aria-label="Scroll to About section"
           className="mt-8 inline-flex h-8 w-8 items-center justify-center text-[#f0bd5d] drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] transition hover:text-[#ffd47a]"
           initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}

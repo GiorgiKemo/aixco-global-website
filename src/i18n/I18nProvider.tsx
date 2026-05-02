@@ -65,7 +65,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         lang === "en" ? pageDescription : attributeTranslations.content[pageDescription]?.[lang] ?? pageDescription,
       );
     }
-    try { localStorage.setItem("aixco-lang", lang); } catch {}
+    try {
+      localStorage.setItem("aixco-lang", lang);
+    } catch {
+      // Language persistence is optional when browser storage is unavailable.
+    }
   }, [lang, dir]);
 
   const value = useMemo<Ctx>(() => ({
