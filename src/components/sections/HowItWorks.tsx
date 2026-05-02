@@ -45,7 +45,7 @@ export function HowItWorks() {
             >
               <div>
                 <p className="text-[10px] uppercase tracking-widest text-muted-foreground">{tx(j.tag ?? `Journey 0${i + 1}`)}</p>
-                <h3 className="font-display text-2xl mt-3">{tx(j.role)}</h3>
+                <h3 className="font-display mt-3 text-2xl leading-tight [overflow-wrap:anywhere]">{tx(j.role)}</h3>
                 <p className="mt-3 text-sm text-foreground/75 leading-relaxed">{tx(j.summary)}</p>
               </div>
               <div className="mt-6 flex items-center justify-between">
