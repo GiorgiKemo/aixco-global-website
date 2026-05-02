@@ -79,7 +79,7 @@ export function Contact() {
               decoding="async"
               width={1280}
               height={720}
-              className="h-56 w-full object-cover"
+              className="aspect-[3/2] w-full object-cover"
             />
           </div>
         </div>
