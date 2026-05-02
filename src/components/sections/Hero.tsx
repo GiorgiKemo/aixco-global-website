@@ -107,17 +107,17 @@ export function Hero() {
       </motion.video>
 
       <div
-        className="absolute inset-0 bg-[linear-gradient(180deg,rgb(0_0_0/0.03)_0%,rgb(0_0_0/0.04)_22%,rgb(0_0_0/0.18)_42%,rgb(0_0_0/0.42)_70%,rgb(0_0_0/0.24)_100%)]"
+        className="absolute inset-0 bg-[linear-gradient(180deg,hsl(222_20%_10%/0.52)_0%,hsl(222_20%_10%/0.22)_38%,hsl(222_20%_10%/0.76)_100%)]"
         aria-hidden
       />
       <div
-        className="absolute inset-x-0 bottom-0 h-[62%] bg-[radial-gradient(ellipse_at_center,rgb(0_0_0/0.42)_0%,rgb(0_0_0/0.24)_42%,transparent_72%)]"
+        className="absolute inset-0 bg-[linear-gradient(90deg,hsl(222_20%_10%/0.66)_0%,transparent_34%,transparent_68%,hsl(222_20%_10%/0.58)_100%)]"
         aria-hidden
       />
 
       <div className="relative z-10 flex min-h-[100svh] flex-col items-center px-6 pt-[45vh] text-center md:pt-[48vh]">
         <motion.p
-          className="mb-4 text-xs font-medium uppercase tracking-normal text-white/80 drop-shadow-[0_3px_14px_rgb(0_0_0/0.5)]"
+          className="mb-5 text-sm font-medium uppercase tracking-normal text-white/90 drop-shadow-[0_4px_16px_rgb(0_0_0/0.55)] sm:text-base md:text-lg"
           initial={hiddenTextState}
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.6 : 0.9, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: 0.12 }}
