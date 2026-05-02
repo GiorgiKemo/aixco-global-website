@@ -21,11 +21,6 @@ const fundVideos = [
   { src: aixcoLiveVideos.fundThree, title: "Fund I Eden House The Canal & Eden House The Park", poster: aixcoLiveImages.dubaiEdenHouse },
 ];
 
-const galleryColumns = [
-  aixcoFundGallery.filter((_, index) => index % 2 === 0),
-  aixcoFundGallery.filter((_, index) => index % 2 === 1),
-];
-
 const fundImageAspectClass: Record<string, string> = {
   "dubai-eden": "aspect-video",
   "dubai-healthcare": "aspect-[2/3]",
@@ -95,47 +90,48 @@ export function Dubai() {
         </div>
 
         <div className="scroll-reveal mt-10 grid gap-6 lg:grid-cols-[minmax(0,1.18fr)_minmax(300px,0.82fr)] lg:items-start">
-          <div className="grid gap-4 sm:grid-cols-2" aria-label="Fund I Eden House gallery">
-            {galleryColumns.map((column, columnIndex) => (
-              <div key={columnIndex} className={`grid gap-4 ${columnIndex === 1 ? "sm:pt-16" : ""}`}>
-                {column.map((src, index) => {
-                  const imageIndex = index * 2 + columnIndex + 1;
-                  return (
-                    <motion.figure
-                      key={src}
-                      className={`group overflow-hidden rounded-lg bg-background shadow-soft ${galleryAspectClass(src)}`}
-                      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 28, scale: 0.985 }}
-                      whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
-                      viewport={{ once: true, amount: 0.22, margin: "0px 0px -10% 0px" }}
-                      transition={{
-                        duration: shouldReduceMotion ? 0.35 : 0.72,
-                        ease: shouldReduceMotion ? "easeOut" : [0.16, 1, 0.3, 1],
-                        delay: shouldReduceMotion ? 0 : (index % 3) * 0.05,
-                      }}
-                    >
-                      <img
-                        src={src}
-                        alt={`Fund I Eden House gallery ${imageIndex}`}
-                        loading="lazy"
-                        decoding="async"
-                        width={1280}
-                        height={720}
-                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                      />
-                    </motion.figure>
-                  );
-                })}
-              </div>
+          <div
+            className="columns-1 gap-4 sm:columns-2"
+            aria-label="Fund I Eden House gallery"
+            data-layout="dense-masonry"
+          >
+            {aixcoFundGallery.map((src, index) => (
+              <motion.figure
+                key={src}
+                className={`group mb-4 break-inside-avoid overflow-hidden rounded-lg bg-background shadow-soft ${galleryAspectClass(src)}`}
+                initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 28, scale: 0.985 }}
+                whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.22, margin: "0px 0px -10% 0px" }}
+                transition={{
+                  duration: shouldReduceMotion ? 0.35 : 0.72,
+                  ease: shouldReduceMotion ? "easeOut" : [0.16, 1, 0.3, 1],
+                  delay: shouldReduceMotion ? 0 : (index % 3) * 0.05,
+                }}
+              >
+                <img
+                  src={src}
+                  alt={`Fund I Eden House gallery ${index + 1}`}
+                  loading="lazy"
+                  decoding="async"
+                  width={1280}
+                  height={720}
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                />
+              </motion.figure>
             ))}
           </div>
-          <div className="grid gap-3 sm:grid-cols-3 lg:sticky lg:top-24 lg:grid-cols-1">
+          <div
+            className="grid grid-cols-3 gap-3 lg:sticky lg:top-24 lg:h-[calc(100svh-8rem)] lg:max-h-[calc(100svh-8rem)] lg:grid-cols-1 lg:grid-rows-3"
+            aria-label="Dubai fund videos"
+            data-layout="viewport-fit-video-rail"
+          >
             {fundVideos.map((video) => (
               <LiveVideo
                 key={video.src}
                 src={video.src}
                 title={tx(video.title)}
                 poster={video.poster}
-                className="aspect-video"
+                className="aspect-video lg:aspect-auto lg:h-full lg:min-h-0"
               />
             ))}
           </div>

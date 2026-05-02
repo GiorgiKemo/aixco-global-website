@@ -2,6 +2,11 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { attributeTranslations, languageOptions, textTranslations, type Lang } from "./translations";
 
 export const LANGS = languageOptions;
+const DEFAULT_LANG: Lang = "en";
+
+function isLang(value: string | null): value is Lang {
+  return LANGS.some((option) => option.code === value);
+}
 
 const keyedText: Record<string, string> = {
   "nav.home": "Home",
@@ -51,7 +56,11 @@ type Ctx = {
 const I18nCtx = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(() => (typeof window !== "undefined" && (localStorage.getItem("aixco-lang") as Lang)) || "en");
+  const [lang, setLang] = useState<Lang>(() => {
+    if (typeof window === "undefined") return DEFAULT_LANG;
+    const storedLang = localStorage.getItem("aixco-lang");
+    return isLang(storedLang) ? storedLang : DEFAULT_LANG;
+  });
   const dir = lang === "ar" ? "rtl" : "ltr";
 
   useEffect(() => {
