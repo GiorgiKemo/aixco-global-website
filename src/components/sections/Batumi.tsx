@@ -17,6 +17,11 @@ const propertyVideos = [
   { src: aixcoLiveVideos.guru, title: "Serenade", poster: aixcoLiveImages.batumiSerenade },
 ];
 
+const propertyImageAspectClass: Record<string, string> = {
+  "batumi-queens": "aspect-[79/97]",
+  "batumi-serenade": "aspect-[3/2]",
+};
+
 export function Batumi() {
   const [selected, setSelected] = useState(batumiProperties[0].id);
   const { tx } = useI18n();
@@ -84,7 +89,7 @@ export function Batumi() {
           </div>
 
           <div className="scroll-reveal grid gap-4 lg:col-span-7 md:grid-cols-[1fr_0.84fr]">
-            <div className="mac-card relative aspect-[4/5] overflow-hidden md:aspect-[5/4]">
+            <div className={`mac-card relative overflow-hidden bg-surface-elevated ${propertyImageAspectClass[property.image] ?? "aspect-[4/5]"}`}>
               <img
                 key={property.id}
                 src={imageMap[property.image]}

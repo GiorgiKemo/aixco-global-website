@@ -418,7 +418,7 @@ function TeamDetail({
 }) {
   return (
     <div className="grid gap-6 sm:grid-cols-[180px_1fr]">
-      <img src={teamImageMap[data.image]} alt={data.name} className="aspect-[4/5] w-full rounded-lg object-cover grayscale" loading="lazy" decoding="async" />
+      <img src={teamImageMap[data.image]} alt={data.name} className="aspect-[9/10] w-full rounded-lg object-cover grayscale" loading="lazy" decoding="async" />
       <div>
         <p className="eyebrow mb-3">{tx("Leadership")}</p>
         <h3 className="heading-section mb-1">{data.name}</h3>
@@ -494,7 +494,7 @@ function PartnerDetail({
                   decoding="async"
                   width={180}
                   height={180}
-                  className="aspect-square w-full rounded-md object-cover"
+                  className="aspect-square w-full rounded-md bg-surface-elevated object-contain"
                 />
               )}
               <div>

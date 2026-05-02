@@ -26,6 +26,18 @@ const galleryColumns = [
   aixcoFundGallery.filter((_, index) => index % 2 === 1),
 ];
 
+const fundImageAspectClass: Record<string, string> = {
+  "dubai-eden": "aspect-video",
+  "dubai-healthcare": "aspect-[2/3]",
+};
+
+function galleryAspectClass(src: string) {
+  if (src.endsWith("/fund1.png")) return "aspect-[2/3]";
+  if (src.endsWith("/fund8.jpeg") || src.endsWith("/fund20.jpeg")) return "aspect-[9/16]";
+  if (src.endsWith("/fund4.jpeg")) return "aspect-[4/3]";
+  return "aspect-video";
+}
+
 export function Dubai() {
   const { tx } = useI18n();
   const shouldReduceMotion = useReducedMotion();
@@ -38,7 +50,7 @@ export function Dubai() {
           <h2 className="heading-section mt-5 max-w-2xl">{tx("Dubai")}</h2>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
           {dubaiFunds.map((fund, idx) => (
             <motion.article
               key={fund.id}
@@ -47,7 +59,7 @@ export function Dubai() {
               whileTap={premiumPress}
             >
               <div className="grid overflow-hidden bg-border/50 md:grid-cols-2">
-                <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                <div className={`relative overflow-hidden bg-muted ${fundImageAspectClass[fund.image] ?? "aspect-video"}`}>
                   <img
                     src={imageMap[fund.image]}
                     alt={tx(fund.name)}
@@ -55,14 +67,14 @@ export function Dubai() {
                     decoding="async"
                     width={1536}
                     height={960}
-                    className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-[1.035]"
+                    className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
                   />
                 </div>
                 <LiveVideo
                   src={videoMap[fund.video]}
                   title={tx(fund.name)}
                   poster={imageMap[fund.image]}
-                  className="aspect-[16/10] rounded-none shadow-none"
+                  className={`${fund.image === "dubai-healthcare" ? "aspect-[2/3]" : "aspect-video"} rounded-none shadow-none`}
                 />
                 <span className="absolute right-4 top-4 font-display text-5xl text-primary/70 drop-shadow-[0_2px_12px_rgb(255_255_255/0.45)]">
                   0{idx + 1}
@@ -91,7 +103,7 @@ export function Dubai() {
                   return (
                     <motion.figure
                       key={src}
-                      className="group overflow-hidden rounded-lg bg-background shadow-soft"
+                      className={`group overflow-hidden rounded-lg bg-background shadow-soft ${galleryAspectClass(src)}`}
                       initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 28, scale: 0.985 }}
                       whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
                       viewport={{ once: true, amount: 0.22, margin: "0px 0px -10% 0px" }}
@@ -106,9 +118,9 @@ export function Dubai() {
                         alt={`Fund I Eden House gallery ${imageIndex}`}
                         loading="lazy"
                         decoding="async"
-                        width={640}
-                        height={440}
-                        className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+                        width={1280}
+                        height={720}
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                       />
                     </motion.figure>
                   );

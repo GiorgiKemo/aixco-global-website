@@ -37,7 +37,7 @@ export function Team() {
               whileHover={premiumSurfaceHover}
               whileTap={premiumPress}
             >
-              <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+              <div className="relative aspect-[9/10] overflow-hidden bg-muted">
                 <img
                   src={imageMap[m.image]}
                   alt={m.name}
