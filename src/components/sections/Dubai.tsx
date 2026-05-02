@@ -31,7 +31,7 @@ export function Dubai() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section id="dubai" className="relative py-28 md:py-36 scroll-mt-24 bg-surface/40">
+    <section id="dubai" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0 bg-surface/40">
       <div className="container-x">
         <div className="scroll-reveal mb-14">
           <p className="eyebrow">{tx("Dubai")}</p>

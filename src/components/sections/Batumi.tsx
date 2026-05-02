@@ -23,7 +23,7 @@ export function Batumi() {
   const property = batumiProperties.find((item) => item.id === selected) ?? batumiProperties[0];
 
   return (
-    <section id="batumi" className="relative py-28 md:py-36 scroll-mt-24">
+    <section id="batumi" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0">
       <div className="container-x">
         <div className="scroll-reveal grid gap-12 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-6">

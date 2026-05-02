@@ -45,7 +45,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-28 md:py-36 scroll-mt-24 bg-surface/40">
+    <section id="contact" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0 bg-surface/40">
       <div className="container-x grid gap-12 lg:grid-cols-12">
         <div className="scroll-reveal lg:col-span-5">
           <p className="eyebrow">{tx("Contact")}</p>
@@ -73,7 +73,7 @@ export function Contact() {
           </div>
           <div className="mac-card mt-10 overflow-hidden">
             <img
-              src={aixcoLiveImages.contact}
+              src={aixcoLiveImages.transactionBackdrop}
               alt={tx("Contact")}
               loading="lazy"
               decoding="async"
