@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import { Logo } from "./Logo";
 import { useI18n, LANGS } from "@/i18n/I18nProvider";
 import { useUI } from "@/components/ui-state";
+import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 
 const NAV = [
   { key: "nav.home", to: "/", hash: "" },
@@ -33,6 +34,20 @@ export function Nav() {
   const controlTextClass = solidNav
     ? "text-foreground/85 hover:text-foreground"
     : "text-white/90 drop-shadow-[0_2px_10px_rgb(0_0_0/0.34)] hover:text-[#f0bd5d]";
+
+  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, item: (typeof NAV)[number]) => {
+    setLangOpen(false);
+    setOpen(false);
+
+    if (location.pathname !== item.to || location.hash !== item.hash) return;
+
+    event.preventDefault();
+    if (item.hash) {
+      scrollToHash(item.hash);
+    } else {
+      scrollToPageTop();
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -73,6 +88,7 @@ export function Nav() {
               <Link
                 key={item.key}
                 to={href}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`shrink-0 rounded-full px-2.5 py-1.5 text-[12px] tracking-wide transition-all duration-300 ${
                   solidNav
                     ? isActive
@@ -133,7 +149,11 @@ export function Nav() {
           <button onClick={openRegister} className="hidden xl:inline-flex btn-ghost-gold !py-2 !px-4 text-[12px]">
             {t("cta.register")}
           </button>
-          <Link to="/#participate" className="hidden xl:inline-flex btn-gold !py-2 !px-4 text-[12px]">
+          <Link
+            to="/#participate"
+            onClick={(event) => handleNavClick(event, NAV[4])}
+            className="hidden xl:inline-flex btn-gold !py-2 !px-4 text-[12px]"
+          >
             {t("cta.start")}
           </Link>
 
@@ -157,6 +177,7 @@ export function Nav() {
               <Link
                 key={item.key}
                 to={`${item.to}${item.hash}`}
+                onClick={(event) => handleNavClick(event, item)}
                 className="rounded-md px-3 py-3 text-base text-foreground/85 hover:bg-muted/70 hover:text-foreground"
               >
                 {t(item.key)}

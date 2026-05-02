@@ -29,6 +29,17 @@ const partnerPeopleMap: Record<string, string> = {
   warren: aixcoLivePartnerPeople.warren,
 };
 
+type JourneyDetailData = { tag: string; role: string; intro: string; steps: { title: string; text: string }[] };
+type TeamDetailData = { name: string; role: string; bio: string; image: string; points: { title: string; text: string }[] };
+type PartnerDetailData = {
+  name: string;
+  group?: string;
+  summary: string;
+  logo?: string;
+  detail?: string[];
+  leaders?: { name: string; role: string; image?: string }[];
+};
+
 const loginRoles = [
   {
     title: "Customer",
@@ -138,9 +149,9 @@ export function Modals() {
           {modal === "register" && <AccessModal mode="register" tx={tx} />}
           {modal === "terms" && <Legal title="Terms & Conditions" tx={tx} />}
           {modal === "privacy" && <Legal title="Privacy Policy" tx={tx} />}
-          {modal === "journey" && <JourneyDetail data={modalData} tx={tx} />}
-          {modal === "team" && <TeamDetail data={modalData} tx={tx} />}
-          {modal === "partner" && <PartnerDetail data={modalData} tx={tx} />}
+          {modal === "journey" && <JourneyDetail data={modalData as JourneyDetailData} tx={tx} />}
+          {modal === "team" && <TeamDetail data={modalData as TeamDetailData} tx={tx} />}
+          {modal === "partner" && <PartnerDetail data={modalData as PartnerDetailData} tx={tx} />}
         </div>
       </div>
     </div>
@@ -199,7 +210,7 @@ function JourneyDetail({
   data,
   tx,
 }: {
-  data: { tag: string; role: string; intro: string; steps: { title: string; text: string }[] };
+  data: JourneyDetailData;
   tx: (text: string) => string;
 }) {
   return (
@@ -228,7 +239,7 @@ function TeamDetail({
   data,
   tx,
 }: {
-  data: { name: string; role: string; bio: string; image: string; points: { title: string; text: string }[] };
+  data: TeamDetailData;
   tx: (text: string) => string;
 }) {
   return (
@@ -256,7 +267,7 @@ function PartnerDetail({
   data,
   tx,
 }: {
-  data: { name: string; group?: string; summary: string; logo?: string; detail?: string[]; leaders?: { name: string; role: string; image?: string }[] };
+  data: PartnerDetailData;
   tx: (text: string) => string;
 }) {
   return (

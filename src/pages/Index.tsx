@@ -12,17 +12,8 @@ import { InsightsTeaser } from "@/components/sections/InsightsTeaser";
 import { FAQs } from "@/components/sections/FAQs";
 import { Contact } from "@/components/sections/Contact";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 
 const Index = () => {
-  const { hash } = useLocation();
-  useEffect(() => {
-    if (hash) {
-      const el = document.querySelector(hash);
-      if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
-    }
-  }, [hash]);
   return (
     <>
       <Nav />
