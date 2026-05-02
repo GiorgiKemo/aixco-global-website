@@ -26,6 +26,7 @@ export function HowItWorks() {
               src={aixcoLiveImages.transactionBackdrop}
               alt={tx("How AIXCO Works")}
               loading="lazy"
+              decoding="async"
               width={1280}
               height={720}
               className="h-64 w-full object-cover"

@@ -16,9 +16,9 @@ const videoMap: Record<string, string> = {
 };
 
 const fundVideos = [
-  { src: aixcoLiveVideos.fundOne, title: "Fund I Eden House The Canal & Eden House The Park" },
-  { src: aixcoLiveVideos.fundTwo, title: "Fund II Dubai Healthcare City" },
-  { src: aixcoLiveVideos.fundThree, title: "Fund I Eden House The Canal & Eden House The Park" },
+  { src: aixcoLiveVideos.fundOne, title: "Fund I Eden House The Canal & Eden House The Park", poster: aixcoLiveImages.dubaiEdenHouse },
+  { src: aixcoLiveVideos.fundTwo, title: "Fund II Dubai Healthcare City", poster: aixcoLiveImages.dubaiHealthcare },
+  { src: aixcoLiveVideos.fundThree, title: "Fund I Eden House The Canal & Eden House The Park", poster: aixcoLiveImages.dubaiEdenHouse },
 ];
 
 const galleryColumns = [
@@ -52,6 +52,7 @@ export function Dubai() {
                     src={imageMap[fund.image]}
                     alt={tx(fund.name)}
                     loading="lazy"
+                    decoding="async"
                     width={1536}
                     height={960}
                     className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-[1.035]"
@@ -104,6 +105,7 @@ export function Dubai() {
                         src={src}
                         alt={`Fund I Eden House gallery ${imageIndex}`}
                         loading="lazy"
+                        decoding="async"
                         width={640}
                         height={440}
                         className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
@@ -120,6 +122,7 @@ export function Dubai() {
                 key={video.src}
                 src={video.src}
                 title={tx(video.title)}
+                poster={video.poster}
                 className="aspect-video"
               />
             ))}

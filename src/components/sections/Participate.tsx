@@ -4,12 +4,12 @@ import { useUI } from "../ui-state";
 import { motion } from "framer-motion";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
-import { aixcoLiveVideos } from "@/lib/aixco-live-assets";
+import { aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { LiveVideo } from "@/components/LiveVideo";
 
-const videoMap: Record<string, string> = {
-  bonds: aixcoLiveVideos.bonds,
-  batumiBuy: aixcoLiveVideos.batumiBuy,
+const videoMap: Record<string, { src: string; poster: string }> = {
+  bonds: { src: aixcoLiveVideos.bonds, poster: aixcoLiveImages.transactionBackdrop },
+  batumiBuy: { src: aixcoLiveVideos.batumiBuy, poster: aixcoLiveImages.batumiSerenade },
 };
 
 export function Participate() {
@@ -39,8 +39,9 @@ export function Participate() {
               whileTap={premiumPress}
             >
               <LiveVideo
-                src={videoMap[route.video]}
+                src={videoMap[route.video].src}
                 title={tx(route.title)}
+                poster={videoMap[route.video].poster}
                 className="aspect-[16/10] rounded-none shadow-none"
               />
               <div className="p-8 md:p-10">

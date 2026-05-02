@@ -42,6 +42,7 @@ export function Team() {
                   src={imageMap[m.image]}
                   alt={m.name}
                   loading="lazy"
+                  decoding="async"
                   width={832}
                   height={1024}
                   className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-[1.025]"

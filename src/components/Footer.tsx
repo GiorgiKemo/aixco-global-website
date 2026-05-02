@@ -18,6 +18,7 @@ export function Footer() {
             src={aixcoLiveLogos.aixcoGlobal}
             alt="AIXCO Global"
             loading="lazy"
+            decoding="async"
             width={420}
             height={120}
             className="mt-4 h-9 w-auto object-contain opacity-80 [filter:brightness(0)_saturate(100%)]"
@@ -32,7 +33,7 @@ export function Footer() {
             rel="noreferrer"
             className="inline-flex items-center gap-2 link-underline"
           >
-            <img src={aixcoLiveLogos.iso} alt="" aria-hidden loading="lazy" className="h-8 w-8 rounded-sm object-contain" />
+            <img src={aixcoLiveLogos.iso} alt="" aria-hidden loading="lazy" decoding="async" className="h-8 w-8 rounded-sm object-contain" />
             ISO 27001-2022 Certified Systems.
           </a>
           <button onClick={openTerms} className="link-underline">{tx("Terms & Conditions")}</button>

@@ -7,29 +7,31 @@ const withBaseUrl = (path: string) => {
 export const aixcoLivePath = (path: string) => withBaseUrl(`aixco-global-op2/${path}`);
 
 const liveImageBase = aixcoLivePath("images");
+const optimizedImageBase = aixcoLivePath("images/optimized");
+const optimizedVideoBase = aixcoLivePath("media");
 
 export const aixcoLiveImages = {
-  aboutArchitecture: `${liveImageBase}/batumip.jpg`,
-  contact: `${liveImageBase}/contact.jpg`,
+  aboutArchitecture: `${optimizedImageBase}/batumip.webp`,
+  contact: `${optimizedImageBase}/contact.webp`,
   dubaiEdenHouse: `${liveImageBase}/fund/fund1.jpeg`,
-  dubaiHealthcare: `${liveImageBase}/fund2.png`,
-  transactionBackdrop: `${liveImageBase}/trans.jpg`,
-  batumiQueens: `${liveImageBase}/batumip.jpg`,
-  batumiSerenade: `${liveImageBase}/batumi.jpg`,
-  teamBenjamin: `${liveImageBase}/benjamin.jpg`,
-  teamOwais: `${liveImageBase}/owais.jpg`,
-  teamWalter: `${liveImageBase}/walter.jpg`,
+  dubaiHealthcare: `${optimizedImageBase}/fund2.webp`,
+  transactionBackdrop: `${optimizedImageBase}/trans.webp`,
+  batumiQueens: `${optimizedImageBase}/batumip.webp`,
+  batumiSerenade: `${optimizedImageBase}/batumi.webp`,
+  teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
+  teamOwais: `${optimizedImageBase}/owais.webp`,
+  teamWalter: `${optimizedImageBase}/walter.webp`,
 } as const;
 
 export const aixcoLiveVideos = {
-  batumiOverview: `${liveImageBase}/batumi2.mp4`,
-  batumiBuy: `${liveImageBase}/batumibuy.mp4`,
-  bonds: `${liveImageBase}/bonds.mp4`,
-  fundOne: `${liveImageBase}/fund/fund1.mp4`,
-  fundTwo: `${liveImageBase}/fund/fund2.mp4`,
-  fundThree: `${liveImageBase}/fund/fund3.mp4`,
-  guru: `${liveImageBase}/guru.mp4`,
-  tempo: `${liveImageBase}/tempo.mp4`,
+  batumiOverview: `${optimizedVideoBase}/batumi2-optimized.mp4`,
+  batumiBuy: `${optimizedVideoBase}/batumibuy-optimized.mp4`,
+  bonds: `${optimizedVideoBase}/bonds-optimized.mp4`,
+  fundOne: `${optimizedVideoBase}/fund1-optimized.mp4`,
+  fundTwo: `${optimizedVideoBase}/fund2-optimized.mp4`,
+  fundThree: `${optimizedVideoBase}/fund3-optimized.mp4`,
+  guru: `${optimizedVideoBase}/guru-optimized.mp4`,
+  tempo: `${optimizedVideoBase}/tempo-optimized.mp4`,
 } as const;
 
 export const aixcoLiveLogos = {

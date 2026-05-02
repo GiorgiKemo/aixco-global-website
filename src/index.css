@@ -86,6 +86,13 @@
     scroll-behavior: smooth;
   }
 
+  @supports (content-visibility: auto) {
+    main section[id] {
+      content-visibility: auto;
+      contain-intrinsic-size: 900px;
+    }
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;

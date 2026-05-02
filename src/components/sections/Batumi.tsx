@@ -90,6 +90,7 @@ export function Batumi() {
                 src={imageMap[property.image]}
                 alt={tx(property.name)}
                 loading="lazy"
+                decoding="async"
                 width={1280}
                 height={896}
                 className="h-full w-full object-cover animate-fade-in"

@@ -76,6 +76,7 @@ export function Contact() {
               src={aixcoLiveImages.contact}
               alt={tx("Contact")}
               loading="lazy"
+              decoding="async"
               width={1280}
               height={720}
               className="h-56 w-full object-cover"

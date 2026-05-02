@@ -80,6 +80,8 @@ export function Hero() {
         width={5630}
         height={2999}
         loading="eager"
+        decoding="async"
+        fetchPriority="high"
         onLoad={() => setIsHeroReady(true)}
         onError={() => setIsHeroReady(true)}
         initial={shouldReduceMotion ? { scale: 1.006, opacity: 0.98 } : { scale: 1.055, opacity: 0.92 }}
