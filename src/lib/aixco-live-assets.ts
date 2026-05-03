@@ -9,6 +9,7 @@ export const aixcoLivePath = (path: string) => withBaseUrl(`aixco-global-op2/${p
 const liveImageBase = aixcoLivePath("images");
 const optimizedImageBase = aixcoLivePath("images/optimized");
 const optimizedVideoBase = aixcoLivePath("media");
+const documentBase = aixcoLivePath("documents");
 
 export const aixcoLiveImages = {
   aboutArchitecture: `${optimizedImageBase}/batumip.webp`,
@@ -16,8 +17,8 @@ export const aixcoLiveImages = {
   dubaiEdenHouse: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiHealthcare: `${optimizedImageBase}/fund2.webp`,
   transactionBackdrop: `${optimizedImageBase}/trans.webp`,
-  batumiQueens: `${optimizedImageBase}/batumip.webp`,
-  batumiSerenade: `${optimizedImageBase}/batumi.webp`,
+  batumiGuru: `${optimizedImageBase}/guru.webp`,
+  batumiOtium: `${optimizedImageBase}/otium.webp`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
   teamOwais: `${optimizedImageBase}/owais.webp`,
   teamWalter: `${optimizedImageBase}/walter.webp`,
@@ -32,13 +33,31 @@ export const aixcoLiveVideos = {
   fundThree: `${optimizedVideoBase}/fund3-optimized.mp4`,
   guru: `${optimizedVideoBase}/guru-optimized.mp4`,
   tempo: `${optimizedVideoBase}/tempo-optimized.mp4`,
+  guruBatumi: `${optimizedVideoBase}/guru-batumi-optimized.mp4`,
+  otium: `${optimizedVideoBase}/otium-optimized.mp4`,
+} as const;
+
+const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
+
+export const aixcoBatumiGalleryVideos = [
+  { src: `${batumiGalleryBase}/batumi1.mp4`, poster: `${batumiGalleryBase}/batumi1-poster.webp`, title: "Batumi gallery 1" },
+  { src: `${batumiGalleryBase}/batumi2.mp4`, poster: `${batumiGalleryBase}/batumi2-poster.webp`, title: "Batumi gallery 2" },
+  { src: `${batumiGalleryBase}/batumi3.mp4`, poster: `${batumiGalleryBase}/batumi3-poster.webp`, title: "Batumi gallery 3" },
+  { src: `${batumiGalleryBase}/batumi4.mp4`, poster: `${batumiGalleryBase}/batumi4-poster.webp`, title: "Batumi gallery 4" },
+  { src: `${batumiGalleryBase}/batumi5.mp4`, poster: `${batumiGalleryBase}/batumi5-poster.webp`, title: "Batumi gallery 5" },
+  { src: `${batumiGalleryBase}/herovideo.mp4`, poster: `${batumiGalleryBase}/herovideo-poster.webp`, title: "Batumi gallery 6" },
+] as const;
+
+export const aixcoLiveDocuments = {
+  guru: `${documentBase}/guru.pdf`,
+  otium: `${documentBase}/otium.pdf`,
 } as const;
 
 export const aixcoLiveLogos = {
   aixcoGlobal: `${liveImageBase}/AIXCOGlobalWlong.png`,
   aixcoMark: `${liveImageBase}/AIXW.png`,
   globalPartners: `${liveImageBase}/Globalpartners.png`,
-  isp: `${liveImageBase}/isp.png`,
+  isp: `${liveImageBase}/isp.svg`,
   workwise: `${liveImageBase}/ww.png`,
   cleanElements: `${liveImageBase}/cleanelement.png`,
   revanta: `${liveImageBase}/revanta.png`,

@@ -3,29 +3,39 @@ import { batumiBenefits, batumiProperties } from "@/data/site";
 import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
-import { aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
+import { aixcoBatumiGalleryVideos, aixcoLiveDocuments, aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 import { LiveVideo } from "@/components/LiveVideo";
 
 const imageMap: Record<string, string> = {
-  "batumi-queens": aixcoLiveImages.batumiQueens,
-  "batumi-serenade": aixcoLiveImages.batumiSerenade,
+  "batumi-guru": aixcoLiveImages.batumiGuru,
+  "batumi-otium": aixcoLiveImages.batumiOtium,
 };
 
-const propertyVideos = [
-  { src: aixcoLiveVideos.tempo, title: "Queens", poster: aixcoLiveImages.batumiQueens },
-  { src: aixcoLiveVideos.guru, title: "Serenade", poster: aixcoLiveImages.batumiSerenade },
-];
+const videoMap: Record<string, string> = {
+  guruBatumi: aixcoLiveVideos.guruBatumi,
+  otium: aixcoLiveVideos.otium,
+};
+
+const documentMap: Record<string, string> = {
+  guru: aixcoLiveDocuments.guru,
+  otium: aixcoLiveDocuments.otium,
+};
 
 const propertyImageAspectClass: Record<string, string> = {
-  "batumi-queens": "aspect-[79/97]",
-  "batumi-serenade": "aspect-[3/2]",
+  "batumi-guru": "aspect-[9/16]",
+  "batumi-otium": "aspect-[16/9]",
 };
 
 export function Batumi() {
   const [selected, setSelected] = useState(batumiProperties[0].id);
   const { tx } = useI18n();
   const property = batumiProperties.find((item) => item.id === selected) ?? batumiProperties[0];
+  const propertyVideo = {
+    src: videoMap[property.video],
+    title: property.name,
+    poster: imageMap[property.image],
+  };
 
   return (
     <section id="batumi" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0">
@@ -42,7 +52,7 @@ export function Batumi() {
             <LiveVideo
               src={aixcoLiveVideos.batumiOverview}
               title={tx("Batumi")}
-              poster={aixcoLiveImages.batumiSerenade}
+              poster={aixcoLiveImages.batumiOtium}
               className="mb-5 aspect-video"
             />
             <div className="grid grid-cols-1 gap-px overflow-hidden rounded-lg bg-border/50 sm:grid-cols-2">
@@ -79,13 +89,30 @@ export function Batumi() {
               })}
             </div>
             <a
-              href={property.url}
+              href={documentMap[property.url] ?? property.url}
               target="_blank"
               rel="noreferrer"
               className="btn-gold mt-6 w-full justify-center sm:w-auto"
             >
               {tx(property.name)} <ExternalLink className="h-4 w-4" />
             </a>
+            <div
+              aria-label="Selected Batumi project content"
+              className="mt-6 rounded-lg border border-border/60 bg-surface-elevated/70 p-5 shadow-soft"
+            >
+              <p className="eyebrow">{tx("Selected project")}</p>
+              <h3 className="mt-3 font-display text-3xl">{tx(property.name)}</h3>
+              <p className="mt-4 text-sm leading-relaxed text-foreground/78">{tx(property.summary)}</p>
+              <div className="mt-5 grid gap-3">
+                {property.highlights.map((highlight) => (
+                  <div key={`${property.id}-${highlight.label}`} className="rounded-md border border-border/55 bg-background/50 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                      {tx(highlight.label)}: <span className="text-foreground/88">{tx(highlight.value)}</span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="scroll-reveal grid gap-4 lg:col-span-7 md:grid-cols-[1fr_0.84fr]">
@@ -105,16 +132,39 @@ export function Batumi() {
               </div>
             </div>
             <div className="grid gap-4">
-              {propertyVideos.map((video) => (
-                <LiveVideo
-                  key={video.src}
-                  src={video.src}
-                  title={tx(video.title)}
-                  poster={video.poster}
-                  className="aspect-video md:min-h-0"
-                />
-              ))}
+              <LiveVideo
+                key={property.id}
+                src={propertyVideo.src}
+                title={tx(propertyVideo.title)}
+                poster={propertyVideo.poster}
+                className="aspect-video md:min-h-0"
+              />
             </div>
+          </div>
+        </div>
+
+        <div className="scroll-reveal mt-16 md:mt-20">
+          <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="eyebrow">{tx("Batumi gallery")}</p>
+              <h3 className="mt-4 text-3xl font-semibold tracking-normal md:text-5xl">{tx("Video gallery")}</h3>
+            </div>
+          </div>
+          <div
+            aria-label="Batumi video gallery"
+            data-layout="portrait-video-gallery"
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {aixcoBatumiGalleryVideos.map((video) => (
+              <LiveVideo
+                key={video.src}
+                src={video.src}
+                title={tx(video.title)}
+                poster={video.poster}
+                className="aspect-[9/16]"
+                rootMargin="700px 0px"
+              />
+            ))}
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ import { LiveVideo } from "@/components/LiveVideo";
 
 const videoMap: Record<string, { src: string; poster: string }> = {
   bonds: { src: aixcoLiveVideos.bonds, poster: aixcoLiveImages.transactionBackdrop },
-  batumiBuy: { src: aixcoLiveVideos.batumiBuy, poster: aixcoLiveImages.batumiSerenade },
+  batumiBuy: { src: aixcoLiveVideos.batumiBuy, poster: aixcoLiveImages.batumiOtium },
 };
 
 export function Participate() {

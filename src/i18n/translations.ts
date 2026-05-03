@@ -1228,19 +1228,19 @@ export const textTranslations = {
     "tr": "Geliştirici onboardingini başlat",
     "ar": "ابدأ إعداد المطور"
   },
-  "Queens": {
-    "de": "Queens",
-    "ru": "Queens",
-    "ka": "Queens",
-    "tr": "Queens",
-    "ar": "كوينز"
+  "Guru": {
+    "de": "Guru",
+    "ru": "Guru",
+    "ka": "Guru",
+    "tr": "Guru",
+    "ar": "Guru"
   },
-  "Serenade": {
-    "de": "Serenade",
-    "ru": "Serenade",
-    "ka": "Serenade",
-    "tr": "Serenade",
-    "ar": "سيريناد"
+  "Otium": {
+    "de": "Otium",
+    "ru": "Otium",
+    "ka": "Otium",
+    "tr": "Otium",
+    "ar": "Otium"
   }
 } as const;
 

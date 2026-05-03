@@ -452,13 +452,13 @@ function PartnerDetail({
     <div>
       <div className="mb-6 grid gap-5 sm:grid-cols-[180px_1fr] sm:items-center">
         {data.logo && (
-          <div className="flex aspect-[4/3] items-center justify-center rounded-lg border border-border/60 bg-surface-elevated/70 p-5">
+          <div className="partner-modal-logo-stage">
             <img
               src={partnerLogoMap[data.logo]}
               alt={data.name}
               loading="lazy"
               decoding="async"
-              className="max-h-24 w-full object-contain"
+              className="partner-modal-logo-image"
               width={320}
               height={180}
             />

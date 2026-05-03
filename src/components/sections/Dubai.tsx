@@ -1,36 +1,151 @@
 import { dubaiFunds } from "@/data/site";
 import { motion, useReducedMotion } from "framer-motion";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
-import { aixcoFundGallery, aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
+import { aixcoFundGallery, aixcoLiveImages } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
-import { LiveVideo } from "@/components/LiveVideo";
 
 const imageMap: Record<string, string> = {
   "dubai-eden": aixcoLiveImages.dubaiEdenHouse,
   "dubai-healthcare": aixcoLiveImages.dubaiHealthcare,
 };
 
-const videoMap: Record<string, string> = {
-  fundOne: aixcoLiveVideos.fundOne,
-  fundTwo: aixcoLiveVideos.fundTwo,
-};
-
-const fundVideos = [
-  { src: aixcoLiveVideos.fundOne, title: "Fund I Eden House The Canal & Eden House The Park", poster: aixcoLiveImages.dubaiEdenHouse },
-  { src: aixcoLiveVideos.fundTwo, title: "Fund II Dubai Healthcare City", poster: aixcoLiveImages.dubaiHealthcare },
-  { src: aixcoLiveVideos.fundThree, title: "Fund I Eden House The Canal & Eden House The Park", poster: aixcoLiveImages.dubaiEdenHouse },
-];
-
-const fundImageAspectClass: Record<string, string> = {
-  "dubai-eden": "aspect-video",
-  "dubai-healthcare": "aspect-[2/3]",
-};
+const dubaiStillRailImages = [
+  { src: aixcoFundGallery[4], title: "Eden House construction view" },
+  { src: aixcoFundGallery[7], title: "Eden House completed facade" },
+  { src: aixcoFundGallery[12], title: "Dubai project streetscape" },
+] as const;
 
 function galleryAspectClass(src: string) {
   if (src.endsWith("/fund1.png")) return "aspect-[2/3]";
   if (src.endsWith("/fund8.jpeg") || src.endsWith("/fund20.jpeg")) return "aspect-[9/16]";
   if (src.endsWith("/fund4.jpeg")) return "aspect-[4/3]";
   return "aspect-video";
+}
+
+function parseFundDetail(detail: string) {
+  const separatorIndex = detail.indexOf(":");
+
+  if (separatorIndex === -1) {
+    return { label: "", value: detail };
+  }
+
+  return {
+    label: detail.slice(0, separatorIndex).trim(),
+    value: detail.slice(separatorIndex + 1).trim(),
+  };
+}
+
+function isHeadlineMetric(label: string) {
+  return ["Units", "Total", "Total Equity", "Performance"].includes(label);
+}
+
+function formatMetricValue(value: string) {
+  const trimmed = value.trim();
+  const prefixedValue = trimmed.match(/^(USD|Projected)\s+(.+)$/i);
+
+  if (!prefixedValue) {
+    return { prefix: "", value: trimmed };
+  }
+
+  return {
+    prefix: prefixedValue[1],
+    value: prefixedValue[2],
+  };
+}
+
+type DubaiFund = (typeof dubaiFunds)[number];
+type Translate = (copy: string) => string;
+
+function DubaiFundCard({ fund, idx, tx }: { fund: DubaiFund; idx: number; tx: Translate }) {
+  const details = fund.details.map(parseFundDetail);
+  const headlineMetrics = details.filter((detail) => isHeadlineMetric(detail.label));
+  const supportingDetails = details.filter((detail) => !isHeadlineMetric(detail.label));
+  const imageFirst = idx % 2 === 0;
+
+  return (
+    <motion.article
+      data-fund-card={fund.id}
+      data-image-position={imageFirst ? "left" : "right"}
+      className={`scroll-reveal mac-card group relative grid overflow-hidden lg:items-stretch ${
+        imageFirst ? "lg:grid-cols-[minmax(0,0.98fr)_minmax(0,1.02fr)]" : "lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]"
+      }`}
+      whileHover={premiumSurfaceHover}
+      whileTap={premiumPress}
+    >
+      <div
+        data-fund-media
+        className={`relative aspect-[16/10] min-h-[18rem] overflow-hidden bg-muted lg:aspect-auto lg:min-h-full ${
+          imageFirst ? "lg:order-1" : "lg:order-2"
+        }`}
+      >
+        <img
+          src={imageMap[fund.image]}
+          alt={tx(fund.name)}
+          loading="lazy"
+          decoding="async"
+          width={1536}
+          height={960}
+          className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
+        />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/35 to-transparent" aria-hidden />
+        <span className="absolute right-4 top-4 font-display text-5xl text-primary/70 drop-shadow-[0_2px_12px_rgb(255_255_255/0.45)]">
+          0{idx + 1}
+        </span>
+      </div>
+      <div
+        data-fund-copy
+        className={`flex min-h-[28rem] flex-col justify-center p-7 md:p-9 lg:min-h-[34rem] lg:p-12 xl:p-14 2xl:p-16 ${
+          imageFirst ? "lg:order-2" : "lg:order-1"
+        }`}
+      >
+        <h3 className="font-display max-w-2xl text-[clamp(2rem,2.35vw,3.05rem)] leading-[1.08]">
+          {tx(fund.name)}
+        </h3>
+        <div data-fund-highlight-grid={fund.id} className="mt-8 grid gap-4 border-t border-border/60 pt-7 sm:grid-cols-2">
+          {headlineMetrics.map((detail) => {
+            const metric = formatMetricValue(tx(detail.value));
+            const isPerformance = detail.label === "Performance";
+
+            return (
+            <div
+              key={`${detail.label}:${detail.value}`}
+              data-fund-highlight-tile
+              className={`min-h-[9.25rem] rounded-lg border bg-background/80 p-5 shadow-soft md:p-6 ${
+                isPerformance ? "border-primary/60 bg-primary/10" : "border-border/70"
+              }`}
+            >
+              <p className="text-[0.82rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                {tx(detail.label)}
+              </p>
+              <div className="mt-5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                {metric.prefix && (
+                  <span className={`font-display text-[1.15rem] leading-none md:text-[1.35rem] ${isPerformance ? "text-primary/80" : "text-foreground/72"}`}>
+                    {tx(metric.prefix)}
+                  </span>
+                )}
+                <span className={`font-display text-[clamp(2.65rem,4vw,4rem)] leading-none tracking-normal ${isPerformance ? "text-primary" : "text-foreground"}`}>
+                  {tx(metric.value)}
+                </span>
+              </div>
+            </div>
+            );
+          })}
+        </div>
+        <ul className="mt-5 space-y-3" data-fund-detail-notes={fund.id}>
+          {supportingDetails.map((detail) => (
+            <li key={`${detail.label}:${detail.value}`} className="rounded-lg border border-border/70 bg-muted/25 px-5 py-4">
+              <p className="text-[0.82rem] font-semibold uppercase tracking-[0.15em] text-primary">
+                {tx(detail.label)}
+              </p>
+              <p className="mt-2 text-base font-medium leading-relaxed text-foreground/86">
+                {tx(detail.value)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </motion.article>
+  );
 }
 
 export function Dubai() {
@@ -45,47 +160,9 @@ export function Dubai() {
           <h2 className="heading-section mt-5 max-w-2xl">{tx("Dubai")}</h2>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+        <div className="grid gap-8" data-layout="alternating-fund-cards">
           {dubaiFunds.map((fund, idx) => (
-            <motion.article
-              key={fund.id}
-              className="scroll-reveal mac-card group relative overflow-hidden"
-              whileHover={premiumSurfaceHover}
-              whileTap={premiumPress}
-            >
-              <div className="grid overflow-hidden bg-border/50 md:grid-cols-2">
-                <div className={`relative overflow-hidden bg-muted ${fundImageAspectClass[fund.image] ?? "aspect-video"}`}>
-                  <img
-                    src={imageMap[fund.image]}
-                    alt={tx(fund.name)}
-                    loading="lazy"
-                    decoding="async"
-                    width={1536}
-                    height={960}
-                    className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
-                  />
-                </div>
-                <LiveVideo
-                  src={videoMap[fund.video]}
-                  title={tx(fund.name)}
-                  poster={imageMap[fund.image]}
-                  className={`${fund.image === "dubai-healthcare" ? "aspect-[2/3]" : "aspect-video"} rounded-none shadow-none`}
-                />
-                <span className="absolute right-4 top-4 font-display text-5xl text-primary/70 drop-shadow-[0_2px_12px_rgb(255_255_255/0.45)]">
-                  0{idx + 1}
-                </span>
-              </div>
-              <div className="p-7 md:p-8">
-                <h3 className="font-display text-3xl md:text-4xl">{tx(fund.name)}</h3>
-                <ul className="mt-6 space-y-3 border-t border-border/60 pt-5">
-                  {fund.details.map((detail) => (
-                    <li key={detail} className="text-sm leading-relaxed text-foreground/80">
-                      {tx(detail)}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.article>
+            <DubaiFundCard key={fund.id} fund={fund} idx={idx} tx={tx} />
           ))}
         </div>
 
@@ -122,17 +199,28 @@ export function Dubai() {
           </div>
           <div
             className="grid grid-cols-3 gap-3 lg:sticky lg:top-24 lg:h-[calc(100svh-8rem)] lg:max-h-[calc(100svh-8rem)] lg:grid-cols-1 lg:grid-rows-3"
-            aria-label="Dubai fund videos"
-            data-layout="viewport-fit-video-rail"
+            aria-label="Dubai fund images"
+            data-layout="viewport-fit-image-rail"
           >
-            {fundVideos.map((video) => (
-              <LiveVideo
-                key={video.src}
-                src={video.src}
-                title={tx(video.title)}
-                poster={video.poster}
-                className="aspect-video lg:aspect-auto lg:h-full lg:min-h-0"
-              />
+            {dubaiStillRailImages.map((image) => (
+              <motion.figure
+                key={image.src}
+                className="group min-h-0 overflow-hidden rounded-lg bg-background shadow-soft"
+                initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 22, scale: 0.985 }}
+                whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.24, margin: "0px 0px -10% 0px" }}
+                transition={{ duration: shouldReduceMotion ? 0.35 : 0.66, ease: shouldReduceMotion ? "easeOut" : [0.16, 1, 0.3, 1] }}
+              >
+                <img
+                  src={image.src}
+                  alt={tx(image.title)}
+                  loading="lazy"
+                  decoding="async"
+                  width={1280}
+                  height={720}
+                  className="h-full min-h-0 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                />
+              </motion.figure>
             ))}
           </div>
         </div>
