@@ -1,5 +1,5 @@
 import { batumiBenefits, batumiProperties } from "@/data/site";
-import { ArrowRight, Building2, ExternalLink, FileText, Home, Percent, ShieldCheck, TrendingUp, type LucideIcon } from "lucide-react";
+import { ArrowRight, Building2, FileText, Home, Percent, ShieldCheck, TrendingUp, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { aixcoBatumiGalleryVideos, aixcoLiveDocuments, aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
@@ -61,7 +61,7 @@ function BatumiStatCard({
       whileHover={{ y: -3 }}
       transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`group flex flex-col justify-between border transition-[background-color,border-color,box-shadow,color] duration-200 ${
-        compact ? "min-h-[5.9rem] p-3.5 md:min-h-[6.15rem] lg:p-4" : "min-h-[8.8rem] p-5 md:min-h-[9.4rem] lg:p-6"
+        compact ? "min-h-[7.1rem] p-4 md:min-h-[7.35rem] lg:min-h-[7.55rem] lg:p-5" : "min-h-[8.8rem] p-5 md:min-h-[9.4rem] lg:p-6"
       } ${
         highlight
           ? "border-foreground bg-foreground text-background"
@@ -70,7 +70,7 @@ function BatumiStatCard({
     >
       <div>
         <span
-          className={`${compact ? "mb-2.5 text-[0.66rem]" : "mb-5 text-[0.72rem]"} block font-bold uppercase tracking-[0.22em] ${
+          className={`${compact ? "mb-3.5 text-[0.68rem]" : "mb-5 text-[0.72rem]"} block font-bold uppercase tracking-[0.22em] ${
             highlight ? "text-primary" : "text-muted-foreground"
           }`}
         >
@@ -79,7 +79,7 @@ function BatumiStatCard({
         <div className="flex items-baseline gap-1.5">
           <span
             className={`font-display ${
-              compact ? "text-[clamp(2rem,2.65vw,2.82rem)]" : "text-[clamp(2.55rem,3.6vw,3.75rem)]"
+              compact ? "text-[clamp(2.18rem,3vw,3.12rem)]" : "text-[clamp(2.55rem,3.6vw,3.75rem)]"
             } font-semibold leading-none tracking-tight ${highlight ? "text-primary" : "text-foreground"}`}
           >
             {tx(value)}
@@ -91,7 +91,7 @@ function BatumiStatCard({
           )}
         </div>
       </div>
-      <div className={`${compact ? "mt-3" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
+      <div className={`${compact ? "mt-4" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
     </motion.div>
   );
 }
@@ -133,7 +133,7 @@ function BatumiMarketCard({ tx }: { tx: Translate }) {
       data-density="viewport-fit"
       data-image-position="right"
       data-design-source="dubai-card-reference"
-      className="batumi-market-card scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:h-[clamp(30rem,calc(100svh-13rem),42rem)] md:min-h-0 md:max-h-[calc(100svh-13rem)] md:grid-cols-12 md:items-stretch lg:h-[clamp(30rem,calc(100svh-13rem),42rem)] lg:min-h-0 lg:max-h-[calc(100svh-13rem)] lg:grid-cols-12"
+      className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:h-full md:min-h-0 md:max-h-full md:grid-cols-12 md:items-stretch lg:h-full lg:min-h-0 lg:max-h-full lg:grid-cols-12"
       whileHover={premiumSurfaceHover}
       whileTap={premiumPress}
     >
@@ -148,8 +148,7 @@ function BatumiMarketCard({ tx }: { tx: Translate }) {
           title={tx("Batumi")}
           poster={aixcoLiveImages.batumiOverviewPoster}
           className="aspect-[9/16] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
-          videoClassName="bg-black"
-          fit="contain"
+          fit="cover"
           eager
           autoplayPreview={false}
         />
@@ -161,7 +160,7 @@ function BatumiMarketCard({ tx }: { tx: Translate }) {
         data-batumi-card-copy
         className="flex min-h-0 flex-col border-foreground/5 md:order-1 md:col-span-7 md:border-r lg:order-1 lg:col-span-7 lg:border-r"
       >
-        <div className="border-b border-foreground/5 p-5 pb-4 md:p-5 md:pb-4 lg:p-6 lg:pb-5">
+        <div className="border-b border-foreground/5 p-6 pb-5 md:p-7 md:pb-6 lg:p-8 lg:pb-7 xl:p-8">
           <h3 className="max-w-[42rem] font-display text-[clamp(2rem,4.7vw,3rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.15rem,3.1vw,3.5rem)] lg:text-[clamp(2.2rem,3.05vw,3.6rem)]">
             {tx("Why Batumi")}
           </h3>
@@ -220,15 +219,14 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
     >
       <div
         data-batumi-property-media
-        className={`relative min-h-[24rem] overflow-hidden bg-foreground md:col-span-5 md:min-h-0 lg:col-span-5 lg:min-h-0 ${mediaOrderClass}`}
+        className={`relative min-h-[22rem] overflow-hidden bg-foreground md:col-span-5 md:min-h-0 lg:col-span-5 lg:min-h-0 ${mediaOrderClass}`}
       >
         <LiveVideo
           src={videoMap[property.video]}
           title={tx(property.name)}
           poster={imageMap[property.image]}
           className="aspect-[4/5] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
-          videoClassName="bg-black"
-          fit="contain"
+          fit="cover"
           rootMargin="700px 0px"
           autoplayPreview={false}
         />
@@ -253,26 +251,10 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
           imageFirst ? "md:border-l lg:border-l" : "md:border-r lg:border-r"
         }`}
       >
-        <div className="border-b border-foreground/5 p-7 pb-6 md:p-9 lg:p-10 xl:p-11">
-          <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-            <div>
-              <h3 className="font-display text-[clamp(2.2rem,3.7vw,4.5rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.65rem,3.8vw,4.65rem)] lg:text-[clamp(2.45rem,3.45vw,4.25rem)]">
-                {tx(property.name)}
-              </h3>
-              <p className="mt-4 max-w-[38rem] text-[clamp(1rem,1.15vw,1.08rem)] font-medium leading-relaxed text-foreground/76">
-                {tx(property.summary)}
-              </p>
-            </div>
-            <a
-              href={documentHref}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex shrink-0 items-center justify-center gap-2 border border-primary/40 px-4 py-3 text-[0.78rem] font-bold uppercase tracking-[0.18em] text-primary transition-[background-color,border-color,color] duration-200 hover:border-primary hover:bg-primary/10"
-            >
-              {tx(`Open ${property.name} profile`)}
-              <ExternalLink className="h-4 w-4" />
-            </a>
-          </div>
+        <div data-batumi-property-title className="border-b border-foreground/5 p-7 pb-6 md:p-9 lg:p-10 xl:p-11">
+          <h3 className="max-w-[42rem] font-display text-[clamp(2.2rem,3.7vw,4.5rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.65rem,3.8vw,4.65rem)] lg:text-[clamp(2.45rem,3.45vw,4.25rem)]">
+            {tx(property.name)}
+          </h3>
         </div>
         <div data-batumi-property-highlight-grid={property.id} className="grid grid-cols-1 border-b border-foreground/5 md:grid-cols-3">
           {metricCards.map((metric) => (

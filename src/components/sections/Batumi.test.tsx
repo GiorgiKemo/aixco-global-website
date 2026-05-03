@@ -42,10 +42,10 @@ describe("Batumi", () => {
     expect(firstViewport).toBeInTheDocument();
     expect(marketCard).toHaveAttribute("data-design-source", "dubai-card-reference");
     expect(marketCard).toHaveAttribute("data-image-position", "right");
-    expect(marketCard?.className).toContain("batumi-market-card");
     expect(marketCard?.className).toContain("transition-[transform,box-shadow,border-color]");
     expect(marketCard?.className).not.toContain("transition-all");
-    expect(marketCard?.className).toContain("md:h-[clamp(30rem,calc(100svh-13rem),42rem)]");
+    expect(marketCard?.className).toContain("md:h-full");
+    expect(marketCard?.className).toContain("md:max-h-full");
     expect(marketCard?.className).toContain("md:grid-cols-12");
     expect(media?.className).toContain("md:col-span-5");
     expect(copy?.className).toContain("md:col-span-7");
@@ -64,11 +64,11 @@ describe("Batumi", () => {
       "data-media-frame",
       "dubai-style-split-media",
     );
-    expect(screen.getByLabelText("Batumi")).toHaveClass("object-contain");
     expect(screen.getByLabelText("Batumi")).toHaveAttribute(
       "poster",
       expect.stringContaining("batumi-gallery/batumi2-poster.webp"),
     );
+    expect(screen.getByLabelText("Batumi")).toHaveClass("object-cover");
     expect(container.querySelector('section[id="batumi"]')).not.toBeInTheDocument();
   });
 
@@ -84,6 +84,8 @@ describe("Batumi", () => {
     const otiumMetrics = otiumCard?.querySelector("[data-batumi-property-highlight-grid='otium']");
     const guruDetails = guruCard?.querySelector("[data-batumi-property-detail-notes='guru']");
     const otiumDetails = otiumCard?.querySelector("[data-batumi-property-detail-notes='otium']");
+    const guruTitle = guruCard?.querySelector("[data-batumi-property-title]");
+    const otiumTitle = otiumCard?.querySelector("[data-batumi-property-title]");
 
     expect(profileGrid).toBeInTheDocument();
     expect(guruCard).toHaveAttribute("data-design-source", "dubai-card-reference");
@@ -98,8 +100,12 @@ describe("Batumi", () => {
     expect(otiumMedia?.className).toContain("md:order-2");
     expect(within(guruCard as HTMLElement).getByRole("heading", { name: "Guru" })).toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).getByRole("heading", { name: "Otium" })).toBeInTheDocument();
-    expect(guruCard).toHaveTextContent("29 floors");
-    expect(guruCard).toHaveTextContent("667 apartments");
+    expect(guruTitle?.className).toContain("border-b");
+    expect(guruTitle?.className).toContain("lg:p-10");
+    expect(guruTitle?.querySelector("p")).not.toBeInTheDocument();
+    expect(otiumTitle?.querySelector("p")).not.toBeInTheDocument();
+    expect(guruCard).toHaveTextContent("667");
+    expect(guruCard).toHaveTextContent("units");
     expect(guruCard).toHaveTextContent("150 meters from the sea");
     expect(guruMetrics).toHaveTextContent("29");
     expect(guruMetrics).toHaveTextContent("667");
@@ -109,8 +115,9 @@ describe("Batumi", () => {
     expect(guruDetails).toHaveTextContent("12% ROI");
     expect(guruCard).not.toHaveTextContent("Guru PDF");
     expect(otiumCard).toHaveTextContent("59 Adlia Street");
-    expect(otiumCard).toHaveTextContent("408 apartments");
-    expect(otiumCard).toHaveTextContent("June 2028");
+    expect(otiumCard).toHaveTextContent("408");
+    expect(otiumCard).toHaveTextContent("total units");
+    expect(otiumCard).toHaveTextContent("Jun 2028");
     expect(otiumMetrics).toHaveTextContent("17");
     expect(otiumMetrics).toHaveTextContent("408");
     expect(otiumMetrics).toHaveTextContent("Jun 2028");
@@ -128,14 +135,8 @@ describe("Batumi", () => {
       "href",
       expect.stringContaining("otium.pdf"),
     );
-    expect(within(guruCard as HTMLElement).getByRole("link", { name: /Open Guru profile/ })).toHaveAttribute(
-      "href",
-      expect.stringContaining("guru.pdf"),
-    );
-    expect(within(otiumCard as HTMLElement).getByRole("link", { name: /Open Otium profile/ })).toHaveAttribute(
-      "href",
-      expect.stringContaining("otium.pdf"),
-    );
+    expect(within(guruCard as HTMLElement).queryByRole("link", { name: /Open Guru profile/ })).not.toBeInTheDocument();
+    expect(within(otiumCard as HTMLElement).queryByRole("link", { name: /Open Otium profile/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Guru" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Otium" })).not.toBeInTheDocument();
   });

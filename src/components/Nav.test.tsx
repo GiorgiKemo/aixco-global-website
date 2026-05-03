@@ -1,9 +1,22 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
+import { replaceLocationHash } from "@/lib/section-hash";
+import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 import { Nav } from "./Nav";
+
+vi.mock("@/lib/section-hash", () => ({
+  getActiveSectionHash: vi.fn(() => ""),
+  replaceLocationHash: vi.fn(),
+  syncLocationHashToActiveSection: vi.fn(() => ""),
+}));
+
+vi.mock("@/lib/smooth-scroll", () => ({
+  scrollToHash: vi.fn(),
+  scrollToPageTop: vi.fn(),
+}));
 
 class TestResizeObserver {
   observe = () => {};
@@ -26,6 +39,7 @@ function renderNav(initialEntry = "/") {
 describe("Nav", () => {
   beforeEach(() => {
     localStorage.clear();
+    vi.clearAllMocks();
     Object.defineProperty(window, "ResizeObserver", {
       configurable: true,
       writable: true,
@@ -60,6 +74,17 @@ describe("Nav", () => {
 
     expect(within(primary).getByRole("link", { name: "Batumi" })).toHaveAttribute("aria-current", "page");
     expect(within(primary).getByRole("link", { name: "Home" })).not.toHaveAttribute("aria-current");
+  });
+
+  it("uses custom same-page hash scrolling so fixed nav does not hide the target section", () => {
+    renderNav("/");
+
+    const primary = screen.getByLabelText("Primary");
+    fireEvent.click(within(primary).getByRole("link", { name: "Ways to Participate" }));
+
+    expect(replaceLocationHash).toHaveBeenCalledWith("#participate");
+    expect(scrollToHash).toHaveBeenCalledWith("#participate");
+    expect(scrollToPageTop).not.toHaveBeenCalled();
   });
 
   it("uses targeted transitions for desktop nav controls", () => {

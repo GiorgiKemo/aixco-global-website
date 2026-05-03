@@ -4,7 +4,7 @@ import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import { Logo } from "./Logo";
 import { useI18n, LANGS } from "@/i18n/I18nProvider";
 import { useUI } from "@/components/ui-state";
-import { getActiveSectionHash, syncLocationHashToActiveSection } from "@/lib/section-hash";
+import { getActiveSectionHash, replaceLocationHash, syncLocationHashToActiveSection } from "@/lib/section-hash";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 
 const NAV = [
@@ -23,6 +23,8 @@ const MORE_NAV = [
 ];
 const ALL_NAV = [...NAV, ...MORE_NAV];
 const HOME_SECTION_IDS = ["about", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"] as const;
+const NAV_HASH_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
+let pendingNavScrollTimers: number[] = [];
 const DESKTOP_NAV_LABELS: Record<string, Record<string, string>> = {
   ka: {
     "nav.about": "AIXCO",
@@ -35,6 +37,24 @@ const DESKTOP_NAV_LABELS: Record<string, Record<string, string>> = {
 
 function getDesktopNavLabel(lang: string, key: string, fallback: string) {
   return DESKTOP_NAV_LABELS[lang]?.[key] ?? fallback;
+}
+
+function clearPendingNavScrollTimers() {
+  pendingNavScrollTimers.forEach((timer) => window.clearTimeout(timer));
+  pendingNavScrollTimers = [];
+}
+
+function scrollToNavHash(hash: string) {
+  clearPendingNavScrollTimers();
+  replaceLocationHash(hash);
+  scrollToHash(hash);
+
+  pendingNavScrollTimers = NAV_HASH_STABILIZE_DELAYS.map((delay) =>
+    window.setTimeout(() => {
+      replaceLocationHash(hash);
+      scrollToHash(hash, "auto");
+    }, delay),
+  );
 }
 
 export function Nav() {
@@ -73,12 +93,14 @@ export function Nav() {
     setMoreOpen(false);
     setOpen(false);
 
-    if (location.pathname !== item.to || location.hash !== item.hash) return;
+    if (location.pathname !== item.to) return;
 
     event.preventDefault();
     if (item.hash) {
-      scrollToHash(item.hash);
+      scrollToNavHash(item.hash);
     } else {
+      clearPendingNavScrollTimers();
+      replaceLocationHash("");
       scrollToPageTop();
     }
   };
