@@ -123,7 +123,7 @@ export function Hero() {
             aria-hidden="true"
             width={780}
             height={704}
-            className="mb-2 h-auto w-[clamp(7.4rem,17vw,14.6rem)] self-start object-contain drop-shadow-[0_16px_32px_rgb(0_0_0/0.28)] sm:ml-[clamp(0rem,20vw,18rem)]"
+            className="mb-2 h-auto w-[clamp(5rem,14vw,14.6rem)] self-start object-contain drop-shadow-[0_16px_32px_rgb(0_0_0/0.28)] sm:ml-[clamp(0rem,20vw,18rem)]"
             decoding="async"
             initial={false}
             animate={isHeroReady ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.985, filter: "blur(14px)" }}
@@ -164,7 +164,7 @@ export function Hero() {
           >
             <span
               data-hero-price-text="true"
-              className="hero-reference-font max-w-full whitespace-nowrap text-[clamp(1.45rem,6vw,4.45rem)] font-medium leading-none tracking-normal sm:text-[clamp(2.1rem,4.85vw,4.45rem)]"
+              className="hero-reference-font max-w-full whitespace-nowrap text-[clamp(1.2rem,5vw,3.5rem)] font-light leading-none tracking-normal sm:text-[clamp(1.8rem,4vw,4rem)]"
             >
               {tx(heroPriceText)}
             </span>
@@ -174,7 +174,7 @@ export function Hero() {
             href="#about"
             onClick={handleAboutClick}
             aria-label="Scroll to About section"
-            className="relative mt-7 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/10 text-white/80 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] backdrop-blur-sm transition hover:bg-black/15 hover:text-white sm:mt-12"
+            className="relative mt-7 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/10 text-white/80 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:bg-black/15 hover:text-white sm:mt-12"
             initial={false}
             animate={isHeroReady ? (shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, 10, 0] }) : { opacity: 0, y: 0 }}
             transition={
@@ -185,8 +185,8 @@ export function Hero() {
                     y: { duration: 3.4, repeat: Infinity, ease: "easeInOut", delay: 1.52 },
                   }
             }
-            whileHover={{ scale: 1.12 }}
-            whileTap={{ scale: 0.94 }}
+            whileHover={{ scale: 1.08, transition: { duration: 0.18, ease: heroEase } }}
+            whileTap={{ scale: 0.96, transition: { duration: 0.08, ease: "easeOut" } }}
           >
             {!shouldReduceMotion && (
               <motion.span

@@ -27,6 +27,8 @@ describe("Dubai", () => {
     expect(fundGrid?.className).not.toContain("lg:grid-cols-2");
     expect(fundOne).toHaveAttribute("data-image-position", "left");
     expect(fundOne).toHaveAttribute("data-design-source", "eden-house-portfolio-reference");
+    expect(fundOne?.className).toContain("transition-[transform,box-shadow,border-color]");
+    expect(fundOne?.className).not.toContain("transition-all");
     expect(fundOne?.className).toContain("md:grid-cols-12");
     expect(fundOne?.className).toContain("lg:grid-cols-12");
     expect(fundOneMedia?.className).toContain("md:order-1");
@@ -60,6 +62,7 @@ describe("Dubai", () => {
     const highlightGrid = container.querySelector("[data-fund-highlight-grid='fund-1']");
     const details = container.querySelector("[data-fund-detail-notes='fund-1']");
     const performanceTile = within(highlightGrid as HTMLElement).getByText("4.9x").closest("[data-fund-highlight-tile]");
+    const performanceAccent = performanceTile?.lastElementChild as HTMLElement | null;
     const titleAccent = within(title).getByText("The Canal");
 
     expect(fundOne?.className).toContain("bg-white");
@@ -71,6 +74,11 @@ describe("Dubai", () => {
     expect(highlightGrid?.className).toContain("grid-cols-1");
     expect(highlightGrid?.className).toContain("md:grid-cols-3");
     expect(performanceTile?.className).toContain("bg-foreground");
+    expect(performanceTile?.className).toContain("transition-[background-color,border-color,box-shadow,color]");
+    expect(performanceTile?.className).not.toContain("transition-all");
+    expect(performanceAccent?.className).toContain("transition-[width,background-color]");
+    expect(performanceAccent?.className).toContain("[transition-duration:400ms]");
+    expect(performanceAccent?.className).not.toContain("duration-400");
     expect(details).toHaveAttribute("data-layout", "prestige-highlights");
     expect(details?.className).toContain("bg-surface/45");
     expect(details?.querySelectorAll("[data-fund-detail-icon]").length).toBe(3);
@@ -101,21 +109,29 @@ describe("Dubai", () => {
     renderDubai();
 
     const gallery = screen.getByLabelText("Fund I Eden House gallery");
+    const firstImage = screen.getByAltText("Fund I Eden House gallery 1");
 
     expect(gallery).toHaveAttribute("data-layout", "dense-masonry");
     expect(gallery.className).toContain("columns-1");
     expect(gallery.className).not.toContain("pt-16");
+    expect(firstImage.className).toContain("transition-transform");
+    expect(firstImage.className).toContain("duration-500");
+    expect(firstImage.className).not.toContain("duration-700");
   });
 
   it("uses still images instead of Dubai fund videos", () => {
     const { container } = renderDubai();
 
     const rail = screen.getByLabelText("Dubai fund images");
+    const railImage = screen.getByAltText("Eden House construction view");
 
     expect(rail).toHaveAttribute("data-layout", "viewport-fit-image-rail");
     expect(rail.className).toContain("grid-cols-3");
     expect(rail.className).toContain("lg:max-h-[calc(100svh-8rem)]");
     expect(rail.className).toContain("lg:grid-rows-3");
+    expect(railImage.className).toContain("transition-transform");
+    expect(railImage.className).toContain("duration-500");
+    expect(railImage.className).not.toContain("duration-700");
     expect(container.querySelector("video")).not.toBeInTheDocument();
   });
 
@@ -141,5 +157,6 @@ describe("Dubai", () => {
     expect(totalTile).toHaveTextContent("m USD");
     expect(performanceTile).toHaveTextContent("Performance");
     expect(performanceTile?.className).toContain("bg-foreground");
+    expect(performanceTile?.className).not.toContain("transition-all");
   });
 });

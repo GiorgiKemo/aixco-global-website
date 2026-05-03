@@ -84,6 +84,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
   }
 
   body {
@@ -245,9 +246,16 @@
   .btn-gold {
     background: var(--gradient-gold);
     color: hsl(var(--primary-foreground));
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3 text-[0.96rem] font-semibold tracking-normal transition-all duration-300;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3 text-[0.96rem] font-semibold tracking-normal;
     box-shadow: 0 0 0 1px hsl(var(--primary) / 0.28), 0 14px 30px -18px hsl(var(--primary) / 0.68), 0 1px 0 hsl(0 0% 100% / 0.32) inset;
-    transition-timing-function: var(--ease-apple);
+    transition:
+      translate 180ms var(--ease-apple),
+      scale 80ms ease-out,
+      filter 180ms var(--ease-apple),
+      box-shadow 180ms var(--ease-apple),
+      background-color 180ms var(--ease-apple),
+      border-color 180ms var(--ease-apple),
+      color 180ms var(--ease-apple);
   }
   .btn-gold:hover {
     translate: 0 -1px;
@@ -263,12 +271,18 @@
   }
 
   .btn-ghost-gold {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3 text-[0.96rem] font-semibold tracking-normal transition-all duration-300 border border-primary/30 text-primary;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-primary/30 px-5 py-3 text-[0.96rem] font-semibold tracking-normal text-primary;
     background: hsl(var(--surface-glass) / 0.58);
     box-shadow: 0 1px 0 hsl(0 0% 100% / 0.7) inset, 0 12px 26px -22px hsl(220 28% 18% / 0.32);
     backdrop-filter: blur(18px) saturate(150%);
     -webkit-backdrop-filter: blur(18px) saturate(150%);
-    transition-timing-function: var(--ease-apple);
+    transition:
+      translate 180ms var(--ease-apple),
+      scale 80ms ease-out,
+      box-shadow 180ms var(--ease-apple),
+      background-color 180ms var(--ease-apple),
+      border-color 180ms var(--ease-apple),
+      color 180ms var(--ease-apple);
   }
   .btn-ghost-gold:hover {
     @apply border-primary/50 bg-primary/10;
@@ -283,8 +297,8 @@
   }
 
   .data-panel {
-    @apply glass rounded-lg p-6 md:p-8 transition-all duration-500;
-    transition-timing-function: var(--ease-apple);
+    @apply glass rounded-lg p-6 md:p-8;
+    transition: translate 0.3s var(--ease-apple), box-shadow 0.3s var(--ease-apple), border-color 0.3s var(--ease-apple);
   }
   .data-panel:hover {
     border-color: hsl(var(--primary) / 0.5);
@@ -293,9 +307,9 @@
   }
 
   .mac-card {
-    @apply rounded-lg border border-border/60 bg-background/70 shadow-soft backdrop-blur-xl transition-all duration-500;
+    @apply rounded-lg border border-border/60 bg-background/70 shadow-soft backdrop-blur-xl;
     box-shadow: var(--shadow-soft), 0 1px 0 hsl(0 0% 100% / 0.62) inset;
-    transition-timing-function: var(--ease-apple);
+    transition: translate 0.3s var(--ease-apple), box-shadow 0.3s var(--ease-apple), border-color 0.3s var(--ease-apple);
   }
   .mac-card:hover {
     border-color: hsl(var(--primary) / 0.46);
@@ -304,27 +318,37 @@
   }
 
   .mac-tile {
-    @apply bg-background/70 transition-all duration-500;
+    @apply bg-background/70;
     box-shadow: 0 1px 0 hsl(0 0% 100% / 0.58) inset;
-    transition-timing-function: var(--ease-apple);
+    transition: background-color 0.25s var(--ease-apple);
   }
   .mac-tile:hover {
     @apply bg-surface-elevated;
   }
 
   .form-control {
-    @apply w-full rounded-lg border border-border/60 bg-background/60 px-4 py-3 text-base outline-none transition-all duration-300;
+    @apply w-full rounded-lg border border-border/60 bg-background/60 px-4 py-3 text-base outline-none;
     box-shadow: 0 1px 0 hsl(0 0% 100% / 0.62) inset;
+    transition:
+      background-color 180ms var(--ease-apple),
+      border-color 180ms var(--ease-apple),
+      box-shadow 180ms var(--ease-apple);
   }
   .form-control:focus {
     @apply border-primary/60 bg-background/80 ring-2 ring-primary/20;
   }
 
   .icon-button-glass {
-    @apply inline-flex items-center justify-center rounded-lg border border-border/60 bg-background/50 transition-all duration-300;
+    @apply inline-flex items-center justify-center rounded-lg border border-border/60 bg-background/50;
     box-shadow: 0 1px 0 hsl(0 0% 100% / 0.62) inset, 0 10px 24px -22px hsl(220 28% 18% / 0.3);
     backdrop-filter: blur(18px) saturate(150%);
     -webkit-backdrop-filter: blur(18px) saturate(150%);
+    transition:
+      translate 180ms var(--ease-apple),
+      background-color 180ms var(--ease-apple),
+      border-color 180ms var(--ease-apple),
+      color 180ms var(--ease-apple),
+      box-shadow 180ms var(--ease-apple);
   }
   .icon-button-glass:hover {
     @apply border-primary/40 bg-background/80 text-primary;
@@ -393,7 +417,7 @@
     display: block;
     border-radius: inherit;
     transform-style: preserve-3d;
-    transition: transform 720ms var(--ease-apple);
+    transition: transform 420ms var(--ease-apple);
   }
 
   .partner-flip-card:hover .partner-flip-card-inner,
