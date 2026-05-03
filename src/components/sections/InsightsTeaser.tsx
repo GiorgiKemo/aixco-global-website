@@ -21,11 +21,14 @@ export function InsightsTeaser() {
   const { tx } = useI18n();
 
   return (
-    <section className="relative py-20 md:py-28 lg:py-36 bg-surface/40">
+    <section id="insights" aria-labelledby="insights-heading" className="relative py-20 md:py-28 lg:py-36 bg-surface/40">
       <div className="container-x">
         <div className="scroll-reveal mb-14 max-w-3xl">
-          <p className="eyebrow">{tx("Batumi")}</p>
-          <h2 className="heading-section mt-5">{tx("Batumi")}</h2>
+          <p className="eyebrow">{tx("Insights")}</p>
+          <h2 id="insights-heading" className="heading-section mt-5">{tx("Market insights")}</h2>
+          <p className="mt-6 text-foreground/80 leading-relaxed">
+            {tx("Selected research on coastal real estate, rental yields, and long-term market participation.")}
+          </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {articleLinks.map((article, index) => (

@@ -1,0 +1,53 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { partners } from "@/data/site";
+import { I18nProvider } from "@/i18n/I18nProvider";
+import { Partners } from "./Partners";
+
+const uiMocks = vi.hoisted(() => ({
+  openPartner: vi.fn(),
+}));
+
+vi.mock("../ui-state", () => ({
+  useUI: () => ({
+    openPartner: uiMocks.openPartner,
+  }),
+}));
+
+function renderPartners() {
+  return render(
+    <I18nProvider>
+      <Partners />
+    </I18nProvider>,
+  );
+}
+
+describe("Partners", () => {
+  beforeEach(() => {
+    uiMocks.openPartner.mockClear();
+  });
+
+  it("renders logo-only flip cards inside the partner marquees", () => {
+    const { container } = renderPartners();
+
+    const groupMarquee = screen.getByLabelText("Group companies");
+    const strategicMarquee = screen.getByLabelText("Strategic partners");
+    const card = container.querySelector(".partner-flip-card");
+
+    expect(groupMarquee).toBeInTheDocument();
+    expect(strategicMarquee).toBeInTheDocument();
+    expect(container.querySelector(".scroll-reveal.mac-card.mb-10")).not.toBeInTheDocument();
+    expect(card).toBeInTheDocument();
+    expect(card?.querySelector(".partner-flip-front img")).toBeInTheDocument();
+    expect(card?.querySelector(".partner-logo-stage")).toBeInTheDocument();
+    expect(card?.querySelector(".partner-flip-back")).toHaveTextContent("Open profile");
+  });
+
+  it("opens the partner profile when a real marquee card is clicked", () => {
+    renderPartners();
+
+    fireEvent.click(screen.getByRole("button", { name: "Global Partners Open profile" }));
+
+    expect(uiMocks.openPartner).toHaveBeenCalledWith(partners[0]);
+  });
+});

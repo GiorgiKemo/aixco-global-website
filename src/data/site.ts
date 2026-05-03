@@ -1,6 +1,6 @@
 // Canonical copy from https://www.aixco.global/op2/index.html#page1.
 export const company = {
-  name: "AIXCO Global",
+  name: "AIXCO.Global",
   tagline: "Quality Real Estate Participation",
   email: "info@aixco.global",
   address: "Grüngasse 16, 1050 Wien, Austria",
@@ -75,18 +75,30 @@ export const batumiBenefits = [
 
 export const batumiProperties = [
   {
-    id: "queens",
-    name: "Queens",
-    url: "https://tempoholding.ge/apartments#/",
-    image: "batumi-queens",
-    video: "tempo",
+    id: "guru",
+    name: "Guru",
+    url: "guru",
+    image: "batumi-guru",
+    video: "guruBatumi",
+    summary: "Guru is presented as a Batumi residential opportunity for buyers evaluating direct ownership, project documentation, and property media in one focused view.",
+    highlights: [
+      { label: "Project media", value: "Guru" },
+      { label: "Document", value: "Guru PDF" },
+      { label: "Focus", value: "Direct ownership in a growing Batumi residential market" },
+    ],
   },
   {
-    id: "serenade",
-    name: "Serenade",
-    url: "https://tempoholding.ge/serenade/apartments#/",
-    image: "batumi-serenade",
-    video: "guru",
+    id: "otium",
+    name: "Otium",
+    url: "otium",
+    image: "batumi-otium",
+    video: "otium",
+    summary: "Otium is presented as a distinct Batumi project with its own media, documentation, and positioning for buyers looking at resort-led coastal demand.",
+    highlights: [
+      { label: "Project media", value: "Otium" },
+      { label: "Document", value: "Otium PDF" },
+      { label: "Focus", value: "Coastal lifestyle positioning with rental demand potential" },
+    ],
   },
 ];
 

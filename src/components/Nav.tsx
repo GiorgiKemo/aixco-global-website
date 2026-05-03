@@ -4,6 +4,7 @@ import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import { Logo } from "./Logo";
 import { useI18n, LANGS } from "@/i18n/I18nProvider";
 import { useUI } from "@/components/ui-state";
+import { getActiveSectionHash, syncLocationHashToActiveSection } from "@/lib/section-hash";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 
 const NAV = [
@@ -18,6 +19,20 @@ const NAV = [
   { key: "nav.faqs", to: "/", hash: "#faqs" },
   { key: "nav.contact", to: "/", hash: "#contact" },
 ];
+const HOME_SECTION_IDS = ["about", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"] as const;
+const DESKTOP_NAV_LABELS: Record<string, Record<string, string>> = {
+  ka: {
+    "nav.about": "AIXCO",
+    "nav.participate": "გზები",
+    "nav.how": "პროცესი",
+    "nav.team": "გუნდი",
+    "nav.faqs": "FAQ",
+  },
+};
+
+function getDesktopNavLabel(lang: string, key: string, fallback: string) {
+  return DESKTOP_NAV_LABELS[lang]?.[key] ?? fallback;
+}
 
 export function Nav() {
   const { t, lang, setLang } = useI18n();
@@ -34,6 +49,11 @@ export function Nav() {
   const location = useLocation();
   const solidNav = scrolled || open || langOpen;
   const fullNavAvailable = !compactNav;
+  const compactDesktopLabels = lang === "ka";
+  const desktopNavSpacing = compactDesktopLabels ? "gap-1 px-2" : "gap-2 px-3";
+  const desktopNavLinkClass = compactDesktopLabels
+    ? "px-2 py-1.5 text-[clamp(11.5px,0.66vw,13px)]"
+    : "px-2.5 py-1.5 text-[clamp(12px,0.72vw,13.5px)]";
   const topControlClass =
     "inline-flex items-center justify-center rounded-lg border border-white/25 bg-white/[0.06] text-white/90 shadow-[0_8px_28px_rgb(0_0_0/0.16)] backdrop-blur-md transition-all duration-300 hover:border-[#f0bd5d]/55 hover:bg-white/[0.12] hover:text-[#f0bd5d]";
   const controlClass = solidNav ? "icon-button-glass" : topControlClass;
@@ -56,22 +76,18 @@ export function Nav() {
   };
 
   useEffect(() => {
-    const onScroll = () => {
+    const updateScrollState = (syncUrlHash: boolean) => {
       setScrolled(window.scrollY > 88);
-      // active section
       if (location.pathname !== "/") return;
-      const sections = ["about", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"];
-      let current = "";
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 120 && rect.bottom >= 120) current = `#${id}`;
-        }
-      }
+      const current = syncUrlHash
+        ? syncLocationHashToActiveSection(HOME_SECTION_IDS)
+        : getActiveSectionHash(HOME_SECTION_IDS);
       setActive(current);
     };
-    onScroll();
+
+    const onScroll = () => updateScrollState(true);
+
+    updateScrollState(false);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [location.pathname]);
@@ -135,19 +151,21 @@ export function Nav() {
 
         <nav
           aria-label="Primary"
-          className={`${fullNavAvailable ? "hidden xl:flex" : "hidden"} min-w-0 flex-1 items-center justify-center gap-2 px-3`}
+          className={`${fullNavAvailable ? "hidden xl:flex" : "hidden"} min-w-0 flex-1 items-center justify-center ${desktopNavSpacing}`}
         >
           {NAV.map((item) => {
             const isActive = item.hash ? active === item.hash : location.pathname === item.to && !active;
             const href = `${item.to}${item.hash}`;
             const label = t(item.key);
+            const desktopLabel = getDesktopNavLabel(lang, item.key, label);
             return (
               <Link
                 key={item.key}
                 to={href}
                 title={label}
+                aria-label={label}
                 onClick={(event) => handleNavClick(event, item)}
-                className={`shrink-0 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[clamp(10.5px,0.68vw,12px)] leading-none tracking-wide transition-all duration-300 ${
+                className={`shrink-0 whitespace-nowrap rounded-full ${desktopNavLinkClass} leading-none tracking-wide transition-all duration-300 ${
                   solidNav
                     ? isActive
                       ? "bg-primary/10 text-primary"
@@ -157,7 +175,7 @@ export function Nav() {
                       : "text-white/90 drop-shadow-[0_2px_10px_rgb(0_0_0/0.34)] hover:bg-white/[0.08] hover:text-[#f0bd5d]"
                 }`}
               >
-                {label}
+                {desktopLabel}
               </Link>
             );
           })}
@@ -172,7 +190,7 @@ export function Nav() {
               aria-haspopup="listbox"
               aria-expanded={langOpen}
               aria-label="Change language"
-              className={`${controlClass} inline-flex min-h-11 min-w-0 items-center gap-1.5 px-2.5 py-1.5 text-[11px] uppercase tracking-widest ${controlTextClass}`}
+              className={`${controlClass} inline-flex min-h-11 min-w-0 items-center gap-1.5 px-2.5 py-1.5 text-[12px] uppercase tracking-widest ${controlTextClass}`}
             >
               <Globe className="h-3.5 w-3.5" />
               {LANGS.find((l) => l.code === lang)?.native}
@@ -190,7 +208,7 @@ export function Nav() {
                       className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${l.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70"}`}
                     >
                       <span>{l.label}</span>
-                      <span className="text-[10px] uppercase tracking-widest opacity-70">{l.native}</span>
+                      <span className="text-[12px] uppercase tracking-widest opacity-70">{l.native}</span>
                     </button>
                   </li>
                 ))}
@@ -200,20 +218,20 @@ export function Nav() {
 
           <button
             onClick={openLogin}
-            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} min-h-11 whitespace-nowrap px-3 py-2 text-[13px] tracking-wide transition-colors ${controlTextClass}`}
+            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} min-h-11 whitespace-nowrap px-3 py-2 text-sm tracking-wide transition-colors ${controlTextClass}`}
           >
             {t("cta.login")}
           </button>
           <button
             onClick={openRegister}
-            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !py-2 !px-4 text-[12px]`}
+            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !py-2 !px-4 text-sm`}
           >
             {t("cta.register")}
           </button>
           <Link
             to="/#participate"
             onClick={(event) => handleNavClick(event, NAV[4])}
-            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-[12px]`}
+            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-sm`}
           >
             {t("cta.start")}
           </Link>
@@ -234,22 +252,25 @@ export function Nav() {
         aria-hidden
         className="pointer-events-none invisible fixed -left-[9999px] top-0 flex items-center gap-4 whitespace-nowrap"
       >
-        <nav ref={navMeasureRef} className="flex items-center justify-center gap-2 px-3">
-          {NAV.map((item) => (
-            <span key={item.key} className="rounded-full px-2.5 py-1.5 text-[12px] leading-none tracking-wide">
-              {t(item.key)}
-            </span>
-          ))}
+        <nav ref={navMeasureRef} className={`flex items-center justify-center ${desktopNavSpacing}`}>
+          {NAV.map((item) => {
+            const label = t(item.key);
+            return (
+              <span key={item.key} className={`rounded-full ${desktopNavLinkClass} leading-none tracking-wide`}>
+                {getDesktopNavLabel(lang, item.key, label)}
+              </span>
+            );
+          })}
         </nav>
         <div ref={controlsMeasureRef} className="flex items-center gap-3">
-          <span data-nav-persistent className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] uppercase tracking-widest">
+          <span data-nav-persistent className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[12px] uppercase tracking-widest">
             <Globe className="h-3.5 w-3.5" />
             {LANGS.find((l) => l.code === lang)?.native}
             <ChevronDown className="h-3 w-3" />
           </span>
-          <span className="px-3 py-2 text-[13px] tracking-wide">{t("cta.login")}</span>
-          <span className="px-4 py-2 text-[12px] tracking-wide">{t("cta.register")}</span>
-          <span className="px-4 py-2 text-[12px] tracking-wide">{t("cta.start")}</span>
+          <span className="px-3 py-2 text-sm tracking-wide">{t("cta.login")}</span>
+          <span className="px-4 py-2 text-sm tracking-wide">{t("cta.register")}</span>
+          <span className="px-4 py-2 text-sm tracking-wide">{t("cta.start")}</span>
         </div>
       </div>
 

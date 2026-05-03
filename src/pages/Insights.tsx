@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { aixcoLivePath } from "@/lib/aixco-live-assets";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const articleLinks = [
   { title: "7% Annual Property Growth", href: aixcoLivePath("annual-property-growth-batumi.html") },
@@ -17,14 +18,19 @@ const articleLinks = [
 ];
 
 export default function Insights() {
+  const { tx } = useI18n();
+
   return (
     <>
       <Nav />
       <main className="pb-20 pt-32">
         <section className="container-x">
           <div className="scroll-reveal">
-            <p className="eyebrow">Batumi</p>
-            <h1 className="heading-display mt-5 max-w-4xl">Batumi</h1>
+            <p className="eyebrow">{tx("Insights")}</p>
+            <h1 className="heading-display mt-5 max-w-4xl">{tx("Market insights")}</h1>
+            <p className="mt-6 max-w-3xl text-foreground/80 leading-relaxed">
+              {tx("Selected research on coastal real estate, rental yields, and long-term market participation.")}
+            </p>
           </div>
 
           <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-5">

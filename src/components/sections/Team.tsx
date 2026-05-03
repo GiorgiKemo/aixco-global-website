@@ -18,12 +18,10 @@ export function Team() {
   return (
     <section id="team" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0 bg-surface/40">
       <div className="container-x">
-        <div className="scroll-reveal grid lg:grid-cols-2 gap-10 items-end mb-14">
-          <div>
-            <p className="eyebrow">{tx("Our Team")}</p>
-            <h2 className="heading-section mt-5">{tx("Our Team")}</h2>
-          </div>
-          <p className="text-foreground/80 leading-relaxed max-w-md">
+        <div className="scroll-reveal mb-16 max-w-4xl">
+          <p className="eyebrow">{tx("Our Team")}</p>
+          <h2 className="heading-section mt-5">{tx("Our Team")}</h2>
+          <p className="mt-6 max-w-3xl text-[clamp(1.12rem,1.02rem+0.42vw,1.34rem)] leading-relaxed text-foreground/82">
             {tx("Meet the leadership team shaping AIXCO’s strategic direction, partnerships, and distribution platform.")}
           </p>
         </div>
