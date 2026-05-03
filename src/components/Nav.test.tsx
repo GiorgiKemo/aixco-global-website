@@ -11,11 +11,11 @@ class TestResizeObserver {
   disconnect = () => {};
 }
 
-function renderNav() {
+function renderNav(initialEntry = "/") {
   return render(
     <I18nProvider>
       <UIProvider>
-        <MemoryRouter>
+        <MemoryRouter initialEntries={[initialEntry]}>
           <Nav />
         </MemoryRouter>
       </UIProvider>
@@ -51,5 +51,14 @@ describe("Nav", () => {
     expect(within(mobile).getByRole("link", { name: "როგორ მუშაობს AIXCO" })).toHaveTextContent(
       "როგორ მუშაობს AIXCO",
     );
+  });
+
+  it("marks the hash target active before scroll sync catches up", () => {
+    renderNav("/#batumi");
+
+    const primary = screen.getByLabelText("Primary");
+
+    expect(within(primary).getByRole("link", { name: "Batumi" })).toHaveAttribute("aria-current", "page");
+    expect(within(primary).getByRole("link", { name: "Home" })).not.toHaveAttribute("aria-current");
   });
 });

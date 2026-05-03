@@ -10,22 +10,24 @@ const liveImageBase = aixcoLivePath("images");
 const optimizedImageBase = aixcoLivePath("images/optimized");
 const optimizedVideoBase = aixcoLivePath("media");
 const documentBase = aixcoLivePath("documents");
+const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
 
 export const aixcoLiveImages = {
-  aboutArchitecture: `${optimizedImageBase}/batumip.webp`,
+  aboutArchitecture: `${optimizedImageBase}/batumip.png`,
   contact: `${optimizedImageBase}/contact.webp`,
   dubaiEdenHouse: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiHealthcare: `${optimizedImageBase}/fund2.webp`,
   transactionBackdrop: `${optimizedImageBase}/trans.webp`,
-  batumiGuru: `${optimizedImageBase}/guru.webp`,
-  batumiOtium: `${optimizedImageBase}/otium.webp`,
+  batumiOverviewPoster: `${batumiGalleryBase}/batumi2-poster.webp`,
+  batumiGuru: `${optimizedImageBase}/guru.png`,
+  batumiOtium: `${optimizedImageBase}/otium-reverance.png`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
   teamOwais: `${optimizedImageBase}/owais.webp`,
   teamWalter: `${optimizedImageBase}/walter.webp`,
 } as const;
 
 export const aixcoLiveVideos = {
-  batumiOverview: `${optimizedVideoBase}/batumi2-optimized.mp4`,
+  batumiOverview: `${batumiGalleryBase}/batumi2.mp4`,
   batumiBuy: `${optimizedVideoBase}/batumibuy-optimized.mp4`,
   bonds: `${optimizedVideoBase}/bonds-optimized.mp4`,
   fundOne: `${optimizedVideoBase}/fund1-optimized.mp4`,
@@ -36,8 +38,6 @@ export const aixcoLiveVideos = {
   guruBatumi: `${optimizedVideoBase}/guru-batumi-optimized.mp4`,
   otium: `${optimizedVideoBase}/otium-optimized.mp4`,
 } as const;
-
-const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
 
 export const aixcoBatumiGalleryVideos = [
   { src: `${batumiGalleryBase}/batumi1.mp4`, poster: `${batumiGalleryBase}/batumi1-poster.webp`, title: "Batumi gallery 1" },

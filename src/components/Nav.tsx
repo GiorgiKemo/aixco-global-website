@@ -60,6 +60,9 @@ export function Nav() {
   const controlTextClass = solidNav
     ? "text-foreground/85 hover:text-foreground"
     : "text-white/90 drop-shadow-[0_2px_10px_rgb(0_0_0/0.34)] hover:text-[#f0bd5d]";
+  const effectiveActiveHash = active || location.hash;
+  const isNavItemActive = (item: (typeof NAV)[number]) =>
+    item.hash ? effectiveActiveHash === item.hash : location.pathname === item.to && !effectiveActiveHash;
 
   const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, item: (typeof NAV)[number]) => {
     setLangOpen(false);
@@ -154,7 +157,7 @@ export function Nav() {
           className={`${fullNavAvailable ? "hidden xl:flex" : "hidden"} min-w-0 flex-1 items-center justify-center ${desktopNavSpacing}`}
         >
           {NAV.map((item) => {
-            const isActive = item.hash ? active === item.hash : location.pathname === item.to && !active;
+            const isActive = isNavItemActive(item);
             const href = `${item.to}${item.hash}`;
             const label = t(item.key);
             const desktopLabel = getDesktopNavLabel(lang, item.key, label);
@@ -164,6 +167,7 @@ export function Nav() {
                 to={href}
                 title={label}
                 aria-label={label}
+                aria-current={isActive ? "page" : undefined}
                 onClick={(event) => handleNavClick(event, item)}
                 className={`shrink-0 whitespace-nowrap rounded-full ${desktopNavLinkClass} leading-none tracking-wide transition-all duration-300 ${
                   solidNav
@@ -282,16 +286,24 @@ export function Nav() {
       >
         <div className="container-x pb-6 pt-2">
           <nav aria-label="Mobile" className="glass grid gap-1 rounded-lg p-2">
-            {NAV.map((item) => (
-              <Link
-                key={item.key}
-                to={`${item.to}${item.hash}`}
-                onClick={(event) => handleNavClick(event, item)}
-                className="rounded-md px-3 py-3 text-base leading-snug text-foreground/85 transition hover:bg-muted/70 hover:text-foreground"
-              >
-                {t(item.key)}
-              </Link>
-            ))}
+            {NAV.map((item) => {
+              const isActive = isNavItemActive(item);
+              return (
+                <Link
+                  key={item.key}
+                  to={`${item.to}${item.hash}`}
+                  aria-current={isActive ? "page" : undefined}
+                  onClick={(event) => handleNavClick(event, item)}
+                  className={`rounded-md px-3 py-3 text-base leading-snug transition ${
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-foreground/85 hover:bg-muted/70 hover:text-foreground"
+                  }`}
+                >
+                  {t(item.key)}
+                </Link>
+              );
+            })}
           </nav>
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <button onClick={openLogin} className="btn-ghost-gold w-full justify-center text-center leading-tight">{t("cta.login")}</button>

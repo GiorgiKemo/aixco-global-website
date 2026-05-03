@@ -6,6 +6,7 @@ type LiveVideoProps = {
   poster?: string;
   className?: string;
   videoClassName?: string;
+  fit?: "cover" | "contain";
   eager?: boolean;
   rootMargin?: string;
 };
@@ -19,6 +20,7 @@ export function LiveVideo({
   poster,
   className = "",
   videoClassName = "",
+  fit = "cover",
   eager = false,
   rootMargin = "350px 0px",
 }: LiveVideoProps) {
@@ -143,7 +145,7 @@ export function LiveVideo({
         poster={poster}
         aria-label={title}
         title={title}
-        className={`h-full w-full object-cover ${videoClassName}`}
+        className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}
         autoPlay={isVisible}
         muted={!isPlayingInline || !isAudible}
         loop={!isPlayingInline}

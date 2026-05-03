@@ -10,7 +10,7 @@ export function FAQs() {
   const { openLogin, openRegister } = useUI();
 
   return (
-    <section id="faqs" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0">
+    <section id="faqs" className="relative scroll-mt-16 py-16 md:scroll-mt-20 md:py-20 lg:py-24">
       <div className="container-x grid lg:grid-cols-12 gap-12">
         <div className="scroll-reveal lg:col-span-4 lg:sticky lg:top-28 self-start">
           <p className="eyebrow">{tx("FAQs")}</p>

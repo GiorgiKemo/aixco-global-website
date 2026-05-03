@@ -24,7 +24,7 @@ const documentMap: Record<string, string> = {
 
 const propertyImageAspectClass: Record<string, string> = {
   "batumi-guru": "aspect-[9/16]",
-  "batumi-otium": "aspect-[16/9]",
+  "batumi-otium": "aspect-[9/16]",
 };
 
 export function Batumi() {
@@ -38,30 +38,55 @@ export function Batumi() {
   };
 
   return (
-    <section id="batumi" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0">
+    <section className="relative py-20 md:py-24 lg:min-h-[calc(100svh-5rem)] lg:pb-16 lg:pt-24">
       <div className="container-x">
-        <div className="scroll-reveal grid gap-12 lg:grid-cols-12 lg:items-start">
-          <div className="lg:col-span-6">
+        <div
+          id="batumi"
+          aria-label="Batumi market overview"
+          data-layout="batumi-intro-balanced-height"
+          data-viewport-fit="first-view"
+          className="scroll-reveal grid scroll-mt-16 gap-10 md:scroll-mt-20 lg:auto-rows-[minmax(0,calc(100svh-9rem))] lg:grid-cols-12 lg:items-stretch"
+        >
+          <div
+            aria-label="Batumi market copy and benefits"
+            data-stretch="matches-overview-media"
+            className="flex h-full flex-col lg:col-span-6"
+          >
             <p className="eyebrow">{tx("Batumi")}</p>
             <h2 className="heading-section mt-5">{tx("Batumi")}</h2>
             <p className="mt-6 max-w-2xl text-foreground/80 leading-relaxed">
               {tx("Georgia sits at the crossroads of Europe and Asia, maintaining strong relationships with neighboring countries as well as with the EU, the United States, and Asian markets. Batumi offers a rare opportunity to enter an emerging market that is steadily aligning with the highest standards in safety, education, and transparency. At the same time, it benefits from a flexible, low-regulation environment and strong long-term growth potential.")}
             </p>
-          </div>
-          <div className="lg:col-span-6">
-            <LiveVideo
-              src={aixcoLiveVideos.batumiOverview}
-              title={tx("Batumi")}
-              poster={aixcoLiveImages.batumiOtium}
-              className="mb-5 aspect-video"
-            />
-            <div className="grid grid-cols-1 gap-px overflow-hidden rounded-lg bg-border/50 sm:grid-cols-2">
-              {batumiBenefits.map((benefit) => (
-                <div key={benefit} className="mac-tile p-5">
+            <div
+              aria-label="Batumi benefit highlights"
+              data-layout="batumi-benefits-left-column"
+              className="mt-8 grid flex-1 grid-cols-1 gap-px overflow-hidden rounded-lg bg-border/50 sm:grid-cols-2 lg:auto-rows-fr"
+            >
+              {batumiBenefits.map((benefit, index) => (
+                <div
+                  key={benefit}
+                  className={`mac-tile flex items-center p-5 ${
+                    index === batumiBenefits.length - 1 && batumiBenefits.length % 2 !== 0 ? "sm:col-span-2" : ""
+                  }`}
+                >
                   <p className="text-sm leading-relaxed text-foreground/85">{tx(benefit)}</p>
                 </div>
               ))}
             </div>
+          </div>
+          <div
+            aria-label="Batumi overview media"
+            data-media-frame="viewport-fit-uncropped"
+            className="lg:col-span-6 lg:flex lg:justify-end"
+          >
+            <LiveVideo
+              src={aixcoLiveVideos.batumiOverview}
+              title={tx("Batumi")}
+              poster={aixcoLiveImages.batumiOverviewPoster}
+              className="aspect-video w-full lg:aspect-[9/16] lg:h-full lg:w-auto lg:max-w-full"
+              videoClassName="bg-black"
+              fit="contain"
+            />
           </div>
         </div>
 
@@ -127,9 +152,11 @@ export function Batumi() {
                 height={896}
                 className="h-full w-full object-cover animate-fade-in"
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 via-black/36 to-transparent p-6 text-white md:p-8">
-                <p className="font-display text-3xl drop-shadow-[0_3px_16px_rgb(0_0_0/0.42)]">{tx(property.name)}</p>
-              </div>
+              {property.id !== "otium" && (
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 via-black/36 to-transparent p-6 text-white md:p-8">
+                  <p className="font-display text-3xl drop-shadow-[0_3px_16px_rgb(0_0_0/0.42)]">{tx(property.name)}</p>
+                </div>
+              )}
             </div>
             <div className="grid gap-4">
               <LiveVideo

@@ -45,7 +45,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0 bg-surface/40">
+    <section id="contact" className="relative scroll-mt-16 bg-surface/40 py-16 md:scroll-mt-20 md:py-20 lg:py-24">
       <div className="container-x grid gap-12 lg:grid-cols-12">
         <div className="scroll-reveal lg:col-span-5">
           <p className="eyebrow">{tx("Contact")}</p>
