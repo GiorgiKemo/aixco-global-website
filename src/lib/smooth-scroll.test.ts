@@ -64,8 +64,19 @@ describe("installGlideScroll", () => {
     expect(document.documentElement).not.toHaveAttribute("data-glide-scroll");
   });
 
-  it("does not install when the visitor prefers reduced motion", () => {
+  it("keeps desktop wheel glide active when reduced motion is reported", () => {
     mockMatchMedia((query) => query.includes("prefers-reduced-motion"));
+    const addEventListener = vi.spyOn(document, "addEventListener");
+
+    const cleanup = installGlideScroll();
+
+    expect(addEventListener).toHaveBeenCalledWith("wheel", expect.any(Function), { passive: false });
+    expect(document.documentElement).toHaveAttribute("data-glide-scroll", "enabled");
+    cleanup();
+  });
+
+  it("does not install custom wheel scrolling on coarse pointer devices", () => {
+    mockMatchMedia((query) => query.includes("pointer: coarse"));
     const addEventListener = vi.spyOn(document, "addEventListener");
 
     const cleanup = installGlideScroll();

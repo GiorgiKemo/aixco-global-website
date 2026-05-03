@@ -98,7 +98,7 @@ function shouldUseNativeWheelScroll(event: WheelEvent, deltaY: number) {
 
 export function installGlideScroll({ easing = 0.16, multiplier = 1.05 }: GlideScrollOptions = {}) {
   if (typeof window === "undefined" || typeof document === "undefined") return () => {};
-  if (prefersReducedMotion() || usesCoarsePointer()) return () => {};
+  if (usesCoarsePointer()) return () => {};
 
   const resolvedEasing = clamp(easing, 0.08, 1);
   const resolvedMultiplier = clamp(multiplier, 0.35, 2);
