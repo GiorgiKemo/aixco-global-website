@@ -36,7 +36,7 @@ function ParticipationRouteCard({
       data-participation-card={route.id}
       data-image-position={imageFirst ? "left" : "right"}
       data-design-source="dubai-batumi-split-card-reference"
-      className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:min-h-[clamp(28rem,calc(100svh-24rem),34rem)] md:grid-cols-12 md:items-stretch lg:min-h-[clamp(28rem,calc(100svh-24rem),34rem)] lg:grid-cols-12"
+      className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:min-h-[max(24.5rem,calc(100svh-22rem))] md:grid-cols-12 md:items-stretch lg:min-h-[max(24.5rem,calc(100svh-22rem))] lg:grid-cols-12"
       whileHover={premiumSurfaceHover}
       whileTap={premiumPress}
     >
@@ -56,33 +56,41 @@ function ParticipationRouteCard({
       </div>
       <div
         data-participation-copy
-        className={`flex min-h-0 flex-col justify-start border-foreground/5 p-8 md:col-span-7 md:p-10 lg:col-span-7 lg:p-11 ${copyOrderClass} ${
+        className={`flex min-h-0 flex-col border-foreground/5 p-7 md:col-span-7 md:px-8 md:py-7 lg:col-span-7 lg:px-9 lg:py-7 ${copyOrderClass} ${
           imageFirst ? "md:border-l lg:border-l" : "md:border-r lg:border-r"
         }`}
       >
-        <div className="mb-6 flex items-baseline justify-between">
-          <span className="font-display text-6xl text-primary/30">0{index + 1}</span>
+        <div className="flex min-h-0 flex-1 flex-col gap-5">
+          <div className="flex items-baseline justify-between">
+            <span className="font-display text-[clamp(3.75rem,4.7vw,4.7rem)] leading-none text-primary/30">0{index + 1}</span>
+          </div>
+          <div className="max-w-[34rem]">
+            <h3 className="font-display text-[clamp(2.45rem,2.85vw,3rem)] leading-[1.03]">{tx(route.title)}</h3>
+            <div className="mt-5 grid gap-3 text-[clamp(1.14rem,1.12vw,1.28rem)] leading-[1.62] text-foreground/85">
+              {route.id === "bond" ? (
+                <>
+                  <p className="text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]">
+                    {tx("Customers sign up, complete onboarding, and invest in the AIXCO bond through a seamless digital process.")}
+                  </p>
+                  <p className="text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]">
+                    <strong>{tx("Purchase the AIXCO Bond with a guaranteed 30% return over 5 years")}</strong>{" "}
+                    {tx("— combining structured security with strong, predictable growth. Backed by property as collateral, the bond provides investors with an added layer of asset-linked confidence.")}
+                  </p>
+                </>
+              ) : (
+                <p className="text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]">{tx(route.body)}</p>
+              )}
+            </div>
+          </div>
+          <motion.button
+            onClick={onRegister}
+            className="btn-gold mt-auto w-auto self-start"
+            whileHover={{ y: -2, scale: 1.012 }}
+            whileTap={premiumPress}
+          >
+            {tx(route.cta)} <ArrowRight className="h-4 w-4" />
+          </motion.button>
         </div>
-        <h3 className="font-display text-3xl md:text-4xl">{tx(route.title)}</h3>
-        <p className="mt-5 text-sm leading-relaxed text-foreground/85">
-          {route.id === "bond" ? (
-            <>
-              {tx("Customers sign up, complete onboarding, and invest in the AIXCO bond through a seamless digital process.")}{" "}
-              <strong>{tx("Purchase the AIXCO Bond with a guaranteed 30% return over 5 years")}</strong>{" "}
-              {tx("— combining structured security with strong, predictable growth. Backed by property as collateral, the bond provides investors with an added layer of asset-linked confidence.")}
-            </>
-          ) : (
-            tx(route.body)
-          )}
-        </p>
-        <motion.button
-          onClick={onRegister}
-          className="btn-gold mt-8 w-auto self-start"
-          whileHover={{ y: -2, scale: 1.012 }}
-          whileTap={premiumPress}
-        >
-          {tx(route.cta)} <ArrowRight className="h-4 w-4" />
-        </motion.button>
       </div>
     </motion.article>
   );
@@ -99,20 +107,20 @@ export function Participate() {
   };
 
   return (
-    <section id="participate" className="relative scroll-mt-16 overflow-hidden bg-surface/40 py-14 noise-overlay md:scroll-mt-20 md:py-16 lg:py-16">
+    <section id="participate" className="relative scroll-mt-16 overflow-hidden bg-surface/40 py-12 noise-overlay md:scroll-mt-20 md:py-10 lg:py-0">
       <div className="motion-accent-line absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="container-x">
-        <div className="scroll-reveal mb-10 max-w-3xl">
+        <div className="scroll-reveal mb-2 max-w-6xl">
           <p className="eyebrow">{tx("Ways to Participate")}</p>
-          <h2 className="heading-section mt-5">
+          <h2 className="heading-section mt-4 text-[clamp(2.65rem,4.1vw,3.5rem)] leading-[1.02]">
             <span className="text-gold">{tx("How")}</span> {tx("Customers/Partners Profit")}
           </h2>
-          <p className="mt-6 text-foreground/80 leading-relaxed">
+          <p className="mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.56] text-foreground/80">
             {tx("Choose the route that fits your goals. Customers can either subscribe to the AIXCO 6% bond, secured by underlying property, or purchase an apartment directly and benefit from rental income potential, capital appreciation, and Batumi’s favorable tax environment.")}
           </p>
         </div>
 
-        <div className="grid gap-8" data-layout="alternating-participation-cards">
+        <div className="grid gap-16" data-layout="alternating-participation-cards">
           {participationRoutes.map((route, index) => (
             <ParticipationRouteCard
               key={route.id}

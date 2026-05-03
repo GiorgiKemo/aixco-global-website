@@ -36,14 +36,16 @@ describe("Participate", () => {
     const apartmentCard = container.querySelector("[data-participation-card='apartment']");
     const bondMedia = bondCard?.querySelector("[data-participation-media]");
     const bondCopy = bondCard?.querySelector("[data-participation-copy]");
+    const bondCopyStack = bondCopy?.firstElementChild;
     const apartmentMedia = apartmentCard?.querySelector("[data-participation-media]");
     const apartmentCopy = apartmentCard?.querySelector("[data-participation-copy]");
 
     expect(section).toBeInTheDocument();
     expect(section?.className).toContain("scroll-mt-16");
     expect(section?.className).toContain("md:scroll-mt-20");
-    expect(section?.className).toContain("lg:py-16");
+    expect(section?.className).toContain("lg:py-0");
     expect(cardGrid).toBeInTheDocument();
+    expect(cardGrid).toHaveClass("gap-16");
     expect(cardGrid?.className).not.toContain("md:grid-cols-2");
     expect(bondCard).toHaveAttribute("data-design-source", "dubai-batumi-split-card-reference");
     expect(apartmentCard).toHaveAttribute("data-design-source", "dubai-batumi-split-card-reference");
@@ -51,14 +53,16 @@ describe("Participate", () => {
     expect(bondCard).toHaveAttribute("data-image-position", "right");
     expect(apartmentCard).toHaveAttribute("data-image-position", "left");
     expect(bondCard?.className).toContain("md:grid-cols-12");
-    expect(bondCard?.className).toContain("md:min-h-[clamp(28rem,calc(100svh-24rem),34rem)]");
+    expect(bondCard?.className).toContain("md:min-h-[max(24.5rem,calc(100svh-22rem))]");
     expect(apartmentCard?.className).toContain("md:grid-cols-12");
     expect(bondCard?.className).not.toContain("mac-card");
     expect(bondMedia?.className).toContain("md:order-2");
     expect(bondMedia?.className).toContain("md:col-span-5");
     expect(bondCopy?.className).toContain("md:order-1");
     expect(bondCopy?.className).toContain("md:col-span-7");
-    expect(bondCopy?.className).toContain("justify-start");
+    expect(bondCopyStack?.className).toContain("gap-5");
+    expect(bondCopyStack?.className).not.toContain("justify-between");
+    expect(bondCopy?.className).not.toContain("justify-start");
     expect(bondCopy?.className).not.toContain("justify-center");
     expect(apartmentMedia?.className).toContain("md:order-1");
     expect(apartmentMedia?.className).toContain("md:col-span-5");
@@ -67,11 +71,12 @@ describe("Participate", () => {
     expect(within(bondCopy as HTMLElement).getByText("01")).toBeInTheDocument();
     expect(within(apartmentCopy as HTMLElement).getByText("02")).toBeInTheDocument();
     expect(within(bondCopy as HTMLElement).getByRole("heading", { name: "Buy the AIXCO 6% Bond" })).toHaveClass(
-      "text-3xl",
+      "text-[clamp(2.45rem,2.85vw,3rem)]",
     );
     expect(within(apartmentCopy as HTMLElement).getByRole("heading", { name: "Buy an Apartment in Batumi" })).toHaveClass(
-      "text-3xl",
+      "text-[clamp(2.45rem,2.85vw,3rem)]",
     );
+    expect(within(bondCopy as HTMLElement).getByRole("button", { name: /Register/ })).toHaveClass("mt-auto");
     expect(within(bondCopy as HTMLElement).getByRole("button", { name: /Register/ })).toHaveClass("self-start");
     expect(within(bondCopy as HTMLElement).getByRole("button", { name: /Register/ }).className).not.toContain("w-full");
     expect(screen.getByLabelText("Buy the AIXCO 6% Bond")).toHaveClass("object-cover");
