@@ -30,6 +30,8 @@ describe("Batumi", () => {
     const media = marketCard?.querySelector("[data-batumi-card-media]");
     const copy = marketCard?.querySelector("[data-batumi-card-copy]");
     const metricGrid = marketCard?.querySelector("[data-batumi-metric-grid]");
+    const entryTile = within(metricGrid as HTMLElement).getByText("EUR 50k").closest("[data-batumi-metric-tile]");
+    const entryAccent = entryTile?.lastElementChild as HTMLElement | null;
     const details = marketCard?.querySelector("[data-batumi-detail-notes]");
 
     expect(anchor).toHaveAttribute("id", "batumi");
@@ -41,11 +43,19 @@ describe("Batumi", () => {
     expect(marketCard).toHaveAttribute("data-design-source", "dubai-card-reference");
     expect(marketCard).toHaveAttribute("data-image-position", "right");
     expect(marketCard?.className).toContain("batumi-market-card");
+    expect(marketCard?.className).toContain("transition-[transform,box-shadow,border-color]");
+    expect(marketCard?.className).not.toContain("transition-all");
     expect(marketCard?.className).toContain("md:h-[clamp(30rem,calc(100svh-13rem),42rem)]");
     expect(marketCard?.className).toContain("md:grid-cols-12");
     expect(media?.className).toContain("md:col-span-5");
     expect(copy?.className).toContain("md:col-span-7");
     expect(metricGrid?.className).toContain("md:grid-cols-3");
+    expect(entryTile?.className).toContain("bg-foreground");
+    expect(entryTile?.className).toContain("transition-[background-color,border-color,box-shadow,color]");
+    expect(entryTile?.className).not.toContain("transition-all");
+    expect(entryAccent?.className).toContain("transition-[width,background-color]");
+    expect(entryAccent?.className).toContain("[transition-duration:400ms]");
+    expect(entryAccent?.className).not.toContain("duration-400");
     expect(details).toHaveAttribute("data-layout", "prestige-highlights");
     expect(details?.className).toContain("md:grid-cols-2");
     expect(details?.className).toContain("xl:grid-cols-4");
@@ -70,6 +80,10 @@ describe("Batumi", () => {
     const otiumCard = container.querySelector("[data-batumi-property-card='otium']");
     const guruMedia = guruCard?.querySelector("[data-batumi-property-media]");
     const otiumMedia = otiumCard?.querySelector("[data-batumi-property-media]");
+    const guruMetrics = guruCard?.querySelector("[data-batumi-property-highlight-grid='guru']");
+    const otiumMetrics = otiumCard?.querySelector("[data-batumi-property-highlight-grid='otium']");
+    const guruDetails = guruCard?.querySelector("[data-batumi-property-detail-notes='guru']");
+    const otiumDetails = otiumCard?.querySelector("[data-batumi-property-detail-notes='otium']");
 
     expect(profileGrid).toBeInTheDocument();
     expect(guruCard).toHaveAttribute("data-design-source", "dubai-card-reference");
@@ -77,13 +91,43 @@ describe("Batumi", () => {
     expect(guruCard).toHaveAttribute("data-image-position", "left");
     expect(otiumCard).toHaveAttribute("data-image-position", "right");
     expect(guruCard).toHaveAttribute("data-density", "standard");
+    expect(guruCard?.className).toContain("transition-[transform,box-shadow,border-color]");
+    expect(guruCard?.className).not.toContain("transition-all");
     expect(guruCard?.className).toContain("md:grid-cols-12");
     expect(guruMedia?.className).toContain("md:col-span-5");
     expect(otiumMedia?.className).toContain("md:order-2");
     expect(within(guruCard as HTMLElement).getByRole("heading", { name: "Guru" })).toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).getByRole("heading", { name: "Otium" })).toBeInTheDocument();
+    expect(guruCard).toHaveTextContent("29 floors");
+    expect(guruCard).toHaveTextContent("667 apartments");
+    expect(guruCard).toHaveTextContent("150 meters from the sea");
+    expect(guruMetrics).toHaveTextContent("29");
+    expect(guruMetrics).toHaveTextContent("667");
+    expect(guruMetrics).toHaveTextContent("85%");
+    expect(guruDetails).toHaveTextContent("3,000 sqm");
+    expect(guruDetails).toHaveTextContent("$600/month");
+    expect(guruDetails).toHaveTextContent("12% ROI");
+    expect(guruCard).not.toHaveTextContent("Guru PDF");
+    expect(otiumCard).toHaveTextContent("59 Adlia Street");
+    expect(otiumCard).toHaveTextContent("408 apartments");
+    expect(otiumCard).toHaveTextContent("June 2028");
+    expect(otiumMetrics).toHaveTextContent("17");
+    expect(otiumMetrics).toHaveTextContent("408");
+    expect(otiumMetrics).toHaveTextContent("Jun 2028");
+    expect(otiumDetails).toHaveTextContent("25,000 sqm");
+    expect(otiumDetails).toHaveTextContent("45,000 sqm");
+    expect(otiumDetails).toHaveTextContent("$80/night");
+    expect(otiumCard).not.toHaveTextContent("Otium PDF");
     expect(within(guruCard as HTMLElement).getByRole("button", { name: /Play video: Guru/ })).toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).getByRole("button", { name: /Play video: Otium/ })).toBeInTheDocument();
+    expect(within(guruCard as HTMLElement).getByRole("link", { name: /View Asset Details: Guru/ })).toHaveAttribute(
+      "href",
+      expect.stringContaining("guru.pdf"),
+    );
+    expect(within(otiumCard as HTMLElement).getByRole("link", { name: /View Asset Details: Otium/ })).toHaveAttribute(
+      "href",
+      expect.stringContaining("otium.pdf"),
+    );
     expect(within(guruCard as HTMLElement).getByRole("link", { name: /Open Guru profile/ })).toHaveAttribute(
       "href",
       expect.stringContaining("guru.pdf"),

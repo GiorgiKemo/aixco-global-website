@@ -62,9 +62,11 @@ describe("Hero", () => {
     expect(priceLockup).toBeInTheDocument();
     expect(container.querySelector("[data-hero-price-rule='true']")).not.toBeInTheDocument();
     expect(within(priceLockup as HTMLElement).getByText("Starting from €1,000")).toBeInTheDocument();
-    expect(priceText?.className).toContain("text-[clamp(2.1rem,4.85vw,4.45rem)]");
+    expect(priceText?.className).toContain("text-[clamp(1.2rem,5vw,3.5rem)]");
     expect(scrollLink.className).toContain("mt-7");
     expect(scrollLink.className).toContain("sm:mt-12");
+    expect(scrollLink.className).toContain("transition-[background-color,border-color,color]");
+    expect(scrollLink.className).toContain("duration-200");
     expect(brandDot).toHaveTextContent(".");
     expect(brandDot?.className).toContain("text-primary-glow");
     expect(heading).not.toHaveTextContent("AIXCO.GLOBAL");

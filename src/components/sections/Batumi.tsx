@@ -58,9 +58,9 @@ function BatumiStatCard({
   return (
     <motion.div
       data-batumi-metric-tile
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className={`group flex flex-col justify-between border transition-all duration-500 ${
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className={`group flex flex-col justify-between border transition-[background-color,border-color,box-shadow,color] duration-200 ${
         compact ? "min-h-[5.9rem] p-3.5 md:min-h-[6.15rem] lg:p-4" : "min-h-[8.8rem] p-5 md:min-h-[9.4rem] lg:p-6"
       } ${
         highlight
@@ -91,7 +91,7 @@ function BatumiStatCard({
           )}
         </div>
       </div>
-      <div className={`${compact ? "mt-3" : "mt-7"} h-px w-8 transition-all duration-700 group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
+      <div className={`${compact ? "mt-3" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
     </motion.div>
   );
 }
@@ -133,7 +133,7 @@ function BatumiMarketCard({ tx }: { tx: Translate }) {
       data-density="viewport-fit"
       data-image-position="right"
       data-design-source="dubai-card-reference"
-      className="batumi-market-card scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-all duration-500 md:h-[clamp(30rem,calc(100svh-13rem),42rem)] md:min-h-0 md:max-h-[calc(100svh-13rem)] md:grid-cols-12 md:items-stretch lg:h-[clamp(30rem,calc(100svh-13rem),42rem)] lg:min-h-0 lg:max-h-[calc(100svh-13rem)] lg:grid-cols-12"
+      className="batumi-market-card scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:h-[clamp(30rem,calc(100svh-13rem),42rem)] md:min-h-0 md:max-h-[calc(100svh-13rem)] md:grid-cols-12 md:items-stretch lg:h-[clamp(30rem,calc(100svh-13rem),42rem)] lg:min-h-0 lg:max-h-[calc(100svh-13rem)] lg:grid-cols-12"
       whileHover={premiumSurfaceHover}
       whileTap={premiumPress}
     >
@@ -206,11 +206,7 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
   const mediaOrderClass = imageFirst ? "md:order-1 lg:order-1" : "md:order-2 lg:order-2";
   const copyOrderClass = imageFirst ? "md:order-2 lg:order-2" : "md:order-1 lg:order-1";
   const documentHref = documentMap[property.url] ?? property.url;
-  const metricCards = [
-    { label: "Project media", value: property.name, subtext: "video" },
-    { label: "Document", value: "PDF", subtext: property.name },
-    { label: "Profile", value: "Open", subtext: "details", highlight: true },
-  ];
+  const metricCards = property.metrics;
 
   return (
     <motion.article
@@ -218,7 +214,7 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
       data-density="standard"
       data-image-position={imageFirst ? "left" : "right"}
       data-design-source="dubai-card-reference"
-      className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-all duration-500 md:min-h-[clamp(30rem,calc(100svh-15rem),38rem)] md:grid-cols-12 md:items-stretch lg:min-h-[clamp(28rem,calc(100svh-15rem),32rem)] lg:grid-cols-12"
+      className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:min-h-[clamp(30rem,calc(100svh-15rem),38rem)] md:grid-cols-12 md:items-stretch lg:min-h-[clamp(28rem,calc(100svh-15rem),32rem)] lg:grid-cols-12"
       whileHover={premiumSurfaceHover}
       whileTap={premiumPress}
     >
@@ -239,12 +235,17 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
         <span className="pointer-events-none absolute left-8 top-7 select-none font-display text-[clamp(5.4rem,8vw,7.8rem)] font-semibold leading-none tracking-tight text-white/20 md:left-10 md:top-9">
           0{idx + 2}
         </span>
-        <div className="pointer-events-none absolute bottom-8 left-8 z-10 md:bottom-10 md:left-10">
-          <span className="inline-flex items-center gap-3 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white">
-            {tx("View Asset Details")}
-            <ArrowRight size={17} className="text-primary transition-transform duration-500 group-hover:translate-x-2" />
-          </span>
-        </div>
+        <a
+          href={documentHref}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`${tx("View Asset Details")}: ${tx(property.name)}`}
+          className="absolute bottom-8 left-8 z-20 inline-flex items-center gap-3 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors duration-200 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-foreground md:bottom-10 md:left-10"
+          onClick={(event) => event.stopPropagation()}
+        >
+          {tx("View Asset Details")}
+          <ArrowRight size={17} className="text-primary transition-transform duration-200 group-hover:translate-x-2" />
+        </a>
       </div>
       <div
         data-batumi-property-copy
@@ -266,7 +267,7 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
               href={documentHref}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex shrink-0 items-center justify-center gap-2 border border-primary/40 px-4 py-3 text-[0.78rem] font-bold uppercase tracking-[0.18em] text-primary transition-all duration-300 hover:border-primary hover:bg-primary/10"
+              className="inline-flex shrink-0 items-center justify-center gap-2 border border-primary/40 px-4 py-3 text-[0.78rem] font-bold uppercase tracking-[0.18em] text-primary transition-[background-color,border-color,color] duration-200 hover:border-primary hover:bg-primary/10"
             >
               {tx(`Open ${property.name} profile`)}
               <ExternalLink className="h-4 w-4" />

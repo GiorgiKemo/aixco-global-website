@@ -14,11 +14,14 @@ const NAV = [
   { key: "nav.batumi", to: "/", hash: "#batumi" },
   { key: "nav.participate", to: "/", hash: "#participate" },
   { key: "nav.how", to: "/", hash: "#how" },
+  { key: "nav.contact", to: "/", hash: "#contact" },
+];
+const MORE_NAV = [
   { key: "nav.team", to: "/", hash: "#team" },
   { key: "nav.partners", to: "/", hash: "#partners" },
   { key: "nav.faqs", to: "/", hash: "#faqs" },
-  { key: "nav.contact", to: "/", hash: "#contact" },
 ];
+const ALL_NAV = [...NAV, ...MORE_NAV];
 const HOME_SECTION_IDS = ["about", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"] as const;
 const DESKTOP_NAV_LABELS: Record<string, Record<string, string>> = {
   ka: {
@@ -40,6 +43,7 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [active, setActive] = useState<string>("");
   const [compactNav, setCompactNav] = useState(false);
   const navRowRef = useRef<HTMLDivElement | null>(null);
@@ -55,17 +59,18 @@ export function Nav() {
     ? "px-2 py-1.5 text-[clamp(11.5px,0.66vw,13px)]"
     : "px-2.5 py-1.5 text-[clamp(12px,0.72vw,13.5px)]";
   const topControlClass =
-    "inline-flex items-center justify-center rounded-lg border border-white/25 bg-white/[0.06] text-white/90 shadow-[0_8px_28px_rgb(0_0_0/0.16)] backdrop-blur-md transition-all duration-300 hover:border-[#f0bd5d]/55 hover:bg-white/[0.12] hover:text-[#f0bd5d]";
+    "inline-flex items-center justify-center rounded-lg border border-white/25 bg-white/[0.06] text-white/90 shadow-[0_8px_28px_rgb(0_0_0/0.16)] backdrop-blur-md transition-[background-color,border-color,color,box-shadow,translate] duration-200 hover:border-[#f0bd5d]/55 hover:bg-white/[0.12] hover:text-[#f0bd5d]";
   const controlClass = solidNav ? "icon-button-glass" : topControlClass;
   const controlTextClass = solidNav
     ? "text-foreground/85 hover:text-foreground"
     : "text-white/90 drop-shadow-[0_2px_10px_rgb(0_0_0/0.34)] hover:text-[#f0bd5d]";
   const effectiveActiveHash = active || location.hash;
-  const isNavItemActive = (item: (typeof NAV)[number]) =>
+  const isNavItemActive = (item: (typeof ALL_NAV)[number]) =>
     item.hash ? effectiveActiveHash === item.hash : location.pathname === item.to && !effectiveActiveHash;
 
-  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, item: (typeof NAV)[number]) => {
+  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, item: (typeof ALL_NAV)[number]) => {
     setLangOpen(false);
+    setMoreOpen(false);
     setOpen(false);
 
     if (location.pathname !== item.to || location.hash !== item.hash) return;
@@ -143,7 +148,7 @@ export function Nav() {
   }, [lang]);
 
   return (
-    <header dir="ltr" className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${solidNav ? "border-b border-border/50 bg-background/[0.78] shadow-soft backdrop-blur-2xl" : "border-b border-transparent bg-transparent"}`}>
+    <header dir="ltr" className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ${solidNav ? "border-b border-border/50 bg-background/[0.78] shadow-soft backdrop-blur-2xl" : "border-b border-transparent bg-transparent"}`}>
       <div ref={navRowRef} className="mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10">
         <div ref={logoSlotRef} className="shrink-0">
           <Logo
@@ -169,7 +174,7 @@ export function Nav() {
                 aria-label={label}
                 aria-current={isActive ? "page" : undefined}
                 onClick={(event) => handleNavClick(event, item)}
-                className={`shrink-0 whitespace-nowrap rounded-full ${desktopNavLinkClass} leading-none tracking-wide transition-all duration-300 ${
+                className={`shrink-0 whitespace-nowrap rounded-full ${desktopNavLinkClass} leading-none tracking-wide transition-[background-color,color] duration-200 ${
                   solidNav
                     ? isActive
                       ? "bg-primary/10 text-primary"
@@ -183,6 +188,47 @@ export function Nav() {
               </Link>
             );
           })}
+          
+          {/* "More" Dropdown */}
+          <div className="relative" onMouseLeave={() => setMoreOpen(false)}>
+            <button
+              type="button"
+              onMouseEnter={() => setMoreOpen(true)}
+              onClick={() => setMoreOpen((v) => !v)}
+              className={`shrink-0 whitespace-nowrap rounded-full flex items-center gap-1 ${desktopNavLinkClass} leading-none tracking-wide transition-[background-color,color] duration-200 ${
+                solidNav
+                  ? "text-foreground/85 hover:bg-background/50 hover:text-foreground"
+                  : "text-white/90 drop-shadow-[0_2px_10px_rgb(0_0_0/0.34)] hover:bg-white/[0.08] hover:text-[#f0bd5d]"
+              }`}
+            >
+              More <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+            </button>
+            {moreOpen && (
+              <div className="absolute top-full right-0 pt-2 w-48 animate-scale-in">
+                <ul className="glass rounded-lg p-1.5 shadow-elegant flex flex-col gap-1">
+                  {MORE_NAV.map((item) => {
+                    const isActive = isNavItemActive(item);
+                    const label = t(item.key);
+                    return (
+                      <li key={item.key}>
+                        <Link
+                          to={`${item.to}${item.hash}`}
+                          onClick={(event) => handleNavClick(event, item)}
+                          className={`flex w-full items-center rounded-md px-3 py-2 text-sm transition-colors ${
+                            isActive
+                              ? "bg-primary/10 text-primary"
+                              : "text-foreground/85 hover:bg-muted/70 hover:text-foreground"
+                          }`}
+                        >
+                          {label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+          </div>
         </nav>
 
         <div className="flex shrink-0 items-center gap-2 md:gap-3">
@@ -257,7 +303,7 @@ export function Nav() {
         className="pointer-events-none invisible fixed -left-[9999px] top-0 flex items-center gap-4 whitespace-nowrap"
       >
         <nav ref={navMeasureRef} className={`flex items-center justify-center ${desktopNavSpacing}`}>
-          {NAV.map((item) => {
+          {ALL_NAV.map((item) => {
             const label = t(item.key);
             return (
               <span key={item.key} className={`rounded-full ${desktopNavLinkClass} leading-none tracking-wide`}>
@@ -280,13 +326,13 @@ export function Nav() {
 
       {/* Mobile drawer */}
       <div
-        className={`${compactNav ? "" : "2xl:hidden"} transition-[max-height] duration-500 ${
+        className={`${compactNav ? "" : "2xl:hidden"} transition-[max-height] duration-300 ${
           open ? "max-h-[calc(100svh-4rem)] overflow-y-auto" : "max-h-0 overflow-hidden"
         }`}
       >
         <div className="container-x pb-6 pt-2">
-          <nav aria-label="Mobile" className="glass grid gap-1 rounded-lg p-2">
-            {NAV.map((item) => {
+          <nav aria-label="Mobile" className="rounded-xl border border-white/10 bg-background/95 p-2 shadow-2xl backdrop-blur-xl flex flex-col gap-0.5">
+            {ALL_NAV.map((item) => {
               const isActive = isNavItemActive(item);
               return (
                 <Link
@@ -294,10 +340,10 @@ export function Nav() {
                   to={`${item.to}${item.hash}`}
                   aria-current={isActive ? "page" : undefined}
                   onClick={(event) => handleNavClick(event, item)}
-                  className={`rounded-md px-3 py-3 text-base leading-snug transition ${
+                  className={`rounded-lg px-4 py-2.5 text-[15px] font-medium transition-colors duration-200 ${
                     isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground/85 hover:bg-muted/70 hover:text-foreground"
+                      ? "bg-primary/15 text-primary w-full"
+                      : "text-foreground/80 hover:bg-white/5 hover:text-foreground w-full"
                   }`}
                 >
                   {t(item.key)}

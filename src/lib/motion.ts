@@ -18,12 +18,11 @@ export const reducedMotionTransition: Transition = {
 };
 
 export const premiumSurfaceHover = {
-  y: -5,
-  scale: 1.012,
-  transition: { duration: 0.32, ease: premiumEase },
+  y: -3,
+  transition: { duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94] },
 };
 
 export const premiumPress = {
-  scale: 0.98,
-  transition: { duration: 0.12, ease: "easeOut" },
+  scale: 0.985,
+  transition: { duration: 0.08, ease: "easeOut" },
 };

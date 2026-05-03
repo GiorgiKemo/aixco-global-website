@@ -61,4 +61,17 @@ describe("Nav", () => {
     expect(within(primary).getByRole("link", { name: "Batumi" })).toHaveAttribute("aria-current", "page");
     expect(within(primary).getByRole("link", { name: "Home" })).not.toHaveAttribute("aria-current");
   });
+
+  it("uses targeted transitions for desktop nav controls", () => {
+    renderNav();
+
+    const primary = screen.getByLabelText("Primary");
+    const aboutLink = within(primary).getByRole("link", { name: "About AIXCO" });
+    const moreButton = within(primary).getByRole("button", { name: /More/ });
+
+    expect(aboutLink.className).toContain("transition-[background-color,color]");
+    expect(aboutLink.className).not.toContain("transition-all");
+    expect(moreButton.className).toContain("transition-[background-color,color]");
+    expect(moreButton.className).not.toContain("transition-all");
+  });
 });

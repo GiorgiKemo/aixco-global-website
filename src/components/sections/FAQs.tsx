@@ -44,9 +44,9 @@ export function FAQs() {
                         className="flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-background/50"
                       >
                         <span className="font-display text-lg md:text-xl">{tx(it.q)}</span>
-                        <Plus className={`h-5 w-5 text-primary shrink-0 transition-transform duration-500 ${isOpen ? "rotate-45" : ""}`} />
+                        <Plus className={`h-5 w-5 text-primary shrink-0 transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`} strokeWidth={2.5} />
                       </button>
-                      <div className={`grid px-5 transition-all duration-500 ${isOpen ? "grid-rows-[1fr] opacity-100 pb-6" : "grid-rows-[0fr] opacity-0"}`}>
+                      <div className={`grid px-5 transition-[grid-template-rows,opacity,padding-bottom] duration-300 ${isOpen ? "grid-rows-[1fr] opacity-100 pb-6" : "grid-rows-[0fr] opacity-0"}`}>
                         <div className="overflow-hidden">
                           <p className="text-sm text-foreground/80 leading-relaxed max-w-2xl">{tx(it.a)}</p>
                         </div>

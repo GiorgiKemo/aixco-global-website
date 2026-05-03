@@ -112,9 +112,9 @@ function PrestigeStatCard({
   return (
     <motion.div
       data-fund-highlight-tile
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className={`group flex flex-col justify-between border transition-all duration-500 ${
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className={`group flex flex-col justify-between border transition-[background-color,border-color,box-shadow,color] duration-200 ${
         compact ? "min-h-[7.1rem] p-4 md:min-h-[7.35rem] lg:min-h-[7.55rem] lg:p-5" : "min-h-[8.8rem] p-5 md:min-h-[9.4rem] lg:p-6"
       } ${
         highlight
@@ -147,7 +147,7 @@ function PrestigeStatCard({
           )}
         </div>
       </div>
-      <div className={`${compact ? "mt-4" : "mt-7"} h-px w-8 transition-all duration-700 group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
+      <div className={`${compact ? "mt-4" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
     </motion.div>
   );
 }
@@ -219,7 +219,7 @@ function DubaiFundCard({
       data-density={isViewportFit ? "viewport-fit" : "standard"}
       data-image-position={imageFirst ? "left" : "right"}
       data-design-source="eden-house-portfolio-reference"
-      className={`scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-all duration-500 md:grid-cols-12 md:items-stretch lg:grid-cols-12 ${heightClass}`}
+      className={`scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:grid-cols-12 md:items-stretch lg:grid-cols-12 ${heightClass}`}
       whileHover={premiumSurfaceHover}
       whileTap={premiumPress}
     >
@@ -234,7 +234,7 @@ function DubaiFundCard({
           decoding="async"
           width={1536}
           height={960}
-          className="h-full w-full object-cover opacity-85 transition-transform duration-1000 ease-out group-hover:scale-[1.035]"
+          className="h-full w-full object-cover opacity-85 transition-transform duration-500 ease-out group-hover:scale-[1.035]"
           initial={isLanding ? { scale: 1.08 } : false}
           whileInView={isLanding ? { scale: 1 } : undefined}
           viewport={{ once: true, amount: 0.3 }}
@@ -247,7 +247,7 @@ function DubaiFundCard({
         <div className="absolute bottom-8 left-8 z-10 md:bottom-10 md:left-10">
           <span className="inline-flex items-center gap-3 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white">
             {tx("View Asset Details")}
-            <ArrowRight size={17} className="text-primary transition-transform duration-500 group-hover:translate-x-2" />
+            <ArrowRight size={17} className="text-primary transition-transform duration-200 group-hover:translate-x-2" />
           </span>
         </div>
       </div>
@@ -354,7 +354,7 @@ export function Dubai() {
                   decoding="async"
                   width={1280}
                   height={720}
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                  className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                 />
               </motion.figure>
             ))}
@@ -380,7 +380,7 @@ export function Dubai() {
                   decoding="async"
                   width={1280}
                   height={720}
-                  className="h-full min-h-0 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                  className="h-full min-h-0 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                 />
               </motion.figure>
             ))}

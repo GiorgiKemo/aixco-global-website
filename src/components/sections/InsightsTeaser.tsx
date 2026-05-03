@@ -22,6 +22,7 @@ export function InsightsTeaser() {
 
   return (
     <section id="insights" aria-labelledby="insights-heading" className="relative py-20 md:py-28 lg:py-36 bg-surface/40">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background/60 to-transparent" aria-hidden="true" />
       <div className="container-x">
         <div className="scroll-reveal mb-14 max-w-3xl">
           <p className="eyebrow">{tx("Insights")}</p>

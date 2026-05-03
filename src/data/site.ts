@@ -80,11 +80,16 @@ export const batumiProperties = [
     url: "guru",
     image: "batumi-guru",
     video: "guruBatumi",
-    summary: "Guru is presented as a Batumi residential opportunity for buyers evaluating direct ownership, project documentation, and property media in one focused view.",
+    summary: "Guru Status is in its final construction phase: a Batumi residence with 29 floors, 667 apartments, 85% sold, and a location about 150 meters from the sea.",
+    metrics: [
+      { label: "Floors", value: "29", subtext: "floors" },
+      { label: "Apartments", value: "667", subtext: "units" },
+      { label: "Sold", value: "85%", subtext: "apartments", highlight: true },
+    ],
     highlights: [
-      { label: "Project media", value: "Guru" },
-      { label: "Document", value: "Guru PDF" },
-      { label: "Focus", value: "Direct ownership in a growing Batumi residential market" },
+      { label: "Scale", value: "3,000 sqm of infrastructure area and 4,000 sqm total site area." },
+      { label: "Location", value: "About 150 meters from the sea, with the beach 5 minutes away and Grand Mall 8 minutes away by car." },
+      { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, 90% potential occupancy, and 12% ROI shown in the project deck." },
     ],
   },
   {
@@ -93,11 +98,16 @@ export const batumiProperties = [
     url: "otium",
     image: "batumi-otium",
     video: "otium",
-    summary: "Otium is presented as a distinct Batumi project with its own media, documentation, and positioning for buyers looking at resort-led coastal demand.",
+    summary: "Reverance by Otium is a premium residential complex at 59 Adlia Street, planned with 17 floors per building, 408 apartments, and completion targeted for June 2028.",
+    metrics: [
+      { label: "Floors", value: "17", subtext: "per building" },
+      { label: "Apartments", value: "408", subtext: "total units" },
+      { label: "Completion", value: "Jun 2028", subtext: "target", highlight: true },
+    ],
     highlights: [
-      { label: "Project media", value: "Otium" },
-      { label: "Document", value: "Otium PDF" },
-      { label: "Focus", value: "Coastal lifestyle positioning with rental demand potential" },
+      { label: "Scale", value: "25,000 sqm of comfort and community infrastructure across a 45,000 sqm planned site." },
+      { label: "Location", value: "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away." },
+      { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, 90% potential occupancy, and 12% ROI shown in the project deck." },
     ],
   },
 ];

@@ -26,6 +26,7 @@ export function Partners() {
 
   return (
     <section id="partners" className="relative scroll-mt-16 py-16 md:scroll-mt-20 md:py-20 lg:py-24">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-surface/60 to-transparent" aria-hidden="true" />
       <div className="container-x">
         <div className="scroll-reveal mb-14 max-w-3xl">
           <p className="eyebrow">{tx("Companies & Partners")}</p>
