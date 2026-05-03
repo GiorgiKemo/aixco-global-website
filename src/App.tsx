@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
 import { ChatWidget } from "@/components/ChatWidget";
-import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
+import { installGlideScroll, scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 
 const Index = lazy(() => import("./pages/Index.tsx"));
 const Insights = lazy(() => import("./pages/Insights.tsx"));
@@ -39,6 +39,8 @@ function ScrollManager() {
       window.history.scrollRestoration = previous;
     };
   }, []);
+
+  useEffect(() => installGlideScroll(), []);
 
   useEffect(() => {
     const firstRender = isFirstRender.current;
