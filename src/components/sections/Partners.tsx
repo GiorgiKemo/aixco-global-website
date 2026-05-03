@@ -25,7 +25,7 @@ export function Partners() {
   const strategicPartners = partners.filter((partner) => partner.group === "Strategic partners");
 
   return (
-    <section id="partners" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0">
+    <section id="partners" className="relative scroll-mt-16 py-16 md:scroll-mt-20 md:py-20 lg:py-24">
       <div className="container-x">
         <div className="scroll-reveal mb-14 max-w-3xl">
           <p className="eyebrow">{tx("Companies & Partners")}</p>

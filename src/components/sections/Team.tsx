@@ -16,7 +16,7 @@ export function Team() {
   const { tx } = useI18n();
 
   return (
-    <section id="team" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0 bg-surface/40">
+    <section id="team" className="relative scroll-mt-16 bg-surface/40 py-16 md:scroll-mt-20 md:py-20 lg:py-24">
       <div className="container-x">
         <div className="scroll-reveal mb-16 max-w-4xl">
           <p className="eyebrow">{tx("Our Team")}</p>

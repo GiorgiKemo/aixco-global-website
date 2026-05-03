@@ -25,7 +25,7 @@ export function Participate() {
   };
 
   return (
-    <section id="participate" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0 bg-surface/40 noise-overlay overflow-hidden">
+    <section id="participate" className="relative scroll-mt-16 overflow-hidden bg-surface/40 py-16 noise-overlay md:scroll-mt-20 md:py-20 lg:py-24">
       <div className="motion-accent-line absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="container-x">
         <div className="scroll-reveal mb-16 max-w-3xl">

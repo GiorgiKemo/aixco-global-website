@@ -18,7 +18,7 @@ export function HowItWorks() {
   };
 
   return (
-    <section id="how" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0">
+    <section id="how" className="relative scroll-mt-16 py-16 md:scroll-mt-20 md:py-20 lg:py-24">
       <div className="container-x">
         <div className="scroll-reveal mb-12 max-w-4xl">
           <p className="eyebrow">{tx("Journeys")}</p>

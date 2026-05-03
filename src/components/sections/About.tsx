@@ -7,28 +7,61 @@ export function About() {
   const { tx } = useI18n();
 
   return (
-    <section id="about" className="relative py-20 md:py-28 lg:py-36 scroll-mt-0">
+    <section id="about" className="relative scroll-mt-16 py-16 md:scroll-mt-20 md:py-20 lg:min-h-[calc(100svh-5rem)] lg:py-24">
       <div className="motion-accent-line absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-      <div className="container-x grid gap-16 lg:grid-cols-12">
-        <div className="scroll-reveal lg:col-span-5 lg:sticky lg:top-28 self-start">
+      <div
+        data-section-layout="about-balanced-two-column"
+        className="container-x grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.28fr)] lg:items-start xl:gap-14"
+      >
+        <div aria-label="About AIXCO story and media" className="scroll-reveal self-start">
           <p className="eyebrow">{tx("About AIXCO")}</p>
-          <h2 className="heading-section mt-5">{tx("AIXCO - Product Powerhouse")}</h2>
-          <p className="mt-6 text-foreground/80 leading-relaxed">
+          <h2
+            data-scale="reduced"
+            className="mt-5 max-w-xl font-display text-[2.35rem] font-semibold leading-[1.04] tracking-normal text-foreground md:text-[2.45rem] lg:text-[clamp(2rem,2.25vw,2.85rem)]"
+          >
+            {tx("AIXCO - Product Powerhouse")}
+          </h2>
+          <p className="mt-5 max-w-[38rem] text-base leading-relaxed text-foreground/80 md:text-lg lg:text-[1.05rem]">
             {tx("Established in 2009, AIXCO is a disciplined real estate holding company with a strong track record across property and financial investments. Headquartered in Vienna and operating in Dubai and Batumi, AIXCO Global specializes in structuring and co-investing in portfolios, guided by a commitment to long-term value creation and enduring investor trust.")}
           </p>
-          <div className="mac-card mt-8 overflow-hidden">
-            <img src={aixcoLiveImages.aboutArchitecture} alt="Batumi skyline and landmark towers from the live AIXCO site" loading="lazy" decoding="async" className="aspect-[79/97] w-full object-cover" width={790} height={974}/>
+          <div className="mac-card mt-7 overflow-hidden">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40">
+              <img
+                src={aixcoLiveImages.aboutArchitecture}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full scale-110 object-cover object-center opacity-35 blur-xl"
+                width={1448}
+                height={1086}
+              />
+              <div className="absolute inset-0 bg-background/15" />
+              <img
+                src={aixcoLiveImages.aboutArchitecture}
+                alt="Batumi skyline and landmark towers from the live AIXCO site"
+                data-frame="tall"
+                data-image-treatment="uncropped"
+                loading="lazy"
+                decoding="async"
+                className="relative z-10 h-full w-full object-contain object-center"
+                width={1448}
+                height={1086}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="lg:col-span-7">
-          <div className="scroll-reveal grid sm:grid-cols-2 gap-px overflow-hidden rounded-lg bg-border/50">
+        <div aria-label="AIXCO performance metrics" data-density="compact" className="lg:self-start">
+          <div className="scroll-reveal grid gap-px overflow-hidden rounded-lg bg-border/50 sm:grid-cols-2">
             {metrics.map((m, i) => (
-              <div key={i} className="mac-tile p-7 md:p-8">
-                <p className="font-display text-4xl md:text-5xl text-gold leading-none">
+              <div key={i} className="mac-tile min-h-[7.2rem] p-5 md:p-6 lg:min-h-[7.6rem] xl:p-7">
+                <p className="font-display text-4xl leading-none text-gold md:text-[2.8rem] lg:text-[clamp(2.35rem,3.2vw,3.35rem)]">
                   <CountUpText value={m.value} />
                 </p>
-                <p className="mt-3 text-[11px] uppercase leading-relaxed tracking-[0.08em] text-muted-foreground [overflow-wrap:anywhere] md:text-xs md:tracking-[0.12em] 2xl:tracking-[0.2em]">{tx(m.label)}</p>
+                <p className="mt-3 text-xs uppercase leading-relaxed tracking-[0.14em] text-muted-foreground [overflow-wrap:anywhere]">
+                  {tx(m.label)}
+                </p>
               </div>
             ))}
           </div>
