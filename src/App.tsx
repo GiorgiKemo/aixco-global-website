@@ -44,13 +44,14 @@ function ScrollManager() {
     const firstRender = isFirstRender.current;
     isFirstRender.current = false;
 
-    let frameId = 0;
+    const frameIds: number[] = [];
 
     const runScroll = (attemptsLeft = 12) => {
       if (location.hash) {
         const didScroll = scrollToHash(location.hash, firstRender ? "auto" : undefined);
-        if (!didScroll && attemptsLeft > 0) {
-          frameId = window.requestAnimationFrame(() => runScroll(attemptsLeft - 1));
+        if ((!didScroll || firstRender) && attemptsLeft > 0) {
+          const frameId = window.requestAnimationFrame(() => runScroll(attemptsLeft - 1));
+          frameIds.push(frameId);
         }
         return;
       }
@@ -60,9 +61,12 @@ function ScrollManager() {
       }
     };
 
-    frameId = window.requestAnimationFrame(() => runScroll());
+    const frameId = window.requestAnimationFrame(() => runScroll(firstRender ? 36 : 12));
+    frameIds.push(frameId);
 
-    return () => window.cancelAnimationFrame(frameId);
+    return () => {
+      frameIds.forEach((id) => window.cancelAnimationFrame(id));
+    };
   }, [location.hash, location.pathname]);
 
   return null;

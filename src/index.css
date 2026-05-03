@@ -627,6 +627,21 @@
 
 }
 
+@media (min-width: 768px) {
+  .batumi-market-card {
+    --batumi-market-card-height: clamp(30rem, calc(100svh - 13rem), 42rem);
+    grid-template-columns: minmax(0, 1fr) minmax(17.5rem, calc(var(--batumi-market-card-height) * 0.5625)) !important;
+  }
+
+  .batumi-market-card [data-batumi-card-copy] {
+    grid-column: 1 / 2 !important;
+  }
+
+  .batumi-market-card [data-batumi-card-media] {
+    grid-column: 2 / 3 !important;
+  }
+}
+
 @layer utilities {
   main section:not(.hero-reference-font) p:not(.eyebrow):not([class*="text-"]) {
     font-size: clamp(1rem, 0.96rem + 0.16vw, 1.1rem);
