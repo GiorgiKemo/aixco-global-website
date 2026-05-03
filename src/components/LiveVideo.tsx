@@ -9,6 +9,7 @@ type LiveVideoProps = {
   fit?: "cover" | "contain";
   eager?: boolean;
   rootMargin?: string;
+  autoplayPreview?: boolean;
 };
 
 const focusThreshold = 0.45;
@@ -23,6 +24,7 @@ export function LiveVideo({
   fit = "cover",
   eager = false,
   rootMargin = "350px 0px",
+  autoplayPreview = true,
 }: LiveVideoProps) {
   const videoId = useId();
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -91,12 +93,12 @@ export function LiveVideo({
     const video = videoRef.current;
     if (!video || !shouldLoad) return;
 
-    if (isVisible) {
+    if (isVisible && (autoplayPreview || isPlayingInline)) {
       void video.play().catch(() => undefined);
     } else {
       video.pause();
     }
-  }, [isVisible, shouldLoad]);
+  }, [autoplayPreview, isPlayingInline, isVisible, shouldLoad]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -146,14 +148,14 @@ export function LiveVideo({
         aria-label={title}
         title={title}
         className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}
-        autoPlay={isVisible}
+        autoPlay={autoplayPreview && isVisible}
         muted={!isPlayingInline || !isAudible}
-        loop={!isPlayingInline}
+        loop={!isPlayingInline && autoplayPreview}
         controls={isPlayingInline}
         playsInline
         preload={shouldLoad ? "metadata" : "none"}
         onCanPlay={(event) => {
-          if (isVisible && event.currentTarget.paused) {
+          if (isVisible && (autoplayPreview || isPlayingInline) && event.currentTarget.paused) {
             void event.currentTarget.play().catch(() => undefined);
           }
         }}

@@ -76,6 +76,24 @@ describe("LiveVideo", () => {
     expect(inlineVideo).toHaveAttribute("controls");
   });
 
+  it("can keep the poster static until the user opens the video", () => {
+    render(<LiveVideo src="/sample-video.mp4" title="Batumi overview" poster="/poster.jpg" autoplayPreview={false} />);
+
+    act(() => {
+      MockIntersectionObserver.instances[0].trigger({ isIntersecting: true, intersectionRatio: 1 });
+    });
+
+    const inlineVideo = screen.getByLabelText("Batumi overview");
+
+    expect(inlineVideo).toHaveAttribute("src", "/sample-video.mp4");
+    expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: /play video: batumi overview/i }));
+
+    expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
+    expect(inlineVideo).toHaveAttribute("controls");
+  });
+
   it("mutes an inline video after it leaves focus and keeps it muted when focus returns", () => {
     render(<LiveVideo src="/sample-video.mp4" title="Batumi gallery 1" poster="/poster.jpg" eager />);
 
