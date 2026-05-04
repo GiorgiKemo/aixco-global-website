@@ -88,10 +88,19 @@ export function Nav() {
   const isNavItemActive = (item: (typeof ALL_NAV)[number]) =>
     item.hash ? effectiveActiveHash === item.hash : location.pathname === item.to && !effectiveActiveHash;
 
-  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, item: (typeof ALL_NAV)[number]) => {
+  const closeNavPanels = () => {
     setLangOpen(false);
     setMoreOpen(false);
     setOpen(false);
+  };
+
+  const handleLogoHomeClick = () => {
+    closeNavPanels();
+    clearPendingNavScrollTimers();
+  };
+
+  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, item: (typeof ALL_NAV)[number]) => {
+    closeNavPanels();
 
     if (location.pathname !== item.to) return;
 
@@ -176,6 +185,7 @@ export function Nav() {
           <Logo
             className={solidNav ? "" : "text-white drop-shadow-[0_3px_14px_rgb(0_0_0/0.34)]"}
             iconClassName={solidNav ? undefined : "[filter:brightness(0)_invert(1)]"}
+            onHomeClick={handleLogoHomeClick}
           />
         </div>
 

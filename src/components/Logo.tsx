@@ -1,18 +1,21 @@
 import type { MouseEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { replaceLocationHash } from "@/lib/section-hash";
 import { scrollToPageTop } from "@/lib/smooth-scroll";
 
 type LogoProps = {
   className?: string;
   iconClassName?: string;
   textClassName?: string;
+  onHomeClick?: () => void;
 };
 
 export function Logo({
   className = "",
   iconClassName = "[filter:brightness(0)_saturate(100%)]",
   textClassName = "",
+  onHomeClick,
 }: LogoProps) {
   const navigate = useNavigate();
 
@@ -21,8 +24,10 @@ export function Logo({
 
     const homePath = new URL(import.meta.env.BASE_URL, window.location.origin).pathname;
 
-    if (window.location.pathname === homePath && !window.location.hash) {
+    if (window.location.pathname === homePath) {
       event.preventDefault();
+      onHomeClick?.();
+      replaceLocationHash("");
       scrollToPageTop();
       return;
     }

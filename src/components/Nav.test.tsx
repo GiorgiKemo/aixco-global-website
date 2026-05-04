@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
 import { replaceLocationHash } from "@/lib/section-hash";
@@ -40,11 +40,16 @@ describe("Nav", () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
+    window.history.replaceState({}, "", "/");
     Object.defineProperty(window, "ResizeObserver", {
       configurable: true,
       writable: true,
       value: TestResizeObserver,
     });
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("uses shorter Georgian labels in the desktop navbar without changing the drawer labels", () => {
@@ -85,6 +90,46 @@ describe("Nav", () => {
     expect(replaceLocationHash).toHaveBeenCalledWith("#participate");
     expect(scrollToHash).toHaveBeenCalledWith("#participate");
     expect(scrollToPageTop).not.toHaveBeenCalled();
+  });
+
+  it("returns home from a section hash with one logo click", () => {
+    window.history.replaceState({}, "", "/#about");
+    renderNav("/");
+
+    fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
+
+    expect(replaceLocationHash).toHaveBeenCalledWith("");
+    expect(scrollToPageTop).toHaveBeenCalledTimes(1);
+  });
+
+  it("closes the compact menu when the logo returns home", () => {
+    window.history.replaceState({}, "", "/#about");
+    renderNav("/");
+
+    fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
+    expect(screen.getByRole("button", { name: "Close menu" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
+
+    expect(screen.getByRole("button", { name: "Open menu" })).toBeInTheDocument();
+  });
+
+  it("cancels pending section scroll timers when the logo returns home", () => {
+    vi.useFakeTimers();
+    renderNav("/");
+
+    const primary = screen.getByLabelText("Primary");
+    fireEvent.click(within(primary).getByRole("link", { name: "Ways to Participate" }));
+
+    vi.clearAllMocks();
+    fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
+    vi.advanceTimersByTime(1200);
+
+    expect(replaceLocationHash).toHaveBeenCalledWith("");
+    expect(replaceLocationHash).not.toHaveBeenCalledWith("#participate");
+    expect(scrollToHash).not.toHaveBeenCalledWith("#participate", "auto");
+
+    vi.useRealTimers();
   });
 
   it("uses targeted transitions for desktop nav controls", () => {
