@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { Hero, getHeroLottieArrowPath } from "./Hero";
+import { Hero, getHeroLottieArrowPath, shouldUseHeroVideoWall } from "./Hero";
 
 function renderHero() {
   return render(
@@ -21,6 +21,15 @@ describe("Hero", () => {
     expect(getHeroLottieArrowPath("/aixco-global-website")).toBe("/aixco-global-website/animations/arrow-down-gold.json");
   });
 
+  it("keeps the video wall disabled for slow networks and small devices", () => {
+    expect(shouldUseHeroVideoWall({ reduceMotion: true, viewportWidth: 1440 })).toBe(false);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 390 })).toBe(false);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, saveData: true })).toBe(false);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "3g" })).toBe(false);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, deviceMemory: 2 })).toBe(false);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "4g", deviceMemory: 8 })).toBe(true);
+  });
+
   it("uses the centered reference-style AIXCO.Global hero composition", () => {
     const { container } = renderHero();
 
@@ -37,10 +46,9 @@ describe("Hero", () => {
     const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
     const priceText = container.querySelector("[data-hero-price-text='true']");
     const scrollLink = within(hero).getByLabelText("Scroll to About section");
-    const heroVideos = Array.from(container.querySelectorAll("video"));
     const heroVideoWall = container.querySelector("[data-hero-video-wall='true']");
     const heroVideoPanels = Array.from(container.querySelectorAll("[data-hero-video-panel='true']"));
-    const heroVideoSources = Array.from(container.querySelectorAll("video source"));
+    const heroPosterImages = Array.from(container.querySelectorAll("[data-hero-video-poster='true']"));
 
     expect(composition).toBeInTheDocument();
     expect(composition?.className).toContain("items-center");
@@ -79,17 +87,16 @@ describe("Hero", () => {
     expect(heading).not.toHaveTextContent("AIXCO Global");
     expect(heroVideoWall).toBeInTheDocument();
     expect(heroVideoWall?.className).toContain("hero-video-wall");
-    expect(heroVideos).toHaveLength(4);
+    expect(heroVideoWall).toHaveAttribute("data-hero-video-mode", "poster");
     expect(heroVideoPanels).toHaveLength(4);
-    expect(heroVideoSources).toHaveLength(4);
-    expect(heroVideoSources.every((source) => source.getAttribute("src")?.includes("/media/batumi-gallery/batumi"))).toBe(true);
-    expect(heroVideoSources.map((source) => source.getAttribute("src")).join(" ")).toContain("batumi1.mp4");
-    expect(heroVideoSources.map((source) => source.getAttribute("src")).join(" ")).toContain("batumi4.mp4");
-    expect(heroVideoSources.map((source) => source.getAttribute("src")).join(" ")).not.toContain("hero-batumi-night-aerial");
-    expect(heroVideoSources.every((source) => source.getAttribute("media") === null)).toBe(true);
-    expect(heroVideoSources.map((source) => source.getAttribute("src")).join(" ")).not.toContain("hero-batumi-night-skyline");
-    expect(heroVideoSources.map((source) => source.getAttribute("src")).join(" ")).not.toContain("hero-benji-video");
-    expect(heroVideoSources.map((source) => source.getAttribute("src")).join(" ")).not.toContain("hero-gateway-video");
-    expect(heroVideoSources.map((source) => source.getAttribute("src")).join(" ")).not.toContain("giorgikemo.github.io");
+    expect(heroPosterImages).toHaveLength(4);
+    expect(heroPosterImages.every((image) => image.getAttribute("src")?.includes("/media/batumi-gallery/batumi"))).toBe(true);
+    expect(heroPosterImages.map((image) => image.getAttribute("src")).join(" ")).toContain("batumi1-poster.webp");
+    expect(heroPosterImages.map((image) => image.getAttribute("src")).join(" ")).toContain("batumi4-poster.webp");
+    expect(container.querySelectorAll("video source")).toHaveLength(0);
+    expect(container.innerHTML).not.toContain("hero-batumi-night-skyline");
+    expect(container.innerHTML).not.toContain("hero-benji-video");
+    expect(container.innerHTML).not.toContain("hero-gateway-video");
+    expect(container.innerHTML).not.toContain("giorgikemo.github.io");
   });
 });

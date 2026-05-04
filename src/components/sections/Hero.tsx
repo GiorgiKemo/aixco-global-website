@@ -10,10 +10,49 @@ const heroIntroText =
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.";
 const heroPriceText = "STARTING FROM \u20ac1,000";
 const heroPanelVideos = aixcoBatumiGalleryVideos.slice(0, 4);
+const heroVideoStartDelayMs = 1400;
+
+type HeroVideoEnvironment = {
+  reduceMotion: boolean | null;
+  viewportWidth: number;
+  saveData?: boolean;
+  effectiveType?: string;
+  deviceMemory?: number;
+};
 
 export function getHeroLottieArrowPath(baseUrl: string) {
   const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   return `${normalizedBase}animations/arrow-down-gold.json`;
+}
+
+export function shouldUseHeroVideoWall({
+  reduceMotion,
+  viewportWidth,
+  saveData = false,
+  effectiveType,
+  deviceMemory,
+}: HeroVideoEnvironment) {
+  if (reduceMotion) return false;
+  if (viewportWidth < 768) return false;
+  if (saveData) return false;
+  if (effectiveType && /(^slow-2g$|^2g$|^3g$)/i.test(effectiveType)) return false;
+  if (deviceMemory !== undefined && deviceMemory <= 2) return false;
+  return true;
+}
+
+function getHeroVideoEnvironment(reduceMotion: boolean | null): HeroVideoEnvironment {
+  const navigatorWithConnection = window.navigator as Navigator & {
+    connection?: { saveData?: boolean; effectiveType?: string };
+    deviceMemory?: number;
+  };
+
+  return {
+    reduceMotion,
+    viewportWidth: window.innerWidth,
+    saveData: navigatorWithConnection.connection?.saveData,
+    effectiveType: navigatorWithConnection.connection?.effectiveType,
+    deviceMemory: navigatorWithConnection.deviceMemory,
+  };
 }
 
 const arrowLottiePath = getHeroLottieArrowPath(import.meta.env.BASE_URL);
@@ -91,9 +130,24 @@ function HeroLottieArrow() {
 export function Hero() {
   const shouldReduceMotion = useReducedMotion();
   const [isHeroReady, setIsHeroReady] = useState(true);
+  const [shouldUseVideoWall, setShouldUseVideoWall] = useState(false);
   const { tx } = useI18n();
   const navigate = useNavigate();
   const hiddenTextState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: "blur(10px)" };
+
+  useEffect(() => {
+    if (typeof window === "undefined" || import.meta.env.MODE === "test") return;
+
+    setShouldUseVideoWall(false);
+
+    if (!shouldUseHeroVideoWall(getHeroVideoEnvironment(shouldReduceMotion))) return;
+
+    const timeout = window.setTimeout(() => {
+      setShouldUseVideoWall(true);
+    }, heroVideoStartDelayMs);
+
+    return () => window.clearTimeout(timeout);
+  }, [shouldReduceMotion]);
 
   const handleAboutClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -112,6 +166,7 @@ export function Hero() {
     <section className="hero-reference-font relative isolate min-h-screen overflow-hidden bg-background">
       <motion.div
         data-hero-video-wall="true"
+        data-hero-video-mode={shouldUseVideoWall ? "video" : "poster"}
         className="hero-video-wall"
         aria-hidden="true"
         initial={shouldReduceMotion ? { scale: 1.006, opacity: 0.98 } : { scale: 1.055, opacity: 0.92 }}
@@ -120,21 +175,32 @@ export function Hero() {
       >
         {heroPanelVideos.map((video, index) => (
           <div key={video.src} data-hero-video-panel="true" className="hero-video-panel">
-            <video
-              poster={video.poster}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload={index === 0 ? "auto" : "metadata"}
+            <img
+              src={video.poster}
+              alt=""
               aria-hidden="true"
-              tabIndex={-1}
-              onLoadedData={index === 0 ? () => setIsHeroReady(true) : undefined}
-              onCanPlay={index === 0 ? () => setIsHeroReady(true) : undefined}
-              onError={index === 0 ? () => setIsHeroReady(true) : undefined}
-            >
-              <source src={video.src} type="video/mp4" />
-            </video>
+              data-hero-video-poster="true"
+              className={shouldUseVideoWall ? "opacity-0" : "opacity-100"}
+              fetchpriority={index === 0 ? "high" : "auto"}
+              decoding="async"
+            />
+            {shouldUseVideoWall && (
+              <video
+                poster={video.poster}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-hidden="true"
+                tabIndex={-1}
+                onLoadedData={index === 0 ? () => setIsHeroReady(true) : undefined}
+                onCanPlay={index === 0 ? () => setIsHeroReady(true) : undefined}
+                onError={index === 0 ? () => setIsHeroReady(true) : undefined}
+              >
+                <source src={video.src} type="video/mp4" />
+              </video>
+            )}
           </div>
         ))}
       </motion.div>

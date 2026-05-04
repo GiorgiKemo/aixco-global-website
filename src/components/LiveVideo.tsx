@@ -33,6 +33,7 @@ export function LiveVideo({
   const [isVisible, setIsVisible] = useState(eager);
   const [isPlayingInline, setIsPlayingInline] = useState(false);
   const [isAudible, setIsAudible] = useState(false);
+  const shouldAttachVideo = shouldLoad && (autoplayPreview || isPlayingInline);
 
   const openInlinePlayer = () => {
     setShouldLoad(true);
@@ -91,14 +92,14 @@ export function LiveVideo({
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !shouldLoad) return;
+    if (!video || !shouldAttachVideo) return;
 
     if (isVisible && (autoplayPreview || isPlayingInline)) {
       void video.play().catch(() => undefined);
     } else {
       video.pause();
     }
-  }, [autoplayPreview, isPlayingInline, isVisible, shouldLoad]);
+  }, [autoplayPreview, isPlayingInline, isVisible, shouldAttachVideo]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -141,21 +142,34 @@ export function LiveVideo({
       data-video-state={isPlayingInline ? "playing" : "preview"}
       className={`group relative overflow-hidden rounded-lg bg-muted shadow-soft ${className}`}
     >
+      {poster && !isPlayingInline && (
+        <img
+          src={shouldLoad ? poster : undefined}
+          alt=""
+          aria-hidden="true"
+          role="presentation"
+          className={`pointer-events-none absolute inset-0 h-full w-full ${
+            fit === "contain" ? "object-contain" : "object-cover"
+          } transition-opacity duration-300 ${shouldAttachVideo && autoplayPreview ? "opacity-0" : "opacity-100"}`}
+          loading={eager ? "eager" : "lazy"}
+          decoding="async"
+        />
+      )}
       <video
         ref={videoRef}
-        src={shouldLoad ? src : undefined}
-        poster={poster}
+        src={shouldAttachVideo ? src : undefined}
+        poster={shouldAttachVideo ? poster : undefined}
         aria-label={title}
         title={title}
         className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}
-        autoPlay={autoplayPreview && isVisible}
+        autoPlay={autoplayPreview && isVisible && shouldAttachVideo}
         muted={!isPlayingInline || !isAudible}
         loop={!isPlayingInline && autoplayPreview}
         controls={isPlayingInline}
         playsInline
-        preload={shouldLoad ? "metadata" : "none"}
+        preload={shouldAttachVideo ? "metadata" : "none"}
         onCanPlay={(event) => {
-          if (isVisible && (autoplayPreview || isPlayingInline) && event.currentTarget.paused) {
+          if (shouldAttachVideo && isVisible && (autoplayPreview || isPlayingInline) && event.currentTarget.paused) {
             void event.currentTarget.play().catch(() => undefined);
           }
         }}

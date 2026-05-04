@@ -13,14 +13,14 @@ const documentBase = aixcoLivePath("documents");
 const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
 
 export const aixcoLiveImages = {
-  aboutArchitecture: `${optimizedImageBase}/batumip.png`,
+  aboutArchitecture: `${optimizedImageBase}/batumip.webp`,
   contact: `${optimizedImageBase}/contact.webp`,
   dubaiEdenHouse: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiHealthcare: `${optimizedImageBase}/fund2.webp`,
   transactionBackdrop: `${optimizedImageBase}/trans.webp`,
   batumiOverviewPoster: `${batumiGalleryBase}/batumi2-poster.webp`,
-  batumiGuru: `${optimizedImageBase}/guru.png`,
-  batumiOtium: `${optimizedImageBase}/otium-reverance.png`,
+  batumiGuru: `${optimizedImageBase}/guru.webp`,
+  batumiOtium: `${optimizedImageBase}/otium-reverance.webp`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
   teamOwais: `${optimizedImageBase}/owais.webp`,
   teamWalter: `${optimizedImageBase}/walter.webp`,

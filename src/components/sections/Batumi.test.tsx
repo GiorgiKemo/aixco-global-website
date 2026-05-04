@@ -64,10 +64,10 @@ describe("Batumi", () => {
       "data-media-frame",
       "dubai-style-split-media",
     );
-    expect(screen.getByLabelText("Batumi")).toHaveAttribute(
-      "poster",
-      expect.stringContaining("batumi-gallery/batumi2-poster.webp"),
-    );
+    expect(media?.querySelector("img[role='presentation']")).toBeInTheDocument();
+    expect(media?.querySelector("img[role='presentation']")).not.toHaveAttribute("src");
+    expect(screen.getByLabelText("Batumi")).not.toHaveAttribute("poster");
+    expect(screen.getByLabelText("Batumi")).not.toHaveAttribute("src");
     expect(screen.getByLabelText("Batumi")).toHaveClass("object-cover");
     expect(container.querySelector('section[id="batumi"]')).not.toBeInTheDocument();
   });

@@ -149,7 +149,7 @@ function BatumiMarketCard({ tx }: { tx: Translate }) {
           poster={aixcoLiveImages.batumiOverviewPoster}
           className="aspect-[9/16] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
           fit="cover"
-          eager
+          rootMargin="250px 0px"
           autoplayPreview={false}
         />
         <span className="pointer-events-none absolute left-8 top-7 select-none font-display text-[clamp(5.4rem,8vw,7.8rem)] font-semibold leading-none tracking-tight text-white/20 md:left-10 md:top-9">

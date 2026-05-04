@@ -26,7 +26,7 @@ describe("About", () => {
     const storyImage = screen.getByRole("img", {
       name: "Batumi skyline and landmark towers from the live AIXCO site",
     });
-    expect(storyImage).toHaveAttribute("src", expect.stringContaining("batumip.png"));
+    expect(storyImage).toHaveAttribute("src", expect.stringContaining("batumip.webp"));
     expect(storyImage).toHaveAttribute("width", "1448");
     expect(storyImage).toHaveAttribute("height", "1086");
     expect(storyImage).toHaveAttribute("data-frame", "tall");
