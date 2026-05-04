@@ -25,9 +25,8 @@ export function getHeroLottieArrowPath(baseUrl: string) {
 }
 
 export function shouldUseHeroVideoWall(environment: HeroVideoEnvironment) {
-  const { reduceMotion, saveData = false } = environment;
+  const { saveData = false } = environment;
 
-  if (reduceMotion) return false;
   if (saveData) return false;
   return true;
 }
