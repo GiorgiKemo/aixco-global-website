@@ -25,15 +25,15 @@ export function About() {
             {tx("Established in 2009, AIXCO is a disciplined real estate holding company with a strong track record across property and financial investments. Headquartered in Vienna and operating in Dubai and Batumi, AIXCO Global specializes in structuring and co-investing in portfolios, guided by a commitment to long-term value creation and enduring investor trust.")}
           </p>
           <div className="mac-card mt-7 overflow-hidden lg:mt-6">
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40 lg:aspect-[16/9]">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40">
               <img
                 src={aixcoLiveImages.aboutArchitecture}
                 alt="Batumi skyline and landmark towers from the live AIXCO site"
                 data-frame="tall"
-                data-image-treatment="uncropped"
+                data-image-treatment="fill-card"
                 loading="lazy"
                 decoding="async"
-                className="relative z-10 h-full w-full object-contain object-center"
+                className="relative z-10 h-full w-full object-cover object-center"
                 width={1448}
                 height={1086}
               />

@@ -30,7 +30,9 @@ describe("About", () => {
     expect(storyImage).toHaveAttribute("width", "1448");
     expect(storyImage).toHaveAttribute("height", "1086");
     expect(storyImage).toHaveAttribute("data-frame", "tall");
-    expect(storyImage).toHaveAttribute("data-image-treatment", "uncropped");
+    expect(storyImage).toHaveAttribute("data-image-treatment", "fill-card");
+    expect(storyImage.className).toContain("object-cover");
+    expect(storyImage.className).not.toContain("object-contain");
   });
 
   it("centers the desktop About layout inside the navbar-aware viewport", () => {
@@ -52,7 +54,8 @@ describe("About", () => {
     expect(layout?.className).toContain("lg:items-center");
     expect(story.className).toContain("lg:self-center");
     expect(metrics.className).toContain("lg:self-center");
-    expect(storyImage.parentElement?.className).toContain("lg:aspect-[16/9]");
+    expect(storyImage.parentElement?.className).toContain("aspect-[4/3]");
+    expect(storyImage.parentElement?.className).not.toContain("lg:aspect-[16/9]");
   });
 
   it("keeps the About image clean without a blurred duplicate background", () => {
