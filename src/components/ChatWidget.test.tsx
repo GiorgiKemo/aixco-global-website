@@ -38,4 +38,19 @@ describe("ChatWidget", () => {
     expect(emailTranscript).toHaveAttribute("href", expect.stringContaining("mailto:info@aixco.global"));
     expect(emailTranscript).toHaveAttribute("href", expect.stringContaining("Batumi%20apartments"));
   });
+
+  it("uses the message circle icon for the launcher", () => {
+    const { container } = renderWidget();
+
+    expect(container.querySelector('[data-chat-launcher-icon="message-circle-more"]')).toBeInTheDocument();
+    expect(container.querySelector("[data-chat-support-lottie]")).not.toBeInTheDocument();
+  });
+
+  it("keeps the online indicator inset inside the launcher", () => {
+    const { container } = renderWidget();
+    const indicator = container.querySelector('[data-chat-online-indicator="true"]');
+
+    expect(indicator).toBeInTheDocument();
+    expect(indicator).toHaveClass("right-1", "top-1");
+  });
 });
