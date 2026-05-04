@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { Dubai } from "./Dubai";
@@ -105,33 +105,81 @@ describe("Dubai", () => {
     expect(remainingCards?.querySelector("[data-fund-card='fund-1']")).not.toBeInTheDocument();
   });
 
-  it("uses a dense gallery layout without staggered column gaps", () => {
+  it("removes the old duplicate Dubai gallery section below the fund cards", () => {
+    const { container } = renderDubai();
+
+    expect(screen.queryByLabelText("Fund I Eden House gallery")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Dubai fund images")).not.toBeInTheDocument();
+    expect(container.querySelector("[data-layout='dense-masonry']")).not.toBeInTheDocument();
+    expect(container.querySelector("[data-layout='viewport-fit-image-rail']")).not.toBeInTheDocument();
+  });
+
+  it("uses horizontal infinite image rails instead of vertical gallery columns", () => {
+    const { container } = renderDubai();
+
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
+    const railTrack = parkRail.querySelector("[data-gallery-track='horizontal-loop']");
+    const railSets = parkRail.querySelectorAll("[data-gallery-set]");
+
+    expect(parkRail).toHaveAttribute("data-layout", "horizontal-infinite-gallery");
+    expect(parkRail.className).toContain("dubai-image-marquee");
+    expect(parkRail.className).not.toContain("columns-");
+    expect(railTrack).toBeInTheDocument();
+    expect(railTrack?.className).toContain("dubai-image-marquee-track");
+    expect(railSets).toHaveLength(2);
+    expect(railSets[1]).toHaveAttribute("aria-hidden", "true");
+    expect(within(railSets[0] as HTMLElement).getByAltText("Eden House The Park construction progress")).toBeInTheDocument();
+    expect(container.querySelectorAll("[data-gallery-tile]").length).toBeGreaterThan(0);
+  });
+
+  it("makes the image rails real horizontal scroll containers", () => {
     renderDubai();
 
-    const gallery = screen.getByLabelText("Fund I Eden House gallery");
-    const firstImage = screen.getByAltText("Fund I Eden House gallery 1");
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
 
-    expect(gallery).toHaveAttribute("data-layout", "dense-masonry");
-    expect(gallery.className).toContain("columns-1");
-    expect(gallery.className).not.toContain("pt-16");
-    expect(firstImage.className).toContain("transition-transform");
-    expect(firstImage.className).toContain("duration-500");
-    expect(firstImage.className).not.toContain("duration-700");
+    Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
+    Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
+    parkRail.scrollLeft = 0;
+
+    fireEvent.wheel(parkRail, { deltaX: 0, deltaY: 180 });
+
+    expect(parkRail.closest("section")?.className).toContain("min-w-0");
+    expect(parkRail).toHaveAttribute("data-native-scroll", "true");
+    expect(parkRail).toHaveAttribute("data-scroll-mode", "horizontal-smooth-glide-loop");
+    expect(parkRail).toHaveAttribute("data-scroll-easing", "true");
+    expect(parkRail).toHaveAttribute("data-drag-scroll", "left-mouse");
+    expect(parkRail.className).toContain("cursor-grab");
+    expect(parkRail.scrollLeft).toBeLessThan(180);
+  });
+
+  it("lets users drag image rails horizontally with the left mouse button", () => {
+    renderDubai();
+
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
+
+    Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
+    Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
+    parkRail.scrollLeft = 600;
+
+    fireEvent.mouseDown(parkRail, { button: 0, clientX: 300 });
+    fireEvent.mouseMove(window, { clientX: 220 });
+    fireEvent.mouseUp(window, { clientX: 220 });
+
+    expect(parkRail).toHaveAttribute("data-drag-scroll", "left-mouse");
+    expect(parkRail.scrollLeft).toBeGreaterThan(600);
   });
 
   it("uses still images instead of Dubai fund videos", () => {
     const { container } = renderDubai();
 
-    const rail = screen.getByLabelText("Dubai fund images");
-    const railImage = screen.getByAltText("Eden House construction view");
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundTwoGallery = screen.getByLabelText("Fund II asset image gallery");
 
-    expect(rail).toHaveAttribute("data-layout", "viewport-fit-image-rail");
-    expect(rail.className).toContain("grid-cols-3");
-    expect(rail.className).toContain("lg:max-h-[calc(100svh-8rem)]");
-    expect(rail.className).toContain("lg:grid-rows-3");
-    expect(railImage.className).toContain("transition-transform");
-    expect(railImage.className).toContain("duration-500");
-    expect(railImage.className).not.toContain("duration-700");
+    expect(within(fundOneGallery).getByAltText("Eden House The Canal aerial overview")).toBeInTheDocument();
+    expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City asset image")).toBeInTheDocument();
     expect(container.querySelector("video")).not.toBeInTheDocument();
   });
 
@@ -170,18 +218,46 @@ describe("Dubai", () => {
     expect(fundCards[1].querySelector("[data-fund-media]")).not.toHaveTextContent("02");
   });
 
-  it("makes Dubai fund asset details clickable with the source assets", () => {
+  it("renders matching Dubai fund asset galleries directly below their fund cards", () => {
     const { container } = renderDubai();
 
-    const fundOne = container.querySelector("[data-fund-card='fund-1']");
-    const fundTwo = container.querySelector("[data-fund-card='fund-2']");
+    const fundOneShell = container.querySelector("[data-fund-card-shell='fund-1']");
+    const fundTwoShell = container.querySelector("[data-fund-card-shell='fund-2']");
+    const fundOne = within(fundOneShell as HTMLElement).getByRole("article");
+    const fundTwo = within(fundTwoShell as HTMLElement).getByRole("article");
+    const fundOneGallery = within(fundOneShell as HTMLElement).getByLabelText("Fund I asset image gallery");
+    const fundTwoGallery = within(fundTwoShell as HTMLElement).getByLabelText("Fund II asset image gallery");
 
-    expect(within(fundOne as HTMLElement).getByRole("link", { name: /View Asset Details: Fund I/ })).toHaveAttribute(
+    expect(fundOneGallery).toBeInTheDocument();
+    expect(fundOneGallery.previousElementSibling).toBe(fundOne);
+    expect(fundOneGallery).toHaveAttribute("data-gallery-source", "eden-house-and-park");
+    expect(fundOneGallery.className).toContain("scroll-mt-16");
+    expect(fundOneGallery.className).toContain("md:scroll-mt-20");
+    expect(within(fundOne).getByRole("link", { name: /View Asset Details: Fund I/ })).toHaveAttribute(
       "href",
+      "#dubai-asset-gallery-fund-1",
+    );
+    expect(within(fundOneGallery as HTMLElement).getByRole("heading", { name: "Eden House The Canal" })).toBeInTheDocument();
+    expect(within(fundOneGallery as HTMLElement).getByRole("heading", { name: "Eden House The Park" })).toBeInTheDocument();
+    expect(within(fundOneGallery as HTMLElement).getByAltText("Eden House The Canal aerial overview")).toHaveAttribute(
+      "src",
+      expect.stringContaining("/aixco-global-op2/images/fund1.png"),
+    );
+    expect(within(fundOneGallery as HTMLElement).getByAltText("Eden House The Park construction progress")).toHaveAttribute(
+      "src",
       expect.stringContaining("/aixco-global-op2/images/fund/fund1.jpeg"),
     );
-    expect(within(fundTwo as HTMLElement).getByRole("link", { name: /View Asset Details: Fund II/ })).toHaveAttribute(
+
+    expect(fundTwoGallery).toBeInTheDocument();
+    expect(fundTwoGallery.previousElementSibling).toBe(fundTwo);
+    expect(fundTwoGallery).toHaveAttribute("data-gallery-source", "dubai-healthcare-city");
+    expect(within(fundTwo).getByRole("link", { name: /View Asset Details: Fund II/ })).toHaveAttribute(
       "href",
+      "#dubai-asset-gallery-fund-2",
+    );
+    expect(within(fundTwoGallery as HTMLElement).getByRole("heading", { name: "Dubai Healthcare City" })).toBeInTheDocument();
+    expect(within(fundTwoGallery as HTMLElement).getByAltText("Dubai Healthcare City asset image")).toHaveAttribute(
+      "src",
       expect.stringContaining("/aixco-global-op2/images/fund2.png"),
     );
   });

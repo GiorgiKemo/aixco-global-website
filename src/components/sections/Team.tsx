@@ -33,7 +33,7 @@ export function Team() {
           </p>
         </div>
 
-      <div className="mx-auto grid max-w-[56rem] gap-5 md:grid-cols-3 min-[1360px]:max-w-[66rem] min-[1536px]:max-w-[72rem] min-[1700px]:max-w-[78rem] min-[1360px]:gap-6">
+        <div data-layout="team-profile-grid" className="grid w-full max-w-[65rem] gap-5 md:grid-cols-3 min-[1360px]:gap-6">
           {team.map((m) => (
             <motion.button
               key={m.name}
@@ -53,17 +53,17 @@ export function Team() {
                   className="h-full w-full object-cover grayscale transition-[filter,transform] [transition-duration:400ms] group-hover:grayscale-0 group-hover:scale-[1.025]"
                 />
               </div>
-              <div className="p-4 min-[1360px]:p-5">
-                <p className="font-display text-[clamp(1.28rem,1.18vw,1.5rem)] leading-[1.12] min-[1360px]:text-[clamp(1.38rem,1.24vw,1.62rem)]">
+              <div className="p-4">
+                <p className="font-display text-[clamp(1.24rem,1.05vw,1.42rem)] leading-[1.12]">
                   {m.name}
                 </p>
-                <p className="mt-1.5 text-[0.9rem] text-primary min-[1360px]:text-[1.1rem]">
+                <p className="mt-1.5 text-[0.9rem] text-primary">
                   {tx(m.role)}
                 </p>
-                <p className="mt-2 text-[0.88rem] leading-[1.48] text-muted-foreground min-[1360px]:text-[1rem] min-[1360px]:leading-[1.52]">
+                <p className="mt-2 text-[0.88rem] leading-[1.48] text-muted-foreground">
                   {tx(m.summary)}
                 </p>
-                <span className="mt-4 inline-flex text-[0.72rem] uppercase tracking-widest text-primary min-[1360px]:text-[0.9rem]">
+                <span className="mt-3 inline-flex text-[0.72rem] uppercase tracking-widest text-primary">
                   {tx('View profile')}
                 </span>
               </div>

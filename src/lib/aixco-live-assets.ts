@@ -62,6 +62,37 @@ export const aixcoLiveAssetDetails = {
   otiumPdf: aixcoLiveDocuments.otium,
 } as const;
 
+export const aixcoDubaiEdenHouseCanalGallery = [
+  { src: `${liveImageBase}/fund1.png`, title: "Eden House The Canal aerial overview" },
+  { src: `${liveImageBase}/fund/fund8.jpeg`, title: "Eden House The Canal entrance wall" },
+  { src: `${liveImageBase}/fund/fund9.jpeg`, title: "Eden House The Canal completed facade" },
+  { src: `${liveImageBase}/fund/fund13.jpeg`, title: "Eden House The Canal residence facade" },
+  { src: `${liveImageBase}/fund/fund14.jpeg`, title: "Eden House The Canal waterfront frontage" },
+  { src: `${liveImageBase}/fund/fund15.jpeg`, title: "Eden House The Canal villa row" },
+  { src: `${liveImageBase}/fund/fund16.jpeg`, title: "Eden House The Canal promenade view" },
+  { src: `${liveImageBase}/fund/fund17.jpeg`, title: "Eden House The Canal waterfront elevation" },
+  { src: `${liveImageBase}/fund/fund18.jpeg`, title: "Eden House The Canal villa detail" },
+  { src: `${liveImageBase}/fund/fund19.jpeg`, title: "Eden House The Canal waterside block" },
+  { src: `${liveImageBase}/fund/fund20.jpeg`, title: "Eden House The Canal signage" },
+] as const;
+
+export const aixcoDubaiEdenHouseParkGallery = [
+  { src: `${liveImageBase}/fund/fund1.jpeg`, title: "Eden House The Park construction progress" },
+  { src: `${liveImageBase}/fund/fund2.jpeg`, title: "Eden House The Park street construction" },
+  { src: `${liveImageBase}/fund/fund3.jpeg`, title: "Eden House The Park structure progress" },
+  { src: `${liveImageBase}/fund/fund4.jpeg`, title: "Eden House The Park branded site fence" },
+  { src: `${liveImageBase}/fund/fund5.jpeg`, title: "Eden House The Park road approach" },
+  { src: `${liveImageBase}/fund/fund6.jpeg`, title: "Eden House The Park active works" },
+  { src: `${liveImageBase}/fund/fund7.jpeg`, title: "Eden House The Park tower progress" },
+  { src: `${liveImageBase}/fund/fund10.jpeg`, title: "Eden House The Park construction streetscape" },
+  { src: `${liveImageBase}/fund/fund11.jpeg`, title: "Eden House The Park low-rise residences" },
+  { src: `${liveImageBase}/fund/fund12.jpeg`, title: "Eden House The Park villa promenade" },
+] as const;
+
+export const aixcoDubaiHealthcareGallery = [
+  { src: `${liveImageBase}/fund2.png`, title: "Dubai Healthcare City asset image" },
+] as const;
+
 export const aixcoLiveLogos = {
   aixcoGlobal: `${liveImageBase}/AIXCOGlobalWlong.png`,
   aixcoMark: `${liveImageBase}/AIXW.png`,

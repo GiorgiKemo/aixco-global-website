@@ -1,4 +1,6 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { X } from "lucide-react";
 
 type LiveVideoProps = {
   src: string;
@@ -13,7 +15,7 @@ type LiveVideoProps = {
 };
 
 const focusThreshold = 0.45;
-const audibleVideoEvent = "aixco-live-video-audible";
+const expandedVideoEvent = "aixco-live-video-expanded";
 
 export function LiveVideo({
   src,
@@ -29,20 +31,21 @@ export function LiveVideo({
   const videoId = useId();
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const expandedVideoRef = useRef<HTMLVideoElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(eager);
   const [isInFocus, setIsInFocus] = useState(eager);
-  const [isPlayingInline, setIsPlayingInline] = useState(false);
-  const [isAudible, setIsAudible] = useState(false);
-  const shouldAttachVideo = shouldLoad && (autoplayPreview || isPlayingInline);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const shouldAttachVideo = shouldLoad && autoplayPreview;
 
-  const openInlinePlayer = () => {
+  const closeExpandedPlayer = useCallback(() => {
+    expandedVideoRef.current?.pause();
+    setIsExpanded(false);
+  }, []);
+
+  const openExpandedPlayer = () => {
     setShouldLoad(true);
     setIsInFocus(true);
-    setIsPlayingInline(true);
-    setIsAudible(true);
-    window.requestAnimationFrame(() => {
-      void videoRef.current?.play().catch(() => undefined);
-    });
+    setIsExpanded(true);
   };
 
   useEffect(() => {
@@ -81,9 +84,6 @@ export function LiveVideo({
       ([entry]) => {
         const nextIsInFocus = entry.isIntersecting && entry.intersectionRatio >= focusThreshold;
         setIsInFocus(nextIsInFocus);
-        if (!nextIsInFocus) {
-          setIsAudible(false);
-        }
       },
       { threshold: [0, focusThreshold, 1] },
     );
@@ -96,99 +96,153 @@ export function LiveVideo({
     const video = videoRef.current;
     if (!video || !shouldAttachVideo) return;
 
-    if (isInFocus && (autoplayPreview || isPlayingInline)) {
+    if (isExpanded) {
+      video.pause();
+    } else if (isInFocus && autoplayPreview) {
       void video.play().catch(() => undefined);
     } else {
       video.pause();
     }
-  }, [autoplayPreview, isInFocus, isPlayingInline, shouldAttachVideo]);
+  }, [autoplayPreview, isExpanded, isInFocus, shouldAttachVideo]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const handleAudibleVideo = (event: Event) => {
+    const handleExpandedVideo = (event: Event) => {
       if (!(event instanceof CustomEvent) || event.detail === videoId) return;
-      setIsAudible(false);
+      closeExpandedPlayer();
     };
 
-    window.addEventListener(audibleVideoEvent, handleAudibleVideo);
+    window.addEventListener(expandedVideoEvent, handleExpandedVideo);
     return () => {
-      window.removeEventListener(audibleVideoEvent, handleAudibleVideo);
+      window.removeEventListener(expandedVideoEvent, handleExpandedVideo);
     };
-  }, [videoId]);
+  }, [closeExpandedPlayer, videoId]);
 
   useEffect(() => {
-    if (!isAudible || typeof window === "undefined") return;
-    window.dispatchEvent(new CustomEvent(audibleVideoEvent, { detail: videoId }));
-  }, [isAudible, videoId]);
+    if (!isExpanded || typeof window === "undefined") return;
+    window.dispatchEvent(new CustomEvent(expandedVideoEvent, { detail: videoId }));
+  }, [isExpanded, videoId]);
 
   useEffect(() => {
-    if (!isPlayingInline || typeof window === "undefined") return;
+    if (!isExpanded || typeof window === "undefined") return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    void expandedVideoRef.current?.play().catch(() => undefined);
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsPlayingInline(false);
-        setIsAudible(false);
+        closeExpandedPlayer();
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
     };
-  }, [isPlayingInline]);
+  }, [closeExpandedPlayer, isExpanded]);
+
+  const expandedPlayer =
+    isExpanded && typeof document !== "undefined"
+      ? createPortal(
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 animate-fade-in md:p-6">
+            <button
+              type="button"
+              aria-label={`Close video: ${title}`}
+              className="absolute inset-0 bg-background/80 backdrop-blur-xl"
+              onClick={closeExpandedPlayer}
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label={`Expanded video: ${title}`}
+              className="relative z-10 w-full max-w-6xl overflow-hidden rounded-lg border border-white/10 bg-black shadow-elegant animate-scale-in"
+            >
+              <video
+                ref={expandedVideoRef}
+                src={src}
+                poster={poster}
+                aria-label={`${title} expanded player`}
+                title={title}
+                className="block h-[min(82svh,calc(100svh-2rem))] w-full bg-black object-contain"
+                autoPlay
+                controls
+                playsInline
+                preload="auto"
+                onCanPlay={(event) => {
+                  if (event.currentTarget.paused) {
+                    void event.currentTarget.play().catch(() => undefined);
+                  }
+                }}
+              />
+              <button
+                type="button"
+                aria-label={`Close video: ${title}`}
+                onClick={closeExpandedPlayer}
+                className="absolute right-3 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80"
+              >
+                <X className="h-4 w-4" />
+                <span className="sr-only">Close</span>
+              </button>
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
 
   return (
-    <div
-      ref={wrapperRef}
-      data-video-state={isPlayingInline ? "playing" : "preview"}
-      className={`group relative overflow-hidden rounded-lg bg-muted shadow-soft ${className}`}
-    >
-      {poster && !isPlayingInline && (
-        <img
-          src={shouldLoad ? poster : undefined}
-          alt=""
-          aria-hidden="true"
-          role="presentation"
-          className={`pointer-events-none absolute inset-0 h-full w-full ${
-            fit === "contain" ? "object-contain" : "object-cover"
-          } transition-opacity duration-300 ${shouldAttachVideo && autoplayPreview && isInFocus ? "opacity-0" : "opacity-100"}`}
-          loading={eager ? "eager" : "lazy"}
-          decoding="async"
+    <>
+      <div
+        ref={wrapperRef}
+        data-video-state={isExpanded ? "expanded" : "preview"}
+        className={`group relative overflow-hidden rounded-lg bg-muted shadow-soft ${className}`}
+      >
+        {poster && (
+          <img
+            src={shouldLoad ? poster : undefined}
+            alt=""
+            aria-hidden="true"
+            role="presentation"
+            className={`pointer-events-none absolute inset-0 h-full w-full ${
+              fit === "contain" ? "object-contain" : "object-cover"
+            } transition-opacity duration-300 ${shouldAttachVideo && autoplayPreview && isInFocus && !isExpanded ? "opacity-0" : "opacity-100"}`}
+            loading={eager ? "eager" : "lazy"}
+            decoding="async"
+          />
+        )}
+        <video
+          ref={videoRef}
+          src={shouldAttachVideo ? src : undefined}
+          poster={shouldAttachVideo ? poster : undefined}
+          aria-label={title}
+          title={title}
+          className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}
+          autoPlay={autoplayPreview && isInFocus && shouldAttachVideo && !isExpanded}
+          muted
+          loop={autoplayPreview}
+          playsInline
+          preload={shouldAttachVideo ? "metadata" : "none"}
+          onCanPlay={(event) => {
+            if (shouldAttachVideo && isInFocus && autoplayPreview && !isExpanded && event.currentTarget.paused) {
+              void event.currentTarget.play().catch(() => undefined);
+            }
+          }}
         />
-      )}
-      <video
-        ref={videoRef}
-        src={shouldAttachVideo ? src : undefined}
-        poster={shouldAttachVideo ? poster : undefined}
-        aria-label={title}
-        title={title}
-        className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}
-        autoPlay={autoplayPreview && isInFocus && shouldAttachVideo}
-        muted={!isPlayingInline || !isAudible}
-        loop={!isPlayingInline && autoplayPreview}
-        controls={isPlayingInline}
-        playsInline
-        preload={shouldAttachVideo ? "metadata" : "none"}
-        onCanPlay={(event) => {
-          if (shouldAttachVideo && isInFocus && (autoplayPreview || isPlayingInline) && event.currentTarget.paused) {
-            void event.currentTarget.play().catch(() => undefined);
-          }
-        }}
-        onVolumeChange={(event) => {
-          setIsAudible(isPlayingInline && !event.currentTarget.muted);
-        }}
-      />
-      {!isPlayingInline && (
-        <button
-          type="button"
-          onClick={openInlinePlayer}
-          aria-label={`Play video: ${title}`}
-          className="absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 hover:bg-black/[0.03] focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          <span className="sr-only">Play video</span>
-        </button>
-      )}
-    </div>
+        {!isExpanded && (
+          <button
+            type="button"
+            onClick={openExpandedPlayer}
+            aria-label={`Play video: ${title}`}
+            className="absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 hover:bg-black/[0.03] focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <span className="sr-only">Play video</span>
+          </button>
+        )}
+      </div>
+      {expandedPlayer}
+    </>
   );
 }

@@ -554,6 +554,57 @@
     filter: drop-shadow(0 14px 24px hsl(220 28% 5% / 0.4));
   }
 
+  .dubai-image-marquee {
+    --dubai-image-marquee-gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    padding-block: 0.25rem 0.45rem;
+    scroll-behavior: auto;
+    scrollbar-width: none;
+    touch-action: pan-x;
+    cursor: grab;
+    user-select: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dubai-image-marquee:active {
+    cursor: grabbing;
+  }
+
+  .dubai-image-marquee::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dubai-image-marquee-track {
+    display: flex;
+    width: max-content;
+    min-width: max-content;
+  }
+
+  .dubai-image-marquee-set {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--dubai-image-marquee-gap);
+    padding-right: var(--dubai-image-marquee-gap);
+  }
+
+  .dubai-gallery-tile {
+    flex: 0 0 clamp(17rem, 34vw, 30rem);
+    height: clamp(12.5rem, 23vw, 19.5rem);
+    overflow: hidden;
+    border: 1px solid hsl(var(--foreground) / 0.08);
+    border-radius: var(--radius);
+    background: hsl(var(--surface) / 0.3);
+  }
+
+  .dubai-gallery-tile img {
+    display: block;
+  }
+
   .partner-flip-back {
     transform: rotateY(180deg);
     align-items: flex-start;

@@ -6,8 +6,6 @@ import { ChatWidget } from "@/components/ChatWidget";
 import { installGlideScroll, scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 
 const Index = lazy(() => import("./pages/Index.tsx"));
-const Insights = lazy(() => import("./pages/Insights.tsx"));
-const Article = lazy(() => import("./pages/Article.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const Modals = lazy(() => import("@/components/Modals").then((module) => ({ default: module.Modals })));
 
@@ -82,8 +80,6 @@ const App = () => (
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/insights" element={<Insights />} />
-            <Route path="/insights/:slug" element={<Article />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

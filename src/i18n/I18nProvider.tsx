@@ -17,7 +17,6 @@ const keyedText: Record<string, string> = {
   "nav.how": "How AIXCO Works",
   "nav.team": "Our Team",
   "nav.partners": "Partners",
-  "nav.insights": "Insights",
   "nav.faqs": "FAQs",
   "nav.contact": "Contact",
   "cta.login": "Login",

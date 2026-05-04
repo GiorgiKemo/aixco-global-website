@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { aixcoLiveAssetDetails, aixcoLiveImages } from "./aixco-live-assets";
+import {
+  aixcoDubaiEdenHouseCanalGallery,
+  aixcoDubaiEdenHouseParkGallery,
+  aixcoDubaiHealthcareGallery,
+  aixcoLiveAssetDetails,
+  aixcoLiveImages,
+} from "./aixco-live-assets";
 
 describe("aixcoLiveImages", () => {
   it("keeps the full generated About artwork while using compressed web images elsewhere", () => {
@@ -13,5 +19,20 @@ describe("aixcoLiveImages", () => {
     expect(aixcoLiveAssetDetails.dubaiFundTwo).toContain("/images/fund2.png");
     expect(aixcoLiveAssetDetails.guruCatalog).toContain("/documents/guru-catalog.jpeg");
     expect(aixcoLiveAssetDetails.otiumCatalog).toContain("/documents/otium-catalog.jpeg");
+  });
+
+  it("publishes grouped Dubai asset galleries from the OP2 source files", () => {
+    expect(aixcoDubaiEdenHouseCanalGallery[0]).toMatchObject({
+      src: expect.stringContaining("/aixco-global-op2/images/fund1.png"),
+      title: "Eden House The Canal aerial overview",
+    });
+    expect(aixcoDubaiEdenHouseParkGallery[0]).toMatchObject({
+      src: expect.stringContaining("/aixco-global-op2/images/fund/fund1.jpeg"),
+      title: "Eden House The Park construction progress",
+    });
+    expect(aixcoDubaiHealthcareGallery[0]).toMatchObject({
+      src: expect.stringContaining("/aixco-global-op2/images/fund2.png"),
+      title: "Dubai Healthcare City asset image",
+    });
   });
 });

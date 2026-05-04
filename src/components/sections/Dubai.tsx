@@ -1,8 +1,14 @@
+import { useEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
 import { dubaiFunds } from "@/data/site";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Building2, HandCoins, TrendingUp, type LucideIcon } from "lucide-react";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
-import { aixcoFundGallery, aixcoLiveAssetDetails, aixcoLiveImages } from "@/lib/aixco-live-assets";
+import {
+  aixcoDubaiEdenHouseCanalGallery,
+  aixcoDubaiEdenHouseParkGallery,
+  aixcoDubaiHealthcareGallery,
+  aixcoLiveImages,
+} from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const imageMap: Record<string, string> = {
@@ -10,23 +16,21 @@ const imageMap: Record<string, string> = {
   "dubai-healthcare": aixcoLiveImages.dubaiHealthcare,
 };
 
-const dubaiStillRailImages = [
-  { src: aixcoFundGallery[4], title: "Eden House construction view" },
-  { src: aixcoFundGallery[7], title: "Eden House completed facade" },
-  { src: aixcoFundGallery[12], title: "Dubai project streetscape" },
-] as const;
-
-const detailAssetMap: Record<string, string> = {
-  "fund-1": aixcoLiveAssetDetails.dubaiFundOne,
-  "fund-2": aixcoLiveAssetDetails.dubaiFundTwo,
-};
-
-function galleryAspectClass(src: string) {
-  if (src.endsWith("/fund1.png")) return "aspect-[2/3]";
-  if (src.endsWith("/fund8.jpeg") || src.endsWith("/fund20.jpeg")) return "aspect-[9/16]";
-  if (src.endsWith("/fund4.jpeg")) return "aspect-[4/3]";
-  return "aspect-video";
-}
+const fundAssetGalleries = {
+  "fund-1": {
+    source: "eden-house-and-park",
+    label: "Fund I asset image gallery",
+    groups: [
+      { title: "Eden House The Canal", images: aixcoDubaiEdenHouseCanalGallery },
+      { title: "Eden House The Park", images: aixcoDubaiEdenHouseParkGallery },
+    ],
+  },
+  "fund-2": {
+    source: "dubai-healthcare-city",
+    label: "Fund II asset image gallery",
+    groups: [{ title: "Dubai Healthcare City", images: aixcoDubaiHealthcareGallery }],
+  },
+} as const;
 
 function parseFundDetail(detail: string) {
   const separatorIndex = detail.indexOf(":");
@@ -78,8 +82,14 @@ function formatMetricValue(value: string) {
 
 type DubaiFund = (typeof dubaiFunds)[number];
 type Translate = (copy: string) => string;
+type DubaiFundGalleryId = keyof typeof fundAssetGalleries;
+type DubaiFundGalleryGroup = (typeof fundAssetGalleries)[DubaiFundGalleryId]["groups"][number];
 
 const detailIcons: LucideIcon[] = [TrendingUp, HandCoins, Building2];
+
+function hasAssetGallery(fundId: string): fundId is DubaiFundGalleryId {
+  return fundId in fundAssetGalleries;
+}
 
 function renderFundTitle(title: string) {
   const accent = "The Canal";
@@ -187,6 +197,229 @@ function PrestigeHighlightItem({
   );
 }
 
+function getNormalizedGalleryScrollLeft(container: HTMLDivElement, scrollLeft: number) {
+  const loopWidth = container.scrollWidth / 2;
+  if (loopWidth <= container.clientWidth) return scrollLeft;
+
+  if (scrollLeft >= loopWidth) return scrollLeft - loopWidth;
+  if (scrollLeft <= 0) return scrollLeft + loopWidth;
+  return scrollLeft;
+}
+
+function DubaiImageMarquee({
+  group,
+  shouldReduceMotion,
+  tx,
+}: {
+  group: DubaiFundGalleryGroup;
+  shouldReduceMotion: boolean | null;
+  tx: Translate;
+}) {
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const currentScrollRef = useRef(0);
+  const targetScrollRef = useRef(0);
+  const dragRef = useRef({
+    active: false,
+    lastX: 0,
+    lastTime: 0,
+    velocity: 0,
+  });
+
+  const syncGalleryScroll = (viewport: HTMLDivElement, nextScrollLeft: number) => {
+    const normalized = getNormalizedGalleryScrollLeft(viewport, nextScrollLeft);
+    viewport.scrollLeft = normalized;
+    currentScrollRef.current = normalized;
+    targetScrollRef.current = normalized;
+    return normalized;
+  };
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return undefined;
+
+    const handleWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+
+      event.preventDefault();
+      if (shouldReduceMotion) {
+        syncGalleryScroll(viewport, viewport.scrollLeft + event.deltaY);
+        return;
+      }
+
+      targetScrollRef.current = getNormalizedGalleryScrollLeft(viewport, targetScrollRef.current + event.deltaY * 1.15);
+    };
+
+    viewport.addEventListener("wheel", handleWheel, { passive: false });
+    return () => viewport.removeEventListener("wheel", handleWheel);
+  }, [shouldReduceMotion]);
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const drag = dragRef.current;
+      const viewport = viewportRef.current;
+      if (!drag.active || !viewport) return;
+
+      const deltaX = event.clientX - drag.lastX;
+      const deltaTime = Math.max(16, event.timeStamp - drag.lastTime);
+      const nextScrollLeft = viewport.scrollLeft - deltaX;
+
+      syncGalleryScroll(viewport, nextScrollLeft);
+      drag.velocity = (-deltaX / deltaTime) * 1000;
+      drag.lastX = event.clientX;
+      drag.lastTime = event.timeStamp;
+      event.preventDefault();
+    };
+
+    const finishMouseDrag = () => {
+      const viewport = viewportRef.current;
+      if (!dragRef.current.active || !viewport) return;
+
+      dragRef.current.active = false;
+      targetScrollRef.current = viewport.scrollLeft;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", finishMouseDrag);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", finishMouseDrag);
+    };
+  }, []);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport || shouldReduceMotion) return undefined;
+
+    let animationFrame = 0;
+    let previousTime = 0;
+    const autoPixelsPerSecond = 46;
+    const easing = 0.12;
+    const frictionPerSecond = 0.085;
+
+    const tick = (time: number) => {
+      if (previousTime === 0) previousTime = time;
+      const deltaSeconds = (time - previousTime) / 1000;
+      previousTime = time;
+
+      if (!dragRef.current.active) {
+        targetScrollRef.current += autoPixelsPerSecond * deltaSeconds;
+
+        if (Math.abs(dragRef.current.velocity) > 1) {
+          targetScrollRef.current += dragRef.current.velocity * deltaSeconds;
+          dragRef.current.velocity *= Math.pow(frictionPerSecond, deltaSeconds);
+        } else {
+          dragRef.current.velocity = 0;
+        }
+
+        currentScrollRef.current += (targetScrollRef.current - currentScrollRef.current) * easing;
+        const normalized = getNormalizedGalleryScrollLeft(viewport, currentScrollRef.current);
+        viewport.scrollLeft = normalized;
+        currentScrollRef.current = normalized;
+        targetScrollRef.current = getNormalizedGalleryScrollLeft(viewport, targetScrollRef.current);
+      }
+
+      animationFrame = window.requestAnimationFrame(tick);
+    };
+
+    currentScrollRef.current = viewport.scrollLeft;
+    targetScrollRef.current = viewport.scrollLeft;
+    animationFrame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [group.images, shouldReduceMotion]);
+
+  const handleMouseDown = (event: ReactMouseEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+
+    const viewport = event.currentTarget;
+    dragRef.current.active = true;
+    dragRef.current.lastX = event.clientX;
+    dragRef.current.lastTime = event.timeStamp;
+    dragRef.current.velocity = 0;
+    currentScrollRef.current = viewport.scrollLeft;
+    targetScrollRef.current = viewport.scrollLeft;
+    event.preventDefault();
+  };
+
+  return (
+    <div
+      ref={viewportRef}
+      aria-label={tx(`${group.title} images`)}
+      className="dubai-image-marquee cursor-grab select-none active:cursor-grabbing"
+      data-gallery-group={group.title}
+      data-layout="horizontal-infinite-gallery"
+      data-drag-scroll="left-mouse"
+      data-native-scroll="true"
+      data-scroll-easing="true"
+      data-scroll-mode="horizontal-smooth-glide-loop"
+      onMouseDown={handleMouseDown}
+    >
+      <div className="dubai-image-marquee-track" data-gallery-track="horizontal-loop">
+        {[0, 1].map((setIndex) => (
+          <div
+            key={`${group.title}-${setIndex}`}
+            aria-hidden={setIndex === 1 ? "true" : undefined}
+            className="dubai-image-marquee-set"
+            data-gallery-set={setIndex === 0 ? "primary" : "duplicate"}
+          >
+            {group.images.map((image) => (
+              <figure key={`${setIndex}-${image.src}`} className="dubai-gallery-tile" data-gallery-tile>
+                <img
+                  src={image.src}
+                  alt={setIndex === 0 ? tx(image.title) : ""}
+                  loading="lazy"
+                  decoding="async"
+                  width={1280}
+                  height={720}
+                  className="h-full w-full object-cover"
+                />
+              </figure>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DubaiFundAssetGallery({
+  fundId,
+  shouldReduceMotion,
+  tx,
+}: {
+  fundId: DubaiFundGalleryId;
+  shouldReduceMotion: boolean | null;
+  tx: Translate;
+}) {
+  const gallery = fundAssetGalleries[fundId];
+
+  return (
+    <motion.div
+      id={`dubai-asset-gallery-${fundId}`}
+      data-fund-asset-gallery={fundId}
+      data-gallery-source={gallery.source}
+      aria-label={tx(gallery.label)}
+      className="mt-5 scroll-mt-16 border border-foreground/10 bg-white p-4 shadow-[0_34px_80px_-35px_rgba(0,0,0,0.28)] sm:p-5 md:scroll-mt-20 lg:p-6"
+      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
+      animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      transition={{ duration: shouldReduceMotion ? 0.18 : 0.32, ease: "easeOut" }}
+    >
+      <div className="grid gap-7">
+        {gallery.groups.map((group) => (
+          <section key={group.title} className="min-w-0" aria-labelledby={`dubai-${fundId}-${group.title.replace(/\s+/g, "-").toLowerCase()}`}>
+            <h4
+              id={`dubai-${fundId}-${group.title.replace(/\s+/g, "-").toLowerCase()}`}
+              className="mb-4 font-display text-[clamp(1.35rem,2.2vw,2rem)] font-semibold leading-tight text-foreground"
+            >
+              {tx(group.title)}
+            </h4>
+            <DubaiImageMarquee group={group} shouldReduceMotion={shouldReduceMotion} tx={tx} />
+          </section>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
 function DubaiFundCard({
   fund,
   idx,
@@ -217,7 +450,8 @@ function DubaiFundCard({
   const detailListClass = isViewportFit
     ? "grid gap-5 bg-surface/45 p-5 md:grid-cols-3 md:gap-5 md:p-6 lg:p-7"
     : "grid gap-7 bg-surface/45 p-7 md:grid-cols-3 md:gap-8 md:p-9 lg:p-10";
-  const detailHref = detailAssetMap[fund.id] ?? imageMap[fund.image];
+  const galleryId = hasAssetGallery(fund.id) ? fund.id : undefined;
+  const galleryHref = galleryId ? `#dubai-asset-gallery-${galleryId}` : undefined;
 
   return (
     <motion.article
@@ -247,16 +481,16 @@ function DubaiFundCard({
           transition={{ duration: 1.45, ease: "easeOut" }}
         />
         <div className="absolute inset-0 bg-gradient-to-tr from-foreground/45 via-foreground/12 to-transparent" aria-hidden />
-        <a
-          href={detailHref}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={`${tx("View Asset Details")}: ${tx(fund.name)}`}
-          className="absolute bottom-8 left-8 z-20 inline-flex items-center gap-3 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors duration-200 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-foreground md:bottom-10 md:left-10"
-        >
-          {tx("View Asset Details")}
-          <ArrowRight size={17} className="text-primary transition-transform duration-200 group-hover:translate-x-2" />
-        </a>
+        {galleryHref && (
+          <a
+            href={galleryHref}
+            aria-label={`${tx("View Asset Details")}: ${tx(fund.name)}`}
+            className="absolute bottom-8 left-8 z-20 inline-flex items-center gap-3 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors duration-200 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-foreground md:bottom-10 md:left-10"
+          >
+            {tx("View Asset Details")}
+            <ArrowRight size={17} className="text-primary transition-transform duration-200 group-hover:translate-x-2" />
+          </a>
+        )}
       </div>
       <div
         data-fund-copy
@@ -308,6 +542,11 @@ export function Dubai() {
   const { tx } = useI18n();
   const shouldReduceMotion = useReducedMotion();
   const [landingFund, ...remainingFunds] = dubaiFunds;
+  const renderFundGallery = (fund: DubaiFund) => {
+    if (!hasAssetGallery(fund.id)) return null;
+
+    return <DubaiFundAssetGallery fundId={fund.id} shouldReduceMotion={shouldReduceMotion} tx={tx} />;
+  };
 
   return (
     <section className="relative bg-surface/40 py-16 md:py-20 lg:py-20">
@@ -323,73 +562,27 @@ export function Dubai() {
               <h2 className="heading-section mt-4 max-w-2xl">{tx("Dubai")}</h2>
             </div>
 
-            <div className="flex flex-1 flex-col md:min-h-0" data-layout="dubai-first-viewport">
-              <DubaiFundCard fund={landingFund} idx={0} tx={tx} isLanding />
+            <div className="flex flex-1 flex-col md:min-h-0" data-layout="dubai-first-viewport" data-fund-card-shell={landingFund.id}>
+              <DubaiFundCard
+                fund={landingFund}
+                idx={0}
+                tx={tx}
+                isLanding
+              />
+              {renderFundGallery(landingFund)}
             </div>
           </div>
 
           <div className="grid gap-8" data-layout="remaining-dubai-fund-cards">
             {remainingFunds.map((fund, idx) => (
-              <DubaiFundCard key={fund.id} fund={fund} idx={idx + 1} tx={tx} />
-            ))}
-          </div>
-        </div>
-
-        <div className="scroll-reveal mt-10 grid gap-6 lg:grid-cols-[minmax(0,1.18fr)_minmax(300px,0.82fr)] lg:items-start">
-          <div
-            className="columns-1 gap-4 sm:columns-2"
-            aria-label="Fund I Eden House gallery"
-            data-layout="dense-masonry"
-          >
-            {aixcoFundGallery.map((src, index) => (
-              <motion.figure
-                key={src}
-                className={`group mb-4 break-inside-avoid overflow-hidden rounded-lg bg-background shadow-soft ${galleryAspectClass(src)}`}
-                initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 28, scale: 0.985 }}
-                whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.22, margin: "0px 0px -10% 0px" }}
-                transition={{
-                  duration: shouldReduceMotion ? 0.35 : 0.72,
-                  ease: shouldReduceMotion ? "easeOut" : [0.16, 1, 0.3, 1],
-                  delay: shouldReduceMotion ? 0 : (index % 3) * 0.05,
-                }}
-              >
-                <img
-                  src={src}
-                  alt={`Fund I Eden House gallery ${index + 1}`}
-                  loading="lazy"
-                  decoding="async"
-                  width={1280}
-                  height={720}
-                  className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+              <div key={fund.id} data-fund-card-shell={fund.id}>
+                <DubaiFundCard
+                  fund={fund}
+                  idx={idx + 1}
+                  tx={tx}
                 />
-              </motion.figure>
-            ))}
-          </div>
-          <div
-            className="grid grid-cols-3 gap-3 lg:sticky lg:top-24 lg:h-[calc(100svh-8rem)] lg:max-h-[calc(100svh-8rem)] lg:grid-cols-1 lg:grid-rows-3"
-            aria-label="Dubai fund images"
-            data-layout="viewport-fit-image-rail"
-          >
-            {dubaiStillRailImages.map((image) => (
-              <motion.figure
-                key={image.src}
-                className="group min-h-0 overflow-hidden rounded-lg bg-background shadow-soft"
-                initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 22, scale: 0.985 }}
-                whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.24, margin: "0px 0px -10% 0px" }}
-                transition={{ duration: shouldReduceMotion ? 0.35 : 0.66, ease: shouldReduceMotion ? "easeOut" : [0.16, 1, 0.3, 1] }}
-              >
-                <img
-                  src={image.src}
-                  alt={tx(image.title)}
-                  loading="lazy"
-                  decoding="async"
-                  width={1280}
-                  height={720}
-                  className="h-full min-h-0 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-                />
-              </motion.figure>
+                {renderFundGallery(fund)}
+              </div>
             ))}
           </div>
         </div>

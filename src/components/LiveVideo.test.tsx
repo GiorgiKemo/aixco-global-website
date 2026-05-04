@@ -60,7 +60,7 @@ describe("LiveVideo", () => {
     vi.restoreAllMocks();
   });
 
-  it("opens the preview inline without a visible CTA or blocking dialog", () => {
+  it("opens the clicked preview in an expanded player dialog", () => {
     render(<LiveVideo src="/sample-video.mp4" title="Fund I walkthrough" poster="/poster.jpg" eager />);
 
     expect(screen.queryByText(/view video/i)).not.toBeInTheDocument();
@@ -68,12 +68,14 @@ describe("LiveVideo", () => {
     const previewTarget = screen.getByRole("button", { name: /play video: fund i walkthrough/i });
     fireEvent.click(previewTarget);
 
-    const inlineVideo = screen.getByLabelText("Fund I walkthrough");
+    const dialog = screen.getByRole("dialog", { name: /expanded video: fund i walkthrough/i });
+    const expandedVideo = screen.getByLabelText("Fund I walkthrough expanded player");
 
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(inlineVideo).toHaveAttribute("src", "/sample-video.mp4");
-    expect(inlineVideo).toHaveAttribute("poster", "/poster.jpg");
-    expect(inlineVideo).toHaveAttribute("controls");
+    expect(dialog).toContainElement(expandedVideo);
+    expect(expandedVideo).toHaveAttribute("src", "/sample-video.mp4");
+    expect(expandedVideo).toHaveAttribute("poster", "/poster.jpg");
+    expect(expandedVideo).toHaveAttribute("controls");
+    expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
 
   it("loads nearby preview media but only plays while it is in focus", () => {
@@ -102,46 +104,32 @@ describe("LiveVideo", () => {
     expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
   });
 
-  it("mutes an inline video after it leaves focus and keeps it muted when focus returns", () => {
+  it("closes the expanded player with Escape and pauses playback", () => {
     render(<LiveVideo src="/sample-video.mp4" title="Batumi gallery 1" poster="/poster.jpg" eager />);
 
     fireEvent.click(screen.getByRole("button", { name: /play video: batumi gallery 1/i }));
 
-    const inlineVideo = screen.getByLabelText("Batumi gallery 1") as HTMLVideoElement;
-    expect(inlineVideo.muted).toBe(false);
+    expect(screen.getByRole("dialog", { name: /expanded video: batumi gallery 1/i })).toBeInTheDocument();
 
-    expect(MockIntersectionObserver.instances).toHaveLength(1);
-    act(() => {
-      MockIntersectionObserver.instances[0].trigger({ isIntersecting: false, intersectionRatio: 0 });
-    });
+    fireEvent.keyDown(window, { key: "Escape" });
 
-    expect(inlineVideo.muted).toBe(true);
-
-    act(() => {
-      MockIntersectionObserver.instances[0].trigger({ isIntersecting: true, intersectionRatio: 1 });
-    });
-
-    expect(inlineVideo.muted).toBe(true);
-    expect(inlineVideo).toHaveAttribute("controls");
+    expect(screen.queryByRole("dialog", { name: /expanded video: batumi gallery 1/i })).not.toBeInTheDocument();
+    expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
   });
 
-  it("keeps only the most recently opened inline video audible", () => {
+  it("keeps the inline preview muted while the expanded player is audible", () => {
     render(
       <>
         <LiveVideo src="/sample-video-one.mp4" title="Batumi gallery 1" poster="/poster-one.jpg" eager />
-        <LiveVideo src="/sample-video-two.mp4" title="Batumi gallery 2" poster="/poster-two.jpg" eager />
       </>,
     );
 
     fireEvent.click(screen.getByRole("button", { name: /play video: batumi gallery 1/i }));
 
-    const firstVideo = screen.getByLabelText("Batumi gallery 1") as HTMLVideoElement;
-    expect(firstVideo.muted).toBe(false);
+    const previewVideo = screen.getByLabelText("Batumi gallery 1") as HTMLVideoElement;
+    const expandedVideo = screen.getByLabelText("Batumi gallery 1 expanded player") as HTMLVideoElement;
 
-    fireEvent.click(screen.getByRole("button", { name: /play video: batumi gallery 2/i }));
-
-    const secondVideo = screen.getByLabelText("Batumi gallery 2") as HTMLVideoElement;
-    expect(firstVideo.muted).toBe(true);
-    expect(secondVideo.muted).toBe(false);
+    expect(previewVideo.muted).toBe(true);
+    expect(expandedVideo.muted).toBe(false);
   });
 });

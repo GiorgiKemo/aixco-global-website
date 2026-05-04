@@ -8,7 +8,6 @@ import { Participate } from "@/components/sections/Participate";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Team } from "@/components/sections/Team";
 import { Partners } from "@/components/sections/Partners";
-import { InsightsTeaser } from "@/components/sections/InsightsTeaser";
 import { FAQs } from "@/components/sections/FAQs";
 import { Contact } from "@/components/sections/Contact";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -39,9 +38,6 @@ const Index = () => {
         </ScrollReveal>
         <ScrollReveal>
           <Partners />
-        </ScrollReveal>
-        <ScrollReveal>
-          <InsightsTeaser />
         </ScrollReveal>
         <ScrollReveal>
           <FAQs />
