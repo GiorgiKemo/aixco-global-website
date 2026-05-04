@@ -40,4 +40,13 @@ describe("index.css motion rules", () => {
     expect(partnerInner).toContain("transform 420ms");
     expect(partnerInner).not.toContain("720ms");
   });
+
+  it("keeps the hero scroll cue visible on short desktop viewports", () => {
+    expect(css).toContain("@media (max-height: 820px) and (min-width: 768px)");
+    expect(css).toContain("[data-hero-content-stack=\"true\"]");
+    expect(css).toContain("transform: none !important");
+    expect(css).toContain("[data-hero-scroll-cue=\"viewport\"]");
+    expect(css).toContain("width: 4.25rem !important");
+    expect(css).toContain("[data-hero-lottie-arrow=\"true\"]");
+  });
 });

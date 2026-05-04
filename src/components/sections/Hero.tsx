@@ -313,25 +313,26 @@ export function Hero() {
               {tx(heroPriceText)}
             </span>
           </motion.div>
-
-          <motion.a
-            href="#about"
-            onClick={handleAboutClick}
-            aria-label="Scroll to About section"
-            className="relative top-[clamp(1.25rem,3svh,2.75rem)] mt-7 inline-flex h-28 w-28 items-center justify-center text-white/85 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] transition-colors duration-200 hover:text-white sm:mt-12"
-            initial={false}
-            animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 0 }}
-            transition={
-              shouldReduceMotion
-                ? { duration: 0.5, ease: "easeOut", delay: 0.74 }
-                : { duration: 0.7, delay: 1.36, ease: heroEase }
-            }
-            whileHover={{ scale: 1.08, transition: { duration: 0.18, ease: heroEase } }}
-            whileTap={{ scale: 0.96, transition: { duration: 0.08, ease: "easeOut" } }}
-          >
-            <HeroLottieArrow />
-          </motion.a>
         </div>
+
+        <motion.a
+          href="#about"
+          onClick={handleAboutClick}
+          data-hero-scroll-cue="viewport"
+          aria-label="Scroll to About section"
+          className="absolute inset-x-0 bottom-[clamp(1rem,4svh,2.75rem)] z-20 mx-auto inline-flex h-24 w-24 items-center justify-center text-white/85 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] transition-colors duration-200 hover:text-white sm:h-28 sm:w-28"
+          initial={false}
+          animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 0 }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0.5, ease: "easeOut", delay: 0.74 }
+              : { duration: 0.7, delay: 1.36, ease: heroEase }
+          }
+          whileHover={{ scale: 1.08, transition: { duration: 0.18, ease: heroEase } }}
+          whileTap={{ scale: 0.96, transition: { duration: 0.08, ease: "easeOut" } }}
+        >
+          <HeroLottieArrow />
+        </motion.a>
       </div>
     </section>
   );

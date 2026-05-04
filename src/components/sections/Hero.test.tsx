@@ -77,8 +77,15 @@ describe("Hero", () => {
     expect(container.querySelector("[data-hero-price-rule='true']")).not.toBeInTheDocument();
     expect(within(priceLockup as HTMLElement).getByText("STARTING FROM €1,000")).toBeInTheDocument();
     expect(priceText?.className).toContain("text-[clamp(1.2rem,5vw,3.5rem)]");
-    expect(scrollLink.className).toContain("mt-7");
-    expect(scrollLink.className).toContain("sm:mt-12");
+    expect(scrollLink).toHaveAttribute("data-hero-scroll-cue", "viewport");
+    expect(scrollLink.parentElement).toHaveAttribute("data-hero-composition", "reference-center");
+    expect(scrollLink.closest("[data-hero-content-stack='true']")).not.toBeInTheDocument();
+    expect(scrollLink.className).toContain("absolute");
+    expect(scrollLink.className).toContain("inset-x-0");
+    expect(scrollLink.className).toContain("bottom-[clamp(1rem,4svh,2.75rem)]");
+    expect(scrollLink.className).toContain("mx-auto");
+    expect(scrollLink.className).not.toContain("mt-7");
+    expect(scrollLink.className).not.toContain("sm:mt-12");
     expect(scrollLink.className).toContain("transition-colors");
     expect(scrollLink.className).toContain("duration-200");
     expect(brandDot).toHaveTextContent(".");

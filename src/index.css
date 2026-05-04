@@ -173,6 +173,23 @@
     }
   }
 
+  @media (max-height: 820px) and (min-width: 768px) {
+    [data-hero-content-stack="true"] {
+      transform: none !important;
+    }
+
+    [data-hero-scroll-cue="viewport"] {
+      bottom: 0.35rem !important;
+      height: 4.25rem !important;
+      width: 4.25rem !important;
+    }
+
+    [data-hero-lottie-arrow="true"] {
+      height: 4rem !important;
+      width: 4rem !important;
+    }
+  }
+
   .font-mono {
     font-family: "SFMono-Regular", ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
   }
