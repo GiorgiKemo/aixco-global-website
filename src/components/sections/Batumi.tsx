@@ -2,7 +2,7 @@ import { batumiBenefits, batumiProperties } from "@/data/site";
 import { ArrowRight, Building2, FileText, Home, Percent, ShieldCheck, TrendingUp, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
-import { aixcoBatumiGalleryVideos, aixcoLiveDocuments, aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
+import { aixcoBatumiGalleryVideos, aixcoLiveAssetDetails, aixcoLiveDocuments, aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 import { LiveVideo } from "@/components/LiveVideo";
 
@@ -19,6 +19,11 @@ const videoMap: Record<string, string> = {
 const documentMap: Record<string, string> = {
   guru: aixcoLiveDocuments.guru,
   otium: aixcoLiveDocuments.otium,
+};
+
+const detailAssetMap: Record<string, string> = {
+  guru: aixcoLiveAssetDetails.guruCatalog,
+  otium: aixcoLiveAssetDetails.otiumCatalog,
 };
 
 type BatumiProperty = (typeof batumiProperties)[number];
@@ -133,7 +138,7 @@ function BatumiMarketCard({ tx }: { tx: Translate }) {
       data-density="viewport-fit"
       data-image-position="right"
       data-design-source="dubai-card-reference"
-      className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:h-full md:min-h-0 md:max-h-full md:grid-cols-12 md:items-stretch lg:h-full lg:min-h-0 lg:max-h-full lg:grid-cols-12"
+      className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:grid-cols-12 md:items-stretch lg:grid-cols-12"
       whileHover={premiumSurfaceHover}
       whileTap={premiumPress}
     >
@@ -141,7 +146,7 @@ function BatumiMarketCard({ tx }: { tx: Translate }) {
         aria-label="Batumi overview media"
         data-media-frame="dubai-style-split-media"
         data-batumi-card-media
-        className="relative min-h-[22rem] overflow-hidden bg-foreground md:order-2 md:col-span-5 md:min-h-0 lg:order-2 lg:col-span-5 lg:min-h-0"
+        className="batumi-match-otium-video-height relative overflow-hidden bg-foreground md:order-2 md:col-span-5 lg:order-2 lg:col-span-5"
       >
         <LiveVideo
           src={aixcoLiveVideos.batumiOverview}
@@ -151,9 +156,6 @@ function BatumiMarketCard({ tx }: { tx: Translate }) {
           fit="cover"
           rootMargin="250px 0px"
         />
-        <span className="pointer-events-none absolute left-8 top-7 select-none font-display text-[clamp(5.4rem,8vw,7.8rem)] font-semibold leading-none tracking-tight text-white/20 md:left-10 md:top-9">
-          01
-        </span>
       </div>
       <div
         data-batumi-card-copy
@@ -203,8 +205,10 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
   const imageFirst = idx % 2 === 0;
   const mediaOrderClass = imageFirst ? "md:order-1 lg:order-1" : "md:order-2 lg:order-2";
   const copyOrderClass = imageFirst ? "md:order-2 lg:order-2" : "md:order-1 lg:order-1";
-  const documentHref = documentMap[property.url] ?? property.url;
+  const documentHref = detailAssetMap[property.url] ?? documentMap[property.url] ?? property.url;
   const metricCards = property.metrics;
+  const mediaHeightClass = property.id === "guru" ? "batumi-match-otium-video-height" : "min-h-[22rem] md:min-h-0 lg:min-h-0";
+  const videoMatteCropClass = property.id === "guru" ? "guru-video-matte-crop" : "";
 
   return (
     <motion.article
@@ -218,19 +222,17 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
     >
       <div
         data-batumi-property-media
-        className={`relative min-h-[22rem] overflow-hidden bg-foreground md:col-span-5 md:min-h-0 lg:col-span-5 lg:min-h-0 ${mediaOrderClass}`}
+        className={`relative overflow-hidden bg-foreground md:col-span-5 lg:col-span-5 ${mediaHeightClass} ${mediaOrderClass}`}
       >
         <LiveVideo
           src={videoMap[property.video]}
           title={tx(property.name)}
           poster={imageMap[property.image]}
           className="aspect-[4/5] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
+          videoClassName={videoMatteCropClass}
           fit="cover"
           rootMargin="700px 0px"
         />
-        <span className="pointer-events-none absolute left-8 top-7 select-none font-display text-[clamp(5.4rem,8vw,7.8rem)] font-semibold leading-none tracking-tight text-white/20 md:left-10 md:top-9">
-          0{idx + 2}
-        </span>
         <a
           href={documentHref}
           target="_blank"

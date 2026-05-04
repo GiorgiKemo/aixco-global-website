@@ -140,6 +140,21 @@
     transition: opacity 640ms var(--ease-apple);
   }
 
+  .guru-video-matte-crop {
+    transform: scaleY(1.06) !important;
+    transform-origin: center !important;
+  }
+
+  .batumi-match-otium-video-height {
+    min-height: 22rem;
+  }
+
+  @media (min-width: 768px) {
+    .batumi-match-otium-video-height {
+      min-height: clamp(39rem, calc(100svh - 3rem), 44rem);
+    }
+  }
+
   .hero-video-scrim {
     background:
       linear-gradient(

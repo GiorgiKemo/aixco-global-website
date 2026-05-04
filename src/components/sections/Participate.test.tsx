@@ -82,4 +82,14 @@ describe("Participate", () => {
     expect(screen.getByLabelText("Buy the AIXCO 6% Bond")).toHaveClass("object-cover");
     expect(screen.getByLabelText("Buy an Apartment in Batumi")).toHaveClass("object-cover");
   });
+
+  it("allows the slash-separated participation headline to wrap on narrow phones", () => {
+    const { container } = renderParticipate();
+
+    const heading = screen.getByRole("heading", { name: /Customers\/\s*Partners Profit/ });
+
+    expect(heading).toHaveClass("[overflow-wrap:anywhere]");
+    expect(heading.querySelector("wbr")).toBeInTheDocument();
+    expect(container.querySelector("section#participate")).toHaveClass("overflow-hidden");
+  });
 });

@@ -2,7 +2,7 @@ import { dubaiFunds } from "@/data/site";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Building2, HandCoins, TrendingUp, type LucideIcon } from "lucide-react";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
-import { aixcoFundGallery, aixcoLiveImages } from "@/lib/aixco-live-assets";
+import { aixcoFundGallery, aixcoLiveAssetDetails, aixcoLiveImages } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const imageMap: Record<string, string> = {
@@ -15,6 +15,11 @@ const dubaiStillRailImages = [
   { src: aixcoFundGallery[7], title: "Eden House completed facade" },
   { src: aixcoFundGallery[12], title: "Dubai project streetscape" },
 ] as const;
+
+const detailAssetMap: Record<string, string> = {
+  "fund-1": aixcoLiveAssetDetails.dubaiFundOne,
+  "fund-2": aixcoLiveAssetDetails.dubaiFundTwo,
+};
 
 function galleryAspectClass(src: string) {
   if (src.endsWith("/fund1.png")) return "aspect-[2/3]";
@@ -212,6 +217,7 @@ function DubaiFundCard({
   const detailListClass = isViewportFit
     ? "grid gap-5 bg-surface/45 p-5 md:grid-cols-3 md:gap-5 md:p-6 lg:p-7"
     : "grid gap-7 bg-surface/45 p-7 md:grid-cols-3 md:gap-8 md:p-9 lg:p-10";
+  const detailHref = detailAssetMap[fund.id] ?? imageMap[fund.image];
 
   return (
     <motion.article
@@ -241,15 +247,16 @@ function DubaiFundCard({
           transition={{ duration: 1.45, ease: "easeOut" }}
         />
         <div className="absolute inset-0 bg-gradient-to-tr from-foreground/45 via-foreground/12 to-transparent" aria-hidden />
-        <span className="pointer-events-none absolute left-8 top-7 select-none font-display text-[clamp(5.4rem,8vw,7.8rem)] font-semibold leading-none tracking-tight text-white/20 md:left-10 md:top-9">
-          0{idx + 1}
-        </span>
-        <div className="absolute bottom-8 left-8 z-10 md:bottom-10 md:left-10">
-          <span className="inline-flex items-center gap-3 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white">
-            {tx("View Asset Details")}
-            <ArrowRight size={17} className="text-primary transition-transform duration-200 group-hover:translate-x-2" />
-          </span>
-        </div>
+        <a
+          href={detailHref}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`${tx("View Asset Details")}: ${tx(fund.name)}`}
+          className="absolute bottom-8 left-8 z-20 inline-flex items-center gap-3 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors duration-200 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-foreground md:bottom-10 md:left-10"
+        >
+          {tx("View Asset Details")}
+          <ArrowRight size={17} className="text-primary transition-transform duration-200 group-hover:translate-x-2" />
+        </a>
       </div>
       <div
         data-fund-copy

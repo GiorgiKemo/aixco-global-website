@@ -159,4 +159,30 @@ describe("Dubai", () => {
     expect(performanceTile?.className).toContain("bg-foreground");
     expect(performanceTile?.className).not.toContain("transition-all");
   });
+
+  it("does not render oversized numbering over Dubai fund media", () => {
+    const { container } = renderDubai();
+
+    const fundCards = container.querySelectorAll("[data-fund-card]");
+
+    expect(fundCards).toHaveLength(2);
+    expect(fundCards[0].querySelector("[data-fund-media]")).not.toHaveTextContent("01");
+    expect(fundCards[1].querySelector("[data-fund-media]")).not.toHaveTextContent("02");
+  });
+
+  it("makes Dubai fund asset details clickable with the source assets", () => {
+    const { container } = renderDubai();
+
+    const fundOne = container.querySelector("[data-fund-card='fund-1']");
+    const fundTwo = container.querySelector("[data-fund-card='fund-2']");
+
+    expect(within(fundOne as HTMLElement).getByRole("link", { name: /View Asset Details: Fund I/ })).toHaveAttribute(
+      "href",
+      expect.stringContaining("/aixco-global-op2/images/fund/fund1.jpeg"),
+    );
+    expect(within(fundTwo as HTMLElement).getByRole("link", { name: /View Asset Details: Fund II/ })).toHaveAttribute(
+      "href",
+      expect.stringContaining("/aixco-global-op2/images/fund2.png"),
+    );
+  });
 });

@@ -32,4 +32,37 @@ describe("About", () => {
     expect(storyImage).toHaveAttribute("data-frame", "tall");
     expect(storyImage).toHaveAttribute("data-image-treatment", "uncropped");
   });
+
+  it("centers the desktop About layout inside the navbar-aware viewport", () => {
+    const { container } = renderAbout();
+
+    const section = container.querySelector("section#about");
+    const layout = container.querySelector('[data-section-layout="about-balanced-two-column"]');
+    const story = screen.getByLabelText("About AIXCO story and media");
+    const metrics = screen.getByLabelText("AIXCO performance metrics");
+    const storyImage = screen.getByRole("img", {
+      name: "Batumi skyline and landmark towers from the live AIXCO site",
+    });
+
+    expect(section?.className).toContain("lg:flex");
+    expect(section?.className).toContain("lg:min-h-[calc(100svh-5rem)]");
+    expect(section?.className).toContain("lg:items-center");
+    expect(section?.className).toContain("lg:py-0");
+    expect(section?.className).not.toContain("lg:py-24");
+    expect(layout?.className).toContain("lg:items-center");
+    expect(story.className).toContain("lg:self-center");
+    expect(metrics.className).toContain("lg:self-center");
+    expect(storyImage.parentElement?.className).toContain("lg:aspect-[16/9]");
+  });
+
+  it("keeps the About image clean without a blurred duplicate background", () => {
+    const { container } = renderAbout();
+
+    const imageFrame = screen
+      .getByRole("img", { name: "Batumi skyline and landmark towers from the live AIXCO site" })
+      .parentElement;
+
+    expect(imageFrame?.querySelectorAll('img[src*="batumip.png"]')).toHaveLength(1);
+    expect(imageFrame?.querySelector("[class*='blur']")).not.toBeInTheDocument();
+  });
 });

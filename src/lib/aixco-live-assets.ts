@@ -53,6 +53,15 @@ export const aixcoLiveDocuments = {
   otium: `${documentBase}/otium.pdf`,
 } as const;
 
+export const aixcoLiveAssetDetails = {
+  dubaiFundOne: `${liveImageBase}/fund/fund1.jpeg`,
+  dubaiFundTwo: `${liveImageBase}/fund2.png`,
+  guruCatalog: `${documentBase}/guru-catalog.jpeg`,
+  otiumCatalog: `${documentBase}/otium-catalog.jpeg`,
+  guruPdf: aixcoLiveDocuments.guru,
+  otiumPdf: aixcoLiveDocuments.otium,
+} as const;
+
 export const aixcoLiveLogos = {
   aixcoGlobal: `${liveImageBase}/AIXCOGlobalWlong.png`,
   aixcoMark: `${liveImageBase}/AIXW.png`,

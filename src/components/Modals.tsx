@@ -297,7 +297,7 @@ export function Modals() {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 animate-fade-in">
       <div className="absolute inset-0 bg-background/70 backdrop-blur-xl" onClick={close} aria-hidden />
-      <div role="dialog" aria-modal="true" className="relative max-h-[88vh] w-full max-w-5xl overflow-y-auto glass rounded-lg shadow-elegant animate-scale-in">
+      <div role="dialog" aria-modal="true" className="relative max-h-[88vh] w-full max-w-5xl overflow-y-auto glass rounded-lg shadow-elegant animate-scale-in [overflow-wrap:anywhere]">
         <button aria-label="Close" onClick={close} className="icon-button-glass absolute right-3 top-3 z-10 h-9 w-9">
           <X className="h-4 w-4" />
         </button>

@@ -44,10 +44,12 @@ describe("Batumi", () => {
     expect(marketCard).toHaveAttribute("data-image-position", "right");
     expect(marketCard?.className).toContain("transition-[transform,box-shadow,border-color]");
     expect(marketCard?.className).not.toContain("transition-all");
-    expect(marketCard?.className).toContain("md:h-full");
-    expect(marketCard?.className).toContain("md:max-h-full");
+    expect(marketCard?.className).not.toContain("md:h-full");
+    expect(marketCard?.className).not.toContain("md:max-h-full");
     expect(marketCard?.className).toContain("md:grid-cols-12");
     expect(media?.className).toContain("md:col-span-5");
+    expect(media?.className).toContain("batumi-match-otium-video-height");
+    expect(media?.className).not.toContain("md:min-h-0");
     expect(copy?.className).toContain("md:col-span-7");
     expect(metricGrid?.className).toContain("md:grid-cols-3");
     expect(entryTile?.className).toContain("bg-foreground");
@@ -97,7 +99,9 @@ describe("Batumi", () => {
     expect(guruCard?.className).not.toContain("transition-all");
     expect(guruCard?.className).toContain("md:grid-cols-12");
     expect(guruMedia?.className).toContain("md:col-span-5");
+    expect(guruMedia?.className).toContain("batumi-match-otium-video-height");
     expect(otiumMedia?.className).toContain("md:order-2");
+    expect(otiumMedia?.className).not.toContain("batumi-match-otium-video-height");
     expect(within(guruCard as HTMLElement).getByRole("heading", { name: "Guru" })).toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).getByRole("heading", { name: "Otium" })).toBeInTheDocument();
     expect(guruTitle?.className).toContain("border-b");
@@ -114,6 +118,7 @@ describe("Batumi", () => {
     expect(guruDetails).toHaveTextContent("$600/month");
     expect(guruDetails).toHaveTextContent("12% ROI");
     expect(guruCard).not.toHaveTextContent("Guru PDF");
+    expect(within(guruCard as HTMLElement).getByLabelText("Guru")).toHaveClass("guru-video-matte-crop");
     expect(otiumCard).toHaveTextContent("59 Adlia Street");
     expect(otiumCard).toHaveTextContent("408");
     expect(otiumCard).toHaveTextContent("total units");
@@ -125,15 +130,16 @@ describe("Batumi", () => {
     expect(otiumDetails).toHaveTextContent("45,000 sqm");
     expect(otiumDetails).toHaveTextContent("$80/night");
     expect(otiumCard).not.toHaveTextContent("Otium PDF");
+    expect(within(otiumCard as HTMLElement).getByLabelText("Otium")).not.toHaveClass("guru-video-matte-crop");
     expect(within(guruCard as HTMLElement).getByRole("button", { name: /Play video: Guru/ })).toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).getByRole("button", { name: /Play video: Otium/ })).toBeInTheDocument();
     expect(within(guruCard as HTMLElement).getByRole("link", { name: /View Asset Details: Guru/ })).toHaveAttribute(
       "href",
-      expect.stringContaining("guru.pdf"),
+      expect.stringContaining("guru-catalog.jpeg"),
     );
     expect(within(otiumCard as HTMLElement).getByRole("link", { name: /View Asset Details: Otium/ })).toHaveAttribute(
       "href",
-      expect.stringContaining("otium.pdf"),
+      expect.stringContaining("otium-catalog.jpeg"),
     );
     expect(within(guruCard as HTMLElement).queryByRole("link", { name: /Open Guru profile/ })).not.toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).queryByRole("link", { name: /Open Otium profile/ })).not.toBeInTheDocument();
@@ -154,5 +160,16 @@ describe("Batumi", () => {
     expect(screen.queryByText("Serenade")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Play video: Queens/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Play video: Serenade/ })).not.toBeInTheDocument();
+  });
+
+  it("does not render oversized numbering over Batumi card media", () => {
+    const { container } = renderBatumi();
+
+    const marketMedia = container.querySelector("[data-batumi-card-media]");
+    const propertyCards = container.querySelectorAll("[data-batumi-property-card]");
+
+    expect(marketMedia).not.toHaveTextContent("01");
+    expect(propertyCards[0].querySelector("[data-batumi-property-media]")).not.toHaveTextContent("02");
+    expect(propertyCards[1].querySelector("[data-batumi-property-media]")).not.toHaveTextContent("03");
   });
 });

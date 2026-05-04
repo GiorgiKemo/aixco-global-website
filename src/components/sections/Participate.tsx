@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { participationRoutes } from "@/data/site";
 import { useUI } from "../ui-state";
 import { motion } from "framer-motion";
-import { type MouseEvent } from "react";
+import { Fragment, type MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -15,6 +15,26 @@ const videoMap: Record<string, { src: string; poster: string }> = {
 };
 
 type ParticipationRoute = (typeof participationRoutes)[number];
+
+function SlashBreakText({ text }: { text: string }) {
+  const parts = text.split("/");
+
+  return (
+    <>
+      {parts.map((part, index) => (
+        <Fragment key={`${part}-${index}`}>
+          {part}
+          {index < parts.length - 1 && (
+            <>
+              /
+              <wbr />
+            </>
+          )}
+        </Fragment>
+      ))}
+    </>
+  );
+}
 
 function ParticipationRouteCard({
   route,
@@ -112,8 +132,8 @@ export function Participate() {
       <div className="container-x">
         <div className="scroll-reveal mb-2 max-w-6xl">
           <p className="eyebrow">{tx("Ways to Participate")}</p>
-          <h2 className="heading-section mt-4 text-[clamp(2.65rem,4.1vw,3.5rem)] leading-[1.02]">
-            <span className="text-gold">{tx("How")}</span> {tx("Customers/Partners Profit")}
+          <h2 className="heading-section mt-4 max-w-full text-[clamp(2.25rem,10vw,3.5rem)] leading-[1.02] [overflow-wrap:anywhere] sm:text-[clamp(2.65rem,4.1vw,3.5rem)]">
+            <span className="text-gold">{tx("How")}</span> <SlashBreakText text={tx("Customers/Partners Profit")} />
           </h2>
           <p className="mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.56] text-foreground/80">
             {tx("Choose the route that fits your goals. Customers can either subscribe to the AIXCO 6% bond, secured by underlying property, or purchase an apartment directly and benefit from rental income potential, capital appreciation, and Batumi’s favorable tax environment.")}

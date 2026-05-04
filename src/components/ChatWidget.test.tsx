@@ -53,4 +53,18 @@ describe("ChatWidget", () => {
     expect(indicator).toBeInTheDocument();
     expect(indicator).toHaveClass("right-1", "top-1");
   });
+
+  it("bounds the open chat panel to short mobile viewports", () => {
+    const { container } = renderWidget();
+
+    fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
+
+    expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toHaveClass(
+      "flex",
+      "h-[min(640px,calc(100svh-6.5rem))]",
+      "max-h-[calc(100svh-6.5rem)]",
+    );
+    expect(container.querySelector("[data-chat-messages]")).toHaveClass("min-h-0", "flex-1", "overflow-y-auto");
+    expect(container.querySelector("[data-chat-quick-replies]")).toHaveClass("overflow-x-auto");
+  });
 });
