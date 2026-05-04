@@ -559,7 +559,7 @@
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
     overscroll-behavior-inline: contain;
     padding-block: 0.25rem 0.45rem;
@@ -583,6 +583,7 @@
     display: flex;
     width: max-content;
     min-width: max-content;
+    will-change: transform;
   }
 
   .dubai-image-marquee-set {
@@ -603,6 +604,9 @@
 
   .dubai-gallery-tile img {
     display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
   }
 
   .partner-flip-back {

@@ -1,6 +1,6 @@
-import { useEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
+import { useCallback, useEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
 import { dubaiFunds } from "@/data/site";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useAnimationFrame, useMotionValue, useMotionValueEvent, useReducedMotion, useSpring } from "framer-motion";
 import { ArrowRight, Building2, HandCoins, TrendingUp, type LucideIcon } from "lucide-react";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import {
@@ -197,13 +197,18 @@ function PrestigeHighlightItem({
   );
 }
 
-function getNormalizedGalleryScrollLeft(container: HTMLDivElement, scrollLeft: number) {
-  const loopWidth = container.scrollWidth / 2;
-  if (loopWidth <= container.clientWidth) return scrollLeft;
+function getRenderedGalleryOffset(loopWidth: number, offset: number) {
+  if (loopWidth === 0) return Math.max(0, offset);
 
-  if (scrollLeft >= loopWidth) return scrollLeft - loopWidth;
-  if (scrollLeft <= 0) return scrollLeft + loopWidth;
-  return scrollLeft;
+  return ((offset % loopWidth) + loopWidth) % loopWidth;
+}
+
+function getGalleryWheelDelta(event: WheelEvent) {
+  const primaryDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+
+  if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return primaryDelta * 18;
+  if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return primaryDelta * window.innerWidth;
+  return primaryDelta;
 }
 
 function DubaiImageMarquee({
@@ -216,54 +221,103 @@ function DubaiImageMarquee({
   tx: Translate;
 }) {
   const viewportRef = useRef<HTMLDivElement>(null);
-  const currentScrollRef = useRef(0);
-  const targetScrollRef = useRef(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const loopWidthRef = useRef(0);
+  const visualOffsetRef = useRef(0);
   const dragRef = useRef({
     active: false,
     lastX: 0,
     lastTime: 0,
     velocity: 0,
   });
+  const interactionPauseUntilRef = useRef(0);
+  const trackX = useMotionValue(0);
+  const targetOffset = useMotionValue(0);
+  const smoothOffset = useSpring(targetOffset, {
+    stiffness: shouldReduceMotion ? 150 : 96,
+    damping: shouldReduceMotion ? 32 : 24,
+    mass: shouldReduceMotion ? 0.55 : 0.72,
+    restDelta: 0.001,
+  });
 
-  const syncGalleryScroll = (viewport: HTMLDivElement, nextScrollLeft: number) => {
-    const normalized = getNormalizedGalleryScrollLeft(viewport, nextScrollLeft);
-    viewport.scrollLeft = normalized;
-    currentScrollRef.current = normalized;
-    targetScrollRef.current = normalized;
-    return normalized;
-  };
+  const renderGalleryOffset = useCallback((offset: number) => {
+    const renderedOffset = getRenderedGalleryOffset(loopWidthRef.current, offset);
+    trackX.set(-renderedOffset);
+  }, [trackX]);
+
+  const setImmediateGalleryOffset = useCallback((offset: number) => {
+    targetOffset.jump(offset);
+    smoothOffset.jump(offset);
+    visualOffsetRef.current = offset;
+    renderGalleryOffset(offset);
+  }, [renderGalleryOffset, smoothOffset, targetOffset]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return undefined;
 
     const handleWheel = (event: WheelEvent) => {
-      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      if (!event.cancelable || event.ctrlKey || event.metaKey || event.altKey) return;
+
+      const delta = getGalleryWheelDelta(event);
+      if (Math.abs(delta) < 1) return;
 
       event.preventDefault();
-      if (shouldReduceMotion) {
-        syncGalleryScroll(viewport, viewport.scrollLeft + event.deltaY);
-        return;
-      }
-
-      targetScrollRef.current = getNormalizedGalleryScrollLeft(viewport, targetScrollRef.current + event.deltaY * 1.15);
+      targetOffset.set(targetOffset.get() + delta * (shouldReduceMotion ? 0.82 : 1.18));
+      interactionPauseUntilRef.current = window.performance.now() + 520;
     };
 
     viewport.addEventListener("wheel", handleWheel, { passive: false });
     return () => viewport.removeEventListener("wheel", handleWheel);
-  }, [shouldReduceMotion]);
+  }, [shouldReduceMotion, targetOffset]);
+
+  useEffect(() => {
+    const updateLoopWidth = () => {
+      const track = trackRef.current;
+      if (!track) return;
+
+      loopWidthRef.current = track.scrollWidth / 2;
+      renderGalleryOffset(visualOffsetRef.current);
+    };
+
+    updateLoopWidth();
+    window.addEventListener("resize", updateLoopWidth);
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined" || !trackRef.current ? null : new ResizeObserver(updateLoopWidth);
+
+    resizeObserver?.observe(trackRef.current);
+
+    return () => {
+      window.removeEventListener("resize", updateLoopWidth);
+      resizeObserver?.disconnect();
+    };
+  }, [group.images, renderGalleryOffset]);
+
+  useMotionValueEvent(smoothOffset, "change", (latest) => {
+    visualOffsetRef.current = latest;
+    renderGalleryOffset(latest);
+  });
+
+  useAnimationFrame((time, delta) => {
+    if (!trackRef.current || dragRef.current.active || time < interactionPauseUntilRef.current) return;
+
+    const deltaSeconds = Math.min(delta, 64) / 1000;
+    if (deltaSeconds <= 0) return;
+
+    targetOffset.set(targetOffset.get() + (shouldReduceMotion ? 22 : 46) * deltaSeconds);
+  });
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       const drag = dragRef.current;
-      const viewport = viewportRef.current;
-      if (!drag.active || !viewport) return;
+      if (!drag.active) return;
 
       const deltaX = event.clientX - drag.lastX;
       const deltaTime = Math.max(16, event.timeStamp - drag.lastTime);
-      const nextScrollLeft = viewport.scrollLeft - deltaX;
+      const nextOffset = visualOffsetRef.current - deltaX;
 
-      syncGalleryScroll(viewport, nextScrollLeft);
+      setImmediateGalleryOffset(nextOffset);
       drag.velocity = (-deltaX / deltaTime) * 1000;
       drag.lastX = event.clientX;
       drag.lastTime = event.timeStamp;
@@ -271,11 +325,12 @@ function DubaiImageMarquee({
     };
 
     const finishMouseDrag = () => {
-      const viewport = viewportRef.current;
-      if (!dragRef.current.active || !viewport) return;
+      const drag = dragRef.current;
+      if (!drag.active) return;
 
-      dragRef.current.active = false;
-      targetScrollRef.current = viewport.scrollLeft;
+      drag.active = false;
+      targetOffset.set(visualOffsetRef.current + drag.velocity * (shouldReduceMotion ? 0.16 : 0.34));
+      interactionPauseUntilRef.current = window.performance.now() + 420;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -284,59 +339,18 @@ function DubaiImageMarquee({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", finishMouseDrag);
     };
-  }, []);
-
-  useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport || shouldReduceMotion) return undefined;
-
-    let animationFrame = 0;
-    let previousTime = 0;
-    const autoPixelsPerSecond = 46;
-    const easing = 0.12;
-    const frictionPerSecond = 0.085;
-
-    const tick = (time: number) => {
-      if (previousTime === 0) previousTime = time;
-      const deltaSeconds = (time - previousTime) / 1000;
-      previousTime = time;
-
-      if (!dragRef.current.active) {
-        targetScrollRef.current += autoPixelsPerSecond * deltaSeconds;
-
-        if (Math.abs(dragRef.current.velocity) > 1) {
-          targetScrollRef.current += dragRef.current.velocity * deltaSeconds;
-          dragRef.current.velocity *= Math.pow(frictionPerSecond, deltaSeconds);
-        } else {
-          dragRef.current.velocity = 0;
-        }
-
-        currentScrollRef.current += (targetScrollRef.current - currentScrollRef.current) * easing;
-        const normalized = getNormalizedGalleryScrollLeft(viewport, currentScrollRef.current);
-        viewport.scrollLeft = normalized;
-        currentScrollRef.current = normalized;
-        targetScrollRef.current = getNormalizedGalleryScrollLeft(viewport, targetScrollRef.current);
-      }
-
-      animationFrame = window.requestAnimationFrame(tick);
-    };
-
-    currentScrollRef.current = viewport.scrollLeft;
-    targetScrollRef.current = viewport.scrollLeft;
-    animationFrame = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(animationFrame);
-  }, [group.images, shouldReduceMotion]);
+  }, [setImmediateGalleryOffset, shouldReduceMotion, targetOffset]);
 
   const handleMouseDown = (event: ReactMouseEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
 
-    const viewport = event.currentTarget;
+    const currentOffset = visualOffsetRef.current || targetOffset.get();
+
     dragRef.current.active = true;
     dragRef.current.lastX = event.clientX;
     dragRef.current.lastTime = event.timeStamp;
     dragRef.current.velocity = 0;
-    currentScrollRef.current = viewport.scrollLeft;
-    targetScrollRef.current = viewport.scrollLeft;
+    setImmediateGalleryOffset(currentOffset);
     event.preventDefault();
   };
 
@@ -348,12 +362,22 @@ function DubaiImageMarquee({
       data-gallery-group={group.title}
       data-layout="horizontal-infinite-gallery"
       data-drag-scroll="left-mouse"
-      data-native-scroll="true"
+      data-auto-scroll="continuous"
+      data-motion-preference={shouldReduceMotion ? "reduced" : "standard"}
+      data-motion-engine="framer-motion"
+      data-visual-scroll="framer-transform"
+      data-glide-scroll-native="true"
       data-scroll-easing="true"
-      data-scroll-mode="horizontal-smooth-glide-loop"
+      data-scroll-mode="framer-motion-glide-loop"
+      data-scroll-physics="auto-wheel-drag-glide"
       onMouseDown={handleMouseDown}
     >
-      <div className="dubai-image-marquee-track" data-gallery-track="horizontal-loop">
+      <motion.div
+        ref={trackRef}
+        className="dubai-image-marquee-track"
+        data-gallery-track="framer-motion-loop"
+        style={{ x: trackX }}
+      >
         {[0, 1].map((setIndex) => (
           <div
             key={`${group.title}-${setIndex}`}
@@ -368,15 +392,17 @@ function DubaiImageMarquee({
                   alt={setIndex === 0 ? tx(image.title) : ""}
                   loading="lazy"
                   decoding="async"
+                  draggable={false}
                   width={1280}
                   height={720}
                   className="h-full w-full object-cover"
+                  onDragStart={(event) => event.preventDefault()}
                 />
               </figure>
             ))}
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

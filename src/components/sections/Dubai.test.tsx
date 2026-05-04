@@ -1,5 +1,5 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { Dubai } from "./Dubai";
 
@@ -11,7 +11,30 @@ function renderDubai() {
   );
 }
 
+function mockGalleryAnimationFrames() {
+  const callbacks: FrameRequestCallback[] = [];
+
+  vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+    callbacks.push(callback);
+    return callbacks.length;
+  });
+  vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => undefined);
+
+  return {
+    runQueuedFrames(time: number) {
+      const queued = callbacks.splice(0);
+      act(() => {
+        queued.forEach((callback) => callback(time));
+      });
+    },
+  };
+}
+
 describe("Dubai", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("lays out fund cards as alternating image and copy columns", () => {
     const { container } = renderDubai();
 
@@ -119,7 +142,7 @@ describe("Dubai", () => {
 
     const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
-    const railTrack = parkRail.querySelector("[data-gallery-track='horizontal-loop']");
+    const railTrack = parkRail.querySelector("[data-gallery-track='framer-motion-loop']");
     const railSets = parkRail.querySelectorAll("[data-gallery-set]");
 
     expect(parkRail).toHaveAttribute("data-layout", "horizontal-infinite-gallery");
@@ -129,11 +152,38 @@ describe("Dubai", () => {
     expect(railTrack?.className).toContain("dubai-image-marquee-track");
     expect(railSets).toHaveLength(2);
     expect(railSets[1]).toHaveAttribute("aria-hidden", "true");
-    expect(within(railSets[0] as HTMLElement).getByAltText("Eden House The Park construction progress")).toBeInTheDocument();
+    expect(within(railSets[0] as HTMLElement).getByAltText("Eden House The Park construction progress")).toHaveAttribute("draggable", "false");
     expect(container.querySelectorAll("[data-gallery-tile]").length).toBeGreaterThan(0);
   });
 
-  it("makes the image rails real horizontal scroll containers", () => {
+  it("uses Framer Motion-controlled image rails instead of direct native scroll stepping", () => {
+    renderDubai();
+
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
+    const railTrack = parkRail.querySelector("[data-gallery-track='framer-motion-loop']");
+
+    Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
+    Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
+    parkRail.scrollLeft = 0;
+
+    fireEvent.wheel(parkRail, { deltaX: 0, deltaY: 180 });
+
+    expect(parkRail.closest("section")?.className).toContain("min-w-0");
+    expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
+    expect(parkRail).toHaveAttribute("data-visual-scroll", "framer-transform");
+    expect(parkRail).toHaveAttribute("data-glide-scroll-native", "true");
+    expect(parkRail).not.toHaveAttribute("data-native-scroll");
+    expect(parkRail).toHaveAttribute("data-scroll-mode", "framer-motion-glide-loop");
+    expect(parkRail).toHaveAttribute("data-scroll-easing", "true");
+    expect(parkRail).toHaveAttribute("data-drag-scroll", "left-mouse");
+    expect(parkRail.className).toContain("cursor-grab");
+    expect(railTrack).toBeInTheDocument();
+    expect(parkRail.scrollLeft).toBe(0);
+  });
+
+  it("auto-advances image rails on animation frames", () => {
+    const frames = mockGalleryAnimationFrames();
     renderDubai();
 
     const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
@@ -143,15 +193,31 @@ describe("Dubai", () => {
     Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
     parkRail.scrollLeft = 0;
 
-    fireEvent.wheel(parkRail, { deltaX: 0, deltaY: 180 });
+    frames.runQueuedFrames(1000);
+    frames.runQueuedFrames(2000);
 
-    expect(parkRail.closest("section")?.className).toContain("min-w-0");
-    expect(parkRail).toHaveAttribute("data-native-scroll", "true");
-    expect(parkRail).toHaveAttribute("data-scroll-mode", "horizontal-smooth-glide-loop");
-    expect(parkRail).toHaveAttribute("data-scroll-easing", "true");
-    expect(parkRail).toHaveAttribute("data-drag-scroll", "left-mouse");
-    expect(parkRail.className).toContain("cursor-grab");
-    expect(parkRail.scrollLeft).toBeLessThan(180);
+    expect(parkRail).toHaveAttribute("data-auto-scroll", "continuous");
+    expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
+  });
+
+  it("glides backward wheel input into the loop tail instead of crawling forward through the rail", () => {
+    const frames = mockGalleryAnimationFrames();
+    renderDubai();
+
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
+
+    Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
+    Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
+    parkRail.scrollLeft = 0;
+
+    frames.runQueuedFrames(1000);
+    fireEvent.wheel(parkRail, { deltaX: 0, deltaY: -180 });
+    frames.runQueuedFrames(1016);
+
+    expect(parkRail).toHaveAttribute("data-scroll-mode", "framer-motion-glide-loop");
+    expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
+    expect(parkRail.scrollLeft).toBe(0);
   });
 
   it("lets users drag image rails horizontally with the left mouse button", () => {
@@ -169,7 +235,7 @@ describe("Dubai", () => {
     fireEvent.mouseUp(window, { clientX: 220 });
 
     expect(parkRail).toHaveAttribute("data-drag-scroll", "left-mouse");
-    expect(parkRail.scrollLeft).toBeGreaterThan(600);
+    expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
   });
 
   it("uses still images instead of Dubai fund videos", () => {
