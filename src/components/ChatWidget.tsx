@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Bot, Mail, MessageCircle, Send, UserRound, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Bot, Mail, Send, UserRound, X } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import type { AnimationItem } from "lottie-web";
 import { company } from "@/data/site";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useUI } from "./ui-state";
@@ -15,6 +16,7 @@ type ChatMessage = {
 };
 
 const STORAGE_KEY = "aixco-live-chat";
+const chatSupportLottiePath = "/animations/chat-support-gold.json";
 
 const quickReplies = [
   "AIXCO 6% Bond",
@@ -62,6 +64,50 @@ function getAutoReply(message: string) {
   return "Thanks. The AIXCO team has your note. Add any budget, role, timeline, or preferred project details and email the transcript when you are ready.";
 }
 
+function ChatSupportIcon({ reduceMotion }: { reduceMotion: boolean | null }) {
+  const containerRef = useRef<HTMLSpanElement | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || import.meta.env.MODE === "test") return;
+
+    let animation: AnimationItem | null = null;
+    let cancelled = false;
+
+    import("lottie-web/build/player/lottie_light").then(({ default: lottie }) => {
+      if (cancelled || !containerRef.current) return;
+
+      animation = lottie.loadAnimation({
+        container: containerRef.current,
+        renderer: "svg",
+        loop: !reduceMotion,
+        autoplay: !reduceMotion,
+        path: chatSupportLottiePath,
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid meet",
+        },
+      });
+
+      if (reduceMotion) {
+        animation.addEventListener("DOMLoaded", () => animation?.goToAndStop(18, true));
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      animation?.destroy();
+    };
+  }, [reduceMotion]);
+
+  return (
+    <span
+      ref={containerRef}
+      aria-hidden="true"
+      data-chat-support-lottie="true"
+      className="block h-10 w-10 scale-x-[-1] md:h-12 md:w-12 [&_svg]:!block [&_svg]:!h-full [&_svg]:!w-full"
+    />
+  );
+}
+
 function loadStoredMessages() {
   if (typeof window === "undefined") return initialMessages();
 
@@ -78,6 +124,7 @@ function loadStoredMessages() {
 export function ChatWidget() {
   const { tx } = useI18n();
   const { openRegister } = useUI();
+  const shouldReduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(loadStoredMessages);
   const [draft, setDraft] = useState("");
@@ -250,7 +297,7 @@ export function ChatWidget() {
         whileHover={{ y: -2, scale: 1.03 }}
         whileTap={premiumPress}
       >
-        <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
+        <ChatSupportIcon reduceMotion={shouldReduceMotion} />
         {!isOpen && (
           <span className="absolute right-0 top-0 h-3 w-3 rounded-full border-2 border-background bg-success" aria-hidden />
         )}

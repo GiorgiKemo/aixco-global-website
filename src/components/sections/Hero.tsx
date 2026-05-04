@@ -1,6 +1,6 @@
-import { ChevronDown } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import type { AnimationItem } from "lottie-web";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoBatumiGalleryVideos, aixcoLiveLogos } from "@/lib/aixco-live-assets";
@@ -8,8 +8,9 @@ import { aixcoBatumiGalleryVideos, aixcoLiveLogos } from "@/lib/aixco-live-asset
 const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const heroIntroText =
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.";
-const heroPriceText = "Starting from \u20ac1,000";
+const heroPriceText = "STARTING FROM \u20ac1,000";
 const heroPanelVideos = aixcoBatumiGalleryVideos.slice(0, 4);
+const arrowLottiePath = "/animations/arrow-down-gold.json";
 
 const headlineVariants: Variants = {
   hidden: {},
@@ -39,6 +40,50 @@ const headlineLineVariants: Variants = {
     },
   },
 };
+
+function HeroLottieArrow({ reduceMotion }: { reduceMotion: boolean | null }) {
+  const containerRef = useRef<HTMLSpanElement | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || import.meta.env.MODE === "test") return;
+
+    let animation: AnimationItem | null = null;
+    let cancelled = false;
+
+    import("lottie-web/build/player/lottie_light").then(({ default: lottie }) => {
+      if (cancelled || !containerRef.current) return;
+
+      animation = lottie.loadAnimation({
+        container: containerRef.current,
+        renderer: "svg",
+        loop: !reduceMotion,
+        autoplay: !reduceMotion,
+        path: arrowLottiePath,
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid meet",
+        },
+      });
+
+      if (reduceMotion) {
+        animation.addEventListener("DOMLoaded", () => animation?.goToAndStop(0, true));
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      animation?.destroy();
+    };
+  }, [reduceMotion]);
+
+  return (
+    <span
+      ref={containerRef}
+      aria-hidden="true"
+      data-hero-lottie-arrow="true"
+      className="block h-11 w-11 [&_svg]:!block [&_svg]:!h-full [&_svg]:!w-full"
+    />
+  );
+}
 
 export function Hero() {
   const shouldReduceMotion = useReducedMotion();
@@ -174,29 +219,18 @@ export function Hero() {
             href="#about"
             onClick={handleAboutClick}
             aria-label="Scroll to About section"
-            className="relative mt-7 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/10 text-white/80 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:bg-black/15 hover:text-white sm:mt-12"
+            className="relative top-[clamp(1.25rem,3svh,2.75rem)] mt-7 inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/10 text-white/85 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:bg-black/15 hover:text-white sm:mt-12"
             initial={false}
-            animate={isHeroReady ? (shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, 10, 0] }) : { opacity: 0, y: 0 }}
+            animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 0 }}
             transition={
               shouldReduceMotion
                 ? { duration: 0.5, ease: "easeOut", delay: 0.74 }
-                : {
-                    opacity: { duration: 0.7, delay: 1.36, ease: heroEase },
-                    y: { duration: 3.4, repeat: Infinity, ease: "easeInOut", delay: 1.52 },
-                  }
+                : { duration: 0.7, delay: 1.36, ease: heroEase }
             }
             whileHover={{ scale: 1.08, transition: { duration: 0.18, ease: heroEase } }}
             whileTap={{ scale: 0.96, transition: { duration: 0.08, ease: "easeOut" } }}
           >
-            {!shouldReduceMotion && (
-              <motion.span
-                aria-hidden="true"
-                className="absolute inset-0 rounded-full border border-white/35"
-                animate={{ opacity: [0.5, 0], scale: [1, 1.8] }}
-                transition={{ duration: 2.1, repeat: Infinity, ease: "easeOut", delay: 1.64 }}
-              />
-            )}
-            <ChevronDown className="h-5 w-5" strokeWidth={2.5} />
+            <HeroLottieArrow reduceMotion={shouldReduceMotion} />
           </motion.a>
         </div>
       </div>

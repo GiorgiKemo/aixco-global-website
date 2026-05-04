@@ -77,7 +77,7 @@ export function Nav() {
   const desktopNavSpacing = compactDesktopLabels ? "gap-1 px-2" : "gap-2 px-3";
   const desktopNavLinkClass = compactDesktopLabels
     ? "px-2 py-1.5 text-[clamp(11.5px,0.66vw,13px)]"
-    : "px-2.5 py-1.5 text-[clamp(12px,0.72vw,13.5px)]";
+    : "px-2.5 py-1.5 text-[clamp(12px,0.78vw,14.5px)]";
   const topControlClass =
     "inline-flex items-center justify-center rounded-lg border border-white/25 bg-white/[0.06] text-white/90 shadow-[0_8px_28px_rgb(0_0_0/0.16)] backdrop-blur-md transition-[background-color,border-color,color,box-shadow,translate] duration-200 hover:border-[#f0bd5d]/55 hover:bg-white/[0.12] hover:text-[#f0bd5d]";
   const controlClass = solidNav ? "icon-button-glass" : topControlClass;
@@ -296,14 +296,14 @@ export function Nav() {
           </button>
           <button
             onClick={openRegister}
-            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !py-2 !px-4 text-sm`}
+            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !border-primary/50 !bg-[#fff8ec] !py-2 !px-4 text-sm font-bold !text-[#7a4a0a] shadow-[0_8px_22px_-18px_rgb(122_74_10/0.7)]`}
           >
             {t("cta.register")}
           </button>
           <Link
             to="/#participate"
             onClick={(event) => handleNavClick(event, NAV[4])}
-            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-sm`}
+            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-sm font-bold !text-white drop-shadow-[0_1px_1px_rgb(76_42_0/0.45)]`}
           >
             {t("cta.start")}
           </Link>
