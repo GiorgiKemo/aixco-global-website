@@ -10,7 +10,13 @@ const heroIntroText =
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.";
 const heroPriceText = "STARTING FROM \u20ac1,000";
 const heroPanelVideos = aixcoBatumiGalleryVideos.slice(0, 4);
-const arrowLottiePath = "/animations/arrow-down-gold.json";
+
+export function getHeroLottieArrowPath(baseUrl: string) {
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  return `${normalizedBase}animations/arrow-down-gold.json`;
+}
+
+const arrowLottiePath = getHeroLottieArrowPath(import.meta.env.BASE_URL);
 
 const headlineVariants: Variants = {
   hidden: {},
@@ -41,7 +47,7 @@ const headlineLineVariants: Variants = {
   },
 };
 
-function HeroLottieArrow({ reduceMotion }: { reduceMotion: boolean | null }) {
+function HeroLottieArrow() {
   const containerRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
@@ -56,31 +62,28 @@ function HeroLottieArrow({ reduceMotion }: { reduceMotion: boolean | null }) {
       animation = lottie.loadAnimation({
         container: containerRef.current,
         renderer: "svg",
-        loop: !reduceMotion,
-        autoplay: !reduceMotion,
+        loop: true,
+        autoplay: true,
         path: arrowLottiePath,
         rendererSettings: {
           preserveAspectRatio: "xMidYMid meet",
         },
       });
 
-      if (reduceMotion) {
-        animation.addEventListener("DOMLoaded", () => animation?.goToAndStop(0, true));
-      }
     });
 
     return () => {
       cancelled = true;
       animation?.destroy();
     };
-  }, [reduceMotion]);
+  }, []);
 
   return (
     <span
       ref={containerRef}
       aria-hidden="true"
       data-hero-lottie-arrow="true"
-      className="block h-11 w-11 [&_svg]:!block [&_svg]:!h-full [&_svg]:!w-full"
+      className="block h-[5.5rem] w-[5.5rem] [&_svg]:!block [&_svg]:!h-full [&_svg]:!w-full"
     />
   );
 }
@@ -219,7 +222,7 @@ export function Hero() {
             href="#about"
             onClick={handleAboutClick}
             aria-label="Scroll to About section"
-            className="relative top-[clamp(1.25rem,3svh,2.75rem)] mt-7 inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/10 text-white/85 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:bg-black/15 hover:text-white sm:mt-12"
+            className="relative top-[clamp(1.25rem,3svh,2.75rem)] mt-7 inline-flex h-28 w-28 items-center justify-center text-white/85 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] transition-colors duration-200 hover:text-white sm:mt-12"
             initial={false}
             animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 0 }}
             transition={
@@ -230,7 +233,7 @@ export function Hero() {
             whileHover={{ scale: 1.08, transition: { duration: 0.18, ease: heroEase } }}
             whileTap={{ scale: 0.96, transition: { duration: 0.08, ease: "easeOut" } }}
           >
-            <HeroLottieArrow reduceMotion={shouldReduceMotion} />
+            <HeroLottieArrow />
           </motion.a>
         </div>
       </div>

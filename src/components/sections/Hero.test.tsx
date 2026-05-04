@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { Hero } from "./Hero";
+import { Hero, getHeroLottieArrowPath } from "./Hero";
 
 function renderHero() {
   return render(
@@ -15,6 +15,12 @@ function renderHero() {
 }
 
 describe("Hero", () => {
+  it("resolves the hero arrow animation from the app base URL", () => {
+    expect(getHeroLottieArrowPath("/")).toBe("/animations/arrow-down-gold.json");
+    expect(getHeroLottieArrowPath("/aixco-global-website/")).toBe("/aixco-global-website/animations/arrow-down-gold.json");
+    expect(getHeroLottieArrowPath("/aixco-global-website")).toBe("/aixco-global-website/animations/arrow-down-gold.json");
+  });
+
   it("uses the centered reference-style AIXCO.Global hero composition", () => {
     const { container } = renderHero();
 
@@ -65,7 +71,7 @@ describe("Hero", () => {
     expect(priceText?.className).toContain("text-[clamp(1.2rem,5vw,3.5rem)]");
     expect(scrollLink.className).toContain("mt-7");
     expect(scrollLink.className).toContain("sm:mt-12");
-    expect(scrollLink.className).toContain("transition-[background-color,border-color,color]");
+    expect(scrollLink.className).toContain("transition-colors");
     expect(scrollLink.className).toContain("duration-200");
     expect(brandDot).toHaveTextContent(".");
     expect(brandDot?.className).toContain("text-primary-glow");
