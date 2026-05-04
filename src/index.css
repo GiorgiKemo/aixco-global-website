@@ -149,9 +149,101 @@
     min-height: 22rem;
   }
 
+  .batumi-match-otium-video-height > [data-video-state] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .asset-detail-cta {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 20;
+    display: inline-flex;
+    max-width: calc(100% - 4rem);
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.74rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: white;
+    transition: color 200ms var(--ease-apple);
+  }
+
+  .asset-detail-cta__label {
+    color: white;
+    filter:
+      drop-shadow(0 1px 1px hsl(220 28% 4% / 0.82))
+      drop-shadow(0 0 8px hsl(0 0% 100% / 0.36));
+    mix-blend-mode: difference;
+    white-space: nowrap;
+  }
+
+  .asset-detail-cta__icon {
+    flex: none;
+    color: hsl(var(--primary));
+    filter:
+      drop-shadow(0 1px 1px hsl(220 28% 4% / 0.86))
+      drop-shadow(0 0 6px hsl(0 0% 100% / 0.42));
+    transition: transform 200ms var(--ease-apple);
+  }
+
+  .asset-detail-cta:hover,
+  .asset-detail-cta:focus-visible {
+    color: hsl(0 0% 100% / 0.82);
+  }
+
+  .asset-detail-cta:hover .asset-detail-cta__icon,
+  .asset-detail-cta:focus-visible .asset-detail-cta__icon {
+    transform: translateX(0.25rem);
+  }
+
+  .asset-detail-cta:focus-visible {
+    outline: 2px solid hsl(var(--primary) / 0.78);
+    outline-offset: 0.35rem;
+  }
+
+  .expandable-image-trigger {
+    cursor: pointer;
+  }
+
+  .expandable-image-trigger img {
+    cursor: inherit;
+  }
+
+  .dubai-image-marquee .expandable-image-trigger {
+    cursor: inherit;
+  }
+
+  @media (min-width: 768px) {
+    .asset-detail-cta {
+      top: 2.5rem;
+      right: 2.5rem;
+    }
+  }
+
+  @supports not (mix-blend-mode: difference) {
+    .asset-detail-cta__label {
+      mix-blend-mode: normal;
+      text-shadow:
+        0 1px 2px hsl(220 28% 4% / 0.9),
+        0 0 10px hsl(220 28% 4% / 0.72);
+    }
+  }
+
   @media (min-width: 768px) {
     .batumi-match-otium-video-height {
-      min-height: clamp(39rem, calc(100svh - 3rem), 44rem);
+      min-height: clamp(30rem, calc(100svh - 15rem), 38rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .batumi-match-otium-video-height {
+      min-height: clamp(28rem, calc(100svh - 15rem), 32rem);
     }
   }
 

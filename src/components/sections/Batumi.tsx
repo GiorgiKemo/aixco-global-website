@@ -238,11 +238,11 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
           target="_blank"
           rel="noreferrer"
           aria-label={`${tx("View Asset Details")}: ${tx(property.name)}`}
-          className="absolute bottom-8 left-8 z-20 inline-flex items-center gap-3 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors duration-200 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-foreground md:bottom-10 md:left-10"
+          className="asset-detail-cta"
           onClick={(event) => event.stopPropagation()}
         >
-          {tx("View Asset Details")}
-          <ArrowRight size={17} className="text-primary transition-transform duration-200 group-hover:translate-x-2" />
+          <span className="asset-detail-cta__label">{tx("View Asset Details")}</span>
+          <ArrowRight size={17} className="asset-detail-cta__icon" />
         </a>
       </div>
       <div

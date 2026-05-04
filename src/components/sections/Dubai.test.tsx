@@ -114,6 +114,7 @@ describe("Dubai", () => {
     const landingViewport = container.querySelector("[data-layout='dubai-first-viewport']");
     const remainingCards = container.querySelector("[data-layout='remaining-dubai-fund-cards']");
     const fundOne = landingViewport?.querySelector("[data-fund-card='fund-1']");
+    const fundOneGallery = landingViewport?.querySelector("[data-fund-asset-gallery='fund-1']");
     const fundTwo = remainingCards?.querySelector("[data-fund-card='fund-2']");
 
     expect(dubaiAnchor?.className).toContain("min-h-[calc(100svh-4rem)]");
@@ -122,6 +123,9 @@ describe("Dubai", () => {
     expect(landingViewport).toBeInTheDocument();
     expect(fundOne).toBeInTheDocument();
     expect(fundOne).toHaveAttribute("data-density", "viewport-fit");
+    expect(fundOneGallery).toHaveAttribute("data-viewport-offset", "landing-gallery");
+    expect(fundOneGallery?.className).toContain("mt-28");
+    expect(fundOneGallery?.className).toContain("md:mt-32");
     expect(fundTwo).toHaveAttribute("data-density", "standard");
     expect(landingViewport?.querySelector("[data-fund-card='fund-2']")).not.toBeInTheDocument();
     expect(remainingCards?.querySelector("[data-fund-card='fund-2']")).toBeInTheDocument();
@@ -238,6 +242,27 @@ describe("Dubai", () => {
     expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
   });
 
+  it("keeps gallery image buttons draggable and only expands them on a real click", () => {
+    renderDubai();
+
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
+    const imageButton = within(parkRail).getByRole("button", {
+      name: "Expand image: Eden House The Park construction progress",
+    });
+
+    fireEvent.mouseDown(imageButton, { button: 0, clientX: 320, clientY: 24 });
+    fireEvent.mouseMove(window, { clientX: 250, clientY: 24 });
+    fireEvent.mouseUp(window, { clientX: 250, clientY: 24 });
+    fireEvent.click(imageButton);
+
+    expect(screen.queryByRole("dialog", { name: "Expanded image: Eden House The Park construction progress" })).not.toBeInTheDocument();
+
+    fireEvent.click(imageButton);
+
+    expect(screen.getByRole("dialog", { name: "Expanded image: Eden House The Park construction progress" })).toBeInTheDocument();
+  });
+
   it("uses still images instead of Dubai fund videos", () => {
     const { container } = renderDubai();
 
@@ -247,6 +272,29 @@ describe("Dubai", () => {
     expect(within(fundOneGallery).getByAltText("Eden House The Canal aerial overview")).toBeInTheDocument();
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City asset image")).toBeInTheDocument();
     expect(container.querySelector("video")).not.toBeInTheDocument();
+  });
+
+  it("expands Dubai card and gallery images when clicked", () => {
+    const { container } = renderDubai();
+
+    const fundOne = container.querySelector("[data-fund-card='fund-1']");
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+
+    fireEvent.click(within(fundOne as HTMLElement).getByRole("button", { name: /Expand image: Fund I Eden House/i }));
+
+    const fundOneDialog = screen.getByRole("dialog", { name: /Expanded image: Fund I Eden House/i });
+    expect(fundOneDialog).toBeInTheDocument();
+    expect(within(fundOneDialog).getByAltText("Fund I Eden House The Canal & Eden House The Park")).toHaveAttribute(
+      "src",
+      expect.stringContaining("/aixco-global-op2/images/fund/fund1.jpeg"),
+    );
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    fireEvent.click(within(fundOneGallery).getByRole("button", { name: "Expand image: Eden House The Canal aerial overview" }));
+
+    expect(screen.getByRole("dialog", { name: "Expanded image: Eden House The Canal aerial overview" })).toBeInTheDocument();
+    expect(screen.getAllByAltText("Eden House The Canal aerial overview").some((image) => image.closest("[role='dialog']"))).toBe(true);
   });
 
   it("enriches Fund II with source facts and multiple Dubai Healthcare City visuals", () => {
@@ -311,16 +359,19 @@ describe("Dubai", () => {
     const fundTwo = within(fundTwoShell as HTMLElement).getByRole("article");
     const fundOneGallery = within(fundOneShell as HTMLElement).getByLabelText("Fund I asset image gallery");
     const fundTwoGallery = within(fundTwoShell as HTMLElement).getByLabelText("Fund II asset image gallery");
+    const fundOneAssetLink = within(fundOne).getByRole("link", { name: /View Asset Details: Fund I/ });
+    const fundTwoAssetLink = within(fundTwo).getByRole("link", { name: /View Asset Details: Fund II/ });
 
     expect(fundOneGallery).toBeInTheDocument();
     expect(fundOneGallery.previousElementSibling).toBe(fundOne);
     expect(fundOneGallery).toHaveAttribute("data-gallery-source", "eden-house-and-park");
     expect(fundOneGallery.className).toContain("scroll-mt-16");
     expect(fundOneGallery.className).toContain("md:scroll-mt-20");
-    expect(within(fundOne).getByRole("link", { name: /View Asset Details: Fund I/ })).toHaveAttribute(
-      "href",
-      "#dubai-asset-gallery-fund-1",
-    );
+    expect(fundOneAssetLink).toHaveAttribute("href", "#dubai-asset-gallery-fund-1");
+    expect(fundOneAssetLink).toHaveClass("asset-detail-cta");
+    expect(fundOneAssetLink.className).not.toContain("bottom-8");
+    expect(fundOneAssetLink.querySelector(".asset-detail-cta__label")).toHaveTextContent("View Asset Details");
+    expect(fundOneAssetLink.querySelector(".asset-detail-cta__icon")).toBeInTheDocument();
     expect(within(fundOneGallery as HTMLElement).getByRole("heading", { name: "Eden House The Canal" })).toBeInTheDocument();
     expect(within(fundOneGallery as HTMLElement).getByRole("heading", { name: "Eden House The Park" })).toBeInTheDocument();
     expect(within(fundOneGallery as HTMLElement).getByAltText("Eden House The Canal aerial overview")).toHaveAttribute(
@@ -335,10 +386,8 @@ describe("Dubai", () => {
     expect(fundTwoGallery).toBeInTheDocument();
     expect(fundTwoGallery.previousElementSibling).toBe(fundTwo);
     expect(fundTwoGallery).toHaveAttribute("data-gallery-source", "dubai-healthcare-city");
-    expect(within(fundTwo).getByRole("link", { name: /View Asset Details: Fund II/ })).toHaveAttribute(
-      "href",
-      "#dubai-asset-gallery-fund-2",
-    );
+    expect(fundTwoAssetLink).toHaveAttribute("href", "#dubai-asset-gallery-fund-2");
+    expect(fundTwoAssetLink).toHaveClass("asset-detail-cta");
     expect(within(fundTwoGallery as HTMLElement).getByRole("heading", { name: "Dubai Healthcare City" })).toBeInTheDocument();
     expect(within(fundTwoGallery as HTMLElement).getByAltText("Dubai Healthcare City asset image")).toHaveAttribute(
       "src",

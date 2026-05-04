@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, type MouseEvent as ReactMouseEvent } fr
 import { dubaiFunds } from "@/data/site";
 import { motion, useAnimationFrame, useMotionValue, useMotionValueEvent, useReducedMotion, useSpring } from "framer-motion";
 import { ArrowRight, Building2, HandCoins, TrendingUp, type LucideIcon } from "lucide-react";
+import { ExpandableImage } from "@/components/ExpandableImage";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import {
   aixcoDubaiEdenHouseCanalGallery,
@@ -387,17 +388,24 @@ function DubaiImageMarquee({
           >
             {group.images.map((image) => (
               <figure key={`${setIndex}-${image.src}`} className="dubai-gallery-tile" data-gallery-tile>
-                <img
+                <ExpandableImage
                   src={image.src}
-                  alt={setIndex === 0 ? tx(image.title) : ""}
-                  loading="lazy"
-                  decoding="async"
-                  draggable={false}
-                  width={1280}
-                  height={720}
-                  className="h-full w-full object-cover"
-                  onDragStart={(event) => event.preventDefault()}
-                />
+                  title={tx(image.title)}
+                  className="h-full w-full"
+                  tabIndex={setIndex === 1 ? -1 : undefined}
+                >
+                  <img
+                    src={image.src}
+                    alt={setIndex === 0 ? tx(image.title) : ""}
+                    loading="lazy"
+                    decoding="async"
+                    draggable={false}
+                    width={1280}
+                    height={720}
+                    className="h-full w-full object-cover"
+                    onDragStart={(event) => event.preventDefault()}
+                  />
+                </ExpandableImage>
               </figure>
             ))}
           </div>
@@ -409,22 +417,26 @@ function DubaiImageMarquee({
 
 function DubaiFundAssetGallery({
   fundId,
+  isLanding = false,
   shouldReduceMotion,
   tx,
 }: {
   fundId: DubaiFundGalleryId;
+  isLanding?: boolean;
   shouldReduceMotion: boolean | null;
   tx: Translate;
 }) {
   const gallery = fundAssetGalleries[fundId];
+  const viewportOffsetClass = isLanding ? "mt-28 md:mt-32" : "mt-5";
 
   return (
     <motion.div
       id={`dubai-asset-gallery-${fundId}`}
       data-fund-asset-gallery={fundId}
       data-gallery-source={gallery.source}
+      data-viewport-offset={isLanding ? "landing-gallery" : undefined}
       aria-label={tx(gallery.label)}
-      className="mt-5 scroll-mt-16 border border-foreground/10 bg-white p-4 shadow-[0_34px_80px_-35px_rgba(0,0,0,0.28)] sm:p-5 md:scroll-mt-20 lg:p-6"
+      className={`${viewportOffsetClass} scroll-mt-16 border border-foreground/10 bg-white p-4 shadow-[0_34px_80px_-35px_rgba(0,0,0,0.28)] sm:p-5 md:scroll-mt-20 lg:p-6`}
       initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
       animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
       transition={{ duration: shouldReduceMotion ? 0.18 : 0.32, ease: "easeOut" }}
@@ -493,28 +505,30 @@ function DubaiFundCard({
         data-fund-media
         className={`relative min-h-[22rem] overflow-hidden bg-foreground md:col-span-5 md:min-h-0 lg:col-span-5 lg:min-h-0 ${mediaOrderClass}`}
       >
-        <motion.img
-          src={imageMap[fund.image]}
-          alt={tx(fund.name)}
-          loading="lazy"
-          decoding="async"
-          width={1536}
-          height={960}
-          className="h-full w-full object-cover opacity-85 transition-transform duration-500 ease-out group-hover:scale-[1.035]"
-          initial={isLanding ? { scale: 1.08 } : false}
-          whileInView={isLanding ? { scale: 1 } : undefined}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 1.45, ease: "easeOut" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-tr from-foreground/45 via-foreground/12 to-transparent" aria-hidden />
+        <ExpandableImage src={imageMap[fund.image]} title={tx(fund.name)} className="h-full w-full">
+          <motion.img
+            src={imageMap[fund.image]}
+            alt={tx(fund.name)}
+            loading="lazy"
+            decoding="async"
+            width={1536}
+            height={960}
+            className="h-full w-full object-cover opacity-85 transition-transform duration-500 ease-out group-hover:scale-[1.035]"
+            initial={isLanding ? { scale: 1.08 } : false}
+            whileInView={isLanding ? { scale: 1 } : undefined}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 1.45, ease: "easeOut" }}
+          />
+        </ExpandableImage>
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-foreground/45 via-foreground/12 to-transparent" aria-hidden />
         {galleryHref && (
           <a
             href={galleryHref}
             aria-label={`${tx("View Asset Details")}: ${tx(fund.name)}`}
-            className="absolute bottom-8 left-8 z-20 inline-flex items-center gap-3 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors duration-200 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-foreground md:bottom-10 md:left-10"
+            className="asset-detail-cta"
           >
-            {tx("View Asset Details")}
-            <ArrowRight size={17} className="text-primary transition-transform duration-200 group-hover:translate-x-2" />
+            <span className="asset-detail-cta__label">{tx("View Asset Details")}</span>
+            <ArrowRight size={17} className="asset-detail-cta__icon" />
           </a>
         )}
       </div>
@@ -568,10 +582,10 @@ export function Dubai() {
   const { tx } = useI18n();
   const shouldReduceMotion = useReducedMotion();
   const [landingFund, ...remainingFunds] = dubaiFunds;
-  const renderFundGallery = (fund: DubaiFund) => {
+  const renderFundGallery = (fund: DubaiFund, isLanding = false) => {
     if (!hasAssetGallery(fund.id)) return null;
 
-    return <DubaiFundAssetGallery fundId={fund.id} shouldReduceMotion={shouldReduceMotion} tx={tx} />;
+    return <DubaiFundAssetGallery fundId={fund.id} isLanding={isLanding} shouldReduceMotion={shouldReduceMotion} tx={tx} />;
   };
 
   return (
@@ -595,7 +609,7 @@ export function Dubai() {
                 tx={tx}
                 isLanding
               />
-              {renderFundGallery(landingFund)}
+              {renderFundGallery(landingFund, true)}
             </div>
           </div>
 

@@ -88,6 +88,8 @@ describe("Batumi", () => {
     const otiumDetails = otiumCard?.querySelector("[data-batumi-property-detail-notes='otium']");
     const guruTitle = guruCard?.querySelector("[data-batumi-property-title]");
     const otiumTitle = otiumCard?.querySelector("[data-batumi-property-title]");
+    const guruAssetLink = within(guruCard as HTMLElement).getByRole("link", { name: /View Asset Details: Guru/ });
+    const otiumAssetLink = within(otiumCard as HTMLElement).getByRole("link", { name: /View Asset Details: Otium/ });
 
     expect(profileGrid).toBeInTheDocument();
     expect(guruCard).toHaveAttribute("data-design-source", "dubai-card-reference");
@@ -119,6 +121,10 @@ describe("Batumi", () => {
     expect(guruDetails).toHaveTextContent("12% ROI");
     expect(guruCard).not.toHaveTextContent("Guru PDF");
     expect(within(guruCard as HTMLElement).getByLabelText("Guru")).toHaveClass("guru-video-matte-crop");
+    expect(guruAssetLink).toHaveClass("asset-detail-cta");
+    expect(guruAssetLink.className).not.toContain("bottom-8");
+    expect(guruAssetLink.querySelector(".asset-detail-cta__label")).toHaveTextContent("View Asset Details");
+    expect(guruAssetLink.querySelector(".asset-detail-cta__icon")).toBeInTheDocument();
     expect(otiumCard).toHaveTextContent("59 Adlia Street");
     expect(otiumCard).toHaveTextContent("408");
     expect(otiumCard).toHaveTextContent("total units");
@@ -133,14 +139,9 @@ describe("Batumi", () => {
     expect(within(otiumCard as HTMLElement).getByLabelText("Otium")).not.toHaveClass("guru-video-matte-crop");
     expect(within(guruCard as HTMLElement).getByRole("button", { name: /Play video: Guru/ })).toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).getByRole("button", { name: /Play video: Otium/ })).toBeInTheDocument();
-    expect(within(guruCard as HTMLElement).getByRole("link", { name: /View Asset Details: Guru/ })).toHaveAttribute(
-      "href",
-      expect.stringContaining("guru-catalog.jpeg"),
-    );
-    expect(within(otiumCard as HTMLElement).getByRole("link", { name: /View Asset Details: Otium/ })).toHaveAttribute(
-      "href",
-      expect.stringContaining("otium-catalog.jpeg"),
-    );
+    expect(guruAssetLink).toHaveAttribute("href", expect.stringContaining("guru-catalog.jpeg"));
+    expect(otiumAssetLink).toHaveAttribute("href", expect.stringContaining("otium-catalog.jpeg"));
+    expect(otiumAssetLink).toHaveClass("asset-detail-cta");
     expect(within(guruCard as HTMLElement).queryByRole("link", { name: /Open Guru profile/ })).not.toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).queryByRole("link", { name: /Open Otium profile/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Guru" })).not.toBeInTheDocument();
