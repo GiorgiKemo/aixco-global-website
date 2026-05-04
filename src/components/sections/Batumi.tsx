@@ -150,7 +150,6 @@ function BatumiMarketCard({ tx }: { tx: Translate }) {
           className="aspect-[9/16] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
           fit="cover"
           rootMargin="250px 0px"
-          autoplayPreview={false}
         />
         <span className="pointer-events-none absolute left-8 top-7 select-none font-display text-[clamp(5.4rem,8vw,7.8rem)] font-semibold leading-none tracking-tight text-white/20 md:left-10 md:top-9">
           01
@@ -228,7 +227,6 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
           className="aspect-[4/5] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
           fit="cover"
           rootMargin="700px 0px"
-          autoplayPreview={false}
         />
         <span className="pointer-events-none absolute left-8 top-7 select-none font-display text-[clamp(5.4rem,8vw,7.8rem)] font-semibold leading-none tracking-tight text-white/20 md:left-10 md:top-9">
           0{idx + 2}

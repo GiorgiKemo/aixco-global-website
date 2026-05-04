@@ -21,12 +21,12 @@ describe("Hero", () => {
     expect(getHeroLottieArrowPath("/aixco-global-website")).toBe("/aixco-global-website/animations/arrow-down-gold.json");
   });
 
-  it("keeps the video wall disabled for slow networks and small devices", () => {
+  it("keeps the video wall available on small and slow devices unless the user opts out", () => {
     expect(shouldUseHeroVideoWall({ reduceMotion: true, viewportWidth: 1440 })).toBe(false);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 390 })).toBe(false);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 390 })).toBe(true);
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, saveData: true })).toBe(false);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "3g" })).toBe(false);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, deviceMemory: 2 })).toBe(false);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "3g" })).toBe(true);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, deviceMemory: 2 })).toBe(true);
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "4g", deviceMemory: 8 })).toBe(true);
   });
 

@@ -30,13 +30,14 @@ export function LiveVideo({
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(eager);
-  const [isVisible, setIsVisible] = useState(eager);
+  const [isInFocus, setIsInFocus] = useState(eager);
   const [isPlayingInline, setIsPlayingInline] = useState(false);
   const [isAudible, setIsAudible] = useState(false);
   const shouldAttachVideo = shouldLoad && (autoplayPreview || isPlayingInline);
 
   const openInlinePlayer = () => {
     setShouldLoad(true);
+    setIsInFocus(true);
     setIsPlayingInline(true);
     setIsAudible(true);
     window.requestAnimationFrame(() => {
@@ -50,7 +51,7 @@ export function LiveVideo({
     const node = wrapperRef.current;
     if (!node || typeof window.IntersectionObserver !== "function") {
       setShouldLoad(true);
-      setIsVisible(true);
+      setIsInFocus(true);
       return;
     }
 
@@ -58,9 +59,6 @@ export function LiveVideo({
       ([entry]) => {
         if (entry.isIntersecting) {
           setShouldLoad(true);
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
         }
       },
       { rootMargin, threshold: 0.01 },
@@ -74,12 +72,16 @@ export function LiveVideo({
     if (typeof window === "undefined") return;
 
     const node = wrapperRef.current;
-    if (!node || typeof window.IntersectionObserver !== "function") return;
+    if (!node || typeof window.IntersectionObserver !== "function") {
+      setIsInFocus(true);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const isInFocus = entry.isIntersecting && entry.intersectionRatio >= focusThreshold;
-        if (!isInFocus) {
+        const nextIsInFocus = entry.isIntersecting && entry.intersectionRatio >= focusThreshold;
+        setIsInFocus(nextIsInFocus);
+        if (!nextIsInFocus) {
           setIsAudible(false);
         }
       },
@@ -94,12 +96,12 @@ export function LiveVideo({
     const video = videoRef.current;
     if (!video || !shouldAttachVideo) return;
 
-    if (isVisible && (autoplayPreview || isPlayingInline)) {
+    if (isInFocus && (autoplayPreview || isPlayingInline)) {
       void video.play().catch(() => undefined);
     } else {
       video.pause();
     }
-  }, [autoplayPreview, isPlayingInline, isVisible, shouldAttachVideo]);
+  }, [autoplayPreview, isInFocus, isPlayingInline, shouldAttachVideo]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -150,7 +152,7 @@ export function LiveVideo({
           role="presentation"
           className={`pointer-events-none absolute inset-0 h-full w-full ${
             fit === "contain" ? "object-contain" : "object-cover"
-          } transition-opacity duration-300 ${shouldAttachVideo && autoplayPreview ? "opacity-0" : "opacity-100"}`}
+          } transition-opacity duration-300 ${shouldAttachVideo && autoplayPreview && isInFocus ? "opacity-0" : "opacity-100"}`}
           loading={eager ? "eager" : "lazy"}
           decoding="async"
         />
@@ -162,14 +164,14 @@ export function LiveVideo({
         aria-label={title}
         title={title}
         className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}
-        autoPlay={autoplayPreview && isVisible && shouldAttachVideo}
+        autoPlay={autoplayPreview && isInFocus && shouldAttachVideo}
         muted={!isPlayingInline || !isAudible}
         loop={!isPlayingInline && autoplayPreview}
         controls={isPlayingInline}
         playsInline
         preload={shouldAttachVideo ? "metadata" : "none"}
         onCanPlay={(event) => {
-          if (shouldAttachVideo && isVisible && (autoplayPreview || isPlayingInline) && event.currentTarget.paused) {
+          if (shouldAttachVideo && isInFocus && (autoplayPreview || isPlayingInline) && event.currentTarget.paused) {
             void event.currentTarget.play().catch(() => undefined);
           }
         }}

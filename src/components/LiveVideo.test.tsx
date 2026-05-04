@@ -76,8 +76,8 @@ describe("LiveVideo", () => {
     expect(inlineVideo).toHaveAttribute("controls");
   });
 
-  it("can keep video bytes detached until the user opens the video", () => {
-    const { container } = render(<LiveVideo src="/sample-video.mp4" title="Batumi overview" poster="/poster.jpg" autoplayPreview={false} />);
+  it("loads nearby preview media but only plays while it is in focus", () => {
+    const { container } = render(<LiveVideo src="/sample-video.mp4" title="Batumi overview" poster="/poster.jpg" />);
 
     act(() => {
       MockIntersectionObserver.instances[0].trigger({ isIntersecting: true, intersectionRatio: 1 });
@@ -86,14 +86,20 @@ describe("LiveVideo", () => {
     const inlineVideo = screen.getByLabelText("Batumi overview");
 
     expect(container.querySelector("img[role='presentation']")).toHaveAttribute("src", "/poster.jpg");
-    expect(inlineVideo).not.toHaveAttribute("src");
+    expect(inlineVideo).toHaveAttribute("src", "/sample-video.mp4");
     expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole("button", { name: /play video: batumi overview/i }));
+    act(() => {
+      MockIntersectionObserver.instances[1].trigger({ isIntersecting: true, intersectionRatio: 0.7 });
+    });
 
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
-    expect(inlineVideo).toHaveAttribute("src", "/sample-video.mp4");
-    expect(inlineVideo).toHaveAttribute("controls");
+
+    act(() => {
+      MockIntersectionObserver.instances[1].trigger({ isIntersecting: false, intersectionRatio: 0 });
+    });
+
+    expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
   });
 
   it("mutes an inline video after it leaves focus and keeps it muted when focus returns", () => {
