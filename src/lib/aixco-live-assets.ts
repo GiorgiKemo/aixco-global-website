@@ -91,6 +91,10 @@ export const aixcoDubaiEdenHouseParkGallery = [
 
 export const aixcoDubaiHealthcareGallery = [
   { src: `${liveImageBase}/fund2.png`, title: "Dubai Healthcare City asset image" },
+  { src: `${liveImageBase}/fund/fund32.png`, title: "Dubai Healthcare City source site image" },
+  { src: `${liveImageBase}/fund/fund33.png`, title: "Dubai Healthcare City skyline site context" },
+  { src: `${liveImageBase}/fund/fund31.png`, title: "Dubai Healthcare City original site location map" },
+  { src: `${optimizedImageBase}/dubai-map-fund-2.webp`, title: "Dubai Healthcare City fund location map" },
 ] as const;
 
 export const aixcoLiveLogos = {

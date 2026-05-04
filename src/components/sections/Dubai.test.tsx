@@ -249,6 +249,24 @@ describe("Dubai", () => {
     expect(container.querySelector("video")).not.toBeInTheDocument();
   });
 
+  it("enriches Fund II with source facts and multiple Dubai Healthcare City visuals", () => {
+    const { container } = renderDubai();
+
+    const fundTwo = container.querySelector("[data-fund-card='fund-2']");
+    const fundTwoGallery = screen.getByLabelText("Fund II asset image gallery");
+
+    expect(fundTwo).toHaveTextContent("Target Net IRR");
+    expect(fundTwo).toHaveTextContent("~20%");
+    expect(fundTwo).toHaveTextContent("Investment Period");
+    expect(fundTwo).toHaveTextContent("4 years");
+    expect(fundTwo).toHaveTextContent("Location");
+    expect(fundTwo).toHaveTextContent("Dubai Creek - Dubai, UAE");
+    expect(fundTwo).toHaveTextContent("Mixed-use masterplan combining Build-to-Rent and Build-to-Sell models");
+    expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City source site image")).toBeInTheDocument();
+    expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City skyline site context")).toBeInTheDocument();
+    expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City fund location map")).toBeInTheDocument();
+  });
+
   it("promotes Fund I headline metrics into visual highlight tiles", () => {
     const { container } = renderDubai();
 

@@ -46,7 +46,7 @@ function parseFundDetail(detail: string) {
 }
 
 function isHeadlineMetric(label: string) {
-  return ["Units", "Total", "Total Equity", "Performance"].includes(label);
+  return ["Units", "Total", "Total Equity", "Target Net IRR", "Performance"].includes(label);
 }
 
 function formatMetricValue(value: string) {
