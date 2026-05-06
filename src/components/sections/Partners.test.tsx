@@ -39,6 +39,7 @@ describe("Partners", () => {
     expect(container.querySelector(".scroll-reveal.mac-card.mb-10")).not.toBeInTheDocument();
     expect(card).toBeInTheDocument();
     expect(card?.querySelector(".partner-flip-front img")).toBeInTheDocument();
+    expect(card?.querySelector(".partner-flip-front img")).toHaveAttribute("loading", "eager");
     expect(card?.querySelector(".partner-logo-stage")).toBeInTheDocument();
     expect(card?.querySelector(".partner-flip-back")).toHaveTextContent("Open profile");
   });

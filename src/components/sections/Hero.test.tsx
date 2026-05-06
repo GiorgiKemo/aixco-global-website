@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { Hero, getHeroLottieArrowPath, shouldUseHeroVideoWall } from "./Hero";
 
@@ -15,6 +15,10 @@ function renderHero() {
 }
 
 describe("Hero", () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
   it("resolves the hero arrow animation from the app base URL", () => {
     expect(getHeroLottieArrowPath("/")).toBe("/animations/arrow-down-gold.json");
     expect(getHeroLottieArrowPath("/aixco-global-website/")).toBe("/aixco-global-website/animations/arrow-down-gold.json");
@@ -75,8 +79,9 @@ describe("Hero", () => {
     expect(introCopy.className).toContain("text-white/90");
     expect(priceLockup).toBeInTheDocument();
     expect(container.querySelector("[data-hero-price-rule='true']")).not.toBeInTheDocument();
-    expect(within(priceLockup as HTMLElement).getByText("STARTING FROM €1,000")).toBeInTheDocument();
+    expect(within(priceLockup as HTMLElement).getByText("Starting from €1,000")).toBeInTheDocument();
     expect(priceText?.className).toContain("text-[clamp(1.2rem,5vw,3.5rem)]");
+    expect(priceText?.className).toContain("uppercase");
     expect(scrollLink).toHaveAttribute("data-hero-scroll-cue", "viewport");
     expect(scrollLink.parentElement).toHaveAttribute("data-hero-composition", "reference-center");
     expect(scrollLink.closest("[data-hero-content-stack='true']")).not.toBeInTheDocument();
@@ -105,5 +110,15 @@ describe("Hero", () => {
     expect(container.innerHTML).not.toContain("hero-benji-video");
     expect(container.innerHTML).not.toContain("hero-gateway-video");
     expect(container.innerHTML).not.toContain("giorgikemo.github.io");
+  });
+
+  it("translates the hero entry price text", () => {
+    localStorage.setItem("aixco-lang", "de");
+
+    const { container } = renderHero();
+    const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
+
+    expect(within(priceLockup as HTMLElement).getByText("Ab 1.000 €")).toBeInTheDocument();
+    expect(within(priceLockup as HTMLElement).queryByText("Starting from €1,000")).not.toBeInTheDocument();
   });
 });

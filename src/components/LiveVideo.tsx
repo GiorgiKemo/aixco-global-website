@@ -35,6 +35,7 @@ export function LiveVideo({
   const [shouldLoad, setShouldLoad] = useState(eager);
   const [isInFocus, setIsInFocus] = useState(eager);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [hasPreviewFrame, setHasPreviewFrame] = useState(false);
   const shouldAttachVideo = shouldLoad && autoplayPreview;
 
   const closeExpandedPlayer = useCallback(() => {
@@ -91,6 +92,16 @@ export function LiveVideo({
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    setHasPreviewFrame(false);
+  }, [src]);
+
+  useEffect(() => {
+    if (!shouldAttachVideo) {
+      setHasPreviewFrame(false);
+    }
+  }, [shouldAttachVideo]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -159,7 +170,7 @@ export function LiveVideo({
               role="dialog"
               aria-modal="true"
               aria-label={`Expanded video: ${title}`}
-              className="relative z-10 w-full max-w-6xl overflow-hidden rounded-lg border border-white/10 bg-black shadow-elegant animate-scale-in"
+              className="relative z-10 inline-flex max-h-[calc(100svh-1.5rem)] max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-lg border border-white/10 bg-black/95 shadow-elegant animate-scale-in md:max-h-[calc(100svh-3rem)] md:max-w-6xl"
             >
               <video
                 ref={expandedVideoRef}
@@ -167,7 +178,7 @@ export function LiveVideo({
                 poster={poster}
                 aria-label={`${title} expanded player`}
                 title={title}
-                className="block h-[min(82svh,calc(100svh-2rem))] w-full bg-black object-contain"
+                className="block h-auto max-h-[min(82svh,calc(100svh-2rem))] w-auto max-w-[calc(100vw-1.5rem)] bg-black object-contain md:max-w-[calc(100vw-3rem)]"
                 autoPlay
                 controls
                 playsInline
@@ -202,13 +213,13 @@ export function LiveVideo({
       >
         {poster && (
           <img
-            src={shouldLoad ? poster : undefined}
+            src={poster}
             alt=""
             aria-hidden="true"
             role="presentation"
             className={`pointer-events-none absolute inset-0 h-full w-full ${
               fit === "contain" ? "object-contain" : "object-cover"
-            } transition-opacity duration-300 ${shouldAttachVideo && autoplayPreview && isInFocus && !isExpanded ? "opacity-0" : "opacity-100"}`}
+            } transition-opacity duration-300 ${shouldAttachVideo && autoplayPreview && isInFocus && hasPreviewFrame && !isExpanded ? "opacity-0" : "opacity-100"}`}
             loading={eager ? "eager" : "lazy"}
             decoding="async"
           />
@@ -225,7 +236,9 @@ export function LiveVideo({
           loop={autoplayPreview}
           playsInline
           preload={shouldAttachVideo ? "metadata" : "none"}
+          onLoadedData={() => setHasPreviewFrame(true)}
           onCanPlay={(event) => {
+            setHasPreviewFrame(true);
             if (shouldAttachVideo && isInFocus && autoplayPreview && !isExpanded && event.currentTarget.paused) {
               void event.currentTarget.play().catch(() => undefined);
             }

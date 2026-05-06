@@ -17,7 +17,7 @@ export function Footer() {
           <p className="mt-4 text-xs text-muted-foreground">&copy; AIXCO Global 2026. All Rights Reserved.</p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 text-sm text-foreground/80">
+        <div data-footer-actions className="flex flex-wrap items-center gap-4 text-sm text-foreground/80 md:pr-24 lg:pr-0">
           <a
             href="https://www.iafcertsearch.org/certified-entity/NjliMzc3N2MtNGQ2Zi01YzY2LThiOTUtMGIwZmViNWMxODk3"
             target="_blank"

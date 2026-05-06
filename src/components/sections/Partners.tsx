@@ -112,7 +112,7 @@ function PartnerCard({
               <img
                 src={logoMap[partner.logo]}
                 alt={partner.name}
-                loading="lazy"
+                loading={isClone ? "lazy" : "eager"}
                 decoding="async"
                 width={240}
                 height={120}

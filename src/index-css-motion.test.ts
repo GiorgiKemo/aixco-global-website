@@ -41,6 +41,15 @@ describe("index.css motion rules", () => {
     expect(partnerInner).not.toContain("720ms");
   });
 
+  it("keeps partner modal logo panels opaque", () => {
+    const partnerModalLogoStage = cssBlock(".partner-modal-logo-stage");
+
+    expect(partnerModalLogoStage).toContain("linear-gradient(145deg, hsl(220 15% 40%), hsl(220 16% 25%))");
+    expect(partnerModalLogoStage).not.toContain("hsl(220 15% 40% /");
+    expect(partnerModalLogoStage).not.toContain("hsl(220 16% 25% /");
+    expect(partnerModalLogoStage).not.toContain("backdrop-filter");
+  });
+
   it("keeps the hero scroll cue visible on short desktop viewports", () => {
     expect(css).toContain("@media (max-height: 820px) and (min-width: 768px)");
     expect(css).toContain("[data-hero-content-stack=\"true\"]");

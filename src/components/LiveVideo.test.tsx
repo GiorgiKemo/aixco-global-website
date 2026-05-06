@@ -75,11 +75,18 @@ describe("LiveVideo", () => {
     expect(expandedVideo).toHaveAttribute("src", "/sample-video.mp4");
     expect(expandedVideo).toHaveAttribute("poster", "/poster.jpg");
     expect(expandedVideo).toHaveAttribute("controls");
+    expect(expandedVideo.className).toContain("h-auto");
+    expect(expandedVideo.className).toContain("w-auto");
+    expect(expandedVideo.className).toContain("max-h-[min(82svh,calc(100svh-2rem))]");
+    expect(expandedVideo.className).not.toContain("w-full");
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
 
   it("loads nearby preview media but only plays while it is in focus", () => {
     const { container } = render(<LiveVideo src="/sample-video.mp4" title="Batumi overview" poster="/poster.jpg" />);
+
+    expect(container.querySelector("img[role='presentation']")).toHaveAttribute("src", "/poster.jpg");
+    expect(screen.getByLabelText("Batumi overview")).not.toHaveAttribute("src");
 
     act(() => {
       MockIntersectionObserver.instances[0].trigger({ isIntersecting: true, intersectionRatio: 1 });
@@ -102,6 +109,24 @@ describe("LiveVideo", () => {
     });
 
     expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
+  });
+
+  it("keeps the poster visible until the preview video has a rendered frame", () => {
+    const { container } = render(<LiveVideo src="/sample-video.mp4" title="Otium" poster="/poster.jpg" />);
+
+    act(() => {
+      MockIntersectionObserver.instances[0].trigger({ isIntersecting: true, intersectionRatio: 1 });
+      MockIntersectionObserver.instances[1].trigger({ isIntersecting: true, intersectionRatio: 0.7 });
+    });
+
+    const poster = container.querySelector("img[role='presentation']");
+    const inlineVideo = screen.getByLabelText("Otium");
+
+    expect(poster?.className).toContain("opacity-100");
+
+    fireEvent.loadedData(inlineVideo);
+
+    expect(poster?.className).toContain("opacity-0");
   });
 
   it("closes the expanded player with Escape and pauses playback", () => {

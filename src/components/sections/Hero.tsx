@@ -8,7 +8,7 @@ import { aixcoBatumiGalleryVideos, aixcoLiveLogos } from "@/lib/aixco-live-asset
 const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const heroIntroText =
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.";
-const heroPriceText = "STARTING FROM \u20ac1,000";
+const heroPriceText = "Starting from \u20ac1,000";
 const heroPanelVideos = aixcoBatumiGalleryVideos.slice(0, 4);
 
 type HeroVideoEnvironment = {
@@ -307,7 +307,7 @@ export function Hero() {
           >
             <span
               data-hero-price-text="true"
-              className="hero-reference-font max-w-full whitespace-nowrap text-[clamp(1.2rem,5vw,3.5rem)] font-light leading-none tracking-normal sm:text-[clamp(1.8rem,4vw,4rem)]"
+              className="hero-reference-font max-w-full whitespace-nowrap text-[clamp(1.2rem,5vw,3.5rem)] font-light uppercase leading-none tracking-normal sm:text-[clamp(1.8rem,4vw,4rem)]"
             >
               {tx(heroPriceText)}
             </span>

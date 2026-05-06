@@ -67,7 +67,7 @@ describe("Batumi", () => {
       "dubai-style-split-media",
     );
     expect(media?.querySelector("img[role='presentation']")).toBeInTheDocument();
-    expect(media?.querySelector("img[role='presentation']")).not.toHaveAttribute("src");
+    expect(media?.querySelector("img[role='presentation']")).toHaveAttribute("src");
     expect(screen.getByLabelText("Batumi")).not.toHaveAttribute("poster");
     expect(screen.getByLabelText("Batumi")).not.toHaveAttribute("src");
     expect(screen.getByLabelText("Batumi")).toHaveClass("object-cover");

@@ -29,6 +29,24 @@ const pageDescription = "Participate in selected Batumi real estate projects sta
 const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
   Start: { de: "Starten Sie", ru: "Начните", ka: "დაიწყეთ", tr: "Başlatın", ar: "ابدأ" },
   How: { de: "Wie", ru: "Как", ka: "როგორ", tr: "Nasıl", ar: "كيف" },
+  "starting from": { de: "ab", ru: "от", ka: "დაწყებული", tr: "başlayan", ar: "ابتداءً من" },
+  "up to": { de: "bis zu", ru: "до", ka: "მდე", tr: "en fazla", ar: "حتى" },
+  from: { de: "ab", ru: "от", ka: "დან", tr: "itibaren", ar: "من" },
+  "Rental yield": { de: "Mietrendite", ru: "Арендная доходность", ka: "ქირის შემოსავალი", tr: "Kira getirisi", ar: "عائد الإيجار" },
+  "Annual growth": { de: "Jährliches Wachstum", ru: "Годовой рост", ka: "წლიური ზრდა", tr: "Yıllık büyüme", ar: "النمو السنوي" },
+  "Entry price": { de: "Einstiegspreis", ru: "Входная цена", ka: "საწყისი ფასი", tr: "Giriş fiyatı", ar: "سعر الدخول" },
+  Ownership: { de: "Eigentum", ru: "Собственность", ka: "საკუთრება", tr: "Mülkiyet", ar: "الملكية" },
+  Tax: { de: "Steuer", ru: "Налог", ka: "გადასახადი", tr: "Vergi", ar: "الضريبة" },
+  "Capital gains": { de: "Kapitalgewinne", ru: "Прирост капитала", ka: "კაპიტალის მოგება", tr: "Sermaye kazancı", ar: "أرباح رأس المال" },
+  Financing: { de: "Finanzierung", ru: "Финансирование", ka: "დაფინანსება", tr: "Finansman", ar: "التمويل" },
+  Units: { de: "Einheiten", ru: "Юниты", ka: "ერთეულები", tr: "Üniteler", ar: "الوحدات" },
+  Total: { de: "Gesamt", ru: "Итого", ka: "სულ", tr: "Toplam", ar: "الإجمالي" },
+  Performance: { de: "Performance", ru: "Результат", ka: "შედეგი", tr: "Performans", ar: "الأداء" },
+  Revenues: { de: "Erlöse", ru: "Выручка", ka: "შემოსავლები", tr: "Gelirler", ar: "الإيرادات" },
+  Exit: { de: "Exit", ru: "Выход", ka: "გასვლა", tr: "Çıkış", ar: "الخروج" },
+  Highlights: { de: "Highlights", ru: "Ключевые моменты", ka: "მთავარი საკითხები", tr: "Öne çıkanlar", ar: "أبرز النقاط" },
+  "Group company": { de: "Konzerngesellschaft", ru: "Компания группы", ka: "ჯგუფის კომპანია", tr: "Grup şirketi", ar: "شركة ضمن المجموعة" },
+  "Strategic partner": { de: "Strategischer Partner", ru: "Стратегический партнер", ka: "სტრატეგიული პარტნიორი", tr: "Stratejik ortak", ar: "شريك استراتيجي" },
   "Developments Underway": {
     de: "Laufende Entwicklungen",
     ru: "Проекты в разработке",
@@ -51,6 +69,30 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "عميل مشتري عقار",
   },
 };
+
+const catalogSources = [
+  supplementalTranslations,
+  textTranslations,
+  attributeTranslations.placeholder,
+  attributeTranslations.content,
+  attributeTranslations.title,
+] as Array<Partial<Record<string, Partial<Record<Lang, string>>>>>;
+
+function lookupTranslation(text: string, lang: Lang) {
+  for (const source of catalogSources) {
+    const value = source[text]?.[lang];
+    if (value) return value;
+  }
+
+  const normalizedText = text.trim().toLocaleLowerCase("en-US");
+  for (const source of catalogSources) {
+    const key = Object.keys(source).find((candidate) => candidate.trim().toLocaleLowerCase("en-US") === normalizedText);
+    const value = key ? source[key]?.[lang] : undefined;
+    if (value) return value;
+  }
+
+  return undefined;
+}
 
 type Ctx = {
   lang: Lang;
@@ -93,20 +135,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     dir,
     tx: (text) => {
       if (lang === "en") return text;
-      const supplementalValue = supplementalTranslations[text]?.[lang];
-      if (supplementalValue) return supplementalValue;
-      const textValue = textTranslations[text as keyof typeof textTranslations]?.[lang];
-      if (textValue) return textValue;
-      const placeholderValue = attributeTranslations.placeholder[text as keyof typeof attributeTranslations.placeholder]?.[lang];
-      if (placeholderValue) return placeholderValue;
-      const contentValue = attributeTranslations.content[text as keyof typeof attributeTranslations.content]?.[lang];
-      if (contentValue) return contentValue;
-      const titleValue = attributeTranslations.title[text as keyof typeof attributeTranslations.title]?.[lang];
-      return titleValue ?? text;
+      return lookupTranslation(text, lang) ?? text;
     },
     t: (key) => {
       const text = keyedText[key] ?? key;
-      return lang === "en" ? text : textTranslations[text as keyof typeof textTranslations]?.[lang] ?? text;
+      return lang === "en" ? text : lookupTranslation(text, lang) ?? text;
     },
   }), [lang, dir]);
 

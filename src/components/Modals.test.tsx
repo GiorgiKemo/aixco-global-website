@@ -27,6 +27,10 @@ describe("Modals", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /open privacy/i }));
 
-    expect(screen.getByRole("dialog")).toHaveClass("[overflow-wrap:anywhere]");
+    const dialog = screen.getByRole("dialog");
+
+    expect(dialog).toHaveClass("[overflow-wrap:anywhere]");
+    expect(dialog).toHaveClass("bg-surface-elevated");
+    expect(dialog.className).not.toContain("glass");
   });
 });

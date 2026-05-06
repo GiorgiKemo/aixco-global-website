@@ -93,6 +93,10 @@ describe("Dubai", () => {
     expect(title.className).not.toContain("font-serif-display");
     expect(titleAccent.className).toContain("text-primary");
     expect(titleAccent.className).not.toContain("italic");
+    expect(within(fundOne as HTMLElement).getByRole("img", { name: "Fund I Eden House The Canal & Eden House The Park" })).toHaveAttribute(
+      "loading",
+      "eager",
+    );
     expect(fundOne?.querySelector("[class*='font-serif-display']")).not.toBeInTheDocument();
     expect(highlightGrid?.className).toContain("grid-cols-1");
     expect(highlightGrid?.className).toContain("md:grid-cols-3");
@@ -156,7 +160,12 @@ describe("Dubai", () => {
     expect(railTrack?.className).toContain("dubai-image-marquee-track");
     expect(railSets).toHaveLength(2);
     expect(railSets[1]).toHaveAttribute("aria-hidden", "true");
-    expect(within(railSets[0] as HTMLElement).getByAltText("Eden House The Park construction progress")).toHaveAttribute("draggable", "false");
+    const primaryRailImage = within(railSets[0] as HTMLElement).getByAltText("Eden House The Park construction progress");
+    const duplicateRailImage = (railSets[1] as HTMLElement).querySelector("img");
+
+    expect(primaryRailImage).toHaveAttribute("draggable", "false");
+    expect(primaryRailImage).toHaveAttribute("loading", "eager");
+    expect(duplicateRailImage).toHaveAttribute("loading", "lazy");
     expect(container.querySelectorAll("[data-gallery-tile]").length).toBeGreaterThan(0);
   });
 
