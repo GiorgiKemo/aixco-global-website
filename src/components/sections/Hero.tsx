@@ -1,5 +1,5 @@
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent, type SyntheticEvent } from "react";
 import type { AnimationItem } from "lottie-web";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -19,9 +19,27 @@ type HeroVideoEnvironment = {
   deviceMemory?: number;
 };
 
+type HeroVideoPosterVisibility = {
+  shouldUseVideoWall: boolean;
+  isHeroInFocus: boolean;
+  isVideoReady: boolean;
+};
+
+type HeroVideoWithFrameCallback = HTMLVideoElement & {
+  requestVideoFrameCallback?: (callback: () => void) => number;
+};
+
 export function getHeroLottieArrowPath(baseUrl: string) {
   const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   return `${normalizedBase}animations/arrow-down-gold.json`;
+}
+
+export function shouldShowHeroVideoPoster({
+  shouldUseVideoWall,
+  isHeroInFocus,
+  isVideoReady,
+}: HeroVideoPosterVisibility) {
+  return !shouldUseVideoWall || !isHeroInFocus || !isVideoReady;
 }
 
 export function shouldUseHeroVideoWall(environment: HeroVideoEnvironment) {
@@ -125,9 +143,34 @@ export function Hero() {
   const [isHeroReady, setIsHeroReady] = useState(true);
   const [shouldUseVideoWall, setShouldUseVideoWall] = useState(false);
   const [isHeroInFocus, setIsHeroInFocus] = useState(false);
+  const [readyHeroVideos, setReadyHeroVideos] = useState<Record<string, boolean>>({});
   const { tx } = useI18n();
   const navigate = useNavigate();
   const hiddenTextState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: "blur(10px)" };
+
+  const markHeroVideoReady = useCallback((src: string, videoElement: HTMLVideoElement) => {
+    const markReady = () => {
+      setReadyHeroVideos((currentReadyVideos) => {
+        if (currentReadyVideos[src]) return currentReadyVideos;
+        return { ...currentReadyVideos, [src]: true };
+      });
+    };
+
+    const videoWithFrameCallback = videoElement as HeroVideoWithFrameCallback;
+    if (typeof videoWithFrameCallback.requestVideoFrameCallback === "function") {
+      videoWithFrameCallback.requestVideoFrameCallback(markReady);
+      return;
+    }
+
+    markReady();
+  }, []);
+
+  const handleHeroVideoReadyEvent = useCallback(
+    (src: string, event: SyntheticEvent<HTMLVideoElement>) => {
+      markHeroVideoReady(src, event.currentTarget);
+    },
+    [markHeroVideoReady],
+  );
 
   useEffect(() => {
     if (typeof window === "undefined" || import.meta.env.MODE === "test") return;
@@ -172,6 +215,12 @@ export function Hero() {
     });
   }, [isHeroInFocus, shouldUseVideoWall]);
 
+  useEffect(() => {
+    if (!shouldUseVideoWall) {
+      setReadyHeroVideos({});
+    }
+  }, [shouldUseVideoWall]);
+
   const handleAboutClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     navigate("/#about");
@@ -197,41 +246,56 @@ export function Hero() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: shouldReduceMotion ? 0.25 : 1.35, ease: heroEase }}
       >
-        {heroPanelVideos.map((video, index) => (
-          <div key={video.src} data-hero-video-panel="true" className="hero-video-panel">
-            <img
-              src={video.poster}
-              alt=""
-              aria-hidden="true"
-              data-hero-video-poster="true"
-              className={shouldUseVideoWall && isHeroInFocus ? "opacity-0" : "opacity-100"}
-              fetchpriority={index === 0 ? "high" : "auto"}
-              decoding="async"
-            />
-            {shouldUseVideoWall && (
-              <video
-                poster={video.poster}
-                autoPlay={isHeroInFocus}
-                muted
-                loop
-                playsInline
-                preload="metadata"
+        {heroPanelVideos.map((video, index) => {
+          const isVideoReady = readyHeroVideos[video.src] === true;
+          const showPoster = shouldShowHeroVideoPoster({ shouldUseVideoWall, isHeroInFocus, isVideoReady });
+
+          return (
+            <div
+              key={video.src}
+              data-hero-video-panel="true"
+              data-hero-video-ready={isVideoReady ? "true" : "false"}
+              className="hero-video-panel"
+            >
+              <img
+                src={video.poster}
+                alt=""
                 aria-hidden="true"
-                tabIndex={-1}
-                onLoadedData={index === 0 ? () => setIsHeroReady(true) : undefined}
-                onCanPlay={index === 0 ? () => {
-                  setIsHeroReady(true);
-                  if (isHeroInFocus) {
-                    void heroVideoWallRef.current?.querySelector("video")?.play().catch(() => undefined);
-                  }
-                } : undefined}
-                onError={index === 0 ? () => setIsHeroReady(true) : undefined}
-              >
-                <source src={video.src} type="video/mp4" />
-              </video>
-            )}
-          </div>
-        ))}
+                data-hero-video-poster="true"
+                className={showPoster ? "opacity-100" : "opacity-0"}
+                fetchpriority={index === 0 ? "high" : "auto"}
+                decoding="async"
+              />
+              {shouldUseVideoWall && (
+                <video
+                  poster={video.poster}
+                  autoPlay={isHeroInFocus}
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                  onLoadedData={(event) => {
+                    handleHeroVideoReadyEvent(video.src, event);
+                    if (index === 0) setIsHeroReady(true);
+                  }}
+                  onCanPlay={(event) => {
+                    handleHeroVideoReadyEvent(video.src, event);
+                    if (index === 0) setIsHeroReady(true);
+                    if (isHeroInFocus) {
+                      void event.currentTarget.play().catch(() => undefined);
+                    }
+                  }}
+                  onPlaying={(event) => handleHeroVideoReadyEvent(video.src, event)}
+                  onError={index === 0 ? () => setIsHeroReady(true) : undefined}
+                >
+                  <source src={video.src} type="video/mp4" />
+                </video>
+              )}
+            </div>
+          );
+        })}
       </motion.div>
 
       <div

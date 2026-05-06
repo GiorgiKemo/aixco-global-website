@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { Hero, getHeroLottieArrowPath, shouldUseHeroVideoWall } from "./Hero";
+import { Hero, getHeroLottieArrowPath, shouldShowHeroVideoPoster, shouldUseHeroVideoWall } from "./Hero";
 
 function renderHero() {
   return render(
@@ -32,6 +32,23 @@ describe("Hero", () => {
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "3g" })).toBe(true);
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, deviceMemory: 2 })).toBe(true);
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "4g", deviceMemory: 8 })).toBe(true);
+  });
+
+  it("keeps each hero poster visible until its matching video is frame-ready", () => {
+    expect(shouldShowHeroVideoPoster({ shouldUseVideoWall: true, isHeroInFocus: true, isVideoReady: false })).toBe(true);
+    expect(shouldShowHeroVideoPoster({ shouldUseVideoWall: true, isHeroInFocus: true, isVideoReady: true })).toBe(false);
+  });
+
+  it("keeps hero posters visible when the video wall is disabled or outside focus", () => {
+    const dataSaverAllowsVideo = shouldUseHeroVideoWall({
+      reduceMotion: false,
+      viewportWidth: 1440,
+      saveData: true,
+    });
+
+    expect(dataSaverAllowsVideo).toBe(false);
+    expect(shouldShowHeroVideoPoster({ shouldUseVideoWall: dataSaverAllowsVideo, isHeroInFocus: true, isVideoReady: true })).toBe(true);
+    expect(shouldShowHeroVideoPoster({ shouldUseVideoWall: true, isHeroInFocus: false, isVideoReady: true })).toBe(true);
   });
 
   it("uses the centered reference-style AIXCO.Global hero composition", () => {
