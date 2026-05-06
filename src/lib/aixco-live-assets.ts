@@ -11,6 +11,9 @@ const optimizedImageBase = aixcoLivePath("images/optimized");
 const optimizedVideoBase = aixcoLivePath("media");
 const documentBase = aixcoLivePath("documents");
 const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
+const healthcareGalleryVersion = "healthcare-gallery-20260506";
+
+const versionHealthcareImage = (src: string) => `${src}?v=${healthcareGalleryVersion}`;
 
 export const aixcoLiveImages = {
   aboutArchitecture: `${optimizedImageBase}/batumip.png`,
@@ -90,11 +93,11 @@ export const aixcoDubaiEdenHouseParkGallery = [
 ] as const;
 
 export const aixcoDubaiHealthcareGallery = [
-  { src: `${liveImageBase}/fund2.png`, title: "Dubai Healthcare City asset image" },
-  { src: `${liveImageBase}/fund/fund32.png`, title: "Dubai Healthcare City source site image" },
-  { src: `${liveImageBase}/fund/fund33.png`, title: "Dubai Healthcare City skyline site context" },
-  { src: `${liveImageBase}/fund/fund31.png`, title: "Dubai Healthcare City original site location map" },
-  { src: `${optimizedImageBase}/dubai-map-fund-2.webp`, title: "Dubai Healthcare City fund location map" },
+  { src: versionHealthcareImage(`${liveImageBase}/fund2.png`), title: "Dubai Healthcare City asset image" },
+  { src: versionHealthcareImage(`${liveImageBase}/fund/fund32.png`), title: "Dubai Healthcare City source site image" },
+  { src: versionHealthcareImage(`${liveImageBase}/fund/fund33.png`), title: "Dubai Healthcare City skyline site context" },
+  { src: versionHealthcareImage(`${liveImageBase}/fund/fund31.png`), title: "Dubai Healthcare City original site location map" },
+  { src: versionHealthcareImage(`${optimizedImageBase}/dubai-map-fund-2.webp`), title: "Dubai Healthcare City fund location map" },
 ] as const;
 
 export const aixcoLiveLogos = {

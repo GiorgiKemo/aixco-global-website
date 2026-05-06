@@ -34,5 +34,6 @@ describe("aixcoLiveImages", () => {
       src: expect.stringContaining("/aixco-global-op2/images/fund2.png"),
       title: "Dubai Healthcare City asset image",
     });
+    expect(aixcoDubaiHealthcareGallery.every(({ src }) => src.endsWith("?v=healthcare-gallery-20260506"))).toBe(true);
   });
 });
