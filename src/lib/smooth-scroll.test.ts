@@ -106,4 +106,30 @@ describe("installGlideScroll", () => {
     expect(wheel.defaultPrevented).toBe(false);
     cleanup();
   });
+
+  it("uses page glide over non-scrollable form fields", () => {
+    mockMatchMedia(() => false);
+    const scrollTo = mockViewport();
+    let nextFrame: FrameRequestCallback | null = null;
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+      nextFrame = callback;
+      return 1;
+    });
+    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => undefined);
+
+    const input = document.createElement("input");
+    input.type = "text";
+    document.body.appendChild(input);
+
+    const cleanup = installGlideScroll({ easing: 1, multiplier: 1 });
+    const wheel = new WheelEvent("wheel", { deltaY: 120, cancelable: true, bubbles: true });
+
+    input.dispatchEvent(wheel);
+    nextFrame?.(16);
+
+    expect(wheel.defaultPrevented).toBe(true);
+    expect(scrollTo).toHaveBeenCalledWith({ top: 120, left: 0, behavior: "auto" });
+
+    cleanup();
+  });
 });

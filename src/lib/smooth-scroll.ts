@@ -9,9 +9,6 @@ let glideCurrentTop = 0;
 let glideTargetTop = 0;
 
 const nativeScrollSelector = [
-  "input",
-  "textarea",
-  "select",
   "[contenteditable='true']",
   "[data-native-scroll]",
   "[data-glide-scroll-native]",
