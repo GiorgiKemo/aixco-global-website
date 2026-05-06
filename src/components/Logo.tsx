@@ -11,6 +11,10 @@ type LogoProps = {
   onHomeClick?: () => void;
 };
 
+function normalizePath(path: string) {
+  return path === "/" ? path : path.replace(/\/+$/, "");
+}
+
 export function Logo({
   className = "",
   iconClassName = "[filter:brightness(0)_saturate(100%)]",
@@ -24,10 +28,11 @@ export function Logo({
 
     const homePath = new URL(import.meta.env.BASE_URL, window.location.origin).pathname;
 
-    if (window.location.pathname === homePath) {
+    if (normalizePath(window.location.pathname) === normalizePath(homePath)) {
       event.preventDefault();
       onHomeClick?.();
       replaceLocationHash("");
+      navigate("/", { replace: true });
       scrollToPageTop();
       return;
     }

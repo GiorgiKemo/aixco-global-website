@@ -3,7 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
-import { replaceLocationHash } from "@/lib/section-hash";
+import { replaceLocationHash, syncLocationHashToActiveSection } from "@/lib/section-hash";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 import { Nav } from "./Nav";
 
@@ -94,12 +94,30 @@ describe("Nav", () => {
 
   it("returns home from a section hash with one logo click", () => {
     window.history.replaceState({}, "", "/#about");
-    renderNav("/");
+    renderNav("/#about");
 
     fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
 
     expect(replaceLocationHash).toHaveBeenCalledWith("");
     expect(scrollToPageTop).toHaveBeenCalledTimes(1);
+
+    const primary = screen.getByLabelText("Primary");
+    expect(within(primary).getByRole("link", { name: "Home" })).toHaveAttribute("aria-current", "page");
+    expect(within(primary).getByRole("link", { name: "About AIXCO" })).not.toHaveAttribute("aria-current");
+  });
+
+  it("keeps hash syncing suppressed while the logo return-home scroll is moving through sections", () => {
+    vi.mocked(syncLocationHashToActiveSection).mockReturnValue("#about");
+    window.history.replaceState({}, "", "/#dubai");
+    renderNav("/#dubai");
+
+    fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
+    vi.clearAllMocks();
+
+    window.dispatchEvent(new Event("scroll"));
+
+    expect(syncLocationHashToActiveSection).not.toHaveBeenCalled();
+    expect(replaceLocationHash).toHaveBeenCalledWith("");
   });
 
   it("closes the compact menu when the logo returns home", () => {

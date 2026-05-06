@@ -24,6 +24,7 @@ const MORE_NAV = [
 const ALL_NAV = [...NAV, ...MORE_NAV];
 const HOME_SECTION_IDS = ["about", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"] as const;
 const NAV_HASH_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
+const HOME_RETURN_HASH_SYNC_LOCK_MS = 1800;
 let pendingNavScrollTimers: number[] = [];
 const DESKTOP_NAV_LABELS: Record<string, Record<string, string>> = {
   ka: {
@@ -65,11 +66,13 @@ export function Nav() {
   const [langOpen, setLangOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [active, setActive] = useState<string>("");
+  const [returningHome, setReturningHome] = useState(false);
   const [compactNav, setCompactNav] = useState(false);
   const navRowRef = useRef<HTMLDivElement | null>(null);
   const logoSlotRef = useRef<HTMLDivElement | null>(null);
   const navMeasureRef = useRef<HTMLDivElement | null>(null);
   const controlsMeasureRef = useRef<HTMLDivElement | null>(null);
+  const homeHashSyncLockedUntilRef = useRef(0);
   const location = useLocation();
   const solidNav = scrolled || open || langOpen;
   const fullNavAvailable = !compactNav;
@@ -84,7 +87,7 @@ export function Nav() {
   const controlTextClass = solidNav
     ? "text-foreground/85 hover:text-foreground"
     : "text-white/90 drop-shadow-[0_2px_10px_rgb(0_0_0/0.34)] hover:text-[#f0bd5d]";
-  const effectiveActiveHash = active || location.hash;
+  const effectiveActiveHash = returningHome ? "" : active || location.hash;
   const isNavItemActive = (item: (typeof ALL_NAV)[number]) =>
     item.hash ? effectiveActiveHash === item.hash : location.pathname === item.to && !effectiveActiveHash;
 
@@ -94,13 +97,20 @@ export function Nav() {
     setOpen(false);
   };
 
-  const handleLogoHomeClick = () => {
+  const beginHomeReturn = () => {
     closeNavPanels();
     clearPendingNavScrollTimers();
+    homeHashSyncLockedUntilRef.current = window.performance.now() + HOME_RETURN_HASH_SYNC_LOCK_MS;
+    setReturningHome(true);
+    setActive("");
+    replaceLocationHash("");
   };
+
+  const handleLogoHomeClick = beginHomeReturn;
 
   const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, item: (typeof ALL_NAV)[number]) => {
     closeNavPanels();
+    setReturningHome(false);
 
     if (location.pathname !== item.to) return;
 
@@ -108,8 +118,7 @@ export function Nav() {
     if (item.hash) {
       scrollToNavHash(item.hash);
     } else {
-      clearPendingNavScrollTimers();
-      replaceLocationHash("");
+      beginHomeReturn();
       scrollToPageTop();
     }
   };
@@ -118,9 +127,18 @@ export function Nav() {
     const updateScrollState = (syncUrlHash: boolean) => {
       setScrolled(window.scrollY > 88);
       if (location.pathname !== "/") return;
+
+      if (homeHashSyncLockedUntilRef.current > window.performance.now()) {
+        replaceLocationHash("");
+        setActive("");
+        setReturningHome(true);
+        return;
+      }
+
       const current = syncUrlHash
         ? syncLocationHashToActiveSection(HOME_SECTION_IDS)
         : getActiveSectionHash(HOME_SECTION_IDS);
+      setReturningHome(false);
       setActive(current);
     };
 
@@ -131,7 +149,10 @@ export function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [location.pathname]);
 
-  useEffect(() => { setOpen(false); }, [location.pathname, location.hash]);
+  useEffect(() => {
+    setOpen(false);
+    if (location.hash) setReturningHome(false);
+  }, [location.pathname, location.hash]);
 
   useLayoutEffect(() => {
     const updateCompactMode = () => {
