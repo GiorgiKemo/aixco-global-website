@@ -281,6 +281,17 @@ const legalCopy: Record<LegalTitle, LegalSection[]> = {
   ],
 };
 
+function getModalAccessibleName(modal: NonNullable<ReturnType<typeof useUI>["modal"]>, modalData: unknown) {
+  if (modal === "login") return "Login to your AIXCO portal";
+  if (modal === "register") return "Register with AIXCO";
+  if (modal === "terms") return "Terms & Conditions";
+  if (modal === "privacy") return "Privacy Policy";
+  if (modal === "journey") return (modalData as JourneyDetailData).role;
+  if (modal === "team") return (modalData as TeamDetailData).name;
+  if (modal === "partner") return (modalData as PartnerDetailData).name;
+  return "AIXCO dialog";
+}
+
 export function Modals() {
   const { modal, modalData, close } = useUI();
   const { tx } = useI18n();
@@ -294,15 +305,18 @@ export function Modals() {
 
   if (!modal) return null;
 
+  const dialogLabel = tx(getModalAccessibleName(modal, modalData));
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 animate-fade-in">
       <div className="absolute inset-0 bg-background/70 backdrop-blur-xl" onClick={close} aria-hidden />
       <div
         role="dialog"
         aria-modal="true"
+        aria-label={dialogLabel}
         className="relative max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-lg border border-border/70 bg-surface-elevated shadow-elegant animate-scale-in [overflow-wrap:anywhere]"
       >
-        <button aria-label="Close" onClick={close} className="icon-button-glass absolute right-3 top-3 z-10 h-9 w-9">
+        <button aria-label="Close" onClick={close} className="icon-button-glass absolute right-3 top-3 z-10 h-10 w-10">
           <X className="h-4 w-4" />
         </button>
         <div className="p-7 md:p-10">

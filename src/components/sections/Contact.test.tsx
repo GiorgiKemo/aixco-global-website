@@ -32,13 +32,43 @@ describe("Contact", () => {
     expect(decodeURIComponent(href)).toContain("I want more details about availability.");
   });
 
+  it("exposes durable labels for every contact form field", () => {
+    renderContact();
+
+    expect(screen.getByRole("textbox", { name: "Name*" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Email*" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Participation interest" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Message*" })).toBeInTheDocument();
+  });
+
+  it("places the contact form before the decorative contact image in reading order", () => {
+    const { container } = renderContact();
+
+    const form = container.querySelector("form");
+    const image = screen.getByAltText("Contact");
+
+    expect(form).not.toBeNull();
+    expect(form?.compareDocumentPosition(image)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+
+  it("moves focus to the first invalid contact field and associates validation copy", async () => {
+    renderContact();
+
+    fireEvent.click(screen.getByRole("button", { name: "Contact AIXCO" }));
+
+    const nameInput = await screen.findByRole("textbox", { name: "Name*" });
+    await waitFor(() => expect(nameInput).toHaveFocus());
+    expect(nameInput).toHaveAttribute("aria-describedby", "contact-name-error");
+    expect(screen.getByText("Please enter your name")).toHaveAttribute("role", "alert");
+  });
+
   it("does not claim a message was sent before the visitor opens their email draft", async () => {
     renderContact();
 
-    fireEvent.change(screen.getByPlaceholderText("Name*"), { target: { value: "Audit User" } });
-    fireEvent.change(screen.getByPlaceholderText("Email*"), { target: { value: "audit@example.com" } });
-    fireEvent.change(screen.getByPlaceholderText("Participation interest"), { target: { value: "Batumi apartments" } });
-    fireEvent.change(screen.getByPlaceholderText("Message*"), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Name*" }), { target: { value: "Audit User" } });
+    fireEvent.change(screen.getByRole("textbox", { name: "Email*" }), { target: { value: "audit@example.com" } });
+    fireEvent.change(screen.getByRole("textbox", { name: "Participation interest" }), { target: { value: "Batumi apartments" } });
+    fireEvent.change(screen.getByRole("textbox", { name: "Message*" }), {
       target: { value: "I want more details about availability." },
     });
     fireEvent.click(screen.getByRole("button", { name: "Contact AIXCO" }));

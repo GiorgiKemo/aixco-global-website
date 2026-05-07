@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState, type MutableRefObject } from "react";
 import { z } from "zod";
 import { Mail, MapPin, Check } from "lucide-react";
 import { company } from "@/data/site";
@@ -21,6 +21,7 @@ export function Contact() {
   const [state, setState] = useState<State>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [mailtoHref, setMailtoHref] = useState("");
+  const fieldRefs = useRef<Record<string, HTMLInputElement | HTMLTextAreaElement | null>>({});
   const { tx } = useI18n();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,6 +39,8 @@ export function Contact() {
       parsed.error.issues.forEach((issue) => { errs[String(issue.path[0])] = issue.message; });
       setErrors(errs);
       setState("error");
+      const firstInvalidField = String(parsed.error.issues[0]?.path[0] ?? "");
+      fieldRefs.current[firstInvalidField]?.focus();
       return;
     }
     setErrors({});
@@ -72,20 +75,9 @@ export function Contact() {
               </div>
             </a>
           </div>
-          <div className="mac-card mt-10 overflow-hidden">
-            <img
-              src={aixcoLiveImages.transactionBackdrop}
-              alt={tx("Contact")}
-              loading="lazy"
-              decoding="async"
-              width={1280}
-              height={720}
-              className="aspect-[3/2] w-full object-cover"
-            />
-          </div>
         </div>
 
-        <div className="scroll-reveal lg:col-span-7">
+        <div className="scroll-reveal lg:col-span-7 lg:col-start-6 lg:row-span-2 lg:row-start-1 lg:self-start">
           {state === "success" ? (
             <div className="glass rounded-lg p-10 text-center animate-scale-in">
               <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 text-primary">
@@ -115,19 +107,28 @@ export function Contact() {
           ) : (
             <form onSubmit={onSubmit} noValidate className="grid gap-6 glass rounded-lg p-7 md:p-10">
               <div className="grid gap-6 md:grid-cols-2">
-                <Field placeholder={tx("Name*")} name="name" error={errors.name} />
-                <Field placeholder={tx("Email*")} name="email" type="email" error={errors.email} />
+                <Field label={tx("Name*")} name="name" error={errors.name} fieldRefs={fieldRefs} />
+                <Field label={tx("Email*")} name="email" type="email" error={errors.email} fieldRefs={fieldRefs} />
               </div>
-              <Field placeholder={tx("Participation interest")} name="interest" />
+              <Field label={tx("Participation interest")} name="interest" fieldRefs={fieldRefs} />
               <div>
+                <label htmlFor="message" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {tx("Message*")}
+                </label>
                 <textarea
                   id="message"
                   name="message"
                   rows={5}
                   placeholder={tx("Message*")}
+                  required
+                  aria-invalid={!!errors.message}
+                  aria-describedby={errors.message ? "contact-message-error" : undefined}
+                  ref={(node) => {
+                    fieldRefs.current.message = node;
+                  }}
                   className="form-control resize-none"
                 />
-                {errors.message && <p className="mt-1 text-xs text-destructive">{errors.message}</p>}
+                {errors.message && <p id="contact-message-error" role="alert" className="mt-1 text-xs text-destructive">{errors.message}</p>}
               </div>
               {state === "error" && Object.keys(errors).length === 0 && (
                 <p className="text-sm text-primary">{tx("Sorry, something went wrong.")}</p>
@@ -143,24 +144,59 @@ export function Contact() {
             </form>
           )}
         </div>
+
+        <div className="scroll-reveal lg:col-span-5">
+          <div className="mac-card overflow-hidden">
+            <img
+              src={aixcoLiveImages.transactionBackdrop}
+              alt={tx("Contact")}
+              loading="lazy"
+              decoding="async"
+              width={1280}
+              height={720}
+              className="aspect-[3/2] w-full object-cover"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-function Field({ placeholder, name, type = "text", error }: { placeholder: string; name: string; type?: string; error?: string }) {
+function Field({
+  label,
+  name,
+  type = "text",
+  error,
+  fieldRefs,
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  error?: string;
+  fieldRefs: MutableRefObject<Record<string, HTMLInputElement | HTMLTextAreaElement | null>>;
+}) {
+  const errorId = `contact-${name}-error`;
+
   return (
     <div>
+      <label htmlFor={name} className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+        {label}
+      </label>
       <input
         id={name}
         name={name}
         type={type}
-        placeholder={placeholder}
+        placeholder={label}
         required={name !== "interest"}
         aria-invalid={!!error}
+        aria-describedby={error ? errorId : undefined}
+        ref={(node) => {
+          fieldRefs.current[name] = node;
+        }}
         className="form-control"
       />
-      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
+      {error && <p id={errorId} role="alert" className="mt-1 text-xs text-destructive">{error}</p>}
     </div>
   );
 }

@@ -144,7 +144,7 @@ export function ChatWidget() {
                 type="button"
                 aria-label={tx("Close live chat")}
                 onClick={() => setIsOpen(false)}
-                className="icon-button-glass h-9 w-9 shrink-0"
+                className="icon-button-glass h-10 w-10 shrink-0"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -187,7 +187,7 @@ export function ChatWidget() {
                     key={reply}
                     type="button"
                     onClick={() => sendMessage(reply)}
-                    className="shrink-0 whitespace-nowrap rounded-lg border border-primary/25 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition hover:border-primary/45 hover:bg-primary/15"
+                    className="min-h-10 shrink-0 whitespace-nowrap rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-xs font-medium text-primary transition hover:border-primary/45 hover:bg-primary/15"
                   >
                     {tx(reply)}
                   </button>
@@ -229,10 +229,10 @@ export function ChatWidget() {
                   {tx("Email transcript")}
                 </a>
                 <div className="flex gap-3">
-                  <button type="button" onClick={openRegister} className="text-xs uppercase tracking-widest text-primary">
+                  <button type="button" onClick={openRegister} className="inline-flex min-h-10 items-center px-1 text-xs uppercase tracking-widest text-primary">
                     Register
                   </button>
-                  <button type="button" onClick={clearChat} className="text-xs uppercase tracking-widest text-muted-foreground">
+                  <button type="button" onClick={clearChat} className="inline-flex min-h-10 items-center px-1 text-xs uppercase tracking-widest text-muted-foreground">
                     {tx("Clear")}
                   </button>
                 </div>
@@ -244,7 +244,7 @@ export function ChatWidget() {
 
       <motion.button
         type="button"
-        aria-label={tx(isOpen ? "Close live chat" : "Open live chat")}
+        aria-label={tx(isOpen ? "Minimize live chat" : "Open live chat")}
         onClick={() => setIsOpen((open) => !open)}
         className="group relative flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-gold transition hover:brightness-105 md:h-14 md:w-14"
         whileHover={{ y: -2, scale: 1.03 }}

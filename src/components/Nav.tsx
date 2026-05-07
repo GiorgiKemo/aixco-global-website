@@ -79,8 +79,8 @@ export function Nav() {
   const compactDesktopLabels = lang === "ka";
   const desktopNavSpacing = compactDesktopLabels ? "gap-1 px-2" : "gap-2 px-3";
   const desktopNavLinkClass = compactDesktopLabels
-    ? "px-2 py-1.5 text-[clamp(11.5px,0.66vw,13px)]"
-    : "px-2.5 py-1.5 text-[clamp(12px,0.78vw,14.5px)]";
+    ? "inline-flex min-h-10 items-center px-2 py-2 text-[clamp(11.5px,0.66vw,13px)]"
+    : "inline-flex min-h-10 items-center px-3 py-2 text-[clamp(12px,0.78vw,14.5px)]";
   const topControlClass =
     "inline-flex items-center justify-center rounded-lg border border-white/25 bg-white/[0.06] text-white/90 shadow-[0_8px_28px_rgb(0_0_0/0.16)] backdrop-blur-md transition-[background-color,border-color,color,box-shadow,translate] duration-200 hover:border-[#f0bd5d]/55 hover:bg-white/[0.12] hover:text-[#f0bd5d]";
   const controlClass = solidNav ? "icon-button-glass" : topControlClass;

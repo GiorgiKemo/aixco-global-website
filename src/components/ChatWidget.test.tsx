@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "./ui-state";
@@ -66,5 +66,19 @@ describe("ChatWidget", () => {
     );
     expect(container.querySelector("[data-chat-messages]")).toHaveClass("min-h-0", "flex-1", "overflow-y-auto");
     expect(container.querySelector("[data-chat-quick-replies]")).toHaveClass("overflow-x-auto");
+  });
+
+  it("keeps chat controls large enough for touch interaction", () => {
+    renderWidget();
+
+    fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
+
+    const dialog = screen.getByRole("dialog", { name: /aixco live chat/i });
+    expect(within(dialog).getByRole("button", { name: /close live chat/i })).toHaveClass("h-10", "w-10");
+    expect(screen.getByRole("button", { name: /minimize live chat/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "AIXCO 6% Bond" })).toHaveClass("min-h-10");
+    expect(screen.getByRole("link", { name: /email transcript/i })).toHaveClass("btn-ghost-gold");
+    expect(screen.getByRole("button", { name: "Register" })).toHaveClass("min-h-10");
+    expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-10");
   });
 });

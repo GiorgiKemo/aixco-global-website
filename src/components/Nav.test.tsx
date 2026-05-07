@@ -178,4 +178,15 @@ describe("Nav", () => {
     expect(moreButton.className).toContain("transition-[background-color,color]");
     expect(moreButton.className).not.toContain("transition-all");
   });
+
+  it("keeps desktop navigation targets large enough for reliable clicking", () => {
+    renderNav();
+
+    const primary = screen.getByLabelText("Primary");
+    const aboutLink = within(primary).getByRole("link", { name: "About AIXCO" });
+    const moreButton = within(primary).getByRole("button", { name: /More/ });
+
+    expect(aboutLink.className).toContain("min-h-10");
+    expect(moreButton.className).toContain("min-h-10");
+  });
 });

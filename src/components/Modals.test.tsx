@@ -15,6 +15,36 @@ function PrivacyTrigger() {
 }
 
 describe("Modals", () => {
+  it("gives legal dialogs an accessible name", () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <PrivacyTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open privacy/i }));
+
+    expect(screen.getByRole("dialog", { name: "Privacy Policy" })).toBeInTheDocument();
+  });
+
+  it("uses a comfortable tap target for the modal close control", () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <PrivacyTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open privacy/i }));
+
+    expect(screen.getByRole("button", { name: "Close" })).toHaveClass("h-10", "w-10");
+  });
+
   it("allows translated dialog copy to wrap inside narrow screens", () => {
     render(
       <I18nProvider>
