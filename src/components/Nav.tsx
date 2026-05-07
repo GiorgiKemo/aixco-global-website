@@ -68,6 +68,7 @@ export function Nav() {
   const [active, setActive] = useState<string>("");
   const [returningHome, setReturningHome] = useState(false);
   const [compactNav, setCompactNav] = useState(false);
+  const [desktopActionsAvailable, setDesktopActionsAvailable] = useState(false);
   const navRowRef = useRef<HTMLDivElement | null>(null);
   const logoSlotRef = useRef<HTMLDivElement | null>(null);
   const navMeasureRef = useRef<HTMLDivElement | null>(null);
@@ -76,6 +77,7 @@ export function Nav() {
   const location = useLocation();
   const solidNav = scrolled || open || langOpen;
   const fullNavAvailable = !compactNav;
+  const showDesktopActions = fullNavAvailable && desktopActionsAvailable;
   const compactDesktopLabels = lang === "ka";
   const desktopNavSpacing = compactDesktopLabels ? "gap-1 px-2" : "gap-2 px-3";
   const desktopNavLinkClass = compactDesktopLabels
@@ -160,6 +162,7 @@ export function Nav() {
 
       if (window.innerWidth < 1280) {
         setCompactNav(true);
+        setDesktopActionsAvailable(false);
         return;
       }
 
@@ -175,12 +178,16 @@ export function Nav() {
       const logoWidth = logo.getBoundingClientRect().width;
       const navWidth = measuredNav.scrollWidth;
       const persistentControls = measuredControls.querySelector<HTMLElement>("[data-nav-persistent]");
-      const controlsWidth =
-        window.innerWidth >= 1536 ? measuredControls.scrollWidth : persistentControls?.scrollWidth ?? measuredControls.scrollWidth;
+      const persistentControlsWidth = persistentControls?.scrollWidth ?? measuredControls.scrollWidth;
+      const fullControlsWidth = measuredControls.scrollWidth;
       const horizontalGaps = 32;
       const reserve = 28;
+      const coreNavFits = logoWidth + navWidth + persistentControlsWidth + horizontalGaps + reserve <= availableWidth;
+      const desktopActionsFit =
+        window.innerWidth >= 1536 && logoWidth + navWidth + fullControlsWidth + horizontalGaps + reserve <= availableWidth;
 
-      setCompactNav(logoWidth + navWidth + controlsWidth + horizontalGaps + reserve > availableWidth);
+      setCompactNav(!coreNavFits);
+      setDesktopActionsAvailable(coreNavFits && desktopActionsFit);
     };
 
     updateCompactMode();
@@ -321,20 +328,20 @@ export function Nav() {
 
           <button
             onClick={openLogin}
-            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} min-h-11 whitespace-nowrap px-3 py-2 text-sm tracking-wide transition-colors ${controlTextClass}`}
+            className={`${showDesktopActions ? "hidden 2xl:inline-flex" : "hidden"} min-h-11 whitespace-nowrap px-3 py-2 text-sm tracking-wide transition-colors ${controlTextClass}`}
           >
             {t("cta.login")}
           </button>
           <button
             onClick={openRegister}
-            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !border-primary/50 !bg-[#fff8ec] !py-2 !px-4 text-sm font-bold !text-[#7a4a0a] shadow-[0_8px_22px_-18px_rgb(122_74_10/0.7)]`}
+            className={`${showDesktopActions ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !border-primary/50 !bg-[#fff8ec] !py-2 !px-4 text-sm font-bold !text-[#7a4a0a] shadow-[0_8px_22px_-18px_rgb(122_74_10/0.7)]`}
           >
             {t("cta.register")}
           </button>
           <Link
             to="/#participate"
             onClick={(event) => handleNavClick(event, NAV[4])}
-            className={`${fullNavAvailable ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-sm font-bold !text-white drop-shadow-[0_1px_1px_rgb(76_42_0/0.45)]`}
+            className={`${showDesktopActions ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-sm font-bold !text-white drop-shadow-[0_1px_1px_rgb(76_42_0/0.45)]`}
           >
             {t("cta.start")}
           </Link>
@@ -356,7 +363,7 @@ export function Nav() {
         className="pointer-events-none invisible fixed -left-[9999px] top-0 flex items-center gap-4 whitespace-nowrap"
       >
         <nav ref={navMeasureRef} className={`flex items-center justify-center ${desktopNavSpacing}`}>
-          {ALL_NAV.map((item) => {
+          {NAV.map((item) => {
             const label = t(item.key);
             return (
               <span key={item.key} className={`rounded-full ${desktopNavLinkClass} leading-none tracking-wide`}>
@@ -364,6 +371,9 @@ export function Nav() {
               </span>
             );
           })}
+          <span className={`rounded-full ${desktopNavLinkClass} leading-none tracking-wide`}>
+            More
+          </span>
         </nav>
         <div ref={controlsMeasureRef} className="flex items-center gap-3">
           <span data-nav-persistent className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[12px] uppercase tracking-widest">

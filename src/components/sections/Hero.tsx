@@ -12,7 +12,7 @@ const heroPriceText = "Starting from \u20ac1,000";
 const heroPanelVideos = aixcoBatumiGalleryVideos.slice(0, 4);
 
 type HeroVideoEnvironment = {
-  reduceMotion: boolean | null;
+  reduceMotion?: boolean | null;
   viewportWidth: number;
   saveData?: boolean;
   effectiveType?: string;
@@ -43,24 +43,21 @@ export function shouldShowHeroVideoPoster({
 }
 
 export function shouldUseHeroVideoWall(environment: HeroVideoEnvironment) {
-  const { reduceMotion, saveData = false, effectiveType, deviceMemory, viewportWidth } = environment;
+  const { saveData = false, effectiveType, deviceMemory } = environment;
 
-  if (reduceMotion) return false;
   if (saveData) return false;
-  if (viewportWidth < 768) return false;
   if (effectiveType && ["slow-2g", "2g", "3g"].includes(effectiveType)) return false;
   if (typeof deviceMemory === "number" && deviceMemory <= 4) return false;
   return true;
 }
 
-function getHeroVideoEnvironment(reduceMotion: boolean | null): HeroVideoEnvironment {
+function getHeroVideoEnvironment(): HeroVideoEnvironment {
   const navigatorWithConnection = window.navigator as Navigator & {
     connection?: { saveData?: boolean; effectiveType?: string };
     deviceMemory?: number;
   };
 
   return {
-    reduceMotion,
     viewportWidth: window.innerWidth,
     saveData: navigatorWithConnection.connection?.saveData,
     effectiveType: navigatorWithConnection.connection?.effectiveType,
@@ -182,7 +179,7 @@ export function Hero() {
     setShouldUseVideoWall(false);
     setIsHeroInFocus(false);
 
-    if (!shouldUseHeroVideoWall(getHeroVideoEnvironment(shouldReduceMotion))) return;
+    if (!shouldUseHeroVideoWall(getHeroVideoEnvironment())) return;
 
     const node = heroSectionRef.current;
     if (!node || typeof window.IntersectionObserver !== "function") {
