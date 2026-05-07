@@ -26,4 +26,14 @@ describe("Footer", () => {
     expect(screen.getByText(/AIXCO Global 2026/)).toBeInTheDocument();
     expect(container.querySelector("[data-footer-actions]")).toHaveClass("md:pr-24", "lg:pr-0");
   });
+
+  it("keeps footer legal and social actions large enough for touch interaction", () => {
+    renderFooter();
+
+    expect(screen.getByRole("link", { name: /ISO 27001-2022 Certified Systems/i })).toHaveClass("min-h-10");
+    expect(screen.getByRole("button", { name: "Terms & Conditions" })).toHaveClass("min-h-10");
+    expect(screen.getByRole("button", { name: "Privacy Policy" })).toHaveClass("min-h-10");
+    expect(screen.getByRole("link", { name: "Instagram" })).toHaveClass("h-10", "w-10");
+    expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveClass("h-10", "w-10");
+  });
 });

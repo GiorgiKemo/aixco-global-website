@@ -308,7 +308,7 @@ export function Nav() {
                       data-lang={l.code}
                       aria-selected={l.code === lang}
                       onClick={() => { setLang(l.code); setLangOpen(false); }}
-                      className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${l.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70"}`}
+                      className={`flex min-h-10 w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${l.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70"}`}
                     >
                       <span>{l.label}</span>
                       <span className="text-[12px] uppercase tracking-widest opacity-70">{l.native}</span>

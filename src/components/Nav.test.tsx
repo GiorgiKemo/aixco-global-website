@@ -189,4 +189,14 @@ describe("Nav", () => {
     expect(aboutLink.className).toContain("min-h-10");
     expect(moreButton.className).toContain("min-h-10");
   });
+
+  it("keeps language menu options large enough for touch interaction", () => {
+    renderNav();
+
+    fireEvent.click(screen.getByRole("button", { name: "Change language" }));
+
+    expect(screen.getByRole("option", { name: /Deutsch/i })).toHaveClass("min-h-10");
+    expect(screen.getByRole("option", { name: /ქართული/i })).toHaveClass("min-h-10");
+    expect(screen.getByRole("option", { name: /العربية/i })).toHaveClass("min-h-10");
+  });
 });
