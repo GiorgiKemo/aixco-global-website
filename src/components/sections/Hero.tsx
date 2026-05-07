@@ -43,9 +43,13 @@ export function shouldShowHeroVideoPoster({
 }
 
 export function shouldUseHeroVideoWall(environment: HeroVideoEnvironment) {
-  const { saveData = false } = environment;
+  const { reduceMotion, saveData = false, effectiveType, deviceMemory, viewportWidth } = environment;
 
+  if (reduceMotion) return false;
   if (saveData) return false;
+  if (viewportWidth < 768) return false;
+  if (effectiveType && ["slow-2g", "2g", "3g"].includes(effectiveType)) return false;
+  if (typeof deviceMemory === "number" && deviceMemory <= 4) return false;
   return true;
 }
 

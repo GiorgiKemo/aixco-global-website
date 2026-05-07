@@ -1246,12 +1246,12 @@ export const textTranslations = {
 
 export const attributeTranslations = {
   "title": {
-    "AIXCO Global | Global Real Estate Participation": {
-      "de": "AIXCO Global | Globale Immobilienbeteiligung",
-      "ru": "AIXCO Global | Глобальное участие в недвижимости",
-      "ka": "AIXCO Global | გლობალური უძრავი ქონების მონაწილეობა",
-      "tr": "AIXCO Global | Küresel Gayrimenkul Katılımı",
-      "ar": "AIXCO Global | المشاركة العقارية العالمية"
+    "AIXCO.Global | Quality Real Estate Participation": {
+      "de": "AIXCO.Global | Hochwertige Immobilienbeteiligung",
+      "ru": "AIXCO.Global | Качественное участие в недвижимости",
+      "ka": "AIXCO.Global | უძრავ ქონებაში ხარისხიანი მონაწილეობა",
+      "tr": "AIXCO.Global | Nitelikli Gayrimenkul Katılımı",
+      "ar": "AIXCO.Global | مشاركة عقارية عالية الجودة"
     }
   },
   "content": {

@@ -35,4 +35,16 @@ describe("I18nProvider", () => {
     expect(screen.getByText("ab")).toBeInTheDocument();
     expect(screen.getByText("Konzerngesellschaft")).toBeInTheDocument();
   });
+
+  it("translates the document title for non-English languages", () => {
+    localStorage.setItem("aixco-lang", "de");
+
+    render(
+      <I18nProvider>
+        <TranslationProbe />
+      </I18nProvider>,
+    );
+
+    expect(document.title).toBe("AIXCO.Global | Hochwertige Immobilienbeteiligung");
+  });
 });

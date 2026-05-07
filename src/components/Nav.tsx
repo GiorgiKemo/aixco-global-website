@@ -379,36 +379,41 @@ export function Nav() {
 
       {/* Mobile drawer */}
       <div
+        data-mobile-drawer
+        aria-hidden={open ? undefined : true}
+        inert={open ? undefined : ""}
         className={`${compactNav ? "" : "2xl:hidden"} transition-[max-height] duration-300 ${
           open ? "max-h-[calc(100svh-4rem)] overflow-y-auto" : "max-h-0 overflow-hidden"
         }`}
       >
-        <div className="container-x pb-6 pt-2">
-          <nav aria-label="Mobile" className="rounded-xl border border-white/10 bg-background/95 p-2 shadow-2xl backdrop-blur-xl flex flex-col gap-0.5">
-            {ALL_NAV.map((item) => {
-              const isActive = isNavItemActive(item);
-              return (
-                <Link
-                  key={item.key}
-                  to={`${item.to}${item.hash}`}
-                  aria-current={isActive ? "page" : undefined}
-                  onClick={(event) => handleNavClick(event, item)}
-                  className={`rounded-lg px-4 py-2.5 text-[15px] font-medium transition-colors duration-200 ${
-                    isActive
-                      ? "bg-primary/15 text-primary w-full"
-                      : "text-foreground/80 hover:bg-white/5 hover:text-foreground w-full"
-                  }`}
-                >
-                  {t(item.key)}
-                </Link>
-              );
-            })}
-          </nav>
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <button onClick={openLogin} className="btn-ghost-gold w-full justify-center text-center leading-tight">{t("cta.login")}</button>
-            <button onClick={openRegister} className="btn-gold w-full justify-center text-center leading-tight">{t("cta.register")}</button>
+        {open && (
+          <div className="container-x pb-6 pt-2">
+            <nav aria-label="Mobile" className="rounded-xl border border-white/10 bg-background/95 p-2 shadow-2xl backdrop-blur-xl flex flex-col gap-0.5">
+              {ALL_NAV.map((item) => {
+                const isActive = isNavItemActive(item);
+                return (
+                  <Link
+                    key={item.key}
+                    to={`${item.to}${item.hash}`}
+                    aria-current={isActive ? "page" : undefined}
+                    onClick={(event) => handleNavClick(event, item)}
+                    className={`rounded-lg px-4 py-2.5 text-[15px] font-medium transition-colors duration-200 ${
+                      isActive
+                        ? "bg-primary/15 text-primary w-full"
+                        : "text-foreground/80 hover:bg-white/5 hover:text-foreground w-full"
+                    }`}
+                  >
+                    {t(item.key)}
+                  </Link>
+                );
+              })}
+            </nav>
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <button onClick={openLogin} className="btn-ghost-gold w-full justify-center text-center leading-tight">{t("cta.login")}</button>
+              <button onClick={openRegister} className="btn-gold w-full justify-center text-center leading-tight">{t("cta.register")}</button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </header>
   );

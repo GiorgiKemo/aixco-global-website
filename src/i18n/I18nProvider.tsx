@@ -68,6 +68,34 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "Gayrimenkul Alıcısı Müşteri",
     ar: "عميل مشتري عقار",
   },
+  "Your email draft is ready.": {
+    de: "Ihr E-Mail-Entwurf ist bereit.",
+    ru: "Ваш черновик письма готов.",
+    ka: "თქვენი ელფოსტის მონახაზი მზად არის.",
+    tr: "E-posta taslağınız hazır.",
+    ar: "مسودة بريدك الإلكتروني جاهزة.",
+  },
+  "We validated your details. Your browser has not sent anything yet; use the email draft to send your message directly to AIXCO.": {
+    de: "Ihre Angaben wurden geprüft. Ihr Browser hat noch nichts gesendet; nutzen Sie den E-Mail-Entwurf, um Ihre Nachricht direkt an AIXCO zu senden.",
+    ru: "Мы проверили ваши данные. Браузер еще ничего не отправил; используйте черновик письма, чтобы отправить сообщение напрямую в AIXCO.",
+    ka: "თქვენი მონაცემები შემოწმებულია. ბრაუზერს ჯერ არაფერი გაუგზავნია; გამოიყენეთ ელფოსტის მონახაზი შეტყობინების პირდაპირ AIXCO-სთვის გასაგზავნად.",
+    tr: "Bilgileriniz doğrulandı. Tarayıcınız henüz hiçbir şey göndermedi; mesajınızı doğrudan AIXCO'ya göndermek için e-posta taslağını kullanın.",
+    ar: "تم التحقق من بياناتك. لم يرسل متصفحك أي شيء بعد؛ استخدم مسودة البريد الإلكتروني لإرسال رسالتك مباشرة إلى AIXCO.",
+  },
+  "Open email draft": {
+    de: "E-Mail-Entwurf öffnen",
+    ru: "Открыть черновик письма",
+    ka: "ელფოსტის მონახაზის გახსნა",
+    tr: "E-posta taslağını aç",
+    ar: "افتح مسودة البريد",
+  },
+  "Edit details": {
+    de: "Angaben bearbeiten",
+    ru: "Изменить данные",
+    ka: "დეტალების შეცვლა",
+    tr: "Bilgileri düzenle",
+    ar: "تعديل البيانات",
+  },
 };
 
 const catalogSources = [

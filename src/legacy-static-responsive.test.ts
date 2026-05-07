@@ -26,4 +26,16 @@ describe("legacy static article responsiveness", () => {
       expect(html).toContain("content:'Back'");
     }
   });
+
+  it("uses optimized legacy homepage videos instead of large source mp4 files", () => {
+    const html = legacyHtml("index.html");
+
+    expect(html).toContain('src="media/batumi2-optimized.mp4"');
+    expect(html).toContain('href="media/fund1-optimized.mp4"');
+    expect(html).toContain('href="media/fund2-optimized.mp4"');
+    expect(html).toContain('href="media/fund3-optimized.mp4"');
+    expect(html).toContain('data-video="media/bonds-optimized.mp4"');
+    expect(html).not.toContain('src="images/batumi2.mp4"');
+    expect(html).not.toContain('href="images/fund/fund2.mp4"');
+  });
 });

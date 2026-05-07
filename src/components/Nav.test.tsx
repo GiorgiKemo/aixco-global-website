@@ -58,7 +58,10 @@ describe("Nav", () => {
     renderNav();
 
     const primary = screen.getByLabelText("Primary");
-    const mobile = screen.getByLabelText("Mobile");
+    const mobile = (() => {
+      fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
+      return screen.getByLabelText("Mobile");
+    })();
     const participateLink = within(primary).getByRole("link", { name: "მონაწილეობის გზები" });
     const howLink = within(primary).getByRole("link", { name: "როგორ მუშაობს AIXCO" });
 
@@ -70,6 +73,19 @@ describe("Nav", () => {
     expect(within(mobile).getByRole("link", { name: "როგორ მუშაობს AIXCO" })).toHaveTextContent(
       "როგორ მუშაობს AIXCO",
     );
+  });
+
+  it("marks the closed compact drawer inert until the menu is opened", () => {
+    const { container } = renderNav();
+
+    const drawer = container.querySelector("[data-mobile-drawer]");
+    expect(drawer).toHaveAttribute("inert");
+    expect(drawer).toHaveAttribute("aria-hidden", "true");
+
+    fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
+
+    expect(drawer).not.toHaveAttribute("inert");
+    expect(drawer).not.toHaveAttribute("aria-hidden");
   });
 
   it("marks the hash target active before scroll sync catches up", () => {

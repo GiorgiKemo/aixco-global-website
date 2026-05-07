@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { z } from "zod";
-import { Mail, MapPin, Check, Loader2 } from "lucide-react";
+import { Mail, MapPin, Check } from "lucide-react";
 import { company } from "@/data/site";
 import { motion } from "framer-motion";
 import { premiumPress } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveImages } from "@/lib/aixco-live-assets";
+import { createContactMailtoHref } from "./contact-mailto";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(100),
@@ -14,11 +15,12 @@ const schema = z.object({
   message: z.string().trim().min(10, "Please share a few details").max(1500),
 });
 
-type State = "idle" | "submitting" | "success" | "error";
+type State = "idle" | "success" | "error";
 
 export function Contact() {
   const [state, setState] = useState<State>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [mailtoHref, setMailtoHref] = useState("");
   const { tx } = useI18n();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,8 +41,7 @@ export function Contact() {
       return;
     }
     setErrors({});
-    setState("submitting");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setMailtoHref(createContactMailtoHref(parsed.data));
     setState("success");
   };
 
@@ -90,7 +91,26 @@ export function Contact() {
               <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 text-primary">
                 <Check className="h-6 w-6" />
               </span>
-              <h3 className="font-display text-3xl">{tx("Thank you, your message has been sent.")}</h3>
+              <h3 className="font-display text-3xl">{tx("Your email draft is ready.")}</h3>
+              <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-foreground/75">
+                {tx("We validated your details. Your browser has not sent anything yet; use the email draft to send your message directly to AIXCO.")}
+              </p>
+              <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <a href={mailtoHref} className="btn-gold justify-center">
+                  <Mail className="h-4 w-4" />
+                  {tx("Open email draft")}
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setState("idle");
+                    setMailtoHref("");
+                  }}
+                  className="btn-ghost-gold justify-center"
+                >
+                  {tx("Edit details")}
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={onSubmit} noValidate className="grid gap-6 glass rounded-lg p-7 md:p-10">
@@ -114,12 +134,11 @@ export function Contact() {
               )}
               <motion.button
                 type="submit"
-                disabled={state === "submitting"}
                 className="btn-gold justify-self-start"
                 whileHover={{ y: -2, scale: 1.012 }}
                 whileTap={premiumPress}
               >
-                {state === "submitting" ? (<><Loader2 className="h-4 w-4 animate-spin" /> {tx("Contact AIXCO")}</>) : tx("Contact AIXCO")}
+                {tx("Contact AIXCO")}
               </motion.button>
             </form>
           )}
