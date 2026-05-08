@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Bot, Mail, MessageCircleMore, Send, UserRound, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { company } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
 import { useI18n } from "@/i18n/I18nProvider";
+import { recordChatTranscript } from "@/lib/backend/lead-capture";
 import { useUI } from "./ui-state";
 import { premiumPress } from "@/lib/motion";
 
@@ -78,6 +79,7 @@ function loadStoredMessages() {
 export function ChatWidget() {
   const { tx } = useI18n();
   const { openRegister } = useUI();
+  const { company } = useSiteContent();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(loadStoredMessages);
   const [draft, setDraft] = useState("");
@@ -102,7 +104,7 @@ export function ChatWidget() {
     const subject = encodeURIComponent("AIXCO live chat request");
     const body = encodeURIComponent(`${transcript}\n\nPlease contact me about my AIXCO request.`);
     return `mailto:${company.email}?subject=${subject}&body=${body}`;
-  }, [messages]);
+  }, [company.email, messages]);
 
   const sendMessage = (text: string) => {
     const cleaned = text.trim();
@@ -224,7 +226,13 @@ export function ChatWidget() {
               </form>
 
               <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-                <a href={transcriptHref} className="btn-ghost-gold !px-3 !py-2 text-xs">
+                <a
+                  href={transcriptHref}
+                  onClick={() => {
+                    void recordChatTranscript(messages);
+                  }}
+                  className="btn-ghost-gold !px-3 !py-2 text-xs"
+                >
                   <Mail className="h-4 w-4" />
                   {tx("Email transcript")}
                 </a>

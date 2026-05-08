@@ -1,11 +1,12 @@
 import { useRef, useState, type MutableRefObject } from "react";
 import { z } from "zod";
 import { Mail, MapPin, Check } from "lucide-react";
-import { company } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
 import { motion } from "framer-motion";
 import { premiumPress } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveImages } from "@/lib/aixco-live-assets";
+import { submitContactSubmission } from "@/lib/backend/lead-capture";
 import { createContactMailtoHref } from "./contact-mailto";
 
 const schema = z.object({
@@ -21,8 +22,10 @@ export function Contact() {
   const [state, setState] = useState<State>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [mailtoHref, setMailtoHref] = useState("");
+  const [backendSaved, setBackendSaved] = useState(false);
   const fieldRefs = useRef<Record<string, HTMLInputElement | HTMLTextAreaElement | null>>({});
   const { tx } = useI18n();
+  const { company } = useSiteContent();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,7 +47,9 @@ export function Contact() {
       return;
     }
     setErrors({});
-    setMailtoHref(createContactMailtoHref(parsed.data));
+    const backendResult = await submitContactSubmission(parsed.data);
+    setBackendSaved(backendResult.ok);
+    setMailtoHref(createContactMailtoHref(parsed.data, company.email));
     setState("success");
   };
 
@@ -83,9 +88,15 @@ export function Contact() {
               <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 text-primary">
                 <Check className="h-6 w-6" />
               </span>
-              <h3 className="font-display text-3xl">{tx("Your email draft is ready.")}</h3>
+              <h3 className="font-display text-3xl">
+                {tx(backendSaved ? "Your request was received." : "Your email draft is ready.")}
+              </h3>
               <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-foreground/75">
-                {tx("We validated your details. Your browser has not sent anything yet; use the email draft to send your message directly to AIXCO.")}
+                {tx(
+                  backendSaved
+                    ? "We saved your details for the AIXCO team. You can also open an email draft if you want to send extra context."
+                    : "We validated your details. Your browser has not sent anything yet; use the email draft to send your message directly to AIXCO.",
+                )}
               </p>
               <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a href={mailtoHref} className="btn-gold justify-center">
@@ -97,6 +108,7 @@ export function Contact() {
                   onClick={() => {
                     setState("idle");
                     setMailtoHref("");
+                    setBackendSaved(false);
                   }}
                   className="btn-ghost-gold justify-center"
                 >

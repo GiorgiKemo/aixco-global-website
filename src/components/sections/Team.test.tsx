@@ -10,19 +10,22 @@ vi.mock("../ui-state", () => ({
 }));
 
 describe("Team", () => {
-  it("keeps the card grid left-aligned with the heading on smaller screens", () => {
+  it("centers the section heading and card grid as one composition", () => {
     const { container } = render(
       <I18nProvider>
         <Team />
       </I18nProvider>,
     );
 
+    const heading = screen.getByRole("heading", { name: "Our Team" });
     const profileGrid = container.querySelector("[data-layout='team-profile-grid']");
 
+    expect(heading.parentElement?.className).toContain("mx-auto");
+    expect(heading.parentElement?.className).toContain("text-center");
     expect(profileGrid).toBeInTheDocument();
     expect(profileGrid?.className).toContain("w-full");
     expect(profileGrid?.className).toContain("max-w-[65rem]");
-    expect(profileGrid?.className).not.toContain("mx-auto");
+    expect(profileGrid?.className).toContain("mx-auto");
   });
 
   it("uses a valid targeted transition for photo hover treatment", () => {

@@ -1,4 +1,4 @@
-import { team } from '@/data/site';
+import { useSiteContent } from '@/data/site-content-context';
 import { useI18n } from '@/i18n/I18nProvider';
 import { aixcoLiveImages } from '@/lib/aixco-live-assets';
 import { premiumPress, premiumSurfaceHover } from '@/lib/motion';
@@ -14,26 +14,27 @@ const imageMap: Record<string, string> = {
 export function Team() {
   const { openTeam } = useUI();
   const { tx } = useI18n();
+  const { team } = useSiteContent();
 
   return (
     <section
       id="team"
       className="relative scroll-mt-16 bg-surface/40 py-14 md:flex md:min-h-[calc(100svh-5rem)] md:items-center md:scroll-mt-20 md:py-0"
     >
-      <div className="container-x md:py-0">
-        <div className="scroll-reveal mb-4 max-w-5xl min-[1360px]:mb-5">
+      <div className="container-x flex flex-col items-center md:py-0">
+        <div className="scroll-reveal mx-auto mb-4 max-w-5xl text-center min-[1360px]:mb-5">
           <p className="eyebrow">{tx('Our Team')}</p>
           <h2 className="heading-section mt-4 text-[clamp(2.32rem,3.45vw,3.35rem)] leading-[1.03] min-[1360px]:text-[clamp(2.6rem,3.35vw,3.75rem)]">
             {tx('Our Team')}
           </h2>
-          <p className="mt-3 max-w-[56rem] text-[clamp(1rem,0.92vw,1.1rem)] leading-[1.5] text-foreground/82 min-[1360px]:text-[clamp(1.04rem,0.96vw,1.16rem)]">
+          <p className="mx-auto mt-3 max-w-[56rem] text-[clamp(1rem,0.92vw,1.1rem)] leading-[1.5] text-foreground/82 min-[1360px]:text-[clamp(1.04rem,0.96vw,1.16rem)]">
             {tx(
               'Meet the leadership team shaping AIXCO’s strategic direction, partnerships, and distribution platform.'
             )}
           </p>
         </div>
 
-        <div data-layout="team-profile-grid" className="grid w-full max-w-[65rem] gap-5 md:grid-cols-3 min-[1360px]:gap-6">
+        <div data-layout="team-profile-grid" className="mx-auto grid w-full max-w-[65rem] gap-5 md:grid-cols-3 min-[1360px]:gap-6">
           {team.map((m) => (
             <motion.button
               key={m.name}

@@ -1,6 +1,6 @@
 import { Instagram, Linkedin } from "lucide-react";
 import { Logo } from "./Logo";
-import { company } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
 import { useUI } from "./ui-state";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
@@ -8,6 +8,7 @@ import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 export function Footer() {
   const { openTerms, openPrivacy } = useUI();
   const { tx } = useI18n();
+  const { company } = useSiteContent();
 
   return (
     <footer className="relative border-t border-border/60 bg-gradient-onyx py-10">

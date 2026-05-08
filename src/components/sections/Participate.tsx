@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
-import { participationRoutes } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
+import type { SiteContent } from "@/lib/backend/site-content";
 import { useUI } from "../ui-state";
 import { motion } from "framer-motion";
 import { Fragment, type MouseEvent } from "react";
@@ -14,7 +15,7 @@ const videoMap: Record<string, { src: string; poster: string }> = {
   batumiBuy: { src: aixcoLiveVideos.batumiBuy, poster: aixcoLiveImages.batumiOtium },
 };
 
-type ParticipationRoute = (typeof participationRoutes)[number];
+type ParticipationRoute = SiteContent["participationRoutes"][number];
 
 function SlashBreakText({ text }: { text: string }) {
   const parts = text.split("/");
@@ -119,6 +120,7 @@ function ParticipationRouteCard({
 export function Participate() {
   const { openRegister } = useUI();
   const { tx } = useI18n();
+  const { participationRoutes } = useSiteContent();
   const navigate = useNavigate();
 
   const handleHowClick = (event: MouseEvent<HTMLAnchorElement>) => {

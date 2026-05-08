@@ -1,4 +1,5 @@
-import { batumiBenefits, batumiProperties } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
+import type { SiteContent } from "@/lib/backend/site-content";
 import { ArrowRight, Building2, FileText, Home, Percent, ShieldCheck, TrendingUp, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
@@ -26,7 +27,8 @@ const detailAssetMap: Record<string, string> = {
   otium: aixcoLiveAssetDetails.otiumCatalog,
 };
 
-type BatumiProperty = (typeof batumiProperties)[number];
+type BatumiProperty = SiteContent["batumiProperties"][number];
+type BatumiBenefits = SiteContent["batumiBenefits"];
 type Translate = (copy: string) => string;
 
 const marketMetrics = [
@@ -38,12 +40,14 @@ const marketMetrics = [
 const marketDetailIcons: LucideIcon[] = [Home, Percent, TrendingUp, ShieldCheck];
 const projectDetailIcons: LucideIcon[] = [Building2, FileText, TrendingUp];
 
-const marketDetails = [
-  { label: "Ownership", content: batumiBenefits[3] },
-  { label: "Tax", content: batumiBenefits[4] },
-  { label: "Capital gains", content: batumiBenefits[5] },
-  { label: "Financing", content: batumiBenefits[6] },
-] as const;
+function getMarketDetails(benefits: BatumiBenefits) {
+  return [
+    { label: "Ownership", content: benefits[3] },
+    { label: "Tax", content: benefits[4] },
+    { label: "Capital gains", content: benefits[5] },
+    { label: "Financing", content: benefits[6] },
+  ].filter((detail): detail is { label: string; content: string } => Boolean(detail.content));
+}
 
 function BatumiStatCard({
   label,
@@ -131,7 +135,9 @@ function BatumiDetailItem({
   );
 }
 
-function BatumiMarketCard({ tx }: { tx: Translate }) {
+function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Translate }) {
+  const marketDetails = getMarketDetails(benefits);
+
   return (
     <motion.article
       data-batumi-card="market-overview"
@@ -286,6 +292,7 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
 
 export function Batumi() {
   const { tx } = useI18n();
+  const { batumiBenefits, batumiProperties } = useSiteContent();
 
   return (
     <section className="relative bg-surface/40 py-16 md:py-20 lg:py-20">
@@ -302,7 +309,7 @@ export function Batumi() {
           </div>
 
           <div className="flex flex-1 flex-col md:min-h-0" data-layout="batumi-first-viewport">
-            <BatumiMarketCard tx={tx} />
+            <BatumiMarketCard benefits={batumiBenefits} tx={tx} />
           </div>
         </div>
 

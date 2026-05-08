@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
-import { dubaiFunds } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
+import type { SiteContent } from "@/lib/backend/site-content";
 import { motion, useAnimationFrame, useMotionValue, useMotionValueEvent, useReducedMotion, useSpring } from "framer-motion";
 import { ArrowRight, Building2, HandCoins, TrendingUp, type LucideIcon } from "lucide-react";
 import { ExpandableImage } from "@/components/ExpandableImage";
@@ -81,7 +82,7 @@ function formatMetricValue(value: string) {
   };
 }
 
-type DubaiFund = (typeof dubaiFunds)[number];
+type DubaiFund = SiteContent["dubaiFunds"][number];
 type Translate = (copy: string) => string;
 type DubaiFundGalleryId = keyof typeof fundAssetGalleries;
 type DubaiFundGalleryGroup = (typeof fundAssetGalleries)[DubaiFundGalleryId]["groups"][number];
@@ -580,6 +581,7 @@ function DubaiFundCard({
 
 export function Dubai() {
   const { tx } = useI18n();
+  const { dubaiFunds } = useSiteContent();
   const shouldReduceMotion = useReducedMotion();
   const [landingFund, ...remainingFunds] = dubaiFunds;
   const renderFundGallery = (fund: DubaiFund, isLanding = false) => {

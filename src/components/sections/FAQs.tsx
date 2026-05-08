@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { faqGroups } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
 import { Plus } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useUI } from "../ui-state";
@@ -8,6 +8,7 @@ export function FAQs() {
   const [openId, setOpenId] = useState<string | null>("Customer-0");
   const { tx } = useI18n();
   const { openLogin, openRegister } = useUI();
+  const { faqGroups } = useSiteContent();
 
   return (
     <section id="faqs" className="relative scroll-mt-16 py-16 md:scroll-mt-20 md:py-20 lg:py-24">

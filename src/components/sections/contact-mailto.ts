@@ -7,7 +7,7 @@ export type ContactMailtoData = {
   message: string;
 };
 
-export function createContactMailtoHref(data: ContactMailtoData) {
+export function createContactMailtoHref(data: ContactMailtoData, recipientEmail = company.email) {
   const subject = encodeURIComponent(`AIXCO contact request from ${data.name}`);
   const lines = [
     `Name: ${data.name}`,
@@ -16,5 +16,5 @@ export function createContactMailtoHref(data: ContactMailtoData) {
     "",
     data.message,
   ];
-  return `mailto:${company.email}?subject=${subject}&body=${encodeURIComponent(lines.join("\n"))}`;
+  return `mailto:${recipientEmail}?subject=${subject}&body=${encodeURIComponent(lines.join("\n"))}`;
 }

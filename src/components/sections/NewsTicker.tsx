@@ -1,7 +1,12 @@
 import { ArrowUpRight } from "lucide-react";
-import { newsTickerItems, type NewsTickerItem } from "@/data/news";
+import { useSiteContent } from "@/data/site-content-context";
+import type { SiteContent } from "@/lib/backend/site-content";
+
+type NewsTickerItem = SiteContent["newsTickerItems"][number];
 
 export function NewsTicker() {
+  const { newsTickerItems } = useSiteContent();
+
   return (
     <section
       aria-label="Latest news"

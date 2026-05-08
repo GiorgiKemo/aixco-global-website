@@ -1,11 +1,12 @@
-import { partners } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
+import type { SiteContent } from "@/lib/backend/site-content";
 import { useUI } from "../ui-state";
 import { motion } from "framer-motion";
 import { premiumPress } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 
-type Partner = (typeof partners)[number];
+type Partner = SiteContent["partners"][number];
 
 const logoMap: Record<string, string> = {
   globalPartners: aixcoLiveLogos.globalPartners,
@@ -21,6 +22,7 @@ const logoMap: Record<string, string> = {
 export function Partners() {
   const { openPartner } = useUI();
   const { tx } = useI18n();
+  const { partners } = useSiteContent();
   const groupCompanies = partners.filter((partner) => partner.group === "Group companies");
   const strategicPartners = partners.filter((partner) => partner.group === "Strategic partners");
 

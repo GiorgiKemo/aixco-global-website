@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
 import { ChatWidget } from "@/components/ChatWidget";
+import { SiteContentProvider } from "@/data/SiteContentProvider";
 import { installGlideScroll, scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -74,19 +75,21 @@ function ScrollManager() {
 
 const App = () => (
   <I18nProvider>
-    <UIProvider>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
-        <ScrollManager />
-        <Suspense fallback={<RouteFallback />}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-        <DeferredModals />
-        <ChatWidget />
-      </BrowserRouter>
-    </UIProvider>
+    <SiteContentProvider>
+      <UIProvider>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <ScrollManager />
+          <Suspense fallback={<RouteFallback />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+          <DeferredModals />
+          <ChatWidget />
+        </BrowserRouter>
+      </UIProvider>
+    </SiteContentProvider>
   </I18nProvider>
 );
 

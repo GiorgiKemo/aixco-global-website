@@ -1,4 +1,4 @@
-import { journeys } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
 import { useUI } from "../ui-state";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { useI18n } from "@/i18n/I18nProvider";
 export function HowItWorks() {
   const { openJourney, openRegister } = useUI();
   const { tx } = useI18n();
+  const { journeys } = useSiteContent();
   const navigate = useNavigate();
 
   const handlePartnersClick = (event: MouseEvent<HTMLAnchorElement>) => {

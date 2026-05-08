@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import { useUI } from "./ui-state";
-import { company } from "@/data/site";
+import { useSiteContent } from "@/data/site-content-context";
+import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveImages, aixcoLiveLogos, aixcoLivePartnerPeople } from "@/lib/aixco-live-assets";
+import { recordPortalEvent } from "@/lib/backend/lead-capture";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const teamImageMap: Record<string, string> = {
@@ -44,12 +46,13 @@ type PartnerDetailData = {
 type LegalTitle = "Terms & Conditions" | "Privacy Policy";
 type LegalSection = { heading: string; body: string; items?: string[] };
 
-const loginRoles = [
+function getLoginRoles(portals: SiteContent["company"]["portals"]) {
+  return [
   {
     title: "Customer",
     action: "Customer Login",
     cta: "Continue as customer",
-    url: company.portals.customerLogin,
+    url: portals.customerLogin,
     description:
       "Customers can log in to manage property interest, review opportunities, follow their onboarding progress, and continue a purchase or participation journey through the portal.",
     points: [
@@ -62,7 +65,7 @@ const loginRoles = [
     title: "Broker",
     action: "Broker Login",
     cta: "Continue as broker",
-    url: company.portals.brokerLogin,
+    url: portals.brokerLogin,
     description:
       "Brokers can log in to use the portal operationally, manage customer journeys, coordinate tours, and work more efficiently with curated Batumi opportunities.",
     points: [
@@ -75,7 +78,7 @@ const loginRoles = [
     title: "Developer Partner",
     action: "Developer Login",
     cta: "Continue as developer",
-    url: company.portals.developerLogin,
+    url: portals.developerLogin,
     description:
       "Developer partners can log in to manage visibility for their listings while benefiting from a platform that still supports customers with a complete 360° service journey.",
     points: [
@@ -84,14 +87,16 @@ const loginRoles = [
       "Benefit from stronger presentation and follow-up flow",
     ],
   },
-];
+  ];
+}
 
-const registerRoles = [
+function getRegisterRoles(portals: SiteContent["company"]["portals"]) {
+  return [
   {
     title: "Why become a customer?",
     action: "Register as Customer",
     cta: "Start customer registration",
-    url: company.portals.customerSignup,
+    url: portals.customerSignup,
     description:
       "Register as a customer if you want to buy property, explore selected opportunities, or receive a more guided route into Batumi through one organized onboarding form.",
     points: [
@@ -104,7 +109,7 @@ const registerRoles = [
     title: "Why become a broker?",
     action: "Register as Broker",
     cta: "Start broker registration",
-    url: company.portals.brokerSignup,
+    url: portals.brokerSignup,
     description:
       "Register as a broker to use the AIXCO portal and services for customer tours, curated support, and stronger access to selected and exclusive listings.",
     points: [
@@ -117,7 +122,7 @@ const registerRoles = [
     title: "Why become a developer partner?",
     action: "Join as Developer Partner",
     cta: "Start developer onboarding",
-    url: company.portals.developerSignup,
+    url: portals.developerSignup,
     description:
       "Register as a developer partner to advertise listings through AIXCO while ensuring end customers still experience a full 360° service from first inquiry onward.",
     points: [
@@ -126,7 +131,8 @@ const registerRoles = [
       "Keep the experience complete from inquiry to follow-up",
     ],
   },
-];
+  ];
+}
 
 const legalCopy: Record<LegalTitle, LegalSection[]> = {
   "Terms & Conditions": [
@@ -334,12 +340,13 @@ export function Modals() {
 }
 
 function AccessModal({ mode, tx }: { mode: "login" | "register"; tx: (text: string) => string }) {
+  const { company } = useSiteContent();
   const isRegister = mode === "register";
   const title = isRegister ? "Register with AIXCO" : "Login to your AIXCO portal";
   const subtitle = isRegister
     ? "Register opens the relevant onboarding form for each role so the right information can be submitted before portal access is activated."
     : "Login takes each user type to its respective portal so customers, brokers, and developers can continue in the right environment immediately.";
-  const roles = isRegister ? registerRoles : loginRoles;
+  const roles = isRegister ? getRegisterRoles(company.portals) : getLoginRoles(company.portals);
 
   return (
     <div>
@@ -347,7 +354,21 @@ function AccessModal({ mode, tx }: { mode: "login" | "register"; tx: (text: stri
       <p className="mb-6 text-sm leading-relaxed text-muted-foreground">{tx(subtitle)}</p>
       <div className="mb-6 flex flex-wrap gap-3">
         {roles.map((role) => (
-          <a key={role.action} href={role.url} target="_blank" rel="noreferrer" className="btn-ghost-gold !py-2 !px-4 text-[12px]">
+          <a
+            key={role.action}
+            href={role.url}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              void recordPortalEvent({
+                mode,
+                roleTitle: role.title,
+                action: role.action,
+                portalUrl: role.url,
+              });
+            }}
+            className="btn-ghost-gold !py-2 !px-4 text-[12px]"
+          >
             {tx(role.action)}
           </a>
         ))}
@@ -362,7 +383,20 @@ function AccessModal({ mode, tx }: { mode: "login" | "register"; tx: (text: stri
                 <li key={point} className="text-sm leading-relaxed text-muted-foreground">{tx(point)}</li>
               ))}
             </ul>
-            <a href={role.url} target="_blank" rel="noreferrer" className="mt-5 inline-flex text-xs uppercase tracking-widest text-primary">
+            <a
+              href={role.url}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => {
+                void recordPortalEvent({
+                  mode,
+                  roleTitle: role.title,
+                  action: role.cta,
+                  portalUrl: role.url,
+                });
+              }}
+              className="mt-5 inline-flex text-xs uppercase tracking-widest text-primary"
+            >
               {tx(role.cta)}
             </a>
           </div>
