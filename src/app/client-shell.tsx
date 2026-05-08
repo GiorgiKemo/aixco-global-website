@@ -9,16 +9,27 @@ import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
 import { SiteContentProvider } from "@/data/SiteContentProvider";
 import { ScrollManager } from "@/components/ScrollManager";
+import type { SiteContent, SiteContentResult } from "@/lib/backend/site-content";
 
 const Modals = lazy(() => import("@/components/Modals").then((module) => ({ default: module.Modals })));
 const ChatWidget = lazy(() => import("@/components/ChatWidget").then((module) => ({ default: module.ChatWidget })));
 
 const queryClient = new QueryClient();
 
-export function ClientShell({ children }: { children: React.ReactNode }) {
+type ClientShellProps = {
+  children: React.ReactNode;
+  initialSiteContent?: SiteContent;
+  initialSiteContentSource?: SiteContentResult["source"];
+};
+
+export function ClientShell({
+  children,
+  initialSiteContent,
+  initialSiteContentSource,
+}: ClientShellProps) {
   return (
     <I18nProvider>
-      <SiteContentProvider>
+      <SiteContentProvider initialContent={initialSiteContent} initialSource={initialSiteContentSource}>
         <UIProvider>
           <QueryClientProvider client={queryClient}>
             <TooltipProvider>

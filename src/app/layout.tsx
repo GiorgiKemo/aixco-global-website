@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@/index.css";
 import { ClientShell } from "./client-shell";
+import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://aixco.global"),
@@ -42,11 +43,20 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const revalidate = 300;
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const initialSiteContent = await fetchSiteContentForServer();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ClientShell>{children}</ClientShell>
+        <ClientShell
+          initialSiteContent={initialSiteContent.content}
+          initialSiteContentSource={initialSiteContent.source}
+        >
+          {children}
+        </ClientShell>
       </body>
     </html>
   );

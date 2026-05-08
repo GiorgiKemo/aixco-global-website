@@ -31,7 +31,7 @@ export const siteContentDefaults: SiteContent = {
   newsTickerItems,
 };
 
-type SiteContentRow = Pick<
+export type SiteContentRow = Pick<
   Database["public"]["Tables"]["site_content_entries"]["Row"],
   "section" | "entry_key" | "payload"
 >;
@@ -60,7 +60,7 @@ function readPayload<T>(
   return isRecord(payload) ? (payload as T) : fallback;
 }
 
-function buildSiteContent(rows: SiteContentRow[]): SiteContent {
+export function buildSiteContent(rows: SiteContentRow[]): SiteContent {
   return {
     company: readPayload(rows, "company", "profile", siteContentDefaults.company, "object"),
     metrics: readPayload(rows, "metrics", "items", siteContentDefaults.metrics, "array"),
@@ -76,7 +76,7 @@ function buildSiteContent(rows: SiteContentRow[]): SiteContent {
   };
 }
 
-function normalizeRows(data: { section: string; entry_key: string; payload: Json }[] | null): SiteContentRow[] {
+export function normalizeRows(data: { section: string; entry_key: string; payload: Json }[] | null): SiteContentRow[] {
   return (data ?? []).filter((row) => row.section && row.entry_key);
 }
 
