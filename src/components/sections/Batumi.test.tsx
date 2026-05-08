@@ -1,6 +1,8 @@
 import { render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
+import { SiteContentContext } from "@/data/site-content-context";
+import { siteContentDefaults } from "@/lib/backend/site-content";
 import { Batumi } from "./Batumi";
 
 function renderBatumi() {
@@ -172,5 +174,30 @@ describe("Batumi", () => {
     expect(marketMedia).not.toHaveTextContent("01");
     expect(propertyCards[0].querySelector("[data-batumi-property-media]")).not.toHaveTextContent("02");
     expect(propertyCards[1].querySelector("[data-batumi-property-media]")).not.toHaveTextContent("03");
+  });
+
+  it("does not use a CMS property URL as an external asset link", () => {
+    render(
+      <I18nProvider>
+        <SiteContentContext.Provider
+          value={{
+            ...siteContentDefaults,
+            batumiProperties: [
+              {
+                ...siteContentDefaults.batumiProperties[0],
+                url: "javascript:alert(1)",
+              },
+            ],
+          }}
+        >
+          <Batumi />
+        </SiteContentContext.Provider>
+      </I18nProvider>,
+    );
+
+    expect(screen.getByRole("link", { name: /View Asset Details: Guru/ })).toHaveAttribute(
+      "href",
+      expect.stringContaining("guru-catalog.jpeg"),
+    );
   });
 });

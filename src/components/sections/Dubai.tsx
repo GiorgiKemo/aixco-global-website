@@ -424,7 +424,8 @@ function DubaiImageMarquee({
                   <Image
                     src={image.src}
                     alt={setIndex === 0 ? tx(image.title) : ""}
-                    loading="lazy"
+                    unoptimized
+                    loading="eager"
                     decoding="async"
                     draggable={false}
                     width={1280}

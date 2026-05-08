@@ -8,6 +8,7 @@ import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { aixcoBatumiGalleryVideos, aixcoLiveAssetDetails, aixcoLiveDocuments, aixcoLiveImages, aixcoLiveVideoPreviews, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 import { LiveVideo } from "@/components/LiveVideo";
+import { getSafeAssetKey, getSafePublicAssetHref } from "@/lib/security/urls";
 
 const imageMap: Record<string, string> = {
   "batumi-guru": aixcoLiveImages.batumiGuru,
@@ -214,7 +215,8 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
   const imageFirst = idx % 2 === 0;
   const mediaOrderClass = imageFirst ? "md:order-1 lg:order-1" : "md:order-2 lg:order-2";
   const copyOrderClass = imageFirst ? "md:order-2 lg:order-2" : "md:order-1 lg:order-1";
-  const documentHref = detailAssetMap[property.url] ?? documentMap[property.url] ?? property.url;
+  const documentKey = getSafeAssetKey(property.url, property.id);
+  const documentHref = getSafePublicAssetHref(detailAssetMap[documentKey] ?? documentMap[documentKey], "#batumi");
   const metricCards = property.metrics;
   const mediaHeightClass = property.id === "guru" ? "batumi-match-otium-video-height" : "min-h-[22rem] md:min-h-0 lg:min-h-0";
   const videoMatteCropClass = property.id === "guru" ? "guru-video-matte-crop" : "";

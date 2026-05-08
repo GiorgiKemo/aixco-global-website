@@ -1,4 +1,5 @@
 import { company } from "@/data/site";
+import { getSafeEmail } from "@/lib/security/urls";
 
 export type ContactMailtoData = {
   name: string;
@@ -8,6 +9,7 @@ export type ContactMailtoData = {
 };
 
 export function createContactMailtoHref(data: ContactMailtoData, recipientEmail = company.email) {
+  const recipient = getSafeEmail(recipientEmail, company.email);
   const subject = encodeURIComponent(`AIXCO contact request from ${data.name}`);
   const lines = [
     `Name: ${data.name}`,
@@ -16,5 +18,5 @@ export function createContactMailtoHref(data: ContactMailtoData, recipientEmail 
     "",
     data.message,
   ];
-  return `mailto:${recipientEmail}?subject=${subject}&body=${encodeURIComponent(lines.join("\n"))}`;
+  return `mailto:${recipient}?subject=${subject}&body=${encodeURIComponent(lines.join("\n"))}`;
 }

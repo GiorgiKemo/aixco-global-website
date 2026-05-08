@@ -26,8 +26,19 @@ describe("lead capture backend helpers", () => {
         mode: "register",
         roleTitle: "Why become a broker?",
         action: "Start broker registration",
-        portalUrl: "https://example.com/broker",
+        portalUrl: "https://workw.com/realestate/broker/signup",
       }),
     ).resolves.toMatchObject({ ok: false, skipped: true });
+  });
+
+  it("rejects portal event capture for URLs outside the approved portal", async () => {
+    await expect(
+      recordPortalEvent({
+        mode: "register",
+        roleTitle: "Why become a broker?",
+        action: "Start broker registration",
+        portalUrl: "https://workw.com.evil.example/realestate/broker/signup",
+      }),
+    ).resolves.toMatchObject({ ok: false, skipped: true, reason: "Portal URL is not allowed." });
   });
 });

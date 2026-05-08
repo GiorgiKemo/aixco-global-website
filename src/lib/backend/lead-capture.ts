@@ -1,5 +1,6 @@
 import { getSupabaseBrowserClient, hasSupabaseBrowserConfig } from "@/lib/supabase/client";
 import type { Database, Json } from "@/lib/supabase/database.types";
+import { isSafePortalUrl } from "@/lib/security/urls";
 
 type CaptureResult =
   | { ok: true }
@@ -138,6 +139,10 @@ export async function recordChatTranscript(messages: ChatMessageInput[]): Promis
 }
 
 export async function recordPortalEvent(input: PortalEventInput): Promise<CaptureResult> {
+  if (!isSafePortalUrl(input.portalUrl)) {
+    return { ok: false, skipped: true, reason: "Portal URL is not allowed." };
+  }
+
   const context = getBrowserContext();
   const payload: PortalEventInsert = {
     source: input.source ?? "access_modal",

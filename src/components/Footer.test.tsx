@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
+import { SiteContentContext } from "@/data/site-content-context";
+import { siteContentDefaults } from "@/lib/backend/site-content";
 import { UIProvider } from "./ui-state";
 import { Footer } from "./Footer";
 
@@ -32,5 +34,38 @@ describe("Footer", () => {
     expect(screen.getByRole("button", { name: "Privacy Policy" })).toHaveClass("min-h-10");
     expect(screen.getByRole("link", { name: "Instagram" })).toHaveClass("h-10", "w-10");
     expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveClass("h-10", "w-10");
+  });
+
+  it("falls back when social URLs are outside the expected platforms", () => {
+    render(
+      <I18nProvider>
+        <SiteContentContext.Provider
+          value={{
+            ...siteContentDefaults,
+            company: {
+              ...siteContentDefaults.company,
+              socials: {
+                ...siteContentDefaults.company.socials,
+                instagram: "javascript:alert(1)",
+                linkedin: "https://evil.example/company/aixco-global",
+              },
+            },
+          }}
+        >
+          <UIProvider>
+            <Footer />
+          </UIProvider>
+        </SiteContentContext.Provider>
+      </I18nProvider>,
+    );
+
+    expect(screen.getByRole("link", { name: "Instagram" })).toHaveAttribute(
+      "href",
+      "https://www.instagram.com/aixco.global",
+    );
+    expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/company/aixco-global",
+    );
   });
 });

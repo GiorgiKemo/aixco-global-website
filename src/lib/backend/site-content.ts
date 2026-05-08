@@ -1,5 +1,6 @@
 import { batumiBenefits, batumiProperties, company, dubaiFunds, faqGroups, journeys, metrics, participationRoutes, partners, team } from "@/data/site";
 import { newsTickerItems } from "@/data/news";
+import { getSafeAixcoNewsUrl, getSafeAssetKey, getSafeEmail, getSafeHttpsUrl, getSafePortalUrl } from "@/lib/security/urls";
 import { getSupabaseBrowserClient, hasSupabaseBrowserConfig } from "@/lib/supabase/client";
 import type { Database, Json } from "@/lib/supabase/database.types";
 
@@ -17,7 +18,7 @@ export type SiteContent = {
   newsTickerItems: typeof newsTickerItems;
 };
 
-export const siteContentDefaults: SiteContent = {
+const rawSiteContentDefaults: SiteContent = {
   company,
   metrics,
   dubaiFunds,
@@ -30,6 +31,66 @@ export const siteContentDefaults: SiteContent = {
   faqGroups,
   newsTickerItems,
 };
+
+function sanitizeCompanyProfile(profile: SiteContent["company"]): SiteContent["company"] {
+  return {
+    ...rawSiteContentDefaults.company,
+    ...profile,
+    email: getSafeEmail(profile.email, rawSiteContentDefaults.company.email),
+    socials: {
+      ...rawSiteContentDefaults.company.socials,
+      ...profile.socials,
+      linkedin: getSafeHttpsUrl(profile.socials?.linkedin, rawSiteContentDefaults.company.socials.linkedin, [
+        "linkedin.com",
+        "www.linkedin.com",
+      ]),
+      instagram: getSafeHttpsUrl(profile.socials?.instagram, rawSiteContentDefaults.company.socials.instagram, [
+        "instagram.com",
+        "www.instagram.com",
+      ]),
+      youtube: getSafeHttpsUrl(profile.socials?.youtube, rawSiteContentDefaults.company.socials.youtube, [
+        "youtube.com",
+        "www.youtube.com",
+      ]),
+      x: getSafeHttpsUrl(profile.socials?.x, rawSiteContentDefaults.company.socials.x, ["x.com", "twitter.com"]),
+    },
+    portals: {
+      ...rawSiteContentDefaults.company.portals,
+      ...profile.portals,
+      customerLogin: getSafePortalUrl(profile.portals?.customerLogin, rawSiteContentDefaults.company.portals.customerLogin),
+      brokerLogin: getSafePortalUrl(profile.portals?.brokerLogin, rawSiteContentDefaults.company.portals.brokerLogin),
+      developerLogin: getSafePortalUrl(profile.portals?.developerLogin, rawSiteContentDefaults.company.portals.developerLogin),
+      customerSignup: getSafePortalUrl(profile.portals?.customerSignup, rawSiteContentDefaults.company.portals.customerSignup),
+      brokerSignup: getSafePortalUrl(profile.portals?.brokerSignup, rawSiteContentDefaults.company.portals.brokerSignup),
+      developerSignup: getSafePortalUrl(profile.portals?.developerSignup, rawSiteContentDefaults.company.portals.developerSignup),
+    },
+  };
+}
+
+function sanitizeBatumiProperties(properties: SiteContent["batumiProperties"]): SiteContent["batumiProperties"] {
+  return properties.map((property, index) => ({
+    ...property,
+    url: getSafeAssetKey(property.url, rawSiteContentDefaults.batumiProperties[index]?.url ?? property.id),
+  }));
+}
+
+function sanitizeNewsTickerItems(items: SiteContent["newsTickerItems"]): SiteContent["newsTickerItems"] {
+  return items.map((item, index) => ({
+    ...item,
+    href: getSafeAixcoNewsUrl(item.href, rawSiteContentDefaults.newsTickerItems[index]?.href ?? "https://www.aixco.global/op2/"),
+  }));
+}
+
+function sanitizeSiteContent(content: SiteContent): SiteContent {
+  return {
+    ...content,
+    company: sanitizeCompanyProfile(content.company),
+    batumiProperties: sanitizeBatumiProperties(content.batumiProperties),
+    newsTickerItems: sanitizeNewsTickerItems(content.newsTickerItems),
+  };
+}
+
+export const siteContentDefaults: SiteContent = sanitizeSiteContent(rawSiteContentDefaults);
 
 export type SiteContentRow = Pick<
   Database["public"]["Tables"]["site_content_entries"]["Row"],
@@ -61,7 +122,7 @@ function readPayload<T>(
 }
 
 export function buildSiteContent(rows: SiteContentRow[]): SiteContent {
-  return {
+  return sanitizeSiteContent({
     company: readPayload(rows, "company", "profile", siteContentDefaults.company, "object"),
     metrics: readPayload(rows, "metrics", "items", siteContentDefaults.metrics, "array"),
     dubaiFunds: readPayload(rows, "dubai_funds", "items", siteContentDefaults.dubaiFunds, "array"),
@@ -73,7 +134,7 @@ export function buildSiteContent(rows: SiteContentRow[]): SiteContent {
     partners: readPayload(rows, "partners", "items", siteContentDefaults.partners, "array"),
     faqGroups: readPayload(rows, "faq_groups", "items", siteContentDefaults.faqGroups, "array"),
     newsTickerItems: readPayload(rows, "news_ticker", "items", siteContentDefaults.newsTickerItems, "array"),
-  };
+  });
 }
 
 export function normalizeRows(data: { section: string; entry_key: string; payload: Json }[] | null): SiteContentRow[] {

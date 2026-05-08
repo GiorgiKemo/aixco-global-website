@@ -7,11 +7,20 @@ import { useSiteContent } from "@/data/site-content-context";
 import { useUI } from "./ui-state";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { getSafeHttpsUrl } from "@/lib/security/urls";
 
 export function Footer() {
   const { openTerms, openPrivacy } = useUI();
   const { tx } = useI18n();
   const { company } = useSiteContent();
+  const instagramHref = getSafeHttpsUrl(company.socials.instagram, "https://www.instagram.com/aixco.global", [
+    "instagram.com",
+    "www.instagram.com",
+  ]);
+  const linkedinHref = getSafeHttpsUrl(company.socials.linkedin, "https://www.linkedin.com/company/aixco-global", [
+    "linkedin.com",
+    "www.linkedin.com",
+  ]);
 
   return (
     <footer className="relative border-t border-border/60 bg-gradient-onyx py-10">
@@ -43,10 +52,10 @@ export function Footer() {
           </a>
           <button onClick={openTerms} className="inline-flex min-h-10 items-center link-underline">{tx("Terms & Conditions")}</button>
           <button onClick={openPrivacy} className="inline-flex min-h-10 items-center link-underline">{tx("Privacy Policy")}</button>
-          <a aria-label="Instagram" href={company.socials.instagram} target="_blank" rel="noreferrer" className="icon-button-glass h-10 w-10">
+          <a aria-label="Instagram" href={instagramHref} target="_blank" rel="noreferrer" className="icon-button-glass h-10 w-10">
             <Instagram className="h-4 w-4" />
           </a>
-          <a aria-label="LinkedIn" href={company.socials.linkedin} target="_blank" rel="noreferrer" className="icon-button-glass h-10 w-10">
+          <a aria-label="LinkedIn" href={linkedinHref} target="_blank" rel="noreferrer" className="icon-button-glass h-10 w-10">
             <Linkedin className="h-4 w-4" />
           </a>
         </div>

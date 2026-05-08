@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
+import { SiteContentContext } from "@/data/site-content-context";
+import { siteContentDefaults } from "@/lib/backend/site-content";
 import { Modals } from "./Modals";
 import { UIProvider, useUI } from "./ui-state";
 
@@ -10,6 +12,16 @@ function PrivacyTrigger() {
   return (
     <button type="button" onClick={openPrivacy}>
       Open privacy
+    </button>
+  );
+}
+
+function LoginTrigger() {
+  const { openLogin } = useUI();
+
+  return (
+    <button type="button" onClick={openLogin}>
+      Open login
     </button>
   );
 }
@@ -62,5 +74,37 @@ describe("Modals", () => {
     expect(dialog).toHaveClass("[overflow-wrap:anywhere]");
     expect(dialog).toHaveClass("bg-surface-elevated");
     expect(dialog.className).not.toContain("glass");
+  });
+
+  it("does not render portal links that are outside the approved Workwise portal", () => {
+    render(
+      <I18nProvider>
+        <SiteContentContext.Provider
+          value={{
+            ...siteContentDefaults,
+            company: {
+              ...siteContentDefaults.company,
+              portals: {
+                ...siteContentDefaults.company.portals,
+                customerLogin: "https://workw.com.evil.example/realestate/customer/login",
+              },
+            },
+          }}
+        >
+          <UIProvider>
+            <LoginTrigger />
+            <Modals />
+          </UIProvider>
+        </SiteContentContext.Provider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open login/i }));
+
+    expect(screen.queryByRole("link", { name: "Customer Login" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Broker Login" })).toHaveAttribute(
+      "href",
+      "https://workw.com/realestate/broker/login",
+    );
   });
 });

@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
+import { getSafeAixcoNewsUrl } from "@/lib/security/urls";
 
 type NewsTickerItem = SiteContent["newsTickerItems"][number];
 
@@ -45,9 +46,11 @@ export function NewsTicker() {
 }
 
 function NewsTickerLink({ item, isClone }: { item: NewsTickerItem; isClone: boolean }) {
+  const href = getSafeAixcoNewsUrl(item.href, "https://www.aixco.global/op2/");
+
   return (
     <a
-      href={item.href}
+      href={href}
       target="_blank"
       rel="noreferrer"
       tabIndex={isClone ? -1 : undefined}

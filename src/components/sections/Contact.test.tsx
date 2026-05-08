@@ -32,6 +32,21 @@ describe("Contact", () => {
     expect(decodeURIComponent(href)).toContain("I want more details about availability.");
   });
 
+  it("rejects unsafe mailto recipients from published content", () => {
+    const href = createContactMailtoHref(
+      {
+        name: "Audit User",
+        email: "audit@example.com",
+        interest: "Batumi apartments",
+        message: "I want more details about availability.",
+      },
+      "info@aixco.global\r\nbcc:attacker@example.com",
+    );
+
+    expect(href).toContain("mailto:info@aixco.global");
+    expect(href).not.toContain("bcc:");
+  });
+
   it("exposes durable labels for every contact form field", () => {
     renderContact();
 

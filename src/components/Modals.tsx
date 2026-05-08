@@ -6,6 +6,7 @@ import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveImages, aixcoLiveLogos, aixcoLivePartnerPeople } from "@/lib/aixco-live-assets";
 import { recordPortalEvent } from "@/lib/backend/lead-capture";
+import { getSafePortalUrl } from "@/lib/security/urls";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const teamImageMap: Record<string, string> = {
@@ -347,7 +348,9 @@ function AccessModal({ mode, tx }: { mode: "login" | "register"; tx: (text: stri
   const subtitle = isRegister
     ? "Register opens the relevant onboarding form for each role so the right information can be submitted before portal access is activated."
     : "Login takes each user type to its respective portal so customers, brokers, and developers can continue in the right environment immediately.";
-  const roles = isRegister ? getRegisterRoles(company.portals) : getLoginRoles(company.portals);
+  const roles = (isRegister ? getRegisterRoles(company.portals) : getLoginRoles(company.portals))
+    .map((role) => ({ ...role, url: getSafePortalUrl(role.url, "") }))
+    .filter((role) => role.url);
 
   return (
     <div>

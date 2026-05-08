@@ -1,5 +1,48 @@
+const isDevelopment = process.env.NODE_ENV !== "production";
+const isVercel = process.env.VERCEL === "1";
+
+const getOrigin = (value) => {
+  if (!value) return null;
+
+  try {
+    return new URL(value).origin;
+  } catch {
+    return null;
+  }
+};
+
+const getContentSecurityPolicy = () => {
+  const supabaseOrigin = getOrigin(process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const connectSources = [
+    "'self'",
+    "https://*.supabase.co",
+    "wss://*.supabase.co",
+    supabaseOrigin,
+    !isVercel ? "http://localhost:*" : null,
+    !isVercel ? "http://127.0.0.1:*" : null,
+    !isVercel ? "ws://localhost:*" : null,
+    !isVercel ? "ws://127.0.0.1:*" : null,
+  ].filter(Boolean);
+
+  return [
+    "default-src 'self'",
+    `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self' data:",
+    `connect-src ${connectSources.join(" ")}`,
+    "media-src 'self' blob:",
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+  ].join("; ");
+};
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
   experimental: {
     webVitalsAttribution: ["CLS", "LCP", "INP"],
   },
@@ -42,6 +85,10 @@ const nextConfig = {
           {
             key: "X-Frame-Options",
             value: "DENY",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: getContentSecurityPolicy(),
           },
         ],
       },
