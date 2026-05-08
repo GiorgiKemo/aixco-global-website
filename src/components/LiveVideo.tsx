@@ -13,6 +13,7 @@ type LiveVideoProps = {
   eager?: boolean;
   rootMargin?: string;
   autoplayPreview?: boolean;
+  smoothPreview?: boolean;
 };
 
 const focusThreshold = 0.45;
@@ -29,6 +30,7 @@ export function LiveVideo({
   eager = false,
   rootMargin = "350px 0px",
   autoplayPreview = true,
+  smoothPreview = true,
 }: LiveVideoProps) {
   const videoId = useId();
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -39,7 +41,8 @@ export function LiveVideo({
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasPreviewFrame, setHasPreviewFrame] = useState(false);
   const shouldAttachVideo = shouldLoad && autoplayPreview;
-  const inlineSrc = previewSrc ?? src;
+  const inlineSrc = smoothPreview ? src : previewSrc ?? src;
+  const previewPreload = shouldAttachVideo && isInFocus && smoothPreview ? "auto" : shouldAttachVideo ? "metadata" : "none";
 
   const closeExpandedPlayer = useCallback(() => {
     expandedVideoRef.current?.pause();
@@ -238,7 +241,7 @@ export function LiveVideo({
           muted
           loop={autoplayPreview}
           playsInline
-          preload={shouldAttachVideo ? "metadata" : "none"}
+          preload={previewPreload}
           onLoadedData={() => setHasPreviewFrame(true)}
           onError={() => setHasPreviewFrame(false)}
           onCanPlay={(event) => {
