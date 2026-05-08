@@ -1,7 +1,10 @@
+"use client";
+
 import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { stagger, useAnimate, useReducedMotion } from "framer-motion";
+import { stagger, useAnimate } from "framer-motion";
 import { imageSettleTransition, reducedMotionTransition, revealTransition } from "@/lib/motion";
+import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 
 type ScrollRevealProps = {
   children: ReactNode;
@@ -30,7 +33,7 @@ export function ScrollReveal({
   threshold = 0.12,
 }: ScrollRevealProps) {
   const [scope, animate] = useAnimate<HTMLDivElement>();
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useHydratedReducedMotion();
   const targetsRef = useRef<HTMLElement[]>([]);
   const mediaTargetsRef = useRef<HTMLElement[]>([]);
   const hasPlayedRef = useRef(false);

@@ -1,3 +1,6 @@
+"use client";
+
+import Image from "next/image";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { useUI } from "../ui-state";
@@ -111,13 +114,14 @@ function PartnerCard({
         <span className="partner-flip-face partner-flip-front" aria-hidden="true">
           {partner.logo && (
             <span className="partner-logo-stage">
-              <img
+              <Image
                 src={logoMap[partner.logo]}
                 alt={partner.name}
-                loading={isClone ? "lazy" : "eager"}
+                loading="lazy"
                 decoding="async"
                 width={240}
                 height={120}
+                sizes="240px"
                 className="partner-logo-image max-h-20 max-w-full object-contain"
               />
             </span>

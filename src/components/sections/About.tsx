@@ -1,3 +1,6 @@
+"use client";
+
+import Image from "next/image";
 import { CountUpText } from "@/components/CountUpText";
 import { aixcoLiveImages } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -27,13 +30,14 @@ export function About() {
           </p>
           <div className="mac-card mt-7 overflow-hidden lg:mt-6">
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40">
-              <img
+              <Image
                 src={aixcoLiveImages.aboutArchitecture}
                 alt="Batumi skyline and landmark towers from the live AIXCO site"
                 data-frame="tall"
                 data-image-treatment="fill-card"
                 loading="lazy"
                 decoding="async"
+                sizes="(min-width: 1024px) 38vw, 100vw"
                 className="relative z-10 h-full w-full object-cover object-center"
                 width={1448}
                 height={1086}

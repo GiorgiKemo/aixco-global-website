@@ -1,3 +1,6 @@
+"use client";
+
+import Image from "next/image";
 import { Instagram, Linkedin } from "lucide-react";
 import { Logo } from "./Logo";
 import { useSiteContent } from "@/data/site-content-context";
@@ -25,7 +28,17 @@ export function Footer() {
             rel="noreferrer"
             className="inline-flex min-h-10 items-center gap-2 link-underline"
           >
-            <img src={aixcoLiveLogos.iso} alt="" aria-hidden loading="lazy" decoding="async" className="h-8 w-8 rounded-sm object-contain" />
+            <Image
+              src={aixcoLiveLogos.iso}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              decoding="async"
+              width={64}
+              height={64}
+              sizes="32px"
+              className="h-8 w-8 rounded-sm object-contain"
+            />
             ISO 27001-2022 Certified Systems.
           </a>
           <button onClick={openTerms} className="inline-flex min-h-10 items-center link-underline">{tx("Terms & Conditions")}</button>

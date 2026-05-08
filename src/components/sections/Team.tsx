@@ -1,3 +1,6 @@
+"use client";
+
+import Image from 'next/image';
 import { useSiteContent } from '@/data/site-content-context';
 import { useI18n } from '@/i18n/I18nProvider';
 import { aixcoLiveImages } from '@/lib/aixco-live-assets';
@@ -44,13 +47,14 @@ export function Team() {
               whileTap={premiumPress}
             >
               <div className="relative aspect-[9/10] overflow-hidden bg-muted">
-                <img
+                <Image
                   src={imageMap[m.image]}
                   alt={m.name}
                   loading="lazy"
                   decoding="async"
                   width={832}
                   height={1024}
+                  sizes="(min-width: 768px) 33vw, 100vw"
                   className="h-full w-full object-cover grayscale transition-[filter,transform] [transition-duration:400ms] group-hover:grayscale-0 group-hover:scale-[1.025]"
                 />
               </div>

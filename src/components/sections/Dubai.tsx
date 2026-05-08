@@ -1,10 +1,15 @@
-import { useCallback, useEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
+"use client";
+
+import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
-import { motion, useAnimationFrame, useMotionValue, useMotionValueEvent, useReducedMotion, useSpring } from "framer-motion";
+import { motion, useAnimationFrame, useMotionValue, useMotionValueEvent, useSpring } from "framer-motion";
 import { ArrowRight, Building2, HandCoins, TrendingUp, type LucideIcon } from "lucide-react";
+
+import Image from "next/image";
 import { ExpandableImage } from "@/components/ExpandableImage";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
+import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import {
   aixcoDubaiEdenHouseCanalGallery,
   aixcoDubaiEdenHouseParkGallery,
@@ -233,6 +238,9 @@ function DubaiImageMarquee({
     velocity: 0,
   });
   const interactionPauseUntilRef = useRef(0);
+  const [isGalleryInView, setIsGalleryInView] = useState(
+    () => process.env.NODE_ENV === "test" || process.env.VITEST === "true",
+  );
   const trackX = useMotionValue(0);
   const targetOffset = useMotionValue(0);
   const smoothOffset = useSpring(targetOffset, {
@@ -274,6 +282,24 @@ function DubaiImageMarquee({
   }, [shouldReduceMotion, targetOffset]);
 
   useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport || typeof IntersectionObserver === "undefined") {
+      setIsGalleryInView(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsGalleryInView(entry.isIntersecting);
+      },
+      { rootMargin: "360px 0px", threshold: 0.01 },
+    );
+
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const updateLoopWidth = () => {
       const track = trackRef.current;
       if (!track) return;
@@ -302,7 +328,7 @@ function DubaiImageMarquee({
   });
 
   useAnimationFrame((time, delta) => {
-    if (!trackRef.current || dragRef.current.active || time < interactionPauseUntilRef.current) return;
+    if (!isGalleryInView || !trackRef.current || dragRef.current.active || time < interactionPauseUntilRef.current) return;
 
     const deltaSeconds = Math.min(delta, 64) / 1000;
     if (deltaSeconds <= 0) return;
@@ -395,14 +421,15 @@ function DubaiImageMarquee({
                   className="h-full w-full"
                   tabIndex={setIndex === 1 ? -1 : undefined}
                 >
-                  <img
+                  <Image
                     src={image.src}
                     alt={setIndex === 0 ? tx(image.title) : ""}
-                    loading={setIndex === 0 ? "eager" : "lazy"}
+                    loading="lazy"
                     decoding="async"
                     draggable={false}
                     width={1280}
                     height={720}
+                    sizes="(min-width: 1024px) 30rem, 78vw"
                     className="h-full w-full object-cover"
                     onDragStart={(event) => event.preventDefault()}
                   />
@@ -510,7 +537,7 @@ function DubaiFundCard({
           <motion.img
             src={imageMap[fund.image]}
             alt={tx(fund.name)}
-            loading={isLanding ? "eager" : "lazy"}
+            loading="lazy"
             decoding="async"
             width={1536}
             height={960}
@@ -582,7 +609,7 @@ function DubaiFundCard({
 export function Dubai() {
   const { tx } = useI18n();
   const { dubaiFunds } = useSiteContent();
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useHydratedReducedMotion();
   const [landingFund, ...remainingFunds] = dubaiFunds;
   const renderFundGallery = (fund: DubaiFund, isLanding = false) => {
     if (!hasAssetGallery(fund.id)) return null;

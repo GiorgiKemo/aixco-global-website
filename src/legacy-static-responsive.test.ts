@@ -1,41 +1,32 @@
-import { readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { findLegacyInsight, getLegacyInsightParams, legacyInsights } from "@/data/legacy-insights";
 
-function legacyHtml(file: string) {
-  return readFileSync(resolve(process.cwd(), "public/aixco-global-op2", file), "utf8");
-}
+describe("legacy insight migration", () => {
+  it("moves old static article content into typed Next route data", () => {
+    const tourism = findLegacyInsight("tourism-led-real-estate-batumi.html");
+    const rentalYield = findLegacyInsight("high-rental-yield-coastal-real-estate");
 
-describe("legacy static article responsiveness", () => {
-  it("keeps the Tourism article comparison table inside its card on phones", () => {
-    const html = legacyHtml("tourism-led-real-estate-batumi.html");
-
-    expect(html).toContain(".table-box {overflow-x:auto;");
-    expect(html).toContain("table {min-width:520px;");
+    expect(legacyInsights).toHaveLength(10);
+    expect(tourism?.title).toContain("Tourism-Led Real Estate");
+    expect(tourism?.sections.some((section) => section.heading.includes("Tourism"))).toBe(true);
+    expect(rentalYield?.title).toContain("8–12% Rental Yield");
   });
 
-  it("uses compact mobile back buttons on article headers with long labels", () => {
-    for (const file of [
-      "tourism-led-real-estate-batumi.html",
-      "high-rental-yield-coastal-real-estate.html",
-    ]) {
-      const html = legacyHtml(file);
+  it("supports both historical .html URLs and extensionless Next routes", () => {
+    const params = getLegacyInsightParams().map((param) => param.slug);
 
-      expect(html).toContain("@media(max-width:480px)");
-      expect(html).toContain(".navbar-fullpage .top-cta:not(.back-link), .navbar-article .top-cta:not(.back-link)");
-      expect(html).toContain("content:'Back'");
+    expect(params).toContain("batumi-short-term-rentals.html");
+    expect(params).toContain("batumi-short-term-rentals");
+    expect(findLegacyInsight("batumi-short-term-rentals.html")).toEqual(findLegacyInsight("batumi-short-term-rentals"));
+  });
+
+  it("removes obsolete public HTML files after rebuilding them as Next pages", () => {
+    for (const article of legacyInsights) {
+      expect(existsSync(resolve(process.cwd(), "public/aixco-global-op2", article.slug))).toBe(false);
     }
-  });
 
-  it("uses optimized legacy homepage videos instead of large source mp4 files", () => {
-    const html = legacyHtml("index.html");
-
-    expect(html).toContain('src="media/batumi2-optimized.mp4"');
-    expect(html).toContain('href="media/fund1-optimized.mp4"');
-    expect(html).toContain('href="media/fund2-optimized.mp4"');
-    expect(html).toContain('href="media/fund3-optimized.mp4"');
-    expect(html).toContain('data-video="media/bonds-optimized.mp4"');
-    expect(html).not.toContain('src="images/batumi2.mp4"');
-    expect(html).not.toContain('href="images/fund/fund2.mp4"');
+    expect(existsSync(resolve(process.cwd(), "public/aixco-global-op2/index.html"))).toBe(false);
   });
 });

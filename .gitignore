@@ -12,6 +12,12 @@ dist
 dist-ssr
 bun.lockb
 *.local
+.next
+*.tsbuildinfo
+tmp/
+test-results/
+.playwright-cli/
+.playwright-mcp/
 
 # Editor directories and files
 .vscode/*

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Image from "next/image";
 import { X } from "lucide-react";
 import { useUI } from "./ui-state";
 import { useSiteContent } from "@/data/site-content-context";
@@ -470,7 +471,16 @@ function TeamDetail({
 }) {
   return (
     <div className="grid gap-6 sm:grid-cols-[180px_1fr]">
-      <img src={teamImageMap[data.image]} alt={data.name} className="aspect-[9/10] w-full rounded-lg object-cover" loading="lazy" decoding="async" />
+      <Image
+        src={teamImageMap[data.image]}
+        alt={data.name}
+        className="aspect-[9/10] w-full rounded-lg object-cover"
+        loading="lazy"
+        decoding="async"
+        width={832}
+        height={1024}
+        sizes="(min-width: 640px) 180px, 100vw"
+      />
       <div>
         <p className="eyebrow mb-3">{tx("Leadership")}</p>
         <h3 className="heading-section mb-1">{data.name}</h3>
@@ -505,7 +515,7 @@ function PartnerDetail({
       <div className="mb-6 grid gap-5 sm:grid-cols-[180px_1fr] sm:items-center">
         {data.logo && (
           <div className="partner-modal-logo-stage">
-            <img
+            <Image
               src={partnerLogoMap[data.logo]}
               alt={data.name}
               loading="lazy"
@@ -513,6 +523,7 @@ function PartnerDetail({
               className="partner-modal-logo-image"
               width={320}
               height={180}
+              sizes="180px"
             />
           </div>
         )}
@@ -539,13 +550,14 @@ function PartnerDetail({
           {data.leaders.map((leader) => (
             <div key={leader.name} className="grid gap-4 rounded-lg border border-border/50 bg-background/50 p-4 sm:grid-cols-[86px_1fr] sm:items-center">
               {leader.image && (
-                <img
+                <Image
                   src={partnerPeopleMap[leader.image]}
                   alt={leader.name}
                   loading="lazy"
                   decoding="async"
                   width={180}
                   height={180}
+                  sizes="(min-width: 640px) 86px, 100vw"
                   className="aspect-square w-full rounded-md bg-surface-elevated object-contain"
                 />
               )}

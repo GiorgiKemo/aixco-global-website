@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useSiteContent } from "@/data/site-content-context";
 import { Plus } from "lucide-react";

@@ -1,3 +1,6 @@
+"use client";
+
+import Image from "next/image";
 import { useRef, useState, type MutableRefObject } from "react";
 import { z } from "zod";
 import { Mail, MapPin, Check } from "lucide-react";
@@ -8,6 +11,13 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveImages } from "@/lib/aixco-live-assets";
 import { submitContactSubmission } from "@/lib/backend/lead-capture";
 import { createContactMailtoHref } from "./contact-mailto";
+
+type ContactFormData = {
+  name: string;
+  email: string;
+  interest?: string;
+  message: string;
+};
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(100),
@@ -47,9 +57,10 @@ export function Contact() {
       return;
     }
     setErrors({});
-    const backendResult = await submitContactSubmission(parsed.data);
+    const submission = parsed.data as ContactFormData;
+    const backendResult = await submitContactSubmission(submission);
     setBackendSaved(backendResult.ok);
-    setMailtoHref(createContactMailtoHref(parsed.data, company.email));
+    setMailtoHref(createContactMailtoHref(submission, company.email));
     setState("success");
   };
 
@@ -159,13 +170,14 @@ export function Contact() {
 
         <div className="scroll-reveal lg:col-span-5">
           <div className="mac-card overflow-hidden">
-            <img
+            <Image
               src={aixcoLiveImages.transactionBackdrop}
               alt={tx("Contact")}
               loading="lazy"
               decoding="async"
               width={1280}
               height={720}
+              sizes="(min-width: 1024px) 42vw, 100vw"
               className="aspect-[3/2] w-full object-cover"
             />
           </div>

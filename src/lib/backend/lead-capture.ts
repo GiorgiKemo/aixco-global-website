@@ -35,6 +35,9 @@ type BrowserContext = {
 type ContactInsert = Database["public"]["Tables"]["contact_submissions"]["Insert"];
 type ChatInsert = Database["public"]["Tables"]["chat_transcripts"]["Insert"];
 type PortalEventInsert = Database["public"]["Tables"]["portal_click_events"]["Insert"];
+type SupabaseInsertBuilder = {
+  insert: (payload: ContactInsert | ChatInsert | PortalEventInsert) => Promise<{ error: { message: string } | null }>;
+};
 
 function cleanOptionalText(value: string | undefined) {
   const cleaned = value?.trim();
@@ -80,16 +83,16 @@ function getInterestFromMessages(messages: ChatMessageInput[]) {
   return null;
 }
 
-async function insertRow<T extends ContactInsert | ChatInsert | PortalEventInsert>(
+async function insertRow(
   table: "contact_submissions" | "chat_transcripts" | "portal_click_events",
-  payload: T,
+  payload: ContactInsert | ChatInsert | PortalEventInsert,
 ): Promise<CaptureResult> {
   if (!hasSupabaseBrowserConfig()) {
     return { ok: false, skipped: true, reason: "Supabase browser configuration is not available." };
   }
 
   const client = await getSupabaseBrowserClient();
-  const { error } = await client.from(table).insert(payload);
+  const { error } = await (client.from(table) as unknown as SupabaseInsertBuilder).insert(payload);
 
   if (error) {
     return { ok: false, reason: error.message };

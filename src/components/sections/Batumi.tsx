@@ -1,3 +1,5 @@
+"use client";
+
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { ArrowRight, Building2, FileText, Home, Percent, ShieldCheck, TrendingUp, type LucideIcon } from "lucide-react";
@@ -183,7 +185,7 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
               label={metric.label}
               value={metric.value}
               subtext={metric.subtext}
-              highlight={metric.highlight}
+              highlight={"highlight" in metric ? metric.highlight : false}
               compact
               tx={tx}
             />
@@ -271,7 +273,7 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
               label={metric.label}
               value={metric.value}
               subtext={metric.subtext}
-              highlight={metric.highlight}
+              highlight={"highlight" in metric ? metric.highlight : false}
               tx={tx}
             />
           ))}

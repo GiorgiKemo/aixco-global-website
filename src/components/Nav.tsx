@@ -1,5 +1,6 @@
+"use client";
+
 import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import { Logo } from "./Logo";
 import { useI18n, LANGS } from "@/i18n/I18nProvider";
@@ -26,6 +27,22 @@ const HOME_SECTION_IDS = ["about", "dubai", "batumi", "participate", "how", "tea
 const NAV_HASH_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
 const HOME_RETURN_HASH_SYNC_LOCK_MS = 1800;
 let pendingNavScrollTimers: number[] = [];
+type BrowserLocationState = {
+  pathname: string;
+  hash: string;
+};
+
+function getBrowserLocation(): BrowserLocationState {
+  if (typeof window === "undefined") {
+    return { pathname: "/", hash: "" };
+  }
+
+  return {
+    pathname: window.location.pathname || "/",
+    hash: window.location.hash,
+  };
+}
+
 const DESKTOP_NAV_LABELS: Record<string, Record<string, string>> = {
   ka: {
     "nav.about": "AIXCO",
@@ -69,12 +86,12 @@ export function Nav() {
   const [returningHome, setReturningHome] = useState(false);
   const [compactNav, setCompactNav] = useState(false);
   const [desktopActionsAvailable, setDesktopActionsAvailable] = useState(false);
+  const [location, setLocation] = useState<BrowserLocationState>({ pathname: "/", hash: "" });
   const navRowRef = useRef<HTMLDivElement | null>(null);
   const logoSlotRef = useRef<HTMLDivElement | null>(null);
   const navMeasureRef = useRef<HTMLDivElement | null>(null);
   const controlsMeasureRef = useRef<HTMLDivElement | null>(null);
   const homeHashSyncLockedUntilRef = useRef(0);
-  const location = useLocation();
   const solidNav = scrolled || open || langOpen;
   const fullNavAvailable = !compactNav;
   const showDesktopActions = fullNavAvailable && desktopActionsAvailable;
@@ -119,11 +136,26 @@ export function Nav() {
     event.preventDefault();
     if (item.hash) {
       scrollToNavHash(item.hash);
+      setLocation(getBrowserLocation());
     } else {
       beginHomeReturn();
       scrollToPageTop();
+      setLocation(getBrowserLocation());
     }
   };
+
+  useEffect(() => {
+    const updateLocationState = () => setLocation(getBrowserLocation());
+
+    updateLocationState();
+    window.addEventListener("hashchange", updateLocationState);
+    window.addEventListener("popstate", updateLocationState);
+
+    return () => {
+      window.removeEventListener("hashchange", updateLocationState);
+      window.removeEventListener("popstate", updateLocationState);
+    };
+  }, []);
 
   useEffect(() => {
     const updateScrollState = (syncUrlHash: boolean) => {
@@ -198,7 +230,9 @@ export function Nav() {
     });
 
     window.addEventListener("resize", updateCompactMode);
-    document.fonts?.ready.then(updateCompactMode).catch(() => undefined);
+    if (process.env.NODE_ENV !== "test") {
+      document.fonts?.ready.then(updateCompactMode).catch(() => undefined);
+    }
 
     return () => {
       observer.disconnect();
@@ -227,9 +261,9 @@ export function Nav() {
             const label = t(item.key);
             const desktopLabel = getDesktopNavLabel(lang, item.key, label);
             return (
-              <Link
+              <a
                 key={item.key}
-                to={href}
+                href={href}
                 title={label}
                 aria-label={label}
                 aria-current={isActive ? "page" : undefined}
@@ -245,7 +279,7 @@ export function Nav() {
                 }`}
               >
                 {desktopLabel}
-              </Link>
+              </a>
             );
           })}
           
@@ -271,8 +305,8 @@ export function Nav() {
                     const label = t(item.key);
                     return (
                       <li key={item.key}>
-                        <Link
-                          to={`${item.to}${item.hash}`}
+                        <a
+                          href={`${item.to}${item.hash}`}
                           onClick={(event) => handleNavClick(event, item)}
                           className={`flex w-full items-center rounded-md px-3 py-2 text-sm transition-colors ${
                             isActive
@@ -281,7 +315,7 @@ export function Nav() {
                           }`}
                         >
                           {label}
-                        </Link>
+                        </a>
                       </li>
                     );
                   })}
@@ -338,13 +372,13 @@ export function Nav() {
           >
             {t("cta.register")}
           </button>
-          <Link
-            to="/#participate"
+          <a
+            href="/#participate"
             onClick={(event) => handleNavClick(event, NAV[4])}
             className={`${showDesktopActions ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-sm font-bold !text-white drop-shadow-[0_1px_1px_rgb(76_42_0/0.45)]`}
           >
             {t("cta.start")}
-          </Link>
+          </a>
 
           <button
             type="button"
@@ -391,7 +425,7 @@ export function Nav() {
       <div
         data-mobile-drawer
         aria-hidden={open ? undefined : true}
-        inert={open ? undefined : ""}
+        inert={open ? undefined : true}
         className={`${compactNav ? "" : "2xl:hidden"} transition-[max-height] duration-300 ${
           open ? "max-h-[calc(100svh-4rem)] overflow-y-auto" : "max-h-0 overflow-hidden"
         }`}
@@ -402,9 +436,9 @@ export function Nav() {
               {ALL_NAV.map((item) => {
                 const isActive = isNavItemActive(item);
                 return (
-                  <Link
+                  <a
                     key={item.key}
-                    to={`${item.to}${item.hash}`}
+                    href={`${item.to}${item.hash}`}
                     aria-current={isActive ? "page" : undefined}
                     onClick={(event) => handleNavClick(event, item)}
                     className={`rounded-lg px-4 py-2.5 text-[15px] font-medium transition-colors duration-200 ${
@@ -414,7 +448,7 @@ export function Nav() {
                     }`}
                   >
                     {t(item.key)}
-                  </Link>
+                  </a>
                 );
               })}
             </nav>

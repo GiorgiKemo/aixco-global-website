@@ -1,14 +1,17 @@
+"use client";
+
 import { ArrowRight } from "lucide-react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { useUI } from "../ui-state";
 import { motion } from "framer-motion";
 import { Fragment, type MouseEvent } from "react";
-import { useNavigate } from "react-router-dom";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveImages, aixcoLiveVideoPreviews, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { LiveVideo } from "@/components/LiveVideo";
+import { replaceLocationHash } from "@/lib/section-hash";
+import { scrollToHash } from "@/lib/smooth-scroll";
 
 const videoMap: Record<string, { src: string; previewSrc: string; poster: string }> = {
   bonds: { src: aixcoLiveVideos.bonds, previewSrc: aixcoLiveVideoPreviews.bonds, poster: aixcoLiveImages.transactionBackdrop },
@@ -122,11 +125,11 @@ export function Participate() {
   const { openRegister } = useUI();
   const { tx } = useI18n();
   const { participationRoutes } = useSiteContent();
-  const navigate = useNavigate();
 
   const handleHowClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    navigate("/#how");
+    replaceLocationHash("#how");
+    scrollToHash("#how");
   };
 
   return (

@@ -1,5 +1,5 @@
 const withBaseUrl = (path: string) => {
-  const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/$/, "");
   const normalizedPath = path.replace(/^\//, "");
   return `${baseUrl}/${normalizedPath}`;
 };
@@ -18,7 +18,7 @@ const healthcareGalleryVersion = "healthcare-gallery-20260506";
 const versionHealthcareImage = (src: string) => `${src}?v=${healthcareGalleryVersion}`;
 
 export const aixcoLiveImages = {
-  aboutArchitecture: `${optimizedImageBase}/batumip.png`,
+  aboutArchitecture: `${optimizedImageBase}/batumip.webp`,
   contact: `${optimizedImageBase}/contact.webp`,
   dubaiEdenHouse: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiHealthcare: `${optimizedImageBase}/fund2.webp`,

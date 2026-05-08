@@ -1,4 +1,3 @@
-import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
@@ -7,13 +6,11 @@ import { Footer } from "./Footer";
 
 function renderFooter() {
   return render(
-    <MemoryRouter>
-      <I18nProvider>
-        <UIProvider>
-          <Footer />
-        </UIProvider>
-      </I18nProvider>
-    </MemoryRouter>,
+    <I18nProvider>
+      <UIProvider>
+        <Footer />
+      </UIProvider>
+    </I18nProvider>,
   );
 }
 

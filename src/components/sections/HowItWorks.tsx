@@ -1,21 +1,24 @@
+"use client";
+
 import { useSiteContent } from "@/data/site-content-context";
 import { useUI } from "../ui-state";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { type MouseEvent } from "react";
-import { useNavigate } from "react-router-dom";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
+import { replaceLocationHash } from "@/lib/section-hash";
+import { scrollToHash } from "@/lib/smooth-scroll";
 
 export function HowItWorks() {
   const { openJourney, openRegister } = useUI();
   const { tx } = useI18n();
   const { journeys } = useSiteContent();
-  const navigate = useNavigate();
 
   const handlePartnersClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    navigate("/#partners");
+    replaceLocationHash("#partners");
+    scrollToHash("#partners");
   };
 
   return (

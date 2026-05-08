@@ -1,5 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
@@ -25,12 +24,12 @@ class TestResizeObserver {
 }
 
 function renderNav(initialEntry = "/") {
+  window.history.replaceState({}, "", initialEntry);
+
   return render(
     <I18nProvider>
       <UIProvider>
-        <MemoryRouter initialEntries={[initialEntry]}>
-          <Nav />
-        </MemoryRouter>
+        <Nav />
       </UIProvider>
     </I18nProvider>,
   );
@@ -130,7 +129,9 @@ describe("Nav", () => {
     fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
     vi.clearAllMocks();
 
-    window.dispatchEvent(new Event("scroll"));
+    act(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
 
     expect(syncLocationHashToActiveSection).not.toHaveBeenCalled();
     expect(replaceLocationHash).toHaveBeenCalledWith("");

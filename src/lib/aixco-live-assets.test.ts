@@ -10,8 +10,8 @@ import {
 } from "./aixco-live-assets";
 
 describe("aixcoLiveImages", () => {
-  it("keeps the full generated About artwork while using compressed web images elsewhere", () => {
-    expect(aixcoLiveImages.aboutArchitecture).toContain("batumip.png");
+  it("uses compressed web images for large rendered surfaces", () => {
+    expect(aixcoLiveImages.aboutArchitecture).toContain("batumip.webp");
     expect(aixcoLiveImages.batumiGuru).toContain("guru.webp");
     expect(aixcoLiveImages.batumiOtium).toContain("otium-reverance.webp");
   });

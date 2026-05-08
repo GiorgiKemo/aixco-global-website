@@ -1,15 +1,22 @@
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+"use client";
+
+import Image from "next/image";
+import { motion, type Variants } from "framer-motion";
 import { useCallback, useEffect, useRef, useState, type MouseEvent, type SyntheticEvent } from "react";
 import type { AnimationItem } from "lottie-web";
-import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import { aixcoBatumiGalleryVideos, aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { replaceLocationHash } from "@/lib/section-hash";
+import { scrollToHash } from "@/lib/smooth-scroll";
 
 const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const heroIntroText =
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.";
 const heroPriceText = "Starting from \u20ac1,000";
 const heroPanelVideos = aixcoBatumiGalleryVideos.slice(0, 4);
+const mobileHeroVideoPanelLimit = 2;
+const mobileHeroVideoBreakpoint = 768;
 
 type HeroVideoEnvironment = {
   reduceMotion?: boolean | null;
@@ -51,6 +58,10 @@ export function shouldUseHeroVideoWall(environment: HeroVideoEnvironment) {
   return true;
 }
 
+export function getHeroVideoPanelLimit(environment: HeroVideoEnvironment) {
+  return environment.viewportWidth < mobileHeroVideoBreakpoint ? mobileHeroVideoPanelLimit : heroPanelVideos.length;
+}
+
 function getHeroVideoEnvironment(): HeroVideoEnvironment {
   const navigatorWithConnection = window.navigator as Navigator & {
     connection?: { saveData?: boolean; effectiveType?: string };
@@ -65,7 +76,7 @@ function getHeroVideoEnvironment(): HeroVideoEnvironment {
   };
 }
 
-const arrowLottiePath = getHeroLottieArrowPath(import.meta.env.BASE_URL);
+const arrowLottiePath = getHeroLottieArrowPath(process.env.NEXT_PUBLIC_BASE_PATH ?? "/");
 
 const headlineVariants: Variants = {
   hidden: {},
@@ -100,7 +111,7 @@ function HeroLottieArrow() {
   const containerRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current || import.meta.env.MODE === "test") return;
+    if (!containerRef.current || process.env.NODE_ENV === "test" || process.env.VITEST === "true") return;
 
     let animation: AnimationItem | null = null;
     let cancelled = false;
@@ -138,15 +149,15 @@ function HeroLottieArrow() {
 }
 
 export function Hero() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useHydratedReducedMotion();
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const heroVideoWallRef = useRef<HTMLDivElement | null>(null);
   const [isHeroReady, setIsHeroReady] = useState(true);
   const [shouldUseVideoWall, setShouldUseVideoWall] = useState(false);
   const [isHeroInFocus, setIsHeroInFocus] = useState(false);
+  const [heroVideoPanelLimit, setHeroVideoPanelLimit] = useState(0);
   const [readyHeroVideos, setReadyHeroVideos] = useState<Record<string, boolean>>({});
   const { tx } = useI18n();
-  const navigate = useNavigate();
   const hiddenTextState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: "blur(10px)" };
 
   const markHeroVideoReady = useCallback((src: string, videoElement: HTMLVideoElement) => {
@@ -174,12 +185,16 @@ export function Hero() {
   );
 
   useEffect(() => {
-    if (typeof window === "undefined" || import.meta.env.MODE === "test") return;
+    if (typeof window === "undefined" || process.env.NODE_ENV === "test" || process.env.VITEST === "true") return;
 
     setShouldUseVideoWall(false);
     setIsHeroInFocus(false);
+    setHeroVideoPanelLimit(0);
 
-    if (!shouldUseHeroVideoWall(getHeroVideoEnvironment())) return;
+    const heroVideoEnvironment = getHeroVideoEnvironment();
+    if (!shouldUseHeroVideoWall(heroVideoEnvironment)) return;
+
+    setHeroVideoPanelLimit(getHeroVideoPanelLimit(heroVideoEnvironment));
 
     const node = heroSectionRef.current;
     if (!node || typeof window.IntersectionObserver !== "function") {
@@ -224,7 +239,8 @@ export function Hero() {
 
   const handleAboutClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    navigate("/#about");
+    replaceLocationHash("#about");
+    scrollToHash("#about");
   };
 
   const reducedLineVariants: Variants = {
@@ -248,8 +264,9 @@ export function Hero() {
         transition={{ duration: shouldReduceMotion ? 0.25 : 1.35, ease: heroEase }}
       >
         {heroPanelVideos.map((video, index) => {
+          const shouldAttachVideo = shouldUseVideoWall && index < heroVideoPanelLimit;
           const isVideoReady = readyHeroVideos[video.src] === true;
-          const showPoster = shouldShowHeroVideoPoster({ shouldUseVideoWall, isHeroInFocus, isVideoReady });
+          const showPoster = shouldShowHeroVideoPoster({ shouldUseVideoWall: shouldAttachVideo, isHeroInFocus, isVideoReady });
           const heroVideoSrc = video.previewSrc ?? video.src;
 
           return (
@@ -259,16 +276,18 @@ export function Hero() {
               data-hero-video-ready={isVideoReady ? "true" : "false"}
               className="hero-video-panel"
             >
-              <img
+              <Image
                 src={video.poster}
                 alt=""
                 aria-hidden="true"
                 data-hero-video-poster="true"
                 className={showPoster ? "opacity-100" : "opacity-0"}
-                fetchpriority={index === 0 ? "high" : "auto"}
+                fill
+                sizes="(min-width: 768px) 25vw, 50vw"
+                loading="lazy"
                 decoding="async"
               />
-              {shouldUseVideoWall && (
+              {shouldAttachVideo && (
                 <video
                   poster={video.poster}
                   autoPlay={isHeroInFocus}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 
 export type CountUpTextSegment =
   | {
@@ -83,9 +83,9 @@ export function getCountStartValue(segment: CountUpNumberSegment): number {
 export function CountUpText({ value, className, delay = 0.12, duration = 1.1 }: CountUpTextProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const segments = useMemo(() => parseCountUpSegments(value), [value]);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useHydratedReducedMotion();
   const [isVisible, setIsVisible] = useState(false);
-  const [progress, setProgress] = useState(shouldReduceMotion ? 1 : 0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (shouldReduceMotion) {

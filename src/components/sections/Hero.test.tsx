@@ -1,17 +1,18 @@
 import { render, screen, within } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { Hero, getHeroLottieArrowPath, shouldShowHeroVideoPoster, shouldUseHeroVideoWall } from "./Hero";
+import { Hero, getHeroLottieArrowPath, getHeroVideoPanelLimit, shouldShowHeroVideoPoster, shouldUseHeroVideoWall } from "./Hero";
 
 function renderHero() {
   return render(
     <I18nProvider>
-      <MemoryRouter>
-        <Hero />
-      </MemoryRouter>
+      <Hero />
     </I18nProvider>,
   );
+}
+
+function renderedImageSrc(image: Element) {
+  return decodeURIComponent(image.getAttribute("src") ?? "");
 }
 
 describe("Hero", () => {
@@ -32,6 +33,11 @@ describe("Hero", () => {
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "3g" })).toBe(false);
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, deviceMemory: 2 })).toBe(false);
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "4g", deviceMemory: 8 })).toBe(true);
+  });
+
+  it("keeps mobile hero video enabled with a smaller early panel budget", () => {
+    expect(getHeroVideoPanelLimit({ viewportWidth: 390 })).toBe(2);
+    expect(getHeroVideoPanelLimit({ viewportWidth: 1440 })).toBe(4);
   });
 
   it("keeps each hero poster visible until its matching video is frame-ready", () => {
@@ -119,9 +125,9 @@ describe("Hero", () => {
     expect(heroVideoWall).toHaveAttribute("data-hero-video-mode", "poster");
     expect(heroVideoPanels).toHaveLength(4);
     expect(heroPosterImages).toHaveLength(4);
-    expect(heroPosterImages.every((image) => image.getAttribute("src")?.includes("/media/batumi-gallery/batumi"))).toBe(true);
-    expect(heroPosterImages.map((image) => image.getAttribute("src")).join(" ")).toContain("batumi1-poster.webp");
-    expect(heroPosterImages.map((image) => image.getAttribute("src")).join(" ")).toContain("batumi4-poster.webp");
+    expect(heroPosterImages.every((image) => renderedImageSrc(image).includes("/media/batumi-gallery/batumi"))).toBe(true);
+    expect(heroPosterImages.map((image) => renderedImageSrc(image)).join(" ")).toContain("batumi1-poster.webp");
+    expect(heroPosterImages.map((image) => renderedImageSrc(image)).join(" ")).toContain("batumi4-poster.webp");
     expect(container.querySelectorAll("video source")).toHaveLength(0);
     expect(container.innerHTML).not.toContain("hero-batumi-night-skyline");
     expect(container.innerHTML).not.toContain("hero-benji-video");

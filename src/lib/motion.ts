@@ -1,4 +1,4 @@
-import type { Transition } from "framer-motion";
+import type { TargetAndTransition, Transition } from "framer-motion";
 
 export const premiumEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -17,12 +17,12 @@ export const reducedMotionTransition: Transition = {
   ease: "easeOut",
 };
 
-export const premiumSurfaceHover = {
+export const premiumSurfaceHover: TargetAndTransition = {
   y: -3,
   transition: { duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94] },
 };
 
-export const premiumPress = {
+export const premiumPress: TargetAndTransition = {
   scale: 0.985,
-  transition: { duration: 0.08, ease: "easeOut" },
+  transition: { duration: 0.08, ease: premiumEase },
 };
