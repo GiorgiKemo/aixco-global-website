@@ -3,7 +3,7 @@ import type { SiteContent } from "@/lib/backend/site-content";
 import { ArrowRight, Building2, FileText, Home, Percent, ShieldCheck, TrendingUp, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
-import { aixcoBatumiGalleryVideos, aixcoLiveAssetDetails, aixcoLiveDocuments, aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
+import { aixcoBatumiGalleryVideos, aixcoLiveAssetDetails, aixcoLiveDocuments, aixcoLiveImages, aixcoLiveVideoPreviews, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 import { LiveVideo } from "@/components/LiveVideo";
 
@@ -12,9 +12,9 @@ const imageMap: Record<string, string> = {
   "batumi-otium": aixcoLiveImages.batumiOtium,
 };
 
-const videoMap: Record<string, string> = {
-  guruBatumi: aixcoLiveVideos.guruBatumi,
-  otium: aixcoLiveVideos.otium,
+const videoMap: Record<string, { src: string; previewSrc: string }> = {
+  guruBatumi: { src: aixcoLiveVideos.guruBatumi, previewSrc: aixcoLiveVideoPreviews.guruBatumi },
+  otium: { src: aixcoLiveVideos.otium, previewSrc: aixcoLiveVideoPreviews.otium },
 };
 
 const documentMap: Record<string, string> = {
@@ -156,6 +156,7 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
       >
         <LiveVideo
           src={aixcoLiveVideos.batumiOverview}
+          previewSrc={aixcoLiveVideoPreviews.batumiOverview}
           title={tx("Batumi")}
           poster={aixcoLiveImages.batumiOverviewPoster}
           className="aspect-[9/16] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
@@ -231,7 +232,8 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
         className={`relative overflow-hidden bg-foreground md:col-span-5 lg:col-span-5 ${mediaHeightClass} ${mediaOrderClass}`}
       >
         <LiveVideo
-          src={videoMap[property.video]}
+          src={videoMap[property.video].src}
+          previewSrc={videoMap[property.video].previewSrc}
           title={tx(property.name)}
           poster={imageMap[property.image]}
           className="aspect-[4/5] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
@@ -335,6 +337,7 @@ export function Batumi() {
               <LiveVideo
                 key={video.src}
                 src={video.src}
+                previewSrc={video.previewSrc}
                 title={tx(video.title)}
                 poster={video.poster}
                 className="aspect-[9/16]"

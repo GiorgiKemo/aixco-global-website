@@ -82,6 +82,29 @@ describe("LiveVideo", () => {
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
 
+  it("uses lightweight preview media inline and full media in the expanded player", () => {
+    render(
+      <LiveVideo
+        src="/full-video.mp4"
+        previewSrc="/preview-video.mp4"
+        title="Preview source test"
+        poster="/poster.jpg"
+        eager
+      />,
+    );
+
+    const inlineVideo = screen.getByLabelText("Preview source test");
+
+    expect(inlineVideo).toHaveAttribute("src", "/preview-video.mp4");
+
+    fireEvent.click(screen.getByRole("button", { name: /play video: preview source test/i }));
+
+    const expandedVideo = screen.getByLabelText("Preview source test expanded player");
+
+    expect(expandedVideo).toHaveAttribute("src", "/full-video.mp4");
+    expect(expandedVideo).toHaveAttribute("poster", "/poster.jpg");
+  });
+
   it("loads nearby preview media but only plays while it is in focus", () => {
     const { container } = render(<LiveVideo src="/sample-video.mp4" title="Batumi overview" poster="/poster.jpg" />);
 

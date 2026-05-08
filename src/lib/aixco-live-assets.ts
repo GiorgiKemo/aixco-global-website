@@ -9,8 +9,10 @@ export const aixcoLivePath = (path: string) => withBaseUrl(`aixco-global-op2/${p
 const liveImageBase = aixcoLivePath("images");
 const optimizedImageBase = aixcoLivePath("images/optimized");
 const optimizedVideoBase = aixcoLivePath("media");
+const previewVideoBase = aixcoLivePath("media/previews");
 const documentBase = aixcoLivePath("documents");
 const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
+const batumiGalleryPreviewBase = `${batumiGalleryBase}/previews`;
 const healthcareGalleryVersion = "healthcare-gallery-20260506";
 
 const versionHealthcareImage = (src: string) => `${src}?v=${healthcareGalleryVersion}`;
@@ -42,13 +44,21 @@ export const aixcoLiveVideos = {
   otium: `${optimizedVideoBase}/otium-optimized.mp4`,
 } as const;
 
+export const aixcoLiveVideoPreviews = {
+  batumiOverview: `${batumiGalleryPreviewBase}/batumi2-preview.mp4`,
+  batumiBuy: `${previewVideoBase}/batumibuy-preview.mp4`,
+  bonds: `${previewVideoBase}/bonds-preview.mp4`,
+  guruBatumi: `${previewVideoBase}/guru-batumi-preview.mp4`,
+  otium: `${previewVideoBase}/otium-preview.mp4`,
+} as const;
+
 export const aixcoBatumiGalleryVideos = [
-  { src: `${batumiGalleryBase}/batumi1.mp4`, poster: `${batumiGalleryBase}/batumi1-poster.webp`, title: "Batumi gallery 1" },
-  { src: `${batumiGalleryBase}/batumi2.mp4`, poster: `${batumiGalleryBase}/batumi2-poster.webp`, title: "Batumi gallery 2" },
-  { src: `${batumiGalleryBase}/batumi3.mp4`, poster: `${batumiGalleryBase}/batumi3-poster.webp`, title: "Batumi gallery 3" },
-  { src: `${batumiGalleryBase}/batumi4.mp4`, poster: `${batumiGalleryBase}/batumi4-poster.webp`, title: "Batumi gallery 4" },
-  { src: `${batumiGalleryBase}/batumi5.mp4`, poster: `${batumiGalleryBase}/batumi5-poster.webp`, title: "Batumi gallery 5" },
-  { src: `${batumiGalleryBase}/herovideo.mp4`, poster: `${batumiGalleryBase}/herovideo-poster.webp`, title: "Batumi gallery 6" },
+  { src: `${batumiGalleryBase}/batumi1.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi1-preview.mp4`, poster: `${batumiGalleryBase}/batumi1-poster.webp`, title: "Batumi gallery 1" },
+  { src: `${batumiGalleryBase}/batumi2.mp4`, previewSrc: aixcoLiveVideoPreviews.batumiOverview, poster: `${batumiGalleryBase}/batumi2-poster.webp`, title: "Batumi gallery 2" },
+  { src: `${batumiGalleryBase}/batumi3.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi3-preview.mp4`, poster: `${batumiGalleryBase}/batumi3-poster.webp`, title: "Batumi gallery 3" },
+  { src: `${batumiGalleryBase}/batumi4.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi4-preview.mp4`, poster: `${batumiGalleryBase}/batumi4-poster.webp`, title: "Batumi gallery 4" },
+  { src: `${batumiGalleryBase}/batumi5.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi5-preview.mp4`, poster: `${batumiGalleryBase}/batumi5-poster.webp`, title: "Batumi gallery 5" },
+  { src: `${batumiGalleryBase}/herovideo.mp4`, previewSrc: `${batumiGalleryPreviewBase}/herovideo-preview.mp4`, poster: `${batumiGalleryBase}/herovideo-poster.webp`, title: "Batumi gallery 6" },
 ] as const;
 
 export const aixcoLiveDocuments = {

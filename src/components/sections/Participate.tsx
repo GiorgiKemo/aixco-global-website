@@ -7,12 +7,12 @@ import { Fragment, type MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
-import { aixcoLiveImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
+import { aixcoLiveImages, aixcoLiveVideoPreviews, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { LiveVideo } from "@/components/LiveVideo";
 
-const videoMap: Record<string, { src: string; poster: string }> = {
-  bonds: { src: aixcoLiveVideos.bonds, poster: aixcoLiveImages.transactionBackdrop },
-  batumiBuy: { src: aixcoLiveVideos.batumiBuy, poster: aixcoLiveImages.batumiOtium },
+const videoMap: Record<string, { src: string; previewSrc: string; poster: string }> = {
+  bonds: { src: aixcoLiveVideos.bonds, previewSrc: aixcoLiveVideoPreviews.bonds, poster: aixcoLiveImages.transactionBackdrop },
+  batumiBuy: { src: aixcoLiveVideos.batumiBuy, previewSrc: aixcoLiveVideoPreviews.batumiBuy, poster: aixcoLiveImages.batumiOtium },
 };
 
 type ParticipationRoute = SiteContent["participationRoutes"][number];
@@ -67,6 +67,7 @@ function ParticipationRouteCard({
       >
         <LiveVideo
           src={videoMap[route.video].src}
+          previewSrc={videoMap[route.video].previewSrc}
           title={tx(route.title)}
           poster={videoMap[route.video].poster}
           className="aspect-[16/10] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"

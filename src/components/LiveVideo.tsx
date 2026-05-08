@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 
 type LiveVideoProps = {
   src: string;
+  previewSrc?: string;
   title: string;
   poster?: string;
   className?: string;
@@ -19,6 +20,7 @@ const expandedVideoEvent = "aixco-live-video-expanded";
 
 export function LiveVideo({
   src,
+  previewSrc,
   title,
   poster,
   className = "",
@@ -37,6 +39,7 @@ export function LiveVideo({
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasPreviewFrame, setHasPreviewFrame] = useState(false);
   const shouldAttachVideo = shouldLoad && autoplayPreview;
+  const inlineSrc = previewSrc ?? src;
 
   const closeExpandedPlayer = useCallback(() => {
     expandedVideoRef.current?.pause();
@@ -95,7 +98,7 @@ export function LiveVideo({
 
   useEffect(() => {
     setHasPreviewFrame(false);
-  }, [src]);
+  }, [inlineSrc]);
 
   useEffect(() => {
     if (!shouldAttachVideo) {
@@ -226,7 +229,7 @@ export function LiveVideo({
         )}
         <video
           ref={videoRef}
-          src={shouldAttachVideo ? src : undefined}
+          src={shouldAttachVideo ? inlineSrc : undefined}
           poster={shouldAttachVideo ? poster : undefined}
           aria-label={title}
           title={title}
@@ -237,6 +240,7 @@ export function LiveVideo({
           playsInline
           preload={shouldAttachVideo ? "metadata" : "none"}
           onLoadedData={() => setHasPreviewFrame(true)}
+          onError={() => setHasPreviewFrame(false)}
           onCanPlay={(event) => {
             setHasPreviewFrame(true);
             if (shouldAttachVideo && isInFocus && autoplayPreview && !isExpanded && event.currentTarget.paused) {

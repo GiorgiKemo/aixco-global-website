@@ -250,6 +250,7 @@ export function Hero() {
         {heroPanelVideos.map((video, index) => {
           const isVideoReady = readyHeroVideos[video.src] === true;
           const showPoster = shouldShowHeroVideoPoster({ shouldUseVideoWall, isHeroInFocus, isVideoReady });
+          const heroVideoSrc = video.previewSrc ?? video.src;
 
           return (
             <div
@@ -291,7 +292,7 @@ export function Hero() {
                   onPlaying={(event) => handleHeroVideoReadyEvent(video.src, event)}
                   onError={index === 0 ? () => setIsHeroReady(true) : undefined}
                 >
-                  <source src={video.src} type="video/mp4" />
+                  <source src={heroVideoSrc} type="video/mp4" />
                 </video>
               )}
             </div>
