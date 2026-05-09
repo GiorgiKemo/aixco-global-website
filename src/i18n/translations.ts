@@ -1249,7 +1249,7 @@ export const attributeTranslations = {
     "AIXCO.Global | Quality Real Estate Participation": {
       "de": "AIXCO.Global | Hochwertige Immobilienbeteiligung",
       "ru": "AIXCO.Global | Качественное участие в недвижимости",
-      "ka": "AIXCO.Global | უძრავ ქონებაში ხარისხიანი მონაწილეობა",
+      "ka": "AIXCO.Global | გლობალური უძრავი ქონების მონაწილეობა",
       "tr": "AIXCO.Global | Nitelikli Gayrimenkul Katılımı",
       "ar": "AIXCO.Global | مشاركة عقارية عالية الجودة"
     }

@@ -1,0 +1,3915 @@
+{
+  "generatedAt": "2026-05-04T12:39:34.439Z",
+  "viewports": [
+    "phone-320",
+    "phone-360",
+    "phone-390",
+    "phone-430",
+    "tablet-768",
+    "tablet-landscape-1024",
+    "laptop-1280",
+    "desktop-1366",
+    "desktop-1536",
+    "wide-1920"
+  ],
+  "reactRoutes": [
+    "/",
+    "/insights",
+    "/not-found-audit"
+  ],
+  "langs": [
+    "en",
+    "de",
+    "ru",
+    "ka",
+    "tr",
+    "ar"
+  ],
+  "legacyRoutes": [
+    "/aixco-global-op2/50k-gateway-european-coastal-property.html",
+    "/aixco-global-op2/annual-property-growth-batumi.html",
+    "/aixco-global-op2/batumi-property-40-percent-down-v2.html",
+    "/aixco-global-op2/batumi-short-term-rentals.html",
+    "/aixco-global-op2/black-sea-corridor-batumi-report.html",
+    "/aixco-global-op2/from-volatility-to-opportunity-batumi.html",
+    "/aixco-global-op2/high-rental-yield-coastal-real-estate.html",
+    "/aixco-global-op2/index.html",
+    "/aixco-global-op2/short-term-rentals-batumi-full.html",
+    "/aixco-global-op2/tourism-led-real-estate-batumi.html",
+    "/aixco-global-op2/why-capital-secondary-coastal-cities.html"
+  ],
+  "totals": {
+    "cases": 290,
+    "failing": 71
+  },
+  "failuresByRoute": {
+    "react:/": 60,
+    "legacy:/aixco-global-op2/black-sea-corridor-batumi-report.html": 1,
+    "legacy:/aixco-global-op2/index.html": 10
+  },
+  "failures": [
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9515,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Group companies Global Partners Real estate investment and development platform. OPEN PROFILE ISP Gr",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategic partners Revanta Capital DFSA-regulated financial services firm in DIFC. OPEN PROFILE Grou",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10292,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Gruppenunternehmen Global Partners Plattform für Immobilieninvestitionen und -entwicklung. PROFIL ÖF",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategische Partner Revanta Capital Von der DFSA reguliertes Finanzdienstleistungsunternehmen im DI",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10198,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Компании группы Global Partners Платформа для инвестиций и девелопмента в недвижимости. ОТКРЫТЬ ПРОФ",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Стратегические партнеры Revanta Capital Финансовая компания в DIFC, регулируемая DFSA. ОТКРЫТЬ ПРОФИ",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10350,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-participation-card=\"bond\"][data-image-position=\"right\"]",
+          "text": "Play video 01 შეიძინეთ AIXCO-ს 6%-იანი ობლიგაცია მომხმარებლები რეგისტრირდებიან, ასრულებენ ონბორდინგს",
+          "clientWidth": 270,
+          "scrollWidth": 284,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "ჯგუფის კომპანიები Global Partners უძრავი ქონების ინვესტირებისა და განვითარების პლატფორმა. პროფილის გ",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "სტრატეგიული პარტნიორები Revanta Capital DFSA-ს მიერ რეგულირებული ფინანსური სერვისების კომპანია DIFC-",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9611,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Grup şirketleri Global Partners Gayrimenkul yatırım ve geliştirme platformu. PROFİLİ AÇ ISP Group Çe",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Stratejik ortaklar Revanta Capital DIFC'de DFSA tarafından düzenlenen finansal hizmetler şirketi. PR",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8260,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "شركات المجموعة Global Partners منصة للاستثمار والتطوير العقاري. فتح الملف ISP Group أعمال استثمارية ",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "الشركاء الاستراتيجيون Revanta Capital شركة خدمات مالية خاضعة لتنظيم DFSA في DIFC. فتح الملف Groupe G",
+          "clientWidth": 272,
+          "scrollWidth": 288,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/black-sea-corridor-batumi-report.html",
+      "lang": "en",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "The Rise of the Black Sea Corridor: A New Frontier for Real Estate Investors | AIXCO Global",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/black-sea-corridor-batumi-report.html",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 27779,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "section.article-section",
+          "text": "IV. INFRASTRUCTURE AS A DEMAND CATALYST — What Money Is Being Spent, and Where Experienced real esta",
+          "clientWidth": 226,
+          "scrollWidth": 246,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "h2",
+          "text": "IV. INFRASTRUCTURE AS A DEMAND CATALYST — What Money Is Being Spent, and Where",
+          "clientWidth": 226,
+          "scrollWidth": 246,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6426,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 249,
+          "scrollWidth": 264,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 249,
+          "scrollWidth": 264,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.container",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 279,
+          "scrollWidth": 287,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 249,
+          "scrollWidth": 272,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.row.align-items-center",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 279,
+          "scrollWidth": 287,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.col-lg-6.offset-xl-1",
+          "text": "Guru Otium",
+          "clientWidth": 279,
+          "scrollWidth": 287,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.pp-scrollable.pp-section.text-white.section.section-5a[data-anchor=\"page5\"]",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 320,
+          "scrollWidth": 528,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.scroll-wrap",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 320,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 360,
+        "height": 740
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9515,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Group companies Global Partners Real estate investment and development platform. OPEN PROFILE ISP Gr",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategic partners Revanta Capital DFSA-regulated financial services firm in DIFC. OPEN PROFILE Grou",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 360,
+        "height": 740
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10292,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Gruppenunternehmen Global Partners Plattform für Immobilieninvestitionen und -entwicklung. PROFIL ÖF",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategische Partner Revanta Capital Von der DFSA reguliertes Finanzdienstleistungsunternehmen im DI",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 360,
+        "height": 740
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10198,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Компании группы Global Partners Платформа для инвестиций и девелопмента в недвижимости. ОТКРЫТЬ ПРОФ",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Стратегические партнеры Revanta Capital Финансовая компания в DIFC, регулируемая DFSA. ОТКРЫТЬ ПРОФИ",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 360,
+        "height": 740
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10350,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "ჯგუფის კომპანიები Global Partners უძრავი ქონების ინვესტირებისა და განვითარების პლატფორმა. პროფილის გ",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "სტრატეგიული პარტნიორები Revanta Capital DFSA-ს მიერ რეგულირებული ფინანსური სერვისების კომპანია DIFC-",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 360,
+        "height": 740
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9611,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Grup şirketleri Global Partners Gayrimenkul yatırım ve geliştirme platformu. PROFİLİ AÇ ISP Group Çe",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Stratejik ortaklar Revanta Capital DIFC'de DFSA tarafından düzenlenen finansal hizmetler şirketi. PR",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 360,
+        "height": 740
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8260,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "شركات المجموعة Global Partners منصة للاستثمار والتطوير العقاري. فتح الملف ISP Group أعمال استثمارية ",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "الشركاء الاستراتيجيون Revanta Capital شركة خدمات مالية خاضعة لتنظيم DFSA في DIFC. فتح الملف Groupe G",
+          "clientWidth": 312,
+          "scrollWidth": 327,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 360,
+        "height": 740
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6557,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 289,
+          "scrollWidth": 304,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 289,
+          "scrollWidth": 304,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 289,
+          "scrollWidth": 304,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.pp-scrollable.pp-section.text-white.section.section-5a[data-anchor=\"page5\"]",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 360,
+          "scrollWidth": 528,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.scroll-wrap",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 360,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.scrollable-content",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 360,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "nowrap"
+        },
+        {
+          "selector": "div.vertical-centred",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 360,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.boxed.boxed-inner",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 360,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9515,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Group companies Global Partners Real estate investment and development platform. OPEN PROFILE ISP Gr",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategic partners Revanta Capital DFSA-regulated financial services firm in DIFC. OPEN PROFILE Grou",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10292,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Gruppenunternehmen Global Partners Plattform für Immobilieninvestitionen und -entwicklung. PROFIL ÖF",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategische Partner Revanta Capital Von der DFSA reguliertes Finanzdienstleistungsunternehmen im DI",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10198,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Компании группы Global Partners Платформа для инвестиций и девелопмента в недвижимости. ОТКРЫТЬ ПРОФ",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Стратегические партнеры Revanta Capital Финансовая компания в DIFC, регулируемая DFSA. ОТКРЫТЬ ПРОФИ",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10350,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "ჯგუფის კომპანიები Global Partners უძრავი ქონების ინვესტირებისა და განვითარების პლატფორმა. პროფილის გ",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "სტრატეგიული პარტნიორები Revanta Capital DFSA-ს მიერ რეგულირებული ფინანსური სერვისების კომპანია DIFC-",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9611,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Grup şirketleri Global Partners Gayrimenkul yatırım ve geliştirme platformu. PROFİLİ AÇ ISP Group Çe",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Stratejik ortaklar Revanta Capital DIFC'de DFSA tarafından düzenlenen finansal hizmetler şirketi. PR",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8260,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "شركات المجموعة Global Partners منصة للاستثمار والتطوير العقاري. فتح الملف ISP Group أعمال استثمارية ",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "الشركاء الاستراتيجيون Revanta Capital شركة خدمات مالية خاضعة لتنظيم DFSA في DIFC. فتح الملف Groupe G",
+          "clientWidth": 342,
+          "scrollWidth": 357,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6557,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 319,
+          "scrollWidth": 334,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 319,
+          "scrollWidth": 334,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 319,
+          "scrollWidth": 334,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.pp-scrollable.pp-section.text-white.section.section-5a[data-anchor=\"page5\"]",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 390,
+          "scrollWidth": 528,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.scroll-wrap",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 390,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.scrollable-content",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 390,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "nowrap"
+        },
+        {
+          "selector": "div.vertical-centred",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 390,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.boxed.boxed-inner",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 390,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9515,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Group companies Global Partners Real estate investment and development platform. OPEN PROFILE ISP Gr",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategic partners Revanta Capital DFSA-regulated financial services firm in DIFC. OPEN PROFILE Grou",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10292,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Gruppenunternehmen Global Partners Plattform für Immobilieninvestitionen und -entwicklung. PROFIL ÖF",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategische Partner Revanta Capital Von der DFSA reguliertes Finanzdienstleistungsunternehmen im DI",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10198,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Компании группы Global Partners Платформа для инвестиций и девелопмента в недвижимости. ОТКРЫТЬ ПРОФ",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Стратегические партнеры Revanta Capital Финансовая компания в DIFC, регулируемая DFSA. ОТКРЫТЬ ПРОФИ",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10350,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "ჯგუფის კომპანიები Global Partners უძრავი ქონების ინვესტირებისა და განვითარების პლატფორმა. პროფილის გ",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "სტრატეგიული პარტნიორები Revanta Capital DFSA-ს მიერ რეგულირებული ფინანსური სერვისების კომპანია DIFC-",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9611,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Grup şirketleri Global Partners Gayrimenkul yatırım ve geliştirme platformu. PROFİLİ AÇ ISP Group Çe",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Stratejik ortaklar Revanta Capital DIFC'de DFSA tarafından düzenlenen finansal hizmetler şirketi. PR",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8260,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "شركات المجموعة Global Partners منصة للاستثمار والتطوير العقاري. فتح الملف ISP Group أعمال استثمارية ",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "الشركاء الاستراتيجيون Revanta Capital شركة خدمات مالية خاضعة لتنظيم DFSA في DIFC. فتح الملف Groupe G",
+          "clientWidth": 382,
+          "scrollWidth": 397,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6557,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 359,
+          "scrollWidth": 374,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 359,
+          "scrollWidth": 374,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 359,
+          "scrollWidth": 374,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.pp-scrollable.pp-section.text-white.section.section-5a[data-anchor=\"page5\"]",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 430,
+          "scrollWidth": 528,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.scroll-wrap",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 430,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.scrollable-content",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 430,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "nowrap"
+        },
+        {
+          "selector": "div.vertical-centred",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 430,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.boxed.boxed-inner",
+          "text": "HowCustomers/Partners Profit Choose the route that fits your goals. Customers can either subscribe t",
+          "clientWidth": 430,
+          "scrollWidth": 528,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9515,
+      "frameworkOverlay": false,
+      "outOfViewport": [
+        {
+          "selector": "span.text-sm.font-medium.leading-none.text-background/70",
+          "text": "apartments",
+          "rect": {
+            "left": 697,
+            "right": 779,
+            "width": 83
+          }
+        }
+      ],
+      "clipped": [
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-fund-card=\"fund-1\"][data-density=\"viewport-fit\"]",
+          "text": "01 VIEW ASSET DETAILS Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD ",
+          "clientWidth": 686,
+          "scrollWidth": 701,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-fund-copy=\"true\"]",
+          "text": "Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x REVEN",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.grid.grid-cols-1.border-b.border-foreground/5.md:grid-cols-3[data-fund-highlight-grid=\"fund-1\"]",
+          "text": "UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.group.flex.flex-col.justify-between.border[data-fund-highlight-tile=\"true\"]",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 131,
+          "scrollWidth": 147,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "span.mb-3.5.text-[0.68rem].block.font-bold.uppercase",
+          "text": "PERFORMANCE",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "ul.grid.gap-5.bg-surface/45.p-5.md:grid-cols-3[data-fund-detail-notes=\"fund-1\"][data-layout=\"prestige-highlights\"]",
+          "text": "REVENUES Successfully generated returns with 4.9x multiple EXIT Realized successfully with distribut",
+          "clientWidth": 399,
+          "scrollWidth": 404,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-2.5",
+          "text": "REVENUES Successfully generated returns with 4.9x multiple",
+          "clientWidth": 104,
+          "scrollWidth": 114,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10292,
+      "frameworkOverlay": false,
+      "outOfViewport": [
+        {
+          "selector": "span.text-sm.font-medium.leading-none.text-background/70",
+          "text": "apartments",
+          "rect": {
+            "left": 697,
+            "right": 779,
+            "width": 83
+          }
+        }
+      ],
+      "clipped": [
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-fund-card=\"fund-1\"][data-density=\"viewport-fit\"]",
+          "text": "01 VIEW ASSET DETAILS Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD ",
+          "clientWidth": 686,
+          "scrollWidth": 701,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-fund-copy=\"true\"]",
+          "text": "Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x REVEN",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.grid.grid-cols-1.border-b.border-foreground/5.md:grid-cols-3[data-fund-highlight-grid=\"fund-1\"]",
+          "text": "UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.group.flex.flex-col.justify-between.border[data-fund-highlight-tile=\"true\"]",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 131,
+          "scrollWidth": 147,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "span.mb-3.5.text-[0.68rem].block.font-bold.uppercase",
+          "text": "PERFORMANCE",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "ul.grid.gap-5.bg-surface/45.p-5.md:grid-cols-3[data-fund-detail-notes=\"fund-1\"][data-layout=\"prestige-highlights\"]",
+          "text": "REVENUES Erfolgreich Renditen mit einem Multiple von 4,9x erzielt EXIT Erfolgreich realisiert mit Au",
+          "clientWidth": 399,
+          "scrollWidth": 404,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-2.5",
+          "text": "REVENUES Erfolgreich Renditen mit einem Multiple von 4,9x erzielt",
+          "clientWidth": 104,
+          "scrollWidth": 114,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10198,
+      "frameworkOverlay": false,
+      "outOfViewport": [
+        {
+          "selector": "span.text-sm.font-medium.leading-none.text-background/70",
+          "text": "apartments",
+          "rect": {
+            "left": 697,
+            "right": 779,
+            "width": 83
+          }
+        }
+      ],
+      "clipped": [
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-fund-card=\"fund-1\"][data-density=\"viewport-fit\"]",
+          "text": "01 VIEW ASSET DETAILS Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD ",
+          "clientWidth": 686,
+          "scrollWidth": 701,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-fund-copy=\"true\"]",
+          "text": "Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x REVEN",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.grid.grid-cols-1.border-b.border-foreground/5.md:grid-cols-3[data-fund-highlight-grid=\"fund-1\"]",
+          "text": "UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.group.flex.flex-col.justify-between.border[data-fund-highlight-tile=\"true\"]",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 131,
+          "scrollWidth": 147,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "span.mb-3.5.text-[0.68rem].block.font-bold.uppercase",
+          "text": "PERFORMANCE",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "ul.grid.gap-5.bg-surface/45.p-5.md:grid-cols-3[data-fund-detail-notes=\"fund-1\"][data-layout=\"prestige-highlights\"]",
+          "text": "REVENUES Успешно получена доходность с мультипликатором 4,9x EXIT Успешно реализовано с выплатами HI",
+          "clientWidth": 399,
+          "scrollWidth": 404,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-2.5",
+          "text": "REVENUES Успешно получена доходность с мультипликатором 4,9x",
+          "clientWidth": 104,
+          "scrollWidth": 133,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10350,
+      "frameworkOverlay": false,
+      "outOfViewport": [
+        {
+          "selector": "span.text-sm.font-medium.leading-none.text-background/70",
+          "text": "apartments",
+          "rect": {
+            "left": 697,
+            "right": 779,
+            "width": 83
+          }
+        }
+      ],
+      "clipped": [
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-fund-card=\"fund-1\"][data-density=\"viewport-fit\"]",
+          "text": "01 VIEW ASSET DETAILS Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD ",
+          "clientWidth": 686,
+          "scrollWidth": 701,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-fund-copy=\"true\"]",
+          "text": "Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x REVEN",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.grid.grid-cols-1.border-b.border-foreground/5.md:grid-cols-3[data-fund-highlight-grid=\"fund-1\"]",
+          "text": "UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.group.flex.flex-col.justify-between.border[data-fund-highlight-tile=\"true\"]",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 131,
+          "scrollWidth": 147,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "span.mb-3.5.text-[0.68rem].block.font-bold.uppercase",
+          "text": "PERFORMANCE",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "ul.grid.gap-5.bg-surface/45.p-5.md:grid-cols-3[data-fund-detail-notes=\"fund-1\"][data-layout=\"prestige-highlights\"]",
+          "text": "REVENUES წარმატებით მიღწეულია 4.9x უკუგება EXIT წარმატებით დასრულდა განაწილებებით HIGHLIGHTS პრემიუმ",
+          "clientWidth": 399,
+          "scrollWidth": 404,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-2.5",
+          "text": "REVENUES წარმატებით მიღწეულია 4.9x უკუგება",
+          "clientWidth": 104,
+          "scrollWidth": 114,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9611,
+      "frameworkOverlay": false,
+      "outOfViewport": [
+        {
+          "selector": "span.text-sm.font-medium.leading-none.text-background/70",
+          "text": "apartments",
+          "rect": {
+            "left": 697,
+            "right": 779,
+            "width": 83
+          }
+        }
+      ],
+      "clipped": [
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-fund-card=\"fund-1\"][data-density=\"viewport-fit\"]",
+          "text": "01 VİEW ASSET DETAİLS Fund I Eden House The Canal & Eden House The Park UNİTS 600 + TOTAL 462 m USD ",
+          "clientWidth": 686,
+          "scrollWidth": 701,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-fund-copy=\"true\"]",
+          "text": "Fund I Eden House The Canal & Eden House The Park UNİTS 600 + TOTAL 462 m USD PERFORMANCE 4.9x REVEN",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.grid.grid-cols-1.border-b.border-foreground/5.md:grid-cols-3[data-fund-highlight-grid=\"fund-1\"]",
+          "text": "UNİTS 600 + TOTAL 462 m USD PERFORMANCE 4.9x",
+          "clientWidth": 399,
+          "scrollWidth": 414,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.group.flex.flex-col.justify-between.border[data-fund-highlight-tile=\"true\"]",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 131,
+          "scrollWidth": 147,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "span.mb-3.5.text-[0.68rem].block.font-bold.uppercase",
+          "text": "PERFORMANCE",
+          "clientWidth": 99,
+          "scrollWidth": 131,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "ul.grid.gap-5.bg-surface/45.p-5.md:grid-cols-3[data-fund-detail-notes=\"fund-1\"][data-layout=\"prestige-highlights\"]",
+          "text": "REVENUES 4,9x çarpanla başarılı getiri sağlandı EXİT Dağıtımlarla başarıyla gerçekleştirildi HİGHLİG",
+          "clientWidth": 399,
+          "scrollWidth": 404,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-2.5",
+          "text": "REVENUES 4,9x çarpanla başarılı getiri sağlandı",
+          "clientWidth": 104,
+          "scrollWidth": 114,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8260,
+      "frameworkOverlay": false,
+      "outOfViewport": [
+        {
+          "selector": "span.text-sm.font-medium.leading-none.text-background/70",
+          "text": "apartments",
+          "rect": {
+            "left": -7,
+            "right": 72,
+            "width": 80
+          }
+        }
+      ],
+      "clipped": [
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-fund-card=\"fund-1\"][data-density=\"viewport-fit\"]",
+          "text": "01 VIEW ASSET DETAILS Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD ",
+          "clientWidth": 686,
+          "scrollWidth": 705,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-fund-copy=\"true\"]",
+          "text": "Fund I Eden House The Canal & Eden House The Park UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x REVEN",
+          "clientWidth": 399,
+          "scrollWidth": 419,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.grid.grid-cols-1.border-b.border-foreground/5.md:grid-cols-3[data-fund-highlight-grid=\"fund-1\"]",
+          "text": "UNITS 600 + TOTAL 462 m USD PERFORMANCE 4.9x",
+          "clientWidth": 399,
+          "scrollWidth": 419,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.group.flex.flex-col.justify-between.border[data-fund-highlight-tile=\"true\"]",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 131,
+          "scrollWidth": 152,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.9x",
+          "clientWidth": 99,
+          "scrollWidth": 136,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "span.mb-3.5.text-[0.68rem].block.font-bold.uppercase",
+          "text": "PERFORMANCE",
+          "clientWidth": 99,
+          "scrollWidth": 136,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "ul.grid.gap-5.bg-surface/45.p-5.md:grid-cols-3[data-fund-detail-notes=\"fund-1\"][data-layout=\"prestige-highlights\"]",
+          "text": "REVENUES تم تحقيق عوائد بنجاح بمضاعف 4.9x EXIT تم التنفيذ بنجاح مع توزيعات HIGHLIGHTS موقع مميز على ",
+          "clientWidth": 399,
+          "scrollWidth": 412,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-2.5",
+          "text": "REVENUES تم تحقيق عوائد بنجاح بمضاعف 4.9x",
+          "clientWidth": 104,
+          "scrollWidth": 120,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6577,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 621,
+          "scrollWidth": 636,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 621,
+          "scrollWidth": 636,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 621,
+          "scrollWidth": 636,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro.overflow-hidden",
+          "text": "Startyour participation in Global real estate opportunities Register with us now, and start particip",
+          "clientWidth": 621,
+          "scrollWidth": 636,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.contact-info",
+          "text": "Contact AIXCO",
+          "clientWidth": 296,
+          "scrollWidth": 311,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "form.js-form",
+          "text": "Contact AIXCO",
+          "clientWidth": 296,
+          "scrollWidth": 311,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9515,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-batumi-property-card=\"guru\"][data-density=\"standard\"]",
+          "text": "Play video 02 VIEW ASSET DETAILS Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCAL",
+          "clientWidth": 942,
+          "scrollWidth": 951,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-batumi-property-copy=\"true\"]",
+          "text": "Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCALE 3,000 sqm of infrastructure are",
+          "clientWidth": 549,
+          "scrollWidth": 558,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.grid.grid-cols-1.border-b.border-foreground/5.md:grid-cols-3[data-batumi-property-highlight-grid=\"guru\"]",
+          "text": "FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments",
+          "clientWidth": 549,
+          "scrollWidth": 558,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.group.flex.flex-col.justify-between.border[data-batumi-metric-tile=\"true\"]",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 181,
+          "scrollWidth": 191,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 133,
+          "scrollWidth": 167,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 133,
+          "scrollWidth": 167,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10292,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-3",
+          "text": "REVENUES Positioniert in einer stark nachgefragten, gesundheitsorientierten Gemeinschaft",
+          "clientWidth": 135,
+          "scrollWidth": 170,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "p.max-w-[18rem].font-medium.text-foreground/78.text-[0.98rem].leading-relaxed",
+          "text": "Positioniert in einer stark nachgefragten, gesundheitsorientierten Gemeinschaft",
+          "clientWidth": 135,
+          "scrollWidth": 170,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-3",
+          "text": "EXIT Erfolgreich in gesundheitsorientierten Entwicklungen positioniert",
+          "clientWidth": 135,
+          "scrollWidth": 170,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "p.max-w-[18rem].font-medium.text-foreground/78.text-[0.98rem].leading-relaxed",
+          "text": "Erfolgreich in gesundheitsorientierten Entwicklungen positioniert",
+          "clientWidth": 135,
+          "scrollWidth": 170,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-batumi-property-card=\"guru\"][data-density=\"standard\"]",
+          "text": "Play video 02 VIEW ASSET DETAILS Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCAL",
+          "clientWidth": 942,
+          "scrollWidth": 951,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-batumi-property-copy=\"true\"]",
+          "text": "Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCALE 3,000 sqm of infrastructure are",
+          "clientWidth": 549,
+          "scrollWidth": 558,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10198,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-3",
+          "text": "HIGHLIGHTS Специализированные активы для специалистов и клиентов в сфере здравоохранения",
+          "clientWidth": 135,
+          "scrollWidth": 164,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "p.max-w-[18rem].font-medium.text-foreground/78.text-[0.98rem].leading-relaxed",
+          "text": "Специализированные активы для специалистов и клиентов в сфере здравоохранения",
+          "clientWidth": 135,
+          "scrollWidth": 164,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-batumi-property-card=\"guru\"][data-density=\"standard\"]",
+          "text": "Play video 02 VIEW ASSET DETAILS Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCAL",
+          "clientWidth": 942,
+          "scrollWidth": 951,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-batumi-property-copy=\"true\"]",
+          "text": "Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCALE 3,000 sqm of infrastructure are",
+          "clientWidth": 549,
+          "scrollWidth": 558,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.grid.grid-cols-1.border-b.border-foreground/5.md:grid-cols-3[data-batumi-property-highlight-grid=\"guru\"]",
+          "text": "FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments",
+          "clientWidth": 549,
+          "scrollWidth": 558,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.group.flex.flex-col.justify-between.border[data-batumi-metric-tile=\"true\"]",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 181,
+          "scrollWidth": 191,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10350,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-3",
+          "text": "EXIT წარმატებით პოზიციონირებულია ჯანდაცვაზე ორიენტირებულ პროექტებში",
+          "clientWidth": 135,
+          "scrollWidth": 173,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "p.max-w-[18rem].font-medium.text-foreground/78.text-[0.98rem].leading-relaxed",
+          "text": "წარმატებით პოზიციონირებულია ჯანდაცვაზე ორიენტირებულ პროექტებში",
+          "clientWidth": 135,
+          "scrollWidth": 173,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-3",
+          "text": "HIGHLIGHTS სპეციალიზებული აქტივები ჯანდაცვის პროფესიონალებისა და კლიენტებისთვის",
+          "clientWidth": 135,
+          "scrollWidth": 169,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "p.max-w-[18rem].font-medium.text-foreground/78.text-[0.98rem].leading-relaxed",
+          "text": "სპეციალიზებული აქტივები ჯანდაცვის პროფესიონალებისა და კლიენტებისთვის",
+          "clientWidth": 135,
+          "scrollWidth": 169,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-batumi-property-card=\"guru\"][data-density=\"standard\"]",
+          "text": "Play video 02 VIEW ASSET DETAILS Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCAL",
+          "clientWidth": 942,
+          "scrollWidth": 951,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-batumi-property-copy=\"true\"]",
+          "text": "Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCALE 3,000 sqm of infrastructure are",
+          "clientWidth": 549,
+          "scrollWidth": 558,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9611,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 148,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-3",
+          "text": "REVENUES Yüksek talep gören sağlık odaklı bir toplulukta konumlandırılmıştır",
+          "clientWidth": 135,
+          "scrollWidth": 139,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "p.max-w-[18rem].font-medium.text-foreground/78.text-[0.98rem].leading-relaxed",
+          "text": "Yüksek talep gören sağlık odaklı bir toplulukta konumlandırılmıştır",
+          "clientWidth": 135,
+          "scrollWidth": 139,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "li.space-y-3",
+          "text": "EXİT Sağlık odaklı projelerde başarıyla konumlandırılmıştır",
+          "clientWidth": 135,
+          "scrollWidth": 139,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "p.max-w-[18rem].font-medium.text-foreground/78.text-[0.98rem].leading-relaxed",
+          "text": "Sağlık odaklı projelerde başarıyla konumlandırılmıştır",
+          "clientWidth": 135,
+          "scrollWidth": 139,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-batumi-property-card=\"guru\"][data-density=\"standard\"]",
+          "text": "Play video 02 VİEW ASSET DETAİLS Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCAL",
+          "clientWidth": 942,
+          "scrollWidth": 951,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-batumi-property-copy=\"true\"]",
+          "text": "Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCALE 3,000 sqm of infrastructure are",
+          "clientWidth": 549,
+          "scrollWidth": 558,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8260,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "PERFORMANCE 4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 146,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "4.3x Projected",
+          "clientWidth": 133,
+          "scrollWidth": 146,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "article.scroll-reveal.group.relative.grid.overflow-hidden[data-batumi-property-card=\"guru\"][data-density=\"standard\"]",
+          "text": "Play video 02 VIEW ASSET DETAILS Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCAL",
+          "clientWidth": 942,
+          "scrollWidth": 947,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.min-h-0.flex-col.border-foreground/5.md:col-span-7[data-batumi-property-copy=\"true\"]",
+          "text": "Guru FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments SCALE 3,000 sqm of infrastructure are",
+          "clientWidth": 549,
+          "scrollWidth": 555,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.grid.grid-cols-1.border-b.border-foreground/5.md:grid-cols-3[data-batumi-property-highlight-grid=\"guru\"]",
+          "text": "FLOORS 29 floors APARTMENTS 667 units SOLD 85% apartments",
+          "clientWidth": 549,
+          "scrollWidth": 555,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.group.flex.flex-col.justify-between.border[data-batumi-metric-tile=\"true\"]",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 181,
+          "scrollWidth": 188,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 133,
+          "scrollWidth": 164,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 133,
+          "scrollWidth": 164,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6657,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 754,
+          "scrollWidth": 769,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.metrics-grid",
+          "text": "5,000+ TRUSTED CLIENTS $400M GROSS DEVELOPMENT VALUE (GDV) 500+ TOTAL TRANSACTIONS 2009 IN BUSINESS ",
+          "clientWidth": 754,
+          "scrollWidth": 765,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 754,
+          "scrollWidth": 769,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 754,
+          "scrollWidth": 769,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.col-lg-5.mt-5.mt-xl-0",
+          "text": "Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationships with neig",
+          "clientWidth": 327,
+          "scrollWidth": 390,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "h2.title",
+          "text": "Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationships with neig",
+          "clientWidth": 297,
+          "scrollWidth": 375,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.feature-points",
+          "text": "Net rental yields starting from 8% Annual price growth of up to 12% Property prices starting from €5",
+          "clientWidth": 297,
+          "scrollWidth": 375,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.feature-grid",
+          "text": "Net rental yields starting from 8% Annual price growth of up to 12% Property prices starting from €5",
+          "clientWidth": 297,
+          "scrollWidth": 375,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9594,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Group companies Global Partners Real estate investment and development platform. OPEN PROFILE ISP Gr",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategic partners Revanta Capital DFSA-regulated financial services firm in DIFC. OPEN PROFILE Grou",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10386,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Gruppenunternehmen Global Partners Plattform für Immobilieninvestitionen und -entwicklung. PROFIL ÖF",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategische Partner Revanta Capital Von der DFSA reguliertes Finanzdienstleistungsunternehmen im DI",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10276,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Компании группы Global Partners Платформа для инвестиций и девелопмента в недвижимости. ОТКРЫТЬ ПРОФ",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Стратегические партнеры Revanta Capital Финансовая компания в DIFC, регулируемая DFSA. ОТКРЫТЬ ПРОФИ",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10405,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "ჯგუფის კომპანიები Global Partners უძრავი ქონების ინვესტირებისა და განვითარების პლატფორმა. პროფილის გ",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "სტრატეგიული პარტნიორები Revanta Capital DFSA-ს მიერ რეგულირებული ფინანსური სერვისების კომპანია DIFC-",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9699,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Grup şirketleri Global Partners Gayrimenkul yatırım ve geliştirme platformu. PROFİLİ AÇ ISP Group Çe",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Stratejik ortaklar Revanta Capital DIFC'de DFSA tarafından düzenlenen finansal hizmetler şirketi. PR",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8334,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "شركات المجموعة Global Partners منصة للاستثمار والتطوير العقاري. فتح الملف ISP Group أعمال استثمارية ",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "الشركاء الاستراتيجيون Revanta Capital شركة خدمات مالية خاضعة لتنظيم DFSA في DIFC. فتح الملف Groupe G",
+          "clientWidth": 1200,
+          "scrollWidth": 1214,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6657,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 1010,
+          "scrollWidth": 1025,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 1010,
+          "scrollWidth": 1025,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 1010,
+          "scrollWidth": 1025,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro.overflow-hidden",
+          "text": "Startyour participation in Global real estate opportunities Register with us now, and start particip",
+          "clientWidth": 1010,
+          "scrollWidth": 1025,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.contact-info",
+          "text": "Contact AIXCO",
+          "clientWidth": 490,
+          "scrollWidth": 505,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "form.js-form",
+          "text": "Contact AIXCO",
+          "clientWidth": 490,
+          "scrollWidth": 505,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1366,
+      "clientWidth": 1366,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9594,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Group companies Global Partners Real estate investment and development platform. OPEN PROFILE ISP Gr",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategic partners Revanta Capital DFSA-regulated financial services firm in DIFC. OPEN PROFILE Grou",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1366,
+      "clientWidth": 1366,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10386,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Gruppenunternehmen Global Partners Plattform für Immobilieninvestitionen und -entwicklung. PROFIL ÖF",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategische Partner Revanta Capital Von der DFSA reguliertes Finanzdienstleistungsunternehmen im DI",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1366,
+      "clientWidth": 1366,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10276,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Компании группы Global Partners Платформа для инвестиций и девелопмента в недвижимости. ОТКРЫТЬ ПРОФ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Стратегические партнеры Revanta Capital Финансовая компания в DIFC, регулируемая DFSA. ОТКРЫТЬ ПРОФИ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1366,
+      "clientWidth": 1366,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10405,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "ჯგუფის კომპანიები Global Partners უძრავი ქონების ინვესტირებისა და განვითარების პლატფორმა. პროფილის გ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "სტრატეგიული პარტნიორები Revanta Capital DFSA-ს მიერ რეგულირებული ფინანსური სერვისების კომპანია DIFC-",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1366,
+      "clientWidth": 1366,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9699,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Grup şirketleri Global Partners Gayrimenkul yatırım ve geliştirme platformu. PROFİLİ AÇ ISP Group Çe",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Stratejik ortaklar Revanta Capital DIFC'de DFSA tarafından düzenlenen finansal hizmetler şirketi. PR",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 1366,
+      "clientWidth": 1366,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8334,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "شركات المجموعة Global Partners منصة للاستثمار والتطوير العقاري. فتح الملف ISP Group أعمال استثمارية ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "الشركاء الاستراتيجيون Revanta Capital شركة خدمات مالية خاضعة لتنظيم DFSA في DIFC. فتح الملف Groupe G",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 1366,
+      "clientWidth": 1366,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6657,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 1096,
+          "scrollWidth": 1111,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 1096,
+          "scrollWidth": 1111,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 1096,
+          "scrollWidth": 1111,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro.overflow-hidden",
+          "text": "Startyour participation in Global real estate opportunities Register with us now, and start particip",
+          "clientWidth": 1096,
+          "scrollWidth": 1111,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.contact-info",
+          "text": "Contact AIXCO",
+          "clientWidth": 533,
+          "scrollWidth": 548,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "form.js-form",
+          "text": "Contact AIXCO",
+          "clientWidth": 533,
+          "scrollWidth": 548,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1536,
+      "clientWidth": 1536,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9515,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Group companies Global Partners Real estate investment and development platform. OPEN PROFILE ISP Gr",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategic partners Revanta Capital DFSA-regulated financial services firm in DIFC. OPEN PROFILE Grou",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1536,
+      "clientWidth": 1536,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10292,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Gruppenunternehmen Global Partners Plattform für Immobilieninvestitionen und -entwicklung. PROFIL ÖF",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategische Partner Revanta Capital Von der DFSA reguliertes Finanzdienstleistungsunternehmen im DI",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1536,
+      "clientWidth": 1536,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10198,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Компании группы Global Partners Платформа для инвестиций и девелопмента в недвижимости. ОТКРЫТЬ ПРОФ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Стратегические партнеры Revanta Capital Финансовая компания в DIFC, регулируемая DFSA. ОТКРЫТЬ ПРОФИ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1536,
+      "clientWidth": 1536,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10295,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "ჯგუფის კომპანიები Global Partners უძრავი ქონების ინვესტირებისა და განვითარების პლატფორმა. პროფილის გ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "სტრატეგიული პარტნიორები Revanta Capital DFSA-ს მიერ რეგულირებული ფინანსური სერვისების კომპანია DIFC-",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1536,
+      "clientWidth": 1536,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9611,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 197,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Grup şirketleri Global Partners Gayrimenkul yatırım ve geliştirme platformu. PROFİLİ AÇ ISP Group Çe",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Stratejik ortaklar Revanta Capital DIFC'de DFSA tarafından düzenlenen finansal hizmetler şirketi. PR",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 1536,
+      "clientWidth": 1536,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8260,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 194,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 194,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "شركات المجموعة Global Partners منصة للاستثمار والتطوير العقاري. فتح الملف ISP Group أعمال استثمارية ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "الشركاء الاستراتيجيون Revanta Capital شركة خدمات مالية خاضعة لتنظيم DFSA في DIFC. فتح الملف Groupe G",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 1536,
+      "clientWidth": 1536,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6657,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 1110,
+          "scrollWidth": 1125,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 1110,
+          "scrollWidth": 1125,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 1110,
+          "scrollWidth": 1125,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro.overflow-hidden",
+          "text": "Startyour participation in Global real estate opportunities Register with us now, and start particip",
+          "clientWidth": 1110,
+          "scrollWidth": 1125,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.contact-info",
+          "text": "Contact AIXCO",
+          "clientWidth": 540,
+          "scrollWidth": 555,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "form.js-form",
+          "text": "Contact AIXCO",
+          "clientWidth": 540,
+          "scrollWidth": 555,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "en",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9518,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Group companies Global Partners Real estate investment and development platform. OPEN PROFILE ISP Gr",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategic partners Revanta Capital DFSA-regulated financial services firm in DIFC. OPEN PROFILE Grou",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "de",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10285,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Gruppenunternehmen Global Partners Plattform für Immobilieninvestitionen und -entwicklung. PROFIL ÖF",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Strategische Partner Revanta Capital Von der DFSA reguliertes Finanzdienstleistungsunternehmen im DI",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ru",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10187,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Компании группы Global Partners Платформа для инвестиций и девелопмента в недвижимости. ОТКРЫТЬ ПРОФ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Стратегические партнеры Revanta Capital Финансовая компания в DIFC, регулируемая DFSA. ОТКРЫТЬ ПРОФИ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ka",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 10295,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "ჯგუფის კომპანიები Global Partners უძრავი ქონების ინვესტირებისა და განვითარების პლატფორმა. პროფილის გ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "სტრატეგიული პარტნიორები Revanta Capital DFSA-ს მიერ რეგულირებული ფინანსური სერვისების კომპანია DIFC-",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "tr",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "ltr",
+      "url": "/",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 9615,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 206,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Grup şirketleri Global Partners Gayrimenkul yatırım ve geliştirme platformu. PROFİLİ AÇ ISP Group Çe",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "Stratejik ortaklar Revanta Capital DIFC'de DFSA tarafından düzenlenen finansal hizmetler şirketi. PR",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "lang": "ar",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "legacy": false,
+      "errors": [],
+      "title": "AIXCO.Global | Quality Real Estate Participation",
+      "dir": "rtl",
+      "url": "/",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 8256,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div",
+          "text": "SOLD 85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 203,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.flex.items-baseline.gap-1.5",
+          "text": "85% apartments",
+          "clientWidth": 190,
+          "scrollWidth": 203,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "شركات المجموعة Global Partners منصة للاستثمار والتطوير العقاري. فتح الملف ISP Group أعمال استثمارية ",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.mb-12.last:mb-0",
+          "text": "الشركاء الاستراتيجيون Revanta Capital شركة خدمات مالية خاضعة لتنظيم DFSA في DIFC. فتح الملف Groupe G",
+          "clientWidth": 1240,
+          "scrollWidth": 1254,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "route": "/aixco-global-op2/index.html",
+      "lang": "en",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "legacy": true,
+      "errors": [],
+      "title": "AIXCO Global | Global Real Estate Participation",
+      "dir": "ltr",
+      "url": "/aixco-global-op2/index.html",
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "horizontalOverflow": 0,
+      "bodyTextLength": 6657,
+      "frameworkOverlay": false,
+      "outOfViewport": [],
+      "clipped": [
+        {
+          "selector": "div.intro",
+          "text": "QUALITY REAL ESTATE PARTICIPATION AIXCO Global Participate where growth, stability, and long term va",
+          "clientWidth": 1110,
+          "scrollWidth": 1125,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Fund I Eden House The Canal & Eden House The Park Units: 600+ Total: USD 462m Performance: 4.9x Reve",
+          "clientWidth": 1110,
+          "scrollWidth": 1125,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro",
+          "text": "Guru Otium Batumi Georgia sits at the crossroads of Europe and Asia, maintaining strong relationship",
+          "clientWidth": 1110,
+          "scrollWidth": 1125,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.intro.overflow-hidden",
+          "text": "Startyour participation in Global real estate opportunities Register with us now, and start particip",
+          "clientWidth": 1110,
+          "scrollWidth": 1125,
+          "overflowX": "hidden",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "div.contact-info",
+          "text": "Contact AIXCO",
+          "clientWidth": 540,
+          "scrollWidth": 555,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        },
+        {
+          "selector": "form.js-form",
+          "text": "Contact AIXCO",
+          "clientWidth": 540,
+          "scrollWidth": 555,
+          "overflowX": "visible",
+          "whiteSpace": "normal"
+        }
+      ]
+    }
+  ]
+}
