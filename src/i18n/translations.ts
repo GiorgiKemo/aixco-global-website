@@ -94,13 +94,6 @@ export const textTranslations = {
     "tr": "Kayıt Ol",
     "ar": "التسجيل"
   },
-  "Register with AIXCO": {
-    "de": "Bei AIXCO registrieren",
-    "ru": "Зарегистрироваться в AIXCO",
-    "ka": "რეგისტრაცია AIXCO-ში",
-    "tr": "AIXCO'ya Kayıt Ol",
-    "ar": "التسجيل مع AIXCO"
-  },
   "Terms & Conditions": {
     "de": "Allgemeine Geschäftsbedingungen",
     "ru": "Условия и положения",
