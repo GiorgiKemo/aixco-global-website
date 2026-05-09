@@ -94,6 +94,13 @@ export const textTranslations = {
     "tr": "Kayıt Ol",
     "ar": "التسجيل"
   },
+  "Register with AIXCO": {
+    "de": "Bei AIXCO registrieren",
+    "ru": "Зарегистрироваться в AIXCO",
+    "ka": "რეგისტრაცია AIXCO-ში",
+    "tr": "AIXCO'ya Kayıt Ol",
+    "ar": "التسجيل مع AIXCO"
+  },
   "Terms & Conditions": {
     "de": "Allgemeine Geschäftsbedingungen",
     "ru": "Условия и положения",
@@ -476,7 +483,7 @@ export const textTranslations = {
     "de": "Für Investoren, die festverzinsliche Chancen mit klarem Onboarding und Dokumentation suchen.",
     "ru": "Для инвесторов, ищущих возможности фиксированного дохода с понятным онбордингом и документацией.",
     "ka": "ინვესტორებისთვის, რომლებიც ეძებენ ფიქსირებული შემოსავლის ტიპის შესაძლებლობებს მკაფიო ონბორდინგითა და დოკუმენტაციით.",
-    "tr": "Net onboarding ve dokümantasyona sahip sabit getirili tarz fırsatlar arayan yatırımcılar için.",
+    "tr": "Net onboarding ve dokümantasyona sahip sabit getirili fırsatlar arayan yatırımcılar için.",
     "ar": "للمستثمرين الباحثين عن فرص شبيهة بالدخل الثابت مع إعداد ووثائق واضحة."
   },
   "Broker": {
@@ -993,8 +1000,8 @@ export const textTranslations = {
   "your participation in Global real estate opportunities": {
     "de": "Ihre Beteiligung an globalen Immobilienchancen",
     "ru": "ваше участие в глобальных возможностях недвижимости",
-    "ka": "თქვენი მონაწილეობა გლობალურ უძრავ ქონების შესაძლებლობებში",
-    "tr": "küresel gayrimenkul fırsatlarına katılımınız",
+    "ka": "თქვენი მონაწილეობა გლობალური უძრავი ქონების შესაძლებლობებში",
+    "tr": "küresel gayrimenkul fırsatlarına katılımınızı",
     "ar": "مشاركتك في فرص العقارات العالمية"
   },
   "Register with us now, and start participating in exclusive real estate opportunities from €1,000.": {
