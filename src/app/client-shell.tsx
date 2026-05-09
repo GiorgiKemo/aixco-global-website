@@ -10,6 +10,7 @@ import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
 import { SiteContentProvider } from "@/data/SiteContentProvider";
 import { ScrollManager } from "@/components/ScrollManager";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { getReducedMotionPreference, installMotionReducedMotionDevWarningFilter } from "@/lib/motion";
 import type { SiteContent, SiteContentResult } from "@/lib/backend/site-content";
 
@@ -40,6 +41,7 @@ export function ClientShell({
             <QueryClientProvider client={queryClient}>
               <TooltipProvider>
                 <ScrollManager />
+                <ScrollToTopButton />
                 {children}
                 <Toaster />
                 <Sonner />
