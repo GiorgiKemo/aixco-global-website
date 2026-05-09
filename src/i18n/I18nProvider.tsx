@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { attributeTranslations, languageOptions, textTranslations, type Lang } from "./translations";
+import { assetTranslations } from "./asset-translations";
+import { siteContentTranslations } from "./site-content-translations";
 
 export const LANGS = languageOptions;
 const DEFAULT_LANG: Lang = "en";
@@ -19,6 +21,7 @@ const keyedText: Record<string, string> = {
   "nav.partners": "Partners",
   "nav.faqs": "FAQs",
   "nav.contact": "Contact",
+  "nav.more": "More",
   "cta.login": "Login",
   "cta.register": "Register",
   "cta.start": "Starting from €1,000",
@@ -47,6 +50,185 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
   Highlights: { de: "Highlights", ru: "Ключевые моменты", ka: "მთავარი საკითხები", tr: "Öne çıkanlar", ar: "أبرز النقاط" },
   "Group company": { de: "Konzerngesellschaft", ru: "Компания группы", ka: "ჯგუფის კომპანია", tr: "Grup şirketi", ar: "شركة ضمن المجموعة" },
   "Strategic partner": { de: "Strategischer Partner", ru: "Стратегический партнер", ka: "სტრატეგიული პარტნიორი", tr: "Stratejik ortak", ar: "شريك استراتيجي" },
+  More: { de: "Mehr", ru: "Ещё", ka: "მეტი", tr: "Daha fazla", ar: "المزيد" },
+  Email: { de: "E-Mail", ru: "Эл. почта", ka: "ელფოსტა", tr: "E-posta", ar: "البريد الإلكتروني" },
+  Address: { de: "Adresse", ru: "Адрес", ka: "მისამართი", tr: "Adres", ar: "العنوان" },
+  "AIXCO - Product Powerhouse": {
+    de: "AIXCO - Produkt-Powerhouse",
+    ru: "AIXCO - продуктовая платформа",
+    ka: "AIXCO - ძლიერი პროდუქტების პლატფორმა",
+    tr: "AIXCO - Güçlü Ürün Platformu",
+    ar: "AIXCO - منصة منتجات قوية",
+  },
+  Batumi: { de: "Batumi", ru: "Батуми", ka: "ბათუმი", tr: "Batum", ar: "باتومي" },
+  Dubai: { de: "Dubai", ru: "Дубай", ka: "დუბაი", tr: "Dubai", ar: "دبي" },
+  "View Asset Details": {
+    de: "Asset-Details ansehen",
+    ru: "Посмотреть детали актива",
+    ka: "აქტივის დეტალების ნახვა",
+    tr: "Varlık detaylarını görüntüle",
+    ar: "عرض تفاصيل الأصل",
+  },
+  "Batumi gallery": { de: "Batumi-Galerie", ru: "Галерея Батуми", ka: "ბათუმის გალერეა", tr: "Batum galerisi", ar: "معرض باتومي" },
+  "Video gallery": { de: "Videogalerie", ru: "Видеогалерея", ka: "ვიდეო გალერეა", tr: "Video galerisi", ar: "معرض الفيديو" },
+  "FAQs - Frequently Asked Questions": {
+    de: "FAQ - Häufig gestellte Fragen",
+    ru: "FAQ - часто задаваемые вопросы",
+    ka: "FAQ - ხშირად დასმული კითხვები",
+    tr: "SSS - Sıkça Sorulan Sorular",
+    ar: "الأسئلة الشائعة",
+  },
+  "Scroll to top": { de: "Nach oben scrollen", ru: "Прокрутить наверх", ka: "ზემოთ დაბრუნება", tr: "Yukarı kaydır", ar: "التمرير إلى الأعلى" },
+  "Play video": { de: "Video abspielen", ru: "Воспроизвести видео", ka: "ვიდეოს გაშვება", tr: "Videoyu oynat", ar: "تشغيل الفيديو" },
+  "Close video": { de: "Video schließen", ru: "Закрыть видео", ka: "ვიდეოს დახურვა", tr: "Videoyu kapat", ar: "إغلاق الفيديو" },
+  "Expanded video": { de: "Erweitertes Video", ru: "Развернутое видео", ka: "გაფართოებული ვიდეო", tr: "Genişletilmiş video", ar: "فيديو موسع" },
+  "expanded player": { de: "erweiterter Player", ru: "развернутый проигрыватель", ka: "გაფართოებული პლეერი", tr: "genişletilmiş oynatıcı", ar: "مشغل موسع" },
+  "Expand image": { de: "Bild vergrößern", ru: "Развернуть изображение", ka: "სურათის გაფართოება", tr: "Görseli büyüt", ar: "تكبير الصورة" },
+  "Close image": { de: "Bild schließen", ru: "Закрыть изображение", ka: "სურათის დახურვა", tr: "Görseli kapat", ar: "إغلاق الصورة" },
+  "Expanded image": { de: "Vergrößertes Bild", ru: "Развернутое изображение", ka: "გაფართოებული სურათი", tr: "Büyütülmüş görsel", ar: "صورة مكبرة" },
+  Close: { de: "Schließen", ru: "Закрыть", ka: "დახურვა", tr: "Kapat", ar: "إغلاق" },
+  images: { de: "Bilder", ru: "изображения", ka: "სურათები", tr: "görseller", ar: "صور" },
+  "Sorry, something went wrong.": {
+    de: "Entschuldigung, etwas ist schiefgelaufen.",
+    ru: "Извините, что-то пошло не так.",
+    ka: "უკაცრავად, რაღაც შეცდომა მოხდა.",
+    tr: "Üzgünüz, bir şeyler ters gitti.",
+    ar: "عذرًا، حدث خطأ ما.",
+  },
+  "Your request was received.": {
+    de: "Ihre Anfrage ist eingegangen.",
+    ru: "Ваш запрос получен.",
+    ka: "თქვენი მოთხოვნა მიღებულია.",
+    tr: "Talebiniz alındı.",
+    ar: "تم استلام طلبك.",
+  },
+  "We saved your details for the AIXCO team. You can also open an email draft if you want to send extra context.": {
+    de: "Wir haben Ihre Angaben für das AIXCO-Team gespeichert. Sie können auch einen E-Mail-Entwurf öffnen, wenn Sie zusätzlichen Kontext senden möchten.",
+    ru: "Мы сохранили ваши данные для команды AIXCO. Вы также можете открыть черновик письма, если хотите отправить дополнительный контекст.",
+    ka: "თქვენი დეტალები AIXCO-ის გუნდისთვის შევინახეთ. დამატებითი კონტექსტის გასაგზავნად შეგიძლიათ ელფოსტის მონახაზიც გახსნათ.",
+    tr: "Bilgilerinizi AIXCO ekibi için kaydettik. Ek bağlam göndermek isterseniz bir e-posta taslağı da açabilirsiniz.",
+    ar: "حفظنا بياناتك لفريق AIXCO. يمكنك أيضًا فتح مسودة بريد إلكتروني إذا أردت إرسال سياق إضافي.",
+  },
+  "Please enter your name": { de: "Bitte geben Sie Ihren Namen ein", ru: "Введите ваше имя", ka: "გთხოვთ შეიყვანოთ თქვენი სახელი", tr: "Lütfen adınızı girin", ar: "يرجى إدخال اسمك" },
+  "Please enter a valid email": { de: "Bitte geben Sie eine gültige E-Mail-Adresse ein", ru: "Введите действительный email", ka: "გთხოვთ შეიყვანოთ სწორი ელფოსტა", tr: "Lütfen geçerli bir e-posta girin", ar: "يرجى إدخال بريد إلكتروني صالح" },
+  "Please share a few details": { de: "Bitte teilen Sie einige Details mit", ru: "Пожалуйста, укажите несколько деталей", ka: "გთხოვთ გაგვიზიაროთ რამდენიმე დეტალი", tr: "Lütfen birkaç ayrıntı paylaşın", ar: "يرجى مشاركة بعض التفاصيل" },
+  "AIXCO Live Chat": { de: "AIXCO Live-Chat", ru: "Онлайн-чат AIXCO", ka: "AIXCO ცოცხალი ჩატი", tr: "AIXCO Canlı Sohbet", ar: "دردشة AIXCO المباشرة" },
+  "Tell us what you need and send the transcript to AIXCO.": {
+    de: "Sagen Sie uns, was Sie benötigen, und senden Sie das Protokoll an AIXCO.",
+    ru: "Расскажите, что вам нужно, и отправьте стенограмму в AIXCO.",
+    ka: "გვითხარით, რა გჭირდებათ და ჩანაწერი AIXCO-ს გაუგზავნეთ.",
+    tr: "Neye ihtiyacınız olduğunu yazın ve dökümü AIXCO'ya gönderin.",
+    ar: "أخبرنا بما تحتاجه وأرسل نسخة المحادثة إلى AIXCO.",
+  },
+  "Close live chat": { de: "Live-Chat schließen", ru: "Закрыть онлайн-чат", ka: "ცოცხალი ჩატის დახურვა", tr: "Canlı sohbeti kapat", ar: "إغلاق الدردشة المباشرة" },
+  "Open live chat": { de: "Live-Chat öffnen", ru: "Открыть онлайн-чат", ka: "ცოცხალი ჩატის გახსნა", tr: "Canlı sohbeti aç", ar: "فتح الدردشة المباشرة" },
+  "Minimize live chat": { de: "Live-Chat minimieren", ru: "Свернуть онлайн-чат", ka: "ცოცხალი ჩატის ჩაკეცვა", tr: "Canlı sohbeti küçült", ar: "تصغير الدردشة المباشرة" },
+  Message: { de: "Nachricht", ru: "Сообщение", ka: "შეტყობინება", tr: "Mesaj", ar: "الرسالة" },
+  "Type your message...": { de: "Ihre Nachricht eingeben...", ru: "Введите сообщение...", ka: "ჩაწერეთ თქვენი შეტყობინება...", tr: "Mesajınızı yazın...", ar: "اكتب رسالتك..." },
+  Send: { de: "Senden", ru: "Отправить", ka: "გაგზავნა", tr: "Gönder", ar: "إرسال" },
+  "Email transcript": { de: "Protokoll per E-Mail senden", ru: "Отправить стенограмму по email", ka: "ჩანაწერის ელფოსტით გაგზავნა", tr: "Dökümü e-postayla gönder", ar: "إرسال نسخة المحادثة بالبريد" },
+  Clear: { de: "Löschen", ru: "Очистить", ka: "გასუფთავება", tr: "Temizle", ar: "مسح" },
+  "AIXCO 6% Bond": { de: "AIXCO 6%-Anleihe", ru: "Облигация AIXCO 6%", ka: "AIXCO 6%-იანი ობლიგაცია", tr: "AIXCO %6 Tahvil", ar: "سند AIXCO بعائد 6%" },
+  "Batumi apartments": { de: "Apartments in Batumi", ru: "Апартаменты в Батуми", ka: "ბათუმის აპარტამენტები", tr: "Batum daireleri", ar: "شقق باتومي" },
+  "Broker partnership": { de: "Maklerpartnerschaft", ru: "Партнёрство для брокеров", ka: "ბროკერის პარტნიორობა", tr: "Broker ortaklığı", ar: "شراكة الوسطاء" },
+  "Developer partnership": { de: "Entwicklerpartnerschaft", ru: "Партнёрство для девелоперов", ka: "დეველოპერის პარტნიორობა", tr: "Geliştirici ortaklığı", ar: "شراكة المطورين" },
+  "Welcome to AIXCO Live Chat. Tell us whether you are interested in the AIXCO 6% Bond, Batumi apartments, broker partnership, or developer partnership.": {
+    de: "Willkommen im AIXCO Live-Chat. Sagen Sie uns, ob Sie sich für die AIXCO 6%-Anleihe, Apartments in Batumi, eine Maklerpartnerschaft oder eine Entwicklerpartnerschaft interessieren.",
+    ru: "Добро пожаловать в онлайн-чат AIXCO. Напишите, что вас интересует: облигация AIXCO 6%, апартаменты в Батуми, партнёрство для брокеров или партнёрство для девелоперов.",
+    ka: "კეთილი იყოს თქვენი მობრძანება AIXCO-ის ცოცხალ ჩატში. გვითხარით, გაინტერესებთ AIXCO 6%-იანი ობლიგაცია, ბათუმის აპარტამენტები, ბროკერის პარტნიორობა თუ დეველოპერის პარტნიორობა.",
+    tr: "AIXCO Canlı Sohbet'e hoş geldiniz. AIXCO %6 Tahvil, Batum daireleri, broker ortaklığı veya geliştirici ortaklığı ile ilgilenip ilgilenmediğinizi söyleyin.",
+    ar: "مرحبًا بك في دردشة AIXCO المباشرة. أخبرنا إن كنت مهتمًا بسند AIXCO بعائد 6% أو شقق باتومي أو شراكة الوسطاء أو شراكة المطورين.",
+  },
+  "Thanks. The AIXCO team can help with the bond route, onboarding, subscription steps, and the supporting documentation.": {
+    de: "Danke. Das AIXCO-Team kann bei der Anleihe, dem Onboarding, den Zeichnungsschritten und den Unterlagen helfen.",
+    ru: "Спасибо. Команда AIXCO поможет с облигацией, онбордингом, этапами подписки и сопроводительными документами.",
+    ka: "გმადლობთ. AIXCO-ის გუნდი დაგეხმარებათ ობლიგაციის მიმართულებაში, ონბორდინგში, გამოწერის ნაბიჯებსა და დოკუმენტაციაში.",
+    tr: "Teşekkürler. AIXCO ekibi tahvil süreci, onboarding, abonelik adımları ve destekleyici belgeler konusunda yardımcı olabilir.",
+    ar: "شكرًا. يمكن لفريق AIXCO مساعدتك في مسار السند، والإعداد، وخطوات الاكتتاب، والمستندات الداعمة.",
+  },
+  "Thanks. The AIXCO team can help with Batumi apartments, available routes, tours, pricing, ownership, rental income, and next steps.": {
+    de: "Danke. Das AIXCO-Team kann bei Apartments in Batumi, verfügbaren Wegen, Besichtigungen, Preisen, Eigentum, Mieteinnahmen und nächsten Schritten helfen.",
+    ru: "Спасибо. Команда AIXCO поможет с апартаментами в Батуми, доступными вариантами, турами, ценами, собственностью, арендным доходом и следующими шагами.",
+    ka: "გმადლობთ. AIXCO-ის გუნდი დაგეხმარებათ ბათუმის აპარტამენტებთან, ხელმისაწვდომ გზებთან, ტურებთან, ფასებთან, საკუთრებასთან, ქირის შემოსავალთან და შემდეგ ნაბიჯებთან დაკავშირებით.",
+    tr: "Teşekkürler. AIXCO ekibi Batum daireleri, uygun yollar, turlar, fiyatlandırma, mülkiyet, kira geliri ve sonraki adımlar konusunda yardımcı olabilir.",
+    ar: "شكرًا. يمكن لفريق AIXCO مساعدتك في شقق باتومي والمسارات المتاحة والجولات والأسعار والملكية ودخل الإيجار والخطوات التالية.",
+  },
+  "Thanks. The AIXCO team can help brokers with portal access, customer tours, listings, and distribution support.": {
+    de: "Danke. Das AIXCO-Team kann Maklern mit Portalzugang, Kundentouren, Listings und Vertriebsunterstützung helfen.",
+    ru: "Спасибо. Команда AIXCO поможет брокерам с доступом к порталу, турами для клиентов, листингами и поддержкой дистрибуции.",
+    ka: "გმადლობთ. AIXCO-ის გუნდი ბროკერებს პორტალზე წვდომაში, კლიენტების ტურებში, ჩამონათვალებსა და დისტრიბუციის მხარდაჭერაში დაეხმარება.",
+    tr: "Teşekkürler. AIXCO ekibi brokerlara portal erişimi, müşteri turları, ilanlar ve dağıtım desteği konusunda yardımcı olabilir.",
+    ar: "شكرًا. يمكن لفريق AIXCO مساعدة الوسطاء في الوصول إلى البوابة وجولات العملاء والقوائم ودعم التوزيع.",
+  },
+  "Thanks. The AIXCO team can help developer partners with project visibility, distribution, and onboarding.": {
+    de: "Danke. Das AIXCO-Team kann Entwicklerpartnern bei Projektsichtbarkeit, Vertrieb und Onboarding helfen.",
+    ru: "Спасибо. Команда AIXCO поможет девелоперским партнёрам с видимостью проектов, дистрибуцией и онбордингом.",
+    ka: "გმადლობთ. AIXCO-ის გუნდი დეველოპერ პარტნიორებს პროექტის ხილვადობაში, დისტრიბუციასა და ონბორდინგში დაეხმარება.",
+    tr: "Teşekkürler. AIXCO ekibi geliştirici ortaklara proje görünürlüğü, dağıtım ve onboarding konularında yardımcı olabilir.",
+    ar: "شكرًا. يمكن لفريق AIXCO مساعدة شركاء التطوير في إبراز المشروع والتوزيع والإعداد.",
+  },
+  "Thanks. The AIXCO team has your note. Add any budget, role, timeline, or preferred project details and email the transcript when you are ready.": {
+    de: "Danke. Das AIXCO-Team hat Ihre Nachricht. Ergänzen Sie Budget, Rolle, Zeitplan oder bevorzugte Projektdetails und senden Sie das Protokoll per E-Mail, wenn Sie bereit sind.",
+    ru: "Спасибо. Команда AIXCO получила вашу заметку. Добавьте бюджет, роль, сроки или предпочтительный проект и отправьте стенограмму по email, когда будете готовы.",
+    ka: "გმადლობთ. AIXCO-ის გუნდმა თქვენი შეტყობინება მიიღო. დაამატეთ ბიუჯეტი, როლი, ვადები ან სასურველი პროექტის დეტალები და მზად რომ იქნებით, ჩანაწერი ელფოსტით გაგზავნეთ.",
+    tr: "Teşekkürler. AIXCO ekibi notunuzu aldı. Bütçe, rol, zamanlama veya tercih edilen proje detaylarını ekleyin ve hazır olduğunuzda dökümü e-postayla gönderin.",
+    ar: "شكرًا. تلقى فريق AIXCO ملاحظتك. أضف الميزانية أو الدور أو الجدول الزمني أو تفاصيل المشروع المفضل وأرسل نسخة المحادثة بالبريد عندما تكون جاهزًا.",
+  },
+  "Latest news": { de: "Neueste Nachrichten", ru: "Последние новости", ka: "უახლესი სიახლეები", tr: "Son haberler", ar: "آخر الأخبار" },
+  Latest: { de: "Neueste", ru: "Последнее", ka: "უახლესი", tr: "Son", ar: "الأحدث" },
+  "Agency feed": { de: "Agentur-Feed", ru: "Лента агентства", ka: "სააგენტოს არხი", tr: "Ajans akışı", ar: "موجز الوكالة" },
+  Agency: { de: "Agentur", ru: "Агентство", ka: "სააგენტო", tr: "Ajans", ar: "وكالة" },
+  Market: { de: "Markt", ru: "Рынок", ka: "ბაზარი", tr: "Pazar", ar: "السوق" },
+  "Batumi development update highlights new investor demand": {
+    de: "Batumi-Entwicklungsupdate zeigt neue Investorennachfrage",
+    ru: "Обновление по развитию Батуми показывает новый спрос инвесторов",
+    ka: "ბათუმის განვითარების განახლება ახალ ინვესტორულ მოთხოვნას უსვამს ხაზს",
+    tr: "Batum geliştirme güncellemesi yeni yatırımcı talebini öne çıkarıyor",
+    ar: "تحديث تطوير باتومي يبرز طلبًا جديدًا من المستثمرين",
+  },
+  "AIXCO Fund I reaches a new Dubai portfolio milestone": {
+    de: "AIXCO Fund I erreicht neuen Meilenstein im Dubai-Portfolio",
+    ru: "AIXCO Fund I достигает нового рубежа в портфеле Дубая",
+    ka: "AIXCO Fund I დუბაის პორტფელის ახალ ეტაპს აღწევს",
+    tr: "AIXCO Fund I Dubai portföyünde yeni bir kilometre taşına ulaşıyor",
+    ar: "صندوق AIXCO الأول يحقق إنجازًا جديدًا في محفظة دبي",
+  },
+  "Black Sea corridor demand strengthens across coastal assets": {
+    de: "Nachfrage im Schwarzmeer-Korridor stärkt Küstenassets",
+    ru: "Спрос в Черноморском коридоре усиливается по прибрежным активам",
+    ka: "შავი ზღვის კორიდორში მოთხოვნა სანაპირო აქტივებზე ძლიერდება",
+    tr: "Karadeniz koridoru talebi kıyı varlıklarında güçleniyor",
+    ar: "يتعزز الطلب في ممر البحر الأسود عبر الأصول الساحلية",
+  },
+  "Agency note: short-term rental yields remain a key Batumi driver": {
+    de: "Agenturnotiz: Kurzzeitmietrenditen bleiben ein wichtiger Treiber in Batumi",
+    ru: "Заметка агентства: доходность краткосрочной аренды остается ключевым драйвером Батуми",
+    ka: "სააგენტოს შენიშვნა: მოკლევადიანი გაქირავების შემოსავლიანობა ბათუმის მთავარ მამოძრავებლად რჩება",
+    tr: "Ajans notu: kısa vadeli kira getirileri Batum için temel itici güç olmaya devam ediyor",
+    ar: "ملاحظة الوكالة: عوائد الإيجار قصير الأجل تبقى محركًا رئيسيًا في باتومي",
+  },
+  "Strategic partner update published for infrastructure investors": {
+    de: "Update strategischer Partner für Infrastrukturinvestoren veröffentlicht",
+    ru: "Опубликовано обновление стратегического партнера для инфраструктурных инвесторов",
+    ka: "ინფრასტრუქტურის ინვესტორებისთვის სტრატეგიული პარტნიორის განახლება გამოქვეყნდა",
+    tr: "Altyapı yatırımcıları için stratejik ortak güncellemesi yayımlandı",
+    ar: "نُشر تحديث الشريك الاستراتيجي لمستثمري البنية التحتية",
+  },
+  "New overview explains participation from EUR 1,000": {
+    de: "Neue Übersicht erklärt Beteiligung ab 1.000 EUR",
+    ru: "Новый обзор объясняет участие от 1 000 EUR",
+    ka: "ახალი მიმოხილვა 1,000 ევროდან მონაწილეობას ხსნის",
+    tr: "Yeni genel bakış 1.000 EUR'dan başlayan katılımı açıklıyor",
+    ar: "نظرة عامة جديدة تشرح المشاركة ابتداءً من 1,000 يورو",
+  },
+  "All Rights Reserved.": { de: "Alle Rechte vorbehalten.", ru: "Все права защищены.", ka: "ყველა უფლება დაცულია.", tr: "Tüm hakları saklıdır.", ar: "جميع الحقوق محفوظة." },
+  "ISO 27001-2022 Certified Systems.": {
+    de: "ISO 27001-2022 zertifizierte Systeme.",
+    ru: "Системы, сертифицированные по ISO 27001-2022.",
+    ka: "ISO 27001-2022 სერტიფიცირებული სისტემები.",
+    tr: "ISO 27001-2022 sertifikalı sistemler.",
+    ar: "أنظمة معتمدة وفق ISO 27001-2022.",
+  },
   "Developments Underway": {
     de: "Laufende Entwicklungen",
     ru: "Проекты в разработке",
@@ -100,6 +282,8 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
 
 const catalogSources = [
   supplementalTranslations,
+  siteContentTranslations,
+  assetTranslations,
   textTranslations,
   attributeTranslations.placeholder,
   attributeTranslations.content,
@@ -122,6 +306,10 @@ function lookupTranslation(text: string, lang: Lang) {
   return undefined;
 }
 
+export function hasTextTranslation(text: string, lang: Lang) {
+  return Boolean(lookupTranslation(text, lang));
+}
+
 type Ctx = {
   lang: Lang;
   setLang: (l: Lang) => void;
@@ -132,17 +320,42 @@ type Ctx = {
 const I18nCtx = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(() => {
-    if (typeof window === "undefined") return DEFAULT_LANG;
-    const storedLang = localStorage.getItem("aixco-lang");
-    return isLang(storedLang) ? storedLang : DEFAULT_LANG;
-  });
+  const [lang, setLang] = useState<Lang>(DEFAULT_LANG);
+  const [hasLoadedStoredLang, setHasLoadedStoredLang] = useState(false);
   const dir = lang === "ar" ? "rtl" : "ltr";
 
   useEffect(() => {
+    try {
+      const storedLang = localStorage.getItem("aixco-lang");
+      if (isLang(storedLang)) {
+        setLang(storedLang);
+      }
+    } catch {
+      // Language persistence is optional when browser storage is unavailable.
+    } finally {
+      setHasLoadedStoredLang(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const localizedTitle = lang === "en" ? pageTitle : attributeTranslations.title[pageTitle]?.[lang] ?? pageTitle;
+
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
-    document.title = lang === "en" ? pageTitle : attributeTranslations.title[pageTitle]?.[lang] ?? pageTitle;
+    const syncTitle = () => {
+      if (document.title !== localizedTitle) {
+        document.title = localizedTitle;
+      }
+    };
+
+    syncTitle();
+    const titleSync = window.setTimeout(syncTitle, 0);
+    const titleObserver = new MutationObserver(syncTitle);
+    titleObserver.observe(document.head, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
     const description = document.querySelector('meta[name="description"]');
     if (description) {
       description.setAttribute(
@@ -150,12 +363,19 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         lang === "en" ? pageDescription : attributeTranslations.content[pageDescription]?.[lang] ?? pageDescription,
       );
     }
-    try {
-      localStorage.setItem("aixco-lang", lang);
-    } catch {
-      // Language persistence is optional when browser storage is unavailable.
+    if (hasLoadedStoredLang) {
+      try {
+        localStorage.setItem("aixco-lang", lang);
+      } catch {
+        // Language persistence is optional when browser storage is unavailable.
+      }
     }
-  }, [lang, dir]);
+
+    return () => {
+      window.clearTimeout(titleSync);
+      titleObserver.disconnect();
+    };
+  }, [lang, dir, hasLoadedStoredLang]);
 
   const value = useMemo<Ctx>(() => ({
     lang,
@@ -178,4 +398,8 @@ export function useI18n() {
   const ctx = useContext(I18nCtx);
   if (!ctx) throw new Error("useI18n must be used within I18nProvider");
   return ctx;
+}
+
+export function useOptionalI18n() {
+  return useContext(I18nCtx);
 }

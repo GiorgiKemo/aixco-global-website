@@ -2,24 +2,26 @@ import { ArrowUpRight } from "lucide-react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { getSafeAixcoNewsUrl } from "@/lib/security/urls";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type NewsTickerItem = SiteContent["newsTickerItems"][number];
 
 export function NewsTicker() {
   const { newsTickerItems } = useSiteContent();
+  const { tx } = useI18n();
 
   return (
     <section
-      aria-label="Latest news"
+      aria-label={tx("Latest news")}
       data-section="news-ticker"
       className="news-ticker relative isolate overflow-hidden border-y border-white/10"
     >
       <div className="container-x">
         <div className="flex flex-col gap-3 py-3.5 sm:flex-row sm:items-center sm:gap-5">
           <div className="flex shrink-0 items-center gap-3">
-            <span className="news-ticker-badge">Latest</span>
+            <span className="news-ticker-badge">{tx("Latest")}</span>
             <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/58">
-              Agency feed
+              {tx("Agency feed")}
             </span>
           </div>
 
@@ -33,7 +35,7 @@ export function NewsTicker() {
                   aria-hidden={isClone ? "true" : undefined}
                 >
                   {newsTickerItems.map((item) => (
-                    <NewsTickerLink key={`${isClone ? "clone" : "primary"}-${item.id}`} item={item} isClone={isClone} />
+                    <NewsTickerLink key={`${isClone ? "clone" : "primary"}-${item.id}`} item={item} isClone={isClone} tx={tx} />
                   ))}
                 </div>
               ))}
@@ -45,7 +47,7 @@ export function NewsTicker() {
   );
 }
 
-function NewsTickerLink({ item, isClone }: { item: NewsTickerItem; isClone: boolean }) {
+function NewsTickerLink({ item, isClone, tx }: { item: NewsTickerItem; isClone: boolean; tx: (copy: string) => string }) {
   const href = getSafeAixcoNewsUrl(item.href, "https://www.aixco.global/op2/");
 
   return (
@@ -57,11 +59,11 @@ function NewsTickerLink({ item, isClone }: { item: NewsTickerItem; isClone: bool
       className="news-ticker-card group"
     >
       <span className="news-ticker-meta">
-        {item.source}
+        {tx(item.source)}
         <span aria-hidden="true">/</span>
         {item.date}
       </span>
-      <span className="news-ticker-title">{item.title}</span>
+      <span className="news-ticker-title">{tx(item.title)}</span>
       <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-primary-glow/80 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
     </a>
   );

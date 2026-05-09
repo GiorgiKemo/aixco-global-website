@@ -80,18 +80,28 @@ export function ChatWidget() {
   const { tx } = useI18n();
   const { openRegister } = useUI();
   const { company } = useSiteContent();
+  const [hasMounted, setHasMounted] = useState(false);
+  const [hasLoadedStoredMessages, setHasLoadedStoredMessages] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>(loadStoredMessages);
+  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [draft, setDraft] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    setMessages(loadStoredMessages());
+    setHasLoadedStoredMessages(true);
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedStoredMessages) return;
+
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
     } catch {
       // Storage can be disabled in private browsing or hardened browser settings.
     }
-  }, [messages]);
+  }, [hasLoadedStoredMessages, messages]);
 
   useEffect(() => {
     if (isOpen) {
@@ -123,13 +133,15 @@ export function ChatWidget() {
     setDraft("");
   };
 
+  if (!hasMounted) return null;
+
   return (
     <div className="fixed bottom-5 right-5 z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3 md:bottom-6 md:right-6">
       <AnimatePresence>
         {isOpen && (
           <motion.section
             role="dialog"
-            aria-label="AIXCO Live Chat"
+            aria-label={tx("AIXCO Live Chat")}
             dir="ltr"
             initial={{ opacity: 0, y: 22, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -238,7 +250,7 @@ export function ChatWidget() {
                 </a>
                 <div className="flex gap-3">
                   <button type="button" onClick={openRegister} className="inline-flex min-h-10 items-center px-1 text-xs uppercase tracking-widest text-primary">
-                    Register
+                    {tx("Register")}
                   </button>
                   <button type="button" onClick={clearChat} className="inline-flex min-h-10 items-center px-1 text-xs uppercase tracking-widest text-muted-foreground">
                     {tx("Clear")}

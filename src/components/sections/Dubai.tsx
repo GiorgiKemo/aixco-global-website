@@ -385,7 +385,7 @@ function DubaiImageMarquee({
   return (
     <div
       ref={viewportRef}
-      aria-label={tx(`${group.title} images`)}
+      aria-label={`${tx(group.title)} ${tx("images")}`}
       className="dubai-image-marquee cursor-grab select-none active:cursor-grabbing"
       data-gallery-group={group.title}
       data-layout="horizontal-infinite-gallery"
@@ -574,14 +574,14 @@ function DubaiFundCard({
         </div>
         <div data-fund-highlight-grid={fund.id} className="grid grid-cols-1 border-b border-foreground/5 md:grid-cols-3">
           {headlineMetrics.map((detail) => {
-            const metric = formatMetricValue(tx(detail.value));
+            const metric = formatMetricValue(detail.value);
             const isPerformance = detail.label === "Performance";
 
             return (
               <PrestigeStatCard
                 key={`${detail.label}:${detail.value}`}
                 label={detail.label}
-                value={`${metric.prefix ? `${metric.prefix} ` : ""}${metric.value}`}
+                value={`${metric.prefix ? `${tx(metric.prefix)} ` : ""}${metric.value}`}
                 subtext={metric.subtext}
                 highlight={isPerformance}
                 compact={isViewportFit}

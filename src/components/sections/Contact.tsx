@@ -49,7 +49,7 @@ export function Contact() {
     const parsed = schema.safeParse(data);
     if (!parsed.success) {
       const errs: Record<string, string> = {};
-      parsed.error.issues.forEach((issue) => { errs[String(issue.path[0])] = issue.message; });
+      parsed.error.issues.forEach((issue) => { errs[String(issue.path[0])] = tx(issue.message); });
       setErrors(errs);
       setState("error");
       const firstInvalidField = String(parsed.error.issues[0]?.path[0] ?? "");
@@ -79,14 +79,14 @@ export function Contact() {
             <a href={`mailto:${company.email}`} className="group flex items-start gap-4">
               <span className="icon-button-glass flex h-10 w-10 shrink-0"><Mail className="h-4 w-4 text-primary" /></span>
               <div>
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Email</p>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">{tx("Email")}</p>
                 <p className="text-sm text-foreground link-underline w-fit">{company.email}</p>
               </div>
             </a>
             <a href="https://maps.app.goo.gl/AVywyfokNdm4VuLD9" target="_blank" rel="noreferrer" className="flex items-start gap-4">
               <span className="icon-button-glass flex h-10 w-10 shrink-0"><MapPin className="h-4 w-4 text-primary" /></span>
               <div>
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Address</p>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">{tx("Address")}</p>
                 <p className="text-sm text-foreground">{company.address}</p>
               </div>
             </a>

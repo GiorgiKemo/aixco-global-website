@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { useOptionalI18n } from "@/i18n/I18nProvider";
 
 type ExpandableImageProps = {
   src: string;
@@ -11,6 +12,7 @@ type ExpandableImageProps = {
 };
 
 export function ExpandableImage({ src, title, className = "", children, tabIndex }: ExpandableImageProps) {
+  const tx = useOptionalI18n()?.tx ?? ((text: string) => text);
   const imageId = useId();
   const [isExpanded, setIsExpanded] = useState(false);
   const suppressClickRef = useRef(false);
@@ -76,31 +78,31 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 animate-fade-in md:p-6">
             <button
               type="button"
-              aria-label={`Close image: ${title}`}
+              aria-label={`${tx("Close image")}: ${tx(title)}`}
               className="absolute inset-0 bg-background/86 backdrop-blur-xl"
               onClick={closeExpandedImage}
             />
             <div
               role="dialog"
               aria-modal="true"
-              aria-label={`Expanded image: ${title}`}
+              aria-label={`${tx("Expanded image")}: ${tx(title)}`}
               className="relative z-10 flex max-h-[calc(100svh-2rem)] w-full max-w-7xl items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-black shadow-elegant animate-scale-in"
             >
               <img
                 id={imageId}
                 src={src}
-                alt={title}
+                alt={tx(title)}
                 className="block max-h-[calc(100svh-2rem)] w-full object-contain"
                 decoding="async"
               />
               <button
                 type="button"
-                aria-label={`Close image: ${title}`}
+                aria-label={`${tx("Close image")}: ${tx(title)}`}
                 onClick={closeExpandedImage}
                 className="absolute right-3 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80"
               >
                 <X className="h-4 w-4" />
-                <span className="sr-only">Close</span>
+                <span className="sr-only">{tx("Close")}</span>
               </button>
             </div>
           </div>,
@@ -112,7 +114,7 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
     <>
       <button
         type="button"
-        aria-label={`Expand image: ${title}`}
+        aria-label={`${tx("Expand image")}: ${tx(title)}`}
         className={`expandable-image-trigger block overflow-hidden border-0 bg-transparent p-0 text-left ${className}`}
         data-expandable-image-trigger
         tabIndex={tabIndex}

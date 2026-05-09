@@ -2,12 +2,17 @@ import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { SiteContentContext } from "@/data/site-content-context";
 import { newsTickerItems } from "@/data/news";
+import { I18nProvider } from "@/i18n/I18nProvider";
 import { siteContentDefaults } from "@/lib/backend/site-content";
 import { NewsTicker } from "./NewsTicker";
 
+function renderWithI18n(ui: React.ReactNode) {
+  return render(<I18nProvider>{ui}</I18nProvider>);
+}
+
 describe("NewsTicker", () => {
   it("renders mock agency news as a seamless horizontal banner under the hero", () => {
-    render(<NewsTicker />);
+    renderWithI18n(<NewsTicker />);
 
     const region = screen.getByRole("region", { name: /latest news/i });
     const tickerSets = within(region).getAllByTestId("news-ticker-set");
@@ -29,7 +34,7 @@ describe("NewsTicker", () => {
   });
 
   it("does not render CMS news links outside AIXCO", () => {
-    render(
+    renderWithI18n(
       <SiteContentContext.Provider
         value={{
           ...siteContentDefaults,

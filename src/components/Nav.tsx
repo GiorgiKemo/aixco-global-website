@@ -295,7 +295,7 @@ export function Nav() {
                   : "text-white/90 drop-shadow-[0_2px_10px_rgb(0_0_0/0.34)] hover:bg-white/[0.08] hover:text-[#f0bd5d]"
               }`}
             >
-              More <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+              {t("nav.more")} <ChevronDown className="h-3.5 w-3.5 opacity-70" />
             </button>
             {moreOpen && (
               <div className="absolute top-full right-0 pt-2 w-48 animate-scale-in">
@@ -406,7 +406,7 @@ export function Nav() {
             );
           })}
           <span className={`rounded-full ${desktopNavLinkClass} leading-none tracking-wide`}>
-            More
+            {t("nav.more")}
           </span>
         </nav>
         <div ref={controlsMeasureRef} className="flex items-center gap-3">
