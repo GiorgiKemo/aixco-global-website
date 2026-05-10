@@ -13,6 +13,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${baseUrl}/aixco-philosophy`,
+      lastModified,
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/aixco-global-op2`,
       lastModified,
       priority: 0.6,

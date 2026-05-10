@@ -243,6 +243,12 @@ export function Hero() {
     scrollToHash("#about");
   };
 
+  const handleFaqClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    replaceLocationHash("#faqs");
+    scrollToHash("#faqs");
+  };
+
   const reducedLineVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -383,9 +389,11 @@ export function Hero() {
             {tx(heroIntroText)}
           </motion.p>
 
-          <motion.div
+          <motion.a
+            href="#faqs"
+            onClick={handleFaqClick}
             data-hero-price-lockup="true"
-            className="mt-8 flex w-full items-center justify-center text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)]"
+            className="mt-8 flex w-full items-center justify-center rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
             initial={false}
             animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
             transition={{ duration: shouldReduceMotion ? 0.68 : 1, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.52 : 1.18 }}
@@ -396,7 +404,7 @@ export function Hero() {
             >
               {tx(heroPriceText)}
             </span>
-          </motion.div>
+          </motion.a>
         </div>
 
         <motion.a

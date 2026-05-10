@@ -101,6 +101,9 @@ describe("Hero", () => {
     expect(introCopy.className).toContain("font-normal");
     expect(introCopy.className).toContain("text-white/90");
     expect(priceLockup).toBeInTheDocument();
+    expect(priceLockup).toHaveAttribute("href", "#faqs");
+    expect(priceLockup?.className).toContain("hover:text-primary-glow");
+    expect(priceLockup?.className).toContain("focus-visible:outline");
     expect(container.querySelector("[data-hero-price-rule='true']")).not.toBeInTheDocument();
     expect(within(priceLockup as HTMLElement).getByText("Starting from €1,000")).toBeInTheDocument();
     expect(priceText?.className).toContain("text-[clamp(1.2rem,5vw,3.5rem)]");

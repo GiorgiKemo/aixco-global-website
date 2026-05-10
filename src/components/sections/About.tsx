@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { CountUpText } from "@/components/CountUpText";
 import { aixcoLiveImages } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -28,6 +30,10 @@ export function About() {
           <p className="mt-5 max-w-[38rem] text-base leading-relaxed text-foreground/80 md:text-lg lg:text-[1.05rem]">
             {tx("Established in 2009, AIXCO is a disciplined real estate holding company with a strong track record across property and financial investments. Headquartered in Vienna and operating in Dubai and Batumi, AIXCO Global specializes in structuring and co-investing in portfolios, guided by a commitment to long-term value creation and enduring investor trust.")}
           </p>
+          <Link href="/aixco-philosophy" className="btn-ghost-gold mt-6">
+            {tx("Read AIXCO Philosophy")}
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
           <div className="mac-card mt-7 overflow-hidden lg:mt-6">
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40">
               <Image

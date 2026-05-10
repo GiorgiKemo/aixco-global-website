@@ -18,11 +18,13 @@ const NAV = [
   { key: "nav.contact", to: "/", hash: "#contact" },
 ];
 const MORE_NAV = [
+  { key: "nav.philosophy", to: "/aixco-philosophy", hash: "" },
   { key: "nav.team", to: "/", hash: "#team" },
   { key: "nav.partners", to: "/", hash: "#partners" },
   { key: "nav.faqs", to: "/", hash: "#faqs" },
 ];
 const ALL_NAV = [...NAV, ...MORE_NAV];
+const STARTING_FROM_NAV_TARGET = MORE_NAV.find((item) => item.key === "nav.faqs") ?? MORE_NAV[MORE_NAV.length - 1];
 const HOME_SECTION_IDS = ["about", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"] as const;
 const NAV_HASH_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
 const HOME_RETURN_HASH_SYNC_LOCK_MS = 1800;
@@ -373,8 +375,8 @@ export function Nav() {
             {t("cta.register")}
           </button>
           <a
-            href="/#participate"
-            onClick={(event) => handleNavClick(event, NAV[4])}
+            href="/#faqs"
+            onClick={(event) => handleNavClick(event, STARTING_FROM_NAV_TARGET)}
             className={`${showDesktopActions ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !py-2 !px-4 text-sm font-bold !text-white drop-shadow-[0_1px_1px_rgb(76_42_0/0.45)]`}
           >
             {t("cta.start")}

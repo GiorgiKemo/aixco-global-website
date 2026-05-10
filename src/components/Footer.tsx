@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Instagram, Linkedin } from "lucide-react";
 import { Logo } from "./Logo";
 import { useSiteContent } from "@/data/site-content-context";
@@ -31,6 +32,9 @@ export function Footer() {
         </div>
 
         <div data-footer-actions className="flex flex-wrap items-center gap-4 text-sm text-foreground/80 md:pr-24 lg:pr-0">
+          <Link href="/aixco-philosophy" className="inline-flex min-h-10 items-center link-underline">
+            AIXCO Philosophy
+          </Link>
           <a
             href="https://www.iafcertsearch.org/certified-entity/NjliMzc3N2MtNGQ2Zi01YzY2LThiOTUtMGIwZmViNWMxODk3"
             target="_blank"

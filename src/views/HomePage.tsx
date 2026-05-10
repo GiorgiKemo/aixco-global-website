@@ -2,6 +2,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
+import { PhilosophyCallout } from "@/components/sections/PhilosophyCallout";
 import { Dubai } from "@/components/sections/Dubai";
 import { Batumi } from "@/components/sections/Batumi";
 import { Participate } from "@/components/sections/Participate";
@@ -20,6 +21,9 @@ const Index = () => {
         <Hero />
         <ScrollReveal>
           <About />
+        </ScrollReveal>
+        <ScrollReveal>
+          <PhilosophyCallout />
         </ScrollReveal>
         <ScrollReveal>
           <Dubai />
