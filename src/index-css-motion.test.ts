@@ -36,9 +36,11 @@ describe("index.css motion rules", () => {
 
   it("keeps partner flip hover responsive", () => {
     const partnerInner = cssBlock(".partner-flip-card-inner");
+    const partnerBack = cssBlock(".partner-flip-back");
 
     expect(partnerInner).toContain("transform 420ms");
     expect(partnerInner).not.toContain("720ms");
+    expect(partnerBack).toContain("overflow-wrap: anywhere");
   });
 
   it("keeps partner modal logo panels opaque", () => {
@@ -64,5 +66,6 @@ describe("index.css motion rules", () => {
 
     expect(assetDetailCta).toContain("min-height: 2.75rem");
     expect(assetDetailCta).toContain("padding-block: 0.75rem");
+    expect(cssBlock(".asset-detail-cta__label")).toContain("overflow-wrap: anywhere");
   });
 });

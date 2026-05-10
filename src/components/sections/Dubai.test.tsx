@@ -338,7 +338,8 @@ describe("Dubai", () => {
     expect(highlightGrid?.className).toContain("md:grid-cols-3");
 
     const detailNotes = container.querySelector("[data-fund-detail-notes='fund-1']");
-    expect(detailNotes?.className).toContain("md:grid-cols-3");
+    expect(detailNotes?.className).toContain("sm:grid-cols-2");
+    expect(detailNotes?.className).toContain("xl:grid-cols-3");
     expect(detailNotes).toHaveAttribute("data-layout", "prestige-highlights");
 
     const unitsTile = within(highlightGrid as HTMLElement).getByText("600").closest("[data-fund-highlight-tile]");

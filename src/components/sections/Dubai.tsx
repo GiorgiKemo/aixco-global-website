@@ -137,7 +137,7 @@ function PrestigeStatCard({
       whileHover={{ y: -3 }}
       transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`group flex flex-col justify-between border transition-[background-color,border-color,box-shadow,color] duration-200 ${
-        compact ? "min-h-[7.1rem] p-4 md:min-h-[7.35rem] lg:min-h-[7.55rem] lg:p-5" : "min-h-[8.8rem] p-5 md:min-h-[9.4rem] lg:p-6"
+        compact ? "min-h-[7.1rem] min-w-0 p-4 md:min-h-[7.35rem] lg:min-h-[7.55rem] lg:p-5" : "min-h-[8.8rem] min-w-0 p-5 md:min-h-[9.4rem] lg:p-6"
       } ${
         highlight
           ? "border-foreground bg-foreground text-background"
@@ -146,13 +146,13 @@ function PrestigeStatCard({
     >
       <div>
         <span
-          className={`${compact ? "mb-3.5 text-[0.68rem]" : "mb-5 text-[0.72rem]"} block font-bold uppercase tracking-[0.22em] ${
+          className={`${compact ? "mb-3.5 text-[0.68rem]" : "mb-5 text-[0.72rem]"} block max-w-full font-bold uppercase leading-[1.35] tracking-[0.14em] [overflow-wrap:anywhere] min-[1280px]:tracking-[0.18em] min-[1440px]:tracking-[0.22em] ${
             highlight ? "text-primary" : "text-muted-foreground"
           }`}
         >
           {tx(label)}
         </span>
-        <div className="flex items-baseline gap-1.5">
+        <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-1">
           {value && (
             <span
               className={`font-display ${
@@ -188,16 +188,16 @@ function PrestigeHighlightItem({
   tx: Translate;
 }) {
   return (
-    <li className={compact ? "space-y-2.5" : "space-y-3"}>
-      <div className="flex items-center gap-3">
-        <span data-fund-detail-icon className="flex size-7 items-center justify-center rounded-full border border-foreground/10 bg-white/70">
+    <li className={`${compact ? "space-y-2.5" : "space-y-3"} min-w-0`}>
+      <div className="flex min-w-0 items-start gap-3">
+        <span data-fund-detail-icon className="flex size-7 shrink-0 items-center justify-center rounded-full border border-foreground/10 bg-white/70">
           <Icon size={14} className="text-primary" strokeWidth={1.9} />
         </span>
-        <span className={`${compact ? "text-[0.68rem]" : "text-[0.72rem]"} font-bold uppercase tracking-[0.18em] text-muted-foreground`}>
+        <span className={`${compact ? "text-[0.68rem]" : "text-[0.72rem]"} min-w-0 font-bold uppercase leading-[1.35] tracking-[0.12em] text-muted-foreground [overflow-wrap:anywhere] min-[1280px]:tracking-[0.16em] min-[1440px]:tracking-[0.18em]`}>
           {tx(title)}
         </span>
       </div>
-      <p className={`max-w-[18rem] font-medium text-foreground/78 ${compact ? "text-[0.92rem] leading-[1.48]" : "text-[0.98rem] leading-relaxed"}`}>
+      <p className={`max-w-full font-medium text-foreground/78 [overflow-wrap:anywhere] ${compact ? "text-[0.92rem] leading-[1.48]" : "text-[0.98rem] leading-relaxed"}`}>
         {tx(content)}
       </p>
     </li>
@@ -515,8 +515,8 @@ function DubaiFundCard({
     ? "max-w-[42rem] font-display text-[clamp(2rem,4.7vw,3rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.15rem,3.1vw,3.5rem)] lg:text-[clamp(2.2rem,3.05vw,3.6rem)]"
     : "max-w-[42rem] font-display text-[clamp(2.2rem,3.7vw,4.5rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.65rem,3.8vw,4.65rem)] lg:text-[clamp(2.45rem,3.45vw,4.25rem)]";
   const detailListClass = isViewportFit
-    ? "grid gap-5 bg-surface/45 p-5 md:grid-cols-3 md:gap-5 md:p-6 lg:p-7"
-    : "grid gap-7 bg-surface/45 p-7 md:grid-cols-3 md:gap-8 md:p-9 lg:p-10";
+    ? "grid gap-5 bg-surface/45 p-5 sm:grid-cols-2 md:gap-5 md:p-6 lg:p-7 xl:grid-cols-3"
+    : "grid gap-7 bg-surface/45 p-7 sm:grid-cols-2 md:gap-8 md:p-9 lg:p-10 xl:grid-cols-3";
   const galleryId = hasAssetGallery(fund.id) ? fund.id : undefined;
   const galleryHref = galleryId ? `#dubai-asset-gallery-${galleryId}` : undefined;
 
@@ -563,7 +563,7 @@ function DubaiFundCard({
       </div>
       <div
         data-fund-copy
-        className={`flex min-h-0 flex-col border-foreground/5 md:col-span-7 lg:col-span-7 ${copyOrderClass} ${
+        className={`flex min-h-0 min-w-0 flex-col border-foreground/5 md:col-span-7 lg:col-span-7 ${copyOrderClass} ${
           imageFirst ? "md:border-l lg:border-l" : "md:border-r lg:border-r"
         }`}
       >

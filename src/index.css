@@ -163,26 +163,30 @@
     z-index: 20;
     display: inline-flex;
     min-height: 2.75rem;
+    min-width: 0;
     max-width: calc(100% - 4rem);
     align-items: center;
     gap: 0.75rem;
     padding-block: 0.75rem;
     font-size: 0.74rem;
     font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0.22em;
+    line-height: 1.15;
+    letter-spacing: 0.16em;
+    text-align: right;
     text-transform: uppercase;
     color: white;
     transition: color 200ms var(--ease-apple);
   }
 
   .asset-detail-cta__label {
+    min-width: 0;
     color: white;
     filter:
       drop-shadow(0 1px 1px hsl(220 28% 4% / 0.82))
       drop-shadow(0 0 8px hsl(0 0% 100% / 0.36));
     mix-blend-mode: difference;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
+    white-space: normal;
   }
 
   .asset-detail-cta__icon {
@@ -225,6 +229,13 @@
     .asset-detail-cta {
       top: 2.5rem;
       right: 2.5rem;
+      max-width: calc(100% - 5rem);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .asset-detail-cta {
+      letter-spacing: 0.22em;
     }
   }
 
@@ -704,10 +715,12 @@
   .partner-flip-back {
     transform: rotateY(180deg);
     align-items: flex-start;
+    min-width: 0;
     border: 1px solid hsl(var(--primary) / 0.34);
     background:
       linear-gradient(145deg, hsl(var(--surface-elevated) / 0.98), hsl(var(--background) / 0.96)),
       radial-gradient(90% 120% at 0% 0%, hsl(var(--primary-glow) / 0.18), transparent 70%);
+    overflow-wrap: anywhere;
     padding: 1.55rem;
   }
 

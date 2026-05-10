@@ -66,6 +66,12 @@ describe("Contact", () => {
     expect(form?.compareDocumentPosition(image)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
+  it("allows the localized contact headline to wrap in narrow columns", () => {
+    renderContact();
+
+    expect(screen.getByRole("heading", { name: /Start your participation/ })).toHaveClass("[overflow-wrap:anywhere]");
+  });
+
   it("moves focus to the first invalid contact field and associates validation copy", async () => {
     renderContact();
 

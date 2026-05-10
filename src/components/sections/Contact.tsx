@@ -69,7 +69,7 @@ export function Contact() {
       <div className="container-x grid gap-12 lg:grid-cols-12">
         <div className="scroll-reveal lg:col-span-5">
           <p className="eyebrow">{tx("Contact")}</p>
-          <h2 className="heading-section mt-5">
+          <h2 className="heading-section mt-5 max-w-full [overflow-wrap:anywhere]">
             <span className="text-gold">{tx("Start")}</span> {tx("your participation in Global real estate opportunities")}
           </h2>
           <p className="mt-5 max-w-md text-foreground/80 leading-relaxed">

@@ -42,6 +42,7 @@ describe("Partners", () => {
     expect(card?.querySelector(".partner-flip-front img")).toHaveAttribute("loading", "lazy");
     expect(card?.querySelector(".partner-logo-stage")).toBeInTheDocument();
     expect(card?.querySelector(".partner-flip-back")).toHaveTextContent("Open profile");
+    expect(card?.querySelector(".partner-flip-back span:nth-child(2)")).toHaveClass("[overflow-wrap:anywhere]");
   });
 
   it("opens the partner profile when a real marquee card is clicked", () => {

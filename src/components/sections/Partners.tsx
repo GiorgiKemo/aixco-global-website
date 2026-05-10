@@ -128,11 +128,11 @@ function PartnerCard({
           )}
         </span>
         <span className="partner-flip-face partner-flip-back">
-          <span className="block font-display text-xl leading-tight">{partner.name}</span>
-          <span className="mt-3 line-clamp-4 block text-sm leading-relaxed text-foreground/80">
+          <span className="block max-w-full font-display text-xl leading-tight [overflow-wrap:anywhere]">{partner.name}</span>
+          <span className="mt-3 line-clamp-4 block max-w-full text-sm leading-relaxed text-foreground/80 [overflow-wrap:anywhere]">
             {tx(partner.summary)}
           </span>
-          <span className="mt-5 inline-block text-[11px] uppercase tracking-widest text-primary">
+          <span className="mt-5 inline-block max-w-full text-[11px] uppercase tracking-widest text-primary [overflow-wrap:anywhere]">
             {tx("Open profile")}
           </span>
         </span>
