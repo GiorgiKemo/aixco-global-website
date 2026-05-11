@@ -42,4 +42,15 @@ describe("Team", () => {
     expect(image.className).not.toContain("transition-all");
     expect(image.className).not.toContain("duration-400");
   });
+
+  it("keeps the middle portrait framed consistently on tablet", () => {
+    render(
+      <I18nProvider>
+        <Team />
+      </I18nProvider>,
+    );
+
+    const middleImage = screen.getByAltText("Owais Shaikh");
+    expect(middleImage.className).toContain("md:object-[center_20%]");
+  });
 });

@@ -7,11 +7,18 @@ import { aixcoLiveImages } from '@/lib/aixco-live-assets';
 import { premiumPress, premiumSurfaceHover } from '@/lib/motion';
 import { motion } from 'framer-motion';
 import { useUI } from '../ui-state';
+import { cn } from '@/lib/utils';
 
 const imageMap: Record<string, string> = {
   'team-benjamin': aixcoLiveImages.teamBenjamin,
   'team-owais': aixcoLiveImages.teamOwais,
   'team-walter': aixcoLiveImages.teamWalter,
+};
+
+const teamImageObjectPositionClass: Record<string, string> = {
+  // Owais source portrait includes more torso; bias crop upward on tablet+
+  // so all three cards read at a similar visual scale.
+  'team-owais': 'md:object-[center_20%]',
 };
 
 export function Team() {
@@ -55,7 +62,10 @@ export function Team() {
                   width={832}
                   height={1024}
                   sizes="(min-width: 768px) 33vw, 100vw"
-                  className="h-full w-full object-cover grayscale transition-[filter,transform] [transition-duration:400ms] group-hover:grayscale-0 group-hover:scale-[1.025]"
+                  className={cn(
+                    'h-full w-full object-cover grayscale transition-[filter,transform] [transition-duration:400ms] group-hover:grayscale-0 group-hover:scale-[1.025]',
+                    teamImageObjectPositionClass[m.image],
+                  )}
                 />
               </div>
               <div className="p-4">
