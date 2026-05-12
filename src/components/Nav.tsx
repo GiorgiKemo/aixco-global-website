@@ -5,7 +5,7 @@ import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import { Logo } from "./Logo";
 import { useI18n, LANGS } from "@/i18n/I18nProvider";
 import { useUI } from "@/components/ui-state";
-import { getActiveSectionHash, replaceLocationHash, syncLocationHashToActiveSection } from "@/lib/section-hash";
+import { getActiveSectionHash, replaceLocationHash } from "@/lib/section-hash";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 
 const NAV = [
@@ -160,29 +160,59 @@ export function Nav() {
   }, []);
 
   useEffect(() => {
+    let scrollFrame = 0;
+    let pendingHashSync = false;
+
     const updateScrollState = (syncUrlHash: boolean) => {
-      setScrolled(window.scrollY > 88);
+      setScrolled((currentScrolled) => {
+        const nextScrolled = window.scrollY > 88;
+        return currentScrolled === nextScrolled ? currentScrolled : nextScrolled;
+      });
+
       if (location.pathname !== "/") return;
 
       if (homeHashSyncLockedUntilRef.current > window.performance.now()) {
         replaceLocationHash("");
-        setActive("");
-        setReturningHome(true);
+        setActive((currentActive) => (currentActive === "" ? currentActive : ""));
+        setReturningHome((currentReturningHome) => (currentReturningHome ? currentReturningHome : true));
         return;
       }
 
-      const current = syncUrlHash
-        ? syncLocationHashToActiveSection(HOME_SECTION_IDS)
-        : getActiveSectionHash(HOME_SECTION_IDS);
-      setReturningHome(false);
-      setActive(current);
+      const current = getActiveSectionHash(HOME_SECTION_IDS);
+      if (syncUrlHash) {
+        replaceLocationHash(current);
+      }
+      setReturningHome((currentReturningHome) => (currentReturningHome ? false : currentReturningHome));
+      setActive((currentActive) => (currentActive === current ? currentActive : current));
     };
 
-    const onScroll = () => updateScrollState(true);
+    const flushScrollUpdate = () => {
+      scrollFrame = 0;
+      const shouldSyncHash = pendingHashSync;
+      pendingHashSync = false;
+      updateScrollState(shouldSyncHash);
+    };
+
+    const scheduleScrollUpdate = (syncUrlHash: boolean) => {
+      pendingHashSync ||= syncUrlHash;
+      if (scrollFrame) return;
+      if (typeof window.requestAnimationFrame !== "function") {
+        flushScrollUpdate();
+        return;
+      }
+      scrollFrame = window.requestAnimationFrame(flushScrollUpdate);
+    };
+
+    const onScroll = () => scheduleScrollUpdate(true);
 
     updateScrollState(false);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (scrollFrame && typeof window.cancelAnimationFrame === "function") {
+        window.cancelAnimationFrame(scrollFrame);
+      }
+    };
   }, [location.pathname]);
 
   useEffect(() => {

@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Bot, Mail, MessageCircleMore, Send, UserRound, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useSiteContent } from "@/data/site-content-context";
 import { useI18n } from "@/i18n/I18nProvider";
 import { recordChatTranscript } from "@/lib/backend/lead-capture";
 import { useUI } from "./ui-state";
-import { premiumPress } from "@/lib/motion";
 
 type ChatRole = "aixco" | "visitor";
 
@@ -137,32 +135,27 @@ export function ChatWidget() {
 
   return (
     <div className="fixed bottom-5 right-5 z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3 md:bottom-6 md:right-6">
-      <AnimatePresence>
-        {isOpen && (
-          <motion.section
-            role="dialog"
-            aria-label={tx("AIXCO Live Chat")}
-            dir="ltr"
-            initial={{ opacity: 0, y: 22, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.98 }}
-            transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="glass flex h-[min(640px,calc(100svh-6.5rem))] max-h-[calc(100svh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg shadow-elegant"
-          >
-            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border/60 bg-surface-elevated/70 p-4">
-              <div>
-                <p className="font-display text-xl">{tx("AIXCO Live Chat")}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{tx("Tell us what you need and send the transcript to AIXCO.")}</p>
-              </div>
-              <button
-                type="button"
-                aria-label={tx("Close live chat")}
-                onClick={() => setIsOpen(false)}
-                className="icon-button-glass h-10 w-10 shrink-0"
-              >
-                <X className="h-4 w-4" />
-              </button>
+      {isOpen && (
+        <section
+          role="dialog"
+          aria-label={tx("AIXCO Live Chat")}
+          dir="ltr"
+          className="glass animate-scale-in flex h-[min(640px,calc(100svh-6.5rem))] max-h-[calc(100svh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg shadow-elegant"
+        >
+          <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border/60 bg-surface-elevated/70 p-4">
+            <div>
+              <p className="font-display text-xl">{tx("AIXCO Live Chat")}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{tx("Tell us what you need and send the transcript to AIXCO.")}</p>
             </div>
+            <button
+              type="button"
+              aria-label={tx("Close live chat")}
+              onClick={() => setIsOpen(false)}
+              className="icon-button-glass h-10 w-10 shrink-0"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
 
             <div data-chat-messages className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
               {messages.map((message) => {
@@ -226,15 +219,14 @@ export function ChatWidget() {
                   placeholder={tx("Type your message...")}
                   className="form-control min-h-[48px] resize-none py-3"
                 />
-                <motion.button
+                <button
                   type="submit"
                   aria-label={tx("Send")}
-                  className="btn-gold h-12 shrink-0 px-4"
-                  whileTap={premiumPress}
+                  className="btn-gold h-12 shrink-0 px-4 transition-transform duration-100 active:scale-[0.985]"
                 >
                   <Send className="h-4 w-4" />
                   <span className="sr-only">{tx("Send")}</span>
-                </motion.button>
+                </button>
               </form>
 
               <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
@@ -258,17 +250,14 @@ export function ChatWidget() {
                 </div>
               </div>
             </div>
-          </motion.section>
-        )}
-      </AnimatePresence>
+        </section>
+      )}
 
-      <motion.button
+      <button
         type="button"
         aria-label={tx(isOpen ? "Minimize live chat" : "Open live chat")}
         onClick={() => setIsOpen((open) => !open)}
-        className="group relative flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-gold transition hover:brightness-105 md:h-14 md:w-14"
-        whileHover={{ y: -2, scale: 1.03 }}
-        whileTap={premiumPress}
+        className="group relative flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-gold transition-[filter,transform] duration-150 hover:-translate-y-0.5 hover:scale-[1.03] hover:brightness-105 active:scale-[0.985] md:h-14 md:w-14"
       >
         <MessageCircleMore
           aria-hidden="true"
@@ -283,7 +272,7 @@ export function ChatWidget() {
             aria-hidden
           />
         )}
-      </motion.button>
+      </button>
     </div>
   );
 }

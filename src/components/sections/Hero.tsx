@@ -1,22 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { motion, type Variants } from "framer-motion";
+import { ChevronsDown } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type MouseEvent, type SyntheticEvent } from "react";
-import type { AnimationItem } from "lottie-web";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import { aixcoBatumiGalleryVideos, aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { replaceLocationHash } from "@/lib/section-hash";
 import { scrollToHash } from "@/lib/smooth-scroll";
 
-const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const heroIntroText =
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.";
 const heroPriceText = "Starting from \u20ac1,000";
 const heroPanelVideos = aixcoBatumiGalleryVideos.slice(0, 4);
 const mobileHeroVideoPanelLimit = 2;
 const mobileHeroVideoBreakpoint = 768;
+const enableHeroVideoWall = process.env.NEXT_PUBLIC_ENABLE_HERO_VIDEO_WALL === "true";
 
 type HeroVideoEnvironment = {
   reduceMotion?: boolean | null;
@@ -36,11 +34,6 @@ type HeroVideoWithFrameCallback = HTMLVideoElement & {
   requestVideoFrameCallback?: (callback: () => void) => number;
 };
 
-export function getHeroLottieArrowPath(baseUrl: string) {
-  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
-  return `${normalizedBase}animations/arrow-down-gold.json`;
-}
-
 export function shouldShowHeroVideoPoster({
   shouldUseVideoWall,
   isHeroInFocus,
@@ -52,6 +45,7 @@ export function shouldShowHeroVideoPoster({
 export function shouldUseHeroVideoWall(environment: HeroVideoEnvironment) {
   const { saveData = false, effectiveType, deviceMemory } = environment;
 
+  if (!enableHeroVideoWall) return false;
   if (saveData) return false;
   if (effectiveType && ["slow-2g", "2g", "3g"].includes(effectiveType)) return false;
   if (typeof deviceMemory === "number" && deviceMemory <= 4) return false;
@@ -76,89 +70,26 @@ function getHeroVideoEnvironment(): HeroVideoEnvironment {
   };
 }
 
-const arrowLottiePath = getHeroLottieArrowPath(process.env.NEXT_PUBLIC_BASE_PATH ?? "/");
-
-const headlineVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      delayChildren: 0.22,
-      staggerChildren: 0.24,
-    },
-  },
-};
-
-const headlineLineVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 12,
-    scale: 0.992,
-    filter: "blur(16px)",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: {
-      duration: 1.18,
-      ease: heroEase,
-    },
-  },
-};
-
-function HeroLottieArrow() {
-  const containerRef = useRef<HTMLSpanElement | null>(null);
-
-  useEffect(() => {
-    if (!containerRef.current || process.env.NODE_ENV === "test" || process.env.VITEST === "true") return;
-
-    let animation: AnimationItem | null = null;
-    let cancelled = false;
-
-    import("lottie-web/build/player/lottie_light").then(({ default: lottie }) => {
-      if (cancelled || !containerRef.current) return;
-
-      animation = lottie.loadAnimation({
-        container: containerRef.current,
-        renderer: "svg",
-        loop: true,
-        autoplay: true,
-        path: arrowLottiePath,
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid meet",
-        },
-      });
-
-    });
-
-    return () => {
-      cancelled = true;
-      animation?.destroy();
-    };
-  }, []);
-
+function HeroScrollArrow() {
   return (
     <span
-      ref={containerRef}
       aria-hidden="true"
-      data-hero-lottie-arrow="true"
-      className="block h-[5.5rem] w-[5.5rem] [&_svg]:!block [&_svg]:!h-full [&_svg]:!w-full"
-    />
+      data-hero-scroll-arrow="true"
+      className="inline-flex h-[5.5rem] w-[5.5rem] items-center justify-center text-primary-glow"
+    >
+      <ChevronsDown className="h-14 w-14" strokeWidth={2.25} />
+    </span>
   );
 }
 
 export function Hero() {
-  const shouldReduceMotion = useHydratedReducedMotion();
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const heroVideoWallRef = useRef<HTMLDivElement | null>(null);
-  const [isHeroReady, setIsHeroReady] = useState(true);
   const [shouldUseVideoWall, setShouldUseVideoWall] = useState(false);
   const [isHeroInFocus, setIsHeroInFocus] = useState(false);
   const [heroVideoPanelLimit, setHeroVideoPanelLimit] = useState(0);
   const [readyHeroVideos, setReadyHeroVideos] = useState<Record<string, boolean>>({});
   const { tx } = useI18n();
-  const hiddenTextState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: "blur(10px)" };
 
   const markHeroVideoReady = useCallback((src: string, videoElement: HTMLVideoElement) => {
     const markReady = () => {
@@ -216,7 +147,7 @@ export function Hero() {
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [shouldReduceMotion]);
+  }, []);
 
   useEffect(() => {
     if (!shouldUseVideoWall) return;
@@ -249,25 +180,14 @@ export function Hero() {
     scrollToHash("#faqs");
   };
 
-  const reducedLineVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.7, ease: "easeOut" },
-    },
-  };
-
   return (
     <section ref={heroSectionRef} className="hero-reference-font relative isolate min-h-screen overflow-hidden bg-background">
-      <motion.div
+      <div
         ref={heroVideoWallRef}
         data-hero-video-wall="true"
         data-hero-video-mode={shouldUseVideoWall && isHeroInFocus ? "video" : "poster"}
         className="hero-video-wall"
         aria-hidden="true"
-        initial={shouldReduceMotion ? { scale: 1.006, opacity: 0.98 } : { scale: 1.055, opacity: 0.92 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: shouldReduceMotion ? 0.25 : 1.35, ease: heroEase }}
       >
         {heroPanelVideos.map((video, index) => {
           const shouldAttachVideo = shouldUseVideoWall && index < heroVideoPanelLimit;
@@ -305,17 +225,14 @@ export function Hero() {
                   tabIndex={-1}
                   onLoadedData={(event) => {
                     handleHeroVideoReadyEvent(video.src, event);
-                    if (index === 0) setIsHeroReady(true);
                   }}
                   onCanPlay={(event) => {
                     handleHeroVideoReadyEvent(video.src, event);
-                    if (index === 0) setIsHeroReady(true);
                     if (isHeroInFocus) {
                       void event.currentTarget.play().catch(() => undefined);
                     }
                   }}
                   onPlaying={(event) => handleHeroVideoReadyEvent(video.src, event)}
-                  onError={index === 0 ? () => setIsHeroReady(true) : undefined}
                 >
                   <source src={heroVideoSrc} type="video/mp4" />
                 </video>
@@ -323,7 +240,7 @@ export function Hero() {
             </div>
           );
         })}
-      </motion.div>
+      </div>
 
       <div
         className="hero-video-scrim absolute inset-0"
@@ -342,61 +259,45 @@ export function Hero() {
           data-hero-content-stack="true"
           className="flex w-full min-w-0 max-w-[calc(100vw-3rem)] translate-y-[clamp(1rem,4svh,3.5rem)] flex-col items-center sm:max-w-[82rem]"
         >
-          <motion.p
+          <p
             className="mb-2 self-start text-sm font-medium uppercase tracking-normal text-white/90 drop-shadow-[0_4px_16px_rgb(0_0_0/0.55)] sm:ml-[clamp(0rem,20vw,18rem)] sm:text-base md:text-lg"
-            initial={false}
-            animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
-            transition={{ duration: shouldReduceMotion ? 0.6 : 0.9, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: 0.12 }}
           >
             {tx("Quality Real Estate Participation")}
-          </motion.p>
-          <motion.img
+          </p>
+          <Image
             data-hero-brand-mark="standalone"
             src={aixcoLiveLogos.aixcoMark}
             alt=""
             aria-hidden="true"
             width={780}
             height={704}
-            className="mb-2 h-auto w-[clamp(5rem,14vw,14.6rem)] self-start object-contain drop-shadow-[0_16px_32px_rgb(0_0_0/0.28)] sm:ml-[clamp(0rem,20vw,18rem)]"
+            className="mb-2 self-start object-contain drop-shadow-[0_16px_32px_rgb(0_0_0/0.28)] sm:ml-[clamp(0rem,20vw,18rem)]"
             decoding="async"
-            initial={false}
-            animate={isHeroReady ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.985, filter: "blur(14px)" }}
-            transition={{ duration: shouldReduceMotion ? 0.7 : 1.08, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: 0.24 }}
+            style={{ width: "clamp(5rem, 14vw, 14.6rem)", height: "auto" }}
+            unoptimized
           />
-          <motion.h1
+          <h1
             className="hero-reference-font max-w-[calc(100vw-3rem)] min-w-0 text-[clamp(1.85rem,8vw,7.45rem)] font-semibold leading-[0.82] tracking-normal text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)] [perspective:900px] sm:max-w-full sm:text-[clamp(2.9rem,10.25vw,7.45rem)]"
-            initial={false}
-            animate={isHeroReady ? "visible" : "hidden"}
-            variants={shouldReduceMotion ? { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } } : headlineVariants}
           >
             <span className="block pb-[0.08em]">
-              <motion.span
-                className="block origin-bottom whitespace-nowrap will-change-[opacity,transform,filter]"
-                variants={shouldReduceMotion ? reducedLineVariants : headlineLineVariants}
-              >
+              <span className="block origin-bottom whitespace-nowrap">
                 AIXCO<span data-hero-brand-dot="true" className="text-primary-glow drop-shadow-[0_0_22px_hsl(var(--primary-glow)/0.5)]">.</span>Global
-              </motion.span>
+              </span>
             </span>
-          </motion.h1>
+          </h1>
 
-          <motion.p
+          <p
             data-hero-intro-copy="true"
             className="hero-reference-font mt-6 w-[18rem] max-w-full px-1 text-[clamp(1.08rem,2.55vw,1.46rem)] font-normal leading-[1.55] text-white/90 drop-shadow-[0_3px_18px_rgb(0_0_0/0.46)] sm:w-full sm:max-w-[50rem]"
-            initial={false}
-            animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
-            transition={{ duration: shouldReduceMotion ? 0.7 : 1.02, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.42 : 1.02 }}
           >
             {tx(heroIntroText)}
-          </motion.p>
+          </p>
 
-          <motion.a
+          <a
             href="#faqs"
             onClick={handleFaqClick}
             data-hero-price-lockup="true"
             className="mt-8 flex w-full items-center justify-center rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-            initial={false}
-            animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
-            transition={{ duration: shouldReduceMotion ? 0.68 : 1, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.52 : 1.18 }}
           >
             <span
               data-hero-price-text="true"
@@ -404,27 +305,18 @@ export function Hero() {
             >
               {tx(heroPriceText)}
             </span>
-          </motion.a>
+          </a>
         </div>
 
-        <motion.a
+        <a
           href="#about"
           onClick={handleAboutClick}
           data-hero-scroll-cue="viewport"
           aria-label="Scroll to About section"
           className="absolute inset-x-0 bottom-[clamp(1rem,4svh,2.75rem)] z-20 mx-auto inline-flex h-24 w-24 items-center justify-center text-white/85 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] transition-colors duration-200 hover:text-white sm:h-28 sm:w-28"
-          initial={false}
-          animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 0 }}
-          transition={
-            shouldReduceMotion
-              ? { duration: 0.5, ease: "easeOut", delay: 0.74 }
-              : { duration: 0.7, delay: 1.36, ease: heroEase }
-          }
-          whileHover={{ scale: 1.08, transition: { duration: 0.18, ease: heroEase } }}
-          whileTap={{ scale: 0.96, transition: { duration: 0.08, ease: "easeOut" } }}
         >
-          <HeroLottieArrow />
-        </motion.a>
+          <HeroScrollArrow />
+        </a>
       </div>
     </section>
   );

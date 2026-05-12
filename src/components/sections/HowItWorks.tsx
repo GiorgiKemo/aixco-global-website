@@ -3,9 +3,7 @@
 import { useSiteContent } from "@/data/site-content-context";
 import { useUI } from "../ui-state";
 import { ArrowUpRight } from "lucide-react";
-import { motion } from "framer-motion";
 import { type MouseEvent } from "react";
-import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { replaceLocationHash } from "@/lib/section-hash";
 import { scrollToHash } from "@/lib/smooth-scroll";
@@ -34,12 +32,10 @@ export function HowItWorks() {
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4 lg:gap-4 min-[1360px]:gap-6">
           {journeys.map((j, i) => (
-            <motion.button
+            <button
               key={j.role}
               onClick={() => openJourney(j)}
               className="scroll-reveal mac-card group flex min-h-[21rem] flex-col justify-between p-8 text-left lg:min-h-[20rem] lg:p-6 min-[1360px]:min-h-[22rem] min-[1360px]:p-9"
-              whileHover={premiumSurfaceHover}
-              whileTap={premiumPress}
             >
               <div>
                 <p className="text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground min-[1360px]:text-[0.82rem] min-[1360px]:tracking-[0.18em]">{tx(j.tag ?? `Journey 0${i + 1}`)}</p>
@@ -50,7 +46,7 @@ export function HowItWorks() {
                 <span className="sr-only">{tx(j.role)}</span>
                 <ArrowUpRight className="h-5 w-5 text-primary transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </div>
-            </motion.button>
+            </button>
           ))}
         </div>
 

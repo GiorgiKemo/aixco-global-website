@@ -4,9 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { useUI } from "../ui-state";
-import { motion } from "framer-motion";
 import { Fragment, type MouseEvent } from "react";
-import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveImages, aixcoLiveVideoPreviews, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { LiveVideo } from "@/components/LiveVideo";
@@ -56,13 +54,11 @@ function ParticipationRouteCard({
   const copyOrderClass = imageFirst ? "order-1 md:order-2 lg:order-2" : "order-1 md:order-1 lg:order-1";
 
   return (
-    <motion.article
+    <article
       data-participation-card={route.id}
       data-image-position={imageFirst ? "left" : "right"}
       data-design-source="dubai-batumi-split-card-reference"
       className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:min-h-[max(24.5rem,calc(100svh-22rem))] md:grid-cols-12 md:items-stretch lg:min-h-[max(24.5rem,calc(100svh-22rem))] lg:grid-cols-12"
-      whileHover={premiumSurfaceHover}
-      whileTap={premiumPress}
     >
       <div
         data-participation-media
@@ -107,17 +103,15 @@ function ParticipationRouteCard({
               )}
             </div>
           </div>
-          <motion.button
+          <button
             onClick={onRegister}
             className="btn-gold mt-auto w-auto self-start"
-            whileHover={{ y: -2, scale: 1.012 }}
-            whileTap={premiumPress}
           >
             {tx(route.cta)} <ArrowRight className="h-4 w-4" />
-          </motion.button>
+          </button>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }
 

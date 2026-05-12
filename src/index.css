@@ -304,7 +304,7 @@
       width: 4.25rem !important;
     }
 
-    [data-hero-lottie-arrow="true"] {
+    [data-hero-scroll-arrow="true"] {
       height: 4rem !important;
       width: 4rem !important;
     }
@@ -492,6 +492,21 @@
   .icon-button-glass:hover {
     @apply border-primary/40 bg-background/80 text-primary;
     translate: 0 -1px;
+  }
+
+  .modal-shell {
+    isolation: isolate;
+  }
+
+  .modal-backdrop {
+    animation: modal-backdrop-in 260ms var(--ease-apple) both;
+    transform: translateZ(0);
+    will-change: opacity;
+  }
+
+  .modal-panel {
+    animation: modal-panel-in 300ms var(--ease-apple) both;
+    will-change: opacity, transform;
   }
 
   .noise-overlay::after {
@@ -846,6 +861,17 @@
 }
 
 @layer utilities {
+  .performance-contained-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1100px;
+  }
+
+  @media (max-width: 767px) {
+    .performance-contained-section {
+      contain-intrinsic-size: auto 1500px;
+    }
+  }
+
   main section:not(.hero-reference-font) p:not(.eyebrow):not([class*="text-"]) {
     font-size: clamp(1rem, 0.96rem + 0.16vw, 1.1rem);
     line-height: 1.72;
@@ -884,10 +910,18 @@
   }
 
   [data-motion-reveal="armed"] {
-    will-change: opacity, transform, filter;
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition:
+      opacity 420ms var(--ease-apple),
+      transform 420ms var(--ease-apple);
+    transition-delay: var(--motion-delay, 0ms);
+    will-change: opacity, transform;
   }
 
   [data-motion-reveal="visible"] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
     will-change: auto;
   }
 
@@ -917,6 +951,26 @@
 
   @keyframes reveal {
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes modal-backdrop-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes modal-panel-in {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0) scale(0.985);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
   }
 
   @keyframes float-slow {

@@ -1,18 +1,4 @@
-type GlideScrollOptions = {
-  easing?: number;
-  multiplier?: number;
-};
-
 let activeScrollFrame: number | null = null;
-let activeGlideFrame: number | null = null;
-let glideCurrentTop = 0;
-let glideTargetTop = 0;
-
-const nativeScrollSelector = [
-  "[contenteditable='true']",
-  "[data-native-scroll]",
-  "[data-glide-scroll-native]",
-].join(",");
 
 function getPreferredScrollBehavior(behavior?: ScrollBehavior): ScrollBehavior {
   if (behavior) return behavior;
@@ -24,23 +10,6 @@ function easeInOutCubic(progress: number) {
   return progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 }
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function getMaxScrollTop() {
-  if (typeof document === "undefined" || typeof window === "undefined") return 0;
-  return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-}
-
-function prefersReducedMotion() {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-function usesCoarsePointer() {
-  return typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
-}
-
 function cancelActiveScroll() {
   if (activeScrollFrame !== null) {
     window.cancelAnimationFrame(activeScrollFrame);
@@ -49,93 +18,7 @@ function cancelActiveScroll() {
 }
 
 export function cancelGlideScroll() {
-  if (activeGlideFrame !== null) {
-    window.cancelAnimationFrame(activeGlideFrame);
-    activeGlideFrame = null;
-  }
-
-  if (typeof window !== "undefined") {
-    glideCurrentTop = window.scrollY;
-    glideTargetTop = window.scrollY;
-  }
-}
-
-function normalizeWheelDelta(event: WheelEvent) {
-  if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 18;
-  if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return event.deltaY * window.innerHeight;
-  return event.deltaY;
-}
-
-function canElementScrollInDirection(element: HTMLElement, deltaY: number) {
-  const overflowY = window.getComputedStyle(element).overflowY;
-  if (!/(auto|scroll|overlay)/.test(overflowY)) return false;
-
-  const maxScrollTop = element.scrollHeight - element.clientHeight;
-  if (maxScrollTop <= 1) return false;
-
-  return deltaY < 0 ? element.scrollTop > 0 : element.scrollTop < maxScrollTop;
-}
-
-function shouldUseNativeWheelScroll(event: WheelEvent, deltaY: number) {
-  if (!event.cancelable || event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return true;
-  if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return true;
-  if (Math.abs(deltaY) < 1) return true;
-
-  let node = event.target instanceof Element ? event.target : null;
-  while (node && node !== document.documentElement) {
-    if (node instanceof HTMLElement) {
-      if (node.matches(nativeScrollSelector)) return true;
-      if (canElementScrollInDirection(node, deltaY)) return true;
-    }
-    node = node.parentElement;
-  }
-
-  return false;
-}
-
-export function installGlideScroll({ easing = 0.16, multiplier = 1.05 }: GlideScrollOptions = {}) {
-  if (typeof window === "undefined" || typeof document === "undefined") return () => {};
-  if (usesCoarsePointer()) return () => {};
-
-  const resolvedEasing = clamp(easing, 0.08, 1);
-  const resolvedMultiplier = clamp(multiplier, 0.35, 2);
-
-  const step = () => {
-    glideCurrentTop += (glideTargetTop - glideCurrentTop) * resolvedEasing;
-
-    if (Math.abs(glideTargetTop - glideCurrentTop) < 0.5) {
-      window.scrollTo({ top: glideTargetTop, left: 0, behavior: "auto" });
-      activeGlideFrame = null;
-      return;
-    }
-
-    window.scrollTo({ top: glideCurrentTop, left: 0, behavior: "auto" });
-    activeGlideFrame = window.requestAnimationFrame(step);
-  };
-
-  const onWheel = (event: WheelEvent) => {
-    const deltaY = normalizeWheelDelta(event);
-    if (shouldUseNativeWheelScroll(event, deltaY)) return;
-
-    event.preventDefault();
-    cancelActiveScroll();
-
-    glideCurrentTop = activeGlideFrame === null ? window.scrollY : glideCurrentTop;
-    glideTargetTop = clamp((activeGlideFrame === null ? window.scrollY : glideTargetTop) + deltaY * resolvedMultiplier, 0, getMaxScrollTop());
-
-    if (activeGlideFrame === null) {
-      activeGlideFrame = window.requestAnimationFrame(step);
-    }
-  };
-
-  document.documentElement.dataset.glideScroll = "enabled";
-  document.addEventListener("wheel", onWheel, { passive: false });
-
-  return () => {
-    document.removeEventListener("wheel", onWheel);
-    document.documentElement.removeAttribute("data-glide-scroll");
-    cancelGlideScroll();
-  };
+  cancelActiveScroll();
 }
 
 function animateScrollTo(top: number, behavior?: ScrollBehavior) {
@@ -145,7 +28,6 @@ function animateScrollTo(top: number, behavior?: ScrollBehavior) {
   const targetTop = Math.max(0, Math.round(top));
 
   cancelGlideScroll();
-  cancelActiveScroll();
 
   if (resolvedBehavior !== "smooth") {
     window.scrollTo({ top: targetTop, left: 0, behavior: "auto" });

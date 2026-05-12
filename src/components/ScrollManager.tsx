@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import {
   cancelGlideScroll,
-  installGlideScroll,
   scrollToHash,
   scrollToPageTop,
 } from "@/lib/smooth-scroll";
@@ -25,8 +24,6 @@ export function ScrollManager() {
       window.history.scrollRestoration = previous;
     };
   }, []);
-
-  useEffect(() => installGlideScroll(), []);
 
   useEffect(() => {
     if (typeof window === "undefined") {
