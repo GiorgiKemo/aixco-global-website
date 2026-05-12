@@ -194,7 +194,7 @@ describe("Dubai", () => {
     expect(parkRail).not.toHaveAttribute("data-native-scroll");
     expect(parkRail).toHaveAttribute("data-scroll-mode", "framer-motion-glide-loop");
     expect(parkRail).toHaveAttribute("data-scroll-easing", "true");
-    expect(parkRail).toHaveAttribute("data-drag-scroll", "left-mouse");
+    expect(parkRail).toHaveAttribute("data-drag-scroll", "mouse-touch");
     expect(parkRail.className).toContain("cursor-grab");
     expect(railTrack).toBeInTheDocument();
     expect(parkRail.scrollLeft).toBe(0);
@@ -252,11 +252,31 @@ describe("Dubai", () => {
     fireEvent.mouseMove(window, { clientX: 220 });
     fireEvent.mouseUp(window, { clientX: 220 });
 
-    expect(parkRail).toHaveAttribute("data-drag-scroll", "left-mouse");
+    expect(parkRail).toHaveAttribute("data-drag-scroll", "mouse-touch");
     expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
   });
 
-  it("keeps gallery image buttons draggable and only expands them on a real click", () => {
+  it("lets users drag image rails horizontally with touch input", () => {
+    renderDubai();
+
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
+
+    Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
+    Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
+
+    fireEvent.touchStart(parkRail, { touches: [{ clientX: 300, clientY: 24 }] });
+    fireEvent.touchMove(window, {
+      cancelable: true,
+      touches: [{ clientX: 220, clientY: 26 }],
+    });
+    fireEvent.touchEnd(window);
+
+    expect(parkRail).toHaveAttribute("data-drag-scroll", "mouse-touch");
+    expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
+  });
+
+  it("keeps gallery image buttons draggable and only expands them on a real click or tap", () => {
     renderDubai();
 
     const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
@@ -268,6 +288,27 @@ describe("Dubai", () => {
     fireEvent.mouseDown(imageButton, { button: 0, clientX: 320, clientY: 24 });
     fireEvent.mouseMove(window, { clientX: 250, clientY: 24 });
     fireEvent.mouseUp(window, { clientX: 250, clientY: 24 });
+    fireEvent.click(imageButton);
+
+    expect(screen.queryByRole("dialog", { name: "Expanded image: Eden House The Park construction progress" })).not.toBeInTheDocument();
+
+    fireEvent.click(imageButton);
+
+    expect(screen.getByRole("dialog", { name: "Expanded image: Eden House The Park construction progress" })).toBeInTheDocument();
+  });
+
+  it("does not expand gallery images from the click generated after a touch swipe", () => {
+    renderDubai();
+
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
+    const imageButton = within(parkRail).getByRole("button", {
+      name: "Expand image: Eden House The Park construction progress",
+    });
+
+    fireEvent.touchStart(imageButton, { touches: [{ clientX: 320, clientY: 24 }] });
+    fireEvent.touchMove(window, { touches: [{ clientX: 250, clientY: 24 }] });
+    fireEvent.touchEnd(window);
     fireEvent.click(imageButton);
 
     expect(screen.queryByRole("dialog", { name: "Expanded image: Eden House The Park construction progress" })).not.toBeInTheDocument();

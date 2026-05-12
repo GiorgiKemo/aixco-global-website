@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent as ReactMouseEvent,
+  type TouchEvent as ReactTouchEvent,
+} from "react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { motion, useAnimationFrame, useMotionValue, useMotionValueEvent, useSpring } from "framer-motion";
@@ -233,7 +240,10 @@ function DubaiImageMarquee({
   const visualOffsetRef = useRef(0);
   const dragRef = useRef({
     active: false,
+    touchActive: false,
     lastX: 0,
+    startX: 0,
+    startY: 0,
     lastTime: 0,
     velocity: 0,
   });
@@ -337,49 +347,97 @@ function DubaiImageMarquee({
   });
 
   useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
+    const updateDrag = (clientX: number, timeStamp: number) => {
       const drag = dragRef.current;
-      if (!drag.active) return;
+      if (!drag.active) return false;
 
-      const deltaX = event.clientX - drag.lastX;
-      const deltaTime = Math.max(16, event.timeStamp - drag.lastTime);
+      const deltaX = clientX - drag.lastX;
+      const deltaTime = Math.max(16, timeStamp - drag.lastTime);
       const nextOffset = visualOffsetRef.current - deltaX;
 
       setImmediateGalleryOffset(nextOffset);
       drag.velocity = (-deltaX / deltaTime) * 1000;
-      drag.lastX = event.clientX;
-      drag.lastTime = event.timeStamp;
+      drag.lastX = clientX;
+      drag.lastTime = timeStamp;
+      return true;
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!updateDrag(event.clientX, event.timeStamp)) return;
       event.preventDefault();
     };
 
-    const finishMouseDrag = () => {
+    const finishDrag = () => {
       const drag = dragRef.current;
       if (!drag.active) return;
 
       drag.active = false;
+      drag.touchActive = false;
       targetOffset.set(visualOffsetRef.current + drag.velocity * (shouldReduceMotion ? 0.16 : 0.34));
       interactionPauseUntilRef.current = window.performance.now() + 420;
     };
 
+    const handleTouchMove = (event: TouchEvent) => {
+      const drag = dragRef.current;
+      const touch = event.touches[0];
+      if (!drag.active || !drag.touchActive || !touch) return;
+
+      const totalX = touch.clientX - drag.startX;
+      const totalY = touch.clientY - drag.startY;
+
+      if (Math.abs(totalY) > Math.abs(totalX) && Math.abs(totalY) > 8) {
+        finishDrag();
+        return;
+      }
+
+      if (Math.abs(totalX) < 4) return;
+
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+
+      updateDrag(touch.clientX, event.timeStamp);
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", finishMouseDrag);
+    window.addEventListener("mouseup", finishDrag);
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", finishDrag);
+    window.addEventListener("touchcancel", finishDrag);
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", finishMouseDrag);
+      window.removeEventListener("mouseup", finishDrag);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", finishDrag);
+      window.removeEventListener("touchcancel", finishDrag);
     };
   }, [setImmediateGalleryOffset, shouldReduceMotion, targetOffset]);
+
+  const startDrag = (clientX: number, clientY: number, timeStamp: number, touchActive: boolean) => {
+    const currentOffset = visualOffsetRef.current || targetOffset.get();
+
+    dragRef.current.active = true;
+    dragRef.current.touchActive = touchActive;
+    dragRef.current.lastX = clientX;
+    dragRef.current.startX = clientX;
+    dragRef.current.startY = clientY;
+    dragRef.current.lastTime = timeStamp;
+    dragRef.current.velocity = 0;
+    setImmediateGalleryOffset(currentOffset);
+  };
 
   const handleMouseDown = (event: ReactMouseEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
 
-    const currentOffset = visualOffsetRef.current || targetOffset.get();
-
-    dragRef.current.active = true;
-    dragRef.current.lastX = event.clientX;
-    dragRef.current.lastTime = event.timeStamp;
-    dragRef.current.velocity = 0;
-    setImmediateGalleryOffset(currentOffset);
+    startDrag(event.clientX, event.clientY, event.timeStamp, false);
     event.preventDefault();
+  };
+
+  const handleTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+
+    startDrag(touch.clientX, touch.clientY, event.timeStamp, true);
   };
 
   return (
@@ -389,7 +447,7 @@ function DubaiImageMarquee({
       className="dubai-image-marquee cursor-grab select-none active:cursor-grabbing"
       data-gallery-group={group.title}
       data-layout="horizontal-infinite-gallery"
-      data-drag-scroll="left-mouse"
+      data-drag-scroll="mouse-touch"
       data-auto-scroll="continuous"
       data-motion-preference={shouldReduceMotion ? "reduced" : "standard"}
       data-motion-engine="framer-motion"
@@ -399,6 +457,7 @@ function DubaiImageMarquee({
       data-scroll-mode="framer-motion-glide-loop"
       data-scroll-physics="auto-wheel-drag-glide"
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
     >
       <motion.div
         ref={trackRef}
