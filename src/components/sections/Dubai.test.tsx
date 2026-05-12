@@ -194,7 +194,7 @@ describe("Dubai", () => {
     expect(parkRail).not.toHaveAttribute("data-native-scroll");
     expect(parkRail).toHaveAttribute("data-scroll-mode", "framer-motion-glide-loop");
     expect(parkRail).toHaveAttribute("data-scroll-easing", "true");
-    expect(parkRail).toHaveAttribute("data-drag-scroll", "mouse-touch");
+    expect(parkRail).toHaveAttribute("data-drag-scroll", "pointer-capture");
     expect(parkRail.className).toContain("cursor-grab");
     expect(railTrack).toBeInTheDocument();
     expect(parkRail.scrollLeft).toBe(0);
@@ -248,15 +248,15 @@ describe("Dubai", () => {
     Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
     parkRail.scrollLeft = 600;
 
-    fireEvent.mouseDown(parkRail, { button: 0, clientX: 300 });
-    fireEvent.mouseMove(window, { clientX: 220 });
-    fireEvent.mouseUp(window, { clientX: 220 });
+    fireEvent.pointerDown(parkRail, { button: 0, pointerId: 3, pointerType: "mouse", clientX: 300, clientY: 24 });
+    fireEvent.pointerMove(parkRail, { pointerId: 3, pointerType: "mouse", clientX: 220, clientY: 24 });
+    fireEvent.pointerUp(parkRail, { pointerId: 3, pointerType: "mouse", clientX: 220, clientY: 24 });
 
-    expect(parkRail).toHaveAttribute("data-drag-scroll", "mouse-touch");
+    expect(parkRail).toHaveAttribute("data-drag-scroll", "pointer-capture");
     expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
   });
 
-  it("lets users drag image rails horizontally with touch input", () => {
+  it("lets users drag image rails horizontally with pointer-captured touch input", () => {
     renderDubai();
 
     const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
@@ -265,14 +265,11 @@ describe("Dubai", () => {
     Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
     Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
 
-    fireEvent.touchStart(parkRail, { touches: [{ clientX: 300, clientY: 24 }] });
-    fireEvent.touchMove(window, {
-      cancelable: true,
-      touches: [{ clientX: 220, clientY: 26 }],
-    });
-    fireEvent.touchEnd(window);
+    fireEvent.pointerDown(parkRail, { pointerId: 7, pointerType: "touch", clientX: 300, clientY: 24 });
+    fireEvent.pointerMove(parkRail, { pointerId: 7, pointerType: "touch", clientX: 220, clientY: 26 });
+    fireEvent.pointerUp(parkRail, { pointerId: 7, pointerType: "touch", clientX: 220, clientY: 26 });
 
-    expect(parkRail).toHaveAttribute("data-drag-scroll", "mouse-touch");
+    expect(parkRail).toHaveAttribute("data-drag-scroll", "pointer-capture");
     expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
   });
 

@@ -76,6 +76,32 @@ describe("Modals", () => {
     expect(dialog.className).not.toContain("glass");
   });
 
+  it("uses a dedicated smooth backdrop transition instead of the global page fade", () => {
+    const { container } = render(
+      <I18nProvider>
+        <UIProvider>
+          <PrivacyTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open privacy/i }));
+
+    const modalShell = container.querySelector(".modal-shell");
+    const modalBackdrop = container.querySelector(".modal-backdrop");
+    const dialog = screen.getByRole("dialog");
+
+    expect(modalShell).toBeInTheDocument();
+    expect(modalShell?.className).not.toContain("animate-fade-in");
+    expect(modalBackdrop).toBeInTheDocument();
+    expect(modalBackdrop?.className).toContain("backdrop-blur-lg");
+    expect(modalBackdrop?.className).toContain("bg-transparent");
+    expect(modalBackdrop?.className).not.toContain("bg-background");
+    expect(dialog).toHaveClass("modal-panel");
+    expect(dialog.className).not.toContain("animate-scale-in");
+  });
+
   it("does not render portal links that are outside the approved Workwise portal", () => {
     render(
       <I18nProvider>

@@ -5,8 +5,7 @@ import {
   useEffect,
   useRef,
   useState,
-  type MouseEvent as ReactMouseEvent,
-  type TouchEvent as ReactTouchEvent,
+  type PointerEvent as ReactPointerEvent,
 } from "react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
@@ -240,7 +239,7 @@ function DubaiImageMarquee({
   const visualOffsetRef = useRef(0);
   const dragRef = useRef({
     active: false,
-    touchActive: false,
+    pointerId: null as number | null,
     lastX: 0,
     startX: 0,
     startY: 0,
@@ -346,78 +345,40 @@ function DubaiImageMarquee({
     targetOffset.set(targetOffset.get() + (shouldReduceMotion ? 22 : 46) * deltaSeconds);
   });
 
-  useEffect(() => {
-    const updateDrag = (clientX: number, timeStamp: number) => {
-      const drag = dragRef.current;
-      if (!drag.active) return false;
+  const updateDrag = useCallback((clientX: number, timeStamp: number) => {
+    const drag = dragRef.current;
+    if (!drag.active) return false;
 
-      const deltaX = clientX - drag.lastX;
-      const deltaTime = Math.max(16, timeStamp - drag.lastTime);
-      const nextOffset = visualOffsetRef.current - deltaX;
+    const deltaX = clientX - drag.lastX;
+    const deltaTime = Math.max(16, timeStamp - drag.lastTime);
+    const nextOffset = visualOffsetRef.current - deltaX;
 
-      setImmediateGalleryOffset(nextOffset);
-      drag.velocity = (-deltaX / deltaTime) * 1000;
-      drag.lastX = clientX;
-      drag.lastTime = timeStamp;
-      return true;
-    };
+    setImmediateGalleryOffset(nextOffset);
+    drag.velocity = (-deltaX / deltaTime) * 1000;
+    drag.lastX = clientX;
+    drag.lastTime = timeStamp;
+    return true;
+  }, [setImmediateGalleryOffset]);
 
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!updateDrag(event.clientX, event.timeStamp)) return;
-      event.preventDefault();
-    };
+  const finishDrag = useCallback((target?: HTMLDivElement | null) => {
+    const drag = dragRef.current;
+    if (!drag.active) return;
 
-    const finishDrag = () => {
-      const drag = dragRef.current;
-      if (!drag.active) return;
+    if (target && drag.pointerId !== null && target.hasPointerCapture?.(drag.pointerId)) {
+      target.releasePointerCapture(drag.pointerId);
+    }
 
-      drag.active = false;
-      drag.touchActive = false;
-      targetOffset.set(visualOffsetRef.current + drag.velocity * (shouldReduceMotion ? 0.16 : 0.34));
-      interactionPauseUntilRef.current = window.performance.now() + 420;
-    };
+    drag.active = false;
+    drag.pointerId = null;
+    targetOffset.set(visualOffsetRef.current + drag.velocity * (shouldReduceMotion ? 0.16 : 0.34));
+    interactionPauseUntilRef.current = window.performance.now() + 420;
+  }, [shouldReduceMotion, targetOffset]);
 
-    const handleTouchMove = (event: TouchEvent) => {
-      const drag = dragRef.current;
-      const touch = event.touches[0];
-      if (!drag.active || !drag.touchActive || !touch) return;
-
-      const totalX = touch.clientX - drag.startX;
-      const totalY = touch.clientY - drag.startY;
-
-      if (Math.abs(totalY) > Math.abs(totalX) && Math.abs(totalY) > 8) {
-        finishDrag();
-        return;
-      }
-
-      if (Math.abs(totalX) < 4) return;
-
-      if (event.cancelable) {
-        event.preventDefault();
-      }
-
-      updateDrag(touch.clientX, event.timeStamp);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", finishDrag);
-    window.addEventListener("touchmove", handleTouchMove, { passive: false });
-    window.addEventListener("touchend", finishDrag);
-    window.addEventListener("touchcancel", finishDrag);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", finishDrag);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("touchend", finishDrag);
-      window.removeEventListener("touchcancel", finishDrag);
-    };
-  }, [setImmediateGalleryOffset, shouldReduceMotion, targetOffset]);
-
-  const startDrag = (clientX: number, clientY: number, timeStamp: number, touchActive: boolean) => {
+  const startDrag = (clientX: number, clientY: number, timeStamp: number, pointerId: number) => {
     const currentOffset = visualOffsetRef.current || targetOffset.get();
 
     dragRef.current.active = true;
-    dragRef.current.touchActive = touchActive;
+    dragRef.current.pointerId = pointerId;
     dragRef.current.lastX = clientX;
     dragRef.current.startX = clientX;
     dragRef.current.startY = clientY;
@@ -426,18 +387,42 @@ function DubaiImageMarquee({
     setImmediateGalleryOffset(currentOffset);
   };
 
-  const handleMouseDown = (event: ReactMouseEvent<HTMLDivElement>) => {
-    if (event.button !== 0) return;
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
 
-    startDrag(event.clientX, event.clientY, event.timeStamp, false);
-    event.preventDefault();
+    startDrag(event.clientX, event.clientY, event.timeStamp, event.pointerId);
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+
+    if (event.pointerType === "mouse") {
+      event.preventDefault();
+    }
   };
 
-  const handleTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
-    const touch = event.touches[0];
-    if (!touch) return;
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag.active || drag.pointerId !== event.pointerId) return;
 
-    startDrag(touch.clientX, touch.clientY, event.timeStamp, true);
+    const totalX = event.clientX - drag.startX;
+    const totalY = event.clientY - drag.startY;
+    const isCoarsePointer = event.pointerType === "touch" || event.pointerType === "pen";
+
+    if (isCoarsePointer && Math.abs(totalY) > Math.abs(totalX) && Math.abs(totalY) > 8) {
+      finishDrag(event.currentTarget);
+      return;
+    }
+
+    if (isCoarsePointer && Math.abs(totalX) < 4) return;
+
+    if (!updateDrag(event.clientX, event.timeStamp)) return;
+
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+  };
+
+  const handlePointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (dragRef.current.pointerId !== event.pointerId) return;
+    finishDrag(event.currentTarget);
   };
 
   return (
@@ -447,7 +432,7 @@ function DubaiImageMarquee({
       className="dubai-image-marquee cursor-grab select-none active:cursor-grabbing"
       data-gallery-group={group.title}
       data-layout="horizontal-infinite-gallery"
-      data-drag-scroll="mouse-touch"
+      data-drag-scroll="pointer-capture"
       data-auto-scroll="continuous"
       data-motion-preference={shouldReduceMotion ? "reduced" : "standard"}
       data-motion-engine="framer-motion"
@@ -455,9 +440,11 @@ function DubaiImageMarquee({
       data-glide-scroll-native="true"
       data-scroll-easing="true"
       data-scroll-mode="framer-motion-glide-loop"
-      data-scroll-physics="auto-wheel-drag-glide"
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
+      data-scroll-physics="auto-wheel-pointer-drag-glide"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
     >
       <motion.div
         ref={trackRef}

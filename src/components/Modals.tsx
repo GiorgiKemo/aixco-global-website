@@ -316,13 +316,13 @@ export function Modals() {
   const dialogLabel = tx(getModalAccessibleName(modal, modalData));
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 animate-fade-in">
-      <div className="absolute inset-0 bg-background/70 backdrop-blur-xl" onClick={close} aria-hidden />
+    <div className="modal-shell fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
+      <div className="modal-backdrop absolute inset-0 bg-transparent backdrop-blur-lg backdrop-saturate-150" onClick={close} aria-hidden />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={dialogLabel}
-        className="relative max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-lg border border-border/70 bg-surface-elevated shadow-elegant animate-scale-in [overflow-wrap:anywhere]"
+        className="modal-panel relative max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-lg border border-border/70 bg-surface-elevated shadow-elegant [overflow-wrap:anywhere]"
       >
         <button aria-label="Close" onClick={close} className="icon-button-glass absolute right-3 top-3 z-10 h-10 w-10">
           <X className="h-4 w-4" />
