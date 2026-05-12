@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { motion, useAnimationFrame, useMotionValue, useMotionValueEvent, useSpring } from "framer-motion";
@@ -233,7 +239,10 @@ function DubaiImageMarquee({
   const visualOffsetRef = useRef(0);
   const dragRef = useRef({
     active: false,
+    pointerId: null as number | null,
     lastX: 0,
+    startX: 0,
+    startY: 0,
     lastTime: 0,
     velocity: 0,
   });
@@ -336,50 +345,84 @@ function DubaiImageMarquee({
     targetOffset.set(targetOffset.get() + (shouldReduceMotion ? 22 : 46) * deltaSeconds);
   });
 
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      const drag = dragRef.current;
-      if (!drag.active) return;
+  const updateDrag = useCallback((clientX: number, timeStamp: number) => {
+    const drag = dragRef.current;
+    if (!drag.active) return false;
 
-      const deltaX = event.clientX - drag.lastX;
-      const deltaTime = Math.max(16, event.timeStamp - drag.lastTime);
-      const nextOffset = visualOffsetRef.current - deltaX;
+    const deltaX = clientX - drag.lastX;
+    const deltaTime = Math.max(16, timeStamp - drag.lastTime);
+    const nextOffset = visualOffsetRef.current - deltaX;
 
-      setImmediateGalleryOffset(nextOffset);
-      drag.velocity = (-deltaX / deltaTime) * 1000;
-      drag.lastX = event.clientX;
-      drag.lastTime = event.timeStamp;
-      event.preventDefault();
-    };
+    setImmediateGalleryOffset(nextOffset);
+    drag.velocity = (-deltaX / deltaTime) * 1000;
+    drag.lastX = clientX;
+    drag.lastTime = timeStamp;
+    return true;
+  }, [setImmediateGalleryOffset]);
 
-    const finishMouseDrag = () => {
-      const drag = dragRef.current;
-      if (!drag.active) return;
+  const finishDrag = useCallback((target?: HTMLDivElement | null) => {
+    const drag = dragRef.current;
+    if (!drag.active) return;
 
-      drag.active = false;
-      targetOffset.set(visualOffsetRef.current + drag.velocity * (shouldReduceMotion ? 0.16 : 0.34));
-      interactionPauseUntilRef.current = window.performance.now() + 420;
-    };
+    if (target && drag.pointerId !== null && target.hasPointerCapture?.(drag.pointerId)) {
+      target.releasePointerCapture(drag.pointerId);
+    }
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", finishMouseDrag);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", finishMouseDrag);
-    };
-  }, [setImmediateGalleryOffset, shouldReduceMotion, targetOffset]);
+    drag.active = false;
+    drag.pointerId = null;
+    targetOffset.set(visualOffsetRef.current + drag.velocity * (shouldReduceMotion ? 0.16 : 0.34));
+    interactionPauseUntilRef.current = window.performance.now() + 420;
+  }, [shouldReduceMotion, targetOffset]);
 
-  const handleMouseDown = (event: ReactMouseEvent<HTMLDivElement>) => {
-    if (event.button !== 0) return;
-
+  const startDrag = (clientX: number, clientY: number, timeStamp: number, pointerId: number) => {
     const currentOffset = visualOffsetRef.current || targetOffset.get();
 
     dragRef.current.active = true;
-    dragRef.current.lastX = event.clientX;
-    dragRef.current.lastTime = event.timeStamp;
+    dragRef.current.pointerId = pointerId;
+    dragRef.current.lastX = clientX;
+    dragRef.current.startX = clientX;
+    dragRef.current.startY = clientY;
+    dragRef.current.lastTime = timeStamp;
     dragRef.current.velocity = 0;
     setImmediateGalleryOffset(currentOffset);
-    event.preventDefault();
+  };
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    startDrag(event.clientX, event.clientY, event.timeStamp, event.pointerId);
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+
+    if (event.pointerType === "mouse") {
+      event.preventDefault();
+    }
+  };
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag.active || drag.pointerId !== event.pointerId) return;
+
+    const totalX = event.clientX - drag.startX;
+    const totalY = event.clientY - drag.startY;
+    const isCoarsePointer = event.pointerType === "touch" || event.pointerType === "pen";
+
+    if (isCoarsePointer && Math.abs(totalY) > Math.abs(totalX) && Math.abs(totalY) > 8) {
+      finishDrag(event.currentTarget);
+      return;
+    }
+
+    if (isCoarsePointer && Math.abs(totalX) < 4) return;
+
+    if (!updateDrag(event.clientX, event.timeStamp)) return;
+
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+  };
+
+  const handlePointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (dragRef.current.pointerId !== event.pointerId) return;
+    finishDrag(event.currentTarget);
   };
 
   return (
@@ -389,7 +432,7 @@ function DubaiImageMarquee({
       className="dubai-image-marquee cursor-grab select-none active:cursor-grabbing"
       data-gallery-group={group.title}
       data-layout="horizontal-infinite-gallery"
-      data-drag-scroll="left-mouse"
+      data-drag-scroll="pointer-capture"
       data-auto-scroll="continuous"
       data-motion-preference={shouldReduceMotion ? "reduced" : "standard"}
       data-motion-engine="framer-motion"
@@ -397,8 +440,11 @@ function DubaiImageMarquee({
       data-glide-scroll-native="true"
       data-scroll-easing="true"
       data-scroll-mode="framer-motion-glide-loop"
-      data-scroll-physics="auto-wheel-drag-glide"
-      onMouseDown={handleMouseDown}
+      data-scroll-physics="auto-wheel-pointer-drag-glide"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
     >
       <motion.div
         ref={trackRef}

@@ -668,7 +668,7 @@
     padding-block: 0.25rem 0.45rem;
     scroll-behavior: auto;
     scrollbar-width: none;
-    touch-action: pan-x;
+    touch-action: pan-y pinch-zoom;
     cursor: grab;
     user-select: none;
     -webkit-overflow-scrolling: touch;

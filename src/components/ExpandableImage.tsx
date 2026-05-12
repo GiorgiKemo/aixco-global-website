@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type MouseEvent as ReactMouseEvent,
+  type ReactNode,
+  type TouchEvent as ReactTouchEvent,
+} from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { useOptionalI18n } from "@/i18n/I18nProvider";
@@ -62,6 +71,34 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
     window.addEventListener("mouseup", handleMouseUp);
   };
 
+  const handleTouchStart = (event: ReactTouchEvent<HTMLButtonElement>) => {
+    const touch = event.touches[0];
+    if (!touch || typeof window === "undefined") return;
+
+    const startX = touch.clientX;
+    const startY = touch.clientY;
+    suppressClickRef.current = false;
+
+    const handleTouchMove = (moveEvent: TouchEvent) => {
+      const nextTouch = moveEvent.touches[0];
+      if (!nextTouch) return;
+
+      if (Math.hypot(nextTouch.clientX - startX, nextTouch.clientY - startY) > 6) {
+        suppressClickRef.current = true;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchcancel", handleTouchEnd);
+    };
+
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("touchcancel", handleTouchEnd);
+  };
+
   const handleClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
     if (suppressClickRef.current) {
       event.preventDefault();
@@ -120,6 +157,7 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
         tabIndex={tabIndex}
         onClick={handleClick}
         onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
       >
         {children}
       </button>
