@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ChevronsDown } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent, type SyntheticEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent, type SyntheticEvent } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoBatumiGalleryVideos, aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { replaceLocationHash } from "@/lib/section-hash";
@@ -75,7 +75,7 @@ function HeroScrollArrow() {
     <span
       aria-hidden="true"
       data-hero-scroll-arrow="true"
-      className="hero-scroll-arrow inline-flex h-[5.5rem] w-[5.5rem] items-center justify-center text-primary-glow"
+      className="inline-flex h-[5.5rem] w-[5.5rem] items-center justify-center text-primary-glow"
     >
       <ChevronsDown className="h-14 w-14" strokeWidth={2.25} />
     </span>
@@ -260,14 +260,11 @@ export function Hero() {
           className="flex w-full min-w-0 max-w-[calc(100vw-3rem)] translate-y-[clamp(1rem,4svh,3.5rem)] flex-col items-center sm:max-w-[82rem]"
         >
           <p
-            data-hero-animate="eyebrow"
-            style={{ "--hero-delay": "120ms" } as CSSProperties}
             className="mb-2 self-start text-sm font-medium uppercase tracking-normal text-white/90 drop-shadow-[0_4px_16px_rgb(0_0_0/0.55)] sm:ml-[clamp(0rem,20vw,18rem)] sm:text-base md:text-lg"
           >
             {tx("Quality Real Estate Participation")}
           </p>
           <Image
-            data-hero-animate="brand"
             data-hero-brand-mark="standalone"
             src={aixcoLiveLogos.aixcoMark}
             alt=""
@@ -276,12 +273,10 @@ export function Hero() {
             height={704}
             className="mb-2 self-start object-contain drop-shadow-[0_16px_32px_rgb(0_0_0/0.28)] sm:ml-[clamp(0rem,20vw,18rem)]"
             decoding="async"
-            style={{ "--hero-delay": "240ms", width: "clamp(5rem, 14vw, 14.6rem)", height: "auto" } as CSSProperties}
+            style={{ width: "clamp(5rem, 14vw, 14.6rem)", height: "auto" }}
             unoptimized
           />
           <h1
-            data-hero-animate="headline"
-            style={{ "--hero-delay": "360ms" } as CSSProperties}
             className="hero-reference-font max-w-[calc(100vw-3rem)] min-w-0 text-[clamp(1.85rem,8vw,7.45rem)] font-semibold leading-[0.82] tracking-normal text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)] [perspective:900px] sm:max-w-full sm:text-[clamp(2.9rem,10.25vw,7.45rem)]"
           >
             <span className="block pb-[0.08em]">
@@ -293,8 +288,6 @@ export function Hero() {
 
           <p
             data-hero-intro-copy="true"
-            data-hero-animate="intro"
-            style={{ "--hero-delay": "620ms" } as CSSProperties}
             className="hero-reference-font mt-6 w-[18rem] max-w-full px-1 text-[clamp(1.08rem,2.55vw,1.46rem)] font-normal leading-[1.55] text-white/90 drop-shadow-[0_3px_18px_rgb(0_0_0/0.46)] sm:w-full sm:max-w-[50rem]"
           >
             {tx(heroIntroText)}
@@ -304,8 +297,6 @@ export function Hero() {
             href="#faqs"
             onClick={handleFaqClick}
             data-hero-price-lockup="true"
-            data-hero-animate="price"
-            style={{ "--hero-delay": "780ms" } as CSSProperties}
             className="mt-8 flex w-full items-center justify-center rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
           >
             <span
@@ -321,8 +312,6 @@ export function Hero() {
           href="#about"
           onClick={handleAboutClick}
           data-hero-scroll-cue="viewport"
-          data-hero-animate="scroll-cue"
-          style={{ "--hero-delay": "980ms" } as CSSProperties}
           aria-label="Scroll to About section"
           className="absolute inset-x-0 bottom-[clamp(1rem,4svh,2.75rem)] z-20 mx-auto inline-flex h-24 w-24 items-center justify-center text-white/85 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] transition-colors duration-200 hover:text-white sm:h-28 sm:w-28"
         >
