@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useSiteContent } from '@/data/site-content-context';
 import { useI18n } from '@/i18n/I18nProvider';
 import { aixcoLiveImages } from '@/lib/aixco-live-assets';
+import { premiumPress, premiumSurfaceHover } from '@/lib/motion';
+import { motion } from 'framer-motion';
 import { useUI } from '../ui-state';
 import { cn } from '@/lib/utils';
 
@@ -44,10 +46,12 @@ export function Team() {
 
         <div data-layout="team-profile-grid" className="mx-auto grid w-full max-w-[65rem] gap-5 md:grid-cols-3 min-[1360px]:gap-6">
           {team.map((m) => (
-            <button
+            <motion.button
               key={m.name}
               onClick={() => openTeam(m)}
               className="scroll-reveal mac-card group flex h-full flex-col overflow-hidden text-left"
+              whileHover={premiumSurfaceHover}
+              whileTap={premiumPress}
             >
               <div className="relative aspect-[9/10] overflow-hidden bg-muted">
                 <Image
@@ -78,7 +82,7 @@ export function Team() {
                   {tx('View profile')}
                 </span>
               </div>
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>

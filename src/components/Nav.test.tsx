@@ -45,19 +45,6 @@ describe("Nav", () => {
       writable: true,
       value: TestResizeObserver,
     });
-    Object.defineProperty(window, "requestAnimationFrame", {
-      configurable: true,
-      writable: true,
-      value: (callback: FrameRequestCallback) => {
-        callback(0);
-        return 1;
-      },
-    });
-    Object.defineProperty(window, "cancelAnimationFrame", {
-      configurable: true,
-      writable: true,
-      value: () => undefined,
-    });
   });
 
   afterEach(() => {

@@ -1,3 +1,6 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
+
 export type CountUpTextSegment =
   | {
       type: "text";
@@ -22,6 +25,10 @@ type CountUpTextProps = {
 };
 
 const NUMBER_PATTERN = /\d[\d,]*(?:\.\d+)?/g;
+
+function easeOutQuart(value: number) {
+  return 1 - Math.pow(1 - value, 4);
+}
 
 export function parseCountUpSegments(value: string): CountUpTextSegment[] {
   const segments: CountUpTextSegment[] = [];
@@ -73,15 +80,85 @@ export function getCountStartValue(segment: CountUpNumberSegment): number {
   return looksLikeYear ? segment.value - 16 : 0;
 }
 
-export function CountUpText({ value, className }: CountUpTextProps) {
-  const segments = parseCountUpSegments(value);
+export function CountUpText({ value, className, delay = 0.12, duration = 1.1 }: CountUpTextProps) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const segments = useMemo(() => parseCountUpSegments(value), [value]);
+  const shouldReduceMotion = useHydratedReducedMotion();
+  const [isVisible, setIsVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setIsVisible(true);
+      return;
+    }
+
+    const target = ref.current;
+    if (!target || typeof window === "undefined" || typeof window.IntersectionObserver !== "function") {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setIsVisible(true);
+        observer.disconnect();
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.28 },
+    );
+
+    observer.observe(target);
+
+    return () => observer.disconnect();
+  }, [shouldReduceMotion]);
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setProgress(1);
+      return;
+    }
+
+    if (!isVisible || typeof window === "undefined") return;
+
+    let frame = 0;
+    let startTime: number | undefined;
+    const delayMs = Math.max(delay, 0) * 1000;
+    const durationMs = Math.max(duration, 0.01) * 1000;
+
+    setProgress(0);
+
+    const tick = (time: number) => {
+      startTime ??= time;
+      const elapsed = time - startTime - delayMs;
+
+      if (elapsed <= 0) {
+        frame = window.requestAnimationFrame(tick);
+        return;
+      }
+
+      const nextProgress = Math.min(elapsed / durationMs, 1);
+      setProgress(easeOutQuart(nextProgress));
+
+      if (nextProgress < 1) {
+        frame = window.requestAnimationFrame(tick);
+      }
+    };
+
+    frame = window.requestAnimationFrame(tick);
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [delay, duration, isVisible, shouldReduceMotion, value]);
 
   return (
-    <span className={className ? `count-up-text ${className}` : "count-up-text"} aria-label={value}>
+    <span ref={ref} className={className ? `count-up-text ${className}` : "count-up-text"} aria-label={value}>
       {segments.map((segment, index) => {
         if (segment.type === "text") return segment.text;
 
-        return <span key={`${segment.raw}-${index}`}>{segment.text}</span>;
+        const start = getCountStartValue(segment);
+        const animatedValue = start + (segment.value - start) * progress;
+
+        return <span key={`${segment.raw}-${index}`}>{formatCountValue(animatedValue, segment)}</span>;
       })}
     </span>
   );

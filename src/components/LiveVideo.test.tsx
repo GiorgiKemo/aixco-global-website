@@ -82,7 +82,7 @@ describe("LiveVideo", () => {
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
 
-  it("keeps inline previews poster-only by default and uses full media in the expanded player", () => {
+  it("uses full media inline by default so previews match expanded playback smoothness", () => {
     render(
       <LiveVideo
         src="/full-video.mp4"
@@ -95,7 +95,7 @@ describe("LiveVideo", () => {
 
     const inlineVideo = screen.getByLabelText("Preview source test");
 
-    expect(inlineVideo).not.toHaveAttribute("src");
+    expect(inlineVideo).toHaveAttribute("src", "/full-video.mp4");
 
     fireEvent.click(screen.getByRole("button", { name: /play video: preview source test/i }));
 
@@ -113,7 +113,6 @@ describe("LiveVideo", () => {
         title="Lightweight source test"
         poster="/poster.jpg"
         eager
-        autoplayPreview
         smoothPreview={false}
       />,
     );
@@ -122,7 +121,7 @@ describe("LiveVideo", () => {
   });
 
   it("loads nearby preview media but only plays while it is in focus", () => {
-    const { container } = render(<LiveVideo src="/sample-video.mp4" title="Batumi overview" poster="/poster.jpg" autoplayPreview />);
+    const { container } = render(<LiveVideo src="/sample-video.mp4" title="Batumi overview" poster="/poster.jpg" />);
 
     expect(container.querySelector("img[role='presentation']")).toHaveAttribute("src", "/poster.jpg");
     expect(screen.getByLabelText("Batumi overview")).not.toHaveAttribute("src");
@@ -151,7 +150,7 @@ describe("LiveVideo", () => {
   });
 
   it("keeps the poster visible until the preview video has a rendered frame", () => {
-    const { container } = render(<LiveVideo src="/sample-video.mp4" title="Otium" poster="/poster.jpg" autoplayPreview />);
+    const { container } = render(<LiveVideo src="/sample-video.mp4" title="Otium" poster="/poster.jpg" />);
 
     act(() => {
       MockIntersectionObserver.instances[0].trigger({ isIntersecting: true, intersectionRatio: 1 });

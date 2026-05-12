@@ -23,7 +23,7 @@ export function AixcoPhilosophyPage() {
             src={aboutArchitecture}
             alt="AIXCO real estate architecture"
             fill
-            preload
+            priority
             sizes="100vw"
             className="absolute inset-0 -z-20 object-cover opacity-40"
           />

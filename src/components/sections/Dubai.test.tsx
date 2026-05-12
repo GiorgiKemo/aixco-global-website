@@ -154,7 +154,7 @@ describe("Dubai", () => {
 
     const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
-    const railTrack = parkRail.querySelector("[data-gallery-track='dom-transform-loop']");
+    const railTrack = parkRail.querySelector("[data-gallery-track='framer-motion-loop']");
     const railSets = parkRail.querySelectorAll("[data-gallery-set]");
 
     expect(parkRail).toHaveAttribute("data-layout", "horizontal-infinite-gallery");
@@ -174,12 +174,12 @@ describe("Dubai", () => {
     expect(container.querySelectorAll("[data-gallery-tile]").length).toBeGreaterThan(0);
   });
 
-  it("uses DOM transform-controlled image rails instead of direct native scroll stepping", () => {
+  it("uses Framer Motion-controlled image rails instead of direct native scroll stepping", () => {
     renderDubai();
 
     const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
-    const railTrack = parkRail.querySelector("[data-gallery-track='dom-transform-loop']");
+    const railTrack = parkRail.querySelector("[data-gallery-track='framer-motion-loop']");
 
     Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
     Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
@@ -188,11 +188,11 @@ describe("Dubai", () => {
     fireEvent.wheel(parkRail, { deltaX: 0, deltaY: 180 });
 
     expect(parkRail.closest("section")?.className).toContain("min-w-0");
-    expect(parkRail).toHaveAttribute("data-motion-engine", "dom-transform");
-    expect(parkRail).toHaveAttribute("data-visual-scroll", "css-transform");
+    expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
+    expect(parkRail).toHaveAttribute("data-visual-scroll", "framer-transform");
     expect(parkRail).toHaveAttribute("data-glide-scroll-native", "true");
     expect(parkRail).not.toHaveAttribute("data-native-scroll");
-    expect(parkRail).toHaveAttribute("data-scroll-mode", "dom-transform-drag-wheel-loop");
+    expect(parkRail).toHaveAttribute("data-scroll-mode", "framer-motion-glide-loop");
     expect(parkRail).toHaveAttribute("data-scroll-easing", "true");
     expect(parkRail).toHaveAttribute("data-drag-scroll", "left-mouse");
     expect(parkRail.className).toContain("cursor-grab");
@@ -200,7 +200,7 @@ describe("Dubai", () => {
     expect(parkRail.scrollLeft).toBe(0);
   });
 
-  it("keeps image rails still until the user wheels or drags", () => {
+  it("auto-advances image rails on animation frames", () => {
     const frames = mockGalleryAnimationFrames();
     renderDubai();
 
@@ -214,8 +214,8 @@ describe("Dubai", () => {
     frames.runQueuedFrames(1000);
     frames.runQueuedFrames(2000);
 
-    expect(parkRail).toHaveAttribute("data-auto-scroll", "off");
-    expect(parkRail).toHaveAttribute("data-motion-engine", "dom-transform");
+    expect(parkRail).toHaveAttribute("data-auto-scroll", "continuous");
+    expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
   });
 
   it("glides backward wheel input into the loop tail instead of crawling forward through the rail", () => {
@@ -233,8 +233,8 @@ describe("Dubai", () => {
     fireEvent.wheel(parkRail, { deltaX: 0, deltaY: -180 });
     frames.runQueuedFrames(1016);
 
-    expect(parkRail).toHaveAttribute("data-scroll-mode", "dom-transform-drag-wheel-loop");
-    expect(parkRail).toHaveAttribute("data-motion-engine", "dom-transform");
+    expect(parkRail).toHaveAttribute("data-scroll-mode", "framer-motion-glide-loop");
+    expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
     expect(parkRail.scrollLeft).toBe(0);
   });
 
@@ -253,7 +253,7 @@ describe("Dubai", () => {
     fireEvent.mouseUp(window, { clientX: 220 });
 
     expect(parkRail).toHaveAttribute("data-drag-scroll", "left-mouse");
-    expect(parkRail).toHaveAttribute("data-motion-engine", "dom-transform");
+    expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
   });
 
   it("keeps gallery image buttons draggable and only expands them on a real click", () => {

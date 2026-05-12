@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 import { X } from "lucide-react";
 import { useOptionalI18n } from "@/i18n/I18nProvider";
 
@@ -89,14 +88,10 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
               aria-label={`${tx("Expanded image")}: ${tx(title)}`}
               className="relative z-10 flex max-h-[calc(100svh-2rem)] w-full max-w-7xl items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-black shadow-elegant animate-scale-in"
             >
-              <Image
+              <img
                 id={imageId}
                 src={src}
                 alt={tx(title)}
-                width={1600}
-                height={1000}
-                sizes="100vw"
-                unoptimized
                 className="block max-h-[calc(100svh-2rem)] w-full object-contain"
                 decoding="async"
               />

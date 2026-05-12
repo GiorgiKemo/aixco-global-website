@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import type { ReactNode } from "react";
+import { stagger, useAnimate } from "framer-motion";
+import { imageSettleTransition, reducedMotionTransition, revealTransition } from "@/lib/motion";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 
 type ScrollRevealProps = {
@@ -30,9 +32,10 @@ export function ScrollReveal({
   targetSelector = DEFAULT_TARGET_SELECTOR,
   threshold = 0.12,
 }: ScrollRevealProps) {
-  const scope = useRef<HTMLDivElement | null>(null);
+  const [scope, animate] = useAnimate<HTMLDivElement>();
   const shouldReduceMotion = useHydratedReducedMotion();
   const targetsRef = useRef<HTMLElement[]>([]);
+  const mediaTargetsRef = useRef<HTMLElement[]>([]);
   const hasPlayedRef = useRef(false);
 
   const collectTargets = useCallback(() => {
@@ -51,7 +54,6 @@ export function ScrollReveal({
       target.dataset.motionReveal = "armed";
       target.dataset.motionKind = kind;
       target.style.setProperty("--motion-index", String(index));
-      target.style.setProperty("--motion-delay", shouldReduceMotion ? "0ms" : `${Math.min(index * staggerMs, 360)}ms`);
 
       if (target.matches(MEDIA_SELECTOR)) {
         target.dataset.motionRevealMedia = "true";
@@ -64,14 +66,29 @@ export function ScrollReveal({
       });
     });
 
+    mediaTargetsRef.current = mediaTargets;
+
     if (!targets.length) return;
-  }, [collectTargets, shouldReduceMotion, staggerMs]);
+
+    animate(
+      targets,
+      shouldReduceMotion
+        ? { opacity: 0.96, y: 6, scale: 0.997, filter: "blur(0px)" }
+        : { opacity: 0, y: 32, scale: 0.985, filter: "blur(10px)" },
+      { duration: 0 },
+    );
+
+    if (mediaTargets.length) {
+      animate(mediaTargets, shouldReduceMotion ? { scale: 1.004 } : { scale: 1.025 }, { duration: 0 });
+    }
+  }, [animate, collectTargets, shouldReduceMotion]);
 
   useEffect(() => {
     const root = scope.current;
     if (!root || typeof window === "undefined") return;
 
     const targets = targetsRef.current.length ? targetsRef.current : collectTargets();
+    const mediaTargets = mediaTargetsRef.current;
     if (!targets.length) return;
 
     const reveal = () => {
@@ -83,6 +100,18 @@ export function ScrollReveal({
         target.dataset.motionReveal = "visible";
       });
 
+      void animate(
+        targets,
+        { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
+        {
+          ...(shouldReduceMotion ? reducedMotionTransition : revealTransition),
+          delay: stagger(shouldReduceMotion ? 0.025 : staggerMs / 1000),
+        },
+      );
+
+      if (mediaTargets.length) {
+        void animate(mediaTargets, { scale: 1 }, shouldReduceMotion ? reducedMotionTransition : imageSettleTransition);
+      }
     };
 
     const IntersectionObserverCtor = window.IntersectionObserver;
@@ -104,7 +133,7 @@ export function ScrollReveal({
     targets.forEach((target) => observer.observe(target));
 
     return () => observer.disconnect();
-  }, [collectTargets, rootMargin, threshold]);
+  }, [animate, collectTargets, rootMargin, scope, shouldReduceMotion, staggerMs, threshold]);
 
   return (
     <div ref={scope} className={className} data-motion-reveal-root="armed">

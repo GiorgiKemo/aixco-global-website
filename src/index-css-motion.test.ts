@@ -58,7 +58,7 @@ describe("index.css motion rules", () => {
     expect(css).toContain("transform: none !important");
     expect(css).toContain("[data-hero-scroll-cue=\"viewport\"]");
     expect(css).toContain("width: 4.25rem !important");
-    expect(css).toContain("[data-hero-scroll-arrow=\"true\"]");
+    expect(css).toContain("[data-hero-lottie-arrow=\"true\"]");
   });
 
   it("keeps asset detail CTAs large enough for mobile touch targets", () => {

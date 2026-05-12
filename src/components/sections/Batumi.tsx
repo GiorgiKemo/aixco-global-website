@@ -3,6 +3,8 @@
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { ArrowRight, Building2, FileText, Home, Percent, ShieldCheck, TrendingUp, type LucideIcon } from "lucide-react";
+import { motion } from "framer-motion";
+import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { aixcoBatumiGalleryVideos, aixcoLiveAssetDetails, aixcoLiveDocuments, aixcoLiveImages, aixcoLiveVideoPreviews, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 import { LiveVideo } from "@/components/LiveVideo";
@@ -70,8 +72,10 @@ function BatumiStatCard({
   const subtextClass = `text-sm font-medium leading-none ${highlight ? "text-background/70" : "text-foreground/60"}`;
 
   return (
-    <div
+    <motion.div
       data-batumi-metric-tile
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`group flex flex-col justify-between border transition-[background-color,border-color,box-shadow,color] duration-200 ${
         compact ? "min-h-[7.1rem] min-w-0 p-4 md:min-h-[7.35rem] lg:min-h-[7.55rem] lg:p-5" : "min-h-[8.8rem] min-w-0 p-5 md:min-h-[9.4rem] lg:p-6"
       } ${
@@ -109,7 +113,7 @@ function BatumiStatCard({
         </div>
       </div>
       <div className={`${compact ? "mt-4" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
-    </div>
+    </motion.div>
   );
 }
 
@@ -147,12 +151,14 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
   const marketDetails = getMarketDetails(benefits);
 
   return (
-    <article
+    <motion.article
       data-batumi-card="market-overview"
       data-density="viewport-fit"
       data-image-position="right"
       data-design-source="dubai-card-reference"
       className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:grid-cols-12 md:items-stretch lg:grid-cols-12"
+      whileHover={premiumSurfaceHover}
+      whileTap={premiumPress}
     >
       <div
         aria-label="Batumi overview media"
@@ -211,7 +217,7 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
           </ul>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
@@ -226,12 +232,14 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
   const videoMatteCropClass = property.id === "guru" ? "guru-video-matte-crop" : "";
 
   return (
-    <article
+    <motion.article
       data-batumi-property-card={property.id}
       data-density="standard"
       data-image-position={imageFirst ? "left" : "right"}
       data-design-source="dubai-card-reference"
       className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:min-h-[clamp(30rem,calc(100svh-15rem),38rem)] md:grid-cols-12 md:items-stretch lg:min-h-[clamp(28rem,calc(100svh-15rem),32rem)] lg:grid-cols-12"
+      whileHover={premiumSurfaceHover}
+      whileTap={premiumPress}
     >
       <div
         data-batumi-property-media
@@ -294,7 +302,7 @@ function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; i
           ))}
         </ul>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
@@ -303,7 +311,7 @@ export function Batumi() {
   const { batumiBenefits, batumiProperties } = useSiteContent();
 
   return (
-    <section className="performance-contained-section relative bg-surface/40 py-16 md:py-20 lg:py-20">
+    <section className="relative bg-surface/40 py-16 md:py-20 lg:py-20">
       <div className="container-x">
         <div
           id="batumi"

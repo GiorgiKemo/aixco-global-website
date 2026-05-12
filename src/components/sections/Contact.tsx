@@ -5,6 +5,8 @@ import { useRef, useState, type MutableRefObject } from "react";
 import { z } from "zod";
 import { Mail, MapPin, Check } from "lucide-react";
 import { useSiteContent } from "@/data/site-content-context";
+import { motion } from "framer-motion";
+import { premiumPress } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveImages } from "@/lib/aixco-live-assets";
 import { submitContactSubmission } from "@/lib/backend/lead-capture";
@@ -154,12 +156,14 @@ export function Contact() {
               {state === "error" && Object.keys(errors).length === 0 && (
                 <p className="text-sm text-primary">{tx("Sorry, something went wrong.")}</p>
               )}
-              <button
+              <motion.button
                 type="submit"
                 className="btn-gold justify-self-start"
+                whileHover={{ y: -2, scale: 1.012 }}
+                whileTap={premiumPress}
               >
                 {tx("Contact AIXCO")}
-              </button>
+              </motion.button>
             </form>
           )}
         </div>

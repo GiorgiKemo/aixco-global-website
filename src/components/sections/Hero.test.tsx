@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { Hero, getHeroVideoPanelLimit, shouldShowHeroVideoPoster, shouldUseHeroVideoWall } from "./Hero";
+import { Hero, getHeroLottieArrowPath, getHeroVideoPanelLimit, shouldShowHeroVideoPoster, shouldUseHeroVideoWall } from "./Hero";
 
 function renderHero() {
   return render(
@@ -20,13 +20,19 @@ describe("Hero", () => {
     localStorage.clear();
   });
 
-  it("keeps the video wall disabled by default so the hero remains smooth", () => {
-    expect(shouldUseHeroVideoWall({ reduceMotion: true, viewportWidth: 1440 })).toBe(false);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 390 })).toBe(false);
+  it("resolves the hero arrow animation from the app base URL", () => {
+    expect(getHeroLottieArrowPath("/")).toBe("/animations/arrow-down-gold.json");
+    expect(getHeroLottieArrowPath("/aixco-global-website/")).toBe("/aixco-global-website/animations/arrow-down-gold.json");
+    expect(getHeroLottieArrowPath("/aixco-global-website")).toBe("/aixco-global-website/animations/arrow-down-gold.json");
+  });
+
+  it("enables the video wall across viewport sizes unless media constraints ask for lighter loading", () => {
+    expect(shouldUseHeroVideoWall({ reduceMotion: true, viewportWidth: 1440 })).toBe(true);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 390 })).toBe(true);
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, saveData: true })).toBe(false);
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "3g" })).toBe(false);
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, deviceMemory: 2 })).toBe(false);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "4g", deviceMemory: 8 })).toBe(false);
+    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "4g", deviceMemory: 8 })).toBe(true);
   });
 
   it("keeps mobile hero video enabled with a smaller early panel budget", () => {

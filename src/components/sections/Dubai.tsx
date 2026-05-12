@@ -1,12 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
+import { motion, useAnimationFrame, useMotionValue, useMotionValueEvent, useSpring } from "framer-motion";
 import { ArrowRight, Building2, HandCoins, TrendingUp, type LucideIcon } from "lucide-react";
 
 import Image from "next/image";
 import { ExpandableImage } from "@/components/ExpandableImage";
+import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import {
   aixcoDubaiEdenHouseCanalGallery,
@@ -130,8 +132,10 @@ function PrestigeStatCard({
   tx: Translate;
 }) {
   return (
-    <div
+    <motion.div
       data-fund-highlight-tile
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`group flex flex-col justify-between border transition-[background-color,border-color,box-shadow,color] duration-200 ${
         compact ? "min-h-[7.1rem] min-w-0 p-4 md:min-h-[7.35rem] lg:min-h-[7.55rem] lg:p-5" : "min-h-[8.8rem] min-w-0 p-5 md:min-h-[9.4rem] lg:p-6"
       } ${
@@ -166,7 +170,7 @@ function PrestigeStatCard({
         </div>
       </div>
       <div className={`${compact ? "mt-4" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
-    </div>
+    </motion.div>
   );
 }
 
@@ -234,19 +238,29 @@ function DubaiImageMarquee({
     velocity: 0,
   });
   const interactionPauseUntilRef = useRef(0);
+  const [isGalleryInView, setIsGalleryInView] = useState(
+    () => process.env.NODE_ENV === "test" || process.env.VITEST === "true",
+  );
+  const trackX = useMotionValue(0);
+  const targetOffset = useMotionValue(0);
+  const smoothOffset = useSpring(targetOffset, {
+    stiffness: shouldReduceMotion ? 150 : 96,
+    damping: shouldReduceMotion ? 32 : 24,
+    mass: shouldReduceMotion ? 0.55 : 0.72,
+    restDelta: 0.001,
+  });
 
   const renderGalleryOffset = useCallback((offset: number) => {
     const renderedOffset = getRenderedGalleryOffset(loopWidthRef.current, offset);
-    const track = trackRef.current;
-    if (track) {
-      track.style.transform = `translate3d(${-renderedOffset}px, 0, 0)`;
-    }
-  }, []);
+    trackX.set(-renderedOffset);
+  }, [trackX]);
 
   const setImmediateGalleryOffset = useCallback((offset: number) => {
+    targetOffset.jump(offset);
+    smoothOffset.jump(offset);
     visualOffsetRef.current = offset;
     renderGalleryOffset(offset);
-  }, [renderGalleryOffset]);
+  }, [renderGalleryOffset, smoothOffset, targetOffset]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -259,13 +273,31 @@ function DubaiImageMarquee({
       if (Math.abs(delta) < 1) return;
 
       event.preventDefault();
-      setImmediateGalleryOffset(visualOffsetRef.current + delta * (shouldReduceMotion ? 0.82 : 1.18));
+      targetOffset.set(targetOffset.get() + delta * (shouldReduceMotion ? 0.82 : 1.18));
       interactionPauseUntilRef.current = window.performance.now() + 520;
     };
 
     viewport.addEventListener("wheel", handleWheel, { passive: false });
     return () => viewport.removeEventListener("wheel", handleWheel);
-  }, [setImmediateGalleryOffset, shouldReduceMotion]);
+  }, [shouldReduceMotion, targetOffset]);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport || typeof IntersectionObserver === "undefined") {
+      setIsGalleryInView(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsGalleryInView(entry.isIntersecting);
+      },
+      { rootMargin: "360px 0px", threshold: 0.01 },
+    );
+
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const updateLoopWidth = () => {
@@ -290,6 +322,20 @@ function DubaiImageMarquee({
     };
   }, [group.images, renderGalleryOffset]);
 
+  useMotionValueEvent(smoothOffset, "change", (latest) => {
+    visualOffsetRef.current = latest;
+    renderGalleryOffset(latest);
+  });
+
+  useAnimationFrame((time, delta) => {
+    if (!isGalleryInView || !trackRef.current || dragRef.current.active || time < interactionPauseUntilRef.current) return;
+
+    const deltaSeconds = Math.min(delta, 64) / 1000;
+    if (deltaSeconds <= 0) return;
+
+    targetOffset.set(targetOffset.get() + (shouldReduceMotion ? 22 : 46) * deltaSeconds);
+  });
+
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       const drag = dragRef.current;
@@ -311,7 +357,7 @@ function DubaiImageMarquee({
       if (!drag.active) return;
 
       drag.active = false;
-      setImmediateGalleryOffset(visualOffsetRef.current + drag.velocity * (shouldReduceMotion ? 0.16 : 0.34));
+      targetOffset.set(visualOffsetRef.current + drag.velocity * (shouldReduceMotion ? 0.16 : 0.34));
       interactionPauseUntilRef.current = window.performance.now() + 420;
     };
 
@@ -321,12 +367,12 @@ function DubaiImageMarquee({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", finishMouseDrag);
     };
-  }, [setImmediateGalleryOffset, shouldReduceMotion]);
+  }, [setImmediateGalleryOffset, shouldReduceMotion, targetOffset]);
 
   const handleMouseDown = (event: ReactMouseEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
 
-    const currentOffset = visualOffsetRef.current;
+    const currentOffset = visualOffsetRef.current || targetOffset.get();
 
     dragRef.current.active = true;
     dragRef.current.lastX = event.clientX;
@@ -344,20 +390,21 @@ function DubaiImageMarquee({
       data-gallery-group={group.title}
       data-layout="horizontal-infinite-gallery"
       data-drag-scroll="left-mouse"
-      data-auto-scroll="off"
+      data-auto-scroll="continuous"
       data-motion-preference={shouldReduceMotion ? "reduced" : "standard"}
-      data-motion-engine="dom-transform"
-      data-visual-scroll="css-transform"
+      data-motion-engine="framer-motion"
+      data-visual-scroll="framer-transform"
       data-glide-scroll-native="true"
       data-scroll-easing="true"
-      data-scroll-mode="dom-transform-drag-wheel-loop"
-      data-scroll-physics="wheel-drag-glide"
+      data-scroll-mode="framer-motion-glide-loop"
+      data-scroll-physics="auto-wheel-drag-glide"
       onMouseDown={handleMouseDown}
     >
-      <div
+      <motion.div
         ref={trackRef}
         className="dubai-image-marquee-track"
-        data-gallery-track="dom-transform-loop"
+        data-gallery-track="framer-motion-loop"
+        style={{ x: trackX }}
       >
         {[0, 1].map((setIndex) => (
           <div
@@ -392,7 +439,7 @@ function DubaiImageMarquee({
             ))}
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -412,13 +459,16 @@ function DubaiFundAssetGallery({
   const viewportOffsetClass = isLanding ? "mt-28 md:mt-32" : "mt-5";
 
   return (
-    <div
+    <motion.div
       id={`dubai-asset-gallery-${fundId}`}
       data-fund-asset-gallery={fundId}
       data-gallery-source={gallery.source}
       data-viewport-offset={isLanding ? "landing-gallery" : undefined}
       aria-label={tx(gallery.label)}
       className={`${viewportOffsetClass} scroll-mt-16 border border-foreground/10 bg-white p-4 shadow-[0_34px_80px_-35px_rgba(0,0,0,0.28)] sm:p-5 md:scroll-mt-20 lg:p-6`}
+      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
+      animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      transition={{ duration: shouldReduceMotion ? 0.18 : 0.32, ease: "easeOut" }}
     >
       <div className="grid gap-7">
         {gallery.groups.map((group) => (
@@ -433,7 +483,7 @@ function DubaiFundAssetGallery({
           </section>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -471,28 +521,32 @@ function DubaiFundCard({
   const galleryHref = galleryId ? `#dubai-asset-gallery-${galleryId}` : undefined;
 
   return (
-    <article
+    <motion.article
       data-fund-card={fund.id}
       data-density={isViewportFit ? "viewport-fit" : "standard"}
       data-image-position={imageFirst ? "left" : "right"}
       data-design-source="eden-house-portfolio-reference"
       className={`scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:grid-cols-12 md:items-stretch lg:grid-cols-12 ${heightClass}`}
+      whileHover={premiumSurfaceHover}
+      whileTap={premiumPress}
     >
       <div
         data-fund-media
         className={`relative min-h-[22rem] overflow-hidden bg-foreground md:col-span-5 md:min-h-0 lg:col-span-5 lg:min-h-0 ${mediaOrderClass}`}
       >
         <ExpandableImage src={imageMap[fund.image]} title={tx(fund.name)} className="h-full w-full">
-          <Image
+          <motion.img
             src={imageMap[fund.image]}
             alt={tx(fund.name)}
-            unoptimized
             loading="lazy"
             decoding="async"
             width={1536}
             height={960}
-            sizes="(min-width: 1024px) 40vw, 100vw"
             className="h-full w-full object-cover opacity-85 transition-transform duration-500 ease-out group-hover:scale-[1.035]"
+            initial={isLanding ? { scale: 1.08 } : false}
+            whileInView={isLanding ? { scale: 1 } : undefined}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 1.45, ease: "easeOut" }}
           />
         </ExpandableImage>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-foreground/45 via-foreground/12 to-transparent" aria-hidden />
@@ -549,7 +603,7 @@ function DubaiFundCard({
           ))}
         </ul>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
@@ -565,7 +619,7 @@ export function Dubai() {
   };
 
   return (
-    <section className="performance-contained-section relative bg-surface/40 py-16 md:py-20 lg:py-20">
+    <section className="relative bg-surface/40 py-16 md:py-20 lg:py-20">
       <div className="container-x">
         <div className="grid gap-8" data-layout="alternating-fund-cards">
           <div
