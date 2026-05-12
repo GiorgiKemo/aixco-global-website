@@ -506,8 +506,8 @@ function DubaiFundCard({
   const heightClass = isLanding
     ? "md:h-full md:min-h-0 md:max-h-full lg:h-full lg:min-h-0 lg:max-h-full"
     : "md:min-h-[clamp(30rem,calc(100svh-15rem),38rem)] lg:min-h-[clamp(28rem,calc(100svh-15rem),32rem)]";
-  const mediaOrderClass = imageFirst ? "md:order-1 lg:order-1" : "md:order-2 lg:order-2";
-  const copyOrderClass = imageFirst ? "md:order-2 lg:order-2" : "md:order-1 lg:order-1";
+  const mediaOrderClass = imageFirst ? "order-2 md:order-1 lg:order-1" : "order-2 md:order-2 lg:order-2";
+  const copyOrderClass = imageFirst ? "order-1 md:order-2 lg:order-2" : "order-1 md:order-1 lg:order-1";
   const titleShellClass = isViewportFit
     ? "border-b border-foreground/5 p-6 pb-5 md:p-7 md:pb-6 lg:p-8 lg:pb-7 xl:p-8"
     : "border-b border-foreground/5 p-7 pb-6 md:p-9 lg:p-10 xl:p-11";

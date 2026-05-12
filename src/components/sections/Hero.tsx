@@ -290,7 +290,7 @@ export function Hero() {
                 className={showPoster ? "opacity-100" : "opacity-0"}
                 fill
                 sizes="(min-width: 768px) 25vw, 50vw"
-                loading="lazy"
+                loading="eager"
                 decoding="async"
               />
               {shouldAttachVideo && (

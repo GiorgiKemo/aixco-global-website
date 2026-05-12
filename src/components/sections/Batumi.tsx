@@ -35,9 +35,9 @@ type BatumiBenefits = SiteContent["batumiBenefits"];
 type Translate = (copy: string) => string;
 
 const marketMetrics = [
-  { label: "Rental yield", value: "8%", subtext: "starting from" },
-  { label: "Annual growth", value: "12%", subtext: "up to" },
-  { label: "Entry price", value: "EUR 50k", subtext: "from", highlight: true },
+  { label: "Rental yield", value: "8%", subtext: "starting from", subtextPosition: "before" },
+  { label: "Annual growth", value: "12%", subtext: "up to", subtextPosition: "before" },
+  { label: "Entry price", value: "EUR 50k", subtext: "from", subtextPosition: "before", highlight: true },
 ] as const;
 
 const marketDetailIcons: LucideIcon[] = [Home, Percent, TrendingUp, ShieldCheck];
@@ -59,6 +59,7 @@ function BatumiStatCard({
   highlight = false,
   compact = false,
   tx,
+  subtextPosition = "after",
 }: {
   label: string;
   value: string;
@@ -66,7 +67,10 @@ function BatumiStatCard({
   highlight?: boolean;
   compact?: boolean;
   tx: Translate;
+  subtextPosition?: "before" | "after";
 }) {
+  const subtextClass = `text-sm font-medium leading-none ${highlight ? "text-background/70" : "text-foreground/60"}`;
+
   return (
     <motion.div
       data-batumi-metric-tile
@@ -89,6 +93,11 @@ function BatumiStatCard({
           {tx(label)}
         </span>
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-1">
+          {subtext && subtextPosition === "before" && (
+            <span className={subtextClass}>
+              {tx(subtext)}
+            </span>
+          )}
           <span
             className={`font-display ${
               compact ? "text-[clamp(2.18rem,3vw,3.12rem)]" : "text-[clamp(2.55rem,3.6vw,3.75rem)]"
@@ -96,8 +105,8 @@ function BatumiStatCard({
           >
             {tx(value)}
           </span>
-          {subtext && (
-            <span className={`text-sm font-medium leading-none ${highlight ? "text-background/70" : "text-foreground/60"}`}>
+          {subtext && subtextPosition === "after" && (
+            <span className={subtextClass}>
               {tx(subtext)}
             </span>
           )}
@@ -155,7 +164,7 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
         aria-label="Batumi overview media"
         data-media-frame="dubai-style-split-media"
         data-batumi-card-media
-        className="batumi-match-otium-video-height relative overflow-hidden bg-foreground md:order-2 md:col-span-5 lg:order-2 lg:col-span-5"
+        className="batumi-match-otium-video-height relative order-2 overflow-hidden bg-foreground md:order-2 md:col-span-5 lg:order-2 lg:col-span-5"
       >
         <LiveVideo
           src={aixcoLiveVideos.batumiOverview}
@@ -169,7 +178,7 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
       </div>
       <div
         data-batumi-card-copy
-        className="flex min-h-0 min-w-0 flex-col border-foreground/5 md:order-1 md:col-span-7 md:border-r lg:order-1 lg:col-span-7 lg:border-r"
+        className="order-1 flex min-h-0 min-w-0 flex-col border-foreground/5 md:order-1 md:col-span-7 md:border-r lg:order-1 lg:col-span-7 lg:border-r"
       >
         <div className="border-b border-foreground/5 p-6 pb-5 md:p-7 md:pb-6 lg:p-8 lg:pb-7 xl:p-8">
           <h3 className="max-w-[42rem] font-display text-[clamp(2rem,4.7vw,3rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.15rem,3.1vw,3.5rem)] lg:text-[clamp(2.2rem,3.05vw,3.6rem)]">
@@ -186,6 +195,7 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
               label={metric.label}
               value={metric.value}
               subtext={metric.subtext}
+              subtextPosition={metric.subtextPosition}
               highlight={"highlight" in metric ? metric.highlight : false}
               compact
               tx={tx}
@@ -213,8 +223,8 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
 
 function BatumiPropertyCard({ property, idx, tx }: { property: BatumiProperty; idx: number; tx: Translate }) {
   const imageFirst = idx % 2 === 0;
-  const mediaOrderClass = imageFirst ? "md:order-1 lg:order-1" : "md:order-2 lg:order-2";
-  const copyOrderClass = imageFirst ? "md:order-2 lg:order-2" : "md:order-1 lg:order-1";
+  const mediaOrderClass = imageFirst ? "order-2 md:order-1 lg:order-1" : "order-2 md:order-2 lg:order-2";
+  const copyOrderClass = imageFirst ? "order-1 md:order-2 lg:order-2" : "order-1 md:order-1 lg:order-1";
   const documentKey = getSafeAssetKey(property.url, property.id);
   const documentHref = getSafePublicAssetHref(detailAssetMap[documentKey] ?? documentMap[documentKey], "#batumi");
   const metricCards = property.metrics;
