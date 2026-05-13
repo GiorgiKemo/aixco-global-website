@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { SiteContentContext } from "@/data/site-content-context";
 import { siteContentDefaults } from "@/lib/backend/site-content";
+import { aixcoLiveVideoPreviews, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 import { Batumi } from "./Batumi";
 
 function renderBatumi() {
@@ -73,6 +74,8 @@ describe("Batumi", () => {
     expect(screen.getByLabelText("Batumi")).not.toHaveAttribute("poster");
     expect(screen.getByLabelText("Batumi")).not.toHaveAttribute("src");
     expect(screen.getByLabelText("Batumi")).toHaveClass("object-cover");
+    expect(aixcoLiveVideos.batumiBuy).toContain("/media/batumibuy-optimized.mp4");
+    expect(aixcoLiveVideoPreviews.batumiBuy).toContain("/media/previews/batumibuy-preview.mp4");
     expect(container.querySelector('section[id="batumi"]')).not.toBeInTheDocument();
   });
 

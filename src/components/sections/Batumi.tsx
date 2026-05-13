@@ -167,10 +167,10 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
         className="batumi-match-otium-video-height relative order-2 overflow-hidden bg-foreground md:order-2 md:col-span-5 lg:order-2 lg:col-span-5"
       >
         <LiveVideo
-          src={aixcoLiveVideos.batumiOverview}
-          previewSrc={aixcoLiveVideoPreviews.batumiOverview}
+          src={aixcoLiveVideos.batumiBuy}
+          previewSrc={aixcoLiveVideoPreviews.batumiBuy}
           title={tx("Batumi")}
-          poster={aixcoLiveImages.batumiOverviewPoster}
+          poster={aixcoLiveImages.batumiOtium}
           className="aspect-[9/16] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
           fit="cover"
           rootMargin="250px 0px"
