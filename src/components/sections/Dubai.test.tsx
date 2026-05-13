@@ -294,6 +294,38 @@ describe("Dubai", () => {
     expect(screen.getByRole("dialog", { name: "Expanded image: Eden House The Park construction progress" })).toBeInTheDocument();
   });
 
+  it("expands gallery images after a pointer tap without horizontal movement", () => {
+    renderDubai();
+
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
+    const imageButton = within(parkRail).getByRole("button", {
+      name: "Expand image: Eden House The Park construction progress",
+    });
+
+    fireEvent.pointerDown(imageButton, { pointerId: 9, pointerType: "touch", clientX: 320, clientY: 24 });
+    fireEvent.pointerUp(imageButton, { pointerId: 9, pointerType: "touch", clientX: 320, clientY: 24 });
+    fireEvent.click(imageButton);
+
+    expect(screen.getByRole("dialog", { name: "Expanded image: Eden House The Park construction progress" })).toBeInTheDocument();
+  });
+
+  it("expands gallery images after a left mouse click without horizontal movement", () => {
+    renderDubai();
+
+    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
+    const imageButton = within(parkRail).getByRole("button", {
+      name: "Expand image: Eden House The Park construction progress",
+    });
+
+    fireEvent.pointerDown(imageButton, { button: 0, pointerId: 11, pointerType: "mouse", clientX: 320, clientY: 24 });
+    fireEvent.pointerUp(imageButton, { button: 0, pointerId: 11, pointerType: "mouse", clientX: 320, clientY: 24 });
+    fireEvent.click(imageButton, { button: 0, clientX: 320, clientY: 24 });
+
+    expect(screen.getByRole("dialog", { name: "Expanded image: Eden House The Park construction progress" })).toBeInTheDocument();
+  });
+
   it("does not expand gallery images from the click generated after a touch swipe", () => {
     renderDubai();
 

@@ -239,6 +239,7 @@ function DubaiImageMarquee({
   const visualOffsetRef = useRef(0);
   const dragRef = useRef({
     active: false,
+    moved: false,
     pointerId: null as number | null,
     lastX: 0,
     startX: 0,
@@ -369,6 +370,7 @@ function DubaiImageMarquee({
     }
 
     drag.active = false;
+    drag.moved = false;
     drag.pointerId = null;
     targetOffset.set(visualOffsetRef.current + drag.velocity * (shouldReduceMotion ? 0.16 : 0.34));
     interactionPauseUntilRef.current = window.performance.now() + 420;
@@ -378,6 +380,7 @@ function DubaiImageMarquee({
     const currentOffset = visualOffsetRef.current || targetOffset.get();
 
     dragRef.current.active = true;
+    dragRef.current.moved = false;
     dragRef.current.pointerId = pointerId;
     dragRef.current.lastX = clientX;
     dragRef.current.startX = clientX;
@@ -391,11 +394,6 @@ function DubaiImageMarquee({
     if (event.pointerType === "mouse" && event.button !== 0) return;
 
     startDrag(event.clientX, event.clientY, event.timeStamp, event.pointerId);
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-
-    if (event.pointerType === "mouse") {
-      event.preventDefault();
-    }
   };
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -412,6 +410,12 @@ function DubaiImageMarquee({
     }
 
     if (isCoarsePointer && Math.abs(totalX) < 4) return;
+    if (!isCoarsePointer && Math.abs(totalX) < 3) return;
+
+    if (!drag.moved) {
+      drag.moved = true;
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+    }
 
     if (!updateDrag(event.clientX, event.timeStamp)) return;
 
