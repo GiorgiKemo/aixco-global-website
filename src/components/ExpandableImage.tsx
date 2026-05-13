@@ -116,31 +116,33 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
             <button
               type="button"
               aria-label={`${tx("Close image")}: ${tx(title)}`}
-              className="absolute inset-0 bg-background/86 backdrop-blur-xl"
+              className="absolute inset-0 bg-black/10 backdrop-blur-xl"
               onClick={closeExpandedImage}
             />
             <div
               role="dialog"
               aria-modal="true"
               aria-label={`${tx("Expanded image")}: ${tx(title)}`}
-              className="relative z-10 flex max-h-[calc(100svh-2rem)] w-full max-w-7xl items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-black shadow-elegant animate-scale-in"
+              className="relative z-10 flex max-h-[calc(100svh-2rem)] max-w-[min(92vw,72rem)] flex-col items-center overflow-visible outline-none animate-scale-in md:max-w-[min(82vw,68rem)]"
             >
-              <img
-                id={imageId}
-                src={src}
-                alt={tx(title)}
-                className="block max-h-[calc(100svh-2rem)] w-full object-contain"
-                decoding="async"
-              />
-              <button
-                type="button"
-                aria-label={`${tx("Close image")}: ${tx(title)}`}
-                onClick={closeExpandedImage}
-                className="absolute right-3 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80"
-              >
-                <X className="h-4 w-4" />
-                <span className="sr-only">{tx("Close")}</span>
-              </button>
+              <div className="relative w-fit max-w-full">
+                <button
+                  type="button"
+                  aria-label={`${tx("Close image")}: ${tx(title)}`}
+                  onClick={closeExpandedImage}
+                  className="absolute right-3 top-3 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/62 text-white shadow-[0_14px_34px_rgb(0_0_0/0.28)] backdrop-blur-md transition-colors duration-200 hover:bg-black/78 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80"
+                >
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">{tx("Close")}</span>
+                </button>
+                <img
+                  id={imageId}
+                  src={src}
+                  alt={tx(title)}
+                  className="block h-auto max-h-[min(70svh,42rem)] max-w-full rounded-md object-contain shadow-[0_30px_90px_rgb(0_0_0/0.22)] md:max-h-[min(68svh,42rem)]"
+                  decoding="async"
+                />
+              </div>
             </div>
           </div>,
           document.body,

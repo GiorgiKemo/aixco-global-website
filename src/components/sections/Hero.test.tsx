@@ -35,9 +35,9 @@ describe("Hero", () => {
     expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "4g", deviceMemory: 8 })).toBe(true);
   });
 
-  it("keeps mobile hero video enabled with a smaller early panel budget", () => {
-    expect(getHeroVideoPanelLimit({ viewportWidth: 390 })).toBe(2);
-    expect(getHeroVideoPanelLimit({ viewportWidth: 1440 })).toBe(4);
+  it("uses the single hero background video across viewport sizes", () => {
+    expect(getHeroVideoPanelLimit({ viewportWidth: 390 })).toBe(1);
+    expect(getHeroVideoPanelLimit({ viewportWidth: 1440 })).toBe(1);
   });
 
   it("keeps each hero poster visible until its matching video is frame-ready", () => {
@@ -126,11 +126,9 @@ describe("Hero", () => {
     expect(heroVideoWall).toBeInTheDocument();
     expect(heroVideoWall?.className).toContain("hero-video-wall");
     expect(heroVideoWall).toHaveAttribute("data-hero-video-mode", "poster");
-    expect(heroVideoPanels).toHaveLength(4);
-    expect(heroPosterImages).toHaveLength(4);
-    expect(heroPosterImages.every((image) => renderedImageSrc(image).includes("/media/batumi-gallery/batumi"))).toBe(true);
-    expect(heroPosterImages.map((image) => renderedImageSrc(image)).join(" ")).toContain("batumi1-poster.webp");
-    expect(heroPosterImages.map((image) => renderedImageSrc(image)).join(" ")).toContain("batumi4-poster.webp");
+    expect(heroVideoPanels).toHaveLength(1);
+    expect(heroPosterImages).toHaveLength(1);
+    expect(renderedImageSrc(heroPosterImages[0])).toContain("/media/batumi-hero-landscape-poster.jpg");
     expect(container.querySelectorAll("video source")).toHaveLength(0);
     expect(container.innerHTML).not.toContain("hero-batumi-night-skyline");
     expect(container.innerHTML).not.toContain("hero-benji-video");

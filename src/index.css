@@ -113,18 +113,15 @@
   .hero-video-wall {
     position: absolute;
     inset: 0;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(2, minmax(0, 1fr));
+    display: block;
     overflow: hidden;
     background: hsl(222 20% 10%);
     pointer-events: none;
   }
 
   .hero-video-panel {
-    position: relative;
-    min-width: 0;
-    min-height: 0;
+    position: absolute;
+    inset: 0;
     overflow: hidden;
   }
 
@@ -284,13 +281,6 @@
       hsl(222 26% 7% / 0.18) 70%,
       hsl(222 26% 7% / 0.54) 100%
     );
-  }
-
-  @media (min-width: 768px) {
-    .hero-video-wall {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      grid-template-rows: minmax(0, 1fr);
-    }
   }
 
   @media (max-height: 820px) and (min-width: 768px) {

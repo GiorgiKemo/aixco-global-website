@@ -16,7 +16,14 @@ describe("ExpandableImage", () => {
     const expandedImage = screen.getAllByAltText("Dubai asset").find((image) => image.closest("[role='dialog']"));
 
     expect(dialog).toBeInTheDocument();
+    expect(dialog.className).not.toContain("bg-black");
+    expect(dialog.className).not.toContain("border");
     expect(expandedImage).toHaveAttribute("src", "/asset.jpg");
+    expect(expandedImage?.className).toContain("max-h-[min(70svh,42rem)]");
+    expect(expandedImage?.className).toContain("rounded-md");
+    const closeControls = screen.getAllByRole("button", { name: "Close image: Dubai asset" });
+    expect(closeControls.some((control) => control.className.includes("absolute right-3 top-3"))).toBe(true);
+    expect(closeControls.every((control) => !control.className.includes("fixed right-4 top-4"))).toBe(true);
 
     fireEvent.keyDown(window, { key: "Escape" });
 

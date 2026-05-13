@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState, type MouseEvent, type Synthet
 import type { AnimationItem } from "lottie-web";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
-import { aixcoBatumiGalleryVideos, aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { aixcoHeroBackgroundVideo, aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { replaceLocationHash } from "@/lib/section-hash";
 import { scrollToHash } from "@/lib/smooth-scroll";
 
@@ -14,8 +14,8 @@ const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const heroIntroText =
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.";
 const heroPriceText = "Starting from \u20ac1,000";
-const heroPanelVideos = aixcoBatumiGalleryVideos.slice(0, 4);
-const mobileHeroVideoPanelLimit = 2;
+const heroPanelVideos = [aixcoHeroBackgroundVideo];
+const mobileHeroVideoPanelLimit = 1;
 const mobileHeroVideoBreakpoint = 768;
 
 type HeroVideoEnvironment = {
@@ -273,7 +273,7 @@ export function Hero() {
           const shouldAttachVideo = shouldUseVideoWall && index < heroVideoPanelLimit;
           const isVideoReady = readyHeroVideos[video.src] === true;
           const showPoster = shouldShowHeroVideoPoster({ shouldUseVideoWall: shouldAttachVideo, isHeroInFocus, isVideoReady });
-          const heroVideoSrc = video.previewSrc ?? video.src;
+          const heroVideoSrc = video.src;
 
           return (
             <div

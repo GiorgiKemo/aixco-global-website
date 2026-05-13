@@ -52,6 +52,12 @@ export const aixcoLiveVideoPreviews = {
   otium: `${previewVideoBase}/otium-preview.mp4`,
 } as const;
 
+export const aixcoHeroBackgroundVideo = {
+  src: `${optimizedVideoBase}/batumi-hero-landscape.mp4`,
+  poster: `${optimizedVideoBase}/batumi-hero-landscape-poster.jpg`,
+  title: "Batumi hero landscape",
+} as const;
+
 export const aixcoBatumiGalleryVideos = [
   { src: `${batumiGalleryBase}/batumi1.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi1-preview.mp4`, poster: `${batumiGalleryBase}/batumi1-poster.webp`, title: "Batumi gallery 1" },
   { src: `${batumiGalleryBase}/batumi2.mp4`, previewSrc: aixcoLiveVideoPreviews.batumiOverview, poster: `${batumiGalleryBase}/batumi2-poster.webp`, title: "Batumi gallery 2" },
