@@ -53,7 +53,7 @@ export const aixcoLiveVideoPreviews = {
 } as const;
 
 export const aixcoHeroBackgroundVideo = {
-  src: `${optimizedVideoBase}/batumi-hero-landscape.mp4`,
+  src: `${optimizedVideoBase}/batumi-hero-landscape-optimized.mp4`,
   poster: `${optimizedVideoBase}/batumi-hero-landscape-poster.jpg`,
   title: "Batumi hero landscape",
 } as const;
