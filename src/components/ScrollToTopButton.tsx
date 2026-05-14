@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { ChevronUp } from "lucide-react";
 import { scrollToPageTop } from "@/lib/smooth-scroll";
 import { useI18n } from "@/i18n/I18nProvider";
-import { SCROLL_TO_TOP_VISIBILITY_OFFSET } from "@/lib/floating-controls";
+
+const SCROLL_TO_TOP_VISIBILITY_OFFSET = 520;
 
 export function ScrollToTopButton() {
   const { tx } = useI18n();

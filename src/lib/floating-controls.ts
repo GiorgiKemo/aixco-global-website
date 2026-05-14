@@ -1,1 +1,0 @@
-export const SCROLL_TO_TOP_VISIBILITY_OFFSET = 520;
