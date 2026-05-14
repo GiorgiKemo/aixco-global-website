@@ -2,6 +2,7 @@
 
 import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
@@ -32,6 +33,8 @@ export function ClientShell({
   initialSiteContentSource,
 }: ClientShellProps) {
   const idleUiReady = useIdleReady(1200);
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith("/admin") ?? false;
 
   return (
     <I18nProvider>
@@ -39,9 +42,9 @@ export function ClientShell({
         <UIProvider>
           <QueryClientProvider client={queryClient}>
             <TooltipProvider>
-              <ScrollManager />
+              {!isAdminRoute && <ScrollManager />}
               {children}
-              {idleUiReady && (
+              {idleUiReady && !isAdminRoute && (
                 <Suspense fallback={null}>
                   <ScrollToTopButton />
                   <Toaster />

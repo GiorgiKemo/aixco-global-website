@@ -1,56 +1,29 @@
-import { getSupabaseBrowserClient, hasSupabaseBrowserConfig } from "@/lib/supabase/client";
-import type { Database, Json } from "@/lib/supabase/database.types";
+import {
+  type BrowserContextInput,
+  type CaptureResult,
+  type ChatMessageInput,
+  type ContactSubmissionInput,
+  type PortalEventInput,
+} from "@/lib/backend/lead-capture-contracts";
 import { isSafePortalUrl } from "@/lib/security/urls";
 
-type CaptureResult =
-  | { ok: true }
-  | { ok: false; skipped?: boolean; reason: string };
+type CaptureEndpoint = "contact" | "chat" | "portal-event";
 
-type ContactSubmissionInput = {
-  name: string;
-  email: string;
-  interest?: string;
-  message: string;
+const CAPTURE_ENDPOINTS: Record<CaptureEndpoint, string> = {
+  contact: "/api/lead-capture/contact",
+  chat: "/api/lead-capture/chat",
+  "portal-event": "/api/lead-capture/portal-event",
 };
 
-type ChatMessageInput = {
-  role: "aixco" | "visitor";
-  text: string;
-};
-
-type PortalEventInput = {
-  mode: "login" | "register";
-  roleTitle: string;
-  action: string;
-  portalUrl: string;
-  source?: "access_modal" | "chat_widget";
-};
-
-type BrowserContext = {
-  locale: string | null;
-  page_path: string | null;
-  user_agent: string | null;
-  metadata: Json;
-};
-
-type ContactInsert = Database["public"]["Tables"]["contact_submissions"]["Insert"];
-type ChatInsert = Database["public"]["Tables"]["chat_transcripts"]["Insert"];
-type PortalEventInsert = Database["public"]["Tables"]["portal_click_events"]["Insert"];
-type SupabaseInsertBuilder = {
-  insert: (payload: ContactInsert | ChatInsert | PortalEventInsert) => Promise<{ error: { message: string } | null }>;
-};
-
-function cleanOptionalText(value: string | undefined) {
-  const cleaned = value?.trim();
-  return cleaned ? cleaned : null;
+function shouldSkipNetworkCapture() {
+  return typeof window === "undefined" || process.env.NODE_ENV === "test" || process.env.VITEST === "true";
 }
 
-function getBrowserContext(): BrowserContext {
+function getBrowserContext(): BrowserContextInput {
   if (typeof window === "undefined") {
     return {
       locale: null,
       page_path: null,
-      user_agent: null,
       metadata: {},
     };
   }
@@ -58,7 +31,6 @@ function getBrowserContext(): BrowserContext {
   return {
     locale: window.navigator.language || null,
     page_path: `${window.location.pathname}${window.location.search}${window.location.hash}`,
-    user_agent: window.navigator.userAgent || null,
     metadata: {
       referrer: document.referrer || null,
       viewport_width: window.innerWidth,
@@ -68,74 +40,60 @@ function getBrowserContext(): BrowserContext {
   };
 }
 
-function getInterestFromMessages(messages: ChatMessageInput[]) {
-  const visitorText = messages
-    .filter((message) => message.role === "visitor")
-    .map((message) => message.text.toLowerCase())
-    .join(" ");
+async function readCaptureResponse(response: Response): Promise<CaptureResult> {
+  try {
+    const payload = (await response.json()) as Partial<CaptureResult>;
 
-  if (visitorText.includes("bond") || visitorText.includes("6%")) return "AIXCO 6% Bond";
-  if (visitorText.includes("broker")) return "Broker partnership";
-  if (visitorText.includes("developer")) return "Developer partnership";
-  if (visitorText.includes("batumi") || visitorText.includes("apartment") || visitorText.includes("property")) {
-    return "Batumi apartments";
+    if (payload.ok === true) return { ok: true };
+
+    return {
+      ok: false,
+      skipped: payload.skipped,
+      reason: typeof payload.reason === "string" ? payload.reason : "Lead capture request failed.",
+    };
+  } catch {
+    return { ok: false, reason: "Lead capture returned an unreadable response." };
   }
-
-  return null;
 }
 
-async function insertRow(
-  table: "contact_submissions" | "chat_transcripts" | "portal_click_events",
-  payload: ContactInsert | ChatInsert | PortalEventInsert,
-): Promise<CaptureResult> {
-  if (!hasSupabaseBrowserConfig()) {
-    return { ok: false, skipped: true, reason: "Supabase browser configuration is not available." };
+async function postCapture(endpoint: CaptureEndpoint, payload: unknown): Promise<CaptureResult> {
+  if (shouldSkipNetworkCapture()) {
+    return { ok: false, skipped: true, reason: "Lead capture API is not available in this environment." };
   }
 
-  const client = await getSupabaseBrowserClient();
-  const { error } = await (client.from(table) as unknown as SupabaseInsertBuilder).insert(payload);
+  try {
+    const response = await fetch(CAPTURE_ENDPOINTS[endpoint], {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ payload, context: getBrowserContext() }),
+      keepalive: true,
+    });
+    const result = await readCaptureResponse(response);
 
-  if (error) {
-    return { ok: false, reason: error.message };
+    if (!response.ok && result.ok) {
+      return { ok: false, reason: `Lead capture failed with status ${response.status}.` };
+    }
+
+    return result;
+  } catch (error) {
+    return {
+      ok: false,
+      reason: error instanceof Error ? error.message : "Unknown lead capture request error.",
+    };
   }
-
-  return { ok: true };
 }
 
 export async function submitContactSubmission(input: ContactSubmissionInput): Promise<CaptureResult> {
-  const context = getBrowserContext();
-  const payload: ContactInsert = {
-    source: "contact_form",
-    name: input.name.trim(),
-    email: input.email.trim().toLowerCase(),
-    interest: cleanOptionalText(input.interest),
-    message: input.message.trim(),
-    ...context,
-  };
-
-  return insertRow("contact_submissions", payload);
+  return postCapture("contact", input);
 }
 
 export async function recordChatTranscript(messages: ChatMessageInput[]): Promise<CaptureResult> {
   const normalizedMessages = messages.map((message) => ({
     role: message.role,
-    text: message.text.trim(),
+    text: message.text,
   }));
-  const transcript = normalizedMessages
-    .map((message) => `${message.role === "visitor" ? "Visitor" : "AIXCO"}: ${message.text}`)
-    .join("\n");
 
-  const context = getBrowserContext();
-  const payload: ChatInsert = {
-    source: "live_chat",
-    interest: getInterestFromMessages(normalizedMessages),
-    transcript,
-    messages: normalizedMessages as Json,
-    message_count: normalizedMessages.length,
-    ...context,
-  };
-
-  return insertRow("chat_transcripts", payload);
+  return postCapture("chat", { messages: normalizedMessages });
 }
 
 export async function recordPortalEvent(input: PortalEventInput): Promise<CaptureResult> {
@@ -143,15 +101,5 @@ export async function recordPortalEvent(input: PortalEventInput): Promise<Captur
     return { ok: false, skipped: true, reason: "Portal URL is not allowed." };
   }
 
-  const context = getBrowserContext();
-  const payload: PortalEventInsert = {
-    source: input.source ?? "access_modal",
-    mode: input.mode,
-    role_title: input.roleTitle.trim(),
-    action: input.action.trim(),
-    portal_url: input.portalUrl,
-    ...context,
-  };
-
-  return insertRow("portal_click_events", payload);
+  return postCapture("portal-event", input);
 }
