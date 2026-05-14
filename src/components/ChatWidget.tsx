@@ -147,9 +147,9 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="glass flex h-[min(640px,calc(100svh-6.5rem))] max-h-[calc(100svh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg shadow-elegant"
+            className="glass flex h-[min(640px,calc(100svh-6.5rem))] max-h-[calc(100svh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg bg-surface-elevated/95 shadow-elegant backdrop-blur-2xl"
           >
-            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border/60 bg-surface-elevated/70 p-4">
+            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border/60 bg-surface-elevated/95 p-4">
               <div>
                 <p className="font-display text-xl">{tx("AIXCO Live Chat")}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{tx("Tell us what you need and send the transcript to AIXCO.")}</p>
@@ -164,7 +164,7 @@ export function ChatWidget() {
               </button>
             </div>
 
-            <div data-chat-messages className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
+            <div data-chat-messages className="min-h-0 flex-1 space-y-4 overflow-y-auto bg-surface/80 p-4">
               {messages.map((message) => {
                 const visitor = message.role === "visitor";
                 return (
@@ -194,14 +194,14 @@ export function ChatWidget() {
               <div ref={messagesEndRef} />
             </div>
 
-            <div className="shrink-0 border-t border-border/60 p-4">
-              <div data-chat-quick-replies className="mb-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
+            <div className="shrink-0 border-t border-border/60 bg-surface-elevated/95 p-4">
+              <div data-chat-quick-replies className="mb-3 grid grid-cols-2 gap-2">
                 {quickReplies.map((reply) => (
                   <button
                     key={reply}
                     type="button"
                     onClick={() => sendMessage(reply)}
-                    className="min-h-10 shrink-0 whitespace-nowrap rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-xs font-medium text-primary transition hover:border-primary/45 hover:bg-primary/15"
+                    className="min-h-10 min-w-0 whitespace-normal rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-center text-xs font-medium leading-snug text-primary transition hover:border-primary/45 hover:bg-primary/15"
                   >
                     {tx(reply)}
                   </button>

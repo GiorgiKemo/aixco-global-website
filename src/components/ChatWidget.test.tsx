@@ -61,11 +61,13 @@ describe("ChatWidget", () => {
 
     expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toHaveClass(
       "flex",
+      "bg-surface-elevated/95",
       "h-[min(640px,calc(100svh-6.5rem))]",
       "max-h-[calc(100svh-6.5rem)]",
     );
     expect(container.querySelector("[data-chat-messages]")).toHaveClass("min-h-0", "flex-1", "overflow-y-auto");
-    expect(container.querySelector("[data-chat-quick-replies]")).toHaveClass("overflow-x-auto");
+    expect(container.querySelector("[data-chat-quick-replies]")).toHaveClass("grid", "grid-cols-2");
+    expect(container.querySelector("[data-chat-quick-replies]")).not.toHaveClass("overflow-x-auto");
   });
 
   it("keeps chat controls large enough for touch interaction", () => {
@@ -76,7 +78,7 @@ describe("ChatWidget", () => {
     const dialog = screen.getByRole("dialog", { name: /aixco live chat/i });
     expect(within(dialog).getByRole("button", { name: /close live chat/i })).toHaveClass("h-10", "w-10");
     expect(screen.getByRole("button", { name: /minimize live chat/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "AIXCO 6% Bond" })).toHaveClass("min-h-10");
+    expect(screen.getByRole("button", { name: "AIXCO 6% Bond" })).toHaveClass("min-h-10", "whitespace-normal");
     expect(screen.getByRole("link", { name: /email transcript/i })).toHaveClass("btn-ghost-gold");
     expect(screen.getByRole("button", { name: "Register" })).toHaveClass("min-h-10");
     expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-10");
