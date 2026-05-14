@@ -30,7 +30,7 @@ export function ScrollToTopButton() {
       aria-label={tx("Scroll to top")}
       data-scroll-to-top-button="true"
       onClick={() => scrollToPageTop()}
-      className="icon-button-glass fixed bottom-20 right-5 z-[94] h-12 w-12 text-foreground shadow-elegant focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:bottom-24 md:right-6 md:h-14 md:w-14"
+      className="fixed bottom-5 left-5 z-[94] inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-gold transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:bottom-6 md:left-6 md:h-14 md:w-14"
     >
       <ChevronUp aria-hidden="true" className="h-5 w-5 md:h-6 md:w-6" strokeWidth={2.1} />
     </button>

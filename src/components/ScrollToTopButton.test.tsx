@@ -40,7 +40,7 @@ describe("ScrollToTopButton", () => {
 
     const button = screen.getByRole("button", { name: /scroll to top/i });
     expect(button).toHaveAttribute("data-scroll-to-top-button", "true");
-    expect(button).toHaveClass("fixed", "bottom-20", "right-5", "z-[94]");
+    expect(button).toHaveClass("fixed", "bottom-5", "left-5", "z-[94]", "bg-primary", "text-primary-foreground");
 
     fireEvent.click(button);
 
