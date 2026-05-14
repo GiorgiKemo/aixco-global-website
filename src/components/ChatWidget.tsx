@@ -150,7 +150,7 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="glass pointer-events-auto flex h-[min(640px,calc(100svh-6.5rem))] max-h-[calc(100svh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg bg-surface-elevated/95 shadow-elegant backdrop-blur-2xl sm:mr-16 md:mr-20"
+            className="glass pointer-events-auto flex h-[min(640px,calc(100svh-6.5rem))] max-h-[calc(100svh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg bg-surface-elevated/95 shadow-elegant backdrop-blur-2xl"
           >
             <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border/60 bg-surface-elevated/95 p-4">
               <div>

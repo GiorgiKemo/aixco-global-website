@@ -70,11 +70,10 @@ describe("ChatWidget", () => {
     expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toHaveClass(
       "flex",
       "bg-surface-elevated/95",
-      "sm:mr-16",
-      "md:mr-20",
       "h-[min(640px,calc(100svh-6.5rem))]",
       "max-h-[calc(100svh-6.5rem)]",
     );
+    expect(screen.getByRole("dialog", { name: /aixco live chat/i })).not.toHaveClass("sm:mr-16", "md:mr-20");
     expect(container.querySelector("[data-chat-messages]")).toHaveClass("min-h-0", "flex-1", "overflow-y-auto");
     expect(container.querySelector("[data-chat-quick-replies]")).toHaveClass("grid", "grid-cols-2");
     expect(container.querySelector("[data-chat-quick-replies]")).not.toHaveClass("overflow-x-auto");
@@ -94,7 +93,7 @@ describe("ChatWidget", () => {
     expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-10");
   });
 
-  it("does not add vertical offset after the panel has been shifted left", () => {
+  it("opens the chat panel directly above the launcher without blocking other floating controls", () => {
     const { container } = renderWidget();
 
     setPageScrollY(720);
@@ -105,6 +104,7 @@ describe("ChatWidget", () => {
     expect(floatingContainer).toHaveClass("pointer-events-none", "gap-3");
     expect(floatingContainer).not.toHaveClass("gap-24", "md:gap-28");
     expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toHaveClass("pointer-events-auto");
+    expect(screen.getByRole("dialog", { name: /aixco live chat/i })).not.toHaveClass("sm:mr-16", "md:mr-20");
     expect(screen.getByRole("button", { name: /minimize live chat/i })).toHaveClass("pointer-events-auto");
   });
 });
