@@ -94,7 +94,7 @@ describe("ChatWidget", () => {
     expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-10");
   });
 
-  it("opens the chat panel above the right-side scroll button after the page is scrolled", () => {
+  it("does not add vertical offset after the panel has been shifted left", () => {
     const { container } = renderWidget();
 
     setPageScrollY(720);
@@ -102,7 +102,9 @@ describe("ChatWidget", () => {
     fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
 
     const floatingContainer = container.querySelector("[data-chat-floating-container]");
-    expect(floatingContainer).toHaveAttribute("data-page-scrolled", "true");
-    expect(floatingContainer).toHaveClass("gap-24", "md:gap-28");
+    expect(floatingContainer).toHaveClass("pointer-events-none", "gap-3");
+    expect(floatingContainer).not.toHaveClass("gap-24", "md:gap-28");
+    expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toHaveClass("pointer-events-auto");
+    expect(screen.getByRole("button", { name: /minimize live chat/i })).toHaveClass("pointer-events-auto");
   });
 });

@@ -4,8 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSiteContent } from "@/data/site-content-context";
 import { useI18n } from "@/i18n/I18nProvider";
 import { recordChatTranscript } from "@/lib/backend/lead-capture";
-import { SCROLL_TO_TOP_VISIBILITY_OFFSET } from "@/lib/floating-controls";
-import { cn } from "@/lib/utils";
 import { useUI } from "./ui-state";
 import { premiumPress } from "@/lib/motion";
 
@@ -85,7 +83,6 @@ export function ChatWidget() {
   const [hasMounted, setHasMounted] = useState(false);
   const [hasLoadedStoredMessages, setHasLoadedStoredMessages] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isPageScrolled, setIsPageScrolled] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [draft, setDraft] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -111,17 +108,6 @@ export function ChatWidget() {
       messagesEndRef.current?.scrollIntoView?.({ block: "end" });
     }
   }, [isOpen, messages]);
-
-  useEffect(() => {
-    const updateScrolledState = () => {
-      setIsPageScrolled(window.scrollY > SCROLL_TO_TOP_VISIBILITY_OFFSET);
-    };
-
-    updateScrolledState();
-    window.addEventListener("scroll", updateScrolledState, { passive: true });
-
-    return () => window.removeEventListener("scroll", updateScrolledState);
-  }, []);
 
   const transcriptHref = useMemo(() => {
     const transcript = messages.map((message) => `${message.role === "visitor" ? "Visitor" : "AIXCO"}: ${message.text}`).join("\n");
@@ -152,11 +138,7 @@ export function ChatWidget() {
   return (
     <div
       data-chat-floating-container="true"
-      data-page-scrolled={isPageScrolled ? "true" : "false"}
-      className={cn(
-        "fixed bottom-5 right-5 z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end md:bottom-6 md:right-6",
-        isOpen && isPageScrolled ? "gap-24 md:gap-28" : "gap-3",
-      )}
+      className="pointer-events-none fixed bottom-5 right-5 z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3 md:bottom-6 md:right-6"
     >
       <AnimatePresence>
         {isOpen && (
@@ -168,7 +150,7 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="glass flex h-[min(640px,calc(100svh-6.5rem))] max-h-[calc(100svh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg bg-surface-elevated/95 shadow-elegant backdrop-blur-2xl sm:mr-16 md:mr-20"
+            className="glass pointer-events-auto flex h-[min(640px,calc(100svh-6.5rem))] max-h-[calc(100svh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg bg-surface-elevated/95 shadow-elegant backdrop-blur-2xl sm:mr-16 md:mr-20"
           >
             <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border/60 bg-surface-elevated/95 p-4">
               <div>
@@ -287,7 +269,7 @@ export function ChatWidget() {
         type="button"
         aria-label={tx(isOpen ? "Minimize live chat" : "Open live chat")}
         onClick={() => setIsOpen((open) => !open)}
-        className="group relative flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-gold transition hover:brightness-105 md:h-14 md:w-14"
+        className="pointer-events-auto group relative flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-gold transition hover:brightness-105 md:h-14 md:w-14"
         whileHover={{ y: -2, scale: 1.03 }}
         whileTap={premiumPress}
       >
