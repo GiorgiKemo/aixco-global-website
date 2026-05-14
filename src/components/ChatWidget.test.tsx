@@ -70,6 +70,8 @@ describe("ChatWidget", () => {
     expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toHaveClass(
       "flex",
       "bg-surface-elevated/95",
+      "sm:mr-16",
+      "md:mr-20",
       "h-[min(640px,calc(100svh-6.5rem))]",
       "max-h-[calc(100svh-6.5rem)]",
     );
