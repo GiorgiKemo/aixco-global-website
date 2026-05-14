@@ -169,8 +169,8 @@ describe("Dubai", () => {
 
     expect(primaryRailImage).toHaveAttribute("draggable", "false");
     expect(renderedImageSrc(primaryRailImage)).not.toContain("/_next/image");
-    expect(primaryRailImage).toHaveAttribute("loading", "eager");
-    expect(duplicateRailImage).toHaveAttribute("loading", "eager");
+    expect(primaryRailImage).toHaveAttribute("loading", "lazy");
+    expect(duplicateRailImage).toHaveAttribute("loading", "lazy");
     expect(container.querySelectorAll("[data-gallery-tile]").length).toBeGreaterThan(0);
   });
 
@@ -464,7 +464,7 @@ describe("Dubai", () => {
     );
     expect(within(fundOneGallery as HTMLElement).getByAltText("Eden House The Canal aerial overview")).toHaveAttribute(
       "loading",
-      "eager",
+      "lazy",
     );
     expect(renderedImageSrc(within(fundOneGallery as HTMLElement).getByAltText("Eden House The Park construction progress"))).toContain(
       "/aixco-global-op2/images/fund/fund1.jpeg",

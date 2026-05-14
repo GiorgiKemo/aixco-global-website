@@ -2,25 +2,23 @@
 
 import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { MotionConfig } from "framer-motion";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
 import { SiteContentProvider } from "@/data/SiteContentProvider";
 import { ScrollManager } from "@/components/ScrollManager";
-import { ScrollToTopButton } from "@/components/ScrollToTopButton";
-import { getReducedMotionPreference, installMotionReducedMotionDevWarningFilter } from "@/lib/motion";
+import { useIdleReady } from "@/hooks/use-idle-ready";
 import type { SiteContent, SiteContentResult } from "@/lib/backend/site-content";
-
-installMotionReducedMotionDevWarningFilter();
 
 const Modals = lazy(() => import("@/components/Modals").then((module) => ({ default: module.Modals })));
 const ChatWidget = lazy(() => import("@/components/ChatWidget").then((module) => ({ default: module.ChatWidget })));
+const ScrollToTopButton = lazy(() =>
+  import("@/components/ScrollToTopButton").then((module) => ({ default: module.ScrollToTopButton })),
+);
+const Toaster = lazy(() => import("@/components/ui/toaster").then((module) => ({ default: module.Toaster })));
+const Sonner = lazy(() => import("@/components/ui/sonner").then((module) => ({ default: module.Toaster })));
 
 const queryClient = new QueryClient();
-const reducedMotionPreference = getReducedMotionPreference();
 
 type ClientShellProps = {
   children: React.ReactNode;
@@ -33,27 +31,29 @@ export function ClientShell({
   initialSiteContent,
   initialSiteContentSource,
 }: ClientShellProps) {
+  const idleUiReady = useIdleReady(1200);
+
   return (
-    <MotionConfig reducedMotion={reducedMotionPreference}>
-      <I18nProvider>
-        <SiteContentProvider initialContent={initialSiteContent} initialSource={initialSiteContentSource}>
-          <UIProvider>
-            <QueryClientProvider client={queryClient}>
-              <TooltipProvider>
-                <ScrollManager />
-                <ScrollToTopButton />
-                {children}
-                <Toaster />
-                <Sonner />
+    <I18nProvider>
+      <SiteContentProvider initialContent={initialSiteContent} initialSource={initialSiteContentSource}>
+        <UIProvider>
+          <QueryClientProvider client={queryClient}>
+            <TooltipProvider>
+              <ScrollManager />
+              {children}
+              {idleUiReady && (
                 <Suspense fallback={null}>
+                  <ScrollToTopButton />
+                  <Toaster />
+                  <Sonner />
                   <Modals />
                   <ChatWidget />
                 </Suspense>
-              </TooltipProvider>
-            </QueryClientProvider>
-          </UIProvider>
-        </SiteContentProvider>
-      </I18nProvider>
-    </MotionConfig>
+              )}
+            </TooltipProvider>
+          </QueryClientProvider>
+        </UIProvider>
+      </SiteContentProvider>
+    </I18nProvider>
   );
 }

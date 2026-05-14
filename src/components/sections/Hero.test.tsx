@@ -2,7 +2,15 @@ import { render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { aixcoHeroBackgroundVideo } from "@/lib/aixco-live-assets";
-import { Hero, getHeroLottieArrowPath, getHeroVideoPanelLimit, shouldShowHeroVideoPoster, shouldUseHeroVideoWall } from "./Hero";
+import {
+  Hero,
+  getHeroLottieArrowPath,
+  getHeroVideoStartDelay,
+  getHeroVideoPanelLimit,
+  shouldAttachHeroVideo,
+  shouldShowHeroVideoPoster,
+  shouldUseHeroVideoWall,
+} from "./Hero";
 
 function renderHero() {
   return render(
@@ -39,6 +47,30 @@ describe("Hero", () => {
   it("uses the single hero background video across viewport sizes", () => {
     expect(getHeroVideoPanelLimit({ viewportWidth: 390 })).toBe(1);
     expect(getHeroVideoPanelLimit({ viewportWidth: 1440 })).toBe(1);
+  });
+
+  it("delays mobile hero video startup longer than desktop startup", () => {
+    expect(getHeroVideoStartDelay(390)).toBeGreaterThan(getHeroVideoStartDelay(1440));
+    expect(getHeroVideoStartDelay(390)).toBeGreaterThanOrEqual(6000);
+  });
+
+  it("waits until idle before attaching the full hero background video", () => {
+    expect(
+      shouldAttachHeroVideo({
+        shouldUseVideoWall: true,
+        isHeroVideoIdleReady: false,
+        panelIndex: 0,
+        panelLimit: 1,
+      }),
+    ).toBe(false);
+    expect(
+      shouldAttachHeroVideo({
+        shouldUseVideoWall: true,
+        isHeroVideoIdleReady: true,
+        panelIndex: 0,
+        panelLimit: 1,
+      }),
+    ).toBe(true);
   });
 
   it("keeps each hero poster visible until its matching video is frame-ready", () => {
@@ -130,6 +162,7 @@ describe("Hero", () => {
     expect(heroVideoPanels).toHaveLength(1);
     expect(heroPosterImages).toHaveLength(1);
     expect(renderedImageSrc(heroPosterImages[0])).toContain("/media/batumi-hero-landscape-poster.jpg");
+    expect(heroPosterImages[0]).toHaveAttribute("fetchpriority", "high");
     expect(aixcoHeroBackgroundVideo.src).toContain("batumi-hero-landscape-optimized.mp4");
     expect(container.querySelectorAll("video source")).toHaveLength(0);
     expect(container.innerHTML).not.toContain("hero-batumi-night-skyline");

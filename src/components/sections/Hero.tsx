@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState, type MouseEvent, type Synthet
 import type { AnimationItem } from "lottie-web";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
+import { scheduleIdleWork } from "@/hooks/use-idle-ready";
 import { aixcoHeroBackgroundVideo, aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { replaceLocationHash } from "@/lib/section-hash";
 import { scrollToHash } from "@/lib/smooth-scroll";
@@ -17,6 +18,8 @@ const heroPriceText = "Starting from \u20ac1,000";
 const heroPanelVideos = [aixcoHeroBackgroundVideo];
 const mobileHeroVideoPanelLimit = 1;
 const mobileHeroVideoBreakpoint = 768;
+const desktopHeroVideoStartDelay = 1200;
+const mobileHeroVideoStartDelay = 6500;
 
 type HeroVideoEnvironment = {
   reduceMotion?: boolean | null;
@@ -30,6 +33,12 @@ type HeroVideoPosterVisibility = {
   shouldUseVideoWall: boolean;
   isHeroInFocus: boolean;
   isVideoReady: boolean;
+};
+type HeroVideoAttachment = {
+  shouldUseVideoWall: boolean;
+  isHeroVideoIdleReady: boolean;
+  panelIndex: number;
+  panelLimit: number;
 };
 
 type HeroVideoWithFrameCallback = HTMLVideoElement & {
@@ -62,6 +71,19 @@ export function getHeroVideoPanelLimit(environment: HeroVideoEnvironment) {
   return environment.viewportWidth < mobileHeroVideoBreakpoint ? mobileHeroVideoPanelLimit : heroPanelVideos.length;
 }
 
+export function getHeroVideoStartDelay(viewportWidth: number) {
+  return viewportWidth < mobileHeroVideoBreakpoint ? mobileHeroVideoStartDelay : desktopHeroVideoStartDelay;
+}
+
+export function shouldAttachHeroVideo({
+  shouldUseVideoWall,
+  isHeroVideoIdleReady,
+  panelIndex,
+  panelLimit,
+}: HeroVideoAttachment) {
+  return shouldUseVideoWall && isHeroVideoIdleReady && panelIndex < panelLimit;
+}
+
 function getHeroVideoEnvironment(): HeroVideoEnvironment {
   const navigatorWithConnection = window.navigator as Navigator & {
     connection?: { saveData?: boolean; effectiveType?: string };
@@ -74,6 +96,29 @@ function getHeroVideoEnvironment(): HeroVideoEnvironment {
     effectiveType: navigatorWithConnection.connection?.effectiveType,
     deviceMemory: navigatorWithConnection.deviceMemory,
   };
+}
+
+function useHeroVideoStartReady() {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || process.env.NODE_ENV === "test" || process.env.VITEST === "true") {
+      return undefined;
+    }
+
+    let cancelIdleWork = () => undefined;
+    const delay = getHeroVideoStartDelay(window.innerWidth);
+    const delayHandle = window.setTimeout(() => {
+      cancelIdleWork = scheduleIdleWork(() => setIsReady(true), 1200);
+    }, delay);
+
+    return () => {
+      window.clearTimeout(delayHandle);
+      cancelIdleWork();
+    };
+  }, []);
+
+  return isReady;
 }
 
 const arrowLottiePath = getHeroLottieArrowPath(process.env.NEXT_PUBLIC_BASE_PATH ?? "/");
@@ -150,6 +195,7 @@ function HeroLottieArrow() {
 
 export function Hero() {
   const shouldReduceMotion = useHydratedReducedMotion();
+  const isHeroVideoIdleReady = useHeroVideoStartReady();
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const heroVideoWallRef = useRef<HTMLDivElement | null>(null);
   const [isHeroReady, setIsHeroReady] = useState(true);
@@ -191,6 +237,8 @@ export function Hero() {
     setIsHeroInFocus(false);
     setHeroVideoPanelLimit(0);
 
+    if (!isHeroVideoIdleReady) return;
+
     const heroVideoEnvironment = getHeroVideoEnvironment();
     if (!shouldUseHeroVideoWall(heroVideoEnvironment)) return;
 
@@ -216,7 +264,7 @@ export function Hero() {
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [shouldReduceMotion]);
+  }, [isHeroVideoIdleReady, shouldReduceMotion]);
 
   useEffect(() => {
     if (!shouldUseVideoWall) return;
@@ -262,7 +310,7 @@ export function Hero() {
       <motion.div
         ref={heroVideoWallRef}
         data-hero-video-wall="true"
-        data-hero-video-mode={shouldUseVideoWall && isHeroInFocus ? "video" : "poster"}
+        data-hero-video-mode={shouldUseVideoWall && isHeroVideoIdleReady && isHeroInFocus ? "video" : "poster"}
         className="hero-video-wall"
         aria-hidden="true"
         initial={shouldReduceMotion ? { scale: 1.006, opacity: 0.98 } : { scale: 1.055, opacity: 0.92 }}
@@ -270,7 +318,12 @@ export function Hero() {
         transition={{ duration: shouldReduceMotion ? 0.25 : 1.35, ease: heroEase }}
       >
         {heroPanelVideos.map((video, index) => {
-          const shouldAttachVideo = shouldUseVideoWall && index < heroVideoPanelLimit;
+          const shouldAttachVideo = shouldAttachHeroVideo({
+            shouldUseVideoWall,
+            isHeroVideoIdleReady,
+            panelIndex: index,
+            panelLimit: heroVideoPanelLimit,
+          });
           const isVideoReady = readyHeroVideos[video.src] === true;
           const showPoster = shouldShowHeroVideoPoster({ shouldUseVideoWall: shouldAttachVideo, isHeroInFocus, isVideoReady });
           const heroVideoSrc = video.src;
@@ -291,6 +344,7 @@ export function Hero() {
                 fill
                 sizes="(min-width: 768px) 25vw, 50vw"
                 loading="eager"
+                fetchPriority="high"
                 decoding="async"
               />
               {shouldAttachVideo && (
