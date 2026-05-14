@@ -4,6 +4,13 @@ import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "./ui-state";
 import { ChatWidget } from "./ChatWidget";
 
+function setPageScrollY(value: number) {
+  Object.defineProperty(window, "scrollY", {
+    configurable: true,
+    value,
+  });
+}
+
 function renderWidget() {
   return render(
     <I18nProvider>
@@ -17,6 +24,7 @@ function renderWidget() {
 describe("ChatWidget", () => {
   beforeEach(() => {
     localStorage.clear();
+    setPageScrollY(0);
   });
 
   it("opens a live chat panel, sends a visitor message, and prepares an email transcript", () => {
@@ -82,5 +90,17 @@ describe("ChatWidget", () => {
     expect(screen.getByRole("link", { name: /email transcript/i })).toHaveClass("btn-ghost-gold");
     expect(screen.getByRole("button", { name: "Register" })).toHaveClass("min-h-10");
     expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-10");
+  });
+
+  it("opens the chat panel above the right-side scroll button after the page is scrolled", () => {
+    const { container } = renderWidget();
+
+    setPageScrollY(720);
+    fireEvent.scroll(window);
+    fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
+
+    const floatingContainer = container.querySelector("[data-chat-floating-container]");
+    expect(floatingContainer).toHaveAttribute("data-page-scrolled", "true");
+    expect(floatingContainer).toHaveClass("gap-24", "md:gap-28");
   });
 });

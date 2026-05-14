@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSiteContent } from "@/data/site-content-context";
 import { useI18n } from "@/i18n/I18nProvider";
 import { recordChatTranscript } from "@/lib/backend/lead-capture";
+import { SCROLL_TO_TOP_VISIBILITY_OFFSET } from "@/lib/floating-controls";
+import { cn } from "@/lib/utils";
 import { useUI } from "./ui-state";
 import { premiumPress } from "@/lib/motion";
 
@@ -83,6 +85,7 @@ export function ChatWidget() {
   const [hasMounted, setHasMounted] = useState(false);
   const [hasLoadedStoredMessages, setHasLoadedStoredMessages] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isPageScrolled, setIsPageScrolled] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [draft, setDraft] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -108,6 +111,17 @@ export function ChatWidget() {
       messagesEndRef.current?.scrollIntoView?.({ block: "end" });
     }
   }, [isOpen, messages]);
+
+  useEffect(() => {
+    const updateScrolledState = () => {
+      setIsPageScrolled(window.scrollY > SCROLL_TO_TOP_VISIBILITY_OFFSET);
+    };
+
+    updateScrolledState();
+    window.addEventListener("scroll", updateScrolledState, { passive: true });
+
+    return () => window.removeEventListener("scroll", updateScrolledState);
+  }, []);
 
   const transcriptHref = useMemo(() => {
     const transcript = messages.map((message) => `${message.role === "visitor" ? "Visitor" : "AIXCO"}: ${message.text}`).join("\n");
@@ -136,7 +150,14 @@ export function ChatWidget() {
   if (!hasMounted) return null;
 
   return (
-    <div className="fixed bottom-5 right-5 z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3 md:bottom-6 md:right-6">
+    <div
+      data-chat-floating-container="true"
+      data-page-scrolled={isPageScrolled ? "true" : "false"}
+      className={cn(
+        "fixed bottom-5 right-5 z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end md:bottom-6 md:right-6",
+        isOpen && isPageScrolled ? "gap-24 md:gap-28" : "gap-3",
+      )}
+    >
       <AnimatePresence>
         {isOpen && (
           <motion.section
