@@ -74,8 +74,8 @@ describe("Batumi", () => {
     expect(screen.getByLabelText("Batumi")).not.toHaveAttribute("poster");
     expect(screen.getByLabelText("Batumi")).not.toHaveAttribute("src");
     expect(screen.getByLabelText("Batumi")).toHaveClass("object-cover");
-    expect(aixcoLiveVideos.batumiBuy).toContain("/media/batumibuy-optimized.mp4");
-    expect(aixcoLiveVideoPreviews.batumiBuy).toContain("/media/previews/batumibuy-preview.mp4");
+    expect(aixcoLiveVideos.batumiBuy).toContain("/media/batumi-gallery/batumi1.mp4");
+    expect(aixcoLiveVideoPreviews.batumiBuy).toContain("/media/batumi-gallery/previews/batumi1-preview.mp4");
     expect(container.querySelector('section[id="batumi"]')).not.toBeInTheDocument();
   });
 

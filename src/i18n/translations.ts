@@ -409,6 +409,13 @@ export const textTranslations = {
     "tr": "Müşteriler kayıt olur, tur rezervasyonu yapar ve daireyi yerinde ziyaret eder. Bu yol, doğrudan mülkiyet ve Batum'un uzun vadeli büyüme hikâyesine erişim arayan alıcılar için tasarlanmıştır.",
     "ar": "يقوم العملاء بالتسجيل وحجز جولة وزيارة الشقة شخصيًا. هذا المسار مخصص للمشترين الباحثين عن ملكية مباشرة والتعرض لقصة النمو طويلة الأجل في باتومي."
   },
+  "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guided AIXCO team.": {
+    "de": "Pruefen Sie ausgewaehlte Projekte, vereinbaren Sie eine private Besichtigung, vergleichen Sie Mietannahmen und gehen Sie mit einem gefuehrten AIXCO-Team zur Reservierung ueber.",
+    "ru": "Izuchite vybrannye proekty, organizujte chastnyj vizit, sravnite arendnye dopushcheniya i perehodite k rezervirovaniyu s komandoj AIXCO.",
+    "ka": "Gadaamotsmet shercheuli proeqtebi, dagegmet piradi viziti, shedaret gaqiravebis varaudebi da AIXCO-s gundis mkhardacherit gadadit rezervatsiaze.",
+    "tr": "Secili projeleri inceleyin, ozel bir ziyaret planlayin, kira varsayimlarini karsilastirin ve AIXCO ekibinin rehberligiyle rezervasyona ilerleyin.",
+    "ar": "Raji al-mashari al-mukhtara, rattib ziyara khassa, qarin iftiradat al-ijar, thumma intaqil ila al-hajz bimusaadat fariq AIXCO."
+  },
   "Sign up and submit your interest.": {
     "de": "Registrieren Sie sich und übermitteln Sie Ihr Interesse.",
     "ru": "Зарегистрируйтесь и отправьте заявку.",

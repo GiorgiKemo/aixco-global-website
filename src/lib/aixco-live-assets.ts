@@ -24,6 +24,7 @@ export const aixcoLiveImages = {
   dubaiHealthcare: `${optimizedImageBase}/fund2.webp`,
   transactionBackdrop: `${optimizedImageBase}/trans.webp`,
   batumiOverviewPoster: `${batumiGalleryBase}/batumi2-poster.webp`,
+  batumiBuyPoster: `${batumiGalleryBase}/batumi1-poster.webp`,
   batumiGuru: `${optimizedImageBase}/guru.webp`,
   batumiOtium: `${optimizedImageBase}/otium-reverance.webp`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
@@ -33,7 +34,7 @@ export const aixcoLiveImages = {
 
 export const aixcoLiveVideos = {
   batumiOverview: `${batumiGalleryBase}/batumi2.mp4`,
-  batumiBuy: `${optimizedVideoBase}/batumibuy-optimized.mp4`,
+  batumiBuy: `${batumiGalleryBase}/batumi1.mp4`,
   bonds: `${optimizedVideoBase}/bonds-optimized.mp4`,
   fundOne: `${optimizedVideoBase}/fund1-optimized.mp4`,
   fundTwo: `${optimizedVideoBase}/fund2-optimized.mp4`,
@@ -46,7 +47,7 @@ export const aixcoLiveVideos = {
 
 export const aixcoLiveVideoPreviews = {
   batumiOverview: `${batumiGalleryPreviewBase}/batumi2-preview.mp4`,
-  batumiBuy: `${previewVideoBase}/batumibuy-preview.mp4`,
+  batumiBuy: `${batumiGalleryPreviewBase}/batumi1-preview.mp4`,
   bonds: `${previewVideoBase}/bonds-preview.mp4`,
   guruBatumi: `${previewVideoBase}/guru-batumi-preview.mp4`,
   otium: `${previewVideoBase}/otium-preview.mp4`,
@@ -59,7 +60,7 @@ export const aixcoHeroBackgroundVideo = {
 } as const;
 
 export const aixcoBatumiGalleryVideos = [
-  { src: `${batumiGalleryBase}/batumi1.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi1-preview.mp4`, poster: `${batumiGalleryBase}/batumi1-poster.webp`, title: "Batumi gallery 1" },
+  { src: `${batumiGalleryBase}/batumi-short.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi-short-preview.mp4`, poster: `${batumiGalleryBase}/batumi-short-poster.webp`, title: "Batumi gallery 1" },
   { src: `${batumiGalleryBase}/batumi2.mp4`, previewSrc: aixcoLiveVideoPreviews.batumiOverview, poster: `${batumiGalleryBase}/batumi2-poster.webp`, title: "Batumi gallery 2" },
   { src: `${batumiGalleryBase}/batumi3.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi3-preview.mp4`, poster: `${batumiGalleryBase}/batumi3-poster.webp`, title: "Batumi gallery 3" },
   { src: `${batumiGalleryBase}/batumi4.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi4-preview.mp4`, poster: `${batumiGalleryBase}/batumi4-poster.webp`, title: "Batumi gallery 4" },
