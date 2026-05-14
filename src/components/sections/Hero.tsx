@@ -6,40 +6,25 @@ import { useCallback, useEffect, useRef, useState, type MouseEvent, type Synthet
 import type { AnimationItem } from "lottie-web";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
-import { scheduleIdleWork } from "@/hooks/use-idle-ready";
-import { aixcoHeroBackgroundVideo, aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { useDelayedIdleReady } from "@/hooks/use-idle-ready";
+import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { replaceLocationHash } from "@/lib/section-hash";
 import { scrollToHash } from "@/lib/smooth-scroll";
+import {
+  getHeroVideoPanelLimit,
+  getHeroVideoStartDelay,
+  heroPanelVideos,
+  heroVideoIdleTimeoutMs,
+  shouldAttachHeroVideo,
+  shouldShowHeroVideoPoster,
+  shouldUseHeroVideoWall,
+  type HeroVideoEnvironment,
+} from "./hero-video-policy";
 
 const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const heroIntroText =
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.";
 const heroPriceText = "Starting from \u20ac1,000";
-const heroPanelVideos = [aixcoHeroBackgroundVideo];
-const mobileHeroVideoPanelLimit = 1;
-const mobileHeroVideoBreakpoint = 768;
-const desktopHeroVideoStartDelay = 1200;
-const mobileHeroVideoStartDelay = 6500;
-
-type HeroVideoEnvironment = {
-  reduceMotion?: boolean | null;
-  viewportWidth: number;
-  saveData?: boolean;
-  effectiveType?: string;
-  deviceMemory?: number;
-};
-
-type HeroVideoPosterVisibility = {
-  shouldUseVideoWall: boolean;
-  isHeroInFocus: boolean;
-  isVideoReady: boolean;
-};
-type HeroVideoAttachment = {
-  shouldUseVideoWall: boolean;
-  isHeroVideoIdleReady: boolean;
-  panelIndex: number;
-  panelLimit: number;
-};
 
 type HeroVideoWithFrameCallback = HTMLVideoElement & {
   requestVideoFrameCallback?: (callback: () => void) => number;
@@ -48,40 +33,6 @@ type HeroVideoWithFrameCallback = HTMLVideoElement & {
 export function getHeroLottieArrowPath(baseUrl: string) {
   const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   return `${normalizedBase}animations/arrow-down-gold.json`;
-}
-
-export function shouldShowHeroVideoPoster({
-  shouldUseVideoWall,
-  isHeroInFocus,
-  isVideoReady,
-}: HeroVideoPosterVisibility) {
-  return !shouldUseVideoWall || !isHeroInFocus || !isVideoReady;
-}
-
-export function shouldUseHeroVideoWall(environment: HeroVideoEnvironment) {
-  const { saveData = false, effectiveType, deviceMemory } = environment;
-
-  if (saveData) return false;
-  if (effectiveType && ["slow-2g", "2g", "3g"].includes(effectiveType)) return false;
-  if (typeof deviceMemory === "number" && deviceMemory <= 4) return false;
-  return true;
-}
-
-export function getHeroVideoPanelLimit(environment: HeroVideoEnvironment) {
-  return environment.viewportWidth < mobileHeroVideoBreakpoint ? mobileHeroVideoPanelLimit : heroPanelVideos.length;
-}
-
-export function getHeroVideoStartDelay(viewportWidth: number) {
-  return viewportWidth < mobileHeroVideoBreakpoint ? mobileHeroVideoStartDelay : desktopHeroVideoStartDelay;
-}
-
-export function shouldAttachHeroVideo({
-  shouldUseVideoWall,
-  isHeroVideoIdleReady,
-  panelIndex,
-  panelLimit,
-}: HeroVideoAttachment) {
-  return shouldUseVideoWall && isHeroVideoIdleReady && panelIndex < panelLimit;
 }
 
 function getHeroVideoEnvironment(): HeroVideoEnvironment {
@@ -99,26 +50,14 @@ function getHeroVideoEnvironment(): HeroVideoEnvironment {
 }
 
 function useHeroVideoStartReady() {
-  const [isReady, setIsReady] = useState(false);
+  const [startupDelay, setStartupDelay] = useState(() => getHeroVideoStartDelay(0));
 
   useEffect(() => {
-    if (typeof window === "undefined" || process.env.NODE_ENV === "test" || process.env.VITEST === "true") {
-      return undefined;
-    }
-
-    let cancelIdleWork = () => undefined;
-    const delay = getHeroVideoStartDelay(window.innerWidth);
-    const delayHandle = window.setTimeout(() => {
-      cancelIdleWork = scheduleIdleWork(() => setIsReady(true), 1200);
-    }, delay);
-
-    return () => {
-      window.clearTimeout(delayHandle);
-      cancelIdleWork();
-    };
+    if (typeof window === "undefined") return;
+    setStartupDelay(getHeroVideoStartDelay(window.innerWidth));
   }, []);
 
-  return isReady;
+  return useDelayedIdleReady(startupDelay, heroVideoIdleTimeoutMs);
 }
 
 const arrowLottiePath = getHeroLottieArrowPath(process.env.NEXT_PUBLIC_BASE_PATH ?? "/");
@@ -264,7 +203,7 @@ export function Hero() {
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [isHeroVideoIdleReady, shouldReduceMotion]);
+  }, [isHeroVideoIdleReady]);
 
   useEffect(() => {
     if (!shouldUseVideoWall) return;

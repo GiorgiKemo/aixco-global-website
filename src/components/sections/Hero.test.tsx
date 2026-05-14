@@ -3,13 +3,15 @@ import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { aixcoHeroBackgroundVideo } from "@/lib/aixco-live-assets";
 import {
-  Hero,
-  getHeroLottieArrowPath,
   getHeroVideoStartDelay,
   getHeroVideoPanelLimit,
   shouldAttachHeroVideo,
   shouldShowHeroVideoPoster,
   shouldUseHeroVideoWall,
+} from "./hero-video-policy";
+import {
+  Hero,
+  getHeroLottieArrowPath,
 } from "./Hero";
 
 function renderHero() {
@@ -36,12 +38,12 @@ describe("Hero", () => {
   });
 
   it("enables the video wall across viewport sizes unless media constraints ask for lighter loading", () => {
-    expect(shouldUseHeroVideoWall({ reduceMotion: true, viewportWidth: 1440 })).toBe(true);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 390 })).toBe(true);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, saveData: true })).toBe(false);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "3g" })).toBe(false);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, deviceMemory: 2 })).toBe(false);
-    expect(shouldUseHeroVideoWall({ reduceMotion: false, viewportWidth: 1440, effectiveType: "4g", deviceMemory: 8 })).toBe(true);
+    expect(shouldUseHeroVideoWall({ viewportWidth: 1440 })).toBe(true);
+    expect(shouldUseHeroVideoWall({ viewportWidth: 390 })).toBe(true);
+    expect(shouldUseHeroVideoWall({ viewportWidth: 1440, saveData: true })).toBe(false);
+    expect(shouldUseHeroVideoWall({ viewportWidth: 1440, effectiveType: "3g" })).toBe(false);
+    expect(shouldUseHeroVideoWall({ viewportWidth: 1440, deviceMemory: 2 })).toBe(false);
+    expect(shouldUseHeroVideoWall({ viewportWidth: 1440, effectiveType: "4g", deviceMemory: 8 })).toBe(true);
   });
 
   it("uses the single hero background video across viewport sizes", () => {
@@ -80,7 +82,6 @@ describe("Hero", () => {
 
   it("keeps hero posters visible when the video wall is disabled or outside focus", () => {
     const dataSaverAllowsVideo = shouldUseHeroVideoWall({
-      reduceMotion: false,
       viewportWidth: 1440,
       saveData: true,
     });
