@@ -77,7 +77,8 @@ describe("LiveVideo", () => {
     expect(expandedVideo).toHaveAttribute("controls");
     expect(expandedVideo.className).toContain("h-auto");
     expect(expandedVideo.className).toContain("w-auto");
-    expect(expandedVideo.className).toContain("max-h-[min(82svh,calc(100svh-2rem))]");
+    expect(expandedVideo.className).toContain("max-h-[calc(100svh-5rem)]");
+    expect(expandedVideo.className).toContain("md:max-h-[calc(100svh-6.5rem)]");
     expect(expandedVideo.className).not.toContain("w-full");
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
@@ -91,11 +92,14 @@ describe("LiveVideo", () => {
     const expandedVideo = screen.getByLabelText("Sound controls test expanded player");
     const closeButton = screen.getByRole("button", { name: /close video: sound controls test/i });
     const videoFrame = expandedVideo.parentElement;
+    const modalShell = dialog.parentElement;
 
-    expect(dialog).toContainElement(closeButton);
+    expect(modalShell).toContainElement(closeButton);
+    expect(dialog).not.toContainElement(closeButton);
     expect(videoFrame).toContainElement(expandedVideo);
     expect(videoFrame).not.toContainElement(closeButton);
-    expect(closeButton.className).not.toContain("absolute");
+    expect(modalShell).toHaveClass("pt-16");
+    expect(closeButton).toHaveClass("absolute", "right-4", "top-4");
     expect(closeButton).toHaveClass("shrink-0");
   });
 
