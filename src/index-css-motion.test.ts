@@ -85,6 +85,21 @@ describe("index.css motion rules", () => {
     expect(css).toContain("bottom: max(0.15rem, env(safe-area-inset-bottom, 0px)) !important");
   });
 
+  it("keeps the scroll cue clear in narrow iPad landscape windows", () => {
+    expect(css).toContain("@media (min-width: 560px) and (max-width: 767px) and (max-height: 780px)");
+    expect(css).toContain("height: 100svh");
+    expect(css).toContain("bottom: max(0.25rem, env(safe-area-inset-bottom, 0px)) !important");
+    expect(css).toContain("height: 2.4rem !important");
+    expect(css).toContain("height: 2.25rem !important");
+  });
+
+  it("keeps the scroll cue visible on very short phone viewports", () => {
+    expect(css).toContain("@media (max-width: 559px) and (max-height: 560px)");
+    expect(css).toContain("bottom: max(0.5rem, env(safe-area-inset-bottom, 0px)) !important");
+    expect(css).toContain("height: 2.75rem !important");
+    expect(css).toContain("height: 2.55rem !important");
+  });
+
   it("keeps asset detail CTAs large enough for mobile touch targets", () => {
     const assetDetailCta = cssBlock(".asset-detail-cta");
 
