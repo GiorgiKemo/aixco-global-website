@@ -14,8 +14,17 @@ describe("ExpandableImage", () => {
 
     const dialog = screen.getByRole("dialog", { name: "Expanded image: Dubai asset" });
     const expandedImage = screen.getAllByAltText("Dubai asset").find((image) => image.closest("[role='dialog']"));
+    const modalShell = dialog.parentElement;
+    const backdrop = screen.getAllByRole("button", { name: "Close image: Dubai asset" }).find((control) =>
+      control.className.includes("backdrop-blur-xl"),
+    );
 
     expect(dialog).toBeInTheDocument();
+    expect(modalShell?.className).not.toContain("animate-fade-in");
+    expect(backdrop).toBeInTheDocument();
+    expect(backdrop?.className).toContain("backdrop-blur-xl");
+    expect(backdrop?.className).toContain("bg-black/30");
+    expect(backdrop?.className).not.toContain("animate");
     expect(dialog.className).not.toContain("bg-black");
     expect(dialog.className).not.toContain("border");
     expect(expandedImage).toHaveAttribute("src", "/asset.jpg");

@@ -112,11 +112,11 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
   const expandedImage =
     isExpanded && typeof document !== "undefined"
       ? createPortal(
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 animate-fade-in md:p-6">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-6">
             <button
               type="button"
               aria-label={`${tx("Close image")}: ${tx(title)}`}
-              className="absolute inset-0 bg-black/10 backdrop-blur-xl"
+              className="absolute inset-0 bg-black/30 backdrop-blur-xl"
               onClick={closeExpandedImage}
             />
             <div
