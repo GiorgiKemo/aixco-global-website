@@ -53,6 +53,10 @@ describe("index.css motion rules", () => {
   });
 
   it("keeps the hero composition compact on iPad-sized viewports", () => {
+    expect(css).toContain("[data-hero-shell=\"true\"]");
+    expect(css).toContain("min-height: 100svh");
+    expect(css).toContain("env(safe-area-inset-top, 0px)");
+    expect(css).toContain("env(safe-area-inset-bottom, 0px)");
     expect(css).toContain("@media (max-height: 840px) and (min-width: 768px) and (max-width: 1180px)");
     expect(css).toContain("height: 4rem !important");
     expect(css).toContain("[data-hero-content-stack=\"true\"]");
@@ -63,6 +67,22 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-hero-scroll-cue=\"viewport\"]");
     expect(css).toContain("bottom: 2.75rem !important");
     expect(css).toContain("[data-hero-lottie-arrow=\"true\"]");
+  });
+
+  it("keeps the desktop hero scroll cue clear of the price lockup", () => {
+    expect(css).toContain("@media (min-width: 1181px) and (min-height: 760px)");
+    expect(css).toContain("bottom: clamp(0.75rem, 2svh, 1.5rem) !important");
+    expect(css).toContain("height: 5.25rem !important");
+    expect(css).toContain("height: 5rem !important");
+  });
+
+  it("keeps the full hero visible in compact landscape browser viewports", () => {
+    expect(css).toContain("@media (orientation: landscape) and (max-height: 520px)");
+    expect(css).toContain("height: 3.5rem !important");
+    expect(css).toContain("height: 100svh");
+    expect(css).toContain("align-items: flex-start !important");
+    expect(css).toContain("font-size: clamp(2.05rem, 7.35vw, 3.8rem) !important");
+    expect(css).toContain("bottom: max(0.15rem, env(safe-area-inset-bottom, 0px)) !important");
   });
 
   it("keeps asset detail CTAs large enough for mobile touch targets", () => {

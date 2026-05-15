@@ -96,6 +96,7 @@ describe("Hero", () => {
 
     const hero = container.querySelector("section");
     expect(hero).not.toBeNull();
+    expect(hero).toHaveAttribute("data-hero-shell", "true");
     expect(hero?.className).toContain("min-h-[100svh]");
     const composition = container.querySelector("[data-hero-composition='reference-center']");
     const contentStack = container.querySelector("[data-hero-content-stack='true']");

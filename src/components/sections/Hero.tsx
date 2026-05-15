@@ -245,7 +245,11 @@ export function Hero() {
   };
 
   return (
-    <section ref={heroSectionRef} className="hero-reference-font relative isolate min-h-screen min-h-[100svh] overflow-hidden bg-background">
+    <section
+      ref={heroSectionRef}
+      data-hero-shell="true"
+      className="hero-reference-font relative isolate min-h-screen min-h-[100svh] overflow-hidden bg-background"
+    >
       <motion.div
         ref={heroVideoWallRef}
         data-hero-video-wall="true"
