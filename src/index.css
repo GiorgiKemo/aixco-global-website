@@ -289,14 +289,31 @@
     }
 
     [data-hero-scroll-cue="viewport"] {
-      bottom: 0.35rem !important;
+      bottom: 1rem !important;
+      height: 4.5rem !important;
+      width: 4.5rem !important;
+    }
+
+    [data-hero-lottie-arrow="true"] {
+      height: 4.25rem !important;
+      width: 4.25rem !important;
+    }
+  }
+
+  @media (max-height: 700px) and (max-width: 767px) {
+    [data-hero-content-stack="true"] {
+      transform: none !important;
+    }
+
+    [data-hero-scroll-cue="viewport"] {
+      bottom: 0.75rem !important;
       height: 4.25rem !important;
       width: 4.25rem !important;
     }
 
     [data-hero-lottie-arrow="true"] {
-      height: 4rem !important;
-      width: 4rem !important;
+      height: 3.75rem !important;
+      width: 3.75rem !important;
     }
   }
 

@@ -96,6 +96,7 @@ describe("Hero", () => {
 
     const hero = container.querySelector("section");
     expect(hero).not.toBeNull();
+    expect(hero?.className).toContain("min-h-[100svh]");
     const composition = container.querySelector("[data-hero-composition='reference-center']");
     const contentStack = container.querySelector("[data-hero-content-stack='true']");
     const standaloneMark = container.querySelector("[data-hero-brand-mark='standalone']");
@@ -112,6 +113,7 @@ describe("Hero", () => {
     const heroPosterImages = Array.from(container.querySelectorAll("[data-hero-video-poster='true']"));
 
     expect(composition).toBeInTheDocument();
+    expect(composition?.className).toContain("min-h-[100svh]");
     expect(composition?.className).toContain("items-center");
     expect(composition?.className).toContain("justify-center");
     expect(composition?.className).toContain("text-center");

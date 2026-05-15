@@ -245,7 +245,7 @@ export function Hero() {
   };
 
   return (
-    <section ref={heroSectionRef} className="hero-reference-font relative isolate min-h-screen overflow-hidden bg-background">
+    <section ref={heroSectionRef} className="hero-reference-font relative isolate min-h-screen min-h-[100svh] overflow-hidden bg-background">
       <motion.div
         ref={heroVideoWallRef}
         data-hero-video-wall="true"
@@ -329,7 +329,7 @@ export function Hero() {
 
       <div
         data-hero-composition="reference-center"
-        className="relative z-10 flex min-h-screen items-center justify-center px-6 py-[clamp(5.5rem,10svh,7rem)] text-center sm:px-10 lg:px-24 xl:px-28"
+        className="relative z-10 flex min-h-screen min-h-[100svh] items-center justify-center px-6 py-[clamp(5.5rem,10svh,7rem)] text-center sm:px-10 lg:px-24 xl:px-28"
       >
         <div
           data-hero-content-stack="true"
