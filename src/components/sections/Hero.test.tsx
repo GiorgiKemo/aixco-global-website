@@ -101,6 +101,7 @@ describe("Hero", () => {
     const contentStack = container.querySelector("[data-hero-content-stack='true']");
     const standaloneMark = container.querySelector("[data-hero-brand-mark='standalone']");
     const heading = within(hero).getByRole("heading", { level: 1 });
+    const heroKicker = container.querySelector("[data-hero-kicker='true']");
     const brandDot = heading.querySelector("[data-hero-brand-dot='true']");
     const introCopy = within(hero).getByText(
       "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.",
@@ -120,7 +121,9 @@ describe("Hero", () => {
     expect(contentStack).toBeInTheDocument();
     expect(contentStack?.className).toContain("translate-y-[clamp(1rem,4svh,3.5rem)]");
     const qualityLine = within(hero).getByText("Quality Real Estate Participation");
+    expect(heroKicker).toBe(qualityLine);
     expect(qualityLine).toBeInTheDocument();
+    expect(heading).toHaveAttribute("data-hero-title", "true");
     expect(qualityLine.className).toContain("self-start");
     expect(qualityLine.className).toContain("sm:ml-[clamp(0rem,20vw,18rem)]");
     expect(within(hero).queryByText("GLOBAL VISION. INFINITE VALUE")).not.toBeInTheDocument();

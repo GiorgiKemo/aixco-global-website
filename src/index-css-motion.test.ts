@@ -52,12 +52,16 @@ describe("index.css motion rules", () => {
     expect(partnerModalLogoStage).not.toContain("backdrop-filter");
   });
 
-  it("keeps the hero scroll cue visible on short desktop viewports", () => {
-    expect(css).toContain("@media (max-height: 820px) and (min-width: 768px)");
+  it("keeps the hero composition compact on iPad-sized viewports", () => {
+    expect(css).toContain("@media (max-height: 840px) and (min-width: 768px) and (max-width: 1180px)");
+    expect(css).toContain("height: 4rem !important");
     expect(css).toContain("[data-hero-content-stack=\"true\"]");
-    expect(css).toContain("transform: none !important");
+    expect(css).toContain("transform: translateY(-1rem) !important");
+    expect(css).toContain("[data-hero-kicker=\"true\"]");
+    expect(css).toContain("[data-hero-title=\"true\"]");
+    expect(css).toContain("[data-hero-price-text=\"true\"]");
     expect(css).toContain("[data-hero-scroll-cue=\"viewport\"]");
-    expect(css).toContain("width: 4.25rem !important");
+    expect(css).toContain("bottom: 2.75rem !important");
     expect(css).toContain("[data-hero-lottie-arrow=\"true\"]");
   });
 

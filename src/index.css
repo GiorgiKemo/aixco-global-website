@@ -283,13 +283,62 @@
     );
   }
 
-  @media (max-height: 820px) and (min-width: 768px) {
+  @media (max-height: 840px) and (min-width: 768px) and (max-width: 1180px) {
+    header[dir="ltr"] > div {
+      height: 4rem !important;
+    }
+
+    [data-hero-composition="reference-center"] {
+      padding-top: 4rem !important;
+      padding-bottom: 6.5rem !important;
+    }
+
     [data-hero-content-stack="true"] {
-      transform: none !important;
+      max-width: min(64rem, calc(100vw - 5rem)) !important;
+      transform: translateY(-1rem) !important;
+    }
+
+    [data-hero-kicker="true"],
+    [data-hero-brand-mark="standalone"] {
+      align-self: center !important;
+      margin-left: 0 !important;
+    }
+
+    [data-hero-kicker="true"] {
+      margin-bottom: 0.15rem !important;
+      font-size: clamp(0.82rem, 1.45vw, 1rem) !important;
+      line-height: 1.2 !important;
+    }
+
+    [data-hero-brand-mark="standalone"] {
+      width: clamp(5rem, 9.5vw, 7rem) !important;
+      margin-bottom: 0.1rem !important;
+    }
+
+    [data-hero-title="true"] {
+      font-size: clamp(3.7rem, 8.4vw, 5.45rem) !important;
+      line-height: 0.86 !important;
+    }
+
+    [data-hero-intro-copy="true"] {
+      max-width: min(52rem, calc(100vw - 7rem)) !important;
+      margin-top: 1rem !important;
+      font-size: clamp(1rem, 2.05vw, 1.22rem) !important;
+      line-height: 1.42 !important;
+    }
+
+    [data-hero-price-lockup="true"] {
+      margin-top: 1.15rem !important;
+      padding-top: 0.25rem !important;
+      padding-bottom: 0.25rem !important;
+    }
+
+    [data-hero-price-text="true"] {
+      font-size: clamp(2rem, 4.6vw, 3rem) !important;
     }
 
     [data-hero-scroll-cue="viewport"] {
-      bottom: 1rem !important;
+      bottom: 2.75rem !important;
       height: 4.5rem !important;
       width: 4.5rem !important;
     }
