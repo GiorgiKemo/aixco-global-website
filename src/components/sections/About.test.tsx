@@ -22,10 +22,7 @@ describe("About", () => {
       "data-scale",
       "reduced",
     );
-    expect(screen.getByRole("link", { name: /Read AIXCO Philosophy/i })).toHaveAttribute(
-      "href",
-      "/aixco-philosophy",
-    );
+    expect(screen.queryByRole("link", { name: /Read AIXCO Philosophy/i })).not.toBeInTheDocument();
 
     const storyImage = screen.getByRole("img", {
       name: "Batumi skyline and landmark towers from the live AIXCO site",
