@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
-import { useCallback, useEffect, useRef, useState, type MouseEvent, type SyntheticEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent, type SyntheticEvent } from "react";
 import type { AnimationItem } from "lottie-web";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
@@ -224,6 +224,27 @@ export function Hero() {
     }
   }, [shouldUseVideoWall]);
 
+  useEffect(() => {
+    const node = heroSectionRef.current;
+    if (typeof window === "undefined" || !node) return;
+
+    const updateHeroViewportHeight = () => {
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+      node.style.setProperty("--hero-viewport-height", `${Math.round(viewportHeight)}px`);
+    };
+
+    updateHeroViewportHeight();
+    window.addEventListener("resize", updateHeroViewportHeight);
+    window.visualViewport?.addEventListener("resize", updateHeroViewportHeight);
+    window.visualViewport?.addEventListener("scroll", updateHeroViewportHeight);
+
+    return () => {
+      window.removeEventListener("resize", updateHeroViewportHeight);
+      window.visualViewport?.removeEventListener("resize", updateHeroViewportHeight);
+      window.visualViewport?.removeEventListener("scroll", updateHeroViewportHeight);
+    };
+  }, []);
+
   const handleAboutClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     replaceLocationHash("#about");
@@ -248,7 +269,8 @@ export function Hero() {
     <section
       ref={heroSectionRef}
       data-hero-shell="true"
-      className="hero-reference-font relative isolate min-h-screen min-h-[100svh] overflow-hidden bg-background"
+      style={{ "--hero-viewport-height": "100dvh" } as CSSProperties}
+      className="hero-reference-font relative isolate h-[var(--hero-viewport-height,100dvh)] min-h-[100svh] max-h-[var(--hero-viewport-height,100dvh)] overflow-hidden bg-background"
     >
       <motion.div
         ref={heroVideoWallRef}
@@ -333,7 +355,7 @@ export function Hero() {
 
       <div
         data-hero-composition="reference-center"
-        className="relative z-10 flex min-h-screen min-h-[100svh] flex-col items-center justify-center px-6 py-[clamp(5.5rem,10svh,7rem)] text-center md:flex-col md:px-8 lg:px-24 xl:px-28"
+        className="relative z-10 flex h-[var(--hero-viewport-height,100dvh)] min-h-[100svh] max-h-[var(--hero-viewport-height,100dvh)] flex-col items-center justify-center px-6 py-[clamp(5.5rem,10svh,7rem)] text-center md:flex-col md:px-8 lg:px-24 xl:px-28"
       >
         <div
           data-hero-content-stack="true"

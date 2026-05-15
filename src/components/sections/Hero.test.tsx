@@ -97,6 +97,9 @@ describe("Hero", () => {
     const hero = container.querySelector("section");
     expect(hero).not.toBeNull();
     expect(hero).toHaveAttribute("data-hero-shell", "true");
+    expect((hero as HTMLElement).style.getPropertyValue("--hero-viewport-height")).toMatch(/^(100dvh|\d+px)$/);
+    expect(hero?.className).toContain("h-[var(--hero-viewport-height,100dvh)]");
+    expect(hero?.className).toContain("max-h-[var(--hero-viewport-height,100dvh)]");
     expect(hero?.className).toContain("min-h-[100svh]");
     const composition = container.querySelector("[data-hero-composition='reference-center']");
     const contentStack = container.querySelector("[data-hero-content-stack='true']");
@@ -115,6 +118,8 @@ describe("Hero", () => {
     const heroPosterImages = Array.from(container.querySelectorAll("[data-hero-video-poster='true']"));
 
     expect(composition).toBeInTheDocument();
+    expect(composition?.className).toContain("h-[var(--hero-viewport-height,100dvh)]");
+    expect(composition?.className).toContain("max-h-[var(--hero-viewport-height,100dvh)]");
     expect(composition?.className).toContain("min-h-[100svh]");
     expect(composition?.className).toContain("items-center");
     expect(composition?.className).toContain("justify-center");
