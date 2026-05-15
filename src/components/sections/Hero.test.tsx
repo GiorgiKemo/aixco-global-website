@@ -190,6 +190,8 @@ describe("Hero", () => {
     );
     const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
     const priceText = container.querySelector("[data-hero-price-text='true']");
+    const scrollLink = within(hero as HTMLElement).getByLabelText("Scroll to About section");
+    const arrow = container.querySelector("[data-hero-lottie-arrow='true']");
 
     expect(composition?.className).toContain("px-6");
     expect(composition?.className).toContain("md:px-8");
@@ -209,6 +211,12 @@ describe("Hero", () => {
     expect(priceLockup?.className).toContain("md:flex-row");
     expect(priceText?.className).toContain("md:text-[clamp(2rem,4vw,3rem)]");
     expect(priceText?.className).toContain("lg:text-[clamp(2.8rem,3.8vw,4rem)]");
+    expect(contentStack?.className).toContain("md:landscape:translate-y-0");
+    expect(contentStack?.className).toContain("lg:landscape:-translate-y-[clamp(0.5rem,3svh,1.5rem)]");
+    expect(scrollLink.className).toContain("md:landscape:!h-14");
+    expect(scrollLink.className).toContain("md:landscape:!w-14");
+    expect(arrow?.className).toContain("md:landscape:!h-12");
+    expect(arrow?.className).toContain("md:landscape:!w-12");
   });
 
   it("translates the hero entry price text", () => {

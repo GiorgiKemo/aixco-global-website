@@ -127,7 +127,7 @@ function HeroLottieArrow() {
       ref={containerRef}
       aria-hidden="true"
       data-hero-lottie-arrow="true"
-      className="block h-[5.5rem] w-[5.5rem] [&_svg]:!block [&_svg]:!h-full [&_svg]:!w-full"
+      className="block h-[5.5rem] w-[5.5rem] md:landscape:!h-12 md:landscape:!w-12 [&_svg]:!block [&_svg]:!h-full [&_svg]:!w-full"
     />
   );
 }
@@ -337,7 +337,7 @@ export function Hero() {
       >
         <div
           data-hero-content-stack="true"
-          className="mx-auto flex w-full min-w-0 max-w-[calc(100vw-3rem)] translate-y-[clamp(1rem,4svh,3.5rem)] flex-col items-center md:max-w-[44rem] md:flex-col lg:max-w-[72rem] lg:flex-col xl:max-w-[82rem]"
+          className="mx-auto flex w-full min-w-0 max-w-[calc(100vw-3rem)] translate-y-[clamp(1rem,4svh,3.5rem)] flex-col items-center md:max-w-[44rem] md:flex-col md:landscape:translate-y-0 lg:max-w-[72rem] lg:flex-col lg:landscape:-translate-y-[clamp(0.5rem,3svh,1.5rem)] xl:max-w-[82rem]"
         >
           <motion.p
             data-hero-kicker="true"
@@ -411,7 +411,7 @@ export function Hero() {
           onClick={handleAboutClick}
           data-hero-scroll-cue="viewport"
           aria-label="Scroll to About section"
-          className="absolute inset-x-0 bottom-[clamp(1rem,4svh,2.75rem)] z-20 mx-auto inline-flex h-24 w-24 items-center justify-center text-white/85 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] transition-colors duration-200 hover:text-white sm:h-28 sm:w-28"
+          className="absolute inset-x-0 bottom-[clamp(1rem,4svh,2.75rem)] z-20 mx-auto inline-flex h-24 w-24 items-center justify-center text-white/85 drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)] transition-colors duration-200 hover:text-white sm:h-28 sm:w-28 md:landscape:!h-14 md:landscape:!w-14"
           initial={false}
           animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 0 }}
           transition={
