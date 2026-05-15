@@ -82,6 +82,23 @@ describe("LiveVideo", () => {
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
   });
 
+  it("keeps the expanded close button outside the video control surface", () => {
+    render(<LiveVideo src="/sample-video.mp4" title="Sound controls test" poster="/poster.jpg" eager />);
+
+    fireEvent.click(screen.getByRole("button", { name: /play video: sound controls test/i }));
+
+    const dialog = screen.getByRole("dialog", { name: /expanded video: sound controls test/i });
+    const expandedVideo = screen.getByLabelText("Sound controls test expanded player");
+    const closeButton = screen.getByRole("button", { name: /close video: sound controls test/i });
+    const videoFrame = expandedVideo.parentElement;
+
+    expect(dialog).toContainElement(closeButton);
+    expect(videoFrame).toContainElement(expandedVideo);
+    expect(videoFrame).not.toContainElement(closeButton);
+    expect(closeButton.className).not.toContain("absolute");
+    expect(closeButton).toHaveClass("shrink-0");
+  });
+
   it("uses full media inline by default so previews match expanded playback smoothness", () => {
     render(
       <LiveVideo

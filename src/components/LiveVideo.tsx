@@ -170,7 +170,7 @@ export function LiveVideo({
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 animate-fade-in md:p-6">
             <button
               type="button"
-              aria-label={`${tx("Close video")}: ${tx(title)}`}
+              aria-label={`${tx("Close video")}: ${tx("Expanded video")} ${tx(title)}`}
               className="absolute inset-0 bg-background/80 backdrop-blur-xl"
               onClick={closeExpandedPlayer}
             />
@@ -178,34 +178,36 @@ export function LiveVideo({
               role="dialog"
               aria-modal="true"
               aria-label={`${tx("Expanded video")}: ${tx(title)}`}
-              className="relative z-10 inline-flex max-h-[calc(100svh-1.5rem)] max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-lg border border-white/10 bg-black/95 shadow-elegant animate-scale-in md:max-h-[calc(100svh-3rem)] md:max-w-6xl"
+              className="relative z-10 flex max-h-[calc(100svh-1.5rem)] max-w-[calc(100vw-1.5rem)] flex-col items-end gap-2 animate-scale-in md:max-h-[calc(100svh-3rem)] md:max-w-6xl"
             >
-              <video
-                ref={expandedVideoRef}
-                src={src}
-                poster={poster}
-                aria-label={`${tx(title)} ${tx("expanded player")}`}
-                title={tx(title)}
-                className="block h-auto max-h-[min(82svh,calc(100svh-2rem))] w-auto max-w-[calc(100vw-1.5rem)] bg-black object-contain md:max-w-[calc(100vw-3rem)]"
-                autoPlay
-                controls
-                playsInline
-                preload="auto"
-                onCanPlay={(event) => {
-                  if (event.currentTarget.paused) {
-                    void event.currentTarget.play().catch(() => undefined);
-                  }
-                }}
-              />
               <button
                 type="button"
                 aria-label={`${tx("Close video")}: ${tx(title)}`}
                 onClick={closeExpandedPlayer}
-                className="absolute right-3 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80"
+                className="relative z-10 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80"
               >
                 <X className="h-4 w-4" />
                 <span className="sr-only">{tx("Close")}</span>
               </button>
+              <div className="overflow-hidden rounded-lg border border-white/10 bg-black/95 shadow-elegant">
+                <video
+                  ref={expandedVideoRef}
+                  src={src}
+                  poster={poster}
+                  aria-label={`${tx(title)} ${tx("expanded player")}`}
+                  title={tx(title)}
+                  className="block h-auto max-h-[min(82svh,calc(100svh-2rem))] w-auto max-w-[calc(100vw-1.5rem)] bg-black object-contain md:max-w-[calc(100vw-3rem)]"
+                  autoPlay
+                  controls
+                  playsInline
+                  preload="auto"
+                  onCanPlay={(event) => {
+                    if (event.currentTarget.paused) {
+                      void event.currentTarget.play().catch(() => undefined);
+                    }
+                  }}
+                />
+              </div>
             </div>
           </div>,
           document.body,
