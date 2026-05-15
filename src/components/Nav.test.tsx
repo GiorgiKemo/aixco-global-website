@@ -167,6 +167,23 @@ describe("Nav", () => {
     vi.useRealTimers();
   });
 
+  it("cancels pending section scroll timers when the user starts scrolling", () => {
+    vi.useFakeTimers();
+    renderNav("/");
+
+    const primary = screen.getByLabelText("Primary");
+    fireEvent.click(within(primary).getByRole("link", { name: "About AIXCO" }));
+
+    vi.clearAllMocks();
+    window.dispatchEvent(new WheelEvent("wheel", { deltaY: 160 }));
+    vi.advanceTimersByTime(1200);
+
+    expect(replaceLocationHash).not.toHaveBeenCalledWith("#about");
+    expect(scrollToHash).not.toHaveBeenCalledWith("#about", "auto");
+
+    vi.useRealTimers();
+  });
+
   it("uses targeted transitions for desktop nav controls", () => {
     renderNav();
 

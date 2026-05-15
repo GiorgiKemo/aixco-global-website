@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { installGlideScroll } from "./smooth-scroll";
+import { installGlideScroll, scrollToHash } from "./smooth-scroll";
 
 function mockMatchMedia(matchesFor: (query: string) => boolean) {
   Object.defineProperty(window, "matchMedia", {
@@ -131,5 +131,46 @@ describe("installGlideScroll", () => {
     expect(scrollTo).toHaveBeenCalledWith({ top: 120, left: 0, behavior: "auto" });
 
     cleanup();
+  });
+});
+
+describe("scrollToHash", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+    vi.restoreAllMocks();
+    mockMatchMedia(() => false);
+  });
+
+  it("cancels active smooth hash scrolling when the user starts scrolling", () => {
+    mockMatchMedia(() => false);
+    const scrollTo = mockViewport();
+    const target = document.createElement("section");
+    target.id = "about";
+    target.getBoundingClientRect = vi.fn(() => ({
+      x: 0,
+      y: 1200,
+      top: 1200,
+      right: 0,
+      bottom: 1600,
+      left: 0,
+      width: 0,
+      height: 400,
+      toJSON: () => ({}),
+    }));
+    document.body.appendChild(target);
+
+    const frames: FrameRequestCallback[] = [];
+    const cancelAnimationFrame = vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => undefined);
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+      frames.push(callback);
+      return frames.length;
+    });
+
+    expect(scrollToHash("#about")).toBe(true);
+    window.dispatchEvent(new WheelEvent("wheel", { deltaY: 120 }));
+    frames[0]?.(16);
+
+    expect(cancelAnimationFrame).toHaveBeenCalledWith(1);
+    expect(scrollTo).not.toHaveBeenCalled();
   });
 });

@@ -190,6 +190,23 @@ export function Nav() {
     if (location.hash) setReturningHome(false);
   }, [location.pathname, location.hash]);
 
+  useEffect(() => {
+    const cancelPendingSectionScrolls = () => clearPendingNavScrollTimers();
+    const options: AddEventListenerOptions = { capture: true, passive: true };
+
+    window.addEventListener("wheel", cancelPendingSectionScrolls, options);
+    window.addEventListener("touchstart", cancelPendingSectionScrolls, options);
+    window.addEventListener("pointerdown", cancelPendingSectionScrolls, options);
+    window.addEventListener("keydown", cancelPendingSectionScrolls, { capture: true });
+
+    return () => {
+      window.removeEventListener("wheel", cancelPendingSectionScrolls, options);
+      window.removeEventListener("touchstart", cancelPendingSectionScrolls, options);
+      window.removeEventListener("pointerdown", cancelPendingSectionScrolls, options);
+      window.removeEventListener("keydown", cancelPendingSectionScrolls, { capture: true });
+    };
+  }, []);
+
   useLayoutEffect(() => {
     const updateCompactMode = () => {
       if (typeof window === "undefined") return;

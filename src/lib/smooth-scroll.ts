@@ -4,6 +4,7 @@ type GlideScrollOptions = {
 };
 
 let activeScrollFrame: number | null = null;
+let activeScrollCancelCleanup: (() => void) | null = null;
 let activeGlideFrame: number | null = null;
 let glideCurrentTop = 0;
 let glideTargetTop = 0;
@@ -46,6 +47,30 @@ function cancelActiveScroll() {
     window.cancelAnimationFrame(activeScrollFrame);
     activeScrollFrame = null;
   }
+
+  activeScrollCancelCleanup?.();
+  activeScrollCancelCleanup = null;
+}
+
+function installActiveScrollUserCancel() {
+  if (typeof window === "undefined") return;
+
+  activeScrollCancelCleanup?.();
+
+  const cancelOnUserInput = () => cancelActiveScroll();
+  const options: AddEventListenerOptions = { capture: true, passive: true, once: true };
+
+  window.addEventListener("wheel", cancelOnUserInput, options);
+  window.addEventListener("touchstart", cancelOnUserInput, options);
+  window.addEventListener("pointerdown", cancelOnUserInput, options);
+  window.addEventListener("keydown", cancelOnUserInput, { capture: true, once: true });
+
+  activeScrollCancelCleanup = () => {
+    window.removeEventListener("wheel", cancelOnUserInput, options);
+    window.removeEventListener("touchstart", cancelOnUserInput, options);
+    window.removeEventListener("pointerdown", cancelOnUserInput, options);
+    window.removeEventListener("keydown", cancelOnUserInput, { capture: true });
+  };
 }
 
 export function cancelGlideScroll() {
@@ -159,8 +184,11 @@ function animateScrollTo(top: number, behavior?: ScrollBehavior) {
 
   const duration = Math.min(1100, Math.max(700, Math.abs(distance) * 0.38));
   const startTime = window.performance.now();
+  installActiveScrollUserCancel();
 
   const step = (time: number) => {
+    if (activeScrollFrame === null) return;
+
     const progress = Math.min((time - startTime) / duration, 1);
     const nextTop = startTop + distance * easeInOutCubic(progress);
     window.scrollTo({ top: nextTop, left: 0, behavior: "auto" });
@@ -169,6 +197,8 @@ function animateScrollTo(top: number, behavior?: ScrollBehavior) {
       activeScrollFrame = window.requestAnimationFrame(step);
     } else {
       activeScrollFrame = null;
+      activeScrollCancelCleanup?.();
+      activeScrollCancelCleanup = null;
     }
   };
 
