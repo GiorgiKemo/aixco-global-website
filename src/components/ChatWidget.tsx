@@ -85,6 +85,7 @@ export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [draft, setDraft] = useState("");
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -108,6 +109,21 @@ export function ChatWidget() {
       messagesEndRef.current?.scrollIntoView?.({ block: "end" });
     }
   }, [isOpen, messages]);
+
+  useEffect(() => {
+    if (!isOpen || typeof document === "undefined") return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node) || containerRef.current?.contains(target)) return;
+      setIsOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [isOpen]);
 
   const transcriptHref = useMemo(() => {
     const transcript = messages.map((message) => `${message.role === "visitor" ? "Visitor" : "AIXCO"}: ${message.text}`).join("\n");
@@ -137,6 +153,7 @@ export function ChatWidget() {
 
   return (
     <div
+      ref={containerRef}
       data-chat-floating-container="true"
       className="pointer-events-none fixed bottom-5 right-5 z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3 md:bottom-6 md:right-6"
     >

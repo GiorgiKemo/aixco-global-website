@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "./ui-state";
@@ -91,6 +91,30 @@ describe("ChatWidget", () => {
     expect(screen.getByRole("link", { name: /email transcript/i })).toHaveClass("btn-ghost-gold");
     expect(screen.getByRole("button", { name: "Register" })).toHaveClass("min-h-10");
     expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-10");
+  });
+
+  it("closes the open chat panel when clicking outside the widget", async () => {
+    renderWidget();
+
+    fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
+
+    expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toBeInTheDocument();
+
+    fireEvent.pointerDown(document.body);
+
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog", { name: /aixco live chat/i })).not.toBeInTheDocument();
+    });
+    expect(screen.getByRole("button", { name: /open live chat/i })).toBeInTheDocument();
+  });
+
+  it("keeps the open chat panel active when clicking inside the widget", () => {
+    renderWidget();
+
+    fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
+    fireEvent.pointerDown(screen.getByRole("dialog", { name: /aixco live chat/i }));
+
+    expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toBeInTheDocument();
   });
 
   it("opens the chat panel directly above the launcher without blocking other floating controls", () => {
