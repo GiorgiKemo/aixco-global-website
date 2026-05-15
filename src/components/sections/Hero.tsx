@@ -333,15 +333,15 @@ export function Hero() {
 
       <div
         data-hero-composition="reference-center"
-        className="relative z-10 flex min-h-screen min-h-[100svh] items-center justify-center px-6 py-[clamp(5.5rem,10svh,7rem)] text-center sm:px-10 lg:px-24 xl:px-28"
+        className="relative z-10 flex min-h-screen min-h-[100svh] flex-col items-center justify-center px-6 py-[clamp(5.5rem,10svh,7rem)] text-center md:flex-col md:px-8 lg:px-24 xl:px-28"
       >
         <div
           data-hero-content-stack="true"
-          className="flex w-full min-w-0 max-w-[calc(100vw-3rem)] translate-y-[clamp(1rem,4svh,3.5rem)] flex-col items-center sm:max-w-[82rem]"
+          className="mx-auto flex w-full min-w-0 max-w-[calc(100vw-3rem)] translate-y-[clamp(1rem,4svh,3.5rem)] flex-col items-center md:max-w-[44rem] md:flex-col lg:max-w-[72rem] lg:flex-col xl:max-w-[82rem]"
         >
           <motion.p
             data-hero-kicker="true"
-            className="mb-2 self-start text-sm font-medium uppercase tracking-normal text-white/90 drop-shadow-[0_4px_16px_rgb(0_0_0/0.55)] sm:ml-[clamp(0rem,20vw,18rem)] sm:text-base md:text-lg"
+            className="mb-2 self-start text-sm font-medium uppercase tracking-normal text-white/90 drop-shadow-[0_4px_16px_rgb(0_0_0/0.55)] sm:ml-[clamp(0rem,20vw,18rem)] sm:text-base md:ml-0 md:self-center md:text-base lg:ml-[clamp(0rem,20vw,18rem)] lg:self-start lg:text-lg"
             initial={false}
             animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
             transition={{ duration: shouldReduceMotion ? 0.6 : 0.9, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: 0.12 }}
@@ -355,7 +355,7 @@ export function Hero() {
             aria-hidden="true"
             width={780}
             height={704}
-            className="mb-2 h-auto w-[clamp(5rem,14vw,14.6rem)] self-start object-contain drop-shadow-[0_16px_32px_rgb(0_0_0/0.28)] sm:ml-[clamp(0rem,20vw,18rem)]"
+            className="mb-2 h-auto w-[clamp(5rem,14vw,14.6rem)] self-start object-contain drop-shadow-[0_16px_32px_rgb(0_0_0/0.28)] sm:ml-[clamp(0rem,20vw,18rem)] md:ml-0 md:w-[clamp(5.5rem,10vw,7rem)] md:self-center lg:ml-[clamp(0rem,20vw,18rem)] lg:w-[clamp(5rem,14vw,14.6rem)] lg:self-start"
             decoding="async"
             initial={false}
             animate={isHeroReady ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.985, filter: "blur(14px)" }}
@@ -363,7 +363,7 @@ export function Hero() {
           />
           <motion.h1
             data-hero-title="true"
-            className="hero-reference-font max-w-[calc(100vw-3rem)] min-w-0 text-[clamp(1.85rem,8vw,7.45rem)] font-semibold leading-[0.82] tracking-normal text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)] [perspective:900px] sm:max-w-full sm:text-[clamp(2.9rem,10.25vw,7.45rem)]"
+            className="hero-reference-font max-w-full min-w-0 break-words text-[clamp(1.85rem,8vw,7.45rem)] font-semibold leading-[0.82] tracking-normal text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)] [perspective:900px] sm:max-w-full sm:text-[clamp(2.9rem,10.25vw,7.45rem)] md:text-[clamp(3.25rem,7.2vw,4.75rem)] lg:text-[clamp(5rem,8vw,7.45rem)]"
             initial={false}
             animate={isHeroReady ? "visible" : "hidden"}
             variants={shouldReduceMotion ? { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } } : headlineVariants}
@@ -380,7 +380,7 @@ export function Hero() {
 
           <motion.p
             data-hero-intro-copy="true"
-            className="hero-reference-font mt-6 w-[18rem] max-w-full px-1 text-[clamp(1.08rem,2.55vw,1.46rem)] font-normal leading-[1.55] text-white/90 drop-shadow-[0_3px_18px_rgb(0_0_0/0.46)] sm:w-full sm:max-w-[50rem]"
+            className="hero-reference-font mt-6 w-[18rem] max-w-full break-words px-1 text-[clamp(1.08rem,2.55vw,1.46rem)] font-normal leading-[1.55] text-white/90 drop-shadow-[0_3px_18px_rgb(0_0_0/0.46)] sm:w-full md:max-w-[42rem] md:text-[clamp(1rem,1.9vw,1.2rem)] lg:max-w-[50rem] lg:text-[clamp(1.14rem,1.7vw,1.46rem)]"
             initial={false}
             animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
             transition={{ duration: shouldReduceMotion ? 0.7 : 1.02, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.42 : 1.02 }}
@@ -392,14 +392,14 @@ export function Hero() {
             href="#faqs"
             onClick={handleFaqClick}
             data-hero-price-lockup="true"
-            className="mt-8 flex w-full items-center justify-center rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+            className="mt-8 flex w-full max-w-full flex-row items-center justify-center rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:mt-6 md:flex-row md:px-0 lg:mt-8"
             initial={false}
             animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
             transition={{ duration: shouldReduceMotion ? 0.68 : 1, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.52 : 1.18 }}
           >
             <span
               data-hero-price-text="true"
-              className="hero-reference-font max-w-full whitespace-nowrap text-[clamp(1.2rem,5vw,3.5rem)] font-light uppercase leading-none tracking-normal sm:text-[clamp(1.8rem,4vw,4rem)]"
+              className="hero-reference-font max-w-full whitespace-nowrap text-[clamp(1.2rem,5vw,3.5rem)] font-light uppercase leading-none tracking-normal sm:text-[clamp(1.8rem,4vw,4rem)] md:text-[clamp(2rem,4vw,3rem)] lg:text-[clamp(2.8rem,3.8vw,4rem)]"
             >
               {tx(heroPriceText)}
             </span>

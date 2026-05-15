@@ -52,21 +52,15 @@ describe("index.css motion rules", () => {
     expect(partnerModalLogoStage).not.toContain("backdrop-filter");
   });
 
-  it("keeps the hero composition compact on iPad-sized viewports", () => {
+  it("keeps hero safe-area support without tablet placement overrides", () => {
     expect(css).toContain("[data-hero-shell=\"true\"]");
     expect(css).toContain("min-height: 100svh");
     expect(css).toContain("env(safe-area-inset-top, 0px)");
     expect(css).toContain("env(safe-area-inset-bottom, 0px)");
-    expect(css).toContain("@media (max-height: 840px) and (min-width: 768px) and (max-width: 1180px)");
-    expect(css).toContain("height: 4rem !important");
-    expect(css).toContain("[data-hero-content-stack=\"true\"]");
-    expect(css).toContain("transform: translateY(-1rem) !important");
-    expect(css).toContain("[data-hero-kicker=\"true\"]");
-    expect(css).toContain("[data-hero-title=\"true\"]");
-    expect(css).toContain("[data-hero-price-text=\"true\"]");
-    expect(css).toContain("[data-hero-scroll-cue=\"viewport\"]");
-    expect(css).toContain("bottom: 2.75rem !important");
-    expect(css).toContain("[data-hero-lottie-arrow=\"true\"]");
+    expect(css).not.toContain("@media (max-height: 840px) and (min-width: 768px) and (max-width: 1180px)");
+    expect(css).not.toContain("transform: translateY(-1rem) !important");
+    expect(css).not.toContain("font-size: clamp(3.7rem, 8.4vw, 5.45rem) !important");
+    expect(css).not.toContain("bottom: 2.75rem !important");
   });
 
   it("keeps the desktop hero scroll cue clear of the price lockup", () => {

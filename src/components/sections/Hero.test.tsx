@@ -178,6 +178,39 @@ describe("Hero", () => {
     expect(container.innerHTML).not.toContain("giorgikemo.github.io");
   });
 
+  it("declares tablet breakpoint constraints directly on the hero Tailwind classes", () => {
+    const { container } = renderHero();
+
+    const hero = container.querySelector("section");
+    const composition = container.querySelector("[data-hero-composition='reference-center']");
+    const contentStack = container.querySelector("[data-hero-content-stack='true']");
+    const heading = within(hero as HTMLElement).getByRole("heading", { level: 1 });
+    const introCopy = within(hero as HTMLElement).getByText(
+      "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.",
+    );
+    const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
+    const priceText = container.querySelector("[data-hero-price-text='true']");
+
+    expect(composition?.className).toContain("px-6");
+    expect(composition?.className).toContain("md:px-8");
+    expect(composition?.className).toContain("lg:px-24");
+    expect(composition?.className).toContain("flex-col");
+    expect(composition?.className).toContain("md:flex-col");
+    expect(contentStack?.className).toContain("max-w-[calc(100vw-3rem)]");
+    expect(contentStack?.className).toContain("md:max-w-[44rem]");
+    expect(contentStack?.className).toContain("lg:max-w-[72rem]");
+    expect(contentStack?.className).toContain("md:flex-col");
+    expect(heading.className).toContain("break-words");
+    expect(heading.className).toContain("md:text-[clamp(3.25rem,7.2vw,4.75rem)]");
+    expect(heading.className).toContain("lg:text-[clamp(5rem,8vw,7.45rem)]");
+    expect(introCopy.className).toContain("md:max-w-[42rem]");
+    expect(introCopy.className).toContain("md:text-[clamp(1rem,1.9vw,1.2rem)]");
+    expect(priceLockup?.className).toContain("md:mt-6");
+    expect(priceLockup?.className).toContain("md:flex-row");
+    expect(priceText?.className).toContain("md:text-[clamp(2rem,4vw,3rem)]");
+    expect(priceText?.className).toContain("lg:text-[clamp(2.8rem,3.8vw,4rem)]");
+  });
+
   it("translates the hero entry price text", () => {
     localStorage.setItem("aixco-lang", "de");
 
