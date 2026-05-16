@@ -18,7 +18,7 @@ export function AixcoPhilosophyPage() {
     <>
       <Nav />
       <main className="bg-background">
-        <section className="relative isolate min-h-[72svh] overflow-hidden bg-[#10110f] pt-28 text-white md:pt-32">
+        <section className="relative isolate min-h-svh overflow-hidden bg-[#10110f] pt-24 text-white md:pt-28 lg:pt-32">
           <Image
             src={aboutArchitecture}
             alt="AIXCO real estate architecture"
@@ -28,7 +28,7 @@ export function AixcoPhilosophyPage() {
             className="absolute inset-0 -z-20 object-cover opacity-40"
           />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,17,15,0.58)_0%,rgba(16,17,15,0.78)_54%,rgba(16,17,15,0.96)_100%)]" />
-          <div className="container-x flex min-h-[calc(72svh-7rem)] flex-col justify-end pb-14 md:pb-20">
+          <div className="container-x flex min-h-[calc(100svh-6rem)] flex-col justify-end pb-8 md:min-h-[calc(100svh-7rem)] md:pb-10 lg:min-h-[calc(100svh-8rem)]">
             <p className="eyebrow text-primary-glow">{philosophyHero.eyebrow}</p>
             <h1 className="mt-5 max-w-5xl text-4xl font-semibold leading-[1.04] text-white md:text-6xl">
               {philosophyHero.title}
@@ -37,16 +37,16 @@ export function AixcoPhilosophyPage() {
               {philosophyHero.summary}
             </p>
 
-            <dl className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <dl className="mt-7 grid grid-cols-2 gap-3 md:mt-8 lg:grid-cols-4">
               {philosophyStats.map((stat, index) => {
                 const Icon = statIcons[index];
 
                 return (
                   <div
                     key={stat.label}
-                    className="rounded-lg border border-white/15 bg-white/[0.075] p-4 shadow-[0_18px_46px_-34px_rgb(0_0_0/0.8)] backdrop-blur-md"
+                    className="min-h-28 rounded-lg border border-white/15 bg-white/[0.075] p-3 shadow-[0_18px_46px_-34px_rgb(0_0_0/0.8)] backdrop-blur-md md:min-h-0 md:p-4"
                   >
-                    <dt className="flex items-center gap-2 text-sm leading-5 text-white/65">
+                    <dt className="flex items-start gap-2 text-xs leading-5 text-white/65 md:items-center md:text-sm">
                       <Icon className="h-4 w-4 text-primary-glow" aria-hidden />
                       {stat.label}
                     </dt>
