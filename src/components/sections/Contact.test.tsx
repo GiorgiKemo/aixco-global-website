@@ -66,6 +66,21 @@ describe("Contact", () => {
     expect(form?.compareDocumentPosition(image)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
+  it("uses a viewport-fit contact layout for desktop and tablet hash landings", () => {
+    const { container } = renderContact();
+
+    const section = container.querySelector("section#contact");
+    const viewportShell = container.querySelector("[data-viewport-fit='contact-view']");
+    const form = container.querySelector("form");
+    const imageFrame = screen.getByAltText("Contact").parentElement;
+
+    expect(section).toHaveClass("scroll-mt-16", "md:scroll-mt-20", "md:py-0");
+    expect(viewportShell).toHaveClass("min-h-[calc(100svh-4rem)]", "md:h-[calc(100svh-5rem)]", "md:grid-cols-2", "md:grid-rows-[auto_minmax(0,1fr)]");
+    expect(form).toHaveClass("gap-4", "md:gap-5", "lg:self-start");
+    expect(screen.getByRole("textbox", { name: "Message*" })).toHaveAttribute("rows", "4");
+    expect(imageFrame).toHaveClass("h-full", "max-h-[18rem]", "lg:max-h-none");
+  });
+
   it("allows the localized contact headline to wrap in narrow columns", () => {
     renderContact();
 

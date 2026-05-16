@@ -65,17 +65,20 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative scroll-mt-16 bg-surface/40 py-16 md:scroll-mt-20 md:py-20 lg:py-24">
-      <div className="container-x grid gap-12 lg:grid-cols-12">
-        <div className="scroll-reveal lg:col-span-5">
+    <section id="contact" className="relative scroll-mt-16 bg-surface/40 py-12 md:scroll-mt-20 md:py-0">
+      <div
+        data-viewport-fit="contact-view"
+        className="container-x grid min-h-[calc(100svh-4rem)] gap-8 py-8 md:h-[calc(100svh-5rem)] md:min-h-0 md:grid-cols-2 md:grid-rows-[auto_minmax(0,1fr)] md:items-stretch md:gap-x-8 md:gap-y-5 md:py-8 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-6 lg:py-8"
+      >
+        <div className="scroll-reveal md:col-span-1 lg:col-span-5">
           <p className="eyebrow">{tx("Contact")}</p>
-          <h2 className="heading-section mt-5 max-w-full [overflow-wrap:anywhere]">
+          <h2 className="heading-section mt-4 max-w-full [overflow-wrap:anywhere]">
             <span className="text-gold">{tx("Start")}</span> {tx("your participation in Global real estate opportunities")}
           </h2>
-          <p className="mt-5 max-w-md text-foreground/80 leading-relaxed">
+          <p className="mt-4 max-w-md leading-relaxed text-foreground/80">
             {tx("Register with us now, and start participating in exclusive real estate opportunities from €1,000.")}
           </p>
-          <div className="mt-10 space-y-5">
+          <div className="mt-6 space-y-4">
             <a href={`mailto:${company.email}`} className="group flex items-start gap-4">
               <span className="icon-button-glass flex h-10 w-10 shrink-0"><Mail className="h-4 w-4 text-primary" /></span>
               <div>
@@ -93,9 +96,9 @@ export function Contact() {
           </div>
         </div>
 
-        <div className="scroll-reveal lg:col-span-7 lg:col-start-6 lg:row-span-2 lg:row-start-1 lg:self-start">
+        <div className="scroll-reveal md:col-span-1 md:col-start-2 md:row-span-2 md:row-start-1 md:flex md:min-h-0 lg:col-span-7 lg:col-start-6">
           {state === "success" ? (
-            <div className="glass rounded-lg p-10 text-center animate-scale-in">
+            <div className="glass w-full rounded-lg p-8 text-center animate-scale-in md:p-10 lg:self-start">
               <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 text-primary">
                 <Check className="h-6 w-6" />
               </span>
@@ -128,8 +131,8 @@ export function Contact() {
               </div>
             </div>
           ) : (
-            <form onSubmit={onSubmit} noValidate className="grid gap-6 glass rounded-lg p-7 md:p-10">
-              <div className="grid gap-6 md:grid-cols-2">
+            <form onSubmit={onSubmit} noValidate className="grid w-full gap-4 glass rounded-lg p-5 md:gap-5 md:p-6 lg:self-start lg:p-7">
+              <div className="grid gap-4 md:grid-cols-2 md:gap-5">
                 <Field label={tx("Name*")} name="name" error={errors.name} fieldRefs={fieldRefs} />
                 <Field label={tx("Email*")} name="email" type="email" error={errors.email} fieldRefs={fieldRefs} />
               </div>
@@ -141,7 +144,7 @@ export function Contact() {
                 <textarea
                   id="message"
                   name="message"
-                  rows={5}
+                  rows={4}
                   placeholder={tx("Message*")}
                   required
                   aria-invalid={!!errors.message}
@@ -168,8 +171,8 @@ export function Contact() {
           )}
         </div>
 
-        <div className="scroll-reveal lg:col-span-5">
-          <div className="mac-card overflow-hidden">
+        <div className="scroll-reveal md:col-span-1 md:col-start-1 md:row-start-2 md:min-h-0 lg:col-span-5">
+          <div className="mac-card h-full max-h-[18rem] overflow-hidden md:max-h-[20rem] lg:max-h-none">
             <Image
               src={aixcoLiveImages.transactionBackdrop}
               alt={tx("Contact")}
@@ -178,7 +181,7 @@ export function Contact() {
               width={1280}
               height={720}
               sizes="(min-width: 1024px) 42vw, 100vw"
-              className="aspect-[3/2] w-full object-cover"
+              className="h-full min-h-[14rem] w-full object-cover"
             />
           </div>
         </div>
