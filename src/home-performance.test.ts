@@ -35,12 +35,10 @@ describe("home page performance structure", () => {
   it("keeps the philosophy hero fitted to viewport breakpoints", () => {
     const philosophySource = readSource("src/views/AixcoPhilosophyPage.tsx");
 
-    expect(philosophySource).toContain("min-h-[86svh]");
-    expect(philosophySource).toContain("md:min-h-[84svh]");
-    expect(philosophySource).toContain("lg:min-h-[82svh]");
-    expect(philosophySource).toContain("min-h-[calc(86svh-6rem)]");
-    expect(philosophySource).toContain("md:min-h-[calc(84svh-7rem)]");
-    expect(philosophySource).toContain("lg:min-h-[calc(82svh-8rem)]");
+    expect(philosophySource).toContain("min-h-svh");
+    expect(philosophySource).toContain("min-h-[calc(100svh-6rem)]");
+    expect(philosophySource).toContain("md:min-h-[calc(100svh-7rem)]");
+    expect(philosophySource).toContain("lg:min-h-[calc(100svh-8rem)]");
     expect(philosophySource).toContain("grid-cols-2");
     expect(philosophySource).toContain("lg:grid-cols-4");
   });
