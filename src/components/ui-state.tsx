@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
 type Modal = null | "login" | "register" | "terms" | "privacy" | "journey" | "team" | "partner";
 type ModalData = unknown;
@@ -22,20 +22,34 @@ export function UIProvider({ children }: { children: ReactNode }) {
   const [modal, setModal] = useState<Modal>(null);
   const [modalData, setModalData] = useState<ModalData>(null);
 
-  const open = (m: Modal, data: ModalData = null) => { setModal(m); setModalData(data); };
+  const open = useCallback((m: Modal, data: ModalData = null) => {
+    setModal(m);
+    setModalData(data);
+  }, []);
 
-  return (
-    <Ctx.Provider value={{
-      modal, modalData,
+  const close = useCallback(() => {
+    setModal(null);
+    setModalData(null);
+  }, []);
+
+  const value = useMemo<UIState>(
+    () => ({
+      modal,
+      modalData,
       openLogin: () => open("login"),
       openRegister: () => open("register"),
       openTerms: () => open("terms"),
       openPrivacy: () => open("privacy"),
-      openJourney: (d) => open("journey", d),
-      openTeam: (d) => open("team", d),
-      openPartner: (d) => open("partner", d),
-      close: () => { setModal(null); setModalData(null); },
-    }}>
+      openJourney: (data) => open("journey", data),
+      openTeam: (data) => open("team", data),
+      openPartner: (data) => open("partner", data),
+      close,
+    }),
+    [close, modal, modalData, open],
+  );
+
+  return (
+    <Ctx.Provider value={value}>
       {children}
     </Ctx.Provider>
   );

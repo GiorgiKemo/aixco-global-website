@@ -200,6 +200,7 @@ export function Nav() {
     window.addEventListener("keydown", cancelPendingSectionScrolls, { capture: true });
 
     return () => {
+      clearPendingNavScrollTimers();
       window.removeEventListener("wheel", cancelPendingSectionScrolls, options);
       window.removeEventListener("touchstart", cancelPendingSectionScrolls, options);
       window.removeEventListener("pointerdown", cancelPendingSectionScrolls, options);

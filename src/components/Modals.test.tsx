@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { SiteContentContext } from "@/data/site-content-context";
 import { siteContentDefaults } from "@/lib/backend/site-content";
@@ -27,6 +27,10 @@ function LoginTrigger() {
 }
 
 describe("Modals", () => {
+  afterEach(() => {
+    document.body.style.overflow = "";
+  });
+
   it("gives legal dialogs an accessible name", () => {
     render(
       <I18nProvider>
@@ -100,6 +104,28 @@ describe("Modals", () => {
     expect(modalBackdrop?.className).not.toContain("bg-background");
     expect(dialog).toHaveClass("modal-panel");
     expect(dialog.className).not.toContain("animate-scale-in");
+  });
+
+  it("restores the previous body overflow value after closing", () => {
+    document.body.style.overflow = "clip";
+
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <PrivacyTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open privacy/i }));
+
+    expect(document.body.style.overflow).toBe("hidden");
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(document.body.style.overflow).toBe("clip");
   });
 
   it("does not render portal links that are outside the approved Workwise portal", () => {

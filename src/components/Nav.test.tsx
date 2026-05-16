@@ -184,6 +184,23 @@ describe("Nav", () => {
     vi.useRealTimers();
   });
 
+  it("clears pending section scroll timers when the nav unmounts", () => {
+    vi.useFakeTimers();
+    const { unmount } = renderNav("/");
+
+    const primary = screen.getByLabelText("Primary");
+    fireEvent.click(within(primary).getByRole("link", { name: "Ways to Participate" }));
+
+    vi.clearAllMocks();
+    unmount();
+    vi.advanceTimersByTime(1200);
+
+    expect(replaceLocationHash).not.toHaveBeenCalledWith("#participate");
+    expect(scrollToHash).not.toHaveBeenCalledWith("#participate", "auto");
+
+    vi.useRealTimers();
+  });
+
   it("uses targeted transitions for desktop nav controls", () => {
     renderNav();
 
