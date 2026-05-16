@@ -41,7 +41,8 @@ describe("home page performance structure", () => {
     expect(philosophySource).toContain("lg:min-h-[calc(100svh-8rem)]");
     expect(philosophySource).toContain("justify-end");
     expect(philosophySource).toContain("md:justify-between");
-    expect(philosophySource).toContain("lg:pt-20");
+    expect(philosophySource).toContain("md:pt-8");
+    expect(philosophySource).toContain("lg:pt-10");
     expect(philosophySource).toContain("md:mt-8 md:text-6xl md:leading-[1.12]");
     expect(philosophySource).toContain("md:mt-9 md:text-xl md:leading-10");
     expect(philosophySource).toContain("grid-cols-2");

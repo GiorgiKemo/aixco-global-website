@@ -28,7 +28,7 @@ export function AixcoPhilosophyPage() {
             className="absolute inset-0 -z-20 object-cover opacity-40"
           />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,17,15,0.58)_0%,rgba(16,17,15,0.78)_54%,rgba(16,17,15,0.96)_100%)]" />
-          <div className="container-x flex min-h-[calc(100svh-6rem)] flex-col justify-end gap-6 pb-8 md:min-h-[calc(100svh-7rem)] md:justify-between md:gap-10 md:pb-10 md:pt-16 lg:min-h-[calc(100svh-8rem)] lg:pt-20">
+          <div className="container-x flex min-h-[calc(100svh-6rem)] flex-col justify-end gap-6 pb-8 md:min-h-[calc(100svh-7rem)] md:justify-between md:gap-10 md:pb-10 md:pt-8 lg:min-h-[calc(100svh-8rem)] lg:pt-10">
             <div className="max-w-5xl">
               <p className="eyebrow text-primary-glow">{philosophyHero.eyebrow}</p>
               <h1 className="mt-6 text-4xl font-semibold leading-[1.08] text-white md:mt-8 md:text-6xl md:leading-[1.12]">
