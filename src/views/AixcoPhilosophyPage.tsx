@@ -31,10 +31,10 @@ export function AixcoPhilosophyPage() {
           <div className="container-x flex min-h-[calc(100svh-6rem)] flex-col justify-end gap-6 pb-8 md:min-h-[calc(100svh-7rem)] md:justify-between md:gap-10 md:pb-10 md:pt-16 lg:min-h-[calc(100svh-8rem)] lg:pt-20">
             <div className="max-w-5xl">
               <p className="eyebrow text-primary-glow">{philosophyHero.eyebrow}</p>
-              <h1 className="mt-5 text-4xl font-semibold leading-[1.04] text-white md:text-6xl">
+              <h1 className="mt-6 text-4xl font-semibold leading-[1.08] text-white md:mt-8 md:text-6xl md:leading-[1.12]">
                 {philosophyHero.title}
               </h1>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-white/80 md:text-xl md:leading-9">
+              <p className="mt-7 max-w-3xl text-lg leading-8 text-white/80 md:mt-9 md:text-xl md:leading-10">
                 {philosophyHero.summary}
               </p>
             </div>
