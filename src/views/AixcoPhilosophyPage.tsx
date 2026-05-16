@@ -48,9 +48,9 @@ export function AixcoPhilosophyPage() {
                     key={stat.label}
                     className="group min-h-24 rounded-lg border border-white/15 bg-[#151820]/92 p-3 shadow-[0_18px_46px_-34px_rgb(0_0_0/0.8)] backdrop-blur-md transition-colors duration-300 hover:border-primary/55 md:min-h-0 md:p-5"
                   >
-                    <dt className="flex items-start gap-2 text-[0.62rem] font-semibold uppercase leading-4 tracking-[0.16em] text-white/65 md:items-center md:text-xs md:leading-5 md:tracking-[0.32em]">
-                      <Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary-glow md:mt-0" aria-hidden />
-                      {stat.label}
+                    <dt className="grid grid-cols-[1rem_minmax(0,1fr)] gap-2 text-[0.62rem] font-semibold uppercase leading-4 tracking-[0.16em] text-white/65 md:grid-cols-[1.25rem_minmax(0,1fr)] md:text-xs md:leading-5 md:tracking-[0.32em]">
+                      <Icon className="mt-0.5 h-4 w-4 shrink-0 justify-self-start text-primary-glow md:mt-[0.125rem]" aria-hidden />
+                      <span className="text-left">{stat.label}</span>
                     </dt>
                     <dd className="mt-2 text-[1.95rem] font-semibold leading-none tracking-normal text-primary md:mt-5 md:text-5xl">{stat.value}</dd>
                     <div className="mt-2 h-px w-full bg-primary/75 transition-colors duration-300 group-hover:bg-primary md:mt-4" aria-hidden />
