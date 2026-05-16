@@ -77,7 +77,7 @@ function BatumiStatCard({
       whileHover={{ y: -3 }}
       transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`group flex flex-col justify-between border transition-[background-color,border-color,box-shadow,color] duration-200 ${
-        compact ? "min-h-[7.1rem] min-w-0 p-4 md:min-h-[7.35rem] lg:min-h-[7.55rem] lg:p-5" : "min-h-[8.8rem] min-w-0 p-5 md:min-h-[9.4rem] lg:p-6"
+        compact ? "min-h-[6.25rem] min-w-0 p-3.5 md:min-h-[6.45rem] lg:min-h-[6.6rem] lg:p-4" : "min-h-[8.8rem] min-w-0 p-5 md:min-h-[9.4rem] lg:p-6"
       } ${
         highlight
           ? "border-foreground bg-foreground text-background"
@@ -112,7 +112,7 @@ function BatumiStatCard({
           )}
         </div>
       </div>
-      <div className={`${compact ? "mt-4" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
+      <div className={`${compact ? "mt-3" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
     </motion.div>
   );
 }
@@ -131,7 +131,7 @@ function BatumiDetailItem({
   tx: Translate;
 }) {
   return (
-    <li className={`${compact ? "space-y-2.5" : "space-y-3"} min-w-0`}>
+    <li className={`${compact ? "space-y-2" : "space-y-3"} min-w-0`}>
       <div className="flex min-w-0 items-start gap-3">
         <span data-batumi-detail-icon className="flex size-7 shrink-0 items-center justify-center rounded-full border border-foreground/10 bg-white/70">
           <Icon size={14} className="text-primary" strokeWidth={1.9} />
@@ -140,7 +140,7 @@ function BatumiDetailItem({
           {tx(title)}
         </span>
       </div>
-      <p className={`font-medium text-foreground/78 [overflow-wrap:anywhere] ${compact ? "text-[0.88rem] leading-[1.4]" : "text-[0.98rem] leading-relaxed"}`}>
+      <p className={`font-medium text-foreground/78 [overflow-wrap:anywhere] ${compact ? "text-[0.88rem] leading-[1.32]" : "text-[0.98rem] leading-relaxed"}`}>
         {tx(content)}
       </p>
     </li>
@@ -156,7 +156,7 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
       data-density="viewport-fit"
       data-image-position="right"
       data-design-source="dubai-card-reference"
-      className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:grid-cols-12 md:items-stretch lg:grid-cols-12"
+      className="scroll-reveal group relative grid overflow-hidden border border-foreground/10 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.10)] transition-[transform,box-shadow,border-color] duration-300 md:h-full md:min-h-0 md:max-h-full md:flex-1 md:grid-cols-12 md:items-stretch lg:h-full lg:min-h-0 lg:max-h-full lg:grid-cols-12"
       whileHover={premiumSurfaceHover}
       whileTap={premiumPress}
     >
@@ -164,7 +164,7 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
         aria-label="Batumi overview media"
         data-media-frame="dubai-style-split-media"
         data-batumi-card-media
-        className="batumi-match-otium-video-height relative order-2 overflow-hidden bg-foreground md:order-2 md:col-span-5 lg:order-2 lg:col-span-5"
+        className="batumi-match-otium-video-height relative order-2 overflow-hidden bg-foreground md:order-2 md:col-span-5 md:min-h-0 lg:order-2 lg:col-span-5 lg:min-h-0"
       >
         <LiveVideo
           src={aixcoLiveVideos.batumiBuy}
@@ -180,11 +180,11 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
         data-batumi-card-copy
         className="order-1 flex min-h-0 min-w-0 flex-col border-foreground/5 md:order-1 md:col-span-7 md:border-r lg:order-1 lg:col-span-7 lg:border-r"
       >
-        <div className="border-b border-foreground/5 p-6 pb-5 md:p-7 md:pb-6 lg:p-8 lg:pb-7 xl:p-8">
+        <div className="border-b border-foreground/5 p-4 pb-3 md:p-5 md:pb-4 lg:p-5 lg:pb-3 xl:p-5">
           <h3 className="max-w-[42rem] font-display text-[clamp(2rem,4.7vw,3rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.15rem,3.1vw,3.5rem)] lg:text-[clamp(2.2rem,3.05vw,3.6rem)]">
             {tx("Why Batumi")}
           </h3>
-          <p className="mt-3 max-w-[45rem] text-[clamp(0.92rem,0.98vw,1rem)] leading-[1.45] text-foreground/76">
+          <p className="mt-2 max-w-[45rem] text-[clamp(1rem,0.98vw,1.08rem)] leading-[1.32] text-foreground/76">
             {tx("Georgia sits at the crossroads of Europe and Asia, maintaining strong relationships with neighboring countries as well as with the EU, the United States, and Asian markets. Batumi offers a rare opportunity to enter an emerging market that is steadily aligning with the highest standards in safety, education, and transparency. At the same time, it benefits from a flexible, low-regulation environment and strong long-term growth potential.")}
           </p>
         </div>
@@ -203,7 +203,7 @@ function BatumiMarketCard({ benefits, tx }: { benefits: BatumiBenefits; tx: Tran
           ))}
         </div>
         <div aria-label="Batumi benefit highlights" data-layout="batumi-benefits-dubai-card" className="bg-surface/45">
-          <ul data-batumi-detail-notes data-layout="prestige-highlights" className="grid gap-4 p-4 sm:grid-cols-2 md:grid-cols-2 md:gap-4 md:p-4 lg:p-5 xl:grid-cols-4">
+          <ul data-batumi-detail-notes data-layout="prestige-highlights" className="grid gap-3 p-3.5 sm:grid-cols-2 md:grid-cols-2 md:gap-3 md:p-3.5 lg:grid-cols-4 lg:p-3.5">
             {marketDetails.map((detail, index) => (
               <BatumiDetailItem
                 key={detail.label}
@@ -319,7 +319,7 @@ export function Batumi() {
           data-viewport-fit="first-view"
           className="flex min-h-[calc(100svh-4rem)] scroll-mt-16 flex-col md:min-h-[calc(100svh-5rem)] md:scroll-mt-20"
         >
-          <div className="scroll-reveal mb-5 shrink-0 md:mb-6 lg:mb-7">
+          <div className="scroll-reveal mb-5 shrink-0 md:mb-4 lg:mb-4">
             <p className="eyebrow">{tx("Batumi")}</p>
             <h2 className="heading-section mt-4 max-w-2xl">{tx("Batumi")}</h2>
           </div>

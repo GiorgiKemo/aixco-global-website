@@ -47,12 +47,13 @@ describe("Batumi", () => {
     expect(marketCard).toHaveAttribute("data-image-position", "right");
     expect(marketCard?.className).toContain("transition-[transform,box-shadow,border-color]");
     expect(marketCard?.className).not.toContain("transition-all");
-    expect(marketCard?.className).not.toContain("md:h-full");
-    expect(marketCard?.className).not.toContain("md:max-h-full");
+    expect(marketCard?.className).toContain("md:h-full");
+    expect(marketCard?.className).toContain("md:max-h-full");
+    expect(marketCard?.className).toContain("md:flex-1");
     expect(marketCard?.className).toContain("md:grid-cols-12");
     expect(media?.className).toContain("md:col-span-5");
     expect(media?.className).toContain("batumi-match-otium-video-height");
-    expect(media?.className).not.toContain("md:min-h-0");
+    expect(media?.className).toContain("md:min-h-0");
     expect(copy?.className).toContain("md:col-span-7");
     expect(metricGrid?.className).toContain("md:grid-cols-3");
     expect(entryTile?.className).toContain("bg-foreground");
@@ -63,7 +64,7 @@ describe("Batumi", () => {
     expect(entryAccent?.className).not.toContain("duration-400");
     expect(details).toHaveAttribute("data-layout", "prestige-highlights");
     expect(details?.className).toContain("md:grid-cols-2");
-    expect(details?.className).toContain("xl:grid-cols-4");
+    expect(details?.className).toContain("lg:grid-cols-4");
     expect(details?.querySelectorAll("[data-batumi-detail-icon]").length).toBe(4);
     expect(screen.getByLabelText("Batumi overview media")).toHaveAttribute(
       "data-media-frame",

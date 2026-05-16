@@ -122,7 +122,7 @@ describe("Dubai", () => {
     const landingViewport = container.querySelector("[data-layout='dubai-first-viewport']");
     const remainingCards = container.querySelector("[data-layout='remaining-dubai-fund-cards']");
     const fundOne = landingViewport?.querySelector("[data-fund-card='fund-1']");
-    const fundOneGallery = landingViewport?.querySelector("[data-fund-asset-gallery='fund-1']");
+    const fundOneGallery = container.querySelector("[data-fund-asset-gallery='fund-1']");
     const fundTwo = remainingCards?.querySelector("[data-fund-card='fund-2']");
 
     expect(dubaiAnchor?.className).toContain("min-h-[calc(100svh-4rem)]");
@@ -134,6 +134,7 @@ describe("Dubai", () => {
     expect(fundOneGallery).toHaveAttribute("data-viewport-offset", "landing-gallery");
     expect(fundOneGallery?.className).toContain("mt-28");
     expect(fundOneGallery?.className).toContain("md:mt-32");
+    expect(landingViewport?.querySelector("[data-fund-asset-gallery='fund-1']")).not.toBeInTheDocument();
     expect(fundTwo).toHaveAttribute("data-density", "standard");
     expect(landingViewport?.querySelector("[data-fund-card='fund-2']")).not.toBeInTheDocument();
     expect(remainingCards?.querySelector("[data-fund-card='fund-2']")).toBeInTheDocument();
@@ -409,7 +410,7 @@ describe("Dubai", () => {
 
     const detailNotes = container.querySelector("[data-fund-detail-notes='fund-1']");
     expect(detailNotes?.className).toContain("sm:grid-cols-2");
-    expect(detailNotes?.className).toContain("xl:grid-cols-3");
+    expect(detailNotes?.className).toContain("lg:grid-cols-3");
     expect(detailNotes).toHaveAttribute("data-layout", "prestige-highlights");
 
     const unitsTile = within(highlightGrid as HTMLElement).getByText("600").closest("[data-fund-highlight-tile]");
@@ -448,7 +449,8 @@ describe("Dubai", () => {
     const fundTwoAssetLink = within(fundTwo).getByRole("link", { name: /View Asset Details: Fund II/ });
 
     expect(fundOneGallery).toBeInTheDocument();
-    expect(fundOneGallery.previousElementSibling).toBe(fundOne);
+    expect(fundOneGallery.previousElementSibling).toHaveAttribute("id", "dubai");
+    expect(fundOneGallery.previousElementSibling?.querySelector("[data-fund-card='fund-1']")).toBe(fundOne);
     expect(fundOneGallery).toHaveAttribute("data-gallery-source", "eden-house-and-park");
     expect(fundOneGallery.className).toContain("scroll-mt-16");
     expect(fundOneGallery.className).toContain("md:scroll-mt-20");

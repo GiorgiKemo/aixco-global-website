@@ -143,7 +143,7 @@ function PrestigeStatCard({
       whileHover={{ y: -3 }}
       transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`group flex flex-col justify-between border transition-[background-color,border-color,box-shadow,color] duration-200 ${
-        compact ? "min-h-[7.1rem] min-w-0 p-4 md:min-h-[7.35rem] lg:min-h-[7.55rem] lg:p-5" : "min-h-[8.8rem] min-w-0 p-5 md:min-h-[9.4rem] lg:p-6"
+        compact ? "min-h-[6.25rem] min-w-0 p-3.5 md:min-h-[6.45rem] lg:min-h-[6.6rem] lg:p-4" : "min-h-[8.8rem] min-w-0 p-5 md:min-h-[9.4rem] lg:p-6"
       } ${
         highlight
           ? "border-foreground bg-foreground text-background"
@@ -175,7 +175,7 @@ function PrestigeStatCard({
           )}
         </div>
       </div>
-      <div className={`${compact ? "mt-4" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
+      <div className={`${compact ? "mt-3" : "mt-7"} h-px w-8 transition-[width,background-color] [transition-duration:400ms] group-hover:w-full ${highlight ? "bg-primary" : "bg-foreground/20"}`} />
     </motion.div>
   );
 }
@@ -554,18 +554,18 @@ function DubaiFundCard({
   const imageFirst = idx % 2 === 0;
   const isViewportFit = isLanding;
   const heightClass = isLanding
-    ? "md:h-full md:min-h-0 md:max-h-full lg:h-full lg:min-h-0 lg:max-h-full"
+    ? "md:h-full md:min-h-0 md:max-h-full md:flex-1 lg:h-full lg:min-h-0 lg:max-h-full"
     : "md:min-h-[clamp(30rem,calc(100svh-15rem),38rem)] lg:min-h-[clamp(28rem,calc(100svh-15rem),32rem)]";
   const mediaOrderClass = imageFirst ? "order-2 md:order-1 lg:order-1" : "order-2 md:order-2 lg:order-2";
   const copyOrderClass = imageFirst ? "order-1 md:order-2 lg:order-2" : "order-1 md:order-1 lg:order-1";
   const titleShellClass = isViewportFit
-    ? "border-b border-foreground/5 p-6 pb-5 md:p-7 md:pb-6 lg:p-8 lg:pb-7 xl:p-8"
+    ? "border-b border-foreground/5 p-4 pb-3 md:p-5 md:pb-4 lg:p-6 lg:pb-4 xl:p-6"
     : "border-b border-foreground/5 p-7 pb-6 md:p-9 lg:p-10 xl:p-11";
   const titleClass = isViewportFit
     ? "max-w-[42rem] font-display text-[clamp(2rem,4.7vw,3rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.15rem,3.1vw,3.5rem)] lg:text-[clamp(2.2rem,3.05vw,3.6rem)]"
     : "max-w-[42rem] font-display text-[clamp(2.2rem,3.7vw,4.5rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.65rem,3.8vw,4.65rem)] lg:text-[clamp(2.45rem,3.45vw,4.25rem)]";
   const detailListClass = isViewportFit
-    ? "grid gap-5 bg-surface/45 p-5 sm:grid-cols-2 md:gap-5 md:p-6 lg:p-7 xl:grid-cols-3"
+    ? "grid gap-3 bg-surface/45 p-3.5 sm:grid-cols-2 md:gap-3 md:p-4 lg:grid-cols-3 lg:p-4"
     : "grid gap-7 bg-surface/45 p-7 sm:grid-cols-2 md:gap-8 md:p-9 lg:p-10 xl:grid-cols-3";
   const galleryId = hasAssetGallery(fund.id) ? fund.id : undefined;
   const galleryHref = galleryId ? `#dubai-asset-gallery-${galleryId}` : undefined;
@@ -672,25 +672,28 @@ export function Dubai() {
     <section className="relative bg-surface/40 py-16 md:py-20 lg:py-20">
       <div className="container-x">
         <div className="grid gap-8" data-layout="alternating-fund-cards">
-          <div
-            id="dubai"
-            data-viewport-fit="first-view"
-            className="flex min-h-[calc(100svh-4rem)] scroll-mt-16 flex-col md:min-h-[calc(100svh-5rem)] md:scroll-mt-20"
-          >
-            <div className="scroll-reveal mb-5 shrink-0 md:mb-6 lg:mb-7">
-              <p className="eyebrow">{tx("Dubai")}</p>
-              <h2 className="heading-section mt-4 max-w-2xl">{tx("Dubai")}</h2>
+          <div data-fund-card-shell={landingFund.id}>
+            <div
+              id="dubai"
+              data-viewport-fit="first-view"
+              className="flex min-h-[calc(100svh-4rem)] scroll-mt-16 flex-col md:min-h-[calc(100svh-5rem)] md:scroll-mt-20"
+            >
+              <div className="scroll-reveal mb-5 shrink-0 md:mb-4 lg:mb-4">
+                <p className="eyebrow">{tx("Dubai")}</p>
+                <h2 className="heading-section mt-4 max-w-2xl">{tx("Dubai")}</h2>
+              </div>
+
+              <div className="flex flex-1 flex-col md:min-h-0" data-layout="dubai-first-viewport">
+                <DubaiFundCard
+                  fund={landingFund}
+                  idx={0}
+                  tx={tx}
+                  isLanding
+                />
+              </div>
             </div>
 
-            <div className="flex flex-1 flex-col md:min-h-0" data-layout="dubai-first-viewport" data-fund-card-shell={landingFund.id}>
-              <DubaiFundCard
-                fund={landingFund}
-                idx={0}
-                tx={tx}
-                isLanding
-              />
-              {renderFundGallery(landingFund, true)}
-            </div>
+            {renderFundGallery(landingFund, true)}
           </div>
 
           <div className="grid gap-8" data-layout="remaining-dubai-fund-cards">

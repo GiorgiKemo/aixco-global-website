@@ -28,6 +28,7 @@ describe("Participate", () => {
     const { container } = renderParticipate();
 
     const section = container.querySelector("section#participate");
+    const firstViewport = container.querySelector("[data-layout='participate-first-viewport']");
     const cardGrid = container.querySelector("[data-layout='alternating-participation-cards']");
     const bondCard = container.querySelector("[data-participation-card='bond']");
     const apartmentCard = container.querySelector("[data-participation-card='apartment']");
@@ -42,7 +43,10 @@ describe("Participate", () => {
     expect(section).toBeInTheDocument();
     expect(section?.className).toContain("scroll-mt-16");
     expect(section?.className).toContain("md:scroll-mt-20");
+    expect(section?.className).toContain("md:py-0");
     expect(section?.className).toContain("lg:py-0");
+    expect(container.querySelector("[data-viewport-fit='first-view']")).toHaveClass("md:h-[calc(100svh-5rem)]");
+    expect(firstViewport).toBeInTheDocument();
     expect(cardGrid).toBeInTheDocument();
     expect(cardGrid).toHaveClass("gap-16");
     expect(cardGrid?.className).not.toContain("md:grid-cols-2");
@@ -53,6 +57,8 @@ describe("Participate", () => {
     expect(apartmentCard).toHaveAttribute("data-image-position", "left");
     expect(bondCard?.className).toContain("md:grid-cols-12");
     expect(bondCard?.className).toContain("scroll-mt-24");
+    expect(bondCard?.className).toContain("md:flex-1");
+    expect(bondCard?.className).toContain("md:max-h-full");
     expect(bondCard?.className).not.toContain("md:h-[calc(100svh-5rem)]");
     expect(bondCard?.className).not.toContain("md:min-h-[min(40rem,calc(100svh-7rem))]");
     expect(apartmentCard?.className).toContain("md:grid-cols-12");
@@ -60,17 +66,17 @@ describe("Participate", () => {
     expect(apartmentCard?.className).toContain("md:max-h-[calc(100svh-5rem)]");
     expect(bondCard?.className).not.toContain("mac-card");
     expect(bondMedia?.className).toContain("md:order-2");
-    expect(bondMedia?.className).toContain("md:col-span-5");
+    expect(bondMedia?.className).toContain("md:col-span-4");
     expect(bondMedia?.className).toContain("md:self-stretch");
     expect(bondVideoWrapper?.className).toContain("!absolute");
     expect(bondVideoWrapper?.className).toContain("!inset-0");
     expect(bondVideoWrapper?.className).toContain("!h-full");
     expect(bondCopy?.className).toContain("md:order-1");
-    expect(bondCopy?.className).toContain("md:col-span-7");
+    expect(bondCopy?.className).toContain("md:col-span-8");
     expect(bondCopyStack?.className).toContain("gap-5");
-    expect(bondCopyStack?.className).not.toContain("max-w-[36rem]");
-    expect(bondCopyStack?.className).not.toContain("flex-1");
-    expect(bondCopyStack?.className).not.toContain("justify-between");
+    expect(bondCopyStack?.className).toContain("max-w-[38rem]");
+    expect(bondCopyStack?.className).toContain("md:h-full");
+    expect(bondCopyStack?.className).toContain("md:justify-between");
     expect(bondCopy?.className).not.toContain("justify-start");
     expect(bondCopy?.className).not.toContain("justify-center");
     expect(apartmentMedia?.className).toContain("md:order-1");
