@@ -28,30 +28,32 @@ export function AixcoPhilosophyPage() {
             className="absolute inset-0 -z-20 object-cover opacity-40"
           />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,17,15,0.58)_0%,rgba(16,17,15,0.78)_54%,rgba(16,17,15,0.96)_100%)]" />
-          <div className="container-x flex min-h-[calc(100svh-6rem)] flex-col justify-end pb-8 md:min-h-[calc(100svh-7rem)] md:pb-10 lg:min-h-[calc(100svh-8rem)]">
-            <p className="eyebrow text-primary-glow">{philosophyHero.eyebrow}</p>
-            <h1 className="mt-5 max-w-5xl text-4xl font-semibold leading-[1.04] text-white md:text-6xl">
-              {philosophyHero.title}
-            </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-white/80 md:text-xl md:leading-9">
-              {philosophyHero.summary}
-            </p>
+          <div className="container-x flex min-h-[calc(100svh-6rem)] flex-col justify-end gap-6 pb-8 md:min-h-[calc(100svh-7rem)] md:justify-between md:gap-10 md:pb-10 md:pt-16 lg:min-h-[calc(100svh-8rem)] lg:pt-20">
+            <div className="max-w-5xl">
+              <p className="eyebrow text-primary-glow">{philosophyHero.eyebrow}</p>
+              <h1 className="mt-5 text-4xl font-semibold leading-[1.04] text-white md:text-6xl">
+                {philosophyHero.title}
+              </h1>
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-white/80 md:text-xl md:leading-9">
+                {philosophyHero.summary}
+              </p>
+            </div>
 
-            <dl className="mt-5 grid grid-cols-2 gap-2 md:mt-8 md:gap-3 lg:grid-cols-4">
+            <dl className="mt-4 grid grid-cols-2 gap-2 md:mt-8 md:gap-3 lg:grid-cols-4">
               {philosophyStats.map((stat, index) => {
                 const Icon = statIcons[index];
 
                 return (
                   <div
                     key={stat.label}
-                    className="group min-h-28 rounded-lg border border-white/15 bg-[#151820]/92 p-3 shadow-[0_18px_46px_-34px_rgb(0_0_0/0.8)] backdrop-blur-md transition-colors duration-300 hover:border-primary/55 md:min-h-0 md:p-5"
+                    className="group min-h-24 rounded-lg border border-white/15 bg-[#151820]/92 p-3 shadow-[0_18px_46px_-34px_rgb(0_0_0/0.8)] backdrop-blur-md transition-colors duration-300 hover:border-primary/55 md:min-h-0 md:p-5"
                   >
-                    <dt className="flex items-start gap-2 text-[0.68rem] font-semibold uppercase leading-5 tracking-[0.18em] text-white/65 md:items-center md:text-xs md:tracking-[0.32em]">
+                    <dt className="flex items-start gap-2 text-[0.62rem] font-semibold uppercase leading-4 tracking-[0.16em] text-white/65 md:items-center md:text-xs md:leading-5 md:tracking-[0.32em]">
                       <Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary-glow md:mt-0" aria-hidden />
                       {stat.label}
                     </dt>
-                    <dd className="mt-3 text-[2.1rem] font-semibold leading-none tracking-normal text-primary md:mt-5 md:text-5xl">{stat.value}</dd>
-                    <div className="mt-3 h-px w-full bg-primary/75 transition-colors duration-300 group-hover:bg-primary md:mt-4" aria-hidden />
+                    <dd className="mt-2 text-[1.95rem] font-semibold leading-none tracking-normal text-primary md:mt-5 md:text-5xl">{stat.value}</dd>
+                    <div className="mt-2 h-px w-full bg-primary/75 transition-colors duration-300 group-hover:bg-primary md:mt-4" aria-hidden />
                   </div>
                 );
               })}
