@@ -37,20 +37,21 @@ export function AixcoPhilosophyPage() {
               {philosophyHero.summary}
             </p>
 
-            <dl className="mt-7 grid grid-cols-2 gap-3 md:mt-8 lg:grid-cols-4">
+            <dl className="mt-5 grid grid-cols-2 gap-2 md:mt-8 md:gap-3 lg:grid-cols-4">
               {philosophyStats.map((stat, index) => {
                 const Icon = statIcons[index];
 
                 return (
                   <div
                     key={stat.label}
-                    className="min-h-28 rounded-lg border border-white/15 bg-white/[0.075] p-3 shadow-[0_18px_46px_-34px_rgb(0_0_0/0.8)] backdrop-blur-md md:min-h-0 md:p-4"
+                    className="group min-h-28 rounded-lg border border-white/15 bg-[#151820]/92 p-3 shadow-[0_18px_46px_-34px_rgb(0_0_0/0.8)] backdrop-blur-md transition-colors duration-300 hover:border-primary/55 md:min-h-0 md:p-5"
                   >
-                    <dt className="flex items-start gap-2 text-xs leading-5 text-white/65 md:items-center md:text-sm">
-                      <Icon className="h-4 w-4 text-primary-glow" aria-hidden />
+                    <dt className="flex items-start gap-2 text-[0.68rem] font-semibold uppercase leading-5 tracking-[0.18em] text-white/65 md:items-center md:text-xs md:tracking-[0.32em]">
+                      <Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary-glow md:mt-0" aria-hidden />
                       {stat.label}
                     </dt>
-                    <dd className="mt-3 text-3xl font-semibold leading-none text-white">{stat.value}</dd>
+                    <dd className="mt-3 text-[2.1rem] font-semibold leading-none tracking-normal text-primary md:mt-5 md:text-5xl">{stat.value}</dd>
+                    <div className="mt-3 h-px w-full bg-primary/75 transition-colors duration-300 group-hover:bg-primary md:mt-4" aria-hidden />
                   </div>
                 );
               })}

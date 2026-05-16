@@ -41,6 +41,12 @@ describe("home page performance structure", () => {
     expect(philosophySource).toContain("lg:min-h-[calc(100svh-8rem)]");
     expect(philosophySource).toContain("grid-cols-2");
     expect(philosophySource).toContain("lg:grid-cols-4");
+    expect(philosophySource).toContain("uppercase");
+    expect(philosophySource).toContain("tracking-[0.18em]");
+    expect(philosophySource).toContain("md:tracking-[0.32em]");
+    expect(philosophySource).toContain("text-[2.1rem]");
+    expect(philosophySource).toContain("text-primary md:mt-5 md:text-5xl");
+    expect(philosophySource).toContain("bg-primary/75");
   });
 
   it("keeps legacy insight articles aligned with the public page typography scale", () => {
