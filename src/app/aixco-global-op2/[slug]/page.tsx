@@ -58,8 +58,8 @@ function LegacyInsightArticle({ article }: { article: LegacyInsight }) {
   return (
     <>
       <Nav />
-      <main className="min-h-screen bg-[#11100e] pt-24 text-white md:pt-28">
-        <article className="container-x max-w-5xl py-12 md:py-16">
+      <main className="min-h-screen bg-[#11100e] pt-20 text-white md:pt-24">
+        <article className="container-x max-w-5xl py-10 md:py-14">
           <Link
             href="/"
             className="inline-flex min-h-10 items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white/82 transition-colors duration-200 hover:border-primary/60 hover:text-primary"
@@ -68,9 +68,9 @@ function LegacyInsightArticle({ article }: { article: LegacyInsight }) {
             Back to AIXCO.Global
           </Link>
 
-          <header className="mt-10 border-b border-white/12 pb-10">
+          <header className="mt-8 border-b border-white/12 pb-8 md:mt-10 md:pb-10">
             <p className="eyebrow text-primary">AIXCO Insights</p>
-            <h1 className="mt-5 max-w-4xl font-display text-[clamp(2.45rem,7vw,5.6rem)] font-semibold leading-[0.98] tracking-normal text-white">
+            <h1 className="mt-5 max-w-4xl font-display text-[clamp(2.35rem,5.5vw,4.75rem)] font-semibold leading-[1.03] tracking-normal text-white [overflow-wrap:anywhere]">
               {article.title}
             </h1>
             {article.subtitle ? (
@@ -80,10 +80,10 @@ function LegacyInsightArticle({ article }: { article: LegacyInsight }) {
             ) : null}
           </header>
 
-          <div className="mx-auto mt-12 max-w-3xl space-y-12">
+          <div className="mx-auto mt-10 max-w-3xl space-y-12 md:mt-12">
             {article.sections.map((section) => (
               <section key={section.heading} className="scroll-mt-24">
-                <h2 className="font-display text-[clamp(1.8rem,4vw,2.8rem)] font-semibold leading-tight text-white">
+                <h2 className="font-display text-[clamp(1.65rem,3vw,2.5rem)] font-semibold leading-tight text-white">
                   {section.heading}
                 </h2>
                 <div className="mt-5 space-y-5 text-[1.02rem] leading-[1.85] text-white/78 md:text-[1.08rem]">

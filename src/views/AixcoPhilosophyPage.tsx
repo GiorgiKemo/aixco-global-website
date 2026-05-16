@@ -18,7 +18,7 @@ export function AixcoPhilosophyPage() {
     <>
       <Nav />
       <main className="bg-background">
-        <section className="relative isolate min-h-svh overflow-hidden bg-[#10110f] pt-24 text-white md:pt-28 lg:pt-32">
+        <section className="relative isolate min-h-[86svh] overflow-hidden bg-[#10110f] pt-24 text-white md:min-h-[84svh] md:pt-28 lg:min-h-[82svh] lg:pt-32">
           <Image
             src={aboutArchitecture}
             alt="AIXCO real estate architecture"
@@ -28,7 +28,7 @@ export function AixcoPhilosophyPage() {
             className="absolute inset-0 -z-20 object-cover opacity-40"
           />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,17,15,0.58)_0%,rgba(16,17,15,0.78)_54%,rgba(16,17,15,0.96)_100%)]" />
-          <div className="container-x flex min-h-[calc(100svh-6rem)] flex-col justify-end pb-8 md:min-h-[calc(100svh-7rem)] md:pb-10 lg:min-h-[calc(100svh-8rem)]">
+          <div className="container-x flex min-h-[calc(86svh-6rem)] flex-col justify-end pb-8 md:min-h-[calc(84svh-7rem)] md:pb-10 lg:min-h-[calc(82svh-8rem)]">
             <p className="eyebrow text-primary-glow">{philosophyHero.eyebrow}</p>
             <h1 className="mt-5 max-w-5xl text-4xl font-semibold leading-[1.04] text-white md:text-6xl">
               {philosophyHero.title}
