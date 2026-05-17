@@ -1,7 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { Team } from "./Team";
+import { Team, getTeamPortraitLoading } from "./Team";
+
+function renderedImageSrc(image: HTMLElement) {
+  return image.getAttribute("src") ?? "";
+}
 
 vi.mock("../ui-state", () => ({
   useUI: () => ({
@@ -52,5 +56,32 @@ describe("Team", () => {
 
     const middleImage = screen.getByAltText("Owais Shaikh");
     expect(middleImage.className).toContain("md:object-[center_20%]");
+  });
+
+  it("serves visible team portraits directly from optimized static files", () => {
+    render(
+      <I18nProvider>
+        <Team />
+      </I18nProvider>,
+    );
+
+    const image = screen.getByAltText("Benjamin Fischer");
+    const src = renderedImageSrc(image);
+
+    expect(src).toContain("/aixco-global-op2/images/optimized/benjamin.webp");
+    expect(src).not.toContain("/_next/image");
+    expect(image).toHaveAttribute("loading", "eager");
+    expect(image).toHaveAttribute("fetchpriority", "high");
+  });
+
+  it("does not prioritize team portraits before the team section is close to the viewport", () => {
+    expect(getTeamPortraitLoading({ isTeamInView: false, index: 0 })).toMatchObject({
+      fetchPriority: "auto",
+      loading: "lazy",
+    });
+    expect(getTeamPortraitLoading({ isTeamInView: true, index: 0 })).toMatchObject({
+      fetchPriority: "high",
+      loading: "eager",
+    });
   });
 });
