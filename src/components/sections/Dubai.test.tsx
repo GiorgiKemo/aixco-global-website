@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { Dubai } from "./Dubai";
+import { Dubai, getGalleryTileLoading } from "./Dubai";
 
 function renderDubai() {
   return render(
@@ -192,6 +192,25 @@ describe("Dubai", () => {
     expect(primaryImages[2]).toHaveAttribute("loading", "eager");
     expect(primaryImages[3]).toHaveAttribute("loading", "lazy");
     expect(duplicateImages[0]).toHaveAttribute("loading", "lazy");
+  });
+
+  it("does not prioritize gallery tiles before their rail is close to the viewport", () => {
+    expect(getGalleryTileLoading({ isGalleryInView: false, setIndex: 0, imageIndex: 0 })).toMatchObject({
+      fetchPriority: "auto",
+      loading: "lazy",
+    });
+    expect(getGalleryTileLoading({ isGalleryInView: true, setIndex: 0, imageIndex: 0 })).toMatchObject({
+      fetchPriority: "high",
+      loading: "eager",
+    });
+    expect(getGalleryTileLoading({ isGalleryInView: true, setIndex: 0, imageIndex: 3 })).toMatchObject({
+      fetchPriority: "auto",
+      loading: "lazy",
+    });
+    expect(getGalleryTileLoading({ isGalleryInView: true, setIndex: 1, imageIndex: 0 })).toMatchObject({
+      fetchPriority: "auto",
+      loading: "lazy",
+    });
   });
 
   it("uses Framer Motion-controlled image rails instead of direct native scroll stepping", () => {

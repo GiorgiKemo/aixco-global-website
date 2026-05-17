@@ -134,6 +134,8 @@ describe("Hero", () => {
     expect(qualityLine.className).toContain("sm:ml-[clamp(0rem,20vw,18rem)]");
     expect(within(hero).queryByText("GLOBAL VISION. INFINITE VALUE")).not.toBeInTheDocument();
     expect(standaloneMark).toBeInTheDocument();
+    expect(standaloneMark).toHaveAttribute("loading", "eager");
+    expect(standaloneMark).toHaveAttribute("fetchpriority", "high");
     expect(standaloneMark?.className).toContain("self-start");
     expect(standaloneMark?.className).toContain("sm:ml-[clamp(0rem,20vw,18rem)]");
     expect(standaloneMark?.parentElement).not.toBe(heading);

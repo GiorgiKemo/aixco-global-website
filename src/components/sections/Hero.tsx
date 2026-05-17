@@ -377,6 +377,8 @@ export function Hero() {
             aria-hidden="true"
             width={780}
             height={704}
+            loading="eager"
+            fetchPriority="high"
             className="mb-2 h-auto w-[clamp(5rem,14vw,14.6rem)] self-start object-contain drop-shadow-[0_16px_32px_rgb(0_0_0/0.28)] sm:ml-[clamp(0rem,20vw,18rem)] md:ml-0 md:w-[clamp(5.5rem,10vw,7rem)] md:self-center lg:ml-[clamp(0rem,20vw,18rem)] lg:w-[clamp(5rem,14vw,14.6rem)] lg:self-start"
             decoding="async"
             initial={false}

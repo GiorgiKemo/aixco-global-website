@@ -12,6 +12,7 @@ type LogoProps = {
   iconClassName?: string;
   textClassName?: string;
   onHomeClick?: () => void;
+  preloadMark?: boolean;
 };
 
 function normalizePath(path: string) {
@@ -23,6 +24,7 @@ export function Logo({
   iconClassName = "[filter:brightness(0)_saturate(100%)]",
   textClassName = "",
   onHomeClick,
+  preloadMark = false,
 }: LogoProps) {
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button !== 0 || event.metaKey || event.altKey || event.ctrlKey || event.shiftKey) return;
@@ -52,9 +54,9 @@ export function Logo({
         width={780}
         height={704}
         sizes="36px"
-        loading="eager"
+        loading={preloadMark ? "eager" : "lazy"}
         decoding="async"
-        fetchPriority="high"
+        fetchPriority={preloadMark ? "high" : "auto"}
       />
       <span className={`whitespace-nowrap text-sm font-medium tracking-[-0.02em] md:text-[15px] ${textClassName}`}>
         AIXCO.GLOBAL

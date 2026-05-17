@@ -101,6 +101,21 @@ type DubaiFundGalleryGroup = (typeof fundAssetGalleries)[DubaiFundGalleryId]["gr
 const detailIcons: LucideIcon[] = [TrendingUp, HandCoins, Building2];
 const eagerGalleryTileCount = 3;
 
+type GalleryTileLoading = {
+  isGalleryInView: boolean;
+  setIndex: number;
+  imageIndex: number;
+};
+
+export function getGalleryTileLoading({ isGalleryInView, setIndex, imageIndex }: GalleryTileLoading) {
+  const shouldEagerLoad = isGalleryInView && setIndex === 0 && imageIndex < eagerGalleryTileCount;
+
+  return {
+    loading: shouldEagerLoad ? "eager" : "lazy",
+    fetchPriority: shouldEagerLoad ? "high" : "auto",
+  } as const;
+}
+
 function hasAssetGallery(fundId: string): fundId is DubaiFundGalleryId {
   return fundId in fundAssetGalleries;
 }
@@ -465,7 +480,7 @@ function DubaiImageMarquee({
             data-gallery-set={setIndex === 0 ? "primary" : "duplicate"}
           >
             {group.images.map((image, imageIndex) => {
-              const shouldEagerLoad = setIndex === 0 && imageIndex < eagerGalleryTileCount;
+              const tileLoading = getGalleryTileLoading({ isGalleryInView, setIndex, imageIndex });
 
               return (
                 <figure key={`${setIndex}-${image.src}`} className="dubai-gallery-tile" data-gallery-tile>
@@ -479,8 +494,8 @@ function DubaiImageMarquee({
                       src={image.src}
                       alt={setIndex === 0 ? tx(image.title) : ""}
                       unoptimized
-                      loading={shouldEagerLoad ? "eager" : "lazy"}
-                      fetchPriority={shouldEagerLoad ? "high" : "auto"}
+                      loading={tileLoading.loading}
+                      fetchPriority={tileLoading.fetchPriority}
                       decoding="async"
                       draggable={false}
                       width={1280}
