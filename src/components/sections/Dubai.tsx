@@ -99,6 +99,7 @@ type DubaiFundGalleryId = keyof typeof fundAssetGalleries;
 type DubaiFundGalleryGroup = (typeof fundAssetGalleries)[DubaiFundGalleryId]["groups"][number];
 
 const detailIcons: LucideIcon[] = [TrendingUp, HandCoins, Building2];
+const eagerGalleryTileCount = 3;
 
 function hasAssetGallery(fundId: string): fundId is DubaiFundGalleryId {
   return fundId in fundAssetGalleries;
@@ -463,30 +464,35 @@ function DubaiImageMarquee({
             className="dubai-image-marquee-set"
             data-gallery-set={setIndex === 0 ? "primary" : "duplicate"}
           >
-            {group.images.map((image) => (
-              <figure key={`${setIndex}-${image.src}`} className="dubai-gallery-tile" data-gallery-tile>
-                <ExpandableImage
-                  src={image.src}
-                  title={tx(image.title)}
-                  className="h-full w-full"
-                  tabIndex={setIndex === 1 ? -1 : undefined}
-                >
-                  <Image
+            {group.images.map((image, imageIndex) => {
+              const shouldEagerLoad = setIndex === 0 && imageIndex < eagerGalleryTileCount;
+
+              return (
+                <figure key={`${setIndex}-${image.src}`} className="dubai-gallery-tile" data-gallery-tile>
+                  <ExpandableImage
                     src={image.src}
-                    alt={setIndex === 0 ? tx(image.title) : ""}
-                    unoptimized
-                    loading="lazy"
-                    decoding="async"
-                    draggable={false}
-                    width={1280}
-                    height={720}
-                    sizes="(min-width: 1024px) 30rem, 78vw"
-                    className="h-full w-full object-cover"
-                    onDragStart={(event) => event.preventDefault()}
-                  />
-                </ExpandableImage>
-              </figure>
-            ))}
+                    title={tx(image.title)}
+                    className="h-full w-full"
+                    tabIndex={setIndex === 1 ? -1 : undefined}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={setIndex === 0 ? tx(image.title) : ""}
+                      unoptimized
+                      loading={shouldEagerLoad ? "eager" : "lazy"}
+                      fetchPriority={shouldEagerLoad ? "high" : "auto"}
+                      decoding="async"
+                      draggable={false}
+                      width={1280}
+                      height={720}
+                      sizes="(min-width: 1024px) 30rem, 78vw"
+                      className="h-full w-full object-cover"
+                      onDragStart={(event) => event.preventDefault()}
+                    />
+                  </ExpandableImage>
+                </figure>
+              );
+            })}
           </div>
         ))}
       </motion.div>

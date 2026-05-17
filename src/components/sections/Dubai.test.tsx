@@ -169,10 +169,29 @@ describe("Dubai", () => {
     const duplicateRailImage = (railSets[1] as HTMLElement).querySelector("img");
 
     expect(primaryRailImage).toHaveAttribute("draggable", "false");
+    expect(renderedImageSrc(primaryRailImage)).toContain("/aixco-global-op2/images/fund/fund1.jpeg");
     expect(renderedImageSrc(primaryRailImage)).not.toContain("/_next/image");
-    expect(primaryRailImage).toHaveAttribute("loading", "lazy");
+    expect(primaryRailImage).toHaveAttribute("loading", "eager");
     expect(duplicateRailImage).toHaveAttribute("loading", "lazy");
     expect(container.querySelectorAll("[data-gallery-tile]").length).toBeGreaterThan(0);
+  });
+
+  it("eagerly fetches the first visible gallery tiles from original source files", () => {
+    renderDubai();
+
+    const fundTwoGallery = screen.getByLabelText("Fund II asset image gallery");
+    const healthcareRail = within(fundTwoGallery).getByLabelText("Dubai Healthcare City images");
+    const railSets = healthcareRail.querySelectorAll("[data-gallery-set]");
+    const primaryImages = Array.from((railSets[0] as HTMLElement).querySelectorAll("img"));
+    const duplicateImages = Array.from((railSets[1] as HTMLElement).querySelectorAll("img"));
+
+    expect(primaryImages[0]).toHaveAttribute("loading", "eager");
+    expect(primaryImages[0]).toHaveAttribute("fetchpriority", "high");
+    expect(renderedImageSrc(primaryImages[0])).toContain("/aixco-global-op2/images/fund2.png");
+    expect(renderedImageSrc(primaryImages[0])).not.toContain("/_next/image");
+    expect(primaryImages[2]).toHaveAttribute("loading", "eager");
+    expect(primaryImages[3]).toHaveAttribute("loading", "lazy");
+    expect(duplicateImages[0]).toHaveAttribute("loading", "lazy");
   });
 
   it("uses Framer Motion-controlled image rails instead of direct native scroll stepping", () => {
@@ -466,7 +485,7 @@ describe("Dubai", () => {
     );
     expect(within(fundOneGallery as HTMLElement).getByAltText("Eden House The Canal aerial overview")).toHaveAttribute(
       "loading",
-      "lazy",
+      "eager",
     );
     expect(renderedImageSrc(within(fundOneGallery as HTMLElement).getByAltText("Eden House The Park construction progress"))).toContain(
       "/aixco-global-op2/images/fund/fund1.jpeg",
