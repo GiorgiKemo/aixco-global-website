@@ -13,18 +13,28 @@ function getEnvValue(value: string | undefined) {
   return value?.trim() || "";
 }
 
+export function getSupabaseServerConfig() {
+  const supabaseUrl =
+    getEnvValue(process.env.SUPABASE_URL) || getEnvValue(process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const supabaseKey =
+    getEnvValue(process.env.SUPABASE_SECRET_KEY) ||
+    getEnvValue(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
+    getEnvValue(process.env.SUPABASE_PUBLISHABLE_KEY) ||
+    getEnvValue(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+
+  if (!supabaseUrl || !supabaseKey) return null;
+
+  return { supabaseKey, supabaseUrl };
+}
+
 export function hasSupabaseServerConfig() {
-  return Boolean(
-    getEnvValue(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      getEnvValue(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY),
-  );
+  return getSupabaseServerConfig() !== null;
 }
 
 export async function getSupabaseServerClient() {
-  const supabaseUrl = getEnvValue(process.env.NEXT_PUBLIC_SUPABASE_URL);
-  const publishableKey = getEnvValue(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+  const config = getSupabaseServerConfig();
 
-  if (!supabaseUrl || !publishableKey) {
+  if (!config) {
     throw new Error("Supabase server configuration is missing.");
   }
 
@@ -36,7 +46,7 @@ export async function getSupabaseServerClient() {
   if (!serverClient) {
     const { createClient } = await import("@supabase/supabase-js");
 
-    serverClient = createClient<Database>(supabaseUrl, publishableKey, {
+    serverClient = createClient<Database>(config.supabaseUrl, config.supabaseKey, {
       auth: {
         persistSession: false,
         autoRefreshToken: false,
