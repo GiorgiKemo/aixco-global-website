@@ -971,6 +971,66 @@
 }
 
 @layer utilities {
+  .scrollbar-seamless {
+    scrollbar-color: transparent transparent;
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-seamless:hover,
+  .scrollbar-seamless:focus-within {
+    scrollbar-color: hsl(var(--foreground) / 0.22) transparent;
+  }
+
+  .scrollbar-seamless::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  .scrollbar-seamless::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-seamless::-webkit-scrollbar-thumb {
+    border: 0.14rem solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+    background-color: transparent;
+  }
+
+  .scrollbar-seamless:hover::-webkit-scrollbar-thumb,
+  .scrollbar-seamless:focus-within::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--foreground) / 0.22);
+  }
+
+  .scrollbar-seamless::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  html:has([data-admin-scrollbar="true"]) {
+    scrollbar-color: hsl(var(--foreground) / 0.18) transparent;
+    scrollbar-width: thin;
+  }
+
+  html:has([data-admin-scrollbar="true"])::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  html:has([data-admin-scrollbar="true"])::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  html:has([data-admin-scrollbar="true"])::-webkit-scrollbar-thumb {
+    border: 0.14rem solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+    background-color: hsl(var(--foreground) / 0.18);
+  }
+
+  html:has([data-admin-scrollbar="true"])::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--foreground) / 0.28);
+  }
+
   main section:not(.hero-reference-font) p:not(.eyebrow):not([class*="text-"]) {
     font-size: clamp(1rem, 0.96rem + 0.16vw, 1.1rem);
     line-height: 1.72;

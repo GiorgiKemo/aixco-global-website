@@ -257,7 +257,7 @@ function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
         <p className="text-sm font-medium text-muted-foreground">{leads.length} total lead records</p>
       </div>
 
-      <div className="mt-5 overflow-x-auto pb-2">
+      <div className="scrollbar-seamless mt-5 overflow-x-auto pb-2">
         <div className="grid min-w-[980px] grid-cols-4 gap-3">
           {pipelineStages.map((stage) => {
             const stageLeads = leads.filter((lead) => lead.status === stage.value);
@@ -272,7 +272,7 @@ function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
                   <span className="rounded-full bg-white/70 px-2 py-0.5 text-xs font-semibold">{stageLeads.length}</span>
                 </div>
 
-                <div className="mt-2 grid max-h-[34rem] gap-2 overflow-y-auto rounded-lg border border-border/60 bg-background/60 p-2">
+                <div className="scrollbar-seamless mt-2 grid max-h-[34rem] gap-2 overflow-y-auto rounded-lg border border-border/60 bg-background/60 p-2">
                   {stageLeads.length === 0 ? (
                     <div className="rounded-md border border-dashed border-border bg-white/70 px-3 py-6 text-center text-xs text-muted-foreground">
                       Empty
@@ -377,7 +377,7 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
   const result = await fetchAdminLeadDashboard();
 
   return (
-    <main className="min-h-screen bg-[#f7f4ef] px-4 py-6 text-foreground md:px-8">
+    <main data-admin-scrollbar="true" className="min-h-screen bg-[#f7f4ef] px-4 py-6 text-foreground md:px-8">
       <div className="mx-auto max-w-[1500px]">
         <header className="rounded-xl border border-[#312719]/20 bg-[#11100e] p-5 text-white shadow-elegant md:p-7">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
