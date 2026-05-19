@@ -87,6 +87,7 @@ export type Database = {
       chat_transcripts: {
         Row: {
           id: string;
+          session_id: string | null;
           created_at: string;
           updated_at: string;
           source: "live_chat";
@@ -104,6 +105,7 @@ export type Database = {
           id?: string;
           created_at?: string;
           updated_at?: string;
+          session_id?: string | null;
           source?: "live_chat";
           interest?: string | null;
           transcript: string;
@@ -117,6 +119,7 @@ export type Database = {
         };
         Update: {
           updated_at?: string;
+          session_id?: string | null;
           source?: "live_chat";
           interest?: string | null;
           transcript?: string;

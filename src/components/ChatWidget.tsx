@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Bot, Mail, MessageCircleMore, Send, UserRound, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSiteContent } from "@/data/site-content-context";
@@ -16,6 +16,7 @@ type ChatMessage = {
 };
 
 const STORAGE_KEY = "aixco-live-chat";
+const SESSION_STORAGE_KEY = "aixco-live-chat-session";
 
 const quickReplies = [
   "AIXCO 6% Bond",
@@ -30,6 +31,30 @@ function createMessage(role: ChatRole, text: string): ChatMessage {
     role,
     text,
   };
+}
+
+function createChatSessionId() {
+  const randomId =
+    typeof window !== "undefined" && window.crypto?.randomUUID
+      ? window.crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  return `chat_${randomId.replace(/[^A-Za-z0-9_-]/g, "_")}`;
+}
+
+function loadChatSessionId() {
+  if (typeof window === "undefined") return "";
+
+  try {
+    const stored = window.localStorage.getItem(SESSION_STORAGE_KEY);
+    if (stored) return stored;
+
+    const sessionId = createChatSessionId();
+    window.localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+    return sessionId;
+  } catch {
+    return createChatSessionId();
+  }
 }
 
 function initialMessages(): ChatMessage[] {
@@ -85,10 +110,13 @@ export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [draft, setDraft] = useState("");
+  const [sessionId, setSessionId] = useState("");
+  const [syncState, setSyncState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setMessages(loadStoredMessages());
+    setSessionId(loadChatSessionId());
     setHasLoadedStoredMessages(true);
     setHasMounted(true);
   }, []);
@@ -116,21 +144,42 @@ export function ChatWidget() {
     return `mailto:${company.email}?subject=${subject}&body=${body}`;
   }, [company.email, messages]);
 
+  const saveTranscript = useCallback(
+    async (nextMessages: ChatMessage[], reason: "auto_sync" | "email_transcript") => {
+      const activeSessionId = sessionId || loadChatSessionId();
+      if (!sessionId) setSessionId(activeSessionId);
+
+      setSyncState("saving");
+      const result = await recordChatTranscript(nextMessages, {
+        reason,
+        sessionId: activeSessionId,
+      });
+      setSyncState(result.ok ? "saved" : "error");
+    },
+    [sessionId],
+  );
+
   const sendMessage = (text: string) => {
     const cleaned = text.trim();
     if (!cleaned) return;
 
-    setMessages((current) => [
-      ...current,
-      createMessage("visitor", cleaned),
-      createMessage("aixco", getAutoReply(cleaned)),
-    ]);
+    setMessages((current) => {
+      const nextMessages = [
+        ...current,
+        createMessage("visitor", cleaned),
+        createMessage("aixco", getAutoReply(cleaned)),
+      ];
+
+      void saveTranscript(nextMessages, "auto_sync");
+      return nextMessages;
+    });
     setDraft("");
   };
 
   const clearChat = () => {
     setMessages(initialMessages());
     setDraft("");
+    setSyncState("idle");
   };
 
   if (!hasMounted) return null;
@@ -198,6 +247,15 @@ export function ChatWidget() {
             </div>
 
             <div className="shrink-0 border-t border-border/60 bg-surface-elevated/95 p-4">
+              <p aria-live="polite" className="mb-3 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                {syncState === "saving"
+                  ? tx("Saving chat...")
+                  : syncState === "saved"
+                    ? tx("Chat saved to AIXCO")
+                    : syncState === "error"
+                      ? tx("Chat could not be saved")
+                      : tx("Live chat")}
+              </p>
               <div data-chat-quick-replies className="mb-3 grid grid-cols-2 gap-2">
                 {quickReplies.map((reply) => (
                   <button
@@ -244,7 +302,7 @@ export function ChatWidget() {
                 <a
                   href={transcriptHref}
                   onClick={() => {
-                    void recordChatTranscript(messages);
+                    void saveTranscript(messages, "email_transcript");
                   }}
                   className="btn-ghost-gold !px-3 !py-2 text-xs"
                 >

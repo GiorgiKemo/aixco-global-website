@@ -18,7 +18,7 @@ describe("lead capture backend helpers", () => {
       recordChatTranscript([
         { role: "aixco", text: "Welcome" },
         { role: "visitor", text: "I am interested in broker partnership." },
-      ]),
+      ], { sessionId: "chat-session-123", reason: "auto_sync" }),
     ).resolves.toMatchObject({ ok: false, skipped: true });
 
     await expect(

@@ -21,6 +21,10 @@ type CaptureTable = "contact_submissions" | "chat_transcripts" | "portal_click_e
 type CaptureInsert = ContactInsert | ChatInsert | PortalEventInsert;
 type InsertResult = Promise<{ error: { message: string } | null }>;
 type InsertBuilder = { insert: (payload: CaptureInsert) => InsertResult };
+type ChatTranscriptBuilder = {
+  insert: (payload: ChatInsert) => InsertResult;
+  upsert: (payload: ChatInsert, options: { onConflict: "session_id" }) => InsertResult;
+};
 type LeadCaptureClient = { from: (table: CaptureTable) => unknown };
 
 type LeadCaptureOptions = {
@@ -94,8 +98,26 @@ function buildTranscript(messages: ChatMessageInput[]) {
     .join("\n");
 }
 
+function getMetadataObject(metadata: Json): { [key: string]: Json | undefined } {
+  return metadata && typeof metadata === "object" && !Array.isArray(metadata) ? metadata : {};
+}
+
 function validationFailure(resource: string): CaptureResult {
   return { ok: false, reason: `Invalid ${resource} payload.` };
+}
+
+function shouldFallbackToLegacyChatInsert(error: { message: string } | null) {
+  const message = error?.message.toLowerCase() ?? "";
+  return (
+    message.includes("session_id") ||
+    message.includes("on conflict") ||
+    message.includes("unique or exclusion constraint")
+  );
+}
+
+function omitChatSessionId(payload: ChatInsert): ChatInsert {
+  const { session_id: _sessionId, ...legacyPayload } = payload;
+  return legacyPayload;
 }
 
 async function insertRow(
@@ -111,6 +133,37 @@ async function insertRow(
     const client = (options.client ?? (await getSupabaseServerClient())) as LeadCaptureClient;
     const tableClient = client.from(table) as InsertBuilder;
     const { error } = await tableClient.insert(payload);
+
+    if (error) {
+      return { ok: false, reason: error.message };
+    }
+
+    return { ok: true };
+  } catch (error) {
+    return {
+      ok: false,
+      reason: error instanceof Error ? error.message : "Unknown lead capture error.",
+    };
+  }
+}
+
+async function writeChatTranscript(payload: ChatInsert, options: LeadCaptureOptions): Promise<CaptureResult> {
+  if (!options.client && !(options.hasServerConfig ?? hasSupabaseServerConfig())) {
+    return { ok: false, skipped: true, reason: "Supabase server configuration is not available." };
+  }
+
+  try {
+    const client = (options.client ?? (await getSupabaseServerClient())) as LeadCaptureClient;
+    const tableClient = client.from("chat_transcripts") as ChatTranscriptBuilder;
+    const result = payload.session_id
+      ? await tableClient.upsert(payload, { onConflict: "session_id" })
+      : await tableClient.insert(payload);
+    let error = result.error;
+
+    if (payload.session_id && shouldFallbackToLegacyChatInsert(error)) {
+      const fallbackResult = await tableClient.insert(omitChatSessionId(payload));
+      error = fallbackResult.error;
+    }
 
     if (error) {
       return { ok: false, reason: error.message };
@@ -165,16 +218,25 @@ export async function captureChatTranscript(
   const serverContext = buildServerContext(context, options.headers);
   if ("ok" in serverContext) return serverContext;
 
+  const sessionId = parsed.data.sessionId ?? null;
   const payload: ChatInsert = {
+    session_id: sessionId,
     source: "live_chat",
     interest: getInterestFromMessages(messages),
     transcript,
     messages: messages as unknown as Json,
     message_count: messages.length,
-    ...serverContext,
+    locale: serverContext.locale,
+    page_path: serverContext.page_path,
+    user_agent: serverContext.user_agent,
+    metadata: {
+      ...getMetadataObject(serverContext.metadata),
+      capture_reason: parsed.data.reason ?? (sessionId ? "auto_sync" : "email_transcript"),
+      chat_session_id: sessionId,
+    },
   };
 
-  return insertRow("chat_transcripts", payload, options);
+  return writeChatTranscript(payload, options);
 }
 
 export async function capturePortalEvent(

@@ -12,14 +12,42 @@ type InsertRecord = {
 
 function createCaptureClient(error: { message: string } | null = null) {
   const inserts: InsertRecord[] = [];
+  const upserts: InsertRecord[] = [];
 
   return {
     inserts,
+    upserts,
     client: {
       from: (table: string) => ({
         insert: async (payload: Record<string, unknown>) => {
           inserts.push({ table, payload });
           return { error };
+        },
+        upsert: async (payload: Record<string, unknown>) => {
+          upserts.push({ table, payload });
+          return { error };
+        },
+      }),
+    },
+  };
+}
+
+function createLegacyChatClient() {
+  const inserts: InsertRecord[] = [];
+  const upserts: InsertRecord[] = [];
+
+  return {
+    inserts,
+    upserts,
+    client: {
+      from: (table: string) => ({
+        insert: async (payload: Record<string, unknown>) => {
+          inserts.push({ table, payload });
+          return { error: null };
+        },
+        upsert: async (payload: Record<string, unknown>) => {
+          upserts.push({ table, payload });
+          return { error: { message: "Could not find the 'session_id' column of 'chat_transcripts'" } };
         },
       }),
     },
@@ -96,6 +124,67 @@ describe("lead capture service", () => {
         message_count: 2,
         transcript: "AIXCO: Welcome\nVisitor: I am interested in the broker route.",
       },
+    });
+  });
+
+  it("upserts live chat transcripts by session id", async () => {
+    const { client, inserts, upserts } = createCaptureClient();
+
+    await expect(
+      captureChatTranscript(
+        {
+          sessionId: "chat-session-123",
+          reason: "auto_sync",
+          messages: [
+            { role: "aixco", text: "Welcome" },
+            { role: "visitor", text: "I want to discuss Batumi apartments." },
+          ],
+        },
+        { page_path: "/#contact" },
+        { client, headers },
+      ),
+    ).resolves.toEqual({ ok: true });
+
+    expect(inserts).toHaveLength(0);
+    expect(upserts).toHaveLength(1);
+    expect(upserts[0]).toMatchObject({
+      table: "chat_transcripts",
+      payload: {
+        session_id: "chat-session-123",
+        interest: "Batumi apartments",
+        message_count: 2,
+      },
+    });
+    expect(upserts[0]?.payload.metadata).toMatchObject({
+      chat_session_id: "chat-session-123",
+      capture_reason: "auto_sync",
+    });
+  });
+
+  it("falls back to the existing insert path when the session id migration is not deployed yet", async () => {
+    const { client, inserts, upserts } = createLegacyChatClient();
+
+    await expect(
+      captureChatTranscript(
+        {
+          sessionId: "chat-session-123",
+          reason: "auto_sync",
+          messages: [
+            { role: "aixco", text: "Welcome" },
+            { role: "visitor", text: "Please save this chat." },
+          ],
+        },
+        {},
+        { client, headers },
+      ),
+    ).resolves.toEqual({ ok: true });
+
+    expect(upserts).toHaveLength(1);
+    expect(inserts).toHaveLength(1);
+    expect(inserts[0]?.payload).not.toHaveProperty("session_id");
+    expect(inserts[0]?.payload.metadata).toMatchObject({
+      chat_session_id: "chat-session-123",
+      capture_reason: "auto_sync",
     });
   });
 

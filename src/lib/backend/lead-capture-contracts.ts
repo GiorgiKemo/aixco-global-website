@@ -30,6 +30,8 @@ export const chatMessageSchema = z
 
 export const chatTranscriptSchema = z
   .object({
+    sessionId: z.string().trim().min(8).max(120).regex(/^[A-Za-z0-9:_-]+$/).optional(),
+    reason: z.enum(["auto_sync", "email_transcript"]).optional(),
     messages: z.array(chatMessageSchema).min(1).max(200),
   })
   .strict();
@@ -62,5 +64,6 @@ export const browserContextSchema = z
 
 export type ContactSubmissionInput = z.infer<typeof contactSubmissionSchema>;
 export type ChatMessageInput = z.infer<typeof chatMessageSchema>;
+export type ChatTranscriptInput = z.infer<typeof chatTranscriptSchema>;
 export type PortalEventInput = z.infer<typeof portalEventSchema>;
 export type BrowserContextInput = z.infer<typeof browserContextSchema>;
