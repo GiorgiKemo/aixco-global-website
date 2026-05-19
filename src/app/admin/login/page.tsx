@@ -15,6 +15,7 @@ type AdminLoginPageProps = {
 function getErrorMessage(error: string | undefined) {
   if (error === "invalid") return "The admin password is incorrect.";
   if (error === "config") return "Admin authentication is not configured.";
+  if (error === "rate-limited") return "Too many sign-in attempts. Please try again shortly.";
   return "";
 }
 

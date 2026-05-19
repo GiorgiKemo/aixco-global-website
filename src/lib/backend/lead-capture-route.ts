@@ -5,6 +5,7 @@ import {
   capturePortalEvent,
 } from "@/lib/backend/lead-capture-service";
 import type { CaptureResult } from "@/lib/backend/lead-capture-contracts";
+import { checkRateLimit, getRateLimitClientId } from "@/lib/security/rate-limit";
 
 type LeadCaptureResource = "contact" | "chat" | "portal-event";
 type LeadCaptureRequestBody = {
@@ -12,6 +13,11 @@ type LeadCaptureRequestBody = {
   context?: unknown;
 };
 type CaptureFailure = Extract<CaptureResult, { ok: false }>;
+
+const LEAD_CAPTURE_RATE_LIMIT = {
+  limit: 30,
+  windowMs: 60_000,
+};
 
 function getStatus(result: CaptureResult) {
   if (result.ok === true) return 201;
@@ -37,6 +43,23 @@ async function readJsonBody(request: Request): Promise<LeadCaptureRequestBody | 
 
 export function createLeadCaptureRoute(resource: LeadCaptureResource) {
   return async function POST(request: Request) {
+    const rateLimit = checkRateLimit({
+      key: `lead-capture:${resource}:${getRateLimitClientId(request.headers)}`,
+      ...LEAD_CAPTURE_RATE_LIMIT,
+    });
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { ok: false, skipped: true, reason: "Too many lead capture requests. Please try again shortly." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfterSeconds),
+          },
+        },
+      );
+    }
+
     const body = await readJsonBody(request);
     if ("ok" in body) {
       return NextResponse.json(body, { status: getStatus(body) });

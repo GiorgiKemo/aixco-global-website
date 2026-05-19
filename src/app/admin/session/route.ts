@@ -6,6 +6,12 @@ import {
   getAdminAuthConfig,
 } from "@/lib/admin/auth";
 import { DEFAULT_ADMIN_SESSION_TTL_SECONDS, verifyAdminPassword } from "@/lib/admin/session-token";
+import { checkRateLimit, getRateLimitClientId } from "@/lib/security/rate-limit";
+
+const ADMIN_LOGIN_RATE_LIMIT = {
+  limit: 8,
+  windowMs: 15 * 60_000,
+};
 
 function getSecureCookieSetting() {
   return process.env.VERCEL === "1" || process.env.ADMIN_COOKIE_SECURE === "true";
@@ -19,6 +25,15 @@ export async function POST(request: Request) {
   const config = getAdminAuthConfig();
   if (!config.configured) {
     return redirectTo(request, "/admin/login?error=config");
+  }
+
+  const rateLimit = checkRateLimit({
+    key: `admin-login:${getRateLimitClientId(request.headers)}`,
+    ...ADMIN_LOGIN_RATE_LIMIT,
+  });
+
+  if (!rateLimit.allowed) {
+    return redirectTo(request, "/admin/login?error=rate-limited");
   }
 
   const formData = await request.formData();

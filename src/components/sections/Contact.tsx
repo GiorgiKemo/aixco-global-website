@@ -33,12 +33,15 @@ export function Contact() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [mailtoHref, setMailtoHref] = useState("");
   const [backendSaved, setBackendSaved] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fieldRefs = useRef<Record<string, HTMLInputElement | HTMLTextAreaElement | null>>({});
   const { tx } = useI18n();
   const { company } = useSiteContent();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     const form = new FormData(e.currentTarget);
     const data = {
       name: String(form.get("name") || ""),
@@ -58,10 +61,16 @@ export function Contact() {
     }
     setErrors({});
     const submission = parsed.data as ContactFormData;
-    const backendResult = await submitContactSubmission(submission);
-    setBackendSaved(backendResult.ok);
-    setMailtoHref(createContactMailtoHref(submission, company.email));
-    setState("success");
+    setIsSubmitting(true);
+
+    try {
+      const backendResult = await submitContactSubmission(submission);
+      setBackendSaved(backendResult.ok);
+      setMailtoHref(createContactMailtoHref(submission, company.email));
+      setState("success");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -123,6 +132,7 @@ export function Contact() {
                     setState("idle");
                     setMailtoHref("");
                     setBackendSaved(false);
+                    setIsSubmitting(false);
                   }}
                   className="btn-ghost-gold justify-center"
                 >
@@ -161,6 +171,8 @@ export function Contact() {
               )}
               <motion.button
                 type="submit"
+                aria-busy={isSubmitting}
+                disabled={isSubmitting}
                 className="btn-gold justify-self-start"
                 whileHover={{ y: -2, scale: 1.012 }}
                 whileTap={premiumPress}
