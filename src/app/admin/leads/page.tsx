@@ -11,6 +11,7 @@ import {
   type LeadStatus,
   type PortalEvent,
 } from "@/lib/admin/leads";
+import { PipelineBoard, type DashboardLead } from "./PipelineBoard";
 
 export const dynamic = "force-dynamic";
 
@@ -22,53 +23,12 @@ type AdminLeadsPageProps = {
   searchParams?: Promise<{ status?: string; updated?: string; error?: string }>;
 };
 
-type DashboardLead = {
-  id: string;
-  resource: LeadResource;
-  status: LeadStatus;
-  createdAt: string;
-  title: string;
-  contactLabel: string;
-  contactHref?: string;
-  interest: string;
-  body: string;
-  pagePath: string;
-  meta: string;
-};
-
 const statusTabs: { label: string; value?: LeadStatus }[] = [
   { label: "All" },
   { label: "New", value: "new" },
   { label: "Contacted", value: "contacted" },
   { label: "Qualified", value: "qualified" },
   { label: "Archived", value: "archived" },
-];
-
-const pipelineStages: { label: string; value: LeadStatus; headerClass: string; dotClass: string }[] = [
-  {
-    label: "New",
-    value: "new",
-    headerClass: "border-amber-200 bg-amber-50 text-amber-900",
-    dotClass: "bg-amber-500",
-  },
-  {
-    label: "Contacted",
-    value: "contacted",
-    headerClass: "border-blue-200 bg-blue-50 text-blue-900",
-    dotClass: "bg-blue-500",
-  },
-  {
-    label: "Qualified",
-    value: "qualified",
-    headerClass: "border-emerald-200 bg-emerald-50 text-emerald-900",
-    dotClass: "bg-emerald-500",
-  },
-  {
-    label: "Archived",
-    value: "archived",
-    headerClass: "border-slate-200 bg-slate-100 text-slate-700",
-    dotClass: "bg-slate-400",
-  },
 ];
 
 function formatDate(value: string) {
@@ -199,94 +159,6 @@ function EmptyState({ label }: { label: string }) {
     <div className="rounded-lg border border-dashed border-border bg-white/70 p-5 text-center text-sm text-muted-foreground">
       {label}
     </div>
-  );
-}
-
-function PipelineLeadCard({ lead }: { lead: DashboardLead }) {
-  return (
-    <article id={`${lead.resource}-${lead.id}`} className="rounded-lg border border-border/70 bg-white p-3 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <p className="break-words text-sm font-semibold leading-tight text-foreground">{lead.title}</p>
-            <span
-              className={`rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.12em] ${
-                lead.resource === "contact" ? "bg-amber-100 text-amber-800" : "bg-blue-100 text-blue-800"
-              }`}
-            >
-              {lead.resource === "contact" ? "Contact" : "Chat"}
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-muted-foreground">{lead.interest}</p>
-        </div>
-        <StatusBadge status={lead.status} />
-      </div>
-
-      <p className="mt-3 whitespace-pre-line break-words text-xs leading-6 text-foreground/75">{lead.body}</p>
-
-      <div className="mt-3 space-y-1 border-t border-border/60 pt-3 text-xs text-muted-foreground">
-        {lead.contactHref ? (
-          <a href={lead.contactHref} className="block truncate text-primary">
-            {lead.contactLabel}
-          </a>
-        ) : (
-          <p>{lead.contactLabel}</p>
-        )}
-        <p className="truncate">{lead.pagePath}</p>
-        <p>{formatDate(lead.createdAt)}</p>
-      </div>
-
-      <div className="mt-3">
-        <StatusForm resource={lead.resource} id={lead.id} status={lead.status} />
-      </div>
-    </article>
-  );
-}
-
-function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
-  return (
-    <section className="rounded-xl border border-border/70 bg-surface-elevated p-4 shadow-elegant md:p-5">
-      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">Pipeline</p>
-          <h2 className="mt-2 font-display text-2xl font-semibold leading-tight text-foreground">Lead pipeline</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Move contact forms and live chat transcripts through the same qualification flow.
-          </p>
-        </div>
-        <p className="text-sm font-medium text-muted-foreground">{leads.length} total lead records</p>
-      </div>
-
-      <div className="scrollbar-seamless mt-5 overflow-x-auto pb-2">
-        <div className="grid min-w-[980px] grid-cols-4 gap-3">
-          {pipelineStages.map((stage) => {
-            const stageLeads = leads.filter((lead) => lead.status === stage.value);
-
-            return (
-              <section key={stage.value} aria-label={`${stage.label} leads`} className="min-w-0">
-                <div className={`flex items-center justify-between rounded-lg border px-3 py-2 ${stage.headerClass}`}>
-                  <div className="flex items-center gap-2">
-                    <span className={`h-2.5 w-2.5 rounded-full ${stage.dotClass}`} aria-hidden="true" />
-                    <h3 className="text-sm font-semibold">{stage.label}</h3>
-                  </div>
-                  <span className="rounded-full bg-white/70 px-2 py-0.5 text-xs font-semibold">{stageLeads.length}</span>
-                </div>
-
-                <div className="scrollbar-seamless mt-2 grid max-h-[34rem] gap-2 overflow-y-auto rounded-lg border border-border/60 bg-background/60 p-2">
-                  {stageLeads.length === 0 ? (
-                    <div className="rounded-md border border-dashed border-border bg-white/70 px-3 py-6 text-center text-xs text-muted-foreground">
-                      Empty
-                    </div>
-                  ) : (
-                    stageLeads.map((lead) => <PipelineLeadCard key={`${lead.resource}-${lead.id}`} lead={lead} />)
-                  )}
-                </div>
-              </section>
-            );
-          })}
-        </div>
-      </div>
-    </section>
   );
 }
 
