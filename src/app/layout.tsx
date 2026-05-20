@@ -2,9 +2,10 @@ import type { Metadata, Viewport } from "next";
 import "@/index.css";
 import { ClientShell } from "./client-shell";
 import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
+import { getSiteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://aixco.global"),
+  metadataBase: new URL(getSiteUrl()),
   title: "AIXCO.Global | Quality Real Estate Participation",
   description:
     "AIXCO gives private partners a simple and transparent way to join selected real estate projects in Dubai and Batumi.",

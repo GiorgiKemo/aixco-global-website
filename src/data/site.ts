@@ -145,7 +145,7 @@ export const journeys = [
     intro: "A guided process for clients participating in selected real estate opportunities.",
     steps: [
       { title: "Create your account", text: "Register and access your secure client portal." },
-      { title: "Complete Profile", text: "Fill out the registration form to create your porfile and access dashboard" },
+      { title: "Complete Profile", text: "Fill out the registration form to create your profile and access dashboard" },
       { title: "Review opportunities", text: "Browse available real estate projects, pricing, and supporting materials." },
       { title: "Select and reserve", text: "Choose the preferred investment or property participation option." },
       { title: "Sign digitally", text: "Complete documentation online and finalize onboarding." },

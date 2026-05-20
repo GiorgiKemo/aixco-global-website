@@ -9,6 +9,7 @@ import {
   type TouchEvent as ReactTouchEvent,
 } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import { X } from "lucide-react";
 import { useOptionalI18n } from "@/i18n/I18nProvider";
 
@@ -24,6 +25,7 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
   const tx = useOptionalI18n()?.tx ?? ((text: string) => text);
   const imageId = useId();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedImageSize, setExpandedImageSize] = useState<{ width: number; height: number } | null>(null);
   const suppressClickRef = useRef(false);
 
   const closeExpandedImage = useCallback(() => {
@@ -48,6 +50,28 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
       document.body.style.overflow = previousOverflow;
     };
   }, [closeExpandedImage, isExpanded]);
+
+  useEffect(() => {
+    if (!isExpanded || typeof window === "undefined") return;
+
+    let cancelled = false;
+    setExpandedImageSize(null);
+
+    const image = new window.Image();
+    image.onload = () => {
+      if (cancelled) return;
+
+      setExpandedImageSize({
+        width: image.naturalWidth || 1600,
+        height: image.naturalHeight || 1000,
+      });
+    };
+    image.src = src;
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isExpanded, src]);
 
   const handleMouseDown = (event: ReactMouseEvent<HTMLButtonElement>) => {
     if (event.button !== 0 || typeof window === "undefined") return;
@@ -109,6 +133,13 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
     setIsExpanded(true);
   };
 
+  const expandedImageAspectRatio = expandedImageSize
+    ? `${expandedImageSize.width} / ${expandedImageSize.height}`
+    : "16 / 10";
+  const expandedImageWidth = expandedImageSize
+    ? `min(${expandedImageSize.width}px, 92vw, 72rem, calc(70svh * ${expandedImageSize.width / expandedImageSize.height}))`
+    : "min(92vw, 72rem)";
+
   const expandedImage =
     isExpanded && typeof document !== "undefined"
       ? createPortal(
@@ -125,7 +156,13 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
               aria-label={`${tx("Expanded image")}: ${tx(title)}`}
               className="relative z-10 flex max-h-[calc(100svh-2rem)] max-w-[min(92vw,72rem)] flex-col items-center overflow-visible outline-none animate-scale-in md:max-w-[min(82vw,68rem)]"
             >
-              <div className="relative w-fit max-w-full">
+              <div
+                className="relative max-w-full"
+                style={{
+                  aspectRatio: expandedImageAspectRatio,
+                  width: expandedImageWidth,
+                }}
+              >
                 <button
                   type="button"
                   aria-label={`${tx("Close image")}: ${tx(title)}`}
@@ -135,10 +172,13 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
                   <X className="h-4 w-4" />
                   <span className="sr-only">{tx("Close")}</span>
                 </button>
-                <img
+                <Image
                   id={imageId}
                   src={src}
                   alt={tx(title)}
+                  fill
+                  sizes="(min-width: 768px) 82vw, 92vw"
+                  unoptimized
                   className="block h-auto max-h-[min(70svh,42rem)] max-w-full rounded-md object-contain shadow-[0_30px_90px_rgb(0_0_0/0.22)] md:max-h-[min(68svh,42rem)]"
                   decoding="async"
                 />

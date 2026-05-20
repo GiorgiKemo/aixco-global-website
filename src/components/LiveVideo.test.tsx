@@ -103,7 +103,7 @@ describe("LiveVideo", () => {
     expect(closeButton).toHaveClass("shrink-0");
   });
 
-  it("uses full media inline by default so previews match expanded playback smoothness", () => {
+  it("uses lightweight preview media inline by default while keeping expanded playback full quality", () => {
     render(
       <LiveVideo
         src="/full-video.mp4"
@@ -116,7 +116,7 @@ describe("LiveVideo", () => {
 
     const inlineVideo = screen.getByLabelText("Preview source test");
 
-    expect(inlineVideo).toHaveAttribute("src", "/full-video.mp4");
+    expect(inlineVideo).toHaveAttribute("src", "/preview-video.mp4");
 
     fireEvent.click(screen.getByRole("button", { name: /play video: preview source test/i }));
 
@@ -126,7 +126,7 @@ describe("LiveVideo", () => {
     expect(expandedVideo).toHaveAttribute("poster", "/poster.jpg");
   });
 
-  it("can still use lightweight preview media when smooth previews are disabled", () => {
+  it("can still use full media inline when smooth previews are explicitly enabled", () => {
     render(
       <LiveVideo
         src="/full-video.mp4"
@@ -134,17 +134,20 @@ describe("LiveVideo", () => {
         title="Lightweight source test"
         poster="/poster.jpg"
         eager
-        smoothPreview={false}
+        smoothPreview
       />,
     );
 
-    expect(screen.getByLabelText("Lightweight source test")).toHaveAttribute("src", "/preview-video.mp4");
+    expect(screen.getByLabelText("Lightweight source test")).toHaveAttribute("src", "/full-video.mp4");
   });
 
   it("loads nearby preview media but only plays while it is in focus", () => {
     const { container } = render(<LiveVideo src="/sample-video.mp4" title="Batumi overview" poster="/poster.jpg" />);
 
-    expect(container.querySelector("img[role='presentation']")).toHaveAttribute("src", "/poster.jpg");
+    expect(container.querySelector("img[role='presentation']")).toHaveAttribute(
+      "src",
+      expect.stringContaining("%2Fposter.jpg"),
+    );
     expect(screen.getByLabelText("Batumi overview")).not.toHaveAttribute("src");
 
     act(() => {
@@ -153,7 +156,10 @@ describe("LiveVideo", () => {
 
     const inlineVideo = screen.getByLabelText("Batumi overview");
 
-    expect(container.querySelector("img[role='presentation']")).toHaveAttribute("src", "/poster.jpg");
+    expect(container.querySelector("img[role='presentation']")).toHaveAttribute(
+      "src",
+      expect.stringContaining("%2Fposter.jpg"),
+    );
     expect(inlineVideo).toHaveAttribute("src", "/sample-video.mp4");
     expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
 

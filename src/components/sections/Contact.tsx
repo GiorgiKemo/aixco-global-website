@@ -5,7 +5,7 @@ import { useRef, useState, type MutableRefObject } from "react";
 import { z } from "zod";
 import { Mail, MapPin, Check } from "lucide-react";
 import { useSiteContent } from "@/data/site-content-context";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/framer-motion";
 import { premiumPress } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveImages } from "@/lib/aixco-live-assets";

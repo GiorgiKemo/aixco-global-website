@@ -44,7 +44,7 @@ function getBrowserContext(): BrowserContextInput {
 
 async function readCaptureResponse(response: Response): Promise<CaptureResult> {
   try {
-    const payload = (await response.json()) as Partial<CaptureResult>;
+    const payload = (await response.json()) as Partial<{ ok: boolean; skipped: boolean; reason: string }>;
 
     if (payload.ok === true) return { ok: true };
 

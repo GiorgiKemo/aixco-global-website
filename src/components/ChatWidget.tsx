@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Bot, Mail, MessageCircleMore, Send, UserRound, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "@/lib/framer-motion";
 import { useSiteContent } from "@/data/site-content-context";
 import { useI18n } from "@/i18n/I18nProvider";
 import { recordChatTranscript } from "@/lib/backend/lead-capture";

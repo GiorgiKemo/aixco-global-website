@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { legacyInsights } from "@/data/legacy-insights";
+import { getSiteUrl } from "@/lib/site-url";
 
-const baseUrl = "https://aixco.global";
+const baseUrl = getSiteUrl();
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();

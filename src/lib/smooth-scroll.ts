@@ -9,6 +9,8 @@ let activeGlideFrame: number | null = null;
 let glideCurrentTop = 0;
 let glideTargetTop = 0;
 
+export const HASH_SCROLL_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
+
 const nativeScrollSelector = [
   "[contenteditable='true']",
   "[data-native-scroll]",
@@ -225,4 +227,14 @@ export function scrollToHash(hash: string, behavior?: ScrollBehavior) {
   const targetTop = window.scrollY + target.getBoundingClientRect().top - scrollMarginTop;
   animateScrollTo(targetTop, behavior);
   return true;
+}
+
+export function scheduleHashScrollStabilization(hash: string) {
+  if (typeof window === "undefined") return [];
+
+  return HASH_SCROLL_STABILIZE_DELAYS.map((delay) =>
+    window.setTimeout(() => {
+      scrollToHash(hash, "auto");
+    }, delay),
+  );
 }

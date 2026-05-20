@@ -111,7 +111,7 @@ describe("Nav", () => {
     window.history.replaceState({}, "", "/#about");
     renderNav("/#about");
 
-    fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
+    fireEvent.click(screen.getByRole("link", { name: /aixco\.global home/i }));
 
     expect(replaceLocationHash).toHaveBeenCalledWith("");
     expect(scrollToPageTop).toHaveBeenCalledTimes(1);
@@ -126,7 +126,7 @@ describe("Nav", () => {
     window.history.replaceState({}, "", "/#dubai");
     renderNav("/#dubai");
 
-    fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
+    fireEvent.click(screen.getByRole("link", { name: /aixco\.global home/i }));
     vi.clearAllMocks();
 
     act(() => {
@@ -144,7 +144,7 @@ describe("Nav", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
     expect(screen.getByRole("button", { name: "Close menu" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
+    fireEvent.click(screen.getByRole("link", { name: /aixco\.global home/i }));
 
     expect(screen.getByRole("button", { name: "Open menu" })).toBeInTheDocument();
   });
@@ -157,7 +157,7 @@ describe("Nav", () => {
     fireEvent.click(within(primary).getByRole("link", { name: "Ways to Participate" }));
 
     vi.clearAllMocks();
-    fireEvent.click(screen.getByRole("link", { name: /aixco global home/i }));
+    fireEvent.click(screen.getByRole("link", { name: /aixco\.global home/i }));
     vi.advanceTimersByTime(1200);
 
     expect(replaceLocationHash).toHaveBeenCalledWith("");
@@ -228,7 +228,7 @@ describe("Nav", () => {
   it("keeps language menu options large enough for touch interaction", () => {
     renderNav();
 
-    fireEvent.click(screen.getByRole("button", { name: "Change language" }));
+    fireEvent.click(screen.getByRole("button", { name: /Change language/ }));
 
     expect(screen.getByRole("option", { name: /Deutsch/i })).toHaveClass("min-h-10");
     expect(screen.getByRole("option", { name: /ქართული/i })).toHaveClass("min-h-10");

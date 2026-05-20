@@ -48,7 +48,7 @@ describe("Partners", () => {
   it("opens the partner profile when a real marquee card is clicked", () => {
     renderPartners();
 
-    fireEvent.click(screen.getByRole("button", { name: "Global Partners Open profile" }));
+    fireEvent.click(screen.getByRole("button", { name: /Global Partners.*Open profile/i }));
 
     expect(uiMocks.openPartner).toHaveBeenCalledWith(partners[0]);
   });

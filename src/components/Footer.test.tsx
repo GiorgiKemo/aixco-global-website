@@ -20,7 +20,7 @@ describe("Footer", () => {
   it("renders one brand logo treatment in the footer", () => {
     const { container } = renderFooter();
 
-    expect(screen.getByRole("link", { name: /aixco global home/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /aixco\.global home/i })).toBeInTheDocument();
     expect(screen.queryByRole("img", { name: "AIXCO Global" })).not.toBeInTheDocument();
     expect(screen.getByText(/AIXCO Global 2026/)).toBeInTheDocument();
     expect(container.querySelector("[data-footer-actions]")).toHaveClass("md:pr-24", "lg:pr-0");

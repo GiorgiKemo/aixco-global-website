@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { useUI } from "../ui-state";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/framer-motion";
 import { Fragment } from "react";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";

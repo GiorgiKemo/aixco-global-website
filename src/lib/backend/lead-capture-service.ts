@@ -10,7 +10,7 @@ import {
   type PortalEventInput,
 } from "@/lib/backend/lead-capture-contracts";
 import { isSafePortalUrl } from "@/lib/security/urls";
-import { getSupabaseServerClient, hasSupabaseServerConfig } from "@/lib/supabase/server";
+import { getSupabaseAdminClient, getSupabaseAdminConfig } from "@/lib/supabase/admin";
 import type { Database, Json } from "@/lib/supabase/database.types";
 
 type ContactInsert = Database["public"]["Tables"]["contact_submissions"]["Insert"];
@@ -125,12 +125,12 @@ async function insertRow(
   payload: CaptureInsert,
   options: LeadCaptureOptions,
 ): Promise<CaptureResult> {
-  if (!options.client && !(options.hasServerConfig ?? hasSupabaseServerConfig())) {
-    return { ok: false, skipped: true, reason: "Supabase server configuration is not available." };
+  if (!options.client && !(options.hasServerConfig ?? getSupabaseAdminConfig().configured)) {
+    return { ok: false, skipped: true, reason: "Supabase admin configuration is not available." };
   }
 
   try {
-    const client = (options.client ?? (await getSupabaseServerClient())) as LeadCaptureClient;
+    const client = (options.client ?? (await getSupabaseAdminClient())) as LeadCaptureClient;
     const tableClient = client.from(table) as InsertBuilder;
     const { error } = await tableClient.insert(payload);
 
@@ -148,12 +148,12 @@ async function insertRow(
 }
 
 async function writeChatTranscript(payload: ChatInsert, options: LeadCaptureOptions): Promise<CaptureResult> {
-  if (!options.client && !(options.hasServerConfig ?? hasSupabaseServerConfig())) {
-    return { ok: false, skipped: true, reason: "Supabase server configuration is not available." };
+  if (!options.client && !(options.hasServerConfig ?? getSupabaseAdminConfig().configured)) {
+    return { ok: false, skipped: true, reason: "Supabase admin configuration is not available." };
   }
 
   try {
-    const client = (options.client ?? (await getSupabaseServerClient())) as LeadCaptureClient;
+    const client = (options.client ?? (await getSupabaseAdminClient())) as LeadCaptureClient;
     const tableClient = client.from("chat_transcripts") as ChatTranscriptBuilder;
     const result = payload.session_id
       ? await tableClient.upsert(payload, { onConflict: "session_id" })

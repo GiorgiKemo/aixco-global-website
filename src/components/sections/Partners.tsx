@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { useUI } from "../ui-state";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/framer-motion";
 import { premiumPress } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
@@ -105,7 +105,6 @@ function PartnerCard({
     <motion.button
       type="button"
       onClick={() => openPartner(partner)}
-      aria-label={`${partner.name} ${tx("Open profile")}`}
       tabIndex={isClone ? -1 : undefined}
       className={`partner-flip-card group h-[236px] w-[min(78vw,300px)] shrink-0 text-left md:w-[300px] ${partner.featured ? "partner-flip-card-featured" : ""}`}
       whileTap={premiumPress}

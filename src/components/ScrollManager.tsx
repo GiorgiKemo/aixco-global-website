@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import {
   cancelGlideScroll,
   installGlideScroll,
+  scheduleHashScrollStabilization,
   scrollToHash,
   scrollToPageTop,
 } from "@/lib/smooth-scroll";
@@ -12,6 +13,17 @@ import {
 export function ScrollManager() {
   const pathname = usePathname();
   const firstRenderRef = useRef(true);
+  const hashStabilizeTimersRef = useRef<number[]>([]);
+
+  const clearHashStabilizeTimers = useCallback(() => {
+    hashStabilizeTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+    hashStabilizeTimersRef.current = [];
+  }, []);
+
+  const stabilizeHashScroll = useCallback((hash: string) => {
+    clearHashStabilizeTimers();
+    hashStabilizeTimersRef.current = scheduleHashScrollStabilization(hash);
+  }, [clearHashStabilizeTimers]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("scrollRestoration" in window.history)) {
@@ -41,6 +53,9 @@ export function ScrollManager() {
       const hash = window.location.hash;
       if (hash) {
         const didScroll = scrollToHash(hash, isFirstRender ? "auto" : undefined);
+        if (didScroll) {
+          stabilizeHashScroll(hash);
+        }
         if (!didScroll && isFirstRender) {
           window.scrollTo({ top: 0, left: 0 });
         }
@@ -56,8 +71,9 @@ export function ScrollManager() {
 
     return () => {
       window.cancelAnimationFrame(frame);
+      clearHashStabilizeTimers();
     };
-  }, [pathname]);
+  }, [clearHashStabilizeTimers, pathname, stabilizeHashScroll]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -68,14 +84,38 @@ export function ScrollManager() {
       const hash = window.location.hash;
       if (hash) {
         scrollToHash(hash);
+        stabilizeHashScroll(hash);
       } else {
+        clearHashStabilizeTimers();
         scrollToPageTop();
       }
     };
 
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+  }, [clearHashStabilizeTimers, stabilizeHashScroll]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const clearOnUserInput = () => clearHashStabilizeTimers();
+    const options: AddEventListenerOptions = { capture: true, passive: true };
+
+    window.addEventListener("wheel", clearOnUserInput, options);
+    window.addEventListener("touchstart", clearOnUserInput, options);
+    window.addEventListener("pointerdown", clearOnUserInput, options);
+    window.addEventListener("keydown", clearOnUserInput, { capture: true });
+
+    return () => {
+      clearHashStabilizeTimers();
+      window.removeEventListener("wheel", clearOnUserInput, options);
+      window.removeEventListener("touchstart", clearOnUserInput, options);
+      window.removeEventListener("pointerdown", clearOnUserInput, options);
+      window.removeEventListener("keydown", clearOnUserInput, { capture: true });
+    };
+  }, [clearHashStabilizeTimers]);
 
   return null;
 }

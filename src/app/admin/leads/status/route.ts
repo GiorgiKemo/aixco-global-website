@@ -25,7 +25,10 @@ async function readStatusUpdatePayload(request: Request, wantsJson: boolean) {
 }
 
 export async function POST(request: Request) {
-  const wantsJson = request.headers.get("accept")?.includes("application/json") || request.headers.get("content-type")?.includes("application/json");
+  const wantsJson = Boolean(
+    request.headers.get("accept")?.includes("application/json") ||
+      request.headers.get("content-type")?.includes("application/json"),
+  );
 
   if (!(await hasAdminSession())) {
     if (wantsJson) return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });

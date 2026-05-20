@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { stagger, useAnimate } from "framer-motion";
+import { stagger, useAnimate } from "@/lib/framer-motion";
 import { imageSettleTransition, reducedMotionTransition, revealTransition } from "@/lib/motion";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 

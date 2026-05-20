@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import { X } from "lucide-react";
 import { useOptionalI18n } from "@/i18n/I18nProvider";
 
@@ -31,7 +32,7 @@ export function LiveVideo({
   eager = false,
   rootMargin = "350px 0px",
   autoplayPreview = true,
-  smoothPreview = true,
+  smoothPreview = false,
 }: LiveVideoProps) {
   const tx = useOptionalI18n()?.tx ?? ((text: string) => text);
   const videoId = useId();
@@ -222,15 +223,18 @@ export function LiveVideo({
         className={`group relative overflow-hidden rounded-lg bg-muted shadow-soft ${className}`}
       >
         {poster && (
-          <img
+          <Image
             src={poster}
             alt=""
             aria-hidden="true"
             role="presentation"
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
             className={`pointer-events-none absolute inset-0 h-full w-full ${
               fit === "contain" ? "object-contain" : "object-cover"
             } transition-opacity duration-300 ${shouldAttachVideo && autoplayPreview && isInFocus && hasPreviewFrame && !isExpanded ? "opacity-0" : "opacity-100"}`}
             loading={eager ? "eager" : "lazy"}
+            fetchPriority={eager ? "high" : "auto"}
             decoding="async"
           />
         )}
