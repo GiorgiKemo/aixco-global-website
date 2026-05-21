@@ -19,7 +19,7 @@ export function MobileDrawer({ compactNav, isNavItemActive, open, t, onLogin, on
       data-mobile-drawer
       aria-hidden={open ? undefined : true}
       inert={open ? undefined : true}
-      className={`${compactNav ? "" : "2xl:hidden"} transition-[max-height] duration-300 ${
+      className={`${compactNav ? "" : "hidden"} transition-[max-height] duration-300 ${
         open ? "max-h-[calc(100svh-4rem)] overflow-y-auto" : "max-h-0 overflow-hidden"
       }`}
     >

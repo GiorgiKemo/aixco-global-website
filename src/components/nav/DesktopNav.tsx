@@ -32,7 +32,7 @@ export function DesktopNav({
   return (
     <nav
       aria-label="Primary"
-      className={`${fullNavAvailable ? "hidden xl:flex" : "hidden"} min-w-0 flex-1 items-center justify-center ${desktopNavSpacing}`}
+      className={`${fullNavAvailable ? "hidden min-[1180px]:flex" : "hidden"} min-w-0 flex-1 items-center justify-center ${desktopNavSpacing}`}
     >
       {NAV.map((item) => {
         const isActive = isNavItemActive(item);

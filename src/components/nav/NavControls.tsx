@@ -106,7 +106,7 @@ export function NavControls({
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className={`${controlClass} ${compactNav ? "" : "xl:hidden"} h-11 w-11 shrink-0`}
+        className={`${controlClass} ${compactNav ? "" : "hidden"} h-11 w-11 shrink-0`}
       >
         {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>

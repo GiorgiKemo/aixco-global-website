@@ -12,6 +12,8 @@ type UseNavResponsiveModeOptions = {
   setDesktopActionsAvailable: Dispatch<SetStateAction<boolean>>;
 };
 
+const MIN_DESKTOP_NAV_WIDTH = 1180;
+
 export function useNavResponsiveMode({
   controlsMeasureRef,
   lang,
@@ -25,7 +27,7 @@ export function useNavResponsiveMode({
     const updateCompactMode = () => {
       if (typeof window === "undefined") return;
 
-      if (window.innerWidth < 1280) {
+      if (window.innerWidth < MIN_DESKTOP_NAV_WIDTH) {
         setCompactNav(true);
         setDesktopActionsAvailable(false);
         return;
