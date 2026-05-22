@@ -94,6 +94,7 @@ export function ChatWidget() {
   const [isAnswering, setIsAnswering] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const replyRequestIdRef = useRef(0);
+  const showQuickReplies = messages.every((message) => message.role !== "visitor");
 
   useEffect(() => {
     setMessages(loadStoredMessages());
@@ -246,6 +247,23 @@ export function ChatWidget() {
                   </div>
                 );
               })}
+              {showQuickReplies && (
+                <div className="flex justify-start" data-chat-quick-replies>
+                  <div className="ml-11 flex max-w-[78%] flex-wrap gap-1.5 rounded-lg border border-border/50 bg-background/55 p-2">
+                    {quickReplies.map((reply) => (
+                      <button
+                        key={reply}
+                        type="button"
+                        disabled={isAnswering}
+                        onClick={() => sendMessage(reply)}
+                        className="min-h-8 rounded-md border border-primary/20 bg-primary/5 px-2.5 py-1.5 text-[11px] font-medium leading-none text-primary transition hover:border-primary/40 hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        {tx(reply)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
               {isAnswering && (
                 <div className="flex gap-3 justify-start" aria-live="polite">
                   <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
@@ -267,23 +285,10 @@ export function ChatWidget() {
                   ? tx("Saving chat...")
                   : syncState === "saved"
                     ? tx("Chat saved to AIXCO")
-                    : syncState === "error"
-                      ? tx("Chat could not be saved")
-                      : tx("Live chat")}
+                      : syncState === "error"
+                        ? tx("Chat could not be saved")
+                        : tx("Live chat")}
               </p>
-              <div data-chat-quick-replies className="mb-3 grid grid-cols-2 gap-2">
-                {quickReplies.map((reply) => (
-                  <button
-                    key={reply}
-                    type="button"
-                    disabled={isAnswering}
-                    onClick={() => sendMessage(reply)}
-                    className="min-h-10 min-w-0 whitespace-normal rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-center text-xs font-medium leading-snug text-primary transition hover:border-primary/45 hover:bg-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {tx(reply)}
-                  </button>
-                ))}
-              </div>
 
               <form
                 className="flex items-end gap-2"

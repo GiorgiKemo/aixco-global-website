@@ -152,8 +152,9 @@ describe("ChatWidget", () => {
     );
     expect(screen.getByRole("dialog", { name: /aixco live chat/i })).not.toHaveClass("sm:mr-16", "md:mr-20");
     expect(container.querySelector("[data-chat-messages]")).toHaveClass("min-h-0", "flex-1", "overflow-y-auto");
-    expect(container.querySelector("[data-chat-quick-replies]")).toHaveClass("grid", "grid-cols-2");
-    expect(container.querySelector("[data-chat-quick-replies]")).not.toHaveClass("overflow-x-auto");
+    expect(container.querySelector("[data-chat-messages] [data-chat-quick-replies]")).toBeInTheDocument();
+    expect(container.querySelector("[data-chat-quick-replies]")).toHaveClass("flex", "justify-start");
+    expect(container.querySelector("[data-chat-quick-replies]")).not.toHaveClass("grid", "overflow-x-auto");
   });
 
   it("keeps chat controls large enough for touch interaction", () => {
@@ -164,10 +165,24 @@ describe("ChatWidget", () => {
     const dialog = screen.getByRole("dialog", { name: /aixco live chat/i });
     expect(within(dialog).getByRole("button", { name: /close live chat/i })).toHaveClass("h-10", "w-10");
     expect(screen.getByRole("button", { name: /minimize live chat/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "AIXCO 6% Bond" })).toHaveClass("min-h-10", "whitespace-normal");
+    expect(screen.getByRole("button", { name: "AIXCO 6% Bond" })).toHaveClass("min-h-8", "text-[11px]");
     expect(screen.getByRole("link", { name: /email transcript/i })).toHaveClass("btn-ghost-gold");
     expect(screen.getByRole("button", { name: "Register" })).toHaveClass("min-h-10");
     expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-10");
+  });
+
+  it("removes compact suggested topics after the visitor sends a message", async () => {
+    renderWidget();
+
+    fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
+
+    expect(screen.getByRole("button", { name: "AIXCO 6% Bond" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "AIXCO 6% Bond" }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole("button", { name: "AIXCO 6% Bond" })).not.toBeInTheDocument();
+    });
   });
 
   it("keeps the open chat panel active when clicking outside so visitors can browse", () => {
