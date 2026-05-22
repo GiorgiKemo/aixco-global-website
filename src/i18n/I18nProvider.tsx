@@ -31,6 +31,20 @@ const keyedText: Record<string, string> = {
 const pageTitle = "AIXCO.Global | Quality Real Estate Participation";
 const pageDescription = "Participate in selected Batumi real estate projects starting from €1,000. Transparent structure, euro-based pricing, and long-term value creation.";
 const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
+  "Checking the AIXCO website content...": {
+    de: "AIXCO-Websiteinhalte werden geprueft...",
+    ru: "Checking the AIXCO website content...",
+    ka: "Checking the AIXCO website content...",
+    tr: "AIXCO web sitesi icerigi kontrol ediliyor...",
+    ar: "Checking the AIXCO website content...",
+  },
+  "Answering from website content...": {
+    de: "Antwort aus Websiteinhalten...",
+    ru: "Answering from website content...",
+    ka: "Answering from website content...",
+    tr: "Web sitesi iceriginden yanitlaniyor...",
+    ar: "Answering from website content...",
+  },
   Start: { de: "Starten Sie", ru: "Начните", ka: "დაიწყეთ", tr: "Başlatın", ar: "ابدأ" },
   Login: { de: "Anmelden", ru: "Войти", ka: "შესვლა", tr: "Giriş", ar: "تسجيل الدخول" },
   Register: { de: "Registrieren", ru: "Регистрация", ka: "რეგისტრაცია", tr: "Kayıt Ol", ar: "التسجيل" },
