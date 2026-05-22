@@ -3,6 +3,7 @@ import { Bot, Mail, MessageCircleMore, Send, UserRound, X } from "lucide-react";
 import { AnimatePresence, motion } from "@/lib/framer-motion";
 import { useSiteContent } from "@/data/site-content-context";
 import { useI18n } from "@/i18n/I18nProvider";
+import { requestWebsiteChatbotReply } from "@/lib/backend/chatbot";
 import { recordChatTranscript } from "@/lib/backend/lead-capture";
 import { useUI } from "./ui-state";
 import { premiumPress } from "@/lib/motion";
@@ -61,31 +62,9 @@ function initialMessages(): ChatMessage[] {
   return [
     createMessage(
       "aixco",
-      "Welcome to AIXCO Live Chat. Tell us whether you are interested in the AIXCO 6% Bond, Batumi apartments, broker partnership, or developer partnership.",
+      "Welcome to the AIXCO assistant. Ask about the AIXCO 6% Bond, Batumi apartments, Dubai funds, broker partnership, developer partnership, partners, team, or FAQs.",
     ),
   ];
-}
-
-function getAutoReply(message: string) {
-  const normalized = message.toLowerCase();
-
-  if (normalized.includes("bond") || normalized.includes("6%")) {
-    return "Thanks. The AIXCO team can help with the bond route, onboarding, subscription steps, and the supporting documentation.";
-  }
-
-  if (normalized.includes("batumi") || normalized.includes("apartment") || normalized.includes("property")) {
-    return "Thanks. The AIXCO team can help with Batumi apartments, available routes, tours, pricing, ownership, rental income, and next steps.";
-  }
-
-  if (normalized.includes("broker")) {
-    return "Thanks. The AIXCO team can help brokers with portal access, customer tours, listings, and distribution support.";
-  }
-
-  if (normalized.includes("developer")) {
-    return "Thanks. The AIXCO team can help developer partners with project visibility, distribution, and onboarding.";
-  }
-
-  return "Thanks. The AIXCO team has your note. Add any budget, role, timeline, or preferred project details and email the transcript when you are ready.";
 }
 
 function loadStoredMessages() {
@@ -112,7 +91,9 @@ export function ChatWidget() {
   const [draft, setDraft] = useState("");
   const [sessionId, setSessionId] = useState("");
   const [syncState, setSyncState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [isAnswering, setIsAnswering] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const replyRequestIdRef = useRef(0);
 
   useEffect(() => {
     setMessages(loadStoredMessages());
@@ -159,26 +140,48 @@ export function ChatWidget() {
     [sessionId],
   );
 
+  const resolveChatbotReply = useCallback(
+    async (nextMessages: ChatMessage[]) => {
+      const requestId = replyRequestIdRef.current + 1;
+      replyRequestIdRef.current = requestId;
+      setIsAnswering(true);
+
+      const reply = await requestWebsiteChatbotReply(nextMessages);
+      if (replyRequestIdRef.current !== requestId) return;
+
+      const replyMessage = createMessage("aixco", reply.answer);
+      setMessages((current) => {
+        const latestVisitorMessage = nextMessages[nextMessages.length - 1];
+        const hasLatestVisitorMessage = current.some((message) => message.id === latestVisitorMessage?.id);
+        const baseMessages = hasLatestVisitorMessage ? current : nextMessages;
+        const updatedMessages = [...baseMessages, replyMessage];
+
+        void saveTranscript(updatedMessages, "auto_sync");
+        return updatedMessages;
+      });
+      setIsAnswering(false);
+    },
+    [saveTranscript],
+  );
+
   const sendMessage = (text: string) => {
     const cleaned = text.trim();
-    if (!cleaned) return;
+    if (!cleaned || isAnswering) return;
 
     setMessages((current) => {
-      const nextMessages = [
-        ...current,
-        createMessage("visitor", cleaned),
-        createMessage("aixco", getAutoReply(cleaned)),
-      ];
+      const nextMessages = [...current, createMessage("visitor", cleaned)];
 
-      void saveTranscript(nextMessages, "auto_sync");
+      void resolveChatbotReply(nextMessages);
       return nextMessages;
     });
     setDraft("");
   };
 
   const clearChat = () => {
+    replyRequestIdRef.current += 1;
     setMessages(initialMessages());
     setDraft("");
+    setIsAnswering(false);
     setSyncState("idle");
   };
 
@@ -243,12 +246,24 @@ export function ChatWidget() {
                   </div>
                 );
               })}
+              {isAnswering && (
+                <div className="flex gap-3 justify-start" aria-live="polite">
+                  <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                    <Bot className="h-4 w-4" />
+                  </span>
+                  <div className="max-w-[78%] rounded-lg border border-border/60 bg-background/70 px-4 py-3 text-sm leading-relaxed text-foreground/85">
+                    {tx("Checking the AIXCO website content...")}
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
 
             <div className="shrink-0 border-t border-border/60 bg-surface-elevated/95 p-4">
               <p aria-live="polite" className="mb-3 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                {syncState === "saving"
+                {isAnswering
+                  ? tx("Answering from website content...")
+                  : syncState === "saving"
                   ? tx("Saving chat...")
                   : syncState === "saved"
                     ? tx("Chat saved to AIXCO")
@@ -261,8 +276,9 @@ export function ChatWidget() {
                   <button
                     key={reply}
                     type="button"
+                    disabled={isAnswering}
                     onClick={() => sendMessage(reply)}
-                    className="min-h-10 min-w-0 whitespace-normal rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-center text-xs font-medium leading-snug text-primary transition hover:border-primary/45 hover:bg-primary/15"
+                    className="min-h-10 min-w-0 whitespace-normal rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-center text-xs font-medium leading-snug text-primary transition hover:border-primary/45 hover:bg-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {tx(reply)}
                   </button>
@@ -290,7 +306,8 @@ export function ChatWidget() {
                 <motion.button
                   type="submit"
                   aria-label={tx("Send")}
-                  className="btn-gold h-12 shrink-0 px-4"
+                  disabled={isAnswering || !draft.trim()}
+                  className="btn-gold h-12 shrink-0 px-4 disabled:cursor-not-allowed disabled:opacity-60"
                   whileTap={premiumPress}
                 >
                   <Send className="h-4 w-4" />

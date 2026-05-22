@@ -1,9 +1,19 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
+import { requestWebsiteChatbotReply } from "@/lib/backend/chatbot";
 import { recordChatTranscript } from "@/lib/backend/lead-capture";
 import { UIProvider } from "./ui-state";
 import { ChatWidget } from "./ChatWidget";
+
+vi.mock("@/lib/backend/chatbot", () => ({
+  requestWebsiteChatbotReply: vi.fn(async () => ({
+    ok: true,
+    answer: "AIXCO can answer this from the website content.",
+    confidence: "high",
+    matchedTopics: ["AIXCO website assistant"],
+  })),
+}));
 
 vi.mock("@/lib/backend/lead-capture", () => ({
   recordChatTranscript: vi.fn(async () => ({ ok: true })),
@@ -29,11 +39,18 @@ function renderWidget() {
 describe("ChatWidget", () => {
   beforeEach(() => {
     localStorage.clear();
+    vi.mocked(requestWebsiteChatbotReply).mockClear();
     vi.mocked(recordChatTranscript).mockClear();
     setPageScrollY(0);
   });
 
-  it("opens a live chat panel, sends a visitor message, and prepares an email transcript", () => {
+  it("opens a live chat panel, sends a visitor message, and prepares an email transcript", async () => {
+    vi.mocked(requestWebsiteChatbotReply).mockResolvedValueOnce({
+      ok: true,
+      answer: "Batumi apartments start from the website's selected property route, with ownership, tours, rental income, and next steps covered by AIXCO.",
+      confidence: "high",
+      matchedTopics: ["Buy an Apartment in Batumi"],
+    });
     renderWidget();
 
     fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
@@ -46,7 +63,12 @@ describe("ChatWidget", () => {
     fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
 
     expect(screen.getByText("I want to invest in Batumi apartments.")).toBeInTheDocument();
-    expect(screen.getByText(/AIXCO team can help with Batumi apartments/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Batumi apartments start from the website's selected property route/i)).toBeInTheDocument();
+    expect(requestWebsiteChatbotReply).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ role: "visitor", text: "I want to invest in Batumi apartments." }),
+      ]),
+    );
 
     const emailTranscript = screen.getByRole("link", { name: /email transcript/i });
     expect(emailTranscript).toHaveAttribute("href", expect.stringContaining("mailto:info@aixco.global"));
@@ -54,6 +76,12 @@ describe("ChatWidget", () => {
   });
 
   it("automatically saves visitor chats to the backend with a stable live session id", async () => {
+    vi.mocked(requestWebsiteChatbotReply).mockResolvedValueOnce({
+      ok: true,
+      answer: "Brokers can apply, complete due diligence, access materials, introduce clients, and track pipeline through the AIXCO flow.",
+      confidence: "high",
+      matchedTopics: ["Broker journey"],
+    });
     renderWidget();
 
     fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
@@ -66,6 +94,7 @@ describe("ChatWidget", () => {
       expect(recordChatTranscript).toHaveBeenCalledWith(
         expect.arrayContaining([
           expect.objectContaining({ role: "visitor", text: "Please contact me about broker partnership." }),
+          expect.objectContaining({ role: "aixco", text: expect.stringContaining("Brokers can apply") }),
         ]),
         expect.objectContaining({
           reason: "auto_sync",
@@ -73,6 +102,26 @@ describe("ChatWidget", () => {
         }),
       );
     });
+  });
+
+  it("uses the website chatbot service for quick-reply answers", async () => {
+    vi.mocked(requestWebsiteChatbotReply).mockResolvedValueOnce({
+      ok: true,
+      answer: "Developers can submit a project, evaluate fit, structure the opportunity, prepare launch materials, distribute through AIXCO, and provide ongoing reporting.",
+      confidence: "high",
+      matchedTopics: ["Developer journey"],
+    });
+    renderWidget();
+
+    fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Developer partnership" }));
+
+    expect(await screen.findByText(/Developers can submit a project/i)).toBeInTheDocument();
+    expect(requestWebsiteChatbotReply).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ role: "visitor", text: "Developer partnership" }),
+      ]),
+    );
   });
 
   it("uses the message circle icon for the launcher", () => {
