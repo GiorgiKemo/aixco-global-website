@@ -18,7 +18,7 @@ describe("PhilosophyCallout", () => {
     expect(screen.getByLabelText("AIXCO Philosophy")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        name: "Swiss discipline, real asset ownership, long-term value creation.",
+        name: "From Switzerland to Dubai to Batumi—disciplined real estate execution since 2009.",
       }),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Read AIXCO Philosophy/i })).toHaveAttribute(

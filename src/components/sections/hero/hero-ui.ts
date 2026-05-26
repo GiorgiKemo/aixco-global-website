@@ -3,9 +3,9 @@ import type { Variants } from "@/lib/framer-motion";
 export const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 export const heroIntroText =
-  "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects.";
+  "Buy, sell, and broker real estate with AIXCO—from apartment purchases in Batumi to end-to-end property administration.";
 
-export const heroPriceText = "Starting from \u20ac1,000";
+export const heroPriceText = "Starting from \u20ac10,000";
 
 export const headlineVariants: Variants = {
   hidden: {},

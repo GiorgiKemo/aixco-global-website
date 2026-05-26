@@ -1,6 +1,7 @@
 export const NAV = [
   { key: "nav.home", to: "/", hash: "" },
   { key: "nav.about", to: "/", hash: "#about" },
+  { key: "nav.legacy", to: "/", hash: "#legacy" },
   { key: "nav.dubai", to: "/", hash: "#dubai" },
   { key: "nav.batumi", to: "/", hash: "#batumi" },
   { key: "nav.participate", to: "/", hash: "#participate" },
@@ -17,13 +18,14 @@ export const MORE_NAV = [
 
 export const ALL_NAV = [...NAV, ...MORE_NAV] as const;
 export const STARTING_FROM_NAV_TARGET = MORE_NAV.find((item) => item.key === "nav.faqs") ?? MORE_NAV[MORE_NAV.length - 1];
-export const HOME_SECTION_IDS = ["about", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"] as const;
+export const HOME_SECTION_IDS = ["about", "legacy", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"] as const;
 export const NAV_HASH_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
 export const HOME_RETURN_HASH_SYNC_LOCK_MS = 1800;
 
 const DESKTOP_NAV_LABELS: Record<string, Record<string, string>> = {
   ka: {
     "nav.about": "AIXCO",
+    "nav.legacy": "გზა",
     "nav.participate": "გზები",
     "nav.how": "პროცესი",
     "nav.team": "გუნდი",

@@ -31,7 +31,7 @@ export const textTranslations = {
     "tr": "Neden Batum",
     "ar": "لماذا باتومي"
   },
-  "Ways to Participate": {
+  "How to work with AIXCO": {
     "de": "Teilnahmemöglichkeiten",
     "ru": "Способы участия",
     "ka": "მონაწილეობის გზები",
@@ -108,26 +108,26 @@ export const textTranslations = {
     "tr": "Gizlilik Politikası",
     "ar": "سياسة الخصوصية"
   },
-  "Quality Real Estate Participation": {
-    "de": "Hochwertige Immobilienbeteiligung",
-    "ru": "Качественное участие в недвижимости",
+  "Quality Real Estate — Buy · Broker · Manage": {
+    "de": "Qualitäts-Immobilien — Kaufen · Makeln · Verwalten",
+    "ru": "Качественная недвижимость — Покупка · Брокеридж · Управление",
     "ka": "უძრავ ქონებაში ხარისხიანი მონაწილეობა",
     "tr": "Nitelikli Gayrimenkul Katılımı",
     "ar": "مشاركة عقارية عالية الجودة"
   },
-  "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects, starting from €1,000.": {
-    "de": "Beteiligen Sie sich dort, wo Wachstum, Stabilität und langfristige Wertschöpfung zusammenkommen. AIXCO bietet privaten Partnern einen einfachen und transparenten Zugang zu ausgewählten Immobilienprojekten ab 1.000 €.",
-    "ru": "Участвуйте там, где сочетаются рост, стабильность и долгосрочное создание стоимости. AIXCO предлагает частным партнерам простой и прозрачный способ присоединиться к выбранным проектам недвижимости, начиная от 1 000 €.",
-    "ka": "მიიღეთ მონაწილეობა იქ, სადაც ერთიანდება ზრდა, სტაბილურობა და გრძელვადიანი ღირებულების შექმნა. AIXCO კერძო პარტნიორებს სთავაზობს მარტივ და გამჭვირვალე გზას შერჩეულ უძრავი ქონების პროექტებში მონაწილეობის მისაღებად, დაწყებული 1,000 ევროდან.",
-    "tr": "Büyüme, istikrar ve uzun vadeli değer yaratımının buluştuğu yerde yer alın. AIXCO, özel ortaklara seçilmiş gayrimenkul projelerine 1.000 €'dan başlayan tutarlarla katılmaları için basit ve şeffaf bir yol sunar.",
-    "ar": "شارك حيث يلتقي النمو والاستقرار وخلق القيمة على المدى الطويل. تمنح AIXCO الشركاء من القطاع الخاص طريقة بسيطة وشفافة للانضمام إلى مشاريع عقارية مختارة بدءًا من 1,000 يورو."
+  "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects, starting from €10,000.": {
+    "de": "Beteiligen Sie sich dort, wo Wachstum, Stabilität und langfristige Wertschöpfung zusammenkommen. AIXCO bietet privaten Partnern einen einfachen und transparenten Zugang zu ausgewählten Immobilienprojekten ab 10.000 €.",
+    "ru": "Участвуйте там, где сочетаются рост, стабильность и долгосрочное создание стоимости. AIXCO предлагает частным партнерам простой и прозрачный способ присоединиться к выбранным проектам недвижимости, начиная от €10 000.",
+    "ka": "მიიღეთ მონაწილეობა იქ, სადაც ერთიანდება ზრდა, სტაბილურობა და გრძელვადიანი ღირებულების შექმნა. AIXCO კერძო პარტნიორებს სთავაზობს მარტივ და გამჭვირვალე გზას შერჩეულ უძრავი ქონების პროექტებში მონაწილეობის მისაღებად, დაწყებული €10,000-დან.",
+    "tr": "Büyüme, istikrar ve uzun vadeli değer yaratımının buluştuğu yerde yer alın. AIXCO, özel ortaklara seçilmiş gayrimenkul projelerine 10.000 €'dan başlayan tutarlarla katılmaları için basit ve şeffaf bir yol sunar.",
+    "ar": "شارك حيث يلتقي النمو والاستقرار وخلق القيمة على المدى الطويل. تمنح AIXCO الشركاء من القطاع الخاص طريقة بسيطة وشفافة للانضمام إلى مشاريع عقارية مختارة بدءًا من 10,000 يورو."
   },
-  "Starting from €1,000": {
-    "de": "Ab 1.000 €",
-    "ru": "От 1 000 €",
-    "ka": "1,000 ევროდან",
-    "tr": "1.000 €'dan başlayan",
-    "ar": "ابتداءً من 1,000 يورو"
+  "Starting from €10,000": {
+    "de": "Ab 10.000 €",
+    "ru": "От 10 000 €",
+    "ka": "10,000 ევროდან",
+    "tr": "10.000 €'dan başlayan",
+    "ar": "ابتداءً من 10,000 يورو"
   },
   "AIXCO - A Product Powerhouse": {
     "de": "AIXCO – Eine Produkt-Powerhouse",
@@ -136,7 +136,7 @@ export const textTranslations = {
     "tr": "AIXCO - Güçlü Bir Ürün Platformu",
     "ar": "AIXCO - منصة منتجات قوية"
   },
-  "Established in 2009, AIXCO is a disciplined real estate holding company with a strong track record across property and financial investments. Headquartered in Vienna and operating in Dubai and Batumi, AIXCO Global specializes in structuring and co-investing in portfolios, guided by a commitment to long-term value creation and enduring investor trust.": {
+  "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.": {
     "de": "AIXCO wurde 2009 gegründet und ist eine disziplinierte Immobilienholding mit einer starken Erfolgsbilanz bei Immobilien- und Finanzinvestitionen. Mit Hauptsitz in Wien und Aktivitäten in Dubai und Batumi ist AIXCO Global auf die Strukturierung und Ko-Investition in Portfolios spezialisiert – mit Fokus auf langfristige Wertschöpfung und nachhaltiges Investorenvertrauen.",
     "ru": "Основанная в 2009 году, AIXCO — это дисциплинированная холдинговая компания в сфере недвижимости с сильным послужным списком в имущественных и финансовых инвестициях. Штаб-квартира находится в Вене, деятельность ведется в Дубае и Батуми. AIXCO Global специализируется на структурировании и соинвестировании в портфели, руководствуясь стремлением к долгосрочному созданию стоимости и устойчивому доверию инвесторов.",
     "ka": "2009 წელს დაარსებული AIXCO არის დისციპლინირებული უძრავი ქონების ჰოლდინგი, რომელსაც აქვს ძლიერი გამოცდილება ქონებრივ და ფინანსურ ინვესტიციებში. ვენაში მდებარე სათაო ოფისით და დუბაისა და ბათუმში ოპერირებით, AIXCO Global სპეციალიზდება პორტფელების სტრუქტურირებასა და თანაინვესტირებაში, გრძელვადიანი ღირებულების შექმნისა და ინვესტორთა მდგრადი ნდობის საფუძველზე.",
@@ -178,12 +178,12 @@ export const textTranslations = {
     "tr": "Çalışanlar",
     "ar": "الموظفون"
   },
-  "Raised Capital": {
-    "de": "Eingeworbenes Kapital",
-    "ru": "Привлеченный капитал",
-    "ka": "მოზიდული კაპიტალი",
-    "tr": "Toplanan Sermaye",
-    "ar": "رأس المال المُجمع"
+  "Real Estate Transacted": {
+    "de": "Transaktioniertes Immobilienvolumen",
+    "ru": "Объём сделок",
+    "ka": "განხორციელებული უძრავი ქონება",
+    "tr": "İşlem gören gayrimenkul",
+    "ar": "حجم المعاملات العقارية"
   },
   "Assets Under Management (AUM)": {
     "de": "Verwaltetes Vermögen (AUM)",
@@ -192,12 +192,12 @@ export const textTranslations = {
     "tr": "Yönetilen Varlıklar (AUM)",
     "ar": "الأصول المدارة (AUM)"
   },
-  "Investment Returns": {
-    "de": "Investmentrenditen",
-    "ru": "Доходность инвестиций",
-    "ka": "ინვესტიციის ანაზღაურება",
-    "tr": "Yatırım Getirileri",
-    "ar": "عوائد الاستثمار"
+  "Markets Served": {
+    "de": "Bediente Märkte",
+    "ru": "Охваченные рынки",
+    "ka": "მომსახურე ბაზრები",
+    "tr": "Hizmet verilen pazarlar",
+    "ar": "الأسواق المخدومة"
   },
   "Successfully generated returns with 4.9x multiple": {
     "de": "Erfolgreich Renditen mit einem Multiple von 4,9x erzielt",
@@ -304,14 +304,14 @@ export const textTranslations = {
     "tr": "Müşteri/Ortak Kazancı",
     "ar": "أرباح العملاء/الشركاء"
   },
-  "Choose the route that fits your goals. Customers can either subscribe to the AIXCO 6% bond, secured by underlying property, or purchase an apartment directly and benefit from rental income potential, capital appreciation, and Batumi’s favorable tax environment.": {
+  "Buy a Batumi apartment as your primary route, or explore the separate AIXCO 6% bond product. Brokers and property owners can also work with us on mandates and administration.": {
     "de": "Wählen Sie den Weg, der zu Ihren Zielen passt. Kunden können entweder die AIXCO-6%-Anleihe zeichnen, die durch zugrunde liegende Immobilien besichert ist, oder direkt eine Wohnung kaufen und von Mieteinnahmen, Wertsteigerung und dem günstigen Steuerumfeld Batumis profitieren.",
     "ru": "Выберите путь, который соответствует вашим целям. Клиенты могут либо подписаться на облигацию AIXCO 6%, обеспеченную недвижимостью, либо купить квартиру напрямую и воспользоваться потенциальным арендным доходом, ростом капитала и благоприятной налоговой средой Батуми.",
     "ka": "აირჩიეთ გზა, რომელიც თქვენს მიზნებს შეესაბამება. მომხმარებლებს შეუძლიათ გამოიწერონ AIXCO-ს 6%-იანი ობლიგაცია, რომელიც უზრუნველყოფილია უძრავი ქონებით, ან პირდაპირ შეიძინონ ბინა და ისარგებლონ საიჯარო შემოსავლის პოტენციალით, კაპიტალის ზრდით და ბათუმის ხელსაყრელი საგადასახადო გარემოთი.",
     "tr": "Hedeflerinize uygun yolu seçin. Müşteriler, dayanak mülkle güvence altına alınmış AIXCO %6 tahviline katılabilir veya doğrudan bir daire satın alarak kira geliri potansiyeli, sermaye değer artışı ve Batum'un elverişli vergi ortamından yararlanabilir.",
     "ar": "اختر المسار الذي يناسب أهدافك. يمكن للعملاء إما الاكتتاب في سند AIXCO بنسبة 6٪ والمضمون بعقار أساسي، أو شراء شقة مباشرة والاستفادة من إمكانات دخل الإيجار وارتفاع قيمة الأصل والبيئة الضريبية المواتية في باتومي."
   },
-  "Buy the AIXCO 6% Bond": {
+  "AIXCO 6% Bond (separate product)": {
     "de": "AIXCO 6%-Anleihe kaufen",
     "ru": "Купить облигацию AIXCO 6%",
     "ka": "შეიძინეთ AIXCO-ს 6%-იანი ობლიგაცია",
@@ -458,7 +458,7 @@ export const textTranslations = {
     "tr": "Yolculuklar",
     "ar": "المسارات"
   },
-  "Choose the journey that fits your role. Whether you are investing directly, distributing products, or bringing projects to market, the process is structured, transparent, and digitally managed.": {
+  "Choose the journey that fits your role. Whether you are buying property, brokering clients, subscribing to the bond product, or bringing projects to market, the process is structured, transparent, and digitally managed.": {
     "de": "Wählen Sie den Weg, der zu Ihrer Rolle passt. Ob Sie direkt investieren, Produkte vertreiben oder Projekte auf den Markt bringen – der Prozess ist strukturiert, transparent und digital verwaltet.",
     "ru": "Выберите путь, который соответствует вашей роли. Независимо от того, инвестируете ли вы напрямую, распространяете продукты или выводите проекты на рынок, процесс структурирован, прозрачен и управляется в цифровом виде.",
     "ka": "აირჩიეთ მარშრუტი, რომელიც თქვენს როლს შეესაბამება. პირდაპირ ინვესტირებთ, ავრცელებთ პროდუქტებს თუ პროექტებს ბაზარზე უშვებთ — პროცესი სტრუქტურირებულია, გამჭვირვალეა და ციფრულად იმართება.",
@@ -808,7 +808,7 @@ export const textTranslations = {
     "tr": "Mülk satın almak veya seçilmiş yatırım fırsatlarına katılmak.",
     "ar": "شراء عقار أو الدخول في فرص استثمارية مختارة."
   },
-  "What is the minimum investment amount?": {
+  "What is the minimum amount to reserve or buy?": {
     "de": "Wie hoch ist der Mindestanlagebetrag?",
     "ru": "Какова минимальная сумма инвестиций?",
     "ka": "რა არის მინიმალური საინვესტიციო თანხა?",
@@ -1004,12 +1004,12 @@ export const textTranslations = {
     "tr": "küresel gayrimenkul fırsatlarına katılımınızı",
     "ar": "مشاركتك في فرص العقارات العالمية"
   },
-  "Register with us now, and start participating in exclusive real estate opportunities from €1,000.": {
-    "de": "Registrieren Sie sich jetzt bei uns und beginnen Sie Ihre Teilnahme an exklusiven Immobilienchancen ab 1.000 €.",
-    "ru": "Зарегистрируйтесь у нас сейчас и начните участвовать в эксклюзивных возможностях недвижимости от 1 000 €.",
-    "ka": "დარეგისტრირდით ჩვენთან ახლავე და დაიწყეთ მონაწილეობა ექსკლუზიურ უძრავი ქონების შესაძლებლობებში 1,000 ევროდან.",
-    "tr": "Şimdi bize kaydolun ve 1.000 €'dan başlayan seçkin gayrimenkul fırsatlarına katılmaya başlayın.",
-    "ar": "سجل معنا الآن وابدأ المشاركة في فرص عقارية حصرية تبدأ من 1,000 يورو."
+  "Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration—typical entry from €10,000.": {
+    "de": "Registrieren Sie sich für Batumi-Wohnungen, Makler-Partnerschaft oder Verwaltung—typischer Einstieg ab 10.000 €.",
+    "ru": "Зарегистрируйтесь для покупки в Батуми, брокерства или администрирования—вход от €10 000.",
+    "ka": "დარეგისტრირდით ბათუმის ბინების, ბროკერობის ან ადმინისტრირებისთვის—შესვლა €10,000-დან.",
+    "tr": "Batum daireleri, broker ortaklığı veya yönetim için kayıt olun—giriş 10.000 €'dan.",
+    "ar": "سجّل لشراء شقق باتومي أو الشراكة كوسيط أو إدارة العقار—الدخول من 10,000 يورو."
   },
   "Contact AIXCO": {
     "de": "AIXCO kontaktieren",
@@ -1242,6 +1242,304 @@ export const textTranslations = {
     "tr": "Guru",
     "ar": "Guru"
   },
+  "Our journey": { de: "Unsere Reise", ru: "Наш путь", ka: "ჩვენი გზა", tr: "Yolculuğumuz", ar: "رحلتنا" },
+  "From Switzerland to Dubai to Batumi": { de: "Von der Schweiz über Dubai nach Batumi", ru: "От Швейцарии через Дубай к Батуми", ka: "შვეიცარიიდან დუბაიმდე და ბათუმამდე", tr: "İsviçre'den Dubai'ye ve Batum'a", ar: "من سويسرا إلى دبي إلى باتومي" },
+  "nav.legacy": { de: "Unsere Reise", ru: "Наш путь", ka: "ჩვენი გზა", tr: "Yolculuğumuz", ar: "رحلتنا" },
+  "10% reservation may apply on selected €50,000 apartments — see FAQs": { de: "10 % Reservierung bei ausgewählten Wohnungen ab 50.000 € möglich — siehe FAQ", ru: "10% резерв на выбранных квартирах от €50 000 — см. FAQ", ka: "10% რეზერვაცია შერჩეულ €50,000 ბინებზე — იხ. FAQ", tr: "Seçili €50.000 dairelerde %10 rezervasyon — SSS", ar: "حجز 10% على شقق مختارة من 50,000 يورو — راجع الأسئلة" },
+  "Dubai · Legacy portfolio": { de: "Dubai · Legacy-Portfolio", ru: "Дубай · Наследие", ka: "დუბაი · მემკვიდრეობა", tr: "Dubai · Miras portföy", ar: "دبي · محفظة إرث" },
+  "Our history in Dubai": { de: "Unsere Geschichte in Dubai", ru: "Наша история в Дубае", ka: "ჩვენი ისტორია დუბაიში", tr: "Dubai'deki geçmişimiz", ar: "تاريخنا في دبي" },
+  "Batumi · Current opportunity": { de: "Batumi · Aktuelle Chance", ru: "Батуми · Текущая возможность", ka: "ბათუმი · მიმდინარე შესაძლებლობა", tr: "Batum · Güncel fırsat", ar: "باتومي · الفرصة الحالية" },
+  "Current focus": { de: "Aktueller Fokus", ru: "Текущий фокус", ka: "მიმდინარე ფოკუსი", tr: "Güncel odak", ar: "التركيز الحالي" },
+  "Legacy": { de: "Legacy", ru: "Наследие", ka: "მემკვიდრეობა", tr: "Miras", ar: "إرث" },
+  "Separate structured product": { de: "Separates Strukturprodukt", ru: "Отдельный структурный продукт", ka: "ცალკე სტრუქტურირებული პროდუქტი", tr: "Ayrı yapılandırılmış ürün", ar: "منتج منظم منفصل" },
+
+  "AIXCO buys, sells, and brokers real estate across markets. Our legacy track record in Switzerland and Dubai supports today's focus on Batumi apartment sales and property services.": {
+    "de": "AIXCO kauft, verkauft und vermittelt Immobilien in mehreren Märkten. Unser Legacy-Track-Record in der Schweiz und Dubai stützt den heutigen Fokus auf Batumi-Verkäufe und Services.",
+    "ru": "AIXCO покупает, продаёт и брокерит недвижимость на разных рынках. Наш legacy в Швейцарии и Дубае поддерживает текущий фокус на продажах в Батуми.",
+    "ka": "AIXCO ყიდულობს, ყიდის და ბროკერობს უძრავ ქონებას სხვადასხვა ბაზარზე. შვეიცარიისა და დუბაის მემკვიდრეობა უჭერს მხარს ბათუმის ფოკუსს.",
+    "tr": "AIXCO pazarlarda gayrimenkul alır, satar ve aracılık eder. İsviçre ve Dubai mirası Batum odağını destekler.",
+    "ar": "تشتري AIXCO وتبيع وتوسّط العقارات عبر الأسواق. إرثنا في سويسرا ودبي يدعم تركيز باتومي اليوم."
+  },
+  "View Batumi opportunities": {
+    "de": "Batumi-Chancen ansehen",
+    "ru": "Смотреть возможности Батуми",
+    "ka": "იხ. ბათუმის შესაძლებლობები",
+    "tr": "Batumi fırsatlarını gör",
+    "ar": "عرض فرص باتومي"
+  },
+  "View Dubai legacy portfolio": {
+    "de": "Dubai-Legacy-Portfolio ansehen",
+    "ru": "Смотреть legacy-портфель Дубая",
+    "ka": "იხ. დუბაის მემკვიდრეობა",
+    "tr": "Dubai miras portföyünü gör",
+    "ar": "عرض محفظة دبي الإرثية"
+  },
+  "Purchase the AIXCO Bond with a guaranteed 30% return over 5 years — property-backed collateral. This is distinct from direct apartment ownership in Batumi.": {
+    "de": "AIXCO-Anleihe mit garantierten 30 % über 5 Jahre — immobilienbesichert. Getrennt vom direkten Wohnungskauf in Batumi.",
+    "ru": "Облигация AIXCO с гарантированными 30% за 5 лет — с залогом недвижимости. Отдельно от прямой покупки квартиры в Батуми.",
+    "ka": "AIXCO ობლიგაცია 30%-იანი გარანტიით 5 წელში—უძრავი ქონებით უზრუნველყოფილი. განსხვავდება პირდაპირი ბინის შეძენისგან.",
+    "tr": "AIXCO tahvilinde 5 yılda garantili %30 getiri—gayrimenkul teminatlı. Batum'da doğrudan daire sahipliğinden ayrıdır.",
+    "ar": "سند AIXCO بعائد مضمون 30% خلال 5 سنوات—بضمان عقاري. منفصل عن شراء الشقة مباشرة في باتومي."
+  },
+  "From Switzerland to Dubai to Batumi—disciplined real estate execution since 2009.": {
+    "de": "Von der Schweiz über Dubai nach Batumi—disziplinierte Immobilien-Umsetzung seit 2009.",
+    "ru": "От Швейцарии через Дубай к Батуми—дисциплинированное исполнение с 2009 года.",
+    "ka": "შვეიცარიიდან დუბაიმდე და ბათუმამდე—დისციპლინირებული განხორციელება 2009-დან.",
+    "tr": "İsviçre'den Dubai'ye Batum'a—2009'dan beri disiplinli gayrimenkul.",
+    "ar": "من سويسرا إلى دبي إلى باتومي—تنفيذ عقاري منضبط منذ 2009."
+  },
+  "Read how AIXCO’s legacy in Swiss and Gulf markets shapes today’s buy-sell-brokerage focus in Batumi.": {
+    "de": "Lesen Sie, wie AIXCOs Legacy in Schweiz und Golf den heutigen Kauf-Verkauf-Makler-Fokus in Batumi prägt.",
+    "ru": "Узнайте, как наследие AIXCO в Швейцарии и на Заливе формирует сегодняшний фокус покупки-продажи в Батуми.",
+    "ka": "წაიკითხეთ, როგორ ყალიბებს AIXCO-ს მემკვიდრეობა ბათუმის ფოკუსს.",
+    "tr": "AIXCO'nun İsviçre ve Körfez mirasının Bugünkü Batum odağını nasıl şekillendirdiğini okuyun.",
+    "ar": "اقرأ كيف يشكّل إرث AIXCO في سويسرا والخليج تركيز باتومي اليوم."
+  },
+  "Work with AIXCO": {
+    "de": "Mit AIXCO arbeiten",
+    "ru": "Работа с AIXCO",
+    "ka": "იმუშავეთ AIXCO-თან",
+    "tr": "AIXCO ile çalışın",
+    "ar": "اعمل مع AIXCO"
+  },
+  "Status: Legacy portfolio — realized": {
+    "de": "Status: Legacy-Portfolio — realisiert",
+    "ru": "Статус: наследие — реализовано",
+    "ka": "სტატუსი: მემკვიდრეობა — დასრულებული",
+    "tr": "Durum: miras portföy — tamamlandı",
+    "ar": "الحالة: محفظة إرث — منجزة"
+  },
+  "Development value: USD 462m": {
+    "de": "Entwicklungswert: 462 Mio. USD",
+    "ru": "Стоимость проекта: 462 млн USD",
+    "ka": "განვითარების ღირებულება: 462 მლნ USD",
+    "tr": "Geliştirme değeri: 462 milyon USD",
+    "ar": "قيمة التطوير: 462 مليون دولار"
+  },
+  "Development scope: USD 350m mixed-use program": {
+    "de": "Entwicklungsumfang: 350 Mio. USD Mixed-Use",
+    "ru": "Масштаб: программа 350 млн USD",
+    "ka": "მასშტაბი: 350 მლნ USD",
+    "tr": "Kapsam: 350 milyon USD karma kullanım",
+    "ar": "نطاق التطوير: 350 مليون دولار"
+  },
+  "Site progress: ~20% developed, ~20% under construction": {
+    "de": "Baufortschritt: ~20 % fertig, ~20 % im Bau",
+    "ru": "Прогресс: ~20% готово, ~20% строится",
+    "ka": "პროგრესი: ~20% დასრულებული, ~20% მშენებლობაში",
+    "tr": "İlerleme: ~%20 tamam, ~%20 inşaat",
+    "ar": "التقدم: ~20% مكتمل، ~20% قيد الإنشاء"
+  },
+  "Volume: Canal-front residential sold and handed over": {
+    "de": "Volumen: Kanal-Front verkauft und übergeben",
+    "ru": "Объём: продано и передано у канала",
+    "ka": "მოცულობა: არხის სანაპირო გაყიდული",
+    "tr": "Hacim: kanal önü konut teslim edildi",
+    "ar": "الحجم: مباني الواجهة البحرية مباعة ومسلّمة"
+  },
+  "Legacy market — we are not accepting new investments in Dubai. Below is a snapshot of delivered and in-progress real estate volume.": {
+    "de": "Legacy-Markt — wir nehmen in Dubai keine neuen Investitionen mehr an. Unten ein Überblick über abgeschlossenes und laufendes Immobilienvolumen.",
+    "ru": "Рынок-наследие — мы не принимаем новые инвестиции в Дубае. Ниже снимок завершённого и текущего объёма недвижимости.",
+    "ka": "მემკვიდრეობის ბაზარი — დუბაიში ახალ ინვესტიციებს აღარ ვიღებთ. ქვემოთ მიწოდებული და მიმდინარე მოცულობის მიმოხილვა.",
+    "tr": "Miras pazar — Dubai'de yeni yatırım kabul etmiyoruz. Aşağıda tamamlanan ve devam eden gayrimenkul hacmi.",
+    "ar": "سوق إرثي — لا نقبل استثمارات جديدة في دبي. فيما يلي لمحة عن حجم العقارات المنجزة والجارية."
+  },
+  "Opportunity-driven focus in Georgia—buy apartments with transparent euro pricing, strong rental potential, and full foreign ownership.": {
+    "de": "Chancenorientierter Fokus in Georgien—Wohnungen mit transparenter Euro-Preisgestaltung, starker Mietpotenzial und vollem Ausländer-Eigentum.",
+    "ru": "Ориентированный на возможности фокус в Грузии—покупка квартир с прозрачными ценами в евро, сильным арендным потенциалом и полной иностранной собственностью.",
+    "ka": "შესაძლებლობაზე ორიენტირებული ფოკუსი საქართველოში—ბინების ყიდვა გამჭვირვალე ევრო ფასებით, ძლიერი გაქირავების პოტენციალით და სრული უცხოური საკუთრებით.",
+    "tr": "Gürcistan'da fırsat odaklı yaklaşım—şeffaf euro fiyatlarla daire satın alma, güçlü kira potansiyeli ve tam yabancı mülkiyeti.",
+    "ar": "تركيز قائم على الفرص في جورجيا—شراء شقق بأسعار يورو شفافة وإمكانات إيجار قوية وملكية أجنبية كاملة."
+  },
+  "Switzerland · Legacy": {
+    "de": "Schweiz · Legacy",
+    "ru": "Швейцария · Наследие",
+    "ka": "შვეიცარია · მემკვიდრეობა",
+    "tr": "İsviçre · Miras",
+    "ar": "سويسرا · إرث"
+  },
+  "Swiss real estate heritage": {
+    "de": "Schweizer Immobilien-Erbe",
+    "ru": "Швейцарское наследие",
+    "ka": "შვეიცარიული მემკვიდრეობა",
+    "tr": "İsviçre mirası",
+    "ar": "إرث عقاري سويسري"
+  },
+  "CHF 1.1 billion": {
+    "de": "1,1 Mrd. CHF",
+    "ru": "1,1 млрд CHF",
+    "ka": "CHF 1.1 მილიარდი",
+    "tr": "1,1 milyar CHF",
+    "ar": "1.1 مليار فرنك"
+  },
+  "Real estate activity": {
+    "de": "Immobilienaktivität",
+    "ru": "Объём недвижимости",
+    "ka": "უძრავი ქონების აქტივობა",
+    "tr": "Gayrimenkul hacmi",
+    "ar": "نشاط عقاري"
+  },
+  "Group origins": {
+    "de": "Gruppenursprung",
+    "ru": "Истоки группы",
+    "ka": "ჯგუფის საწყისები",
+    "tr": "Grup kökeni",
+    "ar": "أصول المجموعة"
+  },
+  "Market heritage": {
+    "de": "Markterbe",
+    "ru": "Наследие рынка",
+    "ka": "ბაზრის მემკვიდრეობა",
+    "tr": "Pazar mirası",
+    "ar": "إرث السوق"
+  },
+  "Swiss": {
+    "de": "Schweiz",
+    "ru": "Швейцария",
+    "ka": "შვეიცარიელი",
+    "tr": "İsviçre",
+    "ar": "سويسري"
+  },
+  "Buy apartments from €50,000": {
+    "de": "Wohnungen ab 50.000 €",
+    "ru": "Квартиры от €50 000",
+    "ka": "ბინები €50,000-დან",
+    "tr": "50.000 €'dan daireler",
+    "ar": "شقق من 50,000 يورو"
+  },
+  "CHF 1.1B": {
+    "de": "CHF 1,1 Mrd.",
+    "ru": "CHF 1,1 млрд",
+    "ka": "CHF 1.1B",
+    "tr": "CHF 1,1 mr",
+    "ar": "1.1 مليار فرنك"
+  },
+  "600+": {
+    "de": "600+",
+    "ru": "600+",
+    "ka": "600+",
+    "tr": "600+",
+    "ar": "600+"
+  },
+  "USD 462m": {
+    "de": "462 Mio. USD",
+    "ru": "462 млн USD",
+    "ka": "462 მლნ USD",
+    "tr": "462 milyon USD",
+    "ar": "462 مليون دولار"
+  },
+  "€50K+": {
+    "de": "50K+ €",
+    "ru": "€50K+",
+    "ka": "€50K+",
+    "tr": "€50K+",
+    "ar": "€50K+"
+  },
+  "8%+": {
+    "de": "8 %+",
+    "ru": "8 %+",
+    "ka": "8 %+",
+    "tr": "%8+",
+    "ar": "+8%"
+  },
+  "Now": {
+    "de": "Jetzt",
+    "ru": "Сейчас",
+    "ka": "ახლა",
+    "tr": "Şimdi",
+    "ar": "الآن"
+  },
+  "Status: Legacy portfolio — in progress": {
+    "de": "Status: Legacy-Portfolio — in Bearbeitung",
+    "ru": "Статус: наследие — в процессе",
+    "ka": "სტატუსი: მემკვიდრეობა — მიმდინარე",
+    "tr": "Durum: miras portföy — devam ediyor",
+    "ar": "الحالة: محفظة إرث — قيد التنفيذ"
+  },
+  "Explore Swiss heritage at x-co-group.com": {
+    "de": "Schweizer Erbe auf x-co-group.com",
+    "ru": "Швейцарское наследие на x-co-group.com",
+    "ka": "შვეიცარიული მემკვიდრეობა x-co-group.com",
+    "tr": "İsviçre mirası x-co-group.com",
+    "ar": "الإرث السويسري على x-co-group.com"
+  },
+  "Gulf developments delivered": {
+    "de": "Golf-Projekte umgesetzt",
+    "ru": "Реализованные проекты в Заливе",
+    "ka": "ყურისზე განხორციელებული პროექტები",
+    "tr": "Körfez projeleri teslim edildi",
+    "ar": "مشاريع الخليج المنجزة"
+  },
+  "USD 800m+ development volume": {
+    "de": "800+ Mio. USD Entwicklungsvolumen",
+    "ru": "800+ млн USD объём",
+    "ka": "800+ მლნ USD",
+    "tr": "800+ milyon USD hacim",
+    "ar": "800+ مليون دولار حجم"
+  },
+  "Units delivered (Eden House)": {
+    "de": "Einheiten (Eden House)",
+    "ru": "Сданные единицы (Eden House)",
+    "ka": "გადაცემული ერთეულები",
+    "tr": "Teslim edilen üniteler",
+    "ar": "وحدات مسلّمة"
+  },
+  "Eden House development value": {
+    "de": "Eden House Entwicklungswert",
+    "ru": "Стоимость Eden House",
+    "ka": "Eden House ღირებულება",
+    "tr": "Eden House geliştirme değeri",
+    "ar": "قيمة تطوير Eden House"
+  },
+  "Market status": {
+    "de": "Marktstatus",
+    "ru": "Статус рынка",
+    "ka": "ბაზრის სტატუსი",
+    "tr": "Pazar durumu",
+    "ar": "حالة السوق"
+  },
+  "Opportunity-driven focus in Georgia": {
+    "de": "Chancenfokus Georgien",
+    "ru": "Фокус на возможностях в Грузии",
+    "ka": "შესაძლებლობაზე ორიენტირებული ფოკუსი",
+    "tr": "Gürcistan'da fırsat odağı",
+    "ar": "تركيز الفرص في جورجيا"
+  },
+  "Apartment pricing": {
+    "de": "Wohnungspreise",
+    "ru": "Цены на квартиры",
+    "ka": "ბინის ფასები",
+    "tr": "Daire fiyatları",
+    "ar": "أسعار الشقق"
+  },
+  "Active market": {
+    "de": "Aktiver Markt",
+    "ru": "Активный рынок",
+    "ka": "აქტიური ბაზარი",
+    "tr": "Aktif pazar",
+    "ar": "سوق نشط"
+  },
+  "AIXCO’s roots trace to Switzerland, where the group built a substantial residential and commercial real estate track record. This legacy foundation shaped our discipline around asset quality, documentation, and long-term ownership.": {
+    "de": "AIXCOs Wurzeln liegen in der Schweiz, wo die Gruppe eine starke Immobilienbilanz aufbaute. Dieses Erbe prägt Qualität, Dokumentation und langfristigen Besitz.",
+    "ru": "Корни AIXCO — в Швейцарии, где группа создала сильный трек-рекорд. Это наследие формирует дисциплину качества и долгосрочного владения.",
+    "ka": "AIXCO-ს საწყისები შვეიცარიაშია, სადაც ჯგუფმა შექმნა მნიშვნელოვანი ტრეკ-რეკორდი.",
+    "tr": "AIXCO'nun kökleri İsviçre'de güçlü bir gayrimenkul geçmişiyle şekillendi.",
+    "ar": "جذور AIXCO في سويسرا حيث بنت المجموعة سجلاً عقارياً قوياً."
+  },
+  "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio—we are not opening new Dubai investments at this time.": {
+    "de": "In Dubai realisierte AIXCO Großprojekte wie Eden House und Dubai Healthcare City. Dieses Kapitel ist Legacy—keine neuen Dubai-Investitionen.",
+    "ru": "В Дубае AIXCO реализовала крупные проекты, включая Eden House. Это legacy—новых инвестиций в Дубае нет.",
+    "ka": "დუბაიში AIXCO-მ განახორციელა მასშტაბური პროექტები. ეს მემკვიდრეობაა—ახალი ინვესტიციები არ ვიღებთ.",
+    "tr": "Dubai'de Eden House gibi büyük projeler teslim edildi. Bu miras bölüm—yeni Dubai yatırımı yok.",
+    "ar": "في دبي نفّذت AIXCO مشاريع كبرى. هذا إرث—لا استثمارات جديدة في دبي حالياً."
+  },
+  "Today, AIXCO is focused on Batumi—helping buyers purchase apartments, supporting brokers, and administering property with transparent euro pricing. Entry typically starts from €10,000, with 10% reservation options on selected units from €50,000.": {
+    "de": "Heute Fokus Batumi—Kauf, Makler und Verwaltung mit transparenter Euro-Preisgestaltung. Einstieg ab 10.000 €, 10 % Reservierung auf ausgewählte Einheiten ab 50.000 €.",
+    "ru": "Сегодня фокус на Батуми—покупка, брокеридж и администрирование. Вход от €10 000, 10% резерв на выбранные квартиры от €50 000.",
+    "ka": "დღეს ფოკუსი ბათუმზეა—ყიდვა, ბროკერობა და ადმინისტრირება. შესვლა €10,000-დან.",
+    "tr": "Bugün Batum odağı—satın alma, broker ve yönetim. Giriş 10.000 €'dan.",
+    "ar": "اليوم التركيز على باتومي—شراء ووساطة وإدارة. الدخول من 10,000 يورو."
+  },
   "Otium": {
     "de": "Otium",
     "ru": "Otium",
@@ -1253,21 +1551,21 @@ export const textTranslations = {
 
 export const attributeTranslations = {
   "title": {
-    "AIXCO.Global | Quality Real Estate Participation": {
-      "de": "AIXCO.Global | Hochwertige Immobilienbeteiligung",
-      "ru": "AIXCO.Global | Качественное участие в недвижимости",
+    "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage": {
+      "de": "AIXCO.Global | Qualitäts-Immobilien — Kaufen · Makeln · Verwalten",
+      "ru": "AIXCO.Global | Качественная недвижимость — Покупка · Брокеридж · Управление",
       "ka": "AIXCO.Global | გლობალური უძრავი ქონების მონაწილეობა",
       "tr": "AIXCO.Global | Nitelikli Gayrimenkul Katılımı",
       "ar": "AIXCO.Global | مشاركة عقارية عالية الجودة"
     }
   },
   "content": {
-    "Participate in selected Batumi real estate projects starting from €1,000. Transparent structure, euro-based pricing, and long-term value creation.": {
-      "de": "Beteiligen Sie sich an ausgewählten Immobilienprojekten in Batumi ab 1.000 €. Transparente Struktur, eurobasierte Preisgestaltung und langfristige Wertschöpfung.",
-      "ru": "Участвуйте в выбранных проектах недвижимости в Батуми от 1 000 €. Прозрачная структура, цены в евро и долгосрочное создание стоимости.",
-      "ka": "მიიღეთ მონაწილეობა ბათუმის შერჩეულ უძრავი ქონების პროექტებში 1,000 ევროდან. გამჭვირვალე სტრუქტურა, ევროზე დაფუძნებული ფასები და გრძელვადიანი ღირებულების შექმნა.",
-      "tr": "Batum'daki seçilmiş gayrimenkul projelerine 1.000 €'dan başlayarak katılın. Şeffaf yapı, euro bazlı fiyatlandırma ve uzun vadeli değer yaratımı.",
-      "ar": "شارك في مشاريع عقارية مختارة في باتومي بدءًا من 1,000 يورو. هيكل شفاف، وتسعير قائم على اليورو، وخلق قيمة طويلة الأجل."
+    "Buy selected Batumi apartments with transparent euro pricing from €50,000 (typical entry from €10,000). Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.": {
+      "de": "Ausgewählte Batumi-Wohnungen ab 50.000 € mit transparenter Euro-Preisgestaltung (Einstieg typisch ab 10.000 €). Kauf, Verkauf und Makler in der Schweiz, Dubai-Legacy und Georgien.",
+      "ru": "Покупка квартир в Батуми от €50 000 с прозрачными ценами (вход от €10 000). Покупка, продажа и брокеридж — Швейцария, legacy Дубая, Грузия.",
+      "ka": "ბათუმის ბინები €50,000-დან გამჭვირვალე ფასებით (შესვლა ხშირად €10,000-დან). ყიდვა-გაყიდვა-ბროკერობა შვეიცარიაში, დუბაის მემკვიდრეობასა და საქართველოში.",
+      "tr": "Batum'da 50.000 €'dan şeffaf euro fiyatlarla daireler (tipik giriş 10.000 €'dan). İsviçre, Dubai mirası ve Gürcistan'da alım-satım-aracılık.",
+      "ar": "شراء شقق باتومي من 50,000 يورو بأسعار شفافة (الدخول عادة من 10,000 يورو). شراء وبيع ووساطة في سويسرا وإرث دبي وجورجيا."
     }
   },
   "placeholder": {

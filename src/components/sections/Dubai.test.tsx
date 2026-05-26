@@ -84,11 +84,11 @@ describe("Dubai", () => {
 
     const fundOne = container.querySelector("[data-fund-card='fund-1']");
     const title = within(fundOne as HTMLElement).getByRole("heading", {
-      name: "Fund I Eden House The Canal & Eden House The Park",
+      name: "Eden House — The Canal & The Park (Dubai)",
     });
     const highlightGrid = container.querySelector("[data-fund-highlight-grid='fund-1']");
     const details = container.querySelector("[data-fund-detail-notes='fund-1']");
-    const performanceTile = within(highlightGrid as HTMLElement).getByText("4.9x").closest("[data-fund-highlight-tile]");
+    const performanceTile = within(highlightGrid as HTMLElement).getByText(/Legacy portfolio/i).closest("[data-fund-highlight-tile]");
     const performanceAccent = performanceTile?.lastElementChild as HTMLElement | null;
     const titleAccent = within(title).getByText("The Canal");
 
@@ -97,7 +97,7 @@ describe("Dubai", () => {
     expect(title.className).not.toContain("font-serif-display");
     expect(titleAccent.className).toContain("text-primary");
     expect(titleAccent.className).not.toContain("italic");
-    expect(within(fundOne as HTMLElement).getByRole("img", { name: "Fund I Eden House The Canal & Eden House The Park" })).toHaveAttribute(
+    expect(within(fundOne as HTMLElement).getByRole("img", { name: "Eden House — The Canal & The Park (Dubai)" })).toHaveAttribute(
       "loading",
       "lazy",
     );
@@ -153,7 +153,7 @@ describe("Dubai", () => {
   it("uses horizontal infinite image rails instead of vertical gallery columns", () => {
     const { container } = renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
     const railTrack = parkRail.querySelector("[data-gallery-track='framer-motion-loop']");
     const railSets = parkRail.querySelectorAll("[data-gallery-set]");
@@ -179,7 +179,7 @@ describe("Dubai", () => {
   it("eagerly fetches the first visible gallery tiles from original source files", () => {
     renderDubai();
 
-    const fundTwoGallery = screen.getByLabelText("Fund II asset image gallery");
+    const fundTwoGallery = screen.getByLabelText("Dubai Healthcare City legacy gallery");
     const healthcareRail = within(fundTwoGallery).getByLabelText("Dubai Healthcare City images");
     const railSets = healthcareRail.querySelectorAll("[data-gallery-set]");
     const primaryImages = Array.from((railSets[0] as HTMLElement).querySelectorAll("img"));
@@ -216,7 +216,7 @@ describe("Dubai", () => {
   it("uses Framer Motion-controlled image rails instead of direct native scroll stepping", () => {
     renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
     const railTrack = parkRail.querySelector("[data-gallery-track='framer-motion-loop']");
 
@@ -243,7 +243,7 @@ describe("Dubai", () => {
     const frames = mockGalleryAnimationFrames();
     renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
 
     Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
@@ -261,7 +261,7 @@ describe("Dubai", () => {
     const frames = mockGalleryAnimationFrames();
     renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
 
     Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
@@ -280,7 +280,7 @@ describe("Dubai", () => {
   it("lets users drag image rails horizontally with the left mouse button", () => {
     renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
 
     Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
@@ -298,7 +298,7 @@ describe("Dubai", () => {
   it("lets users drag image rails horizontally with pointer-captured touch input", () => {
     renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
 
     Object.defineProperty(parkRail, "clientWidth", { configurable: true, value: 520 });
@@ -315,7 +315,7 @@ describe("Dubai", () => {
   it("keeps gallery image buttons draggable and only expands them on a real click or tap", () => {
     renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
     const imageButton = within(parkRail).getByRole("button", {
       name: "Expand image: Eden House The Park construction progress",
@@ -336,7 +336,7 @@ describe("Dubai", () => {
   it("expands gallery images after a pointer tap without horizontal movement", () => {
     renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
     const imageButton = within(parkRail).getByRole("button", {
       name: "Expand image: Eden House The Park construction progress",
@@ -352,7 +352,7 @@ describe("Dubai", () => {
   it("expands gallery images after a left mouse click without horizontal movement", () => {
     renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
     const imageButton = within(parkRail).getByRole("button", {
       name: "Expand image: Eden House The Park construction progress",
@@ -368,7 +368,7 @@ describe("Dubai", () => {
   it("does not expand gallery images from the click generated after a touch swipe", () => {
     renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
     const parkRail = within(fundOneGallery).getByLabelText("Eden House The Park images");
     const imageButton = within(parkRail).getByRole("button", {
       name: "Expand image: Eden House The Park construction progress",
@@ -389,8 +389,8 @@ describe("Dubai", () => {
   it("uses still images instead of Dubai fund videos", () => {
     const { container } = renderDubai();
 
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
-    const fundTwoGallery = screen.getByLabelText("Fund II asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
+    const fundTwoGallery = screen.getByLabelText("Dubai Healthcare City legacy gallery");
 
     expect(within(fundOneGallery).getByAltText("Eden House The Canal aerial overview")).toBeInTheDocument();
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City asset image")).toBeInTheDocument();
@@ -401,13 +401,13 @@ describe("Dubai", () => {
     const { container } = renderDubai();
 
     const fundOne = container.querySelector("[data-fund-card='fund-1']");
-    const fundOneGallery = screen.getByLabelText("Fund I asset image gallery");
+    const fundOneGallery = screen.getByLabelText("Eden House legacy asset gallery");
 
-    fireEvent.click(within(fundOne as HTMLElement).getByRole("button", { name: /Expand image: Fund I Eden House/i }));
+    fireEvent.click(within(fundOne as HTMLElement).getByRole("button", { name: /Expand image: Eden House/i }));
 
-    const fundOneDialog = screen.getByRole("dialog", { name: /Expanded image: Fund I Eden House/i });
+    const fundOneDialog = screen.getByRole("dialog", { name: /Expanded image: Eden House/i });
     expect(fundOneDialog).toBeInTheDocument();
-    expect(within(fundOneDialog).getByAltText("Fund I Eden House The Canal & Eden House The Park")).toHaveAttribute(
+    expect(within(fundOneDialog).getByAltText("Eden House — The Canal & The Park (Dubai)")).toHaveAttribute(
       "src",
       expect.stringContaining("/aixco-global-op2/images/fund/fund1.jpeg"),
     );
@@ -424,15 +424,15 @@ describe("Dubai", () => {
     const { container } = renderDubai();
 
     const fundTwo = container.querySelector("[data-fund-card='fund-2']");
-    const fundTwoGallery = screen.getByLabelText("Fund II asset image gallery");
+    const fundTwoGallery = screen.getByLabelText("Dubai Healthcare City legacy gallery");
 
-    expect(fundTwo).toHaveTextContent("Target Net IRR");
+    expect(fundTwo).toHaveTextContent("Legacy portfolio");
     expect(fundTwo).toHaveTextContent("~20%");
-    expect(fundTwo).toHaveTextContent("Investment Period");
-    expect(fundTwo).toHaveTextContent("4 years");
+    expect(fundTwo).toHaveTextContent("Site progress");
+    expect(fundTwo).toHaveTextContent("under construction");
     expect(fundTwo).toHaveTextContent("Location");
     expect(fundTwo).toHaveTextContent("Dubai Creek - Dubai, UAE");
-    expect(fundTwo).toHaveTextContent("Mixed-use masterplan combining Build-to-Rent and Build-to-Sell models");
+    expect(fundTwo).toHaveTextContent("Mixed-use masterplan combining Build-to-Rent and Build-to-Sell");
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City source site image")).toBeInTheDocument();
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City skyline site context")).toBeInTheDocument();
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City fund location map")).toBeInTheDocument();
@@ -451,17 +451,17 @@ describe("Dubai", () => {
     expect(detailNotes?.className).toContain("lg:grid-cols-3");
     expect(detailNotes).toHaveAttribute("data-layout", "prestige-highlights");
 
+    const statusTile = within(highlightGrid as HTMLElement).getByText(/Legacy portfolio/i).closest("[data-fund-highlight-tile]");
     const unitsTile = within(highlightGrid as HTMLElement).getByText("600").closest("[data-fund-highlight-tile]");
-    const totalTile = within(highlightGrid as HTMLElement).getByText("462").closest("[data-fund-highlight-tile]");
-    const performanceTile = within(highlightGrid as HTMLElement).getByText("4.9x").closest("[data-fund-highlight-tile]");
+    const valueTile = within(highlightGrid as HTMLElement).getByText("462").closest("[data-fund-highlight-tile]");
 
+    expect(statusTile).toHaveTextContent("Status");
     expect(unitsTile).toHaveTextContent("Units");
     expect(unitsTile).toHaveTextContent("+");
-    expect(totalTile).toHaveTextContent("Total");
-    expect(totalTile).toHaveTextContent("m USD");
-    expect(performanceTile).toHaveTextContent("Performance");
-    expect(performanceTile?.className).toContain("bg-foreground");
-    expect(performanceTile?.className).not.toContain("transition-all");
+    expect(valueTile).toHaveTextContent("Development value");
+    expect(valueTile).toHaveTextContent("m USD");
+    expect(statusTile?.className).toContain("bg-foreground");
+    expect(statusTile?.className).not.toContain("transition-all");
   });
 
   it("does not render oversized numbering over Dubai fund media", () => {
@@ -481,10 +481,10 @@ describe("Dubai", () => {
     const fundTwoShell = container.querySelector("[data-fund-card-shell='fund-2']");
     const fundOne = within(fundOneShell as HTMLElement).getByRole("article");
     const fundTwo = within(fundTwoShell as HTMLElement).getByRole("article");
-    const fundOneGallery = within(fundOneShell as HTMLElement).getByLabelText("Fund I asset image gallery");
-    const fundTwoGallery = within(fundTwoShell as HTMLElement).getByLabelText("Fund II asset image gallery");
-    const fundOneAssetLink = within(fundOne).getByRole("link", { name: /View Asset Details: Fund I/ });
-    const fundTwoAssetLink = within(fundTwo).getByRole("link", { name: /View Asset Details: Fund II/ });
+    const fundOneGallery = within(fundOneShell as HTMLElement).getByLabelText("Eden House legacy asset gallery");
+    const fundTwoGallery = within(fundTwoShell as HTMLElement).getByLabelText("Dubai Healthcare City legacy gallery");
+    const fundOneAssetLink = within(fundOne).getByRole("link", { name: /View Asset Details: Eden House/ });
+    const fundTwoAssetLink = within(fundTwo).getByRole("link", { name: /View Asset Details: Dubai Healthcare/ });
 
     expect(fundOneGallery).toBeInTheDocument();
     expect(fundOneGallery.previousElementSibling).toHaveAttribute("id", "dubai");

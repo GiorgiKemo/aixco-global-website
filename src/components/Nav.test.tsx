@@ -100,7 +100,7 @@ describe("Nav", () => {
     renderNav("/");
 
     const primary = screen.getByLabelText("Primary");
-    fireEvent.click(within(primary).getByRole("link", { name: "Ways to Participate" }));
+    fireEvent.click(within(primary).getByRole("link", { name: "How to work with AIXCO" }));
 
     expect(replaceLocationHash).toHaveBeenCalledWith("#participate");
     expect(scrollToHash).toHaveBeenCalledWith("#participate");
@@ -154,7 +154,7 @@ describe("Nav", () => {
     renderNav("/");
 
     const primary = screen.getByLabelText("Primary");
-    fireEvent.click(within(primary).getByRole("link", { name: "Ways to Participate" }));
+    fireEvent.click(within(primary).getByRole("link", { name: "How to work with AIXCO" }));
 
     vi.clearAllMocks();
     fireEvent.click(screen.getByRole("link", { name: /aixco\.global home/i }));
@@ -189,7 +189,7 @@ describe("Nav", () => {
     const { unmount } = renderNav("/");
 
     const primary = screen.getByLabelText("Primary");
-    fireEvent.click(within(primary).getByRole("link", { name: "Ways to Participate" }));
+    fireEvent.click(within(primary).getByRole("link", { name: "How to work with AIXCO" }));
 
     vi.clearAllMocks();
     unmount();

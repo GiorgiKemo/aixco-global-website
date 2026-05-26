@@ -128,12 +128,14 @@ function ParticipationRouteCard({
             <div className="mt-5 grid gap-3 text-[clamp(1.14rem,1.12vw,1.28rem)] leading-[1.62] text-foreground/85">
               {route.id === "bond" ? (
                 <>
-                  <p className="text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]">
-                    {tx("Customers sign up, complete onboarding, and invest in the AIXCO bond through a seamless digital process.")}
+                  <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-foreground/55">
+                    {tx("Separate structured product")}
                   </p>
-                  <p className="text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]">
-                    <strong>{tx("Purchase the AIXCO Bond with a guaranteed 30% return over 5 years")}</strong>{" "}
-                    {tx("— combining structured security with strong, predictable growth. Backed by property as collateral, the bond provides investors with an added layer of asset-linked confidence.")}
+                  <p className="text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]">{tx(route.body)}</p>
+                  <p className="text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72">
+                    {tx(
+                      "Purchase the AIXCO Bond with a guaranteed 30% return over 5 years — property-backed collateral. This is distinct from direct apartment ownership in Batumi.",
+                    )}
                   </p>
                 </>
               ) : (
@@ -185,12 +187,12 @@ export function Participate() {
           className="flex min-h-[calc(100svh-4rem)] flex-col md:h-[calc(100svh-5rem)] md:min-h-0 md:py-4 lg:py-3"
         >
           <div className="scroll-reveal mb-4 max-w-6xl shrink-0 md:mb-4">
-          <p className="eyebrow">{tx("Ways to Participate")}</p>
+          <p className="eyebrow">{tx("How to work with AIXCO")}</p>
           <h2 className="heading-section mt-4 max-w-full text-[clamp(2.25rem,10vw,3.5rem)] leading-[1.02] [overflow-wrap:anywhere] sm:text-[clamp(2.65rem,4.1vw,3.5rem)]">
             <span className="text-gold">{tx("How")}</span> <SlashBreakText text={tx("Customers/Partners Profit")} />
           </h2>
           <p className="mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80">
-            {tx("Choose the route that fits your goals. Customers can either subscribe to the AIXCO 6% bond, secured by underlying property, or purchase an apartment directly and benefit from rental income potential, capital appreciation, and Batumi’s favorable tax environment.")}
+            {tx("Buy a Batumi apartment as your primary route, or explore the separate AIXCO 6% bond product. Brokers and property owners can also work with us on mandates and administration.")}
           </p>
         </div>
 

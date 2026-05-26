@@ -62,7 +62,7 @@ function initialMessages(): ChatMessage[] {
   return [
     createMessage(
       "aixco",
-      "Welcome to the AIXCO assistant. Ask about the AIXCO 6% Bond, Batumi apartments, Dubai funds, broker partnership, developer partnership, partners, team, or FAQs.",
+      "Welcome to the AIXCO assistant. Ask about Batumi apartments, Dubai legacy projects, the AIXCO 6% bond, broker partnership, developer partnership, partners, team, or FAQs.",
     ),
   ];
 }

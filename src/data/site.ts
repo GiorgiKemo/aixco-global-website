@@ -1,7 +1,7 @@
 // Canonical copy from https://www.aixco.global/op2/index.html#page1.
 export const company = {
   name: "AIXCO.Global",
-  tagline: "Quality Real Estate Participation",
+  tagline: "Quality Real Estate — Buy · Broker · Manage",
   email: "info@aixco.global",
   address: "Grüngasse 16, 1050 Wien, Austria",
   founded: 2009,
@@ -28,42 +28,39 @@ export const metrics = [
   { value: "500+", label: "Total Transactions" },
   { value: "2009", label: "In Business Since" },
   { value: "85+", label: "Employees" },
-  { value: "$4.2B", label: "Raised Capital" },
+  { value: "$4.2B", label: "Real Estate Transacted" },
   { value: "$2B", label: "Developments Underway" },
-  { value: "4.2X", label: "Investment Returns" },
+  { value: "3", label: "Markets Served" },
 ];
 
 export const dubaiFunds = [
   {
     id: "fund-1",
-    name: "Fund I Eden House The Canal & Eden House The Park",
+    name: "Eden House — The Canal & The Park (Dubai)",
     image: "dubai-eden",
     video: "fundOne",
     details: [
+      "Status: Legacy portfolio — realized",
       "Units: 600+",
-      "Total: USD 462m",
-      "Performance: 4.9x",
-      "Revenues: Successfully generated returns with 4.9x multiple",
-      "Exit: Realized successfully with distributions",
+      "Development value: USD 462m",
+      "Volume: Canal-front residential sold and handed over",
+      "Location: Dubai Water Canal district",
       "Highlights: Prime canal-front location, strong partnerships, premium delivery",
     ],
   },
   {
     id: "fund-2",
-    name: "Fund II Dubai Healthcare City",
+    name: "Dubai Healthcare City (legacy development)",
     image: "dubai-healthcare",
     video: "fundTwo",
     details: [
-      "Total Equity: USD 350m",
-      "Target Net IRR: ~20%",
-      "Performance: Projected 4.3x",
-      "Investment Period: 4 years",
-      "GP Commitment: Min 2%",
+      "Status: Legacy portfolio — in progress",
+      "Development scope: USD 350m mixed-use program",
+      "Site progress: ~20% developed, ~20% under construction",
       "Location: Dubai Creek - Dubai, UAE",
       "Classification: Residential buildings, offices, retail, gastronomy, healthcare",
-      "Site Area: ~20% developed, ~20% under construction",
       "Access: Al Khail Rd, 2nd Za'abeel Rd, Metro Green Line, Bus",
-      "Strategy: Mixed-use masterplan combining Build-to-Rent and Build-to-Sell models for an underserved millennial market",
+      "Strategy: Mixed-use masterplan combining Build-to-Rent and Build-to-Sell for an underserved millennial market",
       "Connectivity: Near DIFC, Downtown Dubai, Business Bay, Ras Al Khor Wildlife Sanctuary, and Dubai Creek Golf Club",
     ],
   },
@@ -120,19 +117,19 @@ export const batumiProperties = [
 
 export const participationRoutes = [
   {
-    id: "bond",
-    title: "Buy the AIXCO 6% Bond",
-    video: "bonds",
-    body:
-      "Customers sign up, complete onboarding, and invest in the AIXCO bond through a seamless digital process. Purchase the AIXCO Bond with a guaranteed 30% return over 5 years — combining structured security with strong, predictable growth. Backed by property as collateral, the bond provides investors with an added layer of asset-linked confidence.",
-    cta: "Register",
-  },
-  {
     id: "apartment",
     title: "Buy an Apartment in Batumi",
     video: "batumiBuy",
     body:
-      "Customers sign up, book a tour, and visit the apartment in person. This route is designed for buyers seeking direct ownership and exposure to Batumi’s long-term growth story.",
+      "Customers sign up, book a tour, and visit the apartment in person. This is our primary route for buyers seeking direct ownership in Batumi’s opportunity-driven market.",
+    cta: "Register",
+  },
+  {
+    id: "bond",
+    title: "AIXCO 6% Bond (separate product)",
+    video: "bonds",
+    body:
+      "A separate structured product for clients who prefer fixed-income exposure backed by property collateral. Complete onboarding and subscribe through the digital portal—distinct from direct apartment purchase.",
     cta: "Register",
   },
 ];
@@ -141,13 +138,13 @@ export const journeys = [
   {
     tag: "Journey 01",
     role: "Customer Real Estate Buyer",
-    summary: "For clients looking to access selected real estate opportunities through a guided digital process.",
-    intro: "A guided process for clients participating in selected real estate opportunities.",
+    summary: "For clients buying apartments or reserving units in Batumi through a guided digital process.",
+    intro: "A guided process for clients purchasing or reserving selected Batumi apartments.",
     steps: [
       { title: "Create your account", text: "Register and access your secure client portal." },
       { title: "Complete Profile", text: "Fill out the registration form to create your profile and access dashboard" },
       { title: "Review opportunities", text: "Browse available real estate projects, pricing, and supporting materials." },
-      { title: "Select and reserve", text: "Choose the preferred investment or property participation option." },
+      { title: "Select and reserve", text: "Choose the preferred apartment or reservation option." },
       { title: "Sign digitally", text: "Complete documentation online and finalize onboarding." },
       { title: "Track updates", text: "Monitor project progress, documents, and reporting through the portal." },
     ],
@@ -155,8 +152,8 @@ export const journeys = [
   {
     tag: "Journey 02",
     role: "Customer Bond Buyer",
-    summary: "For investors seeking fixed-income style opportunities with clear onboarding and documentation.",
-    intro: "A streamlined subscription path for investors participating in bond offerings.",
+    summary: "For clients subscribing to the separate AIXCO bond product with clear onboarding and documentation.",
+    intro: "A streamlined subscription path for the structured bond product (separate from apartment purchase).",
     steps: [
       { title: "Register", text: "Create your account with Bluerock and access the investor dashboard." },
       { title: "Complete compliance", text: "Finish KYC and suitability checks required for onboarding." },
@@ -183,15 +180,15 @@ export const journeys = [
   {
     tag: "Journey 04",
     role: "Developer",
-    summary: "For developers seeking structuring, placement, distribution, and investor market access.",
-    intro: "A capital and distribution pathway for developers seeking market access and investor reach.",
+    summary: "For developers seeking placement, distribution, and buyer market access.",
+    intro: "A distribution pathway for developers seeking market access and buyer reach.",
     steps: [
-      { title: "Initial project submission", text: "Share project information, structure, and investment requirements." },
-      { title: "Evaluation and fit", text: "Review commercial viability, positioning, and investor suitability." },
+      { title: "Initial project submission", text: "Share project information, structure, and commercial requirements." },
+      { title: "Evaluation and fit", text: "Review commercial viability, positioning, and buyer suitability." },
       { title: "Structure the opportunity", text: "Align capital format, documentation, and route to market." },
       { title: "Prepare launch materials", text: "Create the presentation, data room, and supporting documents." },
-      { title: "Distribution and placement", text: "Connect the project to brokers, clients, and investor networks." },
-      { title: "Ongoing reporting", text: "Provide updates, milestones, and investor communications post-launch." },
+      { title: "Distribution and placement", text: "Connect the project to brokers, clients, and buyer networks." },
+      { title: "Ongoing reporting", text: "Provide updates, milestones, and buyer communications post-launch." },
     ],
   },
 ];
@@ -242,19 +239,19 @@ export const partners = [
     modalLabel: "Featured highlight \u00b7 UAE focus",
     featured: true,
     logo: "globalPartners",
-    summary: "Real estate investment and development platform.",
+    summary: "Real estate development and asset management platform.",
     featuredDetail: [
-      "A premier real estate investment platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+      "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
       "The business is positioned around value creation through strategic asset selection, operational excellence, redevelopment, and property management.",
     ],
     detail: [
-      "Global Partners is presented by AIXCO as a premier real estate investment firm focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+      "Global Partners is presented by AIXCO as a premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
       "The positioning emphasizes value creation through strategic asset selection, operational excellence, development, redevelopment, and property management.",
     ],
     leaders: [
       { name: "H.H Sheikh Maktoum Butti Maktoum Juma Al Maktoum", role: "Chairman", image: "butti" },
       { name: "H.H. Sheikh Rashid Butti Maktoum Juma Al Maktoum", role: "Director", image: "rashid" },
-      { name: "Bader Hareb", role: "Executive Chairman – Fund II", image: "bader" },
+      { name: "Bader Hareb", role: "Executive Chairman", image: "bader" },
       { name: "Warren Blore", role: "Chief Financial Officer", image: "warren" },
     ],
   },
@@ -346,10 +343,13 @@ export const partners = [
 export const faqGroups = [
   {
     group: "Customer",
-    description: "Buying property or entering selected investment opportunities.",
+    description: "Buying property, reserving apartments, or working with AIXCO on real estate services.",
     items: [
-      { q: "What is the minimum investment amount?", a: "The entry point starts from €1,000, depending on the selected opportunity." },
-      { q: "Can I buy property directly?", a: "Yes. Customers may pursue direct purchase, structured participation, or both." },
+      {
+        q: "What is the minimum amount to reserve or buy?",
+        a: "Typical entry starts from €10,000. On selected Batumi apartments from €50,000, a 10% reservation (from €5,000) may be available—final terms depend on the project and purchase agreement.",
+      },
+      { q: "Can I buy property directly?", a: "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration." },
       { q: "Are returns fixed?", a: "No. Returns are performance-based and depend on market conditions and project success." },
       { q: "Will I receive reporting?", a: "Yes. Reporting, documents, and project updates are available through the portal." },
       { q: "Can foreigners buy property in Batumi?", a: "Yes. Foreigners can purchase and own real estate with minimal restrictions." },

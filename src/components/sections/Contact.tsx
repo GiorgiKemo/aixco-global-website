@@ -85,7 +85,7 @@ export function Contact() {
             <span className="text-gold">{tx("Start")}</span> {tx("your participation in Global real estate opportunities")}
           </h2>
           <p className="mt-4 max-w-md leading-relaxed text-foreground/80">
-            {tx("Register with us now, and start participating in exclusive real estate opportunities from €1,000.")}
+            {tx("Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration—typical entry from €10,000.")}
           </p>
           <div className="mt-6 space-y-4">
             <a href={`mailto:${company.email}`} className="group flex items-start gap-4">

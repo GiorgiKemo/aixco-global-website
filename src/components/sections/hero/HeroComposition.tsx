@@ -53,7 +53,7 @@ export function HeroComposition({
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.6 : 0.9, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: 0.12 }}
         >
-          {tx("Quality Real Estate Participation")}
+          {tx("Quality Real Estate — Buy · Broker · Manage")}
         </motion.p>
         <MotionImage
           data-hero-brand-mark="standalone"
@@ -102,16 +102,19 @@ export function HeroComposition({
           href="#faqs"
           onClick={onFaqClick}
           data-hero-price-lockup="true"
-          className="mt-8 flex w-full max-w-full flex-row items-center justify-center rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:mt-6 md:flex-row md:px-0 lg:mt-8"
+          className="mt-8 flex w-full max-w-full flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:mt-6 md:px-0 lg:mt-8"
           initial={false}
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.68 : 1, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.52 : 1.18 }}
         >
           <span
             data-hero-price-text="true"
-            className="hero-reference-font max-w-full whitespace-nowrap text-[clamp(1.2rem,5vw,3.5rem)] font-light uppercase leading-none tracking-normal sm:text-[clamp(1.8rem,4vw,4rem)] md:text-[clamp(2rem,4vw,3rem)] lg:text-[clamp(2.8rem,3.8vw,4rem)]"
+            className="hero-reference-font max-w-full text-[clamp(1.2rem,5vw,3.5rem)] font-light uppercase leading-none tracking-normal [overflow-wrap:anywhere] sm:text-[clamp(1.8rem,4vw,4rem)] md:text-[clamp(2rem,4vw,3rem)] lg:text-[clamp(2.8rem,3.8vw,4rem)]"
           >
             {tx(heroPriceText)}
+          </span>
+          <span className="max-w-[20rem] text-[0.72rem] font-normal normal-case leading-snug text-white/75 sm:max-w-md sm:text-xs md:max-w-lg">
+            {tx("10% reservation may apply on selected €50,000 apartments — see FAQs")}
           </span>
         </motion.a>
       </div>

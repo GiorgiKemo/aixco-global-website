@@ -7,7 +7,7 @@ function TranslationProbe() {
 
   return (
     <div>
-      <p>{tx("STARTING FROM €1,000")}</p>
+      <p>{tx("Starting from €10,000")}</p>
       <p>{tx("Rental yield")}</p>
       <p>{tx("starting from")}</p>
       <p>{tx("Group company")}</p>
@@ -30,7 +30,7 @@ describe("I18nProvider", () => {
       </I18nProvider>,
     );
 
-    expect(screen.getAllByText("Ab 1.000 €")).toHaveLength(2);
+    expect(screen.getAllByText("Ab 10.000 €")).toHaveLength(2);
     expect(screen.getByText("Mietrendite")).toBeInTheDocument();
     expect(screen.getByText("ab")).toBeInTheDocument();
     expect(screen.getByText("Konzerngesellschaft")).toBeInTheDocument();
@@ -45,6 +45,6 @@ describe("I18nProvider", () => {
       </I18nProvider>,
     );
 
-    expect(document.title).toBe("AIXCO.Global | Hochwertige Immobilienbeteiligung");
+    expect(document.title).toBe("AIXCO.Global | Qualitäts-Immobilien — Kaufen · Makeln · Verwalten");
   });
 });

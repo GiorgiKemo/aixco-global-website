@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Index from "@/views/HomePage";
 
 export const metadata: Metadata = {
-  title: "AIXCO.Global | Global Real Estate Participation",
+  title: "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage",
   description:
-    "Participate in selected Batumi real estate projects starting from EUR 1,000. Transparent structure, euro-based pricing, and long-term value creation.",
+    "Buy selected Batumi apartments with transparent euro pricing from EUR 50,000. Typical entry from EUR 10,000. Real estate services across Switzerland, Dubai legacy, and Georgia.",
   alternates: {
     canonical: "/",
   },

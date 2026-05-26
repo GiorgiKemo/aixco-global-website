@@ -86,8 +86,8 @@ const QUERY_ALIASES: Record<string, string[]> = {
   faq: ["question", "answer"],
   foreigner: ["foreign", "ownership", "batumi"],
   foreigners: ["foreign", "ownership", "batumi"],
-  invest: ["investment", "participation", "subscribe"],
-  investor: ["investment", "participation", "subscribe"],
+  invest: ["buy", "purchase", "apartment", "property"],
+  investor: ["buyer", "client", "purchase"],
   login: ["portal", "access"],
   price: ["pricing", "minimum", "entry", "amount"],
   register: ["signup", "apply", "onboarding", "portal"],
@@ -176,7 +176,7 @@ export function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[
       title: "AIXCO.Global company profile",
       priority: 9,
       keywords: ["company", "about", "offices", "founded", "address", "email", "contact"],
-      answer: `${content.company.name} is a real estate participation platform founded in ${content.company.founded}, with offices in ${content.company.offices.join(", ")}. The website positions AIXCO around selected real estate projects, long-term value creation, and private partner participation. Contact: ${content.company.email}. Address: ${content.company.address}.`,
+      answer: `${content.company.name} is a real estate buy-sell-brokerage platform founded in ${content.company.founded}, with offices in ${content.company.offices.join(", ")}. AIXCO helps clients buy Batumi apartments, broker property, and administer real estate—with legacy track records in Switzerland and Dubai. Contact: ${content.company.email}. Address: ${content.company.address}.`,
     }),
     entry({
       id: "contact",
@@ -240,7 +240,7 @@ export function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[
         section: "dubai",
         title: fund.name,
         priority: 8,
-        keywords: [fund.name, "dubai", "fund", "healthcare", "eden", "canal", "park", "irr", "performance"],
+        keywords: [fund.name, "dubai", "legacy", "healthcare", "eden", "canal", "park", "volume", "development"],
         answer: `${fund.name}: ${fund.details.join(". ")}.`,
       }),
     );
@@ -359,7 +359,7 @@ function fallbackAnswer(content: SiteContent, query: string): WebsiteChatbotAnsw
     confidence: "low",
     matchedTopics: [],
     answer: sanitizeDisplayText(
-      `I can answer from the AIXCO website about the AIXCO 6% Bond, Batumi apartments, Dubai funds, broker and developer onboarding, partners, FAQs, and contact details. I do not have enough website content to answer "${query}" precisely. Please add a little more context, or contact ${content.company.email} for the AIXCO team.`,
+      `I can answer from the AIXCO website about Batumi apartments, Dubai legacy projects, the separate AIXCO 6% bond, broker and developer onboarding, partners, FAQs, and contact details. I do not have enough website content to answer "${query}" precisely. Please add a little more context, or contact ${content.company.email} for the AIXCO team.`,
     ),
   };
 }
@@ -392,7 +392,7 @@ export function answerWebsiteChat(messages: ChatMessageInput[], content: SiteCon
     return {
       confidence: "low",
       matchedTopics: [],
-      answer: "Ask me about the AIXCO 6% Bond, Batumi apartments, Dubai projects, broker onboarding, developer partnerships, partners, team, or FAQs.",
+      answer: "Ask me about Batumi apartments, Dubai legacy projects, the AIXCO 6% bond, broker onboarding, developer partnerships, partners, team, or FAQs.",
     };
   }
 
@@ -400,7 +400,7 @@ export function answerWebsiteChat(messages: ChatMessageInput[], content: SiteCon
     return {
       confidence: "high",
       matchedTopics: ["AIXCO website assistant"],
-      answer: "Hello. I can answer questions from the AIXCO website about the bond route, Batumi apartments, Dubai funds, broker and developer onboarding, partners, team, FAQs, and contact details.",
+      answer: "Hello. I can answer questions from the AIXCO website about Batumi apartments, Dubai legacy projects, the separate bond product, broker and developer onboarding, partners, team, FAQs, and contact details.",
     };
   }
 

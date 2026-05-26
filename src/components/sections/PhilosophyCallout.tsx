@@ -13,10 +13,10 @@ export function PhilosophyCallout() {
         <div>
           <p className="eyebrow">{tx("Our philosophy")}</p>
           <h2 className="mt-4 max-w-4xl text-3xl font-semibold leading-tight text-foreground md:text-5xl">
-            {tx("Swiss discipline, real asset ownership, long-term value creation.")}
+            {tx("From Switzerland to Dubai to Batumi—disciplined real estate execution since 2009.")}
           </h2>
           <p className="mt-5 max-w-3xl text-foreground/70">
-            {tx("Read how AIXCO's Swiss real estate heritage shapes its risk management, capital preservation, and income-focused asset ownership.")}
+            {tx("Read how AIXCO’s legacy in Swiss and Gulf markets shapes today’s buy-sell-brokerage focus in Batumi.")}
           </p>
         </div>
 

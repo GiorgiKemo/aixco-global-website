@@ -25,10 +25,10 @@ describe("website chatbot", () => {
   });
 
   it("answers minimum investment questions from the FAQ", () => {
-    const answer = ask("What is the minimum investment amount?");
+    const answer = ask("What is the minimum amount to reserve or buy?");
 
     expect(answer.answer).toContain("starts from");
-    expect(answer.answer).toContain("\u20ac1,000");
+    expect(answer.answer).toContain("\u20ac10,000");
     expect(answer.answer).not.toContain("\u00e2");
   });
 

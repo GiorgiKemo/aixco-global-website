@@ -13,9 +13,10 @@ function isLang(value: string | null): value is Lang {
 const keyedText: Record<string, string> = {
   "nav.home": "Home",
   "nav.about": "About AIXCO",
+  "nav.legacy": "Our journey",
   "nav.dubai": "Dubai",
   "nav.batumi": "Batumi",
-  "nav.participate": "Ways to Participate",
+  "nav.participate": "How to work with AIXCO",
   "nav.how": "How AIXCO Works",
   "nav.team": "Our Team",
   "nav.partners": "Partners",
@@ -25,11 +26,12 @@ const keyedText: Record<string, string> = {
   "nav.more": "More",
   "cta.login": "Login",
   "cta.register": "Register",
-  "cta.start": "Starting from €1,000",
+  "cta.start": "Starting from €10,000",
   "cta.contact": "Contact AIXCO",
 };
-const pageTitle = "AIXCO.Global | Quality Real Estate Participation";
-const pageDescription = "Participate in selected Batumi real estate projects starting from €1,000. Transparent structure, euro-based pricing, and long-term value creation.";
+const pageTitle = "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage";
+const pageDescription =
+  "Buy selected Batumi apartments with transparent euro pricing from €50,000 (typical entry from €10,000). Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.";
 const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
   "Checking the AIXCO website content...": {
     de: "AIXCO-Websiteinhalte werden geprueft...",
@@ -242,12 +244,12 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "Batum geliştirme güncellemesi yeni yatırımcı talebini öne çıkarıyor",
     ar: "تحديث تطوير باتومي يبرز طلبًا جديدًا من المستثمرين",
   },
-  "AIXCO Fund I reaches a new Dubai portfolio milestone": {
-    de: "AIXCO Fund I erreicht neuen Meilenstein im Dubai-Portfolio",
-    ru: "AIXCO Fund I достигает нового рубежа в портфеле Дубая",
-    ka: "AIXCO-ს პირველი ფონდი დუბაის პორტფელში ახალ ეტაპს აღწევს",
-    tr: "AIXCO Fund I Dubai portföyünde yeni bir kilometre taşına ulaşıyor",
-    ar: "صندوق AIXCO الأول يحقق إنجازًا جديدًا في محفظة دبي",
+  "AIXCO completes Eden House phase in Dubai legacy portfolio": {
+    de: "AIXCO schließt Eden-House-Phase im Dubai-Legacy-Portfolio ab",
+    ru: "AIXCO завершает фазу Eden House в наследии Дубая",
+    ka: "AIXCO ასრულებს Eden House ფაზას დუბაის მემკვიდრეობით პორტფოლიოში",
+    tr: "AIXCO, Dubai miras portföyünde Eden House aşamasını tamamlıyor",
+    ar: "AIXCO تكمل مرحلة Eden House في محفظة دبي الإرثية",
   },
   "Black Sea corridor demand strengthens across coastal assets": {
     de: "Nachfrage im Schwarzmeer-Korridor stärkt Küstenassets",
@@ -270,12 +272,12 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "Altyapı yatırımcıları için stratejik ortak güncellemesi yayımlandı",
     ar: "نُشر تحديث الشريك الاستراتيجي لمستثمري البنية التحتية",
   },
-  "New overview explains participation from EUR 1,000": {
-    de: "Neue Übersicht erklärt Beteiligung ab 1.000 EUR",
-    ru: "Новый обзор объясняет участие от 1 000 EUR",
-    ka: "ახალი მიმოხილვა განმარტავს მონაწილეობას 1000 ევროდან",
-    tr: "Yeni genel bakış 1.000 EUR'dan başlayan katılımı açıklıyor",
-    ar: "نظرة عامة جديدة تشرح المشاركة ابتداءً من 1,000 يورو",
+  "New guide: buying Batumi apartments from EUR 50,000": {
+    de: "Neuer Leitfaden: Batumi-Wohnungen ab 50.000 EUR kaufen",
+    ru: "Новое руководство: покупка квартир в Батуми от 50 000 EUR",
+    ka: "ახალი გზამკვლევი: ბათუმის ბინების ყიდვა 50,000 ევროდან",
+    tr: "Yeni rehber: 50.000 EUR'dan Batum daireleri satın alma",
+    ar: "دليل جديد: شراء شقق باتومي من 50,000 يورو",
   },
   "All Rights Reserved.": { de: "Alle Rechte vorbehalten.", ru: "Все права защищены.", ka: "ყველა უფლება დაცულია.", tr: "Tüm hakları saklıdır.", ar: "جميع الحقوق محفوظة." },
   "ISO 27001-2022 Certified Systems.": {

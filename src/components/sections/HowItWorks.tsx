@@ -28,7 +28,7 @@ export function HowItWorks() {
           <p className="eyebrow">{tx("Journeys")}</p>
           <h2 className="heading-section mt-5 text-[clamp(2.4rem,3.8vw,3.55rem)] leading-[1.03] min-[1360px]:text-[clamp(2.75rem,4.1vw,4rem)]">{tx("How AIXCO Works")}</h2>
           <p className="mt-5 max-w-4xl text-[clamp(1rem,0.95vw,1.12rem)] leading-[1.62] text-foreground/80 min-[1360px]:text-[clamp(1.12rem,1.02vw,1.28rem)]">
-            {tx("Choose the journey that fits your role. Whether you are investing directly, distributing products, or bringing projects to market, the process is structured, transparent, and digitally managed.")}
+            {tx("Choose the journey that fits your role. Whether you are buying property, brokering clients, subscribing to the bond product, or bringing projects to market, the process is structured, transparent, and digitally managed.")}
           </p>
         </div>
 

@@ -20,15 +20,15 @@ describe("FAQs", () => {
     expect(faqGroups).toEqual([
       {
         group: "Customer",
-        description: "Buying property or entering selected investment opportunities.",
+        description: "Buying property, reserving apartments, or working with AIXCO on real estate services.",
         items: [
           {
-            q: "What is the minimum investment amount?",
-            a: "The entry point starts from €1,000, depending on the selected opportunity.",
+            q: "What is the minimum amount to reserve or buy?",
+            a: "Typical entry starts from €10,000. On selected Batumi apartments from €50,000, a 10% reservation (from €5,000) may be available—final terms depend on the project and purchase agreement.",
           },
           {
             q: "Can I buy property directly?",
-            a: "Yes. Customers may pursue direct purchase, structured participation, or both.",
+            a: "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
           },
           {
             q: "Are returns fixed?",
@@ -90,7 +90,7 @@ describe("FAQs", () => {
   it("uses targeted, snappy accordion transitions", () => {
     renderFAQs();
 
-    const trigger = screen.getByRole("button", { name: "What is the minimum investment amount?" });
+    const trigger = screen.getByRole("button", { name: "What is the minimum amount to reserve or buy?" });
     const icon = trigger.querySelector("svg");
     const panel = trigger.nextElementSibling as HTMLElement;
 

@@ -26,7 +26,7 @@ export function About() {
             {tx("AIXCO - Product Powerhouse")}
           </h2>
           <p className="mt-5 max-w-[38rem] text-base leading-relaxed text-foreground/80 md:text-lg lg:text-[1.05rem]">
-            {tx("Established in 2009, AIXCO is a disciplined real estate holding company with a strong track record across property and financial investments. Headquartered in Vienna and operating in Dubai and Batumi, AIXCO Global specializes in structuring and co-investing in portfolios, guided by a commitment to long-term value creation and enduring investor trust.")}
+            {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
           </p>
           <div className="mac-card mt-7 overflow-hidden lg:mt-6">
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40">

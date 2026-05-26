@@ -1,12 +1,12 @@
 export const assetTranslations = {
-  "Fund I asset image gallery": {
+  "Eden House legacy asset gallery": {
     de: "Asset-Bildergalerie Fonds I",
     ru: "Галерея изображений активов Фонда I",
     ka: "ფონდი I-ის აქტივების გალერეა",
     tr: "Fon I varlık görsel galerisi",
     ar: "معرض صور أصول الصندوق I",
   },
-  "Fund II asset image gallery": {
+  "Dubai Healthcare City legacy gallery": {
     de: "Asset-Bildergalerie Fonds II",
     ru: "Галерея изображений активов Фонда II",
     ka: "ფონდი II-ის აქტივების გალერეა",

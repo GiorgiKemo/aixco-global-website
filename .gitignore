@@ -31,3 +31,7 @@ test-results/
 *.sw?
 
 .vercel
+
+# Client voice-note artifacts (local requirements only)
+client-requirements-transcript.md
+_transcribe_raw.json

@@ -101,7 +101,7 @@ export function DubaiFundCard({ fund, idx, tx, isLanding = false }: DubaiFundCar
         <div data-fund-highlight-grid={fund.id} className="grid grid-cols-1 border-b border-foreground/5 md:grid-cols-3">
           {headlineMetrics.map((detail) => {
             const metric = formatMetricValue(detail.value);
-            const isPerformance = detail.label === "Performance";
+            const isPerformance = detail.label === "Performance" || detail.label === "Status";
 
             return (
               <DubaiStatCard

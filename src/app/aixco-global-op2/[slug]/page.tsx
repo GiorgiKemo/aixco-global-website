@@ -97,7 +97,7 @@ function LegacyInsightArticle({ article }: { article: LegacyInsight }) {
 
           <footer className="mx-auto mt-16 max-w-3xl border-t border-white/12 pt-8">
             <Link href="/#participate" className="btn-gold">
-              Starting from EUR 1,000
+              Starting from EUR 10,000
               <ArrowRight className="h-4 w-4" />
             </Link>
           </footer>

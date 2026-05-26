@@ -9,14 +9,14 @@ export type NewsTickerItem = {
 export const newsTickerItems: NewsTickerItem[] = [
   {
     id: "batumi-development-update",
-    title: "Batumi development update highlights new investor demand",
+    title: "Batumi development update: strong buyer demand",
     source: "Agency",
     date: "May 2026",
     href: "https://www.aixco.global/op2/annual-property-growth-batumi.html",
   },
   {
     id: "dubai-fund-milestone",
-    title: "AIXCO Fund I reaches a new Dubai portfolio milestone",
+    title: "AIXCO completes Eden House phase in Dubai legacy portfolio",
     source: "AIXCO",
     date: "May 2026",
     href: "https://www.aixco.global/op2/index.html#page1",
@@ -37,14 +37,14 @@ export const newsTickerItems: NewsTickerItem[] = [
   },
   {
     id: "partner-update",
-    title: "Strategic partner update published for infrastructure investors",
+    title: "Strategic partner update published for infrastructure partners",
     source: "Partners",
     date: "Apr 2026",
     href: "https://www.aixco.global/op2/index.html#page5",
   },
   {
     id: "participation-model",
-    title: "New overview explains participation from EUR 1,000",
+    title: "New guide: buying Batumi apartments from EUR 50,000",
     source: "AIXCO",
     date: "Mar 2026",
     href: "https://www.aixco.global/op2/index.html#page6",

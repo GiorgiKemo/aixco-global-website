@@ -16,7 +16,7 @@ export const dubaiImageMap: Record<string, string> = {
 export const fundAssetGalleries = {
   "fund-1": {
     source: "eden-house-and-park",
-    label: "Fund I asset image gallery",
+    label: "Eden House legacy asset gallery",
     groups: [
       { title: "Eden House The Canal", images: aixcoDubaiEdenHouseCanalGallery },
       { title: "Eden House The Park", images: aixcoDubaiEdenHouseParkGallery },
@@ -24,7 +24,7 @@ export const fundAssetGalleries = {
   },
   "fund-2": {
     source: "dubai-healthcare-city",
-    label: "Fund II asset image gallery",
+    label: "Dubai Healthcare City legacy gallery",
     groups: [{ title: "Dubai Healthcare City", images: aixcoDubaiHealthcareGallery }],
   },
 } as const;
@@ -50,7 +50,7 @@ export function parseFundDetail(detail: string) {
 }
 
 export function isHeadlineMetric(label: string) {
-  return ["Units", "Total", "Total Equity", "Target Net IRR", "Performance"].includes(label);
+  return ["Units", "Total", "Development value", "Development scope", "Status", "Site progress", "Total Equity", "Target Net IRR", "Performance"].includes(label);
 }
 
 export function formatMetricValue(value: string) {
