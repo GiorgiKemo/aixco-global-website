@@ -112,6 +112,7 @@ describe("Hero", () => {
     );
     const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
     const priceText = container.querySelector("[data-hero-price-text='true']");
+    const priceFootnote = container.querySelector("[data-hero-price-footnote='true']");
     const scrollLink = within(hero).getByLabelText("Scroll to About section");
     const heroVideoWall = container.querySelector("[data-hero-video-wall='true']");
     const heroVideoPanels = Array.from(container.querySelectorAll("[data-hero-video-panel='true']"));
@@ -155,6 +156,13 @@ describe("Hero", () => {
     expect(within(priceLockup as HTMLElement).getByText("Starting from €10,000")).toBeInTheDocument();
     expect(priceText?.className).toContain("text-[clamp(1.2rem,5vw,3.5rem)]");
     expect(priceText?.className).toContain("uppercase");
+    expect(priceFootnote).toBeInTheDocument();
+    expect(priceFootnote?.className).toContain("text-base");
+    expect(priceFootnote?.className).toContain("md:text-lg");
+    expect(priceFootnote?.className).toContain("leading-relaxed");
+    expect(priceFootnote?.className).toContain("text-white/88");
+    expect(priceFootnote?.className).not.toContain("text-[0.72rem]");
+    expect(priceFootnote?.className).not.toContain("text-white/75");
     expect(scrollLink).toHaveAttribute("data-hero-scroll-cue", "viewport");
     expect(scrollLink.parentElement).toHaveAttribute("data-hero-composition", "reference-center");
     expect(scrollLink.closest("[data-hero-content-stack='true']")).not.toBeInTheDocument();
@@ -197,6 +205,7 @@ describe("Hero", () => {
     );
     const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
     const priceText = container.querySelector("[data-hero-price-text='true']");
+    const priceFootnote = container.querySelector("[data-hero-price-footnote='true']");
     const scrollLink = within(hero as HTMLElement).getByLabelText("Scroll to About section");
     const arrow = container.querySelector("[data-hero-lottie-arrow='true']");
 
@@ -216,7 +225,10 @@ describe("Hero", () => {
     expect(introCopy.className).toContain("md:text-[clamp(1rem,1.9vw,1.2rem)]");
     expect(priceLockup?.className).toContain("md:mt-6");
     expect(priceLockup?.className).toContain("flex-col");
+    expect(priceLockup?.className).toContain("gap-2");
     expect(priceText?.className).toContain("md:text-[clamp(2rem,4vw,3rem)]");
+    expect(priceFootnote?.className).toContain("md:max-w-xl");
+    expect(priceFootnote?.className).toContain("lg:max-w-2xl");
     expect(priceText?.className).toContain("lg:text-[clamp(2.8rem,3.8vw,4rem)]");
     expect(contentStack?.className).toContain("md:landscape:translate-y-0");
     expect(contentStack?.className).toContain("lg:landscape:-translate-y-[clamp(0.5rem,3svh,1.5rem)]");

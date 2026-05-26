@@ -102,7 +102,7 @@ export function HeroComposition({
           href="#faqs"
           onClick={onFaqClick}
           data-hero-price-lockup="true"
-          className="mt-8 flex w-full min-w-0 max-w-full flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:mt-6 md:px-0 lg:mt-8"
+          className="mt-8 flex w-full min-w-0 max-w-full flex-col items-center justify-center gap-2 rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:mt-6 md:gap-2.5 md:px-0 lg:mt-8"
           initial={false}
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.68 : 1, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.52 : 1.18 }}
@@ -113,7 +113,10 @@ export function HeroComposition({
           >
             {tx(heroPriceText)}
           </span>
-          <span className="min-w-0 max-w-[20rem] break-words text-[0.72rem] font-normal normal-case leading-snug text-white/75 [overflow-wrap:anywhere] [text-wrap:balance] sm:max-w-md sm:text-xs md:max-w-lg">
+          <span
+            data-hero-price-footnote="true"
+            className="min-w-0 max-w-[min(100%,22rem)] break-words px-0.5 text-base font-normal normal-case leading-relaxed text-white/88 [overflow-wrap:anywhere] [text-wrap:balance] sm:max-w-lg md:max-w-xl md:text-lg md:leading-relaxed lg:max-w-2xl"
+          >
             {tx("10% reservation may apply on selected €50,000 apartments — see FAQs")}
           </span>
         </motion.a>
