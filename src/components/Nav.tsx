@@ -34,7 +34,10 @@ export function Nav() {
   const homeHashSyncLockedUntilRef = useRef(0);
   const solidNav = scrolled || open || langOpen;
   const fullNavAvailable = !compactNav;
-  const showDesktopActions = fullNavAvailable && desktopActionsAvailable;
+  // Login/Register stay with the language selector whenever desktop nav is visible (no 2xl gate).
+  const showInlineAuth = fullNavAvailable;
+  const showDesktopStart = fullNavAvailable && desktopActionsAvailable;
+  const showCompactMenu = compactNav;
   const compactDesktopLabels = lang === "ka";
   const desktopNavSpacing = compactDesktopLabels ? "gap-1 px-2" : "gap-2 px-3";
   const desktopNavLinkClass = compactDesktopLabels
@@ -183,7 +186,7 @@ export function Nav() {
         />
 
         <NavControls
-          compactNav={compactNav}
+          showCompactMenu={showCompactMenu}
           controlClass={controlClass}
           controlTextClass={controlTextClass}
           lang={lang}
@@ -192,7 +195,8 @@ export function Nav() {
           setLang={setLang}
           setLangOpen={setLangOpen}
           setOpen={setOpen}
-          showDesktopActions={showDesktopActions}
+          showDesktopStart={showDesktopStart}
+          showInlineAuth={showInlineAuth}
           t={t}
           onLogin={openLogin}
           onRegister={openRegister}
@@ -210,7 +214,7 @@ export function Nav() {
       />
 
       <MobileDrawer
-        compactNav={compactNav}
+        showCompactMenu={showCompactMenu}
         isNavItemActive={isNavItemActive}
         open={open}
         t={t}

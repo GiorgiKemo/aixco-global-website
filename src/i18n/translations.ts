@@ -111,9 +111,16 @@ export const textTranslations = {
   "Quality Real Estate — Buy · Broker · Manage": {
     "de": "Qualitäts-Immobilien — Kaufen · Makeln · Verwalten",
     "ru": "Качественная недвижимость — Покупка · Брокеридж · Управление",
-    "ka": "უძრავ ქონებაში ხარისხიანი მონაწილეობა",
-    "tr": "Nitelikli Gayrimenkul Katılımı",
-    "ar": "مشاركة عقارية عالية الجودة"
+    "ka": "ხარისხიანი უძრავი ქონება — ყიდვა · ბროკერინგი · მართვა",
+    "tr": "Kaliteli Gayrimenkul — Satın Alma · Aracılık · Yönetim",
+    "ar": "عقارات عالية الجودة — شراء · وساطة · إدارة"
+  },
+  "Buy, sell, and broker real estate with AIXCO—from apartment purchases in Batumi to end-to-end property administration.": {
+    "de": "Mit AIXCO Immobilien kaufen, verkaufen und vermitteln—von Wohnungskäufen in Batumi bis zur umfassenden Immobilienverwaltung.",
+    "ru": "Покупайте, продавайте и брокеруйте недвижимость с AIXCO — от покупки квартир в Батуми до комплексного управления объектами.",
+    "ka": "AIXCO-თან ერთად იყიდეთ, გაყიდეთ და დააბროკერეთ უძრავი ქონება—ბათუმში ბინების შეძენიდან ობიექტების სრულ ადმინისტრირებამდე.",
+    "tr": "AIXCO ile gayrimenkul alın, satın ve aracılık yapın—Batumi'de daire alımlarından uçtan uca mülk yönetimine kadar.",
+    "ar": "اشترِ وبِعْ وبَسِّط العقارات مع AIXCO — من شراء الشقق في باتومي إلى الإدارة الشاملة للعقارات."
   },
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects, starting from €10,000.": {
     "de": "Beteiligen Sie sich dort, wo Wachstum, Stabilität und langfristige Wertschöpfung zusammenkommen. AIXCO bietet privaten Partnern einen einfachen und transparenten Zugang zu ausgewählten Immobilienprojekten ab 10.000 €.",
@@ -1540,6 +1547,230 @@ export const textTranslations = {
     "tr": "Bugün Batum odağı—satın alma, broker ve yönetim. Giriş 10.000 €'dan.",
     "ar": "اليوم التركيز على باتومي—شراء ووساطة وإدارة. الدخول من 10,000 يورو."
   },
+  "Developments Underway": {
+    "de": "Laufende Entwicklungen",
+    "ru": "Проекты в разработке",
+    "ka": "მიმდინარე პროექტები",
+    "tr": "Devam Eden Projeler",
+    "ar": "مشاريع قيد التطوير"
+  },
+  "Entry pricing": {
+    "de": "Einstiegspreise",
+    "ru": "Стартовые цены",
+    "ka": "შესვლის ფასები",
+    "tr": "Giriş fiyatları",
+    "ar": "أسعار الدخول"
+  },
+  "Net rental yields": {
+    "de": "Netto-Mietrenditen",
+    "ru": "Чистая арендная доходность",
+    "ka": "სუფთა საიჯარო შემოსავალი",
+    "tr": "Net kira getirileri",
+    "ar": "عوائد الإيجار الصافية"
+  },
+  "Financing option": {
+    "de": "Finanzierungsoption",
+    "ru": "Вариант финансирования",
+    "ka": "დაფინანსების ვარიანტი",
+    "tr": "Finansman seçeneği",
+    "ar": "خيار التمويل"
+  },
+  "Foreign ownership": {
+    "de": "Ausländisches Eigentum",
+    "ru": "Иностранная собственность",
+    "ka": "უცხოური საკუთრება",
+    "tr": "Yabancı mülkiyet",
+    "ar": "الملكية الأجنبية"
+  },
+  "Customers sign up, book a tour, and visit the apartment in person. This is our primary route for buyers seeking direct ownership in Batumi’s opportunity-driven market.": {
+    "de": "Kunden registrieren sich, buchen eine Besichtigung und besuchen die Wohnung persönlich. Dies ist unser Hauptweg für Käufer mit direktem Eigentum im chancenorientierten Batumi-Markt.",
+    "ru": "Клиенты регистрируются, бронируют тур и лично посещают квартиру. Это основной путь для покупателей, стремящихся к прямой собственности на ориентированном на возможности рынке Батуми.",
+    "ka": "მომხმარებლები რეგისტრირდებიან, ჯავშნიან ტურს და პირადად სტუმრობენ ბინას. ეს ჩვენი ძირითადი გზაა მყიდველებისთვის, რომლებიც ბათუმის შესაძლებლობაზე ორიენტირებულ ბაზარზე პირდაპირ საკუთრებას ეძებენ.",
+    "tr": "Müşteriler kayıt olur, tur rezervasyonu yapar ve daireyi yerinde ziyaret eder. Bu, Batum'un fırsat odaklı pazarında doğrudan mülkiyet arayan alıcılar için birincil yolumuzdur.",
+    "ar": "يسجل العملاء ويحجزون جولة ويزورون الشقة شخصيًا. هذا مسارنا الأساسي للمشترين الذين يسعون إلى ملكية مباشرة في سوق باتومي القائم على الفرص."
+  },
+  "A separate structured product for clients who prefer fixed-income exposure backed by property collateral. Complete onboarding and subscribe through the digital portal—distinct from direct apartment purchase.": {
+    "de": "Ein separates Strukturprodukt für Kunden mit festverzinslicher Exposition und Immobilienbesicherung. Onboarding und Zeichnung über das digitale Portal—getrennt vom direkten Wohnungskauf.",
+    "ru": "Отдельный структурный продукт для клиентов с фиксированным доходом и залогом недвижимости. Онбординг и подписка через цифровой портал—отдельно от прямой покупки квартиры.",
+    "ka": "ცალკე სტრუქტურირებული პროდუქტი ფიქსირებული შემოსავლისა და უძრავი ქონებით უზრუნველყოფის მსურველებისთვის. ონბორდინგი და გამოწერა ციფრული პორტალით—განსხვავდება პირდაპირი ბინის შეძენისგან.",
+    "tr": "Gayrimenkul teminatlı sabit getiri tercih eden müşteriler için ayrı yapılandırılmış ürün. Dijital portal üzerinden onboarding ve abonelik—doğrudan daire satın alımından ayrıdır.",
+    "ar": "منتج منظم منفصل للعملاء الذين يفضلون التعرض للدخل الثابت بضمان عقاري. أكمل الإعداد والاشتراك عبر البوابة الرقمية—منفصل عن شراء الشقة مباشرة."
+  },
+  "Eden House — The Canal & The Park (Dubai)": {
+    "de": "Eden House — The Canal & The Park (Dubai)",
+    "ru": "Eden House — The Canal и The Park (Дубай)",
+    "ka": "Eden House — The Canal & The Park (დუბაი)",
+    "tr": "Eden House — The Canal ve The Park (Dubai)",
+    "ar": "Eden House — The Canal و The Park (دبي)"
+  },
+  "Dubai Healthcare City (legacy development)": {
+    "de": "Dubai Healthcare City (Legacy-Entwicklung)",
+    "ru": "Dubai Healthcare City (legacy-проект)",
+    "ka": "Dubai Healthcare City (მემკვიდრეობითი განვითარება)",
+    "tr": "Dubai Healthcare City (miras geliştirme)",
+    "ar": "مدينة دبي الطبية (تطوير إرثي)"
+  },
+  "The Canal": {
+    "de": "The Canal",
+    "ru": "The Canal",
+    "ka": "The Canal",
+    "tr": "The Canal",
+    "ar": "The Canal"
+  },
+  "Status": {
+    "de": "Status",
+    "ru": "Статус",
+    "ka": "სტატუსი",
+    "tr": "Durum",
+    "ar": "الحالة"
+  },
+  "Legacy portfolio — realized": {
+    "de": "Legacy-Portfolio — realisiert",
+    "ru": "Наследие — реализовано",
+    "ka": "მემკვიდრეობა — დასრულებული",
+    "tr": "Miras portföy — tamamlandı",
+    "ar": "محفظة إرث — منجزة"
+  },
+  "Legacy portfolio — in progress": {
+    "de": "Legacy-Portfolio — in Bearbeitung",
+    "ru": "Наследие — в процессе",
+    "ka": "მემკვიდრეობა — მიმდინარე",
+    "tr": "Miras portföy — devam ediyor",
+    "ar": "محفظة إرث — قيد التنفيذ"
+  },
+  "Development value": {
+    "de": "Entwicklungswert",
+    "ru": "Стоимость проекта",
+    "ka": "განვითარების ღირებულება",
+    "tr": "Geliştirme değeri",
+    "ar": "قيمة التطوير"
+  },
+  "Development scope": {
+    "de": "Entwicklungsumfang",
+    "ru": "Масштаб проекта",
+    "ka": "განვითარების მასშტაბი",
+    "tr": "Geliştirme kapsamı",
+    "ar": "نطاق التطوير"
+  },
+  "Site progress": {
+    "de": "Baufortschritt",
+    "ru": "Ход строительства",
+    "ka": "მშენებლობის პროგრესი",
+    "tr": "Saha ilerlemesi",
+    "ar": "تقدم الموقع"
+  },
+  "Volume": {
+    "de": "Volumen",
+    "ru": "Объём",
+    "ka": "მოცულობა",
+    "tr": "Hacim",
+    "ar": "الحجم"
+  },
+  "Canal-front residential sold and handed over": {
+    "de": "Kanal-Front-Wohnungen verkauft und übergeben",
+    "ru": "Жильё у канала продано и передано",
+    "ka": "არხის სანაპიროს საცხოვრებელი გაყიდული და გადაცემული",
+    "tr": "Kanal önü konut satıldı ve teslim edildi",
+    "ar": "مباني سكنية على القناة بيعت وسُلّمت"
+  },
+  "Location": {
+    "de": "Standort",
+    "ru": "Локация",
+    "ka": "მდებარეობა",
+    "tr": "Konum",
+    "ar": "الموقع"
+  },
+  "Dubai Water Canal district": {
+    "de": "Dubai Water Canal District",
+    "ru": "Район Dubai Water Canal",
+    "ka": "Dubai Water Canal რაიონი",
+    "tr": "Dubai Water Canal bölgesi",
+    "ar": "منطقة Dubai Water Canal"
+  },
+  "Classification": {
+    "de": "Klassifizierung",
+    "ru": "Классификация",
+    "ka": "კლასიფიკაცია",
+    "tr": "Sınıflandırma",
+    "ar": "التصنيف"
+  },
+  "Residential buildings, offices, retail, gastronomy, healthcare": {
+    "de": "Wohngebäude, Büros, Einzelhandel, Gastronomie, Gesundheitswesen",
+    "ru": "Жилые здания, офисы, ритейл, гастрономия, здравоохранение",
+    "ka": "საცხოვრებელი შენობები, ოფისები, საცალო, გასტრონომია, ჯანდაცვა",
+    "tr": "Konut binaları, ofisler, perakende, gastronomi, sağlık",
+    "ar": "مباني سكنية ومكاتب وتجزئة ومطاعم ورعاية صحية"
+  },
+  "Access": {
+    "de": "Anbindung",
+    "ru": "Доступ",
+    "ka": "წვდომა",
+    "tr": "Erişim",
+    "ar": "الوصول"
+  },
+  "Al Khail Rd, 2nd Za'abeel Rd, Metro Green Line, Bus": {
+    "de": "Al Khail Rd, 2nd Za'abeel Rd, Metro Green Line, Bus",
+    "ru": "Al Khail Rd, 2nd Za'abeel Rd, Metro Green Line, автобус",
+    "ka": "Al Khail Rd, 2nd Za'abeel Rd, Metro Green Line, ავტობუსი",
+    "tr": "Al Khail Rd, 2nd Za'abeel Rd, Metro Green Line, otobüs",
+    "ar": "Al Khail Rd, 2nd Za'abeel Rd, Metro Green Line, حافلة"
+  },
+  "Strategy": {
+    "de": "Strategie",
+    "ru": "Стратегия",
+    "ka": "სტრატეგია",
+    "tr": "Strateji",
+    "ar": "الاستراتيجية"
+  },
+  "Mixed-use masterplan combining Build-to-Rent and Build-to-Sell for an underserved millennial market": {
+    "de": "Mixed-Use-Masterplan mit Build-to-Rent und Build-to-Sell für einen unterversorgten Millennial-Markt",
+    "ru": "Мастер-план mixed-use с Build-to-Rent и Build-to-Sell для недообслуживаемого рынка миллениалов",
+    "ka": "Mixed-use მასტერპლანი Build-to-Rent და Build-to-Sell კომბინაციით მილენიალების ბაზარზე",
+    "tr": "Yetersiz hizmet alan millennials pazarı için Build-to-Rent ve Build-to-Sell kombinasyonlu karma kullanım masterplanı",
+    "ar": "مخطط رئيسي متعدد الاستخدامات يجمع Build-to-Rent و Build-to-Sell لسوق millennials غير المخدوم"
+  },
+  "Connectivity": {
+    "de": "Anbindung",
+    "ru": "Связность",
+    "ka": "კავშირულობა",
+    "tr": "Bağlantı",
+    "ar": "الربط"
+  },
+  "Near DIFC, Downtown Dubai, Business Bay, Ras Al Khor Wildlife Sanctuary, and Dubai Creek Golf Club": {
+    "de": "Nahe DIFC, Downtown Dubai, Business Bay, Ras Al Khor Wildlife Sanctuary und Dubai Creek Golf Club",
+    "ru": "Рядом с DIFC, Downtown Dubai, Business Bay, Ras Al Khor Wildlife Sanctuary и Dubai Creek Golf Club",
+    "ka": "ახლოს DIFC, Downtown Dubai, Business Bay, Ras Al Khor Wildlife Sanctuary და Dubai Creek Golf Club",
+    "tr": "DIFC, Downtown Dubai, Business Bay, Ras Al Khor Wildlife Sanctuary ve Dubai Creek Golf Club yakınında",
+    "ar": "قرب DIFC وDowntown Dubai وBusiness Bay وRas Al Khor Wildlife Sanctuary وDubai Creek Golf Club"
+  },
+  "Dubai Creek - Dubai, UAE": {
+    "de": "Dubai Creek - Dubai, VAE",
+    "ru": "Dubai Creek — Дубай, ОАЭ",
+    "ka": "Dubai Creek - Dubai, UAE",
+    "tr": "Dubai Creek - Dubai, BAE",
+    "ar": "Dubai Creek - دبي، الإمارات"
+  },
+  "USD 350m mixed-use program": {
+    "de": "350 Mio. USD Mixed-Use-Programm",
+    "ru": "Программа mixed-use на 350 млн USD",
+    "ka": "350 მლნ USD mixed-use პროგრამა",
+    "tr": "350 milyon USD karma kullanım programı",
+    "ar": "برنامج استخدام مختلط بقيمة 350 مليون دولار"
+  },
+  "~20% developed, ~20% under construction": {
+    "de": "~20 % fertiggestellt, ~20 % im Bau",
+    "ru": "~20% готово, ~20% строится",
+    "ka": "~20% დასრულებული, ~20% მშენებლობაში",
+    "tr": "~%20 tamamlandı, ~%20 inşaat halinde",
+    "ar": "~20% مكتمل، ~20% قيد الإنشاء"
+  },
+  "2009": {
+    "de": "2009",
+    "ru": "2009",
+    "ka": "2009",
+    "tr": "2009",
+    "ar": "2009"
+  },
   "Otium": {
     "de": "Otium",
     "ru": "Otium",
@@ -1554,9 +1785,9 @@ export const attributeTranslations = {
     "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage": {
       "de": "AIXCO.Global | Qualitäts-Immobilien — Kaufen · Makeln · Verwalten",
       "ru": "AIXCO.Global | Качественная недвижимость — Покупка · Брокеридж · Управление",
-      "ka": "AIXCO.Global | გლობალური უძრავი ქონების მონაწილეობა",
-      "tr": "AIXCO.Global | Nitelikli Gayrimenkul Katılımı",
-      "ar": "AIXCO.Global | مشاركة عقارية عالية الجودة"
+      "ka": "AIXCO.Global | ხარისხიანი უძრავი ქონება — ყიდვა · ბროკერინგი · მართვა",
+      "tr": "AIXCO.Global | Kaliteli Gayrimenkul — Satın Alma · Aracılık · Yönetim",
+      "ar": "AIXCO.Global | عقارات عالية الجودة — شراء · وساطة · إدارة"
     }
   },
   "content": {

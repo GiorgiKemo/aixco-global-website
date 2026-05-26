@@ -48,12 +48,13 @@ export function useNavResponsiveMode({
       const fullControlsWidth = measuredControls.scrollWidth;
       const horizontalGaps = 32;
       const reserve = 28;
+      // Persistent block includes language + Login + Register so inline auth never clips off-screen.
       const coreNavFits = logoWidth + navWidth + persistentControlsWidth + horizontalGaps + reserve <= availableWidth;
-      const desktopActionsFit =
+      const desktopStartFits =
         window.innerWidth >= 1536 && logoWidth + navWidth + fullControlsWidth + horizontalGaps + reserve <= availableWidth;
 
       setCompactNav(!coreNavFits);
-      setDesktopActionsAvailable(coreNavFits && desktopActionsFit);
+      setDesktopActionsAvailable(coreNavFits && desktopStartFits);
     };
 
     updateCompactMode();

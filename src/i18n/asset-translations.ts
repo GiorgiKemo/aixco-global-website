@@ -1,17 +1,17 @@
 export const assetTranslations = {
   "Eden House legacy asset gallery": {
-    de: "Asset-Bildergalerie Fonds I",
-    ru: "Галерея изображений активов Фонда I",
-    ka: "ფონდი I-ის აქტივების გალერეა",
-    tr: "Fon I varlık görsel galerisi",
-    ar: "معرض صور أصول الصندوق I",
+    de: "Eden House Legacy-Asset-Galerie",
+    ru: "Галерея наследия Eden House",
+    ka: "Eden House-ის მემკვიდრეობითი აქტივების გალერეა",
+    tr: "Eden House miras varlık galerisi",
+    ar: "معرض أصول Eden House الإرثية",
   },
   "Dubai Healthcare City legacy gallery": {
-    de: "Asset-Bildergalerie Fonds II",
-    ru: "Галерея изображений активов Фонда II",
-    ka: "ფონდი II-ის აქტივების გალერეა",
-    tr: "Fon II varlık görsel galerisi",
-    ar: "معرض صور أصول الصندوق II",
+    de: "Dubai Healthcare City Legacy-Galerie",
+    ru: "Галерея наследия Dubai Healthcare City",
+    ka: "Dubai Healthcare City-ის მემკვიდრეობითი გალერეა",
+    tr: "Dubai Healthcare City miras galerisi",
+    ar: "معرض إرث مدينة دبي الطبية",
   },
   "Eden House The Canal": {
     de: "Eden House The Canal",

@@ -48,7 +48,7 @@ export function HeroComposition({
       >
         <motion.p
           data-hero-kicker="true"
-          className="mb-2 self-start text-sm font-medium uppercase tracking-normal text-white/90 drop-shadow-[0_4px_16px_rgb(0_0_0/0.55)] sm:ml-[clamp(0rem,20vw,18rem)] sm:text-base md:ml-0 md:self-center md:text-base lg:ml-[clamp(0rem,20vw,18rem)] lg:self-start lg:text-lg"
+          className="mb-2 min-w-0 max-w-full self-start break-words px-1 text-[clamp(0.68rem,2.6vw,1.125rem)] font-medium uppercase leading-snug tracking-normal text-white/90 [overflow-wrap:anywhere] [text-wrap:balance] drop-shadow-[0_4px_16px_rgb(0_0_0/0.55)] sm:ml-[clamp(0rem,20vw,18rem)] sm:px-0 sm:text-base md:ml-0 md:self-center md:text-base lg:ml-[clamp(0rem,20vw,18rem)] lg:self-start lg:text-lg"
           initial={false}
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.6 : 0.9, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: 0.12 }}
@@ -90,7 +90,7 @@ export function HeroComposition({
 
         <motion.p
           data-hero-intro-copy="true"
-          className="hero-reference-font mt-6 w-[18rem] max-w-full break-words px-1 text-[clamp(1.08rem,2.55vw,1.46rem)] font-normal leading-[1.55] text-white/90 drop-shadow-[0_3px_18px_rgb(0_0_0/0.46)] sm:w-full md:max-w-[42rem] md:text-[clamp(1rem,1.9vw,1.2rem)] lg:max-w-[50rem] lg:text-[clamp(1.14rem,1.7vw,1.46rem)]"
+          className="hero-reference-font mt-6 w-full min-w-0 max-w-[min(100%,20rem)] break-words px-1 text-[clamp(0.98rem,2.4vw,1.46rem)] font-normal leading-[1.55] text-white/90 [hyphens:auto] [overflow-wrap:anywhere] [text-wrap:balance] drop-shadow-[0_3px_18px_rgb(0_0_0/0.46)] sm:max-w-[min(100%,28rem)] md:max-w-[42rem] md:text-[clamp(1rem,1.9vw,1.2rem)] lg:max-w-[50rem] lg:text-[clamp(1.14rem,1.7vw,1.46rem)]"
           initial={false}
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.7 : 1.02, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.42 : 1.02 }}
@@ -102,7 +102,7 @@ export function HeroComposition({
           href="#faqs"
           onClick={onFaqClick}
           data-hero-price-lockup="true"
-          className="mt-8 flex w-full max-w-full flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:mt-6 md:px-0 lg:mt-8"
+          className="mt-8 flex w-full min-w-0 max-w-full flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:mt-6 md:px-0 lg:mt-8"
           initial={false}
           animate={isHeroReady ? { opacity: 1, y: 0, filter: "blur(0px)" } : hiddenTextState}
           transition={{ duration: shouldReduceMotion ? 0.68 : 1, ease: shouldReduceMotion ? "easeOut" : heroEase, delay: shouldReduceMotion ? 0.52 : 1.18 }}
@@ -113,7 +113,7 @@ export function HeroComposition({
           >
             {tx(heroPriceText)}
           </span>
-          <span className="max-w-[20rem] text-[0.72rem] font-normal normal-case leading-snug text-white/75 sm:max-w-md sm:text-xs md:max-w-lg">
+          <span className="min-w-0 max-w-[20rem] break-words text-[0.72rem] font-normal normal-case leading-snug text-white/75 [overflow-wrap:anywhere] [text-wrap:balance] sm:max-w-md sm:text-xs md:max-w-lg">
             {tx("10% reservation may apply on selected €50,000 apartments — see FAQs")}
           </span>
         </motion.a>

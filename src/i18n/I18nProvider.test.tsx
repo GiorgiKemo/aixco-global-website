@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { I18nProvider, useI18n } from "./I18nProvider";
+import { heroIntroText } from "@/components/sections/hero/hero-ui";
+import { I18nProvider, hasTextTranslation, useI18n } from "./I18nProvider";
 
 function TranslationProbe() {
   const { t, tx } = useI18n();
@@ -46,5 +47,15 @@ describe("I18nProvider", () => {
     );
 
     expect(document.title).toBe("AIXCO.Global | Qualitäts-Immobilien — Kaufen · Makeln · Verwalten");
+  });
+
+  it("has hero intro and tagline translations for every non-English locale", () => {
+    const heroLocales = ["de", "ru", "ka", "tr", "ar"] as const;
+
+    for (const locale of heroLocales) {
+      expect(hasTextTranslation(heroIntroText, locale)).toBe(true);
+      expect(hasTextTranslation("Quality Real Estate — Buy · Broker · Manage", locale)).toBe(true);
+      expect(hasTextTranslation("Starting from €10,000", locale)).toBe(true);
+    }
   });
 });

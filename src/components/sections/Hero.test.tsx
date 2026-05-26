@@ -144,7 +144,7 @@ describe("Hero", () => {
     expect(heading).not.toHaveTextContent("Starting from");
     expect(introCopy).toBeInTheDocument();
     expect(introCopy.className).toContain("max-w-[50rem]");
-    expect(introCopy.className).toContain("text-[clamp(1.08rem,2.55vw,1.46rem)]");
+    expect(introCopy.className).toContain("text-[clamp(0.98rem,2.4vw,1.46rem)]");
     expect(introCopy.className).toContain("font-normal");
     expect(introCopy.className).toContain("text-white/90");
     expect(priceLockup).toBeInTheDocument();
@@ -234,5 +234,39 @@ describe("Hero", () => {
 
     expect(within(priceLockup as HTMLElement).getByText("Ab 10.000 €")).toBeInTheDocument();
     expect(within(priceLockup as HTMLElement).queryByText("Starting from €10,000")).not.toBeInTheDocument();
+  });
+
+  it("translates hero kicker and intro copy in Georgian", () => {
+    localStorage.setItem("aixco-lang", "ka");
+
+    const { container } = renderHero();
+    const hero = container.querySelector("section");
+
+    expect(
+      within(hero as HTMLElement).getByText("ხარისხიანი უძრავი ქონება — ყიდვა · ბროკერინგი · მართვა"),
+    ).toBeInTheDocument();
+    expect(
+      within(hero as HTMLElement).getByText(
+        "AIXCO-თან ერთად იყიდეთ, გაყიდეთ და დააბროკერეთ უძრავი ქონება—ბათუმში ბინების შეძენიდან ობიექტების სრულ ადმინისტრირებამდე.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      within(hero as HTMLElement).queryByText(
+        "Buy, sell, and broker real estate with AIXCO—from apartment purchases in Batumi to end-to-end property administration.",
+      ),
+    ).not.toBeInTheDocument();
+    expect(
+      within(hero as HTMLElement).queryByText("უძრავ ქონებაში ხარისხიანი მონაწილეობა"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("keeps hero intro copy fluid on narrow viewports", () => {
+    const { container } = renderHero();
+    const introCopy = container.querySelector("[data-hero-intro-copy='true']");
+
+    expect(introCopy?.className).toContain("w-full");
+    expect(introCopy?.className).toContain("min-w-0");
+    expect(introCopy?.className).not.toContain("w-[18rem]");
+    expect(introCopy?.className).toContain("[overflow-wrap:anywhere]");
   });
 });

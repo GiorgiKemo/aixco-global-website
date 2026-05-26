@@ -36,13 +36,15 @@ export function NavMeasurement({
         <span className={`rounded-full ${desktopNavLinkClass} leading-none tracking-wide`}>{t("nav.more")}</span>
       </nav>
       <div ref={controlsMeasureRef} className="flex items-center gap-3">
-        <span data-nav-persistent className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[12px] uppercase tracking-widest">
-          <Globe className="h-3.5 w-3.5" />
-          {LANGS.find((item) => item.code === lang)?.native}
-          <ChevronDown className="h-3 w-3" />
+        <span data-nav-persistent className="inline-flex items-center gap-3">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[12px] uppercase tracking-widest">
+            <Globe className="h-3.5 w-3.5" />
+            {LANGS.find((item) => item.code === lang)?.native}
+            <ChevronDown className="h-3 w-3" />
+          </span>
+          <span className="px-3 py-2 text-sm tracking-wide">{t("cta.login")}</span>
+          <span className="px-4 py-2 text-sm tracking-wide">{t("cta.register")}</span>
         </span>
-        <span className="px-3 py-2 text-sm tracking-wide">{t("cta.login")}</span>
-        <span className="px-4 py-2 text-sm tracking-wide">{t("cta.register")}</span>
         <span className="px-4 py-2 text-sm tracking-wide">{t("cta.start")}</span>
       </div>
     </div>

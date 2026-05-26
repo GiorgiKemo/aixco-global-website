@@ -95,7 +95,7 @@ export function DubaiFundCard({ fund, idx, tx, isLanding = false }: DubaiFundCar
       >
         <div className={titleShellClass}>
           <h3 className={titleClass}>
-            {renderDubaiFundTitle(tx(fund.name))}
+            {renderDubaiFundTitle(tx(fund.name), tx("The Canal"))}
           </h3>
         </div>
         <div data-fund-highlight-grid={fund.id} className="grid grid-cols-1 border-b border-foreground/5 md:grid-cols-3">

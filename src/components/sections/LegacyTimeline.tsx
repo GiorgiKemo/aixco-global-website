@@ -98,9 +98,9 @@ export function LegacyTimeline() {
 
                 <dl className="grid min-w-0 grid-cols-1 gap-px overflow-hidden rounded-lg bg-border/50 sm:grid-cols-3">
                   {chapter.stats.map((stat) => (
-                    <div key={`${chapter.id}-${stat.label}`} className="mac-tile min-h-[5.5rem] p-4 md:p-5">
-                      <dt className="font-display text-[clamp(1.35rem,2vw,1.85rem)] leading-none text-gold">{tx(stat.value)}</dt>
-                      <dd className="mt-2 text-[0.68rem] uppercase leading-relaxed tracking-[0.12em] text-muted-foreground [overflow-wrap:anywhere]">
+                    <div key={`${chapter.id}-${stat.label}`} className="mac-tile min-h-[6.25rem] p-4 sm:min-h-[5.75rem] md:min-h-[6rem] md:p-5">
+                      <dt className="font-display text-[clamp(1.25rem,2vw,1.85rem)] leading-none text-gold [overflow-wrap:anywhere]">{tx(stat.value)}</dt>
+                      <dd className="mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]">
                         {tx(stat.label)}
                       </dd>
                     </div>

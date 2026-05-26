@@ -110,7 +110,7 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
   "AIXCO - Product Powerhouse": {
     de: "AIXCO - Produkt-Powerhouse",
     ru: "AIXCO - продуктовая платформа",
-    ka: "AIXCO - Product Powerhouse",
+    ka: "AIXCO - პროდუქტული ძლიერი პლატფორმა",
     tr: "AIXCO - Güçlü Ürün Platformu",
     ar: "AIXCO - منصة منتجات قوية",
   },
@@ -340,9 +340,9 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
 
 const catalogSources = [
   supplementalTranslations,
-  siteContentTranslations,
-  assetTranslations,
   textTranslations,
+  assetTranslations,
+  siteContentTranslations,
   attributeTranslations.placeholder,
   attributeTranslations.content,
   attributeTranslations.title,

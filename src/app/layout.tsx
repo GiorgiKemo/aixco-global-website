@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage",
   description:
-    "Buy, sell, and broker real estate with AIXCO. Batumi apartments from €50,000, legacy track record in Switzerland and Dubai, transparent euro pricing.",
+    "Buy selected Batumi apartments with transparent euro pricing from €50,000 (typical entry from €10,000). Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.",
   openGraph: {
     title: "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage",
     description: "Buy Batumi apartments, broker property, and manage real estate with AIXCO since 2009.",

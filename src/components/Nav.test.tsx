@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { useLayoutEffect } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
@@ -17,6 +18,28 @@ vi.mock("@/lib/smooth-scroll", () => ({
   scrollToPageTop: vi.fn(),
 }));
 
+vi.mock("./nav/use-nav-responsive-mode", () => ({
+  useNavResponsiveMode: ({
+    setCompactNav,
+    setDesktopActionsAvailable,
+  }: {
+    setCompactNav: (value: boolean) => void;
+    setDesktopActionsAvailable: (value: boolean) => void;
+  }) => {
+    useLayoutEffect(() => {
+      const width = window.innerWidth;
+      if (width < 1180) {
+        setCompactNav(true);
+        setDesktopActionsAvailable(false);
+        return;
+      }
+
+      setCompactNav(false);
+      setDesktopActionsAvailable(width >= 1536);
+    }, [setCompactNav, setDesktopActionsAvailable]);
+  },
+}));
+
 class TestResizeObserver {
   observe = () => {};
   unobserve = () => {};
@@ -33,6 +56,11 @@ function renderNav(initialEntry = "/") {
       </UIProvider>
     </I18nProvider>,
   );
+}
+
+function desktopNavIsActive(container: HTMLElement) {
+  const primary = container.querySelector('nav[aria-label="Primary"]');
+  return primary?.className.includes("min-[1180px]:flex") ?? false;
 }
 
 describe("Nav", () => {
@@ -233,5 +261,74 @@ describe("Nav", () => {
     expect(screen.getByRole("option", { name: /Deutsch/i })).toHaveClass("min-h-10");
     expect(screen.getByRole("option", { name: /ქართული/i })).toHaveClass("min-h-10");
     expect(screen.getByRole("option", { name: /العربية/i })).toHaveClass("min-h-10");
+  });
+
+  it("shows inline Login and Register whenever desktop nav is active (no 2xl gate)", () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      writable: true,
+      value: 1920,
+    });
+
+    const { container } = renderNav();
+
+    expect(desktopNavIsActive(container)).toBe(true);
+
+    const inlineLogin = screen.getByRole("button", { name: "Login" });
+    const inlineRegister = screen.getByRole("button", { name: "Register" });
+
+    expect(inlineLogin.className).toContain("inline-flex");
+    expect(inlineLogin.className).not.toContain("hidden");
+    expect(inlineLogin.className).not.toContain("2xl:inline-flex");
+    expect(inlineRegister.className).toContain("inline-flex");
+    expect(inlineRegister.className).not.toContain("hidden");
+  });
+
+  it("keeps Login and Register reachable in the compact drawer below desktop nav width", () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      writable: true,
+      value: 1100,
+    });
+
+    const { container } = renderNav();
+
+    expect(desktopNavIsActive(container)).toBe(false);
+    expect(screen.getByRole("button", { name: "Open menu" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Login" }).className).toContain("hidden");
+
+    fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
+
+    const drawerLogin = screen.getAllByRole("button", { name: "Login" }).at(-1);
+    const drawerRegister = screen.getAllByRole("button", { name: "Register" }).at(-1);
+    expect(drawerLogin?.className).toContain("btn-ghost-gold");
+    expect(drawerRegister?.className).toContain("btn-gold");
+  });
+
+  it("never leaves a dead zone: active desktop nav implies inline Login or hamburger menu", () => {
+    const widths = [1280, 1366, 1440, 1536, 1920];
+
+    for (const width of widths) {
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        writable: true,
+        value: width,
+      });
+
+      const { container, unmount } = renderNav();
+      const desktopNavActive = desktopNavIsActive(container);
+      const inlineLogin = screen.queryByRole("button", { name: "Login" });
+      const menuButton = screen.queryByRole("button", { name: "Open menu" });
+
+      if (desktopNavActive) {
+        const inlineAuthVisible = inlineLogin != null && inlineLogin.className.includes("inline-flex");
+        expect(inlineAuthVisible || menuButton != null).toBe(true);
+        expect(inlineLogin?.className.includes("2xl:inline-flex")).not.toBe(true);
+      } else {
+        expect(menuButton).toBeInTheDocument();
+      }
+
+      unmount();
+    }
   });
 });

@@ -4,7 +4,7 @@ import type { MouseEvent } from "react";
 import { ALL_NAV, type NavItem } from "./nav-data";
 
 type MobileDrawerProps = {
-  compactNav: boolean;
+  showCompactMenu: boolean;
   isNavItemActive: (item: NavItem) => boolean;
   open: boolean;
   t: (key: string) => string;
@@ -13,13 +13,13 @@ type MobileDrawerProps = {
   onNavClick: (event: MouseEvent<HTMLAnchorElement>, item: NavItem) => void;
 };
 
-export function MobileDrawer({ compactNav, isNavItemActive, open, t, onLogin, onRegister, onNavClick }: MobileDrawerProps) {
+export function MobileDrawer({ showCompactMenu, isNavItemActive, open, t, onLogin, onRegister, onNavClick }: MobileDrawerProps) {
   return (
     <div
       data-mobile-drawer
       aria-hidden={open ? undefined : true}
       inert={open ? undefined : true}
-      className={`${compactNav ? "" : "hidden"} transition-[max-height] duration-300 ${
+      className={`${showCompactMenu ? "" : "hidden"} transition-[max-height] duration-300 ${
         open ? "max-h-[calc(100svh-4rem)] overflow-y-auto" : "max-h-0 overflow-hidden"
       }`}
     >

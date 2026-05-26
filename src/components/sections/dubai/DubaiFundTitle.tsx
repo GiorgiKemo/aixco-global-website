@@ -1,16 +1,14 @@
-export function renderDubaiFundTitle(title: string) {
-  const accent = "The Canal";
-
-  if (!title.includes(accent)) {
+export function renderDubaiFundTitle(title: string, accentPhrase = "The Canal") {
+  if (!title.includes(accentPhrase)) {
     return title;
   }
 
-  const [before, after] = title.split(accent);
+  const [before, after] = title.split(accentPhrase);
 
   return (
     <>
       {before}
-      <span className="text-primary">{accent}</span>
+      <span className="text-primary">{accentPhrase}</span>
       {after}
     </>
   );
