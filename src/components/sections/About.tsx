@@ -23,7 +23,7 @@ export function About() {
             data-scale="reduced"
             className="mt-5 max-w-xl font-display text-[2.35rem] font-semibold leading-[1.04] tracking-normal text-foreground md:text-[2.45rem] lg:text-[clamp(2rem,2.25vw,2.85rem)]"
           >
-            {tx("AIXCO - Product Powerhouse")}
+            {tx("AIXCO - Real Estate Platform")}
           </h2>
           <p className="mt-5 max-w-[38rem] text-base leading-relaxed text-foreground/80 md:text-lg lg:text-[1.05rem]">
             {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}

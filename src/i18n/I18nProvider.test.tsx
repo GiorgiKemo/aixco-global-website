@@ -9,7 +9,7 @@ function TranslationProbe() {
   return (
     <div>
       <p>{tx("Starting from €10,000")}</p>
-      <p>{tx("Rental yield")}</p>
+      <p>{tx("Rental income")}</p>
       <p>{tx("starting from")}</p>
       <p>{tx("Group company")}</p>
       <p>{t("cta.start")}</p>
@@ -32,7 +32,7 @@ describe("I18nProvider", () => {
     );
 
     expect(screen.getAllByText("Ab 10.000 €")).toHaveLength(2);
-    expect(screen.getByText("Mietrendite")).toBeInTheDocument();
+    expect(screen.getByText("Mieteinnahmen")).toBeInTheDocument();
     expect(screen.getByText("ab")).toBeInTheDocument();
     expect(screen.getByText("Konzerngesellschaft")).toBeInTheDocument();
   });

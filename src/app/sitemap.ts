@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { legacyInsights } from "@/data/legacy-insights";
 import { getSiteUrl } from "@/lib/site-url";
 
 const baseUrl = getSiteUrl();
@@ -23,10 +22,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       priority: 0.6,
     },
-    ...legacyInsights.map((article) => ({
-      url: `${baseUrl}/aixco-global-op2/${article.slug}`,
-      lastModified,
-      priority: 0.7,
-    })),
   ];
 }

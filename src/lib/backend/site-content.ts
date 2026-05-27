@@ -81,12 +81,33 @@ function sanitizeNewsTickerItems(items: SiteContent["newsTickerItems"]): SiteCon
   }));
 }
 
-function sanitizeSiteContent(content: SiteContent): SiteContent {
+function applyClientRealEstateBrief(content: SiteContent): SiteContent {
   return {
     ...content,
-    company: sanitizeCompanyProfile(content.company),
-    batumiProperties: sanitizeBatumiProperties(content.batumiProperties),
-    newsTickerItems: sanitizeNewsTickerItems(content.newsTickerItems),
+    company: {
+      ...content.company,
+      tagline: rawSiteContentDefaults.company.tagline,
+    },
+    batumiBenefits: rawSiteContentDefaults.batumiBenefits,
+    batumiProperties: rawSiteContentDefaults.batumiProperties,
+    metrics: rawSiteContentDefaults.metrics,
+    dubaiFunds: rawSiteContentDefaults.dubaiFunds,
+    participationRoutes: rawSiteContentDefaults.participationRoutes,
+    journeys: rawSiteContentDefaults.journeys,
+    partners: rawSiteContentDefaults.partners,
+    faqGroups: rawSiteContentDefaults.faqGroups,
+    newsTickerItems: rawSiteContentDefaults.newsTickerItems,
+  };
+}
+
+function sanitizeSiteContent(content: SiteContent): SiteContent {
+  const compliantContent = applyClientRealEstateBrief(content);
+
+  return {
+    ...compliantContent,
+    company: sanitizeCompanyProfile(compliantContent.company),
+    batumiProperties: sanitizeBatumiProperties(compliantContent.batumiProperties),
+    newsTickerItems: sanitizeNewsTickerItems(compliantContent.newsTickerItems),
   };
 }
 

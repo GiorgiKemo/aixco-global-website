@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/admin/"],
+        disallow: ["/admin", "/admin/", "/aixco-global-op2/*.html"],
       },
     ],
     sitemap: `${getSiteUrl()}/sitemap.xml`,

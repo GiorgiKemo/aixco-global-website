@@ -18,7 +18,7 @@ describe("About", () => {
     expect(container.querySelector('[data-section-layout="about-balanced-two-column"]')).toBeInTheDocument();
     expect(screen.getByLabelText("About AIXCO story and media")).toBeInTheDocument();
     expect(screen.getByLabelText("AIXCO performance metrics")).toHaveAttribute("data-density", "compact");
-    expect(screen.getByRole("heading", { name: "AIXCO - Product Powerhouse" })).toHaveAttribute(
+    expect(screen.getByRole("heading", { name: "AIXCO - Real Estate Platform" })).toHaveAttribute(
       "data-scale",
       "reduced",
     );

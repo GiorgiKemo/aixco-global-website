@@ -2,7 +2,7 @@ export const philosophyHero = {
   eyebrow: "AIXCO Philosophy",
   title: "Disciplined ownership of real assets, shaped by Swiss real estate heritage.",
   summary:
-    "AIXCO Global was built on the conviction that sustainable wealth is created through disciplined ownership of real assets and long-term strategic thinking.",
+    "AIXCO Global was built on disciplined real estate ownership, practical execution, and long-term property services.",
 } as const;
 
 export const philosophyStats = [
@@ -27,7 +27,7 @@ export const philosophyStats = [
 export const philosophySections = [
   {
     eyebrow: "Origins",
-    title: "Sustainable wealth through real assets",
+    title: "A real estate foundation built through ownership",
     paragraphs: [
       "Since its first acquisition in 2009, the company has steadily expanded within the Swiss residential real estate market, developing a portfolio defined by resilience, stability, and recurring income generation.",
       "Over the decades, AIXCO has evolved into a diversified international group combining Swiss real estate heritage with modern asset-backed acquisitions.",
@@ -37,8 +37,8 @@ export const philosophySections = [
     eyebrow: "Risk",
     title: "A distinctly Swiss philosophy of managing risk",
     paragraphs: [
-      "At the core of AIXCO lies a distinctly Swiss philosophy of managing risk. AIXCO approaches capital with discipline, conservatism, and a long-term perspective, focusing on durable assets capable of generating sustainable cash flow across economic cycles.",
-      "Through carefully selected real estate investments and structured financial solutions, AIXCO creates stable, recurring income while prioritizing capital preservation and sustainable long-term growth.",
+      "At the core of AIXCO lies a distinctly Swiss philosophy of managing risk. AIXCO approaches real estate decisions with discipline, conservatism, and a long-term perspective, focusing on durable properties and practical operating fundamentals.",
+      "Through carefully selected real estate purchases, sales, brokerage mandates, and property administration, AIXCO focuses on durable assets, practical risk assessment, and sustainable long-term growth.",
     ],
   },
   {
@@ -46,7 +46,7 @@ export const philosophySections = [
     title: "International expansion through selected opportunities",
     paragraphs: [
       "Built upon decades of market experience and responsible ownership, AIXCO continues to expand internationally through selected opportunities in Dubai and Georgia.",
-      "Today, AIXCO manages projects representing more than $400 million in gross development value, supported by an international team of over 90 professionals and a global network of investors and partners.",
+      "Today, AIXCO manages projects representing more than $400 million in gross development value, supported by an international team of over 90 professionals and a global network of clients, brokers, developers, and partners.",
       "AIXCO has completed more than 2,000 real estate transactions and transacted over $4.2 billion in property value across international markets.",
     ],
   },
@@ -61,8 +61,8 @@ export const philosophySections = [
 ] as const;
 
 export const philosophyPrinciples = [
-  "Capital preservation",
-  "Recurring income generation",
+  "Disciplined ownership",
+  "Property administration",
   "Responsible risk assessment",
   "Long-term value creation",
 ] as const;

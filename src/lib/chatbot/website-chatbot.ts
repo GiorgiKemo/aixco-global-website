@@ -79,7 +79,6 @@ const QUERY_ALIASES: Record<string, string[]> = {
   apartment: ["property", "real", "estate", "batumi"],
   apartments: ["property", "real", "estate", "batumi"],
   apply: ["register", "signup", "onboarding"],
-  bond: ["6%", "subscription", "investor", "fixed", "income"],
   buy: ["purchase", "register", "customer"],
   contact: ["email", "address", "team"],
   developer: ["project", "distribution", "placement", "listing"],
@@ -202,7 +201,7 @@ export function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[
         id: `participation-${route.id}`,
         section: "participation",
         title: route.title,
-        priority: route.id === "bond" ? 10 : 9,
+        priority: route.id === "apartment" ? 10 : 9,
         keywords: [route.id, route.title, route.cta, "participate", "register", "onboarding"],
         answer: `${route.title}: ${route.body} The website CTA for this route is ${route.cta}.`,
       }),
@@ -359,7 +358,20 @@ function fallbackAnswer(content: SiteContent, query: string): WebsiteChatbotAnsw
     confidence: "low",
     matchedTopics: [],
     answer: sanitizeDisplayText(
-      `I can answer from the AIXCO website about Batumi apartments, Dubai legacy projects, the separate AIXCO 6% bond, broker and developer onboarding, partners, FAQs, and contact details. I do not have enough website content to answer "${query}" precisely. Please add a little more context, or contact ${content.company.email} for the AIXCO team.`,
+      `I can answer from the AIXCO website about Batumi apartments, Dubai legacy projects, property administration, broker and developer onboarding, partners, FAQs, and contact details. I do not have enough website content to answer "${query}" precisely. Please add a little more context, or contact ${content.company.email} for the AIXCO team.`,
+    ),
+  };
+}
+
+function maybeSeparateProductAnswer(content: SiteContent, query: string): WebsiteChatbotAnswer | null {
+  const normalized = normalizeText(query);
+  if (!/\b(bond|6%|fixed income|coupon|subscription)\b/.test(normalized)) return null;
+
+  return {
+    confidence: "high",
+    matchedTopics: ["AIXCO real estate focus"],
+    answer: sanitizeDisplayText(
+      `The current AIXCO.Global page is focused on real estate: buying Batumi apartments, brokerage, Dubai legacy projects, and property administration. It does not present a bond subscription route on the regular website. For product-specific questions, contact ${content.company.email}.`,
     ),
   };
 }
@@ -392,7 +404,7 @@ export function answerWebsiteChat(messages: ChatMessageInput[], content: SiteCon
     return {
       confidence: "low",
       matchedTopics: [],
-      answer: "Ask me about Batumi apartments, Dubai legacy projects, the AIXCO 6% bond, broker onboarding, developer partnerships, partners, team, or FAQs.",
+      answer: "Ask me about Batumi apartments, Dubai legacy projects, property administration, broker onboarding, developer partnerships, partners, team, or FAQs.",
     };
   }
 
@@ -400,9 +412,12 @@ export function answerWebsiteChat(messages: ChatMessageInput[], content: SiteCon
     return {
       confidence: "high",
       matchedTopics: ["AIXCO website assistant"],
-      answer: "Hello. I can answer questions from the AIXCO website about Batumi apartments, Dubai legacy projects, the separate bond product, broker and developer onboarding, partners, team, FAQs, and contact details.",
+      answer: "Hello. I can answer questions from the AIXCO website about Batumi apartments, Dubai legacy projects, property administration, broker and developer onboarding, partners, team, FAQs, and contact details.",
     };
   }
+
+  const separateProductAnswer = maybeSeparateProductAnswer(content, query);
+  if (separateProductAnswer) return separateProductAnswer;
 
   const contactAnswer = maybeContactAnswer(content, query);
   if (contactAnswer) return contactAnswer;

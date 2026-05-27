@@ -82,7 +82,7 @@ function getInterestFromMessages(messages: ChatMessageInput[]) {
     .map((message) => message.text.toLowerCase())
     .join(" ");
 
-  if (visitorText.includes("bond") || visitorText.includes("6%")) return "AIXCO 6% Bond";
+  if (visitorText.includes("property administration") || visitorText.includes("handover")) return "Property administration";
   if (visitorText.includes("broker")) return "Broker partnership";
   if (visitorText.includes("developer")) return "Developer partnership";
   if (visitorText.includes("batumi") || visitorText.includes("apartment") || visitorText.includes("property")) {

@@ -215,7 +215,7 @@ export const assetTranslations = {
     tr: "Dubai Healthcare City orijinal konum haritası",
     ar: "خريطة الموقع الأصلية لمدينة دبي الطبية",
   },
-  "Dubai Healthcare City fund location map": {
+  "Dubai Healthcare City legacy location map": {
     de: "Dubai Healthcare City Fonds-Standortkarte",
     ru: "Карта расположения фонда Дубайского медицинского города",
     ka: "Dubai Healthcare City-ის ფონდის ლოკაციის რუკა",

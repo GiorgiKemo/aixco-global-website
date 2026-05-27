@@ -15,8 +15,8 @@ describe("SEO static assets", () => {
     expect(layout).toContain("/favicon.ico");
     expect(layout).not.toContain("/og-image.jpg");
     expect(layout).not.toContain("https://aixco.global/logo.svg");
-    expect(sitemap).toContain("legacyInsights");
-    expect(robots).toContain("disallow: [\"/admin\", \"/admin/\"]");
+    expect(sitemap).not.toContain("legacyInsights");
+    expect(robots).toContain("disallow: [\"/admin\", \"/admin/\", \"/aixco-global-op2/*.html\"]");
     expect(getSiteUrl()).toBe("https://aixco-global-website.vercel.app");
     expect(existsSync(resolve(root, "public/robots.txt"))).toBe(false);
     expect(existsSync(resolve(root, "public/sitemap.xml"))).toBe(false);

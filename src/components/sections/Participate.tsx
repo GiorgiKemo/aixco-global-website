@@ -12,7 +12,6 @@ import { aixcoLiveImages, aixcoLiveVideoPreviews, aixcoLiveVideos } from "@/lib/
 import { LiveVideo } from "@/components/LiveVideo";
 
 const videoMap: Record<string, { src: string; previewSrc: string; poster: string }> = {
-  bonds: { src: aixcoLiveVideos.bonds, previewSrc: aixcoLiveVideoPreviews.bonds, poster: aixcoLiveImages.transactionBackdrop },
   batumiBuy: { src: aixcoLiveVideos.batumiBuy, previewSrc: aixcoLiveVideoPreviews.batumiBuy, poster: aixcoLiveImages.batumiBuyPoster },
 };
 
@@ -23,7 +22,7 @@ const apartmentMetrics = [
   },
   {
     value: "8%+",
-    label: "Net rental yields",
+    label: "Rental income",
   },
   {
     value: "60%",
@@ -126,26 +125,10 @@ function ParticipationRouteCard({
           <div className="max-w-[34rem]">
             <h3 className="font-display text-[clamp(2.45rem,2.85vw,3rem)] leading-[1.03]">{tx(route.title)}</h3>
             <div className="mt-5 grid gap-3 text-[clamp(1.14rem,1.12vw,1.28rem)] leading-[1.62] text-foreground/85">
-              {route.id === "bond" ? (
-                <>
-                  <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-foreground/55">
-                    {tx("Separate structured product")}
-                  </p>
-                  <p className="text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]">{tx(route.body)}</p>
-                  <p className="text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72">
-                    {tx(
-                      "Purchase the AIXCO Bond with a guaranteed 30% return over 5 years — property-backed collateral. This is distinct from direct apartment ownership in Batumi.",
-                    )}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]">{tx(route.body)}</p>
-                  <p className="text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72">
-                    {tx("Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guided AIXCO team.")}
-                  </p>
-                </>
-              )}
+              <p className="text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]">{tx(route.body)}</p>
+              <p className="text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72">
+                {tx("Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guided AIXCO team.")}
+              </p>
             </div>
           </div>
           {route.id === "apartment" && (
@@ -189,10 +172,10 @@ export function Participate() {
           <div className="scroll-reveal mb-4 max-w-6xl shrink-0 md:mb-4">
           <p className="eyebrow">{tx("How to work with AIXCO")}</p>
           <h2 className="heading-section mt-4 max-w-full text-[clamp(2.25rem,10vw,3.5rem)] leading-[1.02] [overflow-wrap:anywhere] sm:text-[clamp(2.65rem,4.1vw,3.5rem)]">
-            <span className="text-gold">{tx("How")}</span> <SlashBreakText text={tx("Customers/Partners Profit")} />
+            <span className="text-gold">{tx("How")}</span> <SlashBreakText text={tx("Customers/Partners Work")} />
           </h2>
           <p className="mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80">
-            {tx("Buy a Batumi apartment as your primary route, or explore the separate AIXCO 6% bond product. Brokers and property owners can also work with us on mandates and administration.")}
+            {tx("Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
           </p>
         </div>
 
@@ -217,7 +200,7 @@ export function Participate() {
               index={index + 1}
               onRegister={openRegister}
               tx={tx}
-              viewportMode={route.id === "apartment" ? "full" : "standard"}
+              viewportMode="standard"
             />
           ))}
         </div>

@@ -67,7 +67,7 @@ export const dubaiFunds = [
 ];
 
 export const batumiBenefits = [
-  "Net rental yields starting from 8%",
+  "Rental income scenarios from 8%",
   "Annual price growth of up to 12%",
   "Property prices starting from €50,000",
   "Full foreign ownership permitted",
@@ -92,7 +92,7 @@ export const batumiProperties = [
     highlights: [
       { label: "Scale", value: "3,000 sqm of infrastructure area and 4,000 sqm total site area." },
       { label: "Location", value: "About 150 meters from the sea, with the beach 5 minutes away and Grand Mall 8 minutes away by car." },
-      { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, 90% potential occupancy, and 12% ROI shown in the project deck." },
+      { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck." },
     ],
   },
   {
@@ -110,7 +110,7 @@ export const batumiProperties = [
     highlights: [
       { label: "Scale", value: "25,000 sqm of comfort and community infrastructure across a 45,000 sqm planned site." },
       { label: "Location", value: "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away." },
-      { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, 90% potential occupancy, and 12% ROI shown in the project deck." },
+      { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck." },
     ],
   },
 ];
@@ -121,15 +121,23 @@ export const participationRoutes = [
     title: "Buy an Apartment in Batumi",
     video: "batumiBuy",
     body:
-      "Customers sign up, book a tour, and visit the apartment in person. This is our primary route for buyers seeking direct ownership in Batumi’s opportunity-driven market.",
+      "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase with the AIXCO team.",
     cta: "Register",
   },
   {
-    id: "bond",
-    title: "AIXCO 6% Bond (separate product)",
-    video: "bonds",
+    id: "brokerage",
+    title: "Broker Real Estate with AIXCO",
+    video: "batumiBuy",
     body:
-      "A separate structured product for clients who prefer fixed-income exposure backed by property collateral. Complete onboarding and subscribe through the digital portal—distinct from direct apartment purchase.",
+      "Brokers and partners can introduce qualified buyers, coordinate tours, and manage deal flow through a structured real estate sales process.",
+    cta: "Register",
+  },
+  {
+    id: "management",
+    title: "Administer Your Property",
+    video: "batumiBuy",
+    body:
+      "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
     cta: "Register",
   },
 ];
@@ -151,16 +159,16 @@ export const journeys = [
   },
   {
     tag: "Journey 02",
-    role: "Customer Bond Buyer",
-    summary: "For clients subscribing to the separate AIXCO bond product with clear onboarding and documentation.",
-    intro: "A streamlined subscription path for the structured bond product (separate from apartment purchase).",
+    role: "Property Owner Administration",
+    summary: "For owners who want AIXCO support after purchase with handover, rental coordination, documents, and reporting.",
+    intro: "A guided service path for owners who want their property administered professionally after purchase.",
     steps: [
-      { title: "Register", text: "Create your account with Bluerock and access the investor dashboard." },
-      { title: "Complete compliance", text: "Finish KYC and suitability checks required for onboarding." },
-      { title: "Review bond materials", text: "Access the term sheet, risk disclosures, and key documentation." },
-      { title: "Subscribe", text: "Select ticket size and confirm subscription instructions." },
-      { title: "Execute documentation", text: "Sign digitally and complete settlement steps." },
-      { title: "Receive reporting", text: "Track performance, coupon events, and investor communications online." },
+      { title: "Register ownership details", text: "Create your account and share the apartment or property details." },
+      { title: "Confirm service scope", text: "Agree what AIXCO should handle: handover, documents, rental coordination, or reporting." },
+      { title: "Upload documents", text: "Provide purchase, ownership, and project materials in the secure portal." },
+      { title: "Coordinate handover", text: "Track completion, snagging, key handover, and operational next steps." },
+      { title: "Manage updates", text: "Receive status updates, documents, and service coordination in one place." },
+      { title: "Review reporting", text: "Monitor property-related updates and owner communication online." },
     ],
   },
   {
@@ -180,15 +188,15 @@ export const journeys = [
   {
     tag: "Journey 04",
     role: "Developer",
-    summary: "For developers seeking placement, distribution, and buyer market access.",
-    intro: "A distribution pathway for developers seeking market access and buyer reach.",
+    summary: "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+    intro: "A project sales pathway for developers seeking market access and buyer reach.",
     steps: [
       { title: "Initial project submission", text: "Share project information, structure, and commercial requirements." },
-      { title: "Evaluation and fit", text: "Review commercial viability, positioning, and buyer suitability." },
-      { title: "Structure the opportunity", text: "Align capital format, documentation, and route to market." },
+      { title: "Evaluation and fit", text: "Review commercial viability, positioning, pricing, and buyer suitability." },
+      { title: "Prepare the listing", text: "Align project information, media, floor plans, pricing, and route to market." },
       { title: "Prepare launch materials", text: "Create the presentation, data room, and supporting documents." },
       { title: "Distribution and placement", text: "Connect the project to brokers, clients, and buyer networks." },
-      { title: "Ongoing reporting", text: "Provide updates, milestones, and buyer communications post-launch." },
+      { title: "Ongoing coordination", text: "Provide updates, milestones, tour support, and buyer communications post-launch." },
     ],
   },
 ];
@@ -212,7 +220,7 @@ export const team = [
     image: "team-owais",
     summary: "Capital markets, banking relationships, and financial structuring.",
     bio:
-      "Owais Shaikh is listed in the AIXCO team section as Partner covering Banking and Finance, positioning him around financing relationships, capital structuring, and institutional financial coordination.",
+      "Owais Shaikh is listed in the AIXCO team section as Partner covering Banking and Finance, positioning him around financing relationships, transaction structuring, and institutional financial coordination.",
     points: [
       { title: "Primary role", text: "Banking and finance leadership across transactions and structuring." },
       { title: "Focus", text: "Capital access, financial coordination, and execution support." },
@@ -260,12 +268,12 @@ export const partners = [
     group: "Group companies",
     modalLabel: "Group company",
     logo: "isp",
-    summary: "Diversified investment and services business.",
+    summary: "Diversified services and operating business.",
     detail: [
-      "ISP Group is described in the AIXCO source as a diversified investment and services firm specializing in the acquisition, management, and transformation of businesses across multiple industries.",
+      "ISP Group is described in the AIXCO source as a diversified services firm specializing in the acquisition, management, and transformation of businesses across multiple industries.",
     ],
     facts: [
-      { title: "Positioning", text: "Diversified investment and services platform." },
+      { title: "Positioning", text: "Diversified services and operating platform." },
       { title: "Role", text: "Business acquisition, management, and transformation across sectors." },
     ],
   },
@@ -289,9 +297,9 @@ export const partners = [
     group: "Group companies",
     modalLabel: "Group company",
     logo: "cleanElements",
-    summary: "Clean-tech and lithium asset exposure.",
+    summary: "Clean-tech and lithium asset company.",
     detail: [
-      "Clean Elements is described in the AIXCO source as a clean-products and lithium asset story, positioned as an environmental and investment opportunity.",
+      "Clean Elements is described in the AIXCO source as a clean-products and lithium asset company positioned around environmental transition themes.",
     ],
     facts: [
       { title: "Theme", text: "Clean products and environmental transition exposure." },
@@ -313,9 +321,9 @@ export const partners = [
     group: "Strategic partners",
     modalLabel: "Strategic partner",
     logo: "gti",
-    summary: "Investment and advisory collective for growth businesses.",
+    summary: "Advisory collective for growth businesses.",
     detail: [
-      "Groupe GTI is presented as an investment and advisory collective focused on accelerating growth-oriented enterprises, especially across technology, infrastructure, and industrial sectors.",
+      "Groupe GTI is presented as an advisory collective focused on accelerating growth-oriented enterprises, especially across technology, infrastructure, and industrial sectors.",
     ],
   },
   {
@@ -325,7 +333,7 @@ export const partners = [
     logo: "bluerock",
     summary: "Financial consultancy focused on planning and advisory.",
     detail: [
-      "Bluerock is described as a financial consultancy delivering data-driven strategies in planning, investment, and advisory, with a client-focused approach aimed at sustainable growth.",
+      "Bluerock is described as a financial consultancy delivering data-driven strategies in planning and advisory, with a client-focused approach aimed at sustainable growth.",
     ],
   },
   {
@@ -350,7 +358,7 @@ export const faqGroups = [
         a: "Typical entry starts from €10,000. On selected Batumi apartments from €50,000, a 10% reservation (from €5,000) may be available—final terms depend on the project and purchase agreement.",
       },
       { q: "Can I buy property directly?", a: "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration." },
-      { q: "Are returns fixed?", a: "No. Returns are performance-based and depend on market conditions and project success." },
+      { q: "Is rental income guaranteed?", a: "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery." },
       { q: "Will I receive reporting?", a: "Yes. Reporting, documents, and project updates are available through the portal." },
       { q: "Can foreigners buy property in Batumi?", a: "Yes. Foreigners can purchase and own real estate with minimal restrictions." },
     ],

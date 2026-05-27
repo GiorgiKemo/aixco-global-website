@@ -4,14 +4,14 @@ import { AixcoPhilosophyPage } from "@/views/AixcoPhilosophyPage";
 export const metadata: Metadata = {
   title: "AIXCO Philosophy | AIXCO.Global",
   description:
-    "AIXCO Global's philosophy of disciplined real asset ownership, Swiss risk management, capital preservation, and long-term value creation.",
+    "AIXCO Global's philosophy of disciplined real estate ownership, Swiss risk management, practical execution, and long-term property services.",
   alternates: {
     canonical: "/aixco-philosophy",
   },
   openGraph: {
     title: "AIXCO Philosophy | AIXCO.Global",
     description:
-      "Disciplined real asset ownership, Swiss risk management, and enduring long-term value creation.",
+      "Disciplined real estate ownership, Swiss risk management, and practical long-term property services.",
     url: "/aixco-philosophy",
     siteName: "AIXCO.Global",
     images: [

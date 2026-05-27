@@ -136,19 +136,19 @@ export const textTranslations = {
     "tr": "10.000 €'dan başlayan",
     "ar": "ابتداءً من 10,000 يورو"
   },
-  "AIXCO - A Product Powerhouse": {
-    "de": "AIXCO – Eine Produkt-Powerhouse",
-    "ru": "AIXCO — мощная продуктовая платформа",
-    "ka": "AIXCO — ძლიერი პროდუქტული პლატფორმა",
-    "tr": "AIXCO - Güçlü Bir Ürün Platformu",
-    "ar": "AIXCO - منصة منتجات قوية"
+  "AIXCO - Real Estate Platform": {
+    "de": "AIXCO - Real Estate Platform",
+    "ru": "AIXCO - Real Estate Platform",
+    "ka": "AIXCO - Real Estate Platform",
+    "tr": "AIXCO - Real Estate Platform",
+    "ar": "AIXCO - Real Estate Platform"
   },
   "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.": {
-    "de": "AIXCO wurde 2009 gegründet und ist eine disziplinierte Immobilienholding mit einer starken Erfolgsbilanz bei Immobilien- und Finanzinvestitionen. Mit Hauptsitz in Wien und Aktivitäten in Dubai und Batumi ist AIXCO Global auf die Strukturierung und Ko-Investition in Portfolios spezialisiert – mit Fokus auf langfristige Wertschöpfung und nachhaltiges Investorenvertrauen.",
-    "ru": "Основанная в 2009 году, AIXCO — это дисциплинированная холдинговая компания в сфере недвижимости с сильным послужным списком в имущественных и финансовых инвестициях. Штаб-квартира находится в Вене, деятельность ведется в Дубае и Батуми. AIXCO Global специализируется на структурировании и соинвестировании в портфели, руководствуясь стремлением к долгосрочному созданию стоимости и устойчивому доверию инвесторов.",
-    "ka": "2009 წელს დაარსებული AIXCO არის დისციპლინირებული უძრავი ქონების ჰოლდინგი, რომელსაც აქვს ძლიერი გამოცდილება ქონებრივ და ფინანსურ ინვესტიციებში. ვენაში მდებარე სათაო ოფისით და დუბაისა და ბათუმში ოპერირებით, AIXCO Global სპეციალიზდება პორტფელების სტრუქტურირებასა და თანაინვესტირებაში, გრძელვადიანი ღირებულების შექმნისა და ინვესტორთა მდგრადი ნდობის საფუძველზე.",
-    "tr": "2009 yılında kurulan AIXCO, gayrimenkul ve finansal yatırımlarda güçlü bir geçmişe sahip, disiplinli bir gayrimenkul holding şirketidir. Merkezi Viyana'da olup Dubai ve Batum'da faaliyet gösteren AIXCO Global, uzun vadeli değer yaratımı ve kalıcı yatırımcı güveni odağıyla portföy yapılandırma ve ortak yatırım alanında uzmanlaşmıştır.",
-    "ar": "تأسست AIXCO في عام 2009، وهي شركة قابضة عقارية منضبطة تتمتع بسجل قوي في الاستثمارات العقارية والمالية. يقع مقرها الرئيسي في فيينا وتعمل في دبي وباتومي، وتتخصص AIXCO Global في هيكلة المحافظ والاستثمار المشترك فيها، مدفوعة بالالتزام بخلق قيمة طويلة الأجل وثقة المستثمرين المستدامة."
+    "de": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.",
+    "ru": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.",
+    "ka": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.",
+    "tr": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.",
+    "ar": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai."
   },
   "Trusted Clients": {
     "de": "Vertrauensvolle Kunden",
@@ -206,12 +206,12 @@ export const textTranslations = {
     "tr": "Hizmet verilen pazarlar",
     "ar": "الأسواق المخدومة"
   },
-  "Successfully generated returns with 4.9x multiple": {
-    "de": "Erfolgreich Renditen mit einem Multiple von 4,9x erzielt",
-    "ru": "Успешно получена доходность с мультипликатором 4,9x",
-    "ka": "წარმატებით მიღწეულია 4.9x უკუგება",
-    "tr": "4,9x çarpanla başarılı getiri sağlandı",
-    "ar": "تم تحقيق عوائد بنجاح بمضاعف 4.9x"
+  "Delivered legacy real estate milestones across markets": {
+    "de": "Delivered legacy real estate milestones across markets",
+    "ru": "Delivered legacy real estate milestones across markets",
+    "ka": "Delivered legacy real estate milestones across markets",
+    "tr": "Delivered legacy real estate milestones across markets",
+    "ar": "Delivered legacy real estate milestones across markets"
   },
   "Realized successfully with distributions": {
     "de": "Erfolgreich realisiert mit Ausschüttungen",
@@ -255,7 +255,7 @@ export const textTranslations = {
     "tr": "Gürcistan, Avrupa ile Asya'nın kesişim noktasında yer alır ve komşu ülkelerin yanı sıra AB, Amerika Birleşik Devletleri ve Asya pazarlarıyla güçlü ilişkiler sürdürür. Batum, güvenlik, eğitim ve şeffaflıkta en yüksek standartlara giderek yaklaşan gelişmekte olan bir pazara giriş için nadir bir fırsat sunar. Aynı zamanda esnek, düşük düzenlemeli bir ortamdan ve güçlü uzun vadeli büyüme potansiyelinden yararlanır.",
     "ar": "تقع جورجيا عند مفترق الطرق بين أوروبا وآسيا، وتحافظ على علاقات قوية مع الدول المجاورة وكذلك مع الاتحاد الأوروبي والولايات المتحدة والأسواق الآسيوية. وتوفر باتومي فرصة نادرة لدخول سوق ناشئة تتجه بثبات نحو أعلى معايير السلامة والتعليم والشفافية. وفي الوقت نفسه، تستفيد من بيئة مرنة منخفضة التنظيم وإمكانات نمو قوية على المدى الطويل."
   },
-  "Net rental yields starting from 8%": {
+  "Rental income scenarios from 8%": {
     "de": "Netto-Mietrenditen ab 8%",
     "ru": "Чистая арендная доходность от 8%",
     "ka": "სუფთა საიჯარო შემოსავალი 8%-დან",
@@ -311,40 +311,40 @@ export const textTranslations = {
     "tr": "Müşteri/Ortak Kazancı",
     "ar": "أرباح العملاء/الشركاء"
   },
-  "Buy a Batumi apartment as your primary route, or explore the separate AIXCO 6% bond product. Brokers and property owners can also work with us on mandates and administration.": {
-    "de": "Wählen Sie den Weg, der zu Ihren Zielen passt. Kunden können entweder die AIXCO-6%-Anleihe zeichnen, die durch zugrunde liegende Immobilien besichert ist, oder direkt eine Wohnung kaufen und von Mieteinnahmen, Wertsteigerung und dem günstigen Steuerumfeld Batumis profitieren.",
-    "ru": "Выберите путь, который соответствует вашим целям. Клиенты могут либо подписаться на облигацию AIXCO 6%, обеспеченную недвижимостью, либо купить квартиру напрямую и воспользоваться потенциальным арендным доходом, ростом капитала и благоприятной налоговой средой Батуми.",
-    "ka": "აირჩიეთ გზა, რომელიც თქვენს მიზნებს შეესაბამება. მომხმარებლებს შეუძლიათ გამოიწერონ AIXCO-ს 6%-იანი ობლიგაცია, რომელიც უზრუნველყოფილია უძრავი ქონებით, ან პირდაპირ შეიძინონ ბინა და ისარგებლონ საიჯარო შემოსავლის პოტენციალით, კაპიტალის ზრდით და ბათუმის ხელსაყრელი საგადასახადო გარემოთი.",
-    "tr": "Hedeflerinize uygun yolu seçin. Müşteriler, dayanak mülkle güvence altına alınmış AIXCO %6 tahviline katılabilir veya doğrudan bir daire satın alarak kira geliri potansiyeli, sermaye değer artışı ve Batum'un elverişli vergi ortamından yararlanabilir.",
-    "ar": "اختر المسار الذي يناسب أهدافك. يمكن للعملاء إما الاكتتاب في سند AIXCO بنسبة 6٪ والمضمون بعقار أساسي، أو شراء شقة مباشرة والاستفادة من إمكانات دخل الإيجار وارتفاع قيمة الأصل والبيئة الضريبية المواتية في باتومي."
+  "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.": {
+    "de": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
+    "ru": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
+    "ka": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
+    "tr": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
+    "ar": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase."
   },
-  "AIXCO 6% Bond (separate product)": {
-    "de": "AIXCO 6%-Anleihe kaufen",
-    "ru": "Купить облигацию AIXCO 6%",
-    "ka": "შეიძინეთ AIXCO-ს 6%-იანი ობლიგაცია",
-    "tr": "AIXCO %6 Tahvilini Satın Al",
-    "ar": "اشترِ سند AIXCO بنسبة 6٪"
+  "Administer Your Property": {
+    "de": "Administer Your Property",
+    "ru": "Administer Your Property",
+    "ka": "Administer Your Property",
+    "tr": "Administer Your Property",
+    "ar": "Administer Your Property"
   },
-  "Customers sign up, complete onboarding, and invest in the AIXCO bond through a seamless digital process.": {
-    "de": "Kunden registrieren sich, schließen das Onboarding ab und investieren über einen nahtlosen digitalen Prozess in die AIXCO-Anleihe.",
-    "ru": "Клиенты регистрируются, проходят онбординг и инвестируют в облигацию AIXCO через удобный цифровой процесс.",
-    "ka": "მომხმარებლები რეგისტრირდებიან, ასრულებენ ონბორდინგს და აბანდებენ AIXCO-ს ობლიგაციაში შეუფერხებელი ციფრული პროცესის საშუალებით.",
-    "tr": "Müşteriler kayıt olur, onboarding sürecini tamamlar ve sorunsuz bir dijital süreç üzerinden AIXCO tahviline yatırım yapar.",
-    "ar": "يقوم العملاء بالتسجيل واستكمال عملية الإعداد والاستثمار في سند AIXCO عبر عملية رقمية سلسة."
+  "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.": {
+    "de": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
+    "ru": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
+    "ka": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
+    "tr": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
+    "ar": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase."
   },
-  "Purchase the AIXCO Bond with a guaranteed 30% return over 5 years": {
-    "de": "Kaufen Sie die AIXCO-Anleihe mit garantierter 30%-Rendite über 5 Jahre",
-    "ru": "Приобретите облигацию AIXCO с гарантированной доходностью 30% за 5 лет",
-    "ka": "შეიძინეთ AIXCO-ს ობლიგაცია გარანტირებული 30%-იანი შემოსავლით 5 წელიწადში",
-    "tr": "5 yılda garantili %30 getiriyle AIXCO Tahvilini satın alın",
-    "ar": "اشترِ سند AIXCO بعائد مضمون 30٪ خلال 5 سنوات"
+  "Coordinate handover, documentation, rental coordination, and owner reporting": {
+    "de": "Coordinate handover, documentation, rental coordination, and owner reporting",
+    "ru": "Coordinate handover, documentation, rental coordination, and owner reporting",
+    "ka": "Coordinate handover, documentation, rental coordination, and owner reporting",
+    "tr": "Coordinate handover, documentation, rental coordination, and owner reporting",
+    "ar": "Coordinate handover, documentation, rental coordination, and owner reporting"
   },
-  "— combining structured security with strong, predictable growth. Backed by property as collateral, the bond provides investors with an added layer of asset-linked confidence.": {
-    "de": "— und verbinden Sie strukturierte Sicherheit mit starkem, planbarem Wachstum. Durch Immobilien besichert bietet die Anleihe Anlegern eine zusätzliche, vermögensbezogene Vertrauensebene.",
-    "ru": "— сочетая структурированную защиту с сильным и предсказуемым ростом. Обеспеченная недвижимостью в качестве залога, облигация дает инвесторам дополнительный уровень уверенности, связанный с активом.",
-    "ka": "— რაც აერთიანებს სტრუქტურირებულ უსაფრთხოებას ძლიერ და პროგნოზირებად ზრდასთან. უძრავი ქონებით უზრუნველყოფილი ობლიგაცია ინვესტორებს აქტივზე მიბმული დამატებითი ნდობის ფენას აძლევს.",
-    "tr": "— yapılandırılmış güvenliği güçlü ve öngörülebilir büyüme ile birleştirir. Teminat olarak gayrimenkulle desteklenen tahvil, yatırımcılara varlığa bağlı ek güven sunar.",
-    "ar": "— ما يجمع بين الأمان المنظم والنمو القوي المتوقع. وبفضل دعم السند بعقار كضمان، فإنه يوفر للمستثمرين طبقة إضافية من الثقة المرتبطة بالأصل."
+  "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.": {
+    "de": "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.",
+    "ru": "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.",
+    "ka": "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.",
+    "tr": "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.",
+    "ar": "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support."
   },
   "Step 1:": {
     "de": "Schritt 1:",
@@ -367,12 +367,12 @@ export const textTranslations = {
     "tr": "Adım 2:",
     "ar": "الخطوة 2:"
   },
-  "Review the AIXCO 6% bond offering and documentation.": {
-    "de": "Prüfen Sie das AIXCO-6%-Angebot und die Unterlagen.",
-    "ru": "Изучите предложение по облигации AIXCO 6% и документацию.",
-    "ka": "გაეცანით AIXCO-ს 6%-იანი ობლიგაციის შეთავაზებას და დოკუმენტაციას.",
-    "tr": "AIXCO %6 tahvil teklifini ve belgelerini inceleyin.",
-    "ar": "راجع عرض سند AIXCO بنسبة 6٪ والوثائق ذات الصلة."
+  "Review ownership and service documentation.": {
+    "de": "Review ownership and service documentation.",
+    "ru": "Review ownership and service documentation.",
+    "ka": "Review ownership and service documentation.",
+    "tr": "Review ownership and service documentation.",
+    "ar": "Review ownership and service documentation."
   },
   "Step 3:": {
     "de": "Schritt 3:",
@@ -381,12 +381,12 @@ export const textTranslations = {
     "tr": "Adım 3:",
     "ar": "الخطوة 3:"
   },
-  "Subscribe digitally and participate in the bond.": {
-    "de": "Zeichnen Sie digital und beteiligen Sie sich an der Anleihe.",
-    "ru": "Подпишитесь в цифровом формате и участвуйте в облигации.",
-    "ka": "გამოიწერეთ ციფრულად და მიიღეთ მონაწილეობა ობლიგაციაში.",
-    "tr": "Dijital olarak katılın ve tahvile dahil olun.",
-    "ar": "اكتتب رقميًا وشارك في السند."
+  "Confirm the service scope and next steps digitally.": {
+    "de": "Confirm the service scope and next steps digitally.",
+    "ru": "Confirm the service scope and next steps digitally.",
+    "ka": "Confirm the service scope and next steps digitally.",
+    "tr": "Confirm the service scope and next steps digitally.",
+    "ar": "Confirm the service scope and next steps digitally."
   },
   "How they profit:": {
     "de": "Wie sie profitieren:",
@@ -395,12 +395,12 @@ export const textTranslations = {
     "tr": "Nasıl kazanç sağlarlar:",
     "ar": "كيف يحققون الربح:"
   },
-  "Investors earn 6% on the bond, with the structure secured by underlying property.": {
-    "de": "Investoren erhalten 6% auf die Anleihe, deren Struktur durch zugrunde liegende Immobilien besichert ist.",
-    "ru": "Инвесторы получают 6% по облигации, структура которой обеспечена базовой недвижимостью.",
-    "ka": "ინვესტორები ობლიგაციაზე იღებენ 6%-ს, ხოლო სტრუქტურა უძრავი ქონებით არის უზრუნველყოფილი.",
-    "tr": "Yatırımcılar, dayanak mülkle güvence altına alınmış yapı sayesinde tahvilde %6 kazanır.",
-    "ar": "يحصل المستثمرون على عائد 6٪ على السند، مع هيكل مضمون بعقار أساسي."
+  "Rental income is not guaranteed and depends on occupancy, market conditions, and property management.": {
+    "de": "Rental income is not guaranteed and depends on occupancy, market conditions, and property management.",
+    "ru": "Rental income is not guaranteed and depends on occupancy, market conditions, and property management.",
+    "ka": "Rental income is not guaranteed and depends on occupancy, market conditions, and property management.",
+    "tr": "Rental income is not guaranteed and depends on occupancy, market conditions, and property management.",
+    "ar": "Rental income is not guaranteed and depends on occupancy, market conditions, and property management."
   },
   "Buy an Apartment in Batumi": {
     "de": "Eine Wohnung in Batumi kaufen",
@@ -451,7 +451,7 @@ export const textTranslations = {
     "tr": "Neden önemli:",
     "ar": "لماذا يهم ذلك:"
   },
-  "Buyers can benefit from potential property price appreciation, rental yield opportunities, and Batumi’s favorable tax environment.": {
+  "Buyers can benefit from potential property price appreciation, rental income opportunities, and Batumi’s favorable tax environment.": {
     "de": "Käufer können von möglicher Wertsteigerung, Mietrenditechancen und dem günstigen Steuerumfeld Batumis profitieren.",
     "ru": "Покупатели могут воспользоваться потенциальным ростом стоимости недвижимости, возможностями арендной доходности и благоприятной налоговой средой Батуми.",
     "ka": "მყიდველებს შეუძლიათ ისარგებლონ ქონების ფასის პოტენციური ზრდით, საიჯარო შემოსავლის შესაძლებლობებით და ბათუმის ხელსაყრელი საგადასახადო გარემოთი.",
@@ -465,12 +465,12 @@ export const textTranslations = {
     "tr": "Yolculuklar",
     "ar": "المسارات"
   },
-  "Choose the journey that fits your role. Whether you are buying property, brokering clients, subscribing to the bond product, or bringing projects to market, the process is structured, transparent, and digitally managed.": {
-    "de": "Wählen Sie den Weg, der zu Ihrer Rolle passt. Ob Sie direkt investieren, Produkte vertreiben oder Projekte auf den Markt bringen – der Prozess ist strukturiert, transparent und digital verwaltet.",
-    "ru": "Выберите путь, который соответствует вашей роли. Независимо от того, инвестируете ли вы напрямую, распространяете продукты или выводите проекты на рынок, процесс структурирован, прозрачен и управляется в цифровом виде.",
-    "ka": "აირჩიეთ მარშრუტი, რომელიც თქვენს როლს შეესაბამება. პირდაპირ ინვესტირებთ, ავრცელებთ პროდუქტებს თუ პროექტებს ბაზარზე უშვებთ — პროცესი სტრუქტურირებულია, გამჭვირვალეა და ციფრულად იმართება.",
-    "tr": "Rolünüze uygun yolculuğu seçin. Doğrudan yatırım yapıyor, ürün dağıtıyor veya projeleri pazara sunuyor olun; süreç yapılandırılmış, şeffaf ve dijital olarak yönetilir.",
-    "ar": "اختر المسار الذي يناسب دورك. سواء كنت تستثمر مباشرة أو توزع المنتجات أو تطرح المشاريع في السوق، فإن العملية منظمة وشفافة وتدار رقميًا."
+  "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.": {
+    "de": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.",
+    "ru": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.",
+    "ka": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.",
+    "tr": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.",
+    "ar": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed."
   },
   "For clients looking to access selected real estate opportunities through a guided digital process.": {
     "de": "Für Kunden, die über einen geführten digitalen Prozess Zugang zu ausgewählten Immobilienchancen suchen.",
@@ -479,19 +479,19 @@ export const textTranslations = {
     "tr": "Yönlendirmeli dijital süreçle seçilmiş gayrimenkul fırsatlarına erişmek isteyen müşteriler için.",
     "ar": "للعملاء الذين يسعون للوصول إلى فرص عقارية مختارة عبر عملية رقمية موجهة."
   },
-  "Customer Bond Buyer": {
-    "de": "Kunde – Anleihekäufer",
-    "ru": "Клиент-покупатель облигаций",
-    "ka": "მომხმარებელი ობლიგაციის მყიდველი",
-    "tr": "Müşteri Tahvil Alıcısı",
-    "ar": "عميل مشتري السندات"
+  "Property Owner Administration": {
+    "de": "Property Owner Administration",
+    "ru": "Property Owner Administration",
+    "ka": "Property Owner Administration",
+    "tr": "Property Owner Administration",
+    "ar": "Property Owner Administration"
   },
-  "For investors seeking fixed-income style opportunities with clear onboarding and documentation.": {
-    "de": "Für Investoren, die festverzinsliche Chancen mit klarem Onboarding und Dokumentation suchen.",
-    "ru": "Для инвесторов, ищущих возможности фиксированного дохода с понятным онбордингом и документацией.",
-    "ka": "ინვესტორებისთვის, რომლებიც ეძებენ ფიქსირებული შემოსავლის ტიპის შესაძლებლობებს მკაფიო ონბორდინგითა და დოკუმენტაციით.",
-    "tr": "Net onboarding ve dokümantasyona sahip sabit getirili fırsatlar arayan yatırımcılar için.",
-    "ar": "للمستثمرين الباحثين عن فرص شبيهة بالدخل الثابت مع إعداد ووثائق واضحة."
+  "For owners who want AIXCO support after purchase with handover, rental coordination, documents, and reporting.": {
+    "de": "For owners who want AIXCO support after purchase with handover, rental coordination, documents, and reporting.",
+    "ru": "For owners who want AIXCO support after purchase with handover, rental coordination, documents, and reporting.",
+    "ka": "For owners who want AIXCO support after purchase with handover, rental coordination, documents, and reporting.",
+    "tr": "For owners who want AIXCO support after purchase with handover, rental coordination, documents, and reporting.",
+    "ar": "For owners who want AIXCO support after purchase with handover, rental coordination, documents, and reporting."
   },
   "Broker": {
     "de": "Makler",
@@ -514,12 +514,12 @@ export const textTranslations = {
     "tr": "Geliştirici",
     "ar": "مطور"
   },
-  "For developers seeking structuring, placement, distribution, and investor market access.": {
-    "de": "Für Entwickler, die Strukturierung, Platzierung, Vertrieb und Zugang zum Investorenmarkt suchen.",
-    "ru": "Для девелоперов, которым нужны структурирование, размещение, дистрибуция и доступ к рынку инвесторов.",
-    "ka": "დეველოპერებისთვის, რომლებიც ეძებენ სტრუქტურირებას, განთავსებას, დისტრიბუციას და ინვესტორთა ბაზარზე წვდომას.",
-    "tr": "Yapılandırma, yerleştirme, dağıtım ve yatırımcı pazarına erişim arayan geliştiriciler için.",
-    "ar": "للمطورين الباحثين عن الهيكلة والتوزيع والوصول إلى سوق المستثمرين."
+  "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.": {
+    "de": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+    "ru": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+    "ka": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+    "tr": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+    "ar": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel."
   },
   "Our Partners": {
     "de": "Unsere Partner",
@@ -619,12 +619,12 @@ export const textTranslations = {
     "tr": "Öne çıkan vurgu",
     "ar": "أبرز عنصر"
   },
-  "A premier real estate investment platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.": {
-    "de": "Eine führende Immobilieninvestment-Plattform, die auf die Identifizierung, den Erwerb und das Management von Wohn- und Gewerbeprojekten mit hohem Potenzial ausgerichtet ist.",
-    "ru": "Премиальная платформа инвестиций в недвижимость, ориентированная на поиск, приобретение и управление жилыми и коммерческими проектами с высоким потенциалом.",
-    "ka": "უძრავი ქონების საინვესტიციო პრემიუმ პლატფორმა, რომელიც ორიენტირებულია მაღალი პოტენციალის მქონე საცხოვრებელი და კომერციული პროექტების იდენტიფიკაციაზე, შეძენასა და მართვაზე.",
-    "tr": "Yüksek potansiyelli konut ve ticari projeleri belirleme, edinme ve yönetmeye odaklanan seçkin bir gayrimenkul yatırım platformu.",
-    "ar": "منصة استثمار عقاري رائدة تركز على تحديد المشاريع السكنية والتجارية عالية الإمكانات والاستحواذ عليها وإدارتها."
+  "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.": {
+    "de": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+    "ru": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+    "ka": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+    "tr": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+    "ar": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments."
   },
   "The business is positioned around value creation through strategic asset selection, operational excellence, redevelopment, and property management.": {
     "de": "Das Unternehmen ist auf Wertschöpfung durch strategische Asset-Auswahl, operative Exzellenz, Neuentwicklung und Immobilienmanagement ausgerichtet.",
@@ -647,12 +647,12 @@ export const textTranslations = {
     "tr": "Grup şirketleri",
     "ar": "شركات المجموعة"
   },
-  "Real estate investment and development platform.": {
-    "de": "Plattform für Immobilieninvestitionen und -entwicklung.",
-    "ru": "Платформа для инвестиций и девелопмента в недвижимости.",
-    "ka": "უძრავი ქონების ინვესტირებისა და განვითარების პლატფორმა.",
-    "tr": "Gayrimenkul yatırım ve geliştirme platformu.",
-    "ar": "منصة للاستثمار والتطوير العقاري."
+  "Real estate development and asset management platform.": {
+    "de": "Real estate development and asset management platform.",
+    "ru": "Real estate development and asset management platform.",
+    "ka": "Real estate development and asset management platform.",
+    "tr": "Real estate development and asset management platform.",
+    "ar": "Real estate development and asset management platform."
   },
   "Open profile": {
     "de": "Profil öffnen",
@@ -661,12 +661,12 @@ export const textTranslations = {
     "tr": "Profili aç",
     "ar": "فتح الملف"
   },
-  "Diversified investment and services business.": {
-    "de": "Diversifiziertes Investment- und Dienstleistungsgeschäft.",
-    "ru": "Диверсифицированный инвестиционный и сервисный бизнес.",
-    "ka": "დივერსიფიცირებული საინვესტიციო და მომსახურების ბიზნესი.",
-    "tr": "Çeşitlendirilmiş yatırım ve hizmet işletmesi.",
-    "ar": "أعمال استثمارية وخدمية متنوعة."
+  "Diversified services and operating business.": {
+    "de": "Diversified services and operating business.",
+    "ru": "Diversified services and operating business.",
+    "ka": "Diversified services and operating business.",
+    "tr": "Diversified services and operating business.",
+    "ar": "Diversified services and operating business."
   },
   "Enterprise SaaS and fintech operating platform.": {
     "de": "Betriebsplattform für Enterprise SaaS und Fintech.",
@@ -696,12 +696,12 @@ export const textTranslations = {
     "tr": "DIFC'de DFSA tarafından düzenlenen finansal hizmetler şirketi.",
     "ar": "شركة خدمات مالية خاضعة لتنظيم DFSA في DIFC."
   },
-  "Investment and advisory collective for growth businesses.": {
-    "de": "Investment- und Beratungskollektiv für Wachstumsunternehmen.",
-    "ru": "Инвестиционное и консультационное объединение для растущего бизнеса.",
-    "ka": "საინვესტიციო და საკონსულტაციო გაერთიანება ზრდის ბიზნესებისთვის.",
-    "tr": "Büyüme odaklı işletmeler için yatırım ve danışmanlık kolektifi.",
-    "ar": "مجموعة استثمارية واستشارية للشركات النامية."
+  "Advisory collective for growth businesses.": {
+    "de": "Advisory collective for growth businesses.",
+    "ru": "Advisory collective for growth businesses.",
+    "ka": "Advisory collective for growth businesses.",
+    "tr": "Advisory collective for growth businesses.",
+    "ar": "Advisory collective for growth businesses."
   },
   "Financial consultancy focused on planning and advisory.": {
     "de": "Finanzberatung mit Fokus auf Planung und Advisory.",
@@ -731,12 +731,12 @@ export const textTranslations = {
     "tr": "Süregelen büyümemizin bir parçası olarak AIXCO Global, uzun vadeli değer yaratımı ve küresel sürdürülebilirliği destekleyen batarya depolama, güneş ve alternatif enerji çözümlerine odaklanarak enerji sektörüne giriyor.",
     "ar": "كجزء من توسعنا المستمر، تدخل AIXCO Global قطاع الطاقة مع التركيز على تخزين البطاريات والطاقة الشمسية وحلول الطاقة البديلة التي تدعم خلق القيمة على المدى الطويل والاستدامة العالمية."
   },
-  "Battery Storage Investments": {
-    "de": "Investitionen in Batteriespeicher",
-    "ru": "Инвестиции в хранение энергии",
-    "ka": "ინვესტიციები ბატარეის საცავებში",
-    "tr": "Batarya Depolama Yatırımları",
-    "ar": "استثمارات تخزين البطاريات"
+  "Battery Storage Projects": {
+    "de": "Battery Storage Projects",
+    "ru": "Battery Storage Projects",
+    "ka": "Battery Storage Projects",
+    "tr": "Battery Storage Projects",
+    "ar": "Battery Storage Projects"
   },
   "Battery storage systems are a key component of modern energy infrastructure. They store excess electricity and release it when demand increases, helping stabilize the grid and optimize energy usage.": {
     "de": "Batteriespeichersysteme sind ein zentrales Element moderner Energieinfrastruktur. Sie speichern überschüssigen Strom und geben ihn bei steigender Nachfrage ab, was zur Netzstabilisierung und Optimierung des Energieverbrauchs beiträgt.",
@@ -745,12 +745,12 @@ export const textTranslations = {
     "tr": "Batarya depolama sistemleri modern enerji altyapısının temel bir bileşenidir. Fazla elektriği depolar ve talep arttığında serbest bırakır; böylece şebekenin dengelenmesine ve enerji kullanımının optimize edilmesine yardımcı olur.",
     "ar": "تعد أنظمة تخزين البطاريات عنصرًا أساسيًا في البنية التحتية الحديثة للطاقة. فهي تخزن الكهرباء الزائدة وتطلقها عند زيادة الطلب، مما يساعد على استقرار الشبكة وتحسين استخدام الطاقة."
   },
-  "Revenue is generated through grid services and energy trading, offering a combination of stable returns and upside potential while supporting the transition to renewable energy.": {
-    "de": "Einnahmen werden durch Netzdienstleistungen und Energiehandel generiert und bieten eine Kombination aus stabilen Renditen und Aufwärtspotenzial, während sie den Übergang zu erneuerbaren Energien unterstützen.",
-    "ru": "Доход формируется за счет сетевых услуг и торговли энергией, обеспечивая сочетание стабильной доходности и потенциала роста при поддержке перехода к возобновляемой энергетике.",
-    "ka": "შემოსავალი გენერირდება ქსელური სერვისებისა და ენერგიით ვაჭრობის გზით, რაც გვთავაზობს სტაბილური ანაზღაურებისა და ზრდის პოტენციალის კომბინაციას და ამავდროულად მხარს უჭერს განახლებად ენერგიაზე გადასვლას.",
-    "tr": "Gelir, şebeke hizmetleri ve enerji ticareti yoluyla elde edilir; bu da yenilenebilir enerjiye geçişi desteklerken istikrarlı getiri ve yukarı yönlü potansiyel kombinasyonu sunar.",
-    "ar": "يتم تحقيق الإيرادات من خلال خدمات الشبكة وتداول الطاقة، مما يوفر مزيجًا من العوائد المستقرة وإمكانات النمو مع دعم الانتقال إلى الطاقة المتجددة."
+  "Revenue is generated through grid services and energy trading while supporting the transition to renewable energy.": {
+    "de": "Revenue is generated through grid services and energy trading while supporting the transition to renewable energy.",
+    "ru": "Revenue is generated through grid services and energy trading while supporting the transition to renewable energy.",
+    "ka": "Revenue is generated through grid services and energy trading while supporting the transition to renewable energy.",
+    "tr": "Revenue is generated through grid services and energy trading while supporting the transition to renewable energy.",
+    "ar": "Revenue is generated through grid services and energy trading while supporting the transition to renewable energy."
   },
   "Solar & Alternative Energy": {
     "de": "Solar- & alternative Energie",
@@ -808,12 +808,12 @@ export const textTranslations = {
     "tr": "Müşteri",
     "ar": "العميل"
   },
-  "Buying property or entering selected investment opportunities.": {
-    "de": "Immobilien kaufen oder an ausgewählten Investitionsmöglichkeiten teilnehmen.",
-    "ru": "Покупка недвижимости или участие в выбранных инвестиционных возможностях.",
-    "ka": "ქონების ყიდვა ან შერჩეულ საინვესტიციო შესაძლებლობებში მონაწილეობა.",
-    "tr": "Mülk satın almak veya seçilmiş yatırım fırsatlarına katılmak.",
-    "ar": "شراء عقار أو الدخول في فرص استثمارية مختارة."
+  "Buying property or arranging selected real estate services.": {
+    "de": "Buying property or arranging selected real estate services.",
+    "ru": "Buying property or arranging selected real estate services.",
+    "ka": "Buying property or arranging selected real estate services.",
+    "tr": "Buying property or arranging selected real estate services.",
+    "ar": "Buying property or arranging selected real estate services."
   },
   "What is the minimum amount to reserve or buy?": {
     "de": "Wie hoch ist der Mindestanlagebetrag?",
@@ -829,12 +829,12 @@ export const textTranslations = {
     "tr": "Doğrudan mülk satın alabilir miyim?",
     "ar": "هل يمكنني شراء عقار مباشرة؟"
   },
-  "Are returns fixed?": {
-    "de": "Sind die Renditen fest?",
-    "ru": "Доходность фиксированная?",
-    "ka": "მოგება ფიქსირებულია?",
-    "tr": "Getiriler sabit mi?",
-    "ar": "هل العوائد ثابتة؟"
+  "Is rental income guaranteed?": {
+    "de": "Is rental income guaranteed?",
+    "ru": "Is rental income guaranteed?",
+    "ka": "Is rental income guaranteed?",
+    "tr": "Is rental income guaranteed?",
+    "ar": "Is rental income guaranteed?"
   },
   "Will I receive reporting?": {
     "de": "Erhalte ich Berichte?",
@@ -857,12 +857,12 @@ export const textTranslations = {
     "tr": "Evet. Müşteriler doğrudan satın alma, yapılandırılmış katılım veya her ikisini de tercih edebilir.",
     "ar": "نعم. يمكن للعملاء اختيار الشراء المباشر أو المشاركة المنظمة أو كليهما."
   },
-  "No. Returns are performance-based and depend on market conditions and project success.": {
-    "de": "Nein. Renditen sind leistungsabhängig und hängen von Marktbedingungen und Projekterfolg ab.",
-    "ru": "Нет. Доходность зависит от результатов и рыночных условий, а также от успеха проекта.",
-    "ka": "არა. ანაზღაურება დამოკიდებულია შედეგებზე, ბაზრის პირობებსა და პროექტის წარმატებაზე.",
-    "tr": "Hayır. Getiriler performansa bağlıdır ve piyasa koşulları ile proje başarısına bağlıdır.",
-    "ar": "لا. تعتمد العوائد على الأداء وظروف السوق ونجاح المشروع."
+  "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.": {
+    "de": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
+    "ru": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
+    "ka": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
+    "tr": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
+    "ar": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery."
   },
   "Yes. Reporting, documents, and project updates are available through the portal.": {
     "de": "Ja. Berichte, Dokumente und Projekt-Updates sind über das Portal verfügbar.",
@@ -1281,12 +1281,12 @@ export const textTranslations = {
     "tr": "Dubai miras portföyünü gör",
     "ar": "عرض محفظة دبي الإرثية"
   },
-  "Purchase the AIXCO Bond with a guaranteed 30% return over 5 years — property-backed collateral. This is distinct from direct apartment ownership in Batumi.": {
-    "de": "AIXCO-Anleihe mit garantierten 30 % über 5 Jahre — immobilienbesichert. Getrennt vom direkten Wohnungskauf in Batumi.",
-    "ru": "Облигация AIXCO с гарантированными 30% за 5 лет — с залогом недвижимости. Отдельно от прямой покупки квартиры в Батуми.",
-    "ka": "AIXCO ობლიგაცია 30%-იანი გარანტიით 5 წელში—უძრავი ქონებით უზრუნველყოფილი. განსხვავდება პირდაპირი ბინის შეძენისგან.",
-    "tr": "AIXCO tahvilinde 5 yılda garantili %30 getiri—gayrimenkul teminatlı. Batum'da doğrudan daire sahipliğinden ayrıdır.",
-    "ar": "سند AIXCO بعائد مضمون 30% خلال 5 سنوات—بضمان عقاري. منفصل عن شراء الشقة مباشرة في باتومي."
+  "Property administration support covers handover, documents, rental coordination, and owner reporting after purchase.": {
+    "de": "Property administration support covers handover, documents, rental coordination, and owner reporting after purchase.",
+    "ru": "Property administration support covers handover, documents, rental coordination, and owner reporting after purchase.",
+    "ka": "Property administration support covers handover, documents, rental coordination, and owner reporting after purchase.",
+    "tr": "Property administration support covers handover, documents, rental coordination, and owner reporting after purchase.",
+    "ar": "Property administration support covers handover, documents, rental coordination, and owner reporting after purchase."
   },
   "From Switzerland to Dubai to Batumi—disciplined real estate execution since 2009.": {
     "de": "Von der Schweiz über Dubai nach Batumi—disziplinierte Immobilien-Umsetzung seit 2009.",
@@ -1344,12 +1344,12 @@ export const textTranslations = {
     "tr": "Hacim: kanal önü konut teslim edildi",
     "ar": "الحجم: مباني الواجهة البحرية مباعة ومسلّمة"
   },
-  "Legacy market — we are not accepting new investments in Dubai. Below is a snapshot of delivered and in-progress real estate volume.": {
-    "de": "Legacy-Markt — wir nehmen in Dubai keine neuen Investitionen mehr an. Unten ein Überblick über abgeschlossenes und laufendes Immobilienvolumen.",
-    "ru": "Рынок-наследие — мы не принимаем новые инвестиции в Дубае. Ниже снимок завершённого и текущего объёма недвижимости.",
-    "ka": "მემკვიდრეობის ბაზარი — დუბაიში ახალ ინვესტიციებს აღარ ვიღებთ. ქვემოთ მიწოდებული და მიმდინარე მოცულობის მიმოხილვა.",
-    "tr": "Miras pazar — Dubai'de yeni yatırım kabul etmiyoruz. Aşağıda tamamlanan ve devam eden gayrimenkul hacmi.",
-    "ar": "سوق إرثي — لا نقبل استثمارات جديدة في دبي. فيما يلي لمحة عن حجم العقارات المنجزة والجارية."
+  "Legacy market ? we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.": {
+    "de": "Legacy market ? we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.",
+    "ru": "Legacy market ? we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.",
+    "ka": "Legacy market ? we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.",
+    "tr": "Legacy market ? we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.",
+    "ar": "Legacy market ? we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume."
   },
   "Opportunity-driven focus in Georgia—buy apartments with transparent euro pricing, strong rental potential, and full foreign ownership.": {
     "de": "Chancenorientierter Fokus in Georgien—Wohnungen mit transparenter Euro-Preisgestaltung, starker Mietpotenzial und vollem Ausländer-Eigentum.",
@@ -1533,12 +1533,12 @@ export const textTranslations = {
     "tr": "AIXCO'nun kökleri İsviçre'de güçlü bir gayrimenkul geçmişiyle şekillendi.",
     "ar": "جذور AIXCO في سويسرا حيث بنت المجموعة سجلاً عقارياً قوياً."
   },
-  "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio—we are not opening new Dubai investments at this time.": {
-    "de": "In Dubai realisierte AIXCO Großprojekte wie Eden House und Dubai Healthcare City. Dieses Kapitel ist Legacy—keine neuen Dubai-Investitionen.",
-    "ru": "В Дубае AIXCO реализовала крупные проекты, включая Eden House. Это legacy—новых инвестиций в Дубае нет.",
-    "ka": "დუბაიში AIXCO-მ განახორციელა მასშტაბური პროექტები. ეს მემკვიდრეობაა—ახალი ინვესტიციები არ ვიღებთ.",
-    "tr": "Dubai'de Eden House gibi büyük projeler teslim edildi. Bu miras bölüm—yeni Dubai yatırımı yok.",
-    "ar": "في دبي نفّذت AIXCO مشاريع كبرى. هذا إرث—لا استثمارات جديدة في دبي حالياً."
+  "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio?we are not opening new Dubai real estate offers at this time.": {
+    "de": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio?we are not opening new Dubai real estate offers at this time.",
+    "ru": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio?we are not opening new Dubai real estate offers at this time.",
+    "ka": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio?we are not opening new Dubai real estate offers at this time.",
+    "tr": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio?we are not opening new Dubai real estate offers at this time.",
+    "ar": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio?we are not opening new Dubai real estate offers at this time."
   },
   "Today, AIXCO is focused on Batumi—helping buyers purchase apartments, supporting brokers, and administering property with transparent euro pricing. Entry typically starts from €10,000, with 10% reservation options on selected units from €50,000.": {
     "de": "Heute Fokus Batumi—Kauf, Makler und Verwaltung mit transparenter Euro-Preisgestaltung. Einstieg ab 10.000 €, 10 % Reservierung auf ausgewählte Einheiten ab 50.000 €.",
@@ -1561,7 +1561,7 @@ export const textTranslations = {
     "tr": "Giriş fiyatları",
     "ar": "أسعار الدخول"
   },
-  "Net rental yields": {
+  "Rental income": {
     "de": "Netto-Mietrenditen",
     "ru": "Чистая арендная доходность",
     "ka": "სუფთა საიჯარო შემოსავალი",
@@ -1588,13 +1588,6 @@ export const textTranslations = {
     "ka": "მომხმარებლები რეგისტრირდებიან, ჯავშნიან ტურს და პირადად სტუმრობენ ბინას. ეს ჩვენი ძირითადი გზაა მყიდველებისთვის, რომლებიც ბათუმის შესაძლებლობაზე ორიენტირებულ ბაზარზე პირდაპირ საკუთრებას ეძებენ.",
     "tr": "Müşteriler kayıt olur, tur rezervasyonu yapar ve daireyi yerinde ziyaret eder. Bu, Batum'un fırsat odaklı pazarında doğrudan mülkiyet arayan alıcılar için birincil yolumuzdur.",
     "ar": "يسجل العملاء ويحجزون جولة ويزورون الشقة شخصيًا. هذا مسارنا الأساسي للمشترين الذين يسعون إلى ملكية مباشرة في سوق باتومي القائم على الفرص."
-  },
-  "A separate structured product for clients who prefer fixed-income exposure backed by property collateral. Complete onboarding and subscribe through the digital portal—distinct from direct apartment purchase.": {
-    "de": "Ein separates Strukturprodukt für Kunden mit festverzinslicher Exposition und Immobilienbesicherung. Onboarding und Zeichnung über das digitale Portal—getrennt vom direkten Wohnungskauf.",
-    "ru": "Отдельный структурный продукт для клиентов с фиксированным доходом и залогом недвижимости. Онбординг и подписка через цифровой портал—отдельно от прямой покупки квартиры.",
-    "ka": "ცალკე სტრუქტურირებული პროდუქტი ფიქსირებული შემოსავლისა და უძრავი ქონებით უზრუნველყოფის მსურველებისთვის. ონბორდინგი და გამოწერა ციფრული პორტალით—განსხვავდება პირდაპირი ბინის შეძენისგან.",
-    "tr": "Gayrimenkul teminatlı sabit getiri tercih eden müşteriler için ayrı yapılandırılmış ürün. Dijital portal üzerinden onboarding ve abonelik—doğrudan daire satın alımından ayrıdır.",
-    "ar": "منتج منظم منفصل للعملاء الذين يفضلون التعرض للدخل الثابت بضمان عقاري. أكمل الإعداد والاشتراك عبر البوابة الرقمية—منفصل عن شراء الشقة مباشرة."
   },
   "Eden House — The Canal & The Park (Dubai)": {
     "de": "Eden House — The Canal & The Park (Dubai)",

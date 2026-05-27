@@ -51,7 +51,7 @@ values
   true,
   $${
     "name": "AIXCO.Global",
-    "tagline": "Quality Real Estate Participation",
+    "tagline": "Quality Real Estate — Buy · Broker · Manage",
     "email": "info@aixco.global",
     "address": "Gr\u00fcngasse 16, 1050 Wien, Austria",
     "founded": 2009,
@@ -84,9 +84,9 @@ values
     { "value": "500+", "label": "Total Transactions" },
     { "value": "2009", "label": "In Business Since" },
     { "value": "85+", "label": "Employees" },
-    { "value": "$4.2B", "label": "Raised Capital" },
+    { "value": "$4.2B", "label": "Real Estate Transacted" },
     { "value": "$2B", "label": "Developments Underway" },
-    { "value": "4.2X", "label": "Investment Returns" }
+    { "value": "3", "label": "Markets Served" }
   ]$$::jsonb
 ),
 (
@@ -98,34 +98,31 @@ values
   $$[
     {
       "id": "fund-1",
-      "name": "Fund I Eden House The Canal & Eden House The Park",
+      "name": "Eden House — The Canal & The Park (Dubai)",
       "image": "dubai-eden",
       "video": "fundOne",
       "details": [
+        "Status: Legacy portfolio — realized",
         "Units: 600+",
-        "Total: USD 462m",
-        "Performance: 4.9x",
-        "Revenues: Successfully generated returns with 4.9x multiple",
-        "Exit: Realized successfully with distributions",
+        "Development value: USD 462m",
+        "Volume: Canal-front residential sold and handed over",
+        "Location: Dubai Water Canal district",
         "Highlights: Prime canal-front location, strong partnerships, premium delivery"
       ]
     },
     {
       "id": "fund-2",
-      "name": "Fund II Dubai Healthcare City",
+      "name": "Dubai Healthcare City (legacy development)",
       "image": "dubai-healthcare",
       "video": "fundTwo",
       "details": [
-        "Total Equity: USD 350m",
-        "Target Net IRR: ~20%",
-        "Performance: Projected 4.3x",
-        "Investment Period: 4 years",
-        "GP Commitment: Min 2%",
+        "Status: Legacy portfolio — in progress",
+        "Development scope: USD 350m mixed-use program",
+        "Site progress: ~20% developed, ~20% under construction",
         "Location: Dubai Creek - Dubai, UAE",
         "Classification: Residential buildings, offices, retail, gastronomy, healthcare",
-        "Site Area: ~20% developed, ~20% under construction",
         "Access: Al Khail Rd, 2nd Za'abeel Rd, Metro Green Line, Bus",
-        "Strategy: Mixed-use masterplan combining Build-to-Rent and Build-to-Sell models for an underserved millennial market",
+        "Strategy: Mixed-use masterplan combining Build-to-Rent and Build-to-Sell for an underserved millennial market",
         "Connectivity: Near DIFC, Downtown Dubai, Business Bay, Ras Al Khor Wildlife Sanctuary, and Dubai Creek Golf Club"
       ]
     }
@@ -138,7 +135,7 @@ values
   30,
   true,
   $$[
-    "Net rental yields starting from 8%",
+    "Rental income scenarios from 8%",
     "Annual price growth of up to 12%",
     "Property prices starting from \u20ac50,000",
     "Full foreign ownership permitted",
@@ -169,7 +166,7 @@ values
       "highlights": [
         { "label": "Scale", "value": "3,000 sqm of infrastructure area and 4,000 sqm total site area." },
         { "label": "Location", "value": "About 150 meters from the sea, with the beach 5 minutes away and Grand Mall 8 minutes away by car." },
-        { "label": "Rental case", "value": "$600/month average long-term rent, $80/night average short-stay rent, 90% potential occupancy, and 12% ROI shown in the project deck." }
+        { "label": "Rental case", "value": "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck." }
       ]
     },
     {
@@ -187,7 +184,7 @@ values
       "highlights": [
         { "label": "Scale", "value": "25,000 sqm of comfort and community infrastructure across a 45,000 sqm planned site." },
         { "label": "Location", "value": "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away." },
-        { "label": "Rental case", "value": "$600/month average long-term rent, $80/night average short-stay rent, 90% potential occupancy, and 12% ROI shown in the project deck." }
+        { "label": "Rental case", "value": "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck." }
       ]
     }
   ]$$::jsonb
@@ -200,17 +197,24 @@ values
   true,
   $$[
     {
-      "id": "bond",
-      "title": "Buy the AIXCO 6% Bond",
-      "video": "bonds",
-      "body": "Customers sign up, complete onboarding, and invest in the AIXCO bond through a seamless digital process. Purchase the AIXCO Bond with a guaranteed 30% return over 5 years \u2014 combining structured security with strong, predictable growth. Backed by property as collateral, the bond provides investors with an added layer of asset-linked confidence.",
-      "cta": "Register"
-    },
-    {
       "id": "apartment",
       "title": "Buy an Apartment in Batumi",
       "video": "batumiBuy",
-      "body": "Customers sign up, book a tour, and visit the apartment in person. This route is designed for buyers seeking direct ownership and exposure to Batumi\u2019s long-term growth story.",
+      "body": "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase with the AIXCO team.",
+      "cta": "Register"
+    },
+    {
+      "id": "brokerage",
+      "title": "Broker Real Estate with AIXCO",
+      "video": "batumiBuy",
+      "body": "Brokers and partners can introduce qualified buyers, coordinate tours, and manage deal flow through a structured real estate sales process.",
+      "cta": "Register"
+    },
+    {
+      "id": "management",
+      "title": "Administer Your Property",
+      "video": "batumiBuy",
+      "body": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
       "cta": "Register"
     }
   ]$$::jsonb
@@ -231,23 +235,23 @@ values
         { "title": "Create your account", "text": "Register and access your secure client portal." },
         { "title": "Complete Profile", "text": "Fill out the registration form to create your profile and access dashboard" },
         { "title": "Review opportunities", "text": "Browse available real estate projects, pricing, and supporting materials." },
-        { "title": "Select and reserve", "text": "Choose the preferred investment or property participation option." },
+        { "title": "Select and reserve", "text": "Choose the preferred apartment or reservation option." },
         { "title": "Sign digitally", "text": "Complete documentation online and finalize onboarding." },
         { "title": "Track updates", "text": "Monitor project progress, documents, and reporting through the portal." }
       ]
     },
     {
       "tag": "Journey 02",
-      "role": "Customer Bond Buyer",
-      "summary": "For investors seeking fixed-income style opportunities with clear onboarding and documentation.",
-      "intro": "A streamlined subscription path for investors participating in bond offerings.",
+      "role": "Property Owner Administration",
+      "summary": "For owners who want AIXCO support after purchase with handover, rental coordination, documents, and reporting.",
+      "intro": "A guided service path for owners who want their property administered professionally after purchase.",
       "steps": [
-        { "title": "Register", "text": "Create your account with Bluerock and access the investor dashboard." },
-        { "title": "Complete compliance", "text": "Finish KYC and suitability checks required for onboarding." },
-        { "title": "Review bond materials", "text": "Access the term sheet, risk disclosures, and key documentation." },
-        { "title": "Subscribe", "text": "Select ticket size and confirm subscription instructions." },
-        { "title": "Execute documentation", "text": "Sign digitally and complete settlement steps." },
-        { "title": "Receive reporting", "text": "Track performance, coupon events, and investor communications online." }
+        { "title": "Register ownership details", "text": "Create your account and share the apartment or property details." },
+        { "title": "Confirm service scope", "text": "Agree what AIXCO should handle: handover, documents, rental coordination, or reporting." },
+        { "title": "Upload documents", "text": "Provide purchase, ownership, and project materials in the secure portal." },
+        { "title": "Coordinate handover", "text": "Track completion, snagging, key handover, and operational next steps." },
+        { "title": "Manage updates", "text": "Receive status updates, documents, and service coordination in one place." },
+        { "title": "Review reporting", "text": "Monitor property-related updates and owner communication online." }
       ]
     },
     {
@@ -267,15 +271,15 @@ values
     {
       "tag": "Journey 04",
       "role": "Developer",
-      "summary": "For developers seeking structuring, placement, distribution, and investor market access.",
-      "intro": "A capital and distribution pathway for developers seeking market access and investor reach.",
+      "summary": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+      "intro": "A project sales pathway for developers seeking market access and buyer reach.",
       "steps": [
-        { "title": "Initial project submission", "text": "Share project information, structure, and investment requirements." },
-        { "title": "Evaluation and fit", "text": "Review commercial viability, positioning, and investor suitability." },
-        { "title": "Structure the opportunity", "text": "Align capital format, documentation, and route to market." },
+        { "title": "Initial project submission", "text": "Share project information, structure, and commercial requirements." },
+        { "title": "Evaluation and fit", "text": "Review commercial viability, positioning, pricing, and buyer suitability." },
+        { "title": "Prepare the listing", "text": "Align project information, media, floor plans, pricing, and route to market." },
         { "title": "Prepare launch materials", "text": "Create the presentation, data room, and supporting documents." },
-        { "title": "Distribution and placement", "text": "Connect the project to brokers, clients, and investor networks." },
-        { "title": "Ongoing reporting", "text": "Provide updates, milestones, and investor communications post-launch." }
+        { "title": "Distribution and placement", "text": "Connect the project to brokers, clients, and buyer networks." },
+        { "title": "Ongoing coordination", "text": "Provide updates, milestones, tour support, and buyer communications post-launch." }
       ]
     }
   ]$$::jsonb
@@ -303,7 +307,7 @@ values
       "role": "Partner",
       "image": "team-owais",
       "summary": "Capital markets, banking relationships, and financial structuring.",
-      "bio": "Owais Shaikh is listed in the AIXCO team section as Partner covering Banking and Finance, positioning him around financing relationships, capital structuring, and institutional financial coordination.",
+      "bio": "Owais Shaikh is listed in the AIXCO team section as Partner covering Banking and Finance, positioning him around financing relationships, transaction structuring, and institutional financial coordination.",
       "points": [
         { "title": "Primary role", "text": "Banking and finance leadership across transactions and structuring." },
         { "title": "Focus", "text": "Capital access, financial coordination, and execution support." }
@@ -335,19 +339,19 @@ values
       "modalLabel": "Featured highlight \u00b7 UAE focus",
       "featured": true,
       "logo": "globalPartners",
-      "summary": "Real estate investment and development platform.",
+      "summary": "Real estate development and asset management platform.",
       "featuredDetail": [
-        "A premier real estate investment platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+        "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
         "The business is positioned around value creation through strategic asset selection, operational excellence, redevelopment, and property management."
       ],
       "detail": [
-        "Global Partners is presented by AIXCO as a premier real estate investment firm focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+        "Global Partners is presented by AIXCO as a premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
         "The positioning emphasizes value creation through strategic asset selection, operational excellence, development, redevelopment, and property management."
       ],
       "leaders": [
         { "name": "H.H Sheikh Maktoum Butti Maktoum Juma Al Maktoum", "role": "Chairman", "image": "butti" },
         { "name": "H.H. Sheikh Rashid Butti Maktoum Juma Al Maktoum", "role": "Director", "image": "rashid" },
-        { "name": "Bader Hareb", "role": "Executive Chairman \u2013 Fund II", "image": "bader" },
+        { "name": "Bader Hareb", "role": "Executive Chairman", "image": "bader" },
         { "name": "Warren Blore", "role": "Chief Financial Officer", "image": "warren" }
       ]
     },
@@ -356,12 +360,12 @@ values
       "group": "Group companies",
       "modalLabel": "Group company",
       "logo": "isp",
-      "summary": "Diversified investment and services business.",
+      "summary": "Diversified services and operating business.",
       "detail": [
-        "ISP Group is described in the AIXCO source as a diversified investment and services firm specializing in the acquisition, management, and transformation of businesses across multiple industries."
+        "ISP Group is described in the AIXCO source as a diversified services firm specializing in the acquisition, management, and transformation of businesses across multiple industries."
       ],
       "facts": [
-        { "title": "Positioning", "text": "Diversified investment and services platform." },
+        { "title": "Positioning", "text": "Diversified services and operating platform." },
         { "title": "Role", "text": "Business acquisition, management, and transformation across sectors." }
       ]
     },
@@ -385,9 +389,9 @@ values
       "group": "Group companies",
       "modalLabel": "Group company",
       "logo": "cleanElements",
-      "summary": "Clean-tech and lithium asset exposure.",
+      "summary": "Clean-tech and lithium asset company.",
       "detail": [
-        "Clean Elements is described in the AIXCO source as a clean-products and lithium asset story, positioned as an environmental and investment opportunity."
+        "Clean Elements is described in the AIXCO source as a clean-products and lithium asset company positioned around environmental transition themes."
       ],
       "facts": [
         { "title": "Theme", "text": "Clean products and environmental transition exposure." },
@@ -409,9 +413,9 @@ values
       "group": "Strategic partners",
       "modalLabel": "Strategic partner",
       "logo": "gti",
-      "summary": "Investment and advisory collective for growth businesses.",
+      "summary": "Advisory collective for growth businesses.",
       "detail": [
-        "Groupe GTI is presented as an investment and advisory collective focused on accelerating growth-oriented enterprises, especially across technology, infrastructure, and industrial sectors."
+        "Groupe GTI is presented as an advisory collective focused on accelerating growth-oriented enterprises, especially across technology, infrastructure, and industrial sectors."
       ]
     },
     {
@@ -421,7 +425,7 @@ values
       "logo": "bluerock",
       "summary": "Financial consultancy focused on planning and advisory.",
       "detail": [
-        "Bluerock is described as a financial consultancy delivering data-driven strategies in planning, investment, and advisory, with a client-focused approach aimed at sustainable growth."
+        "Bluerock is described as a financial consultancy delivering data-driven strategies in planning and advisory, with a client-focused approach aimed at sustainable growth."
       ]
     },
     {
@@ -445,11 +449,11 @@ values
   $$[
     {
       "group": "Customer",
-      "description": "Buying property or entering selected investment opportunities.",
+      "description": "Buying property, reserving apartments, or working with AIXCO on real estate services.",
       "items": [
-        { "q": "What is the minimum investment amount?", "a": "The entry point starts from \u20ac1,000, depending on the selected opportunity." },
-        { "q": "Can I buy property directly?", "a": "Yes. Customers may pursue direct purchase, structured participation, or both." },
-        { "q": "Are returns fixed?", "a": "No. Returns are performance-based and depend on market conditions and project success." },
+        { "q": "What is the minimum amount to reserve or buy?", "a": "Typical entry starts from \u20ac10,000. On selected Batumi apartments from \u20ac50,000, a 10% reservation (from \u20ac5,000) may be available\u2014final terms depend on the project and purchase agreement." },
+        { "q": "Can I buy property directly?", "a": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration." },
+        { "q": "Is rental income guaranteed?", "a": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery." },
         { "q": "Will I receive reporting?", "a": "Yes. Reporting, documents, and project updates are available through the portal." },
         { "q": "Can foreigners buy property in Batumi?", "a": "Yes. Foreigners can purchase and own real estate with minimal restrictions." }
       ]
@@ -484,14 +488,14 @@ values
   $$[
     {
       "id": "batumi-development-update",
-      "title": "Batumi development update highlights new investor demand",
+      "title": "Batumi development update: strong buyer demand",
       "source": "Agency",
       "date": "May 2026",
-      "href": "https://www.aixco.global/op2/annual-property-growth-batumi.html"
+      "href": "https://www.aixco.global/op2/index.html#batumi"
     },
     {
-      "id": "dubai-fund-milestone",
-      "title": "AIXCO Fund I reaches a new Dubai portfolio milestone",
+      "id": "dubai-legacy-milestone",
+      "title": "AIXCO completes Eden House phase in Dubai legacy portfolio",
       "source": "AIXCO",
       "date": "May 2026",
       "href": "https://www.aixco.global/op2/index.html#page1"
@@ -501,25 +505,25 @@ values
       "title": "Black Sea corridor demand strengthens across coastal assets",
       "source": "Market",
       "date": "Apr 2026",
-      "href": "https://www.aixco.global/op2/black-sea-corridor-batumi-report.html"
+      "href": "https://www.aixco.global/op2/index.html#batumi"
     },
     {
-      "id": "rental-yield-note",
-      "title": "Agency note: short-term rental yields remain a key Batumi driver",
+      "id": "rental-income-note",
+      "title": "Agency note: short-term rental demand remains a key Batumi driver",
       "source": "Agency",
       "date": "Apr 2026",
-      "href": "https://www.aixco.global/op2/high-rental-yield-coastal-real-estate.html"
+      "href": "https://www.aixco.global/op2/index.html#batumi"
     },
     {
       "id": "partner-update",
-      "title": "Strategic partner update published for infrastructure investors",
+      "title": "Strategic partner update published for infrastructure partners",
       "source": "Partners",
       "date": "Apr 2026",
       "href": "https://www.aixco.global/op2/index.html#page5"
     },
     {
       "id": "participation-model",
-      "title": "New overview explains participation from EUR 1,000",
+      "title": "New guide: buying Batumi apartments from EUR 50,000",
       "source": "AIXCO",
       "date": "Mar 2026",
       "href": "https://www.aixco.global/op2/index.html#page6"

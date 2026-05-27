@@ -56,9 +56,9 @@ function getLoginRoles(portals: SiteContent["company"]["portals"]) {
     cta: "Continue as customer",
     url: portals.customerLogin,
     description:
-      "Customers can log in to manage property interest, review opportunities, follow their onboarding progress, and continue a purchase or participation journey through the portal.",
+      "Customers can log in to manage property interest, review opportunities, follow their onboarding progress, and continue a purchase or service journey through the portal.",
     points: [
-      "Continue property purchase or participation workflows",
+      "Continue property purchase or service workflows",
       "Access documents, updates, and dashboard information",
       "Stay connected to a guided 360° service process",
     ],
@@ -103,7 +103,7 @@ function getRegisterRoles(portals: SiteContent["company"]["portals"]) {
       "Register as a customer if you want to buy property, explore selected opportunities, or receive a more guided route into Batumi through one organized onboarding form.",
     points: [
       "Submit your interest and onboarding details digitally",
-      "Access support for buying property or joining opportunities",
+      "Access support for buying property or property services",
       "Move into a guided 360° customer journey",
     ],
   },
@@ -146,7 +146,7 @@ const legalCopy: Record<LegalTitle, LegalSection[]> = {
     {
       heading: "2. Nature of Services",
       body:
-        "AIXCO Global provides access to structured real estate participation opportunities, investment information, and related services. AIXCO acts as a facilitator and does not provide financial, legal, or tax advice unless explicitly stated.",
+        "AIXCO Global provides information and services for real estate purchase, brokerage, property administration, and related portal workflows. AIXCO acts as a facilitator and does not provide financial, legal, or tax advice unless explicitly stated.",
     },
     {
       heading: "3. Eligibility",
@@ -159,14 +159,14 @@ const legalCopy: Record<LegalTitle, LegalSection[]> = {
         "To access services, users must register and complete Know Your Customer (KYC) verification. You agree to provide accurate, complete, and updated information. AIXCO reserves the right to suspend or terminate accounts that fail verification or provide misleading data.",
     },
     {
-      heading: "5. Investment Risks",
+      heading: "5. Real Estate Risks",
       body:
-        "All investments carry risk. Returns are not guaranteed and may fluctuate based on market conditions, project performance, and external factors. Past performance is not indicative of future results.",
+        "Real estate purchases and rental assumptions carry risk. Rental income, resale values, and project timelines are not guaranteed and may fluctuate based on market conditions, property condition, project delivery, and external factors.",
     },
     {
-      heading: "6. No Financial Advice",
+      heading: "6. No Professional Advice",
       body:
-        "Information provided on the Platform is for informational purposes only and should not be considered financial or investment advice. Users should consult independent advisors before making investment decisions.",
+        "Information provided on the Platform is for informational purposes only and should not be considered financial, legal, tax, or property-purchase advice. Users should consult independent advisors before entering a real estate transaction.",
     },
     {
       heading: "7. User Responsibilities",
@@ -186,7 +186,7 @@ const legalCopy: Record<LegalTitle, LegalSection[]> = {
     {
       heading: "10. Limitation of Liability",
       body:
-        "AIXCO Global shall not be liable for any direct, indirect, or consequential losses arising from the use of the Platform or investment decisions made by users.",
+        "AIXCO Global shall not be liable for any direct, indirect, or consequential losses arising from the use of the Platform or real estate decisions made by users.",
     },
     {
       heading: "11. Third-Party Services",
@@ -228,7 +228,7 @@ const legalCopy: Record<LegalTitle, LegalSection[]> = {
       items: [
         "Account creation and management",
         "KYC and compliance verification",
-        "Providing investment opportunities",
+        "Providing real estate purchase, brokerage, and administration services",
         "Communication and support",
         "Improving platform functionality",
       ],

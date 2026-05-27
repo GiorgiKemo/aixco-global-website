@@ -58,14 +58,13 @@ describe("home page performance structure", () => {
     expect(philosophySource).toContain("bg-primary/75");
   });
 
-  it("keeps legacy insight articles aligned with the public page typography scale", () => {
+  it("keeps legacy insight articles unpublished until the copy is rewritten", () => {
     const articleSource = readSource("src/app/aixco-global-op2/[slug]/page.tsx");
 
-    expect(articleSource).toContain("pt-20");
-    expect(articleSource).toContain("md:pt-24");
-    expect(articleSource).toContain("text-[clamp(2.35rem,5.5vw,4.75rem)]");
-    expect(articleSource).toContain("[overflow-wrap:anywhere]");
-    expect(articleSource).not.toContain("text-[clamp(2.45rem,7vw,5.6rem)]");
+    expect(articleSource).toContain("generateStaticParams");
+    expect(articleSource).toContain("index: false");
+    expect(articleSource).toContain("notFound()");
+    expect(articleSource).not.toContain("LegacyInsightArticle");
   });
 
   it("keeps the not-found page aligned with the public brand layout", () => {

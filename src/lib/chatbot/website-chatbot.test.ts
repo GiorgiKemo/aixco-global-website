@@ -21,7 +21,7 @@ describe("website chatbot", () => {
 
     expect(answer.confidence).toBe("high");
     expect(answer.answer).toMatch(/foreigners can purchase and own real estate/i);
-    expect(answer.answer).toContain("Net rental yields");
+    expect(answer.answer).toContain("Rental income scenarios");
   });
 
   it("answers minimum investment questions from the FAQ", () => {

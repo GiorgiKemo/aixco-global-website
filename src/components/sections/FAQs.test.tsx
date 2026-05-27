@@ -31,8 +31,8 @@ describe("FAQs", () => {
             a: "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
           },
           {
-            q: "Are returns fixed?",
-            a: "No. Returns are performance-based and depend on market conditions and project success.",
+            q: "Is rental income guaranteed?",
+            a: "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
           },
           {
             q: "Will I receive reporting?",

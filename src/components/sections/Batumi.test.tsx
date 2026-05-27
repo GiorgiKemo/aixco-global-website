@@ -124,7 +124,7 @@ describe("Batumi", () => {
     expect(guruMetrics).toHaveTextContent("85%");
     expect(guruDetails).toHaveTextContent("3,000 sqm");
     expect(guruDetails).toHaveTextContent("$600/month");
-    expect(guruDetails).toHaveTextContent("12% ROI");
+    expect(guruDetails).toHaveTextContent("90% potential occupancy");
     expect(guruCard).not.toHaveTextContent("Guru PDF");
     expect(within(guruCard as HTMLElement).getByLabelText("Guru")).toHaveClass("guru-video-matte-crop");
     expect(guruAssetLink).toHaveClass("asset-detail-cta");

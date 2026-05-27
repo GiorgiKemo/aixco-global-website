@@ -63,4 +63,38 @@ describe("site content backend", () => {
     expect(content.newsTickerItems[0].href).toBe(siteContentDefaults.newsTickerItems[0].href);
     expect(content.batumiProperties[0].url).toBe(siteContentDefaults.batumiProperties[0].url);
   });
+
+  it("keeps stale CMS investment copy from overriding the real estate brief", () => {
+    const content = buildSiteContent([
+      {
+        section: "participation_routes",
+        entry_key: "items",
+        payload: [
+          {
+            id: "bond",
+            title: "Buy the AIXCO 6% Bond",
+            video: "bonds",
+            body: "Purchase the AIXCO Bond with a guaranteed 30% return over 5 years.",
+            cta: "Register",
+          },
+        ],
+      },
+      {
+        section: "faq_groups",
+        entry_key: "items",
+        payload: [
+          {
+            group: "Customer",
+            description: "Investment opportunities.",
+            items: [{ q: "What is the minimum investment amount?", a: "The entry point starts from €1,000." }],
+          },
+        ],
+      },
+    ]);
+
+    expect(content.participationRoutes.map((route) => route.id)).toEqual(["apartment", "brokerage", "management"]);
+    expect(JSON.stringify(content.participationRoutes)).not.toMatch(/bond|guaranteed|30% return/i);
+    expect(content.faqGroups[0].items[0].q).toBe("What is the minimum amount to reserve or buy?");
+    expect(content.faqGroups[0].items[0].a).toContain("€10,000");
+  });
 });

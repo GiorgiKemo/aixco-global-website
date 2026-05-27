@@ -31,7 +31,7 @@ export const legacyTimelineChapters: LegacyTimelineChapter[] = [
     title: "Gulf developments delivered",
     highlight: "USD 800m+ development volume",
     body:
-      "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio—we are not opening new Dubai investments at this time.",
+      "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio—we are not opening new Dubai real estate offers at this time.",
     stats: [
       { value: "600+", label: "Units delivered (Eden House)" },
       { value: "USD 462m", label: "Eden House development value" },
@@ -48,7 +48,7 @@ export const legacyTimelineChapters: LegacyTimelineChapter[] = [
       "Today, AIXCO is focused on Batumi—helping buyers purchase apartments, supporting brokers, and administering property with transparent euro pricing. Entry typically starts from €10,000, with 10% reservation options on selected units from €50,000.",
     stats: [
       { value: "€50K+", label: "Apartment pricing" },
-      { value: "8%+", label: "Net rental yields" },
+      { value: "8%+", label: "Rental income scenarios" },
       { value: "Now", label: "Active market" },
     ],
     status: "current",

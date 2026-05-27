@@ -435,7 +435,7 @@ describe("Dubai", () => {
     expect(fundTwo).toHaveTextContent("Mixed-use masterplan combining Build-to-Rent and Build-to-Sell");
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City source site image")).toBeInTheDocument();
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City skyline site context")).toBeInTheDocument();
-    expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City fund location map")).toBeInTheDocument();
+    expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City legacy location map")).toBeInTheDocument();
   });
 
   it("promotes Fund I headline metrics into visual highlight tiles", () => {

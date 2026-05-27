@@ -34,9 +34,9 @@ export function Dubai() {
                 <p className="eyebrow">{tx("Dubai · Legacy portfolio")}</p>
                 <h2 className="heading-section mt-4 max-w-2xl [overflow-wrap:anywhere]">{tx("Our history in Dubai")}</h2>
                 <p className="mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base">
-                  {tx(
-                    "Legacy market — we are not accepting new investments in Dubai. Below is a snapshot of delivered and in-progress real estate volume.",
-                  )}
+                {tx(
+                    "Legacy market — we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.",
+                )}
                 </p>
               </div>
 

@@ -165,7 +165,7 @@ describe("ChatWidget", () => {
     const dialog = screen.getByRole("dialog", { name: /aixco live chat/i });
     expect(within(dialog).getByRole("button", { name: /close live chat/i })).toHaveClass("h-10", "w-10");
     expect(screen.getByRole("button", { name: /minimize live chat/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "AIXCO 6% Bond" })).toHaveClass("min-h-8", "text-[11px]");
+    expect(screen.getByRole("button", { name: "Property administration" })).toHaveClass("min-h-8", "text-[11px]");
     expect(screen.getByRole("link", { name: /email transcript/i })).toHaveClass("btn-ghost-gold");
     expect(screen.getByRole("button", { name: "Register" })).toHaveClass("min-h-10");
     expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-10");
@@ -176,12 +176,12 @@ describe("ChatWidget", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
 
-    expect(screen.getByRole("button", { name: "AIXCO 6% Bond" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Property administration" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "AIXCO 6% Bond" }));
+    fireEvent.click(screen.getByRole("button", { name: "Property administration" }));
 
     await waitFor(() => {
-      expect(screen.queryByRole("button", { name: "AIXCO 6% Bond" })).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Property administration" })).not.toBeInTheDocument();
     });
   });
 

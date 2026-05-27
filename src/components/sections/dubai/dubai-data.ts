@@ -50,7 +50,7 @@ export function parseFundDetail(detail: string) {
 }
 
 export function isHeadlineMetric(label: string) {
-  return ["Units", "Total", "Development value", "Development scope", "Status", "Site progress", "Total Equity", "Target Net IRR", "Performance"].includes(label);
+  return ["Units", "Total", "Development value", "Development scope", "Status", "Site progress"].includes(label);
 }
 
 export function formatMetricValue(value: string) {
