@@ -53,8 +53,10 @@ describe("home page performance structure", () => {
     expect(philosophySource).toContain("grid-cols-[1rem_minmax(0,1fr)]");
     expect(philosophySource).toContain("md:grid-cols-[1.25rem_minmax(0,1fr)]");
     expect(philosophySource).toContain("text-left");
-    expect(philosophySource).toContain("text-[1.95rem]");
-    expect(philosophySource).toContain("text-primary md:mt-5 md:text-5xl");
+    expect(philosophySource).toContain("max-w-full break-words");
+    expect(philosophySource).toContain("text-[clamp(1.95rem,8vw,2.75rem)]");
+    expect(philosophySource).toContain("md:text-[clamp(2.35rem,4.2vw,2.9rem)]");
+    expect(philosophySource).toContain("xl:text-5xl");
     expect(philosophySource).toContain("bg-primary/75");
   });
 

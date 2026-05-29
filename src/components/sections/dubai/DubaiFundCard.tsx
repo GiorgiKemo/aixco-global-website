@@ -27,6 +27,9 @@ export function DubaiFundCard({ fund, idx, tx, isLanding = false }: DubaiFundCar
   const details = fund.details.map(parseFundDetail);
   const headlineMetrics = details.filter((detail) => isHeadlineMetric(detail.label));
   const supportingDetails = details.filter((detail) => !isHeadlineMetric(detail.label));
+  const hasLongHeadlineMetrics = headlineMetrics.some(
+    (detail) => detail.label === "Site progress" || detail.value.length > 32,
+  );
   const imageFirst = idx % 2 === 0;
   const isViewportFit = isLanding;
   const heightClass = isLanding
@@ -98,7 +101,14 @@ export function DubaiFundCard({ fund, idx, tx, isLanding = false }: DubaiFundCar
             {renderDubaiFundTitle(tx(fund.name), tx("The Canal"))}
           </h3>
         </div>
-        <div data-fund-highlight-grid={fund.id} className="grid grid-cols-1 border-b border-foreground/5 md:grid-cols-3">
+        <div
+          data-fund-highlight-grid={fund.id}
+          className={`grid grid-cols-1 border-b border-foreground/5 ${
+            hasLongHeadlineMetrics
+              ? "md:[grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))]"
+              : "md:grid-cols-3"
+          }`}
+        >
           {headlineMetrics.map((detail) => {
             const metric = formatMetricValue(detail.value);
             const isPerformance = detail.label === "Performance" || detail.label === "Status";

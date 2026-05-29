@@ -424,6 +424,7 @@ describe("Dubai", () => {
     const { container } = renderDubai();
 
     const fundTwo = container.querySelector("[data-fund-card='fund-2']");
+    const fundTwoHighlightGrid = fundTwo?.querySelector("[data-fund-highlight-grid='fund-2']");
     const fundTwoGallery = screen.getByLabelText("Dubai Healthcare City legacy gallery");
 
     expect(fundTwo).toHaveTextContent("Legacy portfolio");
@@ -433,6 +434,7 @@ describe("Dubai", () => {
     expect(fundTwo).toHaveTextContent("Location");
     expect(fundTwo).toHaveTextContent("Dubai Creek - Dubai, UAE");
     expect(fundTwo).toHaveTextContent("Mixed-use masterplan combining Build-to-Rent and Build-to-Sell");
+    expect(fundTwoHighlightGrid?.className).toContain("md:[grid-template-columns:repeat(auto-fit");
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City source site image")).toBeInTheDocument();
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City skyline site context")).toBeInTheDocument();
     expect(within(fundTwoGallery).getByAltText("Dubai Healthcare City legacy location map")).toBeInTheDocument();

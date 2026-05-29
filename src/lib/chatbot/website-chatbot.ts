@@ -1,4 +1,5 @@
 import type { ChatMessageInput } from "@/lib/backend/lead-capture-contracts";
+import { materialDownloads } from "@/data/materials";
 import type { SiteContent } from "@/lib/backend/site-content";
 
 type KnowledgeSection =
@@ -11,7 +12,8 @@ type KnowledgeSection =
   | "team"
   | "partners"
   | "faq"
-  | "news";
+  | "news"
+  | "materials";
 
 type KnowledgeEntry = {
   id: string;
@@ -82,12 +84,17 @@ const QUERY_ALIASES: Record<string, string[]> = {
   buy: ["purchase", "register", "customer"],
   contact: ["email", "address", "team"],
   developer: ["project", "distribution", "placement", "listing"],
+  download: ["downloads", "materials", "brochure", "catalog", "assets", "files"],
+  downloads: ["download", "materials", "brochure", "catalog", "assets", "files"],
   faq: ["question", "answer"],
+  files: ["download", "downloads", "materials", "brochure", "catalog", "assets"],
   foreigner: ["foreign", "ownership", "batumi"],
   foreigners: ["foreign", "ownership", "batumi"],
   invest: ["buy", "purchase", "apartment", "property"],
   investor: ["buyer", "client", "purchase"],
   login: ["portal", "access"],
+  material: ["materials", "download", "downloads", "brochure", "catalog", "assets"],
+  materials: ["material", "download", "downloads", "brochure", "catalog", "assets"],
   price: ["pricing", "minimum", "entry", "amount"],
   register: ["signup", "apply", "onboarding", "portal"],
   roi: ["return", "yield", "income", "performance"],

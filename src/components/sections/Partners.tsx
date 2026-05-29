@@ -67,7 +67,7 @@ function PartnerMarquee({
   if (items.length === 0) return null;
 
   return (
-    <div className="mb-12 last:mb-0">
+    <div className="mb-12 overflow-hidden last:mb-0">
       <h3 className="scroll-reveal mb-5 font-display text-2xl">{tx(title)}</h3>
       <div className="partner-marquee scroll-reveal" aria-label={tx(title)}>
         <div className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""}`}>

@@ -11,6 +11,7 @@ export const NAV = [
 
 export const MORE_NAV = [
   { key: "nav.philosophy", to: "/aixco-philosophy", hash: "" },
+  { key: "nav.materials", to: "/", hash: "#materials" },
   { key: "nav.team", to: "/", hash: "#team" },
   { key: "nav.partners", to: "/", hash: "#partners" },
   { key: "nav.faqs", to: "/", hash: "#faqs" },
@@ -18,7 +19,7 @@ export const MORE_NAV = [
 
 export const ALL_NAV = [...NAV, ...MORE_NAV] as const;
 export const STARTING_FROM_NAV_TARGET = MORE_NAV.find((item) => item.key === "nav.faqs") ?? MORE_NAV[MORE_NAV.length - 1];
-export const HOME_SECTION_IDS = ["about", "legacy", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"] as const;
+export const HOME_SECTION_IDS = ["about", "legacy", "dubai", "batumi", "materials", "participate", "how", "team", "partners", "faqs", "contact"] as const;
 export const NAV_HASH_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
 export const HOME_RETURN_HASH_SYNC_LOCK_MS = 1800;
 

@@ -52,7 +52,9 @@ export function AixcoPhilosophyPage() {
                       <Icon className="mt-0.5 h-4 w-4 shrink-0 justify-self-start text-primary-glow md:mt-[0.125rem]" aria-hidden />
                       <span className="text-left">{stat.label}</span>
                     </dt>
-                    <dd className="mt-2 text-[1.95rem] font-semibold leading-none tracking-normal text-primary md:mt-5 md:text-5xl">{stat.value}</dd>
+                    <dd className="mt-2 max-w-full break-words text-[clamp(1.95rem,8vw,2.75rem)] font-semibold leading-none tracking-normal text-primary [overflow-wrap:anywhere] md:mt-5 md:text-[clamp(2.35rem,4.2vw,2.9rem)] xl:text-5xl">
+                      {stat.value}
+                    </dd>
                     <div className="mt-2 h-px w-full bg-primary/75 transition-colors duration-300 group-hover:bg-primary md:mt-4" aria-hidden />
                   </div>
                 );

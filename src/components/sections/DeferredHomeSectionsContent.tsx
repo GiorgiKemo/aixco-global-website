@@ -3,6 +3,7 @@
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { Dubai } from "@/components/sections/Dubai";
 import { Batumi } from "@/components/sections/Batumi";
+import { Materials } from "@/components/sections/Materials";
 import { Participate } from "@/components/sections/Participate";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Team } from "@/components/sections/Team";
@@ -18,6 +19,9 @@ export function DeferredHomeSectionsContent() {
       </ScrollReveal>
       <ScrollReveal>
         <Batumi />
+      </ScrollReveal>
+      <ScrollReveal>
+        <Materials />
       </ScrollReveal>
       <ScrollReveal>
         <Participate />
