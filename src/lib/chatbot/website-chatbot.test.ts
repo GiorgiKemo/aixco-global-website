@@ -32,6 +32,16 @@ describe("website chatbot", () => {
     expect(answer.answer).not.toContain("\u00e2");
   });
 
+  it("answers download and materials questions from the website content", () => {
+    const answer = ask("Where can clients download brochures and assets?");
+
+    expect(answer.confidence).toBe("high");
+    expect(answer.matchedTopics).toContain("Materials & downloads");
+    expect(answer.answer).toContain("#materials");
+    expect(answer.answer).toContain("Guru brochure");
+    expect(answer.answer).toContain("Otium brochure");
+  });
+
   it("does not invent answers outside website content", () => {
     const answer = ask("Can you guarantee my personal tax result in Canada?");
 

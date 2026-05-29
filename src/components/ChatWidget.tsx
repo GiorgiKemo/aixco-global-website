@@ -21,6 +21,7 @@ const SESSION_STORAGE_KEY = "aixco-live-chat-session";
 
 const quickReplies = [
   "Batumi apartments",
+  "Client materials",
   "Property administration",
   "Broker partnership",
   "Developer partnership",
@@ -62,7 +63,7 @@ function initialMessages(): ChatMessage[] {
   return [
     createMessage(
       "aixco",
-      "Welcome to the AIXCO assistant. Ask about Batumi apartments, Dubai legacy projects, property administration, broker partnership, developer partnership, partners, team, or FAQs.",
+      "Welcome to the AIXCO assistant. Ask about Batumi apartments, client materials and downloads, Dubai legacy projects, property administration, broker partnership, developer partnership, partners, team, or FAQs.",
     ),
   ];
 }

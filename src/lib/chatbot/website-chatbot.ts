@@ -217,6 +217,17 @@ export function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[
 
   entries.push(
     entry({
+      id: "client-materials",
+      section: "materials",
+      title: "Materials & downloads",
+      priority: 12,
+      keywords: ["materials", "downloads", "download section", "assets", "files", "brochures", "catalog", "documents"],
+      answer: `The website has a Materials & downloads section at #materials. It includes ${materialDownloads
+        .filter((material) => material.format === "PDF")
+        .map((material) => material.title)
+        .join(" and ")} plus catalog sheets and Dubai legacy reference images. Clients, buyers, brokers, and partners can click Download on each card to save the files.`,
+    }),
+    entry({
       id: "batumi-market",
       section: "batumi",
       title: "Why Batumi",
@@ -365,7 +376,7 @@ function fallbackAnswer(content: SiteContent, query: string): WebsiteChatbotAnsw
     confidence: "low",
     matchedTopics: [],
     answer: sanitizeDisplayText(
-      `I can answer from the AIXCO website about Batumi apartments, Dubai legacy projects, property administration, broker and developer onboarding, partners, FAQs, and contact details. I do not have enough website content to answer "${query}" precisely. Please add a little more context, or contact ${content.company.email} for the AIXCO team.`,
+      `I can answer from the AIXCO website about Batumi apartments, client materials and downloads, Dubai legacy projects, property administration, broker and developer onboarding, partners, FAQs, and contact details. I do not have enough website content to answer "${query}" precisely. Please add a little more context, or contact ${content.company.email} for the AIXCO team.`,
     ),
   };
 }
@@ -411,7 +422,7 @@ export function answerWebsiteChat(messages: ChatMessageInput[], content: SiteCon
     return {
       confidence: "low",
       matchedTopics: [],
-      answer: "Ask me about Batumi apartments, Dubai legacy projects, property administration, broker onboarding, developer partnerships, partners, team, or FAQs.",
+      answer: "Ask me about Batumi apartments, client materials and downloads, Dubai legacy projects, property administration, broker onboarding, developer partnerships, partners, team, or FAQs.",
     };
   }
 
@@ -419,7 +430,7 @@ export function answerWebsiteChat(messages: ChatMessageInput[], content: SiteCon
     return {
       confidence: "high",
       matchedTopics: ["AIXCO website assistant"],
-      answer: "Hello. I can answer questions from the AIXCO website about Batumi apartments, Dubai legacy projects, property administration, broker and developer onboarding, partners, team, FAQs, and contact details.",
+      answer: "Hello. I can answer questions from the AIXCO website about Batumi apartments, client materials and downloads, Dubai legacy projects, property administration, broker and developer onboarding, partners, team, FAQs, and contact details.",
     };
   }
 

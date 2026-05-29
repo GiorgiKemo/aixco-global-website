@@ -8,6 +8,7 @@ import { Contact } from "./Contact";
 import { Dubai } from "./Dubai";
 import { FAQs } from "./FAQs";
 import { HowItWorks } from "./HowItWorks";
+import { Materials } from "./Materials";
 import { Partners } from "./Partners";
 import { Participate } from "./Participate";
 import { Team } from "./Team";
@@ -19,6 +20,7 @@ function renderHomeSections() {
         <About />
         <Dubai />
         <Batumi />
+        <Materials />
         <Participate />
         <HowItWorks />
         <Team />
@@ -43,7 +45,7 @@ describe("section anchor layout", () => {
   it("keeps every nav hash target below the fixed header instead of hiding the first content", () => {
     renderHomeSections();
 
-    for (const id of ["about", "dubai", "batumi", "participate", "how", "team", "partners", "faqs", "contact"]) {
+    for (const id of ["about", "dubai", "batumi", "materials", "participate", "how", "team", "partners", "faqs", "contact"]) {
       const anchor = document.getElementById(id);
 
       expect(anchor, `Missing #${id}`).toBeInTheDocument();
