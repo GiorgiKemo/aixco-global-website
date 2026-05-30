@@ -77,7 +77,10 @@ export function BatumiPropertyCard({ property, idx, tx }: BatumiPropertyCardProp
             {tx(property.name)}
           </h3>
         </div>
-        <div data-batumi-property-highlight-grid={property.id} className="grid grid-cols-1 border-b border-foreground/5 md:grid-cols-3">
+        <div
+          data-batumi-property-highlight-grid={property.id}
+          className="grid min-w-0 grid-cols-1 border-b border-foreground/5 md:grid-cols-3 [&>*]:min-w-0"
+        >
           {property.metrics.map((metric) => (
             <BatumiStatCard
               key={metric.label}

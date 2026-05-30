@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, type Dispatch, type RefObject, type SetStateAction } from "react";
+import { useLayoutEffect, useRef, type Dispatch, type RefObject, type SetStateAction } from "react";
 
 type UseNavResponsiveModeOptions = {
   controlsMeasureRef: RefObject<HTMLDivElement | null>;
@@ -13,6 +13,7 @@ type UseNavResponsiveModeOptions = {
 };
 
 const MIN_DESKTOP_NAV_WIDTH = 1180;
+const RESIZE_DEBOUNCE_MS = 120;
 
 export function useNavResponsiveMode({
   controlsMeasureRef,
@@ -23,11 +24,18 @@ export function useNavResponsiveMode({
   setCompactNav,
   setDesktopActionsAvailable,
 }: UseNavResponsiveModeOptions) {
+  const resizeDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useLayoutEffect(() => {
+    const isCompactViewport = () =>
+      typeof window.matchMedia === "function"
+        ? window.matchMedia(`(max-width: ${MIN_DESKTOP_NAV_WIDTH - 1}px)`).matches
+        : window.innerWidth < MIN_DESKTOP_NAV_WIDTH;
+
     const updateCompactMode = () => {
       if (typeof window === "undefined") return;
 
-      if (window.innerWidth < MIN_DESKTOP_NAV_WIDTH) {
+      if (isCompactViewport()) {
         setCompactNav(true);
         setDesktopActionsAvailable(false);
         return;
@@ -57,21 +65,46 @@ export function useNavResponsiveMode({
       setDesktopActionsAvailable(coreNavFits && desktopStartFits);
     };
 
+    const scheduleResizeUpdate = () => {
+      if (isCompactViewport()) {
+        if (resizeDebounceRef.current) {
+          clearTimeout(resizeDebounceRef.current);
+          resizeDebounceRef.current = null;
+        }
+        updateCompactMode();
+        return;
+      }
+
+      if (resizeDebounceRef.current) clearTimeout(resizeDebounceRef.current);
+      resizeDebounceRef.current = setTimeout(() => {
+        resizeDebounceRef.current = null;
+        updateCompactMode();
+      }, RESIZE_DEBOUNCE_MS);
+    };
+
     updateCompactMode();
 
-    const observer = new ResizeObserver(updateCompactMode);
+    const compactMedia = window.matchMedia(`(max-width: ${MIN_DESKTOP_NAV_WIDTH - 1}px)`);
+    const onCompactMediaChange = () => scheduleResizeUpdate();
+    compactMedia.addEventListener("change", onCompactMediaChange);
+
+    const observer = new ResizeObserver(() => {
+      scheduleResizeUpdate();
+    });
     [navRowRef.current, logoSlotRef.current, navMeasureRef.current, controlsMeasureRef.current].forEach((element) => {
       if (element) observer.observe(element);
     });
 
-    window.addEventListener("resize", updateCompactMode);
+    window.addEventListener("resize", scheduleResizeUpdate);
     if (process.env.NODE_ENV !== "test") {
       document.fonts?.ready.then(updateCompactMode).catch(() => undefined);
     }
 
     return () => {
+      if (resizeDebounceRef.current) clearTimeout(resizeDebounceRef.current);
+      compactMedia.removeEventListener("change", onCompactMediaChange);
       observer.disconnect();
-      window.removeEventListener("resize", updateCompactMode);
+      window.removeEventListener("resize", scheduleResizeUpdate);
     };
   }, [controlsMeasureRef, lang, logoSlotRef, navMeasureRef, navRowRef, setCompactNav, setDesktopActionsAvailable]);
 }

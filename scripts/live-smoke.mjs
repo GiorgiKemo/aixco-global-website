@@ -93,9 +93,20 @@ async function main() {
 
   await check("Navigation hash links work (#legacy, #dubai, #batumi)", async () => {
     for (const id of ["legacy", "dubai", "batumi"]) {
-      const link = page.locator(`a[href*='#${id}'], a[href$='#${id}']`).first();
-      if ((await link.count()) === 0) throw new Error(`No nav link for #${id}`);
-      await link.click();
+      const desktopLink = page.locator(`nav[aria-label="Primary"] a[href*='#${id}']`).first();
+      const mobileLink = page.locator(`nav[aria-label="Mobile"] a[href*='#${id}']`).first();
+      const menuButton = page.getByRole("button", { name: /open menu/i });
+
+      if (await desktopLink.isVisible().catch(() => false)) {
+        await desktopLink.click();
+      } else if (await menuButton.isVisible().catch(() => false)) {
+        await menuButton.click();
+        await mobileLink.waitFor({ state: "visible", timeout: 5000 });
+        await mobileLink.click();
+      } else {
+        throw new Error(`No reachable nav link for #${id}`);
+      }
+
       await page.waitForTimeout(600);
       const section = page.locator(`#${id}`).first();
       await section.scrollIntoViewIfNeeded();
@@ -116,12 +127,13 @@ async function main() {
     if (!(await faq.isVisible())) throw new Error("FAQ section not visible");
   });
 
-await check("Key CTA links are present and clickable", async () => {
-    const cta = page.locator("a[href*='contact'], button:has-text('Contact'), a:has-text('Contact')").first();
-    await cta.scrollIntoViewIfNeeded();
-    if (!(await cta.isVisible())) throw new Error("No visible Contact CTA");
-    const disabled = await cta.isDisabled().catch(() => false);
-    if (disabled) throw new Error("Contact CTA disabled");
+  await check("Key CTA links are present and clickable", async () => {
+    const contactSection = page.locator("#contact").first();
+    await contactSection.scrollIntoViewIfNeeded({ timeout: 15000 });
+    if (!(await contactSection.isVisible())) throw new Error("Contact section not visible");
+    const submit = page.locator("#contact button[type='submit'], #contact form button").first();
+    if ((await submit.count()) === 0) throw new Error("Contact form submit control not found");
+    if (await submit.isDisabled().catch(() => false)) throw new Error("Contact submit disabled");
   });
 
   await check("Language switcher EN → DE (layout)", async () => {

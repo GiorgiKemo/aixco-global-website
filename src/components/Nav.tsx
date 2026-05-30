@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useUI } from "@/components/ui-state";
 import { getActiveSectionHash, replaceLocationHash, syncLocationHashToActiveSection } from "@/lib/section-hash";
@@ -145,6 +145,19 @@ export function Nav() {
     };
   }, []);
 
+  useLayoutEffect(() => {
+    const compactMedia = window.matchMedia("(max-width: 1179px)");
+    const syncCompactViewport = () => {
+      if (!compactMedia.matches) return;
+      setCompactNav(true);
+      setDesktopActionsAvailable(false);
+    };
+
+    syncCompactViewport();
+    compactMedia.addEventListener("change", syncCompactViewport);
+    return () => compactMedia.removeEventListener("change", syncCompactViewport);
+  }, []);
+
   useNavResponsiveMode({
     controlsMeasureRef,
     lang,
@@ -158,6 +171,8 @@ export function Nav() {
   return (
     <header
       dir="ltr"
+      data-nav-compact={compactNav ? "true" : "false"}
+      data-nav-inline-auth={showInlineAuth ? "true" : "false"}
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ${
         solidNav ? "border-b border-border/50 bg-background/[0.78] shadow-soft backdrop-blur-2xl" : "border-b border-transparent bg-transparent"
       }`}

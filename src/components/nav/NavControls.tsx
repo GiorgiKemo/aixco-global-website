@@ -86,13 +86,13 @@ export function NavControls({
 
         <button
           onClick={onLogin}
-          className={`${showInlineAuth ? "inline-flex" : "hidden"} min-h-11 whitespace-nowrap px-3 py-2 text-sm tracking-wide transition-colors ${controlTextClass}`}
+          className={`${showInlineAuth ? "inline-flex" : "hidden"} min-h-11 items-center whitespace-nowrap px-3 py-2 text-sm tracking-wide transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${controlTextClass}`}
         >
           {t("cta.login")}
         </button>
         <button
           onClick={onRegister}
-          className={`${showInlineAuth ? "inline-flex" : "hidden"} whitespace-nowrap btn-ghost-gold !border-primary/50 !bg-[#fff8ec] !px-4 !py-2 text-sm font-bold !text-[#7a4a0a] shadow-[0_8px_22px_-18px_rgb(122_74_10/0.7)]`}
+          className={`${showInlineAuth ? "inline-flex" : "hidden"} min-h-11 items-center whitespace-nowrap btn-ghost-gold !border-primary/50 !bg-[#fff8ec] !px-4 !py-2 text-sm font-bold !text-[#7a4a0a] shadow-[0_8px_22px_-18px_rgb(122_74_10/0.7)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`}
         >
           {t("cta.register")}
         </button>

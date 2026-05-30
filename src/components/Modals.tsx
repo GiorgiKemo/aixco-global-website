@@ -322,7 +322,7 @@ export function Modals() {
   const dialogLabel = tx(getModalAccessibleName(modal, modalData));
 
   return (
-    <div className="modal-shell fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
+    <div className="modal-shell fixed inset-0 z-[100] flex items-center justify-center overscroll-contain p-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] pt-[max(1rem,env(safe-area-inset-top,0px))] md:p-6">
       <div className="modal-backdrop absolute inset-0 bg-transparent backdrop-blur-lg backdrop-saturate-150" onClick={close} aria-hidden />
       <div
         role="dialog"

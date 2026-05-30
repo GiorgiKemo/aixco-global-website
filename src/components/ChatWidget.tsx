@@ -192,7 +192,7 @@ export function ChatWidget() {
   return (
     <div
       data-chat-floating-container="true"
-      className="pointer-events-none fixed bottom-5 right-5 z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3 md:bottom-6 md:right-6"
+      className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))] right-[max(1.25rem,env(safe-area-inset-right,0px))] z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3 md:bottom-[max(1.5rem,env(safe-area-inset-bottom,0px))] md:right-[max(1.5rem,env(safe-area-inset-right,0px))]"
     >
       <AnimatePresence>
         {isOpen && (

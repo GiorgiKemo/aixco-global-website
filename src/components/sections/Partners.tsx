@@ -67,8 +67,8 @@ function PartnerMarquee({
   if (items.length === 0) return null;
 
   return (
-    <div className="mb-12 overflow-hidden last:mb-0">
-      <h3 className="scroll-reveal mb-5 font-display text-2xl">{tx(title)}</h3>
+    <div className="mb-12 min-w-0 overflow-hidden last:mb-0">
+      <h3 className="scroll-reveal mb-5 min-w-0 font-display text-2xl [overflow-wrap:anywhere]">{tx(title)}</h3>
       <div className="partner-marquee scroll-reveal" aria-label={tx(title)}>
         <div className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""}`}>
           {[0, 1].map((setIndex) => (

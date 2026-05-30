@@ -80,7 +80,7 @@ export function HeroComposition({
         >
           <span className="block pb-[0.08em]">
             <motion.span
-              className="block origin-bottom whitespace-nowrap will-change-[opacity,transform,filter]"
+              className="block origin-bottom max-w-full break-words [overflow-wrap:anywhere] sm:whitespace-nowrap will-change-[opacity,transform,filter]"
               variants={shouldReduceMotion ? reducedLineVariants : headlineLineVariants}
             >
               AIXCO<span data-hero-brand-dot="true" className="text-primary-glow drop-shadow-[0_0_22px_hsl(var(--primary-glow)/0.5)]">.</span>Global
