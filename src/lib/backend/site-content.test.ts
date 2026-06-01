@@ -97,4 +97,15 @@ describe("site content backend", () => {
     expect(content.faqGroups[0].items[0].q).toBe("What is the minimum amount to reserve or buy?");
     expect(content.faqGroups[0].items[0].a).toContain("€10,000");
   });
+
+  it("uses distinct participation media for each route", () => {
+    expect(siteContentDefaults.participationRoutes.map((route) => route.video)).toEqual([
+      "batumiBuy",
+      "batumiOverview",
+      "otium",
+    ]);
+    expect(new Set(siteContentDefaults.participationRoutes.map((route) => route.video)).size).toBe(
+      siteContentDefaults.participationRoutes.length,
+    );
+  });
 });

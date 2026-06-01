@@ -13,6 +13,8 @@ import { LiveVideo } from "@/components/LiveVideo";
 
 const videoMap: Record<string, { src: string; previewSrc: string; poster: string }> = {
   batumiBuy: { src: aixcoLiveVideos.batumiBuy, previewSrc: aixcoLiveVideoPreviews.batumiBuy, poster: aixcoLiveImages.batumiBuyPoster },
+  batumiOverview: { src: aixcoLiveVideos.batumiOverview, previewSrc: aixcoLiveVideoPreviews.batumiOverview, poster: aixcoLiveImages.batumiOverviewPoster },
+  otium: { src: aixcoLiveVideos.otium, previewSrc: aixcoLiveVideoPreviews.otium, poster: aixcoLiveImages.batumiOtium },
 };
 
 const apartmentMetrics = [

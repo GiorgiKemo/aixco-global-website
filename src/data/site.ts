@@ -127,7 +127,7 @@ export const participationRoutes = [
   {
     id: "brokerage",
     title: "Broker Real Estate with AIXCO",
-    video: "batumiBuy",
+    video: "batumiOverview",
     body:
       "Brokers and partners can introduce qualified buyers, coordinate tours, and manage deal flow through a structured real estate sales process.",
     cta: "Register",
@@ -135,7 +135,7 @@ export const participationRoutes = [
   {
     id: "management",
     title: "Administer Your Property",
-    video: "batumiBuy",
+    video: "otium",
     body:
       "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
     cta: "Register",
