@@ -34,6 +34,14 @@ async function scrollSection(loc) {
   await loc.scrollIntoViewIfNeeded({ timeout: 15000 });
 }
 
+async function waitForRealSection(id) {
+  const section = page
+    .locator(`xpath=//*[@id='${id}' and not(ancestor::*[@data-deferred-home-sections='loading'])]`)
+    .first();
+  await section.waitFor({ state: "attached", timeout: 20000 });
+  return section;
+}
+
 async function gotoHome() {
   for (const url of [`${BASE}/`, `${BASE}/aixco-global-op2`]) {
     const res = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
@@ -73,20 +81,20 @@ async function main() {
   });
 
   await check("Dubai section visible", async () => {
-    const dubai = page.locator("#dubai").first();
+    const dubai = await waitForRealSection("dubai");
     await dubai.scrollIntoViewIfNeeded({ timeout: 15000 });
     if (!(await dubai.isVisible())) throw new Error("#dubai not visible");
   });
 
   await check("Dubai UI avoids Fund I/II product language", async () => {
-    const dubai = page.locator("#dubai");
+    const dubai = await waitForRealSection("dubai");
     await dubai.scrollIntoViewIfNeeded();
     const text = await dubai.innerText();
     if (/\bFund\s*(I|II|1|2)\b/i.test(text)) throw new Error("Fund I/II language found in Dubai section");
   });
 
   await check("Batumi section visible", async () => {
-    const batumi = page.locator("#batumi").first();
+    const batumi = await waitForRealSection("batumi");
     await batumi.scrollIntoViewIfNeeded({ timeout: 15000 });
     if (!(await batumi.isVisible())) throw new Error("#batumi not visible");
   });
@@ -108,7 +116,7 @@ async function main() {
       }
 
       await page.waitForTimeout(600);
-      const section = page.locator(`#${id}`).first();
+      const section = id === "legacy" ? page.locator(`#${id}`).first() : await waitForRealSection(id);
       await section.scrollIntoViewIfNeeded();
       const box = await section.boundingBox();
       if (!box || box.height < 20) throw new Error(`#${id} not in view after click`);
@@ -116,19 +124,19 @@ async function main() {
   });
 
   await check("Contact section loads", async () => {
-    const contact = page.locator("#contact, [id*='contact' i]").first();
+    const contact = await waitForRealSection("contact");
     await contact.scrollIntoViewIfNeeded({ timeout: 15000 });
     if (!(await contact.isVisible())) throw new Error("contact section not visible");
   });
 
   await check("FAQ section loads", async () => {
-    const faq = page.locator("#faq, #faqs, [id*='faq' i]").first();
+    const faq = await waitForRealSection("faqs");
     await scrollSection(faq);
     if (!(await faq.isVisible())) throw new Error("FAQ section not visible");
   });
 
   await check("Key CTA links are present and clickable", async () => {
-    const contactSection = page.locator("#contact").first();
+    const contactSection = await waitForRealSection("contact");
     await contactSection.scrollIntoViewIfNeeded({ timeout: 15000 });
     if (!(await contactSection.isVisible())) throw new Error("Contact section not visible");
     const submit = page.locator("#contact button[type='submit'], #contact form button").first();
@@ -187,4 +195,3 @@ main().catch(async (e) => {
   if (browser) await browser.close();
   process.exit(2);
 });
-

@@ -1,47 +1,38 @@
 import Image from "next/image";
 import { forwardRef, type SyntheticEvent } from "react";
-import { motion } from "@/lib/framer-motion";
 import {
   heroPanelVideos,
   shouldAttachHeroVideo,
   shouldShowHeroVideoPoster,
 } from "../hero-video-policy";
-import { heroEase } from "./hero-ui";
 
 type HeroVideoWallProps = {
-  shouldReduceMotion: boolean | null;
   shouldUseVideoWall: boolean;
   isHeroVideoIdleReady: boolean;
   isHeroInFocus: boolean;
   heroVideoPanelLimit: number;
   readyHeroVideos: Record<string, boolean>;
   onHeroVideoReady: (src: string, event: SyntheticEvent<HTMLVideoElement>) => void;
-  onFirstVideoReady: () => void;
 };
 
 export const HeroVideoWall = forwardRef<HTMLDivElement, HeroVideoWallProps>(function HeroVideoWall(
   {
-    shouldReduceMotion,
     shouldUseVideoWall,
     isHeroVideoIdleReady,
     isHeroInFocus,
     heroVideoPanelLimit,
     readyHeroVideos,
     onHeroVideoReady,
-    onFirstVideoReady,
   },
   ref,
 ) {
   return (
-    <motion.div
+    <div
       ref={ref}
       data-hero-video-wall="true"
       data-hero-video-mode={shouldUseVideoWall && isHeroVideoIdleReady && isHeroInFocus ? "video" : "poster"}
       className="hero-video-wall"
       aria-hidden="true"
-      initial={shouldReduceMotion ? { scale: 1.006, opacity: 0.98 } : { scale: 1.055, opacity: 0.92 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: shouldReduceMotion ? 0.25 : 1.35, ease: heroEase }}
     >
       {heroPanelVideos.map((video, index) => {
         const shouldAttachVideo = shouldAttachHeroVideo({
@@ -71,6 +62,7 @@ export const HeroVideoWall = forwardRef<HTMLDivElement, HeroVideoWallProps>(func
               loading="eager"
               fetchPriority="high"
               decoding="async"
+              quality={62}
             />
             {shouldAttachVideo && (
               <video
@@ -84,17 +76,14 @@ export const HeroVideoWall = forwardRef<HTMLDivElement, HeroVideoWallProps>(func
                 tabIndex={-1}
                 onLoadedData={(event) => {
                   onHeroVideoReady(video.src, event);
-                  if (index === 0) onFirstVideoReady();
                 }}
                 onCanPlay={(event) => {
                   onHeroVideoReady(video.src, event);
-                  if (index === 0) onFirstVideoReady();
                   if (isHeroInFocus) {
                     void event.currentTarget.play().catch(() => undefined);
                   }
                 }}
                 onPlaying={(event) => onHeroVideoReady(video.src, event)}
-                onError={index === 0 ? onFirstVideoReady : undefined}
               >
                 <source src={video.src} type="video/mp4" />
               </video>
@@ -102,6 +91,6 @@ export const HeroVideoWall = forwardRef<HTMLDivElement, HeroVideoWallProps>(func
           </div>
         );
       })}
-    </motion.div>
+    </div>
   );
 });

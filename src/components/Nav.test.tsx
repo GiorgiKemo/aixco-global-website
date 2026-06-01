@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { useLayoutEffect } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
@@ -79,12 +79,16 @@ describe("Nav", () => {
     vi.useRealTimers();
   });
 
-  it("uses shorter Georgian labels in the desktop navbar without changing the drawer labels", () => {
+  it("uses shorter Georgian labels in the desktop navbar without changing the drawer labels", async () => {
     localStorage.setItem("aixco-lang", "ka");
 
     renderNav();
 
     const primary = screen.getByLabelText("Primary");
+    await waitFor(() => {
+      expect(within(primary).getByRole("link", { name: "მონაწილეობის გზები" })).toBeInTheDocument();
+    });
+
     const mobile = (() => {
       fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
       return screen.getByLabelText("Mobile");

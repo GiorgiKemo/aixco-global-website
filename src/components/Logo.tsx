@@ -42,6 +42,7 @@ export function Logo({
   return (
     <Link
       href="/"
+      prefetch={false}
       aria-label="AIXCO.GLOBAL home"
       onClick={handleClick}
       className={`inline-flex min-h-11 shrink-0 items-center gap-2.5 text-foreground ${className}`}

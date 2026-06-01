@@ -3,7 +3,7 @@
 import { ChevronDown, Globe, Menu, X } from "lucide-react";
 import type { MouseEvent } from "react";
 import { LANGS } from "@/i18n/I18nProvider";
-import type { Lang } from "@/i18n/translations";
+import type { Lang } from "@/i18n/languages";
 import { STARTING_FROM_NAV_TARGET, type NavItem } from "./nav-data";
 
 type NavControlsProps = {

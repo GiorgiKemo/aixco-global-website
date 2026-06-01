@@ -37,6 +37,7 @@ export function About() {
                 data-image-treatment="fill-card"
                 loading="lazy"
                 decoding="async"
+                quality={62}
                 sizes="(min-width: 1024px) 38vw, 100vw"
                 className="relative z-10 h-full w-full object-cover object-center"
                 width={1448}

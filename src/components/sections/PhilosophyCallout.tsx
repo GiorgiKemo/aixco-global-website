@@ -20,7 +20,7 @@ export function PhilosophyCallout() {
           </p>
         </div>
 
-        <Link href="/aixco-philosophy" className="btn-gold w-full sm:w-auto">
+        <Link href="/aixco-philosophy" prefetch={false} className="btn-gold w-full sm:w-auto">
           <ShieldCheck className="h-4 w-4" aria-hidden />
           {tx("Read AIXCO Philosophy")}
           <ArrowRight className="h-4 w-4" aria-hidden />

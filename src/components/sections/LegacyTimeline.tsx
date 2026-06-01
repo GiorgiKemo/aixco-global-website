@@ -60,7 +60,7 @@ export function LegacyTimeline() {
                     <p className="eyebrow">{tx(chapter.eyebrow)}</p>
                     <span
                       className={`rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] ${
-                        isCurrent ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"
+                        isCurrent ? "bg-[#f1dfbf] text-[#5f3f11]" : "bg-muted text-muted-foreground"
                       }`}
                     >
                       {isCurrent ? tx("Current focus") : tx("Legacy")}
@@ -87,6 +87,7 @@ export function LegacyTimeline() {
                   {anchor ? (
                     <Link
                       href={anchor}
+                      prefetch={false}
                       onClick={(event) => handleChapterNav(event, anchor)}
                       className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-primary"
                     >

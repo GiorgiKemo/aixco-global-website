@@ -39,7 +39,7 @@ export function Materials() {
                     <div className="flex size-11 items-center justify-center rounded-md border border-primary/20 bg-primary/10 text-primary">
                       <Icon size={21} aria-hidden="true" />
                     </div>
-                    <span className="rounded-md border border-foreground/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/60">
+                    <span className="rounded-md border border-foreground/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/80">
                       {material.format}
                     </span>
                   </div>
@@ -51,7 +51,7 @@ export function Materials() {
                   </div>
 
                   <div className="mt-5 border-t border-foreground/10 pt-4">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground/50">{tx("Audience")}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground/75">{tx("Audience")}</p>
                     <p className="mt-1 text-sm text-foreground/75">{tx(material.audience)}</p>
                   </div>
 

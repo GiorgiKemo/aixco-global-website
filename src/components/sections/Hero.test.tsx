@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { aixcoHeroBackgroundVideo } from "@/lib/aixco-live-assets";
@@ -157,7 +157,8 @@ describe("Hero", () => {
     expect(priceText?.className).toContain("text-[clamp(1.2rem,5vw,3.5rem)]");
     expect(priceText?.className).toContain("uppercase");
     expect(priceFootnote).toBeInTheDocument();
-    expect(priceFootnote?.className).toContain("text-base");
+    expect(priceFootnote?.className).toContain("text-sm");
+    expect(priceFootnote?.className).toContain("sm:text-base");
     expect(priceFootnote?.className).toContain("md:text-lg");
     expect(priceFootnote?.className).toContain("leading-relaxed");
     expect(priceFootnote?.className).toContain("text-white/88");
@@ -238,30 +239,34 @@ describe("Hero", () => {
     expect(arrow?.className).toContain("md:landscape:!w-12");
   });
 
-  it("translates the hero entry price text", () => {
+  it("translates the hero entry price text", async () => {
     localStorage.setItem("aixco-lang", "de");
 
     const { container } = renderHero();
     const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
 
-    expect(within(priceLockup as HTMLElement).getByText("Ab 10.000 €")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(within(priceLockup as HTMLElement).getByText("Ab 10.000 €")).toBeInTheDocument();
+    });
     expect(within(priceLockup as HTMLElement).queryByText("Starting from €10,000")).not.toBeInTheDocument();
   });
 
-  it("translates hero kicker and intro copy in Georgian", () => {
+  it("translates hero kicker and intro copy in Georgian", async () => {
     localStorage.setItem("aixco-lang", "ka");
 
     const { container } = renderHero();
     const hero = container.querySelector("section");
 
-    expect(
-      within(hero as HTMLElement).getByText("ხარისხიანი უძრავი ქონება — ყიდვა · ბროკერინგი · მართვა"),
-    ).toBeInTheDocument();
-    expect(
-      within(hero as HTMLElement).getByText(
-        "AIXCO-თან ერთად იყიდეთ, გაყიდეთ და დააბროკერეთ უძრავი ქონება—ბათუმში ბინების შეძენიდან ობიექტების სრულ ადმინისტრირებამდე.",
-      ),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        within(hero as HTMLElement).getByText("ხარისხიანი უძრავი ქონება — ყიდვა · ბროკერინგი · მართვა"),
+      ).toBeInTheDocument();
+      expect(
+        within(hero as HTMLElement).getByText(
+          "AIXCO-თან ერთად იყიდეთ, გაყიდეთ და დააბროკერეთ უძრავი ქონება—ბათუმში ბინების შეძენიდან ობიექტების სრულ ადმინისტრირებამდე.",
+        ),
+      ).toBeInTheDocument();
+    });
     expect(
       within(hero as HTMLElement).queryByText(
         "Buy, sell, and broker real estate with AIXCO—from apartment purchases in Batumi to end-to-end property administration.",

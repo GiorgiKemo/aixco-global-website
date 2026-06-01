@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ClientShell } from "./client-shell";
 
-const idleState = vi.hoisted(() => ({ ready: false }));
+const idleState = vi.hoisted(() => ({ idleReady: false, delayedReady: false }));
 
 vi.mock("framer-motion", async () => {
   const actual = await vi.importActual<typeof import("framer-motion")>("framer-motion");
@@ -25,7 +25,8 @@ vi.mock("framer-motion", async () => {
 });
 
 vi.mock("@/hooks/use-idle-ready", () => ({
-  useIdleReady: () => idleState.ready,
+  useIdleReady: () => idleState.idleReady,
+  useDelayedIdleReady: () => idleState.delayedReady,
   scheduleIdleWork: (callback: () => void) => {
     const handle = window.setTimeout(callback, 0);
     return () => window.clearTimeout(handle);
@@ -41,7 +42,8 @@ vi.mock("@/components/ui/sonner", () => ({ Toaster: () => <div data-testid="sonn
 
 describe("ClientShell", () => {
   beforeEach(() => {
-    idleState.ready = false;
+    idleState.idleReady = false;
+    idleState.delayedReady = false;
   });
 
   it("renders children without a global Framer Motion provider", () => {
@@ -66,15 +68,15 @@ describe("ClientShell", () => {
     expect(screen.queryByTestId("modals")).not.toBeInTheDocument();
     expect(screen.queryByTestId("toaster")).not.toBeInTheDocument();
 
-    idleState.ready = true;
+    idleState.delayedReady = true;
     rerender(
       <ClientShell initialSiteContentSource="supabase">
         <main>Page content</main>
       </ClientShell>,
     );
 
-    expect(await screen.findByTestId("chat-widget")).toBeInTheDocument();
     expect(await screen.findByTestId("modals")).toBeInTheDocument();
     expect(await screen.findByTestId("toaster")).toBeInTheDocument();
+    expect(await screen.findByTestId("chat-widget")).toBeInTheDocument();
   });
 });

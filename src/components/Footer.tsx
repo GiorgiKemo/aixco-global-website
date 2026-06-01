@@ -32,7 +32,7 @@ export function Footer() {
         </div>
 
         <div data-footer-actions className="flex flex-wrap items-center gap-4 text-sm text-foreground/80 md:pr-24 lg:pr-0">
-          <Link href="/aixco-philosophy" className="inline-flex min-h-10 items-center link-underline">
+          <Link href="/aixco-philosophy" prefetch={false} className="inline-flex min-h-10 items-center link-underline">
             AIXCO Philosophy
           </Link>
           <a

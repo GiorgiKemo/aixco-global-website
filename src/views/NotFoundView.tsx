@@ -18,7 +18,7 @@ const NotFound = () => {
             The page may have moved, or the address may be incorrect. Return to AIXCO.Global to continue exploring selected real estate participation routes.
           </p>
           <div className="mt-8 flex justify-center">
-            <Link href="/" className="btn-gold">
+            <Link href="/" prefetch={false} className="btn-gold">
               Return to Home
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>

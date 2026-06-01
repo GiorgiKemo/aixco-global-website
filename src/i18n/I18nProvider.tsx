@@ -1,7 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { attributeTranslations, languageOptions, textTranslations, type Lang } from "./translations";
-import { assetTranslations } from "./asset-translations";
-import { siteContentTranslations } from "./site-content-translations";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { languageOptions, type Lang } from "./languages";
 
 export const LANGS = languageOptions;
 const DEFAULT_LANG: Lang = "en";
@@ -466,25 +464,63 @@ function sameCopyInAllLanguages(text: string): Partial<Record<Lang, string>> {
 const clientBriefPassthroughTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> =
   Object.fromEntries(clientBriefPassthroughCopy.map((text) => [text, sameCopyInAllLanguages(text)]));
 
-const catalogSources = [
+type TranslationSource = Partial<Record<string, Partial<Record<Lang, string>>>>;
+type AttributeTranslationCatalog = {
+  placeholder: TranslationSource;
+  content: TranslationSource;
+  title: TranslationSource;
+};
+type LoadedTranslationCatalogs = {
+  sources: TranslationSource[];
+  attributes: AttributeTranslationCatalog;
+};
+
+const baseCatalogSources: TranslationSource[] = [
   supplementalTranslations,
   clientBriefPassthroughTranslations,
-  textTranslations,
-  assetTranslations,
-  siteContentTranslations,
-  attributeTranslations.placeholder,
-  attributeTranslations.content,
-  attributeTranslations.title,
-] as Array<Partial<Record<string, Partial<Record<Lang, string>>>>>;
+];
 
-function lookupTranslation(text: string, lang: Lang) {
-  for (const source of catalogSources) {
+const emptyAttributeTranslations: AttributeTranslationCatalog = {
+  placeholder: {},
+  content: {},
+  title: {},
+};
+
+let translationCatalogPromise: Promise<LoadedTranslationCatalogs> | null = null;
+
+function loadTranslationCatalogs() {
+  translationCatalogPromise ??= Promise.all([
+    import("./translations"),
+    import("./asset-translations"),
+    import("./site-content-translations"),
+  ]).then(([translations, assets, siteContent]) => {
+    const attributes = translations.attributeTranslations as AttributeTranslationCatalog;
+
+    return {
+      attributes,
+      sources: [
+        ...baseCatalogSources,
+        translations.textTranslations,
+        assets.assetTranslations,
+        siteContent.siteContentTranslations,
+        attributes.placeholder,
+        attributes.content,
+        attributes.title,
+      ],
+    };
+  });
+
+  return translationCatalogPromise;
+}
+
+function lookupTranslation(text: string, lang: Lang, sources: TranslationSource[]) {
+  for (const source of sources) {
     const value = source[text]?.[lang];
     if (value) return value;
   }
 
   const normalizedText = text.trim().toLocaleLowerCase("en-US");
-  for (const source of catalogSources) {
+  for (const source of sources) {
     const key = Object.keys(source).find((candidate) => candidate.trim().toLocaleLowerCase("en-US") === normalizedText);
     const value = key ? source[key]?.[lang] : undefined;
     if (value) return value;
@@ -493,8 +529,9 @@ function lookupTranslation(text: string, lang: Lang) {
   return undefined;
 }
 
-export function hasTextTranslation(text: string, lang: Lang) {
-  return Boolean(lookupTranslation(text, lang));
+export async function hasTextTranslation(text: string, lang: Lang) {
+  const catalogs = await loadTranslationCatalogs();
+  return Boolean(lookupTranslation(text, lang, catalogs.sources));
 }
 
 type Ctx = {
@@ -508,8 +545,11 @@ const I18nCtx = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>(DEFAULT_LANG);
-  const [hasLoadedStoredLang, setHasLoadedStoredLang] = useState(false);
+  const [translationCatalogs, setTranslationCatalogs] = useState<LoadedTranslationCatalogs | null>(null);
+  const hasLoadedStoredLangRef = useRef(false);
   const dir = lang === "ar" ? "rtl" : "ltr";
+  const activeCatalogSources = translationCatalogs?.sources ?? baseCatalogSources;
+  const activeAttributeTranslations = translationCatalogs?.attributes ?? emptyAttributeTranslations;
 
   useEffect(() => {
     try {
@@ -520,12 +560,25 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     } catch {
       // Language persistence is optional when browser storage is unavailable.
     } finally {
-      setHasLoadedStoredLang(true);
+      hasLoadedStoredLangRef.current = true;
     }
   }, []);
 
   useEffect(() => {
-    const localizedTitle = lang === "en" ? pageTitle : attributeTranslations.title[pageTitle]?.[lang] ?? pageTitle;
+    if (lang === "en" || translationCatalogs) return;
+
+    let isMounted = true;
+    loadTranslationCatalogs().then((catalogs) => {
+      if (isMounted) setTranslationCatalogs(catalogs);
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [lang, translationCatalogs]);
+
+  useEffect(() => {
+    const localizedTitle = lang === "en" ? pageTitle : activeAttributeTranslations.title[pageTitle]?.[lang] ?? pageTitle;
 
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
@@ -547,10 +600,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     if (description) {
       description.setAttribute(
         "content",
-        lang === "en" ? pageDescription : attributeTranslations.content[pageDescription]?.[lang] ?? pageDescription,
+        lang === "en" ? pageDescription : activeAttributeTranslations.content[pageDescription]?.[lang] ?? pageDescription,
       );
     }
-    if (hasLoadedStoredLang) {
+    if (hasLoadedStoredLangRef.current) {
       try {
         localStorage.setItem("aixco-lang", lang);
       } catch {
@@ -562,7 +615,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       window.clearTimeout(titleSync);
       titleObserver.disconnect();
     };
-  }, [lang, dir, hasLoadedStoredLang]);
+  }, [lang, dir, activeAttributeTranslations]);
 
   const value = useMemo<Ctx>(() => ({
     lang,
@@ -570,13 +623,13 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     dir,
     tx: (text) => {
       if (lang === "en") return text;
-      return lookupTranslation(text, lang) ?? text;
+      return lookupTranslation(text, lang, activeCatalogSources) ?? text;
     },
     t: (key) => {
       const text = keyedText[key] ?? key;
-      return lang === "en" ? text : lookupTranslation(text, lang) ?? text;
+      return lang === "en" ? text : lookupTranslation(text, lang, activeCatalogSources) ?? text;
     },
-  }), [lang, dir]);
+  }), [lang, dir, activeCatalogSources]);
 
   return <I18nCtx.Provider value={value}>{children}</I18nCtx.Provider>;
 }

@@ -13,7 +13,7 @@ This directory contains the local Supabase project configuration and migrations 
 ## Security Model
 
 - RLS is enabled and forced on every public table.
-- Browser clients only use `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
+- Browser clients only use `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 - Secret keys and database URLs stay in `.env.local`, which is git-ignored.
 - Anonymous visitors can insert lead/event rows, but cannot select, update, or delete them.
 - Anonymous visitors can read only published `site_content_entries` rows.

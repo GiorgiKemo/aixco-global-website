@@ -1,14 +1,14 @@
 "use client";
 
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { UIProvider } from "@/components/ui-state";
+import { UIProvider, useUI } from "@/components/ui-state";
 import { SiteContentProvider } from "@/data/SiteContentProvider";
 import { ScrollManager } from "@/components/ScrollManager";
-import { useIdleReady } from "@/hooks/use-idle-ready";
+import { useDelayedIdleReady } from "@/hooks/use-idle-ready";
 import type { SiteContent, SiteContentResult } from "@/lib/backend/site-content";
 
 const Modals = lazy(() => import("@/components/Modals").then((module) => ({ default: module.Modals })));
@@ -20,6 +20,45 @@ const Toaster = lazy(() => import("@/components/ui/toaster").then((module) => ({
 const Sonner = lazy(() => import("@/components/ui/sonner").then((module) => ({ default: module.Toaster })));
 
 const queryClient = new QueryClient();
+const mobileNonCriticalUiDelayMs = 6500;
+const desktopNonCriticalUiDelayMs = 2200;
+const interactiveUiDelayMs = 3200;
+
+function useNonCriticalUiReady() {
+  const [startupDelay, setStartupDelay] = useState(mobileNonCriticalUiDelayMs);
+
+  useEffect(() => {
+    setStartupDelay(window.innerWidth < 768 ? mobileNonCriticalUiDelayMs : desktopNonCriticalUiDelayMs);
+  }, []);
+
+  return useDelayedIdleReady(startupDelay, 1800);
+}
+
+function DeferredShellUi({ isAdminRoute }: { isAdminRoute: boolean }) {
+  const interactiveUiReady = useDelayedIdleReady(interactiveUiDelayMs, 1200);
+  const nonCriticalUiReady = useNonCriticalUiReady();
+  const { modal } = useUI();
+
+  if (isAdminRoute) return null;
+
+  return (
+    <>
+      {(interactiveUiReady || modal !== null) && (
+        <Suspense fallback={null}>
+          <Toaster />
+          <Sonner />
+          <Modals />
+        </Suspense>
+      )}
+      {nonCriticalUiReady && (
+        <Suspense fallback={null}>
+          <ScrollToTopButton />
+          <ChatWidget />
+        </Suspense>
+      )}
+    </>
+  );
+}
 
 type ClientShellProps = {
   children: React.ReactNode;
@@ -32,7 +71,6 @@ export function ClientShell({
   initialSiteContent,
   initialSiteContentSource,
 }: ClientShellProps) {
-  const idleUiReady = useIdleReady(1200);
   const pathname = usePathname();
   const isAdminRoute = pathname?.startsWith("/admin") ?? false;
 
@@ -44,15 +82,7 @@ export function ClientShell({
             <TooltipProvider>
               {!isAdminRoute && <ScrollManager />}
               {children}
-              {idleUiReady && !isAdminRoute && (
-                <Suspense fallback={null}>
-                  <ScrollToTopButton />
-                  <Toaster />
-                  <Sonner />
-                  <Modals />
-                  <ChatWidget />
-                </Suspense>
-              )}
+              <DeferredShellUi isAdminRoute={isAdminRoute} />
             </TooltipProvider>
           </QueryClientProvider>
         </UIProvider>

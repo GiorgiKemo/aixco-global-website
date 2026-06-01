@@ -15,11 +15,11 @@ function getEnvValue(value: string | undefined) {
 
 export function getSupabaseAdminConfig() {
   const supabaseUrl = getEnvValue(process.env.SUPABASE_URL) || getEnvValue(process.env.NEXT_PUBLIC_SUPABASE_URL);
-  const secretKey = getEnvValue(process.env.SUPABASE_SECRET_KEY);
+  const secretKey = getEnvValue(process.env.SUPABASE_SECRET_KEY) || getEnvValue(process.env.SUPABASE_SERVICE_ROLE_KEY);
   const missing: string[] = [];
 
   if (!supabaseUrl) missing.push("SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL");
-  if (!secretKey) missing.push("SUPABASE_SECRET_KEY");
+  if (!secretKey) missing.push("SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY");
 
   return {
     configured: missing.length === 0,

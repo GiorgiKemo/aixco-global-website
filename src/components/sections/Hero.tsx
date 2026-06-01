@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent, type SyntheticEvent } from "react";
-import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import { useDelayedIdleReady } from "@/hooks/use-idle-ready";
 import { useI18n } from "@/i18n/I18nProvider";
 import { replaceLocationHash } from "@/lib/section-hash";
@@ -49,17 +48,14 @@ function useHeroVideoStartReady() {
 }
 
 export function Hero() {
-  const shouldReduceMotion = useHydratedReducedMotion();
   const isHeroVideoIdleReady = useHeroVideoStartReady();
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const heroVideoWallRef = useRef<HTMLDivElement | null>(null);
-  const [isHeroReady, setIsHeroReady] = useState(true);
   const [shouldUseVideoWall, setShouldUseVideoWall] = useState(false);
   const [isHeroInFocus, setIsHeroInFocus] = useState(false);
   const [heroVideoPanelLimit, setHeroVideoPanelLimit] = useState(0);
   const [readyHeroVideos, setReadyHeroVideos] = useState<Record<string, boolean>>({});
   const { tx } = useI18n();
-  const hiddenTextState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: "blur(10px)" };
 
   const markHeroVideoReady = useCallback((src: string, videoElement: HTMLVideoElement) => {
     const markReady = () => {
@@ -178,18 +174,16 @@ export function Hero() {
       ref={heroSectionRef}
       data-hero-shell="true"
       style={{ "--hero-viewport-height": "100dvh" } as CSSProperties}
-      className="hero-reference-font relative isolate h-[var(--hero-viewport-height,100dvh)] min-h-[100svh] max-h-[var(--hero-viewport-height,100dvh)] overflow-hidden bg-background"
+      className="hero-reference-font relative isolate h-[var(--hero-viewport-height,100dvh)] min-h-[100svh] max-h-[var(--hero-viewport-height,100dvh)] overflow-hidden bg-[#061211]"
     >
       <HeroVideoWall
         ref={heroVideoWallRef}
-        shouldReduceMotion={shouldReduceMotion}
         shouldUseVideoWall={shouldUseVideoWall}
         isHeroVideoIdleReady={isHeroVideoIdleReady}
         isHeroInFocus={isHeroInFocus}
         heroVideoPanelLimit={heroVideoPanelLimit}
         readyHeroVideos={readyHeroVideos}
         onHeroVideoReady={handleHeroVideoReadyEvent}
-        onFirstVideoReady={() => setIsHeroReady(true)}
       />
 
       <div className="hero-video-scrim absolute inset-0" aria-hidden />
@@ -197,9 +191,6 @@ export function Hero() {
 
       <HeroComposition
         tx={tx}
-        shouldReduceMotion={shouldReduceMotion}
-        isHeroReady={isHeroReady}
-        hiddenTextState={hiddenTextState}
         onAboutClick={handleAboutClick}
         onFaqClick={handleFaqClick}
       />

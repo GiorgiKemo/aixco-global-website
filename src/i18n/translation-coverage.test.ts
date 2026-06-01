@@ -202,35 +202,47 @@ function collectRenderedAssetStrings() {
 }
 
 describe("translation coverage", () => {
-  it("has catalog entries for literal tx() copy in every non-English language", () => {
+  it("has catalog entries for literal tx() copy in every non-English language", async () => {
     const languages = LANGS.map((language) => language.code).filter((language) => language !== "en");
-    const missing = collectTranslatedLiterals().flatMap((literal) =>
-      languages
-        .filter((language) => !hasTextTranslation(literal.text, language))
-        .map((language) => `${literal.file}:${literal.line} [${language}] ${literal.text}`),
-    );
+    const missing: string[] = [];
+
+    for (const literal of collectTranslatedLiterals()) {
+      for (const language of languages) {
+        if (!(await hasTextTranslation(literal.text, language))) {
+          missing.push(`${literal.file}:${literal.line} [${language}] ${literal.text}`);
+        }
+      }
+    }
 
     expect(missing).toEqual([]);
   });
 
-  it("has catalog entries for rendered site-content copy in every non-English language", () => {
+  it("has catalog entries for rendered site-content copy in every non-English language", async () => {
     const languages = LANGS.map((language) => language.code).filter((language) => language !== "en");
-    const missing = collectRenderedSiteContentStrings().flatMap((literal) =>
-      languages
-        .filter((language) => !hasTextTranslation(literal.text, language))
-        .map((language) => `${literal.file} [${language}] ${literal.text}`),
-    );
+    const missing: string[] = [];
+
+    for (const literal of collectRenderedSiteContentStrings()) {
+      for (const language of languages) {
+        if (!(await hasTextTranslation(literal.text, language))) {
+          missing.push(`${literal.file} [${language}] ${literal.text}`);
+        }
+      }
+    }
 
     expect(missing).toEqual([]);
   });
 
-  it("has catalog entries for media and gallery copy in every non-English language", () => {
+  it("has catalog entries for media and gallery copy in every non-English language", async () => {
     const languages = LANGS.map((language) => language.code).filter((language) => language !== "en");
-    const missing = collectRenderedAssetStrings().flatMap((literal) =>
-      languages
-        .filter((language) => !hasTextTranslation(literal.text, language))
-        .map((language) => `${literal.file} [${language}] ${literal.text}`),
-    );
+    const missing: string[] = [];
+
+    for (const literal of collectRenderedAssetStrings()) {
+      for (const language of languages) {
+        if (!(await hasTextTranslation(literal.text, language))) {
+          missing.push(`${literal.file} [${language}] ${literal.text}`);
+        }
+      }
+    }
 
     expect(missing).toEqual([]);
   });

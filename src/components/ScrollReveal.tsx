@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { stagger, useAnimate } from "@/lib/framer-motion";
-import { imageSettleTransition, reducedMotionTransition, revealTransition } from "@/lib/motion";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 
 type ScrollRevealProps = {
@@ -32,21 +30,19 @@ export function ScrollReveal({
   targetSelector = DEFAULT_TARGET_SELECTOR,
   threshold = 0.12,
 }: ScrollRevealProps) {
-  const [scope, animate] = useAnimate<HTMLDivElement>();
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const shouldReduceMotion = useHydratedReducedMotion();
   const targetsRef = useRef<HTMLElement[]>([]);
-  const mediaTargetsRef = useRef<HTMLElement[]>([]);
   const hasPlayedRef = useRef(false);
 
   const collectTargets = useCallback(() => {
-    const root = scope.current;
+    const root = rootRef.current;
     if (!root) return [];
     return Array.from(root.querySelectorAll<HTMLElement>(targetSelector));
-  }, [scope, targetSelector]);
+  }, [targetSelector]);
 
   useLayoutEffect(() => {
     const targets = collectTargets();
-    const mediaTargets: HTMLElement[] = [];
     targetsRef.current = targets;
 
     targets.forEach((target, index) => {
@@ -54,41 +50,25 @@ export function ScrollReveal({
       target.dataset.motionReveal = "armed";
       target.dataset.motionKind = kind;
       target.style.setProperty("--motion-index", String(index));
+      target.style.setProperty("--motion-delay", `${index * staggerMs}ms`);
 
       if (target.matches(MEDIA_SELECTOR)) {
         target.dataset.motionRevealMedia = "true";
-        mediaTargets.push(target);
       }
 
       target.querySelectorAll<HTMLElement>(MEDIA_SELECTOR).forEach((media) => {
         media.dataset.motionRevealMedia = "true";
-        mediaTargets.push(media);
+        media.style.setProperty("--motion-delay", `${index * staggerMs}ms`);
       });
     });
-
-    mediaTargetsRef.current = mediaTargets;
-
-    if (!targets.length) return;
-
-    animate(
-      targets,
-      shouldReduceMotion
-        ? { opacity: 0.96, y: 6, scale: 0.997, filter: "blur(0px)" }
-        : { opacity: 0, y: 32, scale: 0.985, filter: "blur(10px)" },
-      { duration: 0 },
-    );
-
-    if (mediaTargets.length) {
-      animate(mediaTargets, shouldReduceMotion ? { scale: 1.004 } : { scale: 1.025 }, { duration: 0 });
-    }
-  }, [animate, collectTargets, shouldReduceMotion]);
+  }, [collectTargets, staggerMs]);
 
   useEffect(() => {
-    const root = scope.current;
+    const root = rootRef.current;
     if (!root || typeof window === "undefined") return;
+    root.dataset.motionPreference = shouldReduceMotion ? "reduced" : "standard";
 
     const targets = targetsRef.current.length ? targetsRef.current : collectTargets();
-    const mediaTargets = mediaTargetsRef.current;
     if (!targets.length) return;
 
     const reveal = () => {
@@ -99,19 +79,6 @@ export function ScrollReveal({
       targets.forEach((target) => {
         target.dataset.motionReveal = "visible";
       });
-
-      void animate(
-        targets,
-        { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
-        {
-          ...(shouldReduceMotion ? reducedMotionTransition : revealTransition),
-          delay: stagger(shouldReduceMotion ? 0.025 : staggerMs / 1000),
-        },
-      );
-
-      if (mediaTargets.length) {
-        void animate(mediaTargets, { scale: 1 }, shouldReduceMotion ? reducedMotionTransition : imageSettleTransition);
-      }
     };
 
     const IntersectionObserverCtor = window.IntersectionObserver;
@@ -133,10 +100,10 @@ export function ScrollReveal({
     targets.forEach((target) => observer.observe(target));
 
     return () => observer.disconnect();
-  }, [animate, collectTargets, rootMargin, scope, shouldReduceMotion, staggerMs, threshold]);
+  }, [collectTargets, rootMargin, shouldReduceMotion, threshold]);
 
   return (
-    <div ref={scope} className={className} data-motion-reveal-root="armed">
+    <div ref={rootRef} className={className} data-motion-reveal-root="armed">
       {children}
     </div>
   );
