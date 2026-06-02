@@ -102,11 +102,16 @@ async function main() {
   await check("Navigation hash links work (#legacy, #dubai, #batumi)", async () => {
     for (const id of ["legacy", "dubai", "batumi"]) {
       const desktopLink = page.locator(`nav[aria-label="Primary"] a[href*='#${id}']`).first();
+      const storyLink = page
+        .locator(`nav[aria-label*="Story"] a[href*='#${id}'], nav[aria-label*="story"] a[href*='#${id}']`)
+        .first();
       const mobileLink = page.locator(`nav[aria-label="Mobile"] a[href*='#${id}']`).first();
       const menuButton = page.getByRole("button", { name: /open menu/i });
 
       if (await desktopLink.isVisible().catch(() => false)) {
         await desktopLink.click();
+      } else if (await storyLink.isVisible().catch(() => false)) {
+        await storyLink.click();
       } else if (await menuButton.isVisible().catch(() => false)) {
         await menuButton.click();
         await mobileLink.waitFor({ state: "visible", timeout: 5000 });
@@ -140,20 +145,26 @@ async function main() {
     await contactSection.scrollIntoViewIfNeeded({ timeout: 15000 });
     if (!(await contactSection.isVisible())) throw new Error("Contact section not visible");
     const submit = page.locator("#contact button[type='submit'], #contact form button").first();
-    if ((await submit.count()) === 0) throw new Error("Contact form submit control not found");
-    if (await submit.isDisabled().catch(() => false)) throw new Error("Contact submit disabled");
+    const storyRegister = page.locator("#contact button:has-text('Register'), #contact a[href^='mailto']").first();
+    if ((await submit.count()) === 0 && (await storyRegister.count()) === 0) {
+      throw new Error("Contact CTA not found (form submit or story contact actions)");
+    }
+    if ((await submit.count()) > 0 && (await submit.isDisabled().catch(() => false))) {
+      throw new Error("Contact submit disabled");
+    }
   });
 
   await check("Language switcher EN → DE (layout)", async () => {
-    const langBtn = page.locator("button[aria-label*='language' i], [data-testid*='lang'], button:has-text('EN'), [class*='lang']").first();
-    if ((await langBtn.count()) === 0) {
-      const alt = page.getByRole("button", { name: /language|sprache|lang/i }).first();
-      if ((await alt.count()) === 0) throw new Error("Language control not found");
-      await alt.click();
-    } else {
-      await langBtn.click();
-    }
-    const de = page.getByRole("menuitem", { name: /DE|Deutsch|German/i }).or(page.locator("button:has-text('DE'), [data-lang='de'], li:has-text('DE')")).first();
+    await page.setViewportSize({ width: 1024, height: 800 });
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(900);
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(250);
+
+    const langBtn = page.locator("button[aria-label*='Change language' i]").first();
+    if ((await langBtn.count()) === 0) throw new Error("Language control not found");
+    await langBtn.click();
+    const de = page.locator('[data-lang="de"][role="option"]').first();
     if ((await de.count()) === 0) throw new Error("DE locale option not found");
     await de.click();
     await page.waitForTimeout(1200);

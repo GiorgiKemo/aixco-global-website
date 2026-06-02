@@ -1,29 +1,45 @@
 import { chromium } from "playwright";
 
 const BASE = (process.env.RESPONSIVE_CHECK_URL || "https://aixco-global-website.vercel.app").replace(/\/$/, "");
-const WIDTHS = [375, 768, 1280, 1920];
+const WIDTHS = [375, 390, 768, 1024, 1280, 1440, 1920];
 const LANGS = ["en", "de", "ru", "ka", "tr", "ar"];
 
 async function evaluateNav(page) {
   return page.evaluate(() => {
+    const isVisible = (element) => {
+      if (!element) return false;
+      const style = window.getComputedStyle(element);
+      return style.display !== "none" && style.visibility !== "hidden" && style.opacity !== "0";
+    };
+
+    const storyMode = !!document.querySelector('[data-home-experience-mode="story"]');
     const primary = document.querySelector('nav[aria-label="Primary"]');
-    const desktopNavVisible =
-      primary != null && window.getComputedStyle(primary).display !== "none";
+    const storyNav = document.querySelector(
+      'nav[aria-label*="Story"], nav[aria-label*="story"], nav[aria-label*="Навигация"], nav[aria-label*="ნავიგაცია"]',
+    );
+    const desktopNavVisible = isVisible(primary);
+    const storyNavVisible = isVisible(storyNav);
     const loginButtons = Array.from(document.querySelectorAll("button")).filter((button) =>
       /^(Login|Anmelden|Войти|შესვლა|Giriş|تسجيل الدخول)$/i.test(button.textContent?.trim() ?? ""),
     );
-    const inlineLoginVisible = loginButtons.some(
-      (button) => window.getComputedStyle(button).display !== "none",
-    );
+    const inlineLoginVisible = loginButtons.some((button) => isVisible(button));
     const menuButton = document.querySelector('button[aria-label="Open menu"], button[aria-label="Close menu"]');
-    const menuVisible =
-      menuButton != null && window.getComputedStyle(menuButton).display !== "none";
+    const menuVisible = isVisible(menuButton);
+
+    const authReachable = inlineLoginVisible || menuVisible;
+    const ok = storyMode
+      ? storyNavVisible || authReachable
+      : desktopNavVisible
+        ? authReachable
+        : menuVisible || inlineLoginVisible;
 
     return {
+      storyMode,
       desktopNavVisible,
+      storyNavVisible,
       inlineLoginVisible,
       menuVisible,
-      ok: desktopNavVisible ? inlineLoginVisible || menuVisible : menuVisible,
+      ok,
       overflow: document.documentElement.scrollWidth - window.innerWidth,
     };
   });
