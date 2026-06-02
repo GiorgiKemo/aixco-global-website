@@ -263,11 +263,13 @@ function StoryChrome({
   );
 }
 
-function FixedHeroBackdrop() {
+function FixedHeroBackdrop({ visible }: { visible: boolean }) {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed bottom-0 right-0 top-0 z-0 overflow-hidden bg-[#11100e]"
+      className={`pointer-events-none fixed bottom-0 right-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 ease-[var(--ease-apple)] ${
+        visible ? "opacity-100" : "opacity-0"
+      }`}
       style={{ left: storySidebarWidth }}
     >
       <video
@@ -304,7 +306,7 @@ function SceneShell({
     tone === "dark"
       ? "bg-[#11100e] text-white"
       : tone === "surface"
-        ? "bg-surface/55 text-foreground"
+        ? "bg-surface text-foreground"
         : "bg-background text-foreground";
 
   return (
@@ -945,7 +947,7 @@ export function DesktopStoryHome() {
 
   return (
     <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background">
-      <FixedHeroBackdrop />
+      <FixedHeroBackdrop visible={activeIndex === 0} />
       <StoryChrome activeIndex={activeIndex} progress={progress} tx={tx} onChapterClick={handleChapterClick} />
       <div className="relative z-10">
         {scenes.map((scene, index) => {
