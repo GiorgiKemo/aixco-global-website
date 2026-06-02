@@ -318,7 +318,7 @@ function SceneShell({
         <div aria-hidden className="hidden xl:block" />
         <div className={`grid min-h-0 grid-cols-1 xl:grid-cols-12 ${reverse ? "" : ""}`}>
           <div
-            className={`relative z-10 flex min-h-0 flex-col justify-center px-8 pb-12 pt-28 2xl:px-12 ${
+            className={`relative z-10 flex min-h-0 flex-col justify-center overflow-y-auto overscroll-contain px-8 pb-12 pt-28 2xl:px-12 ${
               reverse ? "xl:order-2 xl:col-span-5" : "xl:order-1 xl:col-span-5"
             }`}
           >
@@ -592,19 +592,19 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
       }}
     >
       <p className="eyebrow">{tx("How to work with AIXCO")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(2.8rem,4.4vw,5.25rem)] font-semibold leading-[0.96] tracking-[-0.03em]">
+      <h2 className="mt-5 max-w-xl text-[clamp(2.8rem,4.4vw,5.25rem)] font-semibold leading-[0.96] tracking-[-0.03em]">
         <span className="text-gold">{tx("How")}</span> {tx("Customers/Partners Work")}
       </h2>
-      <p className="mt-6 max-w-xl text-[clamp(1.02rem,1.08vw,1.2rem)] leading-[1.62] text-foreground/76">
+      <p className="mt-5 max-w-xl text-[clamp(1.02rem,1.08vw,1.2rem)] leading-[1.62] text-foreground/76">
         {tx("Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
       </p>
-      <div className="mt-8 grid gap-3">
+      <div className="mt-6 grid gap-2.5" data-layout="story-participation-routes">
         {[primaryRoute, ...remainingRoutes].map((route, index) => (
           <button
             key={route.id}
             type="button"
             onClick={onRegister}
-            className="group grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-4 border border-foreground/10 bg-white/82 p-4 text-left transition-colors hover:border-primary/35 hover:bg-white"
+            className="group grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 border border-foreground/10 bg-white/82 p-3.5 text-left transition-colors hover:border-primary/35 hover:bg-white"
           >
             <span className="font-display text-3xl leading-none text-primary/45">{formatChapterNumber(index + 1)}</span>
             <span className="min-w-0">
@@ -963,7 +963,7 @@ export function DesktopStoryHome() {
               id={chapter.id}
               data-story-section={chapter.key}
               data-story-active={isActive ? "true" : "false"}
-              className="h-[115svh] scroll-mt-0"
+              className="isolate h-[115svh] scroll-mt-0 overflow-hidden"
             >
               {scene}
             </section>

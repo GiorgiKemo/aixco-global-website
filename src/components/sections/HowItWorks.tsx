@@ -22,7 +22,7 @@ export function HowItWorks() {
   };
 
   return (
-    <section id="how" className="relative scroll-mt-16 py-14 md:scroll-mt-20 md:py-16 lg:flex lg:min-h-[calc(100svh-5rem)] lg:items-center lg:py-0">
+    <section id="how" className="relative z-0 scroll-mt-16 py-14 md:scroll-mt-20 md:py-16 lg:flex lg:min-h-[calc(100svh-5rem)] lg:items-center lg:py-0">
       <div className="container-x lg:py-0">
         <div className="scroll-reveal mb-10 max-w-5xl">
           <p className="eyebrow">{tx("Journeys")}</p>

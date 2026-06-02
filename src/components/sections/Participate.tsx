@@ -164,7 +164,10 @@ export function Participate() {
   const [firstRoute, ...remainingRoutes] = participationRoutes;
 
   return (
-    <section id="participate" className="relative scroll-mt-16 overflow-hidden bg-surface/40 py-12 noise-overlay md:scroll-mt-20 md:py-0 lg:py-0">
+    <section
+      id="participate"
+      className="relative isolate z-10 scroll-mt-16 overflow-x-hidden bg-surface/40 py-12 pb-14 noise-overlay md:scroll-mt-20 md:py-0 md:pb-20 lg:pb-24"
+    >
       <div className="motion-accent-line absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="container-x">
         <div
@@ -194,7 +197,7 @@ export function Participate() {
           )}
           </div>
 
-        <div className="mt-16 grid gap-16 md:mt-20" data-layout="alternating-participation-cards">
+        <div className="mt-16 grid gap-16 pb-4 md:mt-20 md:pb-8" data-layout="alternating-participation-cards">
           {remainingRoutes.map((route, index) => (
             <ParticipationRouteCard
               key={route.id}

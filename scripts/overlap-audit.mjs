@@ -112,6 +112,49 @@ async function scrollSections(page) {
   await page.waitForTimeout(300);
 }
 
+async function auditParticipateTransition(page) {
+  return page.evaluate(() => {
+    const participate =
+      document.getElementById("participate") || document.querySelector('[data-story-section="participate"]');
+    const how = document.getElementById("how") || document.querySelector('[data-story-section="how"]');
+    const lastRoute =
+      document.querySelector('[data-participation-card="management"]') ||
+      Array.from(document.querySelectorAll("button")).find((b) =>
+        /Administer Your Property/i.test(b.textContent ?? ""),
+      );
+    const howMedia = how?.querySelector("img, video, [data-video-state]");
+
+    if (!participate || !how || !lastRoute) {
+      return { skipped: true, reason: "participate-transition-targets-missing" };
+    }
+
+    const routeRect = lastRoute.getBoundingClientRect();
+    const howRect = how.getBoundingClientRect();
+    const sectionRect = participate.getBoundingClientRect();
+    const routePastSection = Math.round(routeRect.bottom - sectionRect.bottom);
+    const routeIntoHow = Math.round(routeRect.bottom - howRect.top);
+
+    let mediaOverlapPx = 0;
+    if (howMedia) {
+      const mediaRect = howMedia.getBoundingClientRect();
+      const top = Math.max(routeRect.top, mediaRect.top);
+      const bottom = Math.min(routeRect.bottom, mediaRect.bottom);
+      mediaOverlapPx = Math.max(0, Math.round(bottom - top));
+    }
+
+    return {
+      skipped: false,
+      routePastSection,
+      routeIntoHow,
+      mediaOverlapPx,
+      sceneOverflow:
+        !!participate.querySelector(".relative.z-10.flex") &&
+        participate.querySelector(".relative.z-10.flex").scrollHeight >
+          participate.querySelector(".relative.z-10.flex").clientHeight + 4,
+    };
+  });
+}
+
 async function main() {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -133,22 +176,40 @@ async function main() {
       await scrollSections(page);
 
       const heroResult = await auditPage(page);
+
+      await page.evaluate(() => {
+        const target =
+          document.querySelector('[data-participation-card="management"]') ||
+          document.getElementById("participate");
+        target?.scrollIntoView({ block: "end" });
+      });
+      await page.waitForTimeout(450);
+      const participateTransition = await auditParticipateTransition(page);
+      const participateFail =
+        !participateTransition.skipped &&
+        (participateTransition.routeIntoHow > 2 ||
+          participateTransition.mediaOverlapPx > 2 ||
+          participateTransition.routePastSection > 2);
+
       const hasOverflow = heroResult.overflow > 8;
       const hasOverlap = heroResult.issues.length > 0;
       const hasClip = heroResult.clipped.length > 0;
-      const fail = hasOverflow || hasOverlap || hasClip;
+      const fail = hasOverflow || hasOverlap || hasClip || participateFail;
 
       if (fail) {
         failCount += 1;
         const label = `${lang}-${width}`;
         const shot = path.join(OUT, `${label}.png`);
         await page.screenshot({ path: shot, fullPage: false });
-        findings.push({ lang, width, ...heroResult, screenshot: shot });
+        findings.push({ lang, width, ...heroResult, participateTransition, screenshot: shot });
       }
 
       const status = fail ? "FAIL" : "PASS";
+      const participateNote = participateTransition.skipped
+        ? "participate n/a"
+        : `participate +${participateTransition.routeIntoHow}px`;
       console.log(
-        `${lang.padEnd(2)} ${String(width).padStart(4)}px | overflow ${heroResult.overflow}px | overlaps ${heroResult.issues.length} | clipped ${heroResult.clipped.length} | ${status}`,
+        `${lang.padEnd(2)} ${String(width).padStart(4)}px | overflow ${heroResult.overflow}px | overlaps ${heroResult.issues.length} | clipped ${heroResult.clipped.length} | ${participateNote} | ${status}`,
       );
     }
   }

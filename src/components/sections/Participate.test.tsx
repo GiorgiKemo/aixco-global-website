@@ -44,7 +44,7 @@ describe("Participate", () => {
     expect(section?.className).toContain("scroll-mt-16");
     expect(section?.className).toContain("md:scroll-mt-20");
     expect(section?.className).toContain("md:py-0");
-    expect(section?.className).toContain("lg:py-0");
+    expect(section?.className).toContain("lg:pb-24");
     expect(container.querySelector("[data-viewport-fit='first-view']")).toHaveClass("md:h-[calc(100svh-5rem)]");
     expect(firstViewport).toBeInTheDocument();
     expect(cardGrid).toBeInTheDocument();
@@ -114,6 +114,8 @@ describe("Participate", () => {
 
     expect(heading).toHaveClass("[overflow-wrap:anywhere]");
     expect(heading.querySelector("wbr")).toBeInTheDocument();
-    expect(container.querySelector("section#participate")).toHaveClass("overflow-hidden");
+    expect(container.querySelector("section#participate")).toHaveClass("overflow-x-hidden");
+    expect(container.querySelector("section#participate")).toHaveClass("md:pb-20");
+    expect(container.querySelector("[data-layout='alternating-participation-cards']")).toHaveClass("md:pb-8");
   });
 });
