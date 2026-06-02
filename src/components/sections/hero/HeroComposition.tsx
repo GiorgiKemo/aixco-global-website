@@ -8,12 +8,14 @@ type HeroCompositionProps = {
   tx: (copy: string) => string;
   onAboutClick: (event: MouseEvent<HTMLAnchorElement>) => void;
   onFaqClick: (event: MouseEvent<HTMLAnchorElement>) => void;
+  preloadBrandMark?: boolean;
 };
 
 export function HeroComposition({
   tx,
   onAboutClick,
   onFaqClick,
+  preloadBrandMark = true,
 }: HeroCompositionProps) {
   return (
     <div
@@ -38,8 +40,8 @@ export function HeroComposition({
           width={780}
           height={704}
           sizes="(min-width: 1024px) 15vw, (min-width: 768px) 7rem, 6rem"
-          loading="eager"
-          fetchPriority="high"
+          loading={preloadBrandMark ? "eager" : "lazy"}
+          fetchPriority={preloadBrandMark ? "high" : "auto"}
           className="mb-2 h-auto w-[clamp(5rem,14vw,14.6rem)] self-start object-contain drop-shadow-[0_16px_32px_rgb(0_0_0/0.28)] sm:ml-[clamp(0rem,20vw,18rem)] md:ml-0 md:w-[clamp(5.5rem,10vw,7rem)] md:self-center lg:ml-[clamp(0rem,20vw,18rem)] lg:w-[clamp(5rem,14vw,14.6rem)] lg:self-start"
           decoding="async"
         />

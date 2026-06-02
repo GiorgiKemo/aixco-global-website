@@ -15,6 +15,13 @@ import { clearPendingNavScrollTimers, scrollToNavHash } from "./nav/nav-scroll";
 import { useNavResponsiveMode } from "./nav/use-nav-responsive-mode";
 import { HOME_RETURN_HASH_SYNC_LOCK_MS, HOME_SECTION_IDS, type NavItem } from "./nav/nav-data";
 
+const desktopStoryNavQuery = "(min-width: 1280px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)";
+
+function shouldHideNavForDesktopStory() {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") return false;
+  return window.location.pathname === "/" && window.matchMedia(desktopStoryNavQuery).matches;
+}
+
 export function Nav() {
   const { t, lang, setLang } = useI18n();
   const { openLogin, openRegister } = useUI();
@@ -26,6 +33,7 @@ export function Nav() {
   const [returningHome, setReturningHome] = useState(false);
   const [compactNav, setCompactNav] = useState(false);
   const [desktopActionsAvailable, setDesktopActionsAvailable] = useState(false);
+  const [hideForDesktopStory, setHideForDesktopStory] = useState(false);
   const [location, setLocation] = useState<BrowserLocationState>({ pathname: "/", hash: "" });
   const navRowRef = useRef<HTMLDivElement | null>(null);
   const logoSlotRef = useRef<HTMLDivElement | null>(null);
@@ -146,6 +154,28 @@ export function Nav() {
   }, []);
 
   useLayoutEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return undefined;
+
+    const mediaQuery = window.matchMedia(desktopStoryNavQuery);
+    const updateDesktopStoryVisibility = () => setHideForDesktopStory(shouldHideNavForDesktopStory());
+
+    updateDesktopStoryVisibility();
+    mediaQuery.addEventListener("change", updateDesktopStoryVisibility);
+    window.addEventListener("popstate", updateDesktopStoryVisibility);
+    window.addEventListener("hashchange", updateDesktopStoryVisibility);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateDesktopStoryVisibility);
+      window.removeEventListener("popstate", updateDesktopStoryVisibility);
+      window.removeEventListener("hashchange", updateDesktopStoryVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    setHideForDesktopStory(shouldHideNavForDesktopStory());
+  }, [location.pathname]);
+
+  useLayoutEffect(() => {
     const compactMedia = window.matchMedia("(max-width: 1179px)");
     const syncCompactViewport = () => {
       if (!compactMedia.matches) return;
@@ -168,6 +198,8 @@ export function Nav() {
     setDesktopActionsAvailable,
   });
 
+  if (hideForDesktopStory) return null;
+
   return (
     <header
       dir="ltr"
@@ -183,7 +215,6 @@ export function Nav() {
             className={solidNav ? "" : "text-white drop-shadow-[0_3px_14px_rgb(0_0_0/0.34)]"}
             iconClassName={solidNav ? undefined : "[filter:brightness(0)_invert(1)]"}
             onHomeClick={beginHomeReturn}
-            preloadMark
           />
         </div>
 

@@ -46,12 +46,26 @@ export const viewport: Viewport = {
 
 export const revalidate = 300;
 
+const homeStoryBootScript = `
+(function () {
+  try {
+    var isHome = window.location.pathname === "/";
+    var supportsStory = window.matchMedia && window.matchMedia("(min-width: 1280px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)").matches;
+    if (isHome && supportsStory) {
+      document.body.classList.add("home-desktop-story-boot");
+      document.body.classList.add("home-story-nav-hidden");
+    }
+  } catch (error) {}
+})();
+`;
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const initialSiteContent = await fetchSiteContentForServer();
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
+        <script dangerouslySetInnerHTML={{ __html: homeStoryBootScript }} />
         <ClientShell
           initialSiteContent={initialSiteContent.content}
           initialSiteContentSource={initialSiteContent.source}

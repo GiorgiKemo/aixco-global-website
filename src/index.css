@@ -1246,4 +1246,30 @@
     }
 
   }
+
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1280px) and (min-height: 700px) {
+    body.home-desktop-story-boot {
+      background: hsl(var(--foreground)) !important;
+    }
+
+    body.home-desktop-story-boot footer,
+    body.home-story-nav-hidden footer,
+    body.home-desktop-story-boot main > [data-home-experience-mode="native"],
+    body.home-desktop-story-boot main > [data-home-experience-mode="story-loading"] {
+      display: none !important;
+    }
+
+    body.home-story-nav-hidden > header[dir="ltr"],
+    body.home-story-nav-hidden header.fixed.inset-x-0.top-0,
+    html[data-home-experience="story"] header[dir="ltr"],
+    html:has(main [data-home-experience-mode]) header[dir="ltr"] {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateY(-100%) !important;
+      transition:
+        opacity 260ms var(--ease-apple),
+        transform 260ms var(--ease-apple) !important;
+      visibility: hidden !important;
+    }
+  }
 }

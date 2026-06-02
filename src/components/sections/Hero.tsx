@@ -47,7 +47,7 @@ function useHeroVideoStartReady() {
   return useDelayedIdleReady(startupDelay, heroVideoIdleTimeoutMs);
 }
 
-export function Hero() {
+export function Hero({ preloadBrandMark = true }: { preloadBrandMark?: boolean } = {}) {
   const isHeroVideoIdleReady = useHeroVideoStartReady();
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const heroVideoWallRef = useRef<HTMLDivElement | null>(null);
@@ -193,6 +193,7 @@ export function Hero() {
         tx={tx}
         onAboutClick={handleAboutClick}
         onFaqClick={handleFaqClick}
+        preloadBrandMark={preloadBrandMark}
       />
     </section>
   );
