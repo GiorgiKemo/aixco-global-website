@@ -43,6 +43,7 @@ const getContentSecurityPolicy = () => {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  devIndicators: false,
   experimental: {
     webVitalsAttribution: ["CLS", "LCP", "INP"],
   },

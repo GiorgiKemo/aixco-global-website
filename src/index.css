@@ -1248,6 +1248,10 @@
   }
 
   @media (min-width: 1280px) and (min-height: 700px) {
+    html[data-home-experience="story"] {
+      scroll-padding-top: 0 !important;
+    }
+
     body.home-desktop-story-boot {
       background: hsl(var(--foreground)) !important;
     }
@@ -1270,6 +1274,10 @@
         opacity 260ms var(--ease-apple),
         transform 260ms var(--ease-apple) !important;
       visibility: hidden !important;
+    }
+
+    html[data-home-experience="story"] [data-scroll-to-top-button="true"] {
+      display: none !important;
     }
   }
 }

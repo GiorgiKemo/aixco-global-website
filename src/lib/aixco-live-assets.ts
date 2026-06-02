@@ -19,7 +19,7 @@ const versionHealthcareImage = (src: string) => `${src}?v=${healthcareGalleryVer
 
 export const aixcoLiveImages = {
   aboutArchitecture: `${optimizedImageBase}/batumip.webp`,
-  contact: `${optimizedImageBase}/contact.webp`,
+  contact: `${optimizedImageBase}/trans.webp`,
   dubaiEdenHouse: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiHealthcare: `${optimizedImageBase}/fund2.webp`,
   transactionBackdrop: `${optimizedImageBase}/trans.webp`,

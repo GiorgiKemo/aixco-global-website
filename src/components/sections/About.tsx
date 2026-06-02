@@ -35,7 +35,8 @@ export function About() {
                 alt="Batumi skyline and landmark towers from the live AIXCO site"
                 data-frame="tall"
                 data-image-treatment="fill-card"
-                loading="lazy"
+                loading="eager"
+                fetchPriority="high"
                 decoding="async"
                 quality={62}
                 sizes="(min-width: 1024px) 38vw, 100vw"
