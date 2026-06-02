@@ -1302,138 +1302,156 @@
       object-fit: cover;
     }
 
+    [data-story-scene-copy] [data-layout="story-batumi-benefits"] > * {
+      font-size: clamp(0.88rem, 0.95vw, 1rem);
+    }
+
+    [data-story-scene-copy] [data-layout="story-batumi-properties"] a {
+      padding: 0.85rem 1rem;
+    }
+
     @container story-section (max-height: 62rem) {
       [data-story-scene-copy] h2 {
-        font-size: clamp(2.35rem, 3.8vw, 4.35rem) !important;
+        font-size: clamp(2.25rem, 3.2vw, 4rem) !important;
         line-height: 0.95 !important;
       }
 
-      [data-story-scene-copy] p {
-        line-height: 1.52 !important;
+      [data-story-scene-copy] p:not(.eyebrow) {
+        line-height: 1.5 !important;
       }
     }
 
     @container story-section (max-height: 56rem) {
       [data-story-scene-column] {
-        padding-block: clamp(2rem, 4.75svh, 3.75rem) !important;
+        padding-block: clamp(1.85rem, 4.25svh, 3.5rem) !important;
       }
 
       [data-story-scene-copy] h2 {
-        font-size: clamp(2.1rem, 3.4vw, 3.85rem) !important;
+        font-size: clamp(2rem, 2.85vw, 3.5rem) !important;
       }
 
       [data-story-scene-copy] [data-layout="story-participation-routes"] button {
-        padding-block: 0.65rem;
+        padding-block: 0.7rem;
       }
 
       [data-story-scene-copy] .font-display.text-xl {
-        font-size: 1.05rem;
+        font-size: 1.1rem;
       }
     }
 
     @container story-section (max-height: 48rem) {
       [data-story-scene-column] {
-        padding-block: clamp(1.75rem, 4svh, 3rem) !important;
+        padding-block: clamp(1.65rem, 3.75svh, 2.85rem) !important;
       }
 
       [data-story-scene-copy] {
-        gap: clamp(0.28rem, 0.55svh, 0.48rem) !important;
+        gap: clamp(0.32rem, 0.62svh, 0.55rem) !important;
       }
 
       [data-story-scene-copy] h2 {
-        font-size: clamp(1.85rem, 3vw, 3.25rem) !important;
-        line-height: 0.93 !important;
+        font-size: clamp(1.95rem, 2.65vw, 3.1rem) !important;
+        line-height: 0.94 !important;
       }
 
       [data-story-scene-copy] p:not(.eyebrow) {
-        font-size: clamp(0.82rem, 0.92vw, 0.98rem) !important;
-        line-height: 1.44 !important;
+        font-size: clamp(0.9rem, 0.98vw, 1.02rem) !important;
+        line-height: 1.46 !important;
       }
 
       [data-story-scene-copy] .eyebrow {
-        font-size: 0.66rem !important;
+        font-size: 0.7rem !important;
       }
 
       [data-story-scene-copy] dl > div {
-        padding: 0.55rem !important;
+        padding: 0.65rem !important;
       }
 
       [data-story-scene-copy] dl dt {
-        font-size: clamp(1.25rem, 1.85vw, 2rem) !important;
+        font-size: clamp(1.45rem, 2vw, 2.15rem) !important;
       }
 
       [data-story-scene-copy] dl dd {
-        font-size: 0.58rem !important;
+        font-size: 0.64rem !important;
         margin-top: 0.35rem !important;
       }
 
+      [data-story-scene-copy] [data-layout="story-batumi-benefits"] > * {
+        font-size: clamp(0.84rem, 0.92vw, 0.96rem) !important;
+        padding: 0.65rem !important;
+      }
+
       [data-story-scene-copy] [data-layout="story-participation-routes"] button,
+      [data-story-scene-copy] [data-layout="story-batumi-properties"] a,
       [data-story-scene-copy] .grid.gap-2 > *,
       [data-story-scene-copy] .divide-y > * {
-        padding-block: 0.55rem !important;
+        padding-block: 0.6rem !important;
       }
 
       [data-story-scene-copy] .font-display.text-lg {
-        font-size: 1rem !important;
+        font-size: 1.05rem !important;
       }
     }
 
     @container story-section (max-height: 45rem) {
       [data-story-scene-column] {
-        padding-block: clamp(1.35rem, 3.25svh, 2.35rem) !important;
+        padding-block: clamp(1.25rem, 3svh, 2.15rem) !important;
       }
 
       [data-story-scene-copy] h2 {
-        font-size: clamp(1.65rem, 2.65vw, 2.85rem) !important;
-        line-height: 0.92 !important;
+        font-size: clamp(1.75rem, 2.35vw, 2.65rem) !important;
+        line-height: 0.93 !important;
       }
 
       [data-story-scene-copy] p:not(.eyebrow) {
-        font-size: clamp(0.76rem, 0.86vw, 0.9rem) !important;
-        line-height: 1.38 !important;
+        font-size: clamp(0.86rem, 0.94vw, 0.96rem) !important;
+        line-height: 1.4 !important;
       }
 
       [data-story-scene-copy] dl > div {
-        padding: 0.42rem !important;
+        padding: 0.5rem !important;
       }
 
       [data-story-scene-copy] dl dt {
-        font-size: clamp(1.05rem, 1.55vw, 1.55rem) !important;
+        font-size: clamp(1.2rem, 1.65vw, 1.7rem) !important;
       }
 
       [data-story-scene-copy] .font-display.text-2xl {
-        font-size: 1.35rem !important;
+        font-size: 1.4rem !important;
       }
 
       [data-story-scene-copy] .font-display.text-xl {
-        font-size: 0.95rem !important;
+        font-size: 1rem !important;
       }
 
       [data-story-scene-copy] .font-display.text-lg {
-        font-size: 0.92rem !important;
+        font-size: 0.98rem !important;
+      }
+
+      [data-story-scene-copy] [data-layout="story-batumi-benefits"] > * {
+        font-size: clamp(0.8rem, 0.88vw, 0.92rem) !important;
       }
 
       [data-story-scene-copy] [data-layout="story-participation-routes"] button {
-        padding: 0.45rem 0.55rem !important;
-        gap: 0.45rem !important;
+        padding: 0.55rem 0.65rem !important;
+        gap: 0.5rem !important;
       }
 
       [data-story-scene-copy] .grid.gap-2 {
-        gap: 0.35rem !important;
+        gap: 0.4rem !important;
       }
 
       [data-story-scene-copy] .grid.gap-2 > * {
-        padding: 0.45rem 0.55rem !important;
+        padding: 0.5rem 0.65rem !important;
       }
 
       [data-story-scene-copy] .divide-y > * {
-        padding-block: 0.45rem !important;
+        padding-block: 0.5rem !important;
       }
 
       [data-story-scene-copy] .btn-gold,
       [data-story-scene-copy] .btn-ghost-gold {
-        padding-block: 0.55rem !important;
-        font-size: 0.82rem !important;
+        padding-block: 0.58rem !important;
+        font-size: 0.86rem !important;
       }
     }
   }

@@ -25,12 +25,18 @@ const SECTIONS = [
   "contact",
 ];
 
+async function waitForStoryReady(page) {
+  await page.waitForSelector('[data-home-experience-mode="story"]', { state: "attached", timeout: 30000 });
+  await page.waitForSelector('[data-story-section="hero"]', { state: "attached", timeout: 30000 });
+  await page.waitForTimeout(500);
+}
+
 async function setLanguage(page, code) {
   await page.evaluate((langCode) => {
     localStorage.setItem("aixco-lang", langCode);
   }, code);
-  await page.reload({ waitUntil: "domcontentloaded" });
-  await page.waitForTimeout(900);
+  await page.reload({ waitUntil: "networkidle" });
+  await waitForStoryReady(page);
 }
 
 async function scrollToSection(page, sectionId) {
@@ -97,6 +103,7 @@ async function auditSection(page, sectionId) {
 
 function sectionFailed(result) {
   if (result.missing) return true;
+  if (result.sectionHeightDelta == null) return true;
   return (
     result.sectionHeightDelta > 12 ||
     result.copyOverflow ||
@@ -113,7 +120,9 @@ async function main() {
   let fail = 0;
 
   for (const lang of LANGS) {
-    await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.setViewportSize({ width: VIEWPORTS[0].width, height: VIEWPORTS[0].height });
+    await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 60000 });
+    await waitForStoryReady(page);
     await setLanguage(page, lang);
 
     for (const viewport of VIEWPORTS) {
@@ -134,8 +143,12 @@ async function main() {
       if (bad.length) {
         console.log(`  FAIL (${bad.length}/${SECTIONS.length} sections)`);
         bad.forEach((row) => {
+          if (row.missing) {
+            console.log(`    - ${row.sectionId}: missing story section`);
+            return;
+          }
           console.log(
-            `    - ${row.sectionId}: sectionDelta=${row.sectionHeightDelta}px copyOverflow=${row.copyOverflow} columnOverflow=${row.columnOverflow} scrollable=${row.scrollable} clipped=${row.clipped.join(",") || "none"} mediaClipped=${row.mediaClipped}`,
+            `    - ${row.sectionId}: sectionDelta=${row.sectionHeightDelta}px copyOverflow=${row.copyOverflow} columnOverflow=${row.columnOverflow} scrollable=${row.scrollable} clipped=${(row.clipped ?? []).join(",") || "none"} mediaClipped=${row.mediaClipped}`,
           );
         });
       } else {
