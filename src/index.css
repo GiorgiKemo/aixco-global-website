@@ -585,15 +585,12 @@
     width: 100%;
     max-width: none;
     display: grid;
-    gap: 1px;
-    overflow: hidden;
-    border: 1px solid hsl(var(--foreground) / 0.1);
-    background: hsl(var(--foreground) / 0.1);
+    gap: clamp(0.65rem, 1.1svh, 0.95rem);
   }
 
   .story-panel-cell {
-    background: hsl(var(--background) / 0.9);
-    padding: clamp(0.75rem, 1.4svh, 1.1rem) clamp(0.85rem, 1.5vw, 1.15rem);
+    padding: 0;
+    background: transparent;
   }
 
   .text-gold {
@@ -1436,7 +1433,7 @@
     }
 
     [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-fund-row + .story-fund-row {
-      border-top: 1px solid hsl(var(--foreground) / 0.1);
+      border-top: 1px solid hsl(var(--foreground) / 0.3);
     }
 
     @container story-section (max-height: 62rem) {
@@ -1479,9 +1476,6 @@
         font-size: 0.68rem !important;
       }
 
-      [data-story-scene-copy] .story-panel-cell {
-        padding: 0.65rem 0.75rem;
-      }
     }
 
     @container story-section (max-height: 45rem) {
