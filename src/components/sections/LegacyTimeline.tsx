@@ -33,10 +33,10 @@ export function LegacyTimeline() {
       <div className="container-x">
         <div className="scroll-reveal mb-10 max-w-3xl md:mb-12">
           <p className="eyebrow">{tx("Our journey")}</p>
-          <h2 className="heading-section mt-4 max-w-2xl [overflow-wrap:anywhere]">
+          <h2 className="heading-section mt-5 max-w-2xl [overflow-wrap:anywhere]">
             {tx("From Switzerland to Dubai to Batumi")}
           </h2>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/80 md:text-lg">
+          <p className="mt-6 max-w-2xl text-base leading-[1.62] text-foreground/80 md:text-lg">
             {tx(
               "AIXCO buys, sells, and brokers real estate across markets. Our legacy track record in Switzerland and Dubai supports today's focus on Batumi apartment sales and property services.",
             )}

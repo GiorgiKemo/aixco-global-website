@@ -26,14 +26,14 @@ export function ScrollReveal({
   children,
   className = "contents",
   rootMargin = "0px 0px -10% 0px",
-  staggerMs = 100,
+  staggerMs = 130,
   targetSelector = DEFAULT_TARGET_SELECTOR,
   threshold = 0.12,
 }: ScrollRevealProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const shouldReduceMotion = useHydratedReducedMotion();
   const targetsRef = useRef<HTMLElement[]>([]);
-  const hasPlayedRef = useRef(false);
+  const revealedCountRef = useRef(0);
 
   const collectTargets = useCallback(() => {
     const root = rootRef.current;
@@ -71,28 +71,38 @@ export function ScrollReveal({
     const targets = targetsRef.current.length ? targetsRef.current : collectTargets();
     if (!targets.length) return;
 
-    const reveal = () => {
-      if (hasPlayedRef.current) return;
-      hasPlayedRef.current = true;
+    const revealAll = () => {
       root.dataset.motionRevealRoot = "visible";
-
       targets.forEach((target) => {
         target.dataset.motionReveal = "visible";
       });
+      revealedCountRef.current = targets.length;
+    };
+
+    const revealTarget = (target: HTMLElement) => {
+      if (target.dataset.motionReveal === "visible") return;
+      target.dataset.motionReveal = "visible";
+      root.dataset.motionRevealRoot = "visible";
+      revealedCountRef.current += 1;
     };
 
     const IntersectionObserverCtor = window.IntersectionObserver;
 
     if (typeof IntersectionObserverCtor !== "function") {
-      reveal();
+      revealAll();
       return;
     }
 
     const observer = new IntersectionObserverCtor(
       (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        reveal();
-        observer.disconnect();
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          revealTarget(entry.target as HTMLElement);
+        });
+
+        if (revealedCountRef.current >= targets.length) {
+          observer.disconnect();
+        }
       },
       { rootMargin, threshold },
     );

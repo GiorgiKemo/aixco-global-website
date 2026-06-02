@@ -37,6 +37,11 @@ export function installMotionReducedMotionDevWarningFilter(nodeEnv = process.env
 export const premiumEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 export const revealTransition: Transition = {
+  duration: 0.72,
+  ease: premiumEase,
+};
+
+export const scrollRevealTransition: Transition = {
   duration: 0.82,
   ease: premiumEase,
 };

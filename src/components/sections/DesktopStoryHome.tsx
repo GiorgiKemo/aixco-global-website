@@ -32,6 +32,9 @@ import {
 import { replaceLocationHash } from "@/lib/section-hash";
 import { getSafePublicAssetHref } from "@/lib/security/urls";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
+import { StorySceneReveal } from "@/components/StoryReveal";
+import { motion } from "@/lib/framer-motion";
+import { revealTransition } from "@/lib/motion";
 import {
   formatMetricValue,
   isHeadlineMetric,
@@ -296,18 +299,20 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
 function StorySceneBody({
   children,
   density = "default",
+  isActive,
 }: {
   children: React.ReactNode;
   density?: "default" | "compact" | "dense";
+  isActive: boolean;
 }) {
   const copyRef = useRef<HTMLDivElement | null>(null);
 
   const densityClass =
     density === "dense"
-      ? "gap-[clamp(0.38rem,0.75svh,0.62rem)]"
+      ? "gap-[clamp(0.62rem,1.1svh,0.95rem)]"
       : density === "compact"
-        ? "gap-[clamp(0.45rem,0.9svh,0.72rem)]"
-        : "gap-[clamp(0.55rem,1.15svh,0.9rem)]";
+        ? "gap-[clamp(0.72rem,1.35svh,1.1rem)]"
+        : "gap-[clamp(0.85rem,1.75svh,1.4rem)]";
 
   useLayoutEffect(() => {
     const copy = copyRef.current;
@@ -317,13 +322,16 @@ function StorySceneBody({
     const fitCopy = () => {
       copy.style.removeProperty("zoom");
       copy.style.removeProperty("width");
-      const available = column.clientHeight;
+      const columnAvailable = column.clientHeight;
+      const copyAvailable = copy.clientHeight;
+      const available =
+        copyAvailable > 0 ? Math.min(columnAvailable, copyAvailable) : columnAvailable;
       const needed = copy.scrollHeight;
       if (needed <= available + 2) return;
 
       const rawZoom = (available - 2) / needed;
       const zoom = Math.max(0.88, Math.min(1, rawZoom));
-      if (zoom < 0.985) {
+      if (zoom < 0.995) {
         copy.style.setProperty("zoom", String(zoom));
         // Zoom shrinks layout width too — expand so scaled content still fills the column edge-to-edge.
         copy.style.setProperty("width", `${100 / zoom}%`);
@@ -344,15 +352,20 @@ function StorySceneBody({
       copy.style.removeProperty("zoom");
       copy.style.removeProperty("width");
     };
-  }, [children]);
+  }, [children, isActive]);
 
   return (
     <div
       ref={copyRef}
       data-story-scene-copy
-      className={`flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center overflow-hidden ${densityClass}`}
+      className="flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center overflow-hidden"
     >
-      {children}
+      <StorySceneReveal
+        isActive={isActive}
+        className={`flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center ${densityClass}`}
+      >
+        {children}
+      </StorySceneReveal>
     </div>
   );
 }
@@ -395,7 +408,9 @@ function SceneShell({
               reverse ? "xl:order-2 xl:col-span-8" : "xl:order-1 xl:col-span-8"
             }`}
           >
-            <StorySceneBody density={density}>{children}</StorySceneBody>
+            <StorySceneBody density={density} isActive={isActive}>
+              {children}
+            </StorySceneBody>
           </div>
 
           <div
@@ -423,7 +438,12 @@ function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy:
       <div className="relative z-10 grid h-full min-h-0" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
         <div aria-hidden className="hidden xl:block" />
         <div className="flex h-full min-h-0 items-end overflow-hidden px-8 pb-[clamp(2.5rem,6svh,5rem)] pt-[clamp(5rem,8svh,7rem)] 2xl:px-14">
-          <div className="max-w-[74rem]">
+          <motion.div
+            className="max-w-[74rem]"
+            initial={{ opacity: 0, y: 32 }}
+            animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0.92, y: 8 }}
+            transition={revealTransition}
+          >
             <p className="mb-5 max-w-full text-[clamp(0.82rem,0.86vw,1.05rem)] font-medium uppercase tracking-normal text-white/88 drop-shadow-[0_3px_16px_rgba(0,0,0,0.45)]">
               {tx("Quality Real Estate - Buy / Broker / Manage")}
             </p>
@@ -455,7 +475,7 @@ function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy:
             <p className="mt-8 max-w-3xl text-[clamp(1.65rem,2.4vw,2.6rem)] font-light uppercase leading-none text-white/85">
               {tx(heroPriceText)}
             </p>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
@@ -467,15 +487,15 @@ function StoryDubaiFundRow({ fund, tx }: { fund: DubaiFund; tx: (copy: string) =
   const headlineMetrics = details.filter((detail) => isHeadlineMetric(detail.label)).slice(0, 3);
 
   return (
-    <div className="story-fund-row py-[clamp(0.65rem,1.1svh,0.95rem)] first:pt-0 last:pb-0">
+    <div className="story-fund-row py-[clamp(0.85rem,1.45svh,1.25rem)] first:pt-0 last:pb-0">
       <h3 className="story-card-title">{tx(fund.name)}</h3>
-      <div className="mt-2.5 grid w-full grid-cols-3 gap-x-4 gap-y-2">
+      <div className="mt-[clamp(0.65rem,1.1svh,0.95rem)] grid w-full grid-cols-3 gap-x-6 gap-y-[clamp(0.55rem,1svh,0.85rem)]">
         {headlineMetrics.map((detail) => {
           const metric = formatMetricValue(detail.value);
           return (
             <div key={`${detail.label}:${detail.value}`}>
               <p className="story-metric-label">{tx(detail.label)}</p>
-              <p className="story-metric-value mt-1">
+              <p className="story-metric-value mt-[clamp(0.45rem,0.85svh,0.7rem)]">
                 {metric.prefix ? `${tx(metric.prefix)} ` : ""}
                 {metric.value}
                 {metric.subtext ? (
@@ -506,13 +526,13 @@ function AboutScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
       <p className="story-body text-foreground/78">
         {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
       </p>
-      <dl className="grid w-full grid-cols-2 gap-x-6 gap-y-[clamp(0.65rem,1.1svh,0.95rem)]">
+      <dl className="grid w-full grid-cols-2 gap-x-8 gap-y-[clamp(0.85rem,1.45svh,1.25rem)]">
         {metrics.slice(0, 4).map((metric) => (
           <div key={metric.label}>
             <dt className="story-metric-value">
               <CountUpText value={metric.value} />
             </dt>
-            <dd className="story-metric-label mt-2">{tx(metric.label)}</dd>
+            <dd className="story-metric-label mt-[clamp(0.45rem,0.85svh,0.7rem)]">{tx(metric.label)}</dd>
           </div>
         ))}
       </dl>
@@ -530,11 +550,11 @@ function LegacyScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
     >
       <p className="eyebrow story-eyebrow">{tx("Our journey")}</p>
       <h2 className="story-h2">{tx("From Switzerland to Dubai to Batumi")}</h2>
-      <div className="grid w-full gap-[clamp(0.65rem,1.1svh,0.95rem)]">
+      <div className="grid w-full gap-[clamp(0.85rem,1.45svh,1.25rem)]">
         {legacyTimelineChapters.slice(0, 3).map((chapter, index) => (
-          <div key={chapter.id} className="border-l-2 border-primary/35 pl-4">
+          <div key={chapter.id} className="border-l-2 border-primary/35 pl-5">
             <p className="story-metric-label text-primary/80">{formatChapterNumber(index + 1)}</p>
-            <h3 className="story-card-title mt-1">{tx(chapter.title)}</h3>
+            <h3 className="story-card-title mt-[clamp(0.35rem,0.75svh,0.6rem)]">{tx(chapter.title)}</h3>
             <p className="story-body line-clamp-2 text-foreground/72">{tx(chapter.highlight)}</p>
           </div>
         ))}
@@ -679,7 +699,7 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
     <SceneShell
       isActive={isActive}
       tone="surface"
-      density="compact"
+      density="dense"
       reverse
       media={{
         kind: "video",
@@ -703,7 +723,7 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
             type="button"
             data-participation-card={route.id}
             onClick={onRegister}
-            className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-left transition-colors hover:text-primary"
+            className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-2.5 text-left transition-colors hover:text-primary"
           >
             <span className="story-metric-value text-primary/45">{formatChapterNumber(index + 1)}</span>
             <span className="min-w-0">

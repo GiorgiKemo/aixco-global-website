@@ -83,7 +83,7 @@
     --story-body-min: 1.125rem;
     --story-body-pref: 1.22vw;
     --story-body-max: 1.375rem;
-    --story-body-lh: 1.5;
+    --story-body-lh: 1.58;
 
     --story-card-title-min: 1.3rem;
     --story-card-title-pref: 1.5vw;
@@ -93,7 +93,9 @@
     --story-metric-pref: 2.25vw;
     --story-metric-max: 2.65rem;
 
-    --story-copy-gap: clamp(0.55rem, 1.15svh, 0.9rem);
+    --story-copy-gap: clamp(0.85rem, 1.75svh, 1.4rem);
+    --story-section-gap: clamp(1rem, 2svh, 1.65rem);
+    --story-metric-gap: clamp(0.55rem, 1svh, 0.85rem);
     --story-col-py: clamp(1.35rem, 3.25svh, 2.75rem);
     --story-col-px: clamp(1.25rem, 2vw, 2rem);
   }
@@ -512,7 +514,7 @@
   }
 
   .eyebrow {
-    @apply inline-flex items-center gap-2 text-[0.78rem] uppercase tracking-[0.22em] text-primary font-semibold;
+    @apply inline-flex items-center gap-2 text-[0.78rem] uppercase tracking-[0.24em] text-primary font-semibold;
   }
   .eyebrow::before {
     content: "";
@@ -553,7 +555,7 @@
 
   .story-eyebrow {
     font-size: clamp(0.72rem, 0.76vw, 0.88rem);
-    letter-spacing: 0.2em;
+    letter-spacing: 0.24em;
   }
 
   .story-card-title {
@@ -576,8 +578,8 @@
     font-size: clamp(0.62rem, 0.66vw, 0.72rem);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    line-height: 1.25;
+    letter-spacing: 0.16em;
+    line-height: 1.35;
     color: hsl(var(--muted-foreground));
   }
 
@@ -585,7 +587,7 @@
     width: 100%;
     max-width: none;
     display: grid;
-    gap: clamp(0.65rem, 1.1svh, 0.95rem);
+    gap: clamp(0.85rem, 1.45svh, 1.25rem);
   }
 
   .story-panel-cell {
@@ -1171,6 +1173,27 @@
     line-height: 1.45;
   }
 
+  main section:not(.hero-reference-font) .eyebrow + h2,
+  main section:not(.hero-reference-font) .eyebrow + .heading-section {
+    margin-top: clamp(1.15rem, 2.2vw, 1.65rem) !important;
+  }
+
+  main section:not(.hero-reference-font) .heading-section + p,
+  main section:not(.hero-reference-font) h2 + p:not(.eyebrow) {
+    margin-top: clamp(1.1rem, 2vw, 1.5rem);
+    line-height: 1.62;
+  }
+
+  main section:not(.hero-reference-font) [class*="tracking-[0.14em]"],
+  main section:not(.hero-reference-font) [class*="tracking-[0.12em]"] {
+    letter-spacing: 0.16em;
+  }
+
+  main section:not(.hero-reference-font) .font-display.text-4xl + p,
+  main section:not(.hero-reference-font) .text-gold + p {
+    margin-top: clamp(0.85rem, 1.5vw, 1.1rem);
+  }
+
   .reveal {
     opacity: 0;
     transform: translateY(24px);
@@ -1186,12 +1209,12 @@
   [data-motion-reveal="armed"] {
     will-change: opacity, transform, filter;
     opacity: 0;
-    transform: translate3d(0, 32px, 0) scale(0.985);
-    filter: blur(10px);
+    transform: translate3d(0, 36px, 0) scale(0.988);
+    filter: blur(8px);
     transition:
-      opacity 820ms var(--ease-apple),
-      transform 820ms var(--ease-apple),
-      filter 820ms var(--ease-apple);
+      opacity 760ms var(--ease-apple),
+      transform 760ms var(--ease-apple),
+      filter 760ms var(--ease-apple);
     transition-delay: var(--motion-delay, 0ms);
   }
 
@@ -1381,7 +1404,9 @@
       --story-metric-min: 1.7rem;
       --story-metric-pref: 2.25vw;
       --story-metric-max: 2.65rem;
-      --story-copy-gap: clamp(0.55rem, 1.15svh, 0.9rem);
+      --story-copy-gap: clamp(0.85rem, 1.75svh, 1.4rem);
+      --story-section-gap: clamp(1rem, 2svh, 1.65rem);
+      --story-metric-gap: clamp(0.55rem, 1svh, 0.85rem);
       --story-col-py: clamp(1.35rem, 3.25svh, 2.75rem);
       --story-col-px: clamp(1.25rem, 2vw, 2rem);
     }
@@ -1434,6 +1459,13 @@
 
     [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-fund-row + .story-fund-row {
       border-top: 1px solid hsl(var(--foreground) / 0.3);
+      margin-top: var(--story-metric-gap);
+      padding-top: var(--story-metric-gap);
+    }
+
+    [data-story-scene-copy] .story-metric-value + .story-metric-label,
+    [data-story-scene-copy] dt.story-metric-value + dd.story-metric-label {
+      margin-top: var(--story-metric-gap);
     }
 
     @container story-section (max-height: 62rem) {
@@ -1453,7 +1485,8 @@
         --story-card-title-max: 1.55rem;
         --story-metric-max: 2.1rem;
         --story-col-py: clamp(1.15rem, 2.75svh, 2.25rem);
-        --story-copy-gap: clamp(0.45rem, 0.95svh, 0.75rem);
+        --story-copy-gap: clamp(0.72rem, 1.35svh, 1.1rem);
+        --story-section-gap: clamp(0.85rem, 1.65svh, 1.35rem);
       }
     }
 
@@ -1469,7 +1502,8 @@
         --story-metric-min: 1.45rem;
         --story-metric-max: 1.85rem;
         --story-col-py: clamp(1rem, 2.35svh, 1.85rem);
-        --story-copy-gap: clamp(0.38rem, 0.75svh, 0.62rem);
+        --story-copy-gap: clamp(0.62rem, 1.1svh, 0.95rem);
+        --story-section-gap: clamp(0.72rem, 1.35svh, 1.15rem);
       }
 
       [data-story-scene-copy] .story-eyebrow {
@@ -1490,7 +1524,8 @@
         --story-metric-min: 1.3rem;
         --story-metric-max: 1.65rem;
         --story-col-py: clamp(0.85rem, 2svh, 1.5rem);
-        --story-copy-gap: clamp(0.32rem, 0.62svh, 0.52rem);
+        --story-copy-gap: clamp(0.55rem, 0.95svh, 0.82rem);
+        --story-section-gap: clamp(0.65rem, 1.15svh, 1rem);
       }
 
       [data-story-scene-copy] [data-layout="story-participation-routes"] button {

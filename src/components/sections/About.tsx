@@ -21,11 +21,11 @@ export function About() {
           <p className="eyebrow">{tx("About AIXCO")}</p>
           <h2
             data-scale="reduced"
-            className="mt-5 max-w-xl font-display text-[2.35rem] font-semibold leading-[1.04] tracking-normal text-foreground md:text-[2.45rem] lg:text-[clamp(2rem,2.25vw,2.85rem)]"
+            className="mt-6 max-w-xl font-display text-[2.35rem] font-semibold leading-[1.04] tracking-normal text-foreground md:text-[2.45rem] lg:text-[clamp(2rem,2.25vw,2.85rem)]"
           >
             {tx("AIXCO - Real Estate Platform")}
           </h2>
-          <p className="mt-5 max-w-[38rem] text-base leading-relaxed text-foreground/80 md:text-lg lg:text-[1.05rem]">
+          <p className="mt-6 max-w-[38rem] text-base leading-[1.62] text-foreground/80 md:text-lg lg:text-[1.05rem]">
             {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
           </p>
           <div className="mac-card mt-7 overflow-hidden lg:mt-6">
@@ -55,7 +55,7 @@ export function About() {
                 <p className="font-display text-4xl leading-none text-gold md:text-[2.8rem] lg:text-[clamp(2.35rem,3.2vw,3.35rem)]">
                   <CountUpText value={m.value} />
                 </p>
-                <p className="mt-3 text-xs uppercase leading-relaxed tracking-[0.14em] text-muted-foreground [overflow-wrap:anywhere]">
+                <p className="mt-4 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground [overflow-wrap:anywhere]">
                   {tx(m.label)}
                 </p>
               </div>
