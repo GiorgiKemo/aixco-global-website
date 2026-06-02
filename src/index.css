@@ -1293,6 +1293,25 @@
 
     [data-story-scene-column] {
       padding-block: clamp(2.25rem, 5.5svh, 4.75rem);
+      width: 100%;
+      min-width: 0;
+    }
+
+    [data-story-scene-copy] {
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      align-self: stretch;
+    }
+
+    [data-story-scene-copy] h2,
+    [data-story-scene-copy] p:not(.eyebrow),
+    [data-story-scene-copy] dl,
+    [data-story-scene-copy] .grid,
+    [data-story-scene-copy] .divide-y,
+    [data-story-scene-copy] [data-layout] {
+      width: 100%;
+      max-width: none;
     }
 
     [data-story-scene-media] img,

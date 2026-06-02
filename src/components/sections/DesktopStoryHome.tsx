@@ -310,6 +310,7 @@ function StorySceneBody({
 
     const fitCopy = () => {
       copy.style.removeProperty("zoom");
+      copy.style.removeProperty("width");
       const available = column.clientHeight;
       const needed = copy.scrollHeight;
       if (needed <= available + 2) return;
@@ -318,6 +319,8 @@ function StorySceneBody({
       const zoom = Math.max(0.84, Math.min(1, rawZoom));
       if (zoom < 0.985) {
         copy.style.setProperty("zoom", String(zoom));
+        // Zoom shrinks layout width too — expand so scaled content still fills the column edge-to-edge.
+        copy.style.setProperty("width", `${100 / zoom}%`);
       }
     };
 
@@ -333,6 +336,7 @@ function StorySceneBody({
       observer.disconnect();
       window.removeEventListener("resize", scheduleFit);
       copy.style.removeProperty("zoom");
+      copy.style.removeProperty("width");
     };
   }, [children]);
 
@@ -340,7 +344,7 @@ function StorySceneBody({
     <div
       ref={copyRef}
       data-story-scene-copy
-      className={`flex min-h-0 w-full max-w-none flex-col justify-center overflow-hidden ${densityClass}`}
+      className={`flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center overflow-hidden ${densityClass}`}
     >
       {children}
     </div>
@@ -381,8 +385,8 @@ function SceneShell({
         <div className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-12">
           <div
             data-story-scene-column
-            className={`relative z-10 flex h-full min-h-0 flex-col justify-center overflow-hidden px-8 py-[clamp(2rem,4.75svh,4.25rem)] 2xl:px-10 ${
-              reverse ? "xl:order-2 xl:col-span-6" : "xl:order-1 xl:col-span-6"
+            className={`relative z-10 flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-stretch justify-center overflow-hidden px-6 py-[clamp(2rem,4.75svh,4.25rem)] lg:px-8 ${
+              reverse ? "xl:order-2 xl:col-span-7" : "xl:order-1 xl:col-span-7"
             }`}
           >
             <StorySceneBody density={density}>{children}</StorySceneBody>
@@ -390,7 +394,7 @@ function SceneShell({
 
           <div
             data-story-scene-media
-            className={`relative h-full min-h-0 overflow-hidden ${reverse ? "xl:order-1 xl:col-span-6" : "xl:order-2 xl:col-span-6"}`}
+            className={`relative h-full min-h-0 overflow-hidden ${reverse ? "xl:order-1 xl:col-span-5" : "xl:order-2 xl:col-span-5"}`}
           >
             {media ? (
               <>
@@ -532,7 +536,7 @@ function DubaiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
       <p className="w-full text-[clamp(0.98rem,1.08vw,1.16rem)] leading-[1.56] text-foreground/78">
         {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
       </p>
-      <div className="grid gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+      <div className="grid w-full grid-cols-1 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
         {[landingFund, secondFund].filter(Boolean).map((fund) => (
           <div key={fund.id} className="bg-white/88 p-3.5">
             <h3 className="font-display text-lg font-semibold leading-tight">{tx(fund.name)}</h3>
@@ -621,7 +625,7 @@ function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string
       <p className="w-full text-[clamp(0.98rem,1.06vw,1.14rem)] leading-[1.56] text-foreground/74">
         {tx("Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.")}
       </p>
-      <div className="divide-y divide-foreground/10 border-y border-foreground/10">
+      <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
         {materialDownloads.slice(0, 4).map((material) => {
           const Icon = getMaterialIcon(material.format);
           const href = getSafePublicAssetHref(material.href, "#materials");
@@ -725,7 +729,7 @@ function HowScene({
       <p className="w-full text-[clamp(0.98rem,1.06vw,1.14rem)] leading-[1.56] text-foreground/76">
         {tx("Choose the journey that fits your role. The process is structured, transparent, and digitally managed.")}
       </p>
-      <div className="grid gap-px overflow-hidden border border-foreground/10 bg-foreground/10 sm:grid-cols-2">
+      <div className="grid w-full grid-cols-1 gap-px overflow-hidden border border-foreground/10 bg-foreground/10 sm:grid-cols-2">
         {journeys.map((journey, index) => (
           <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group bg-white/90 p-3.5 text-left transition-colors hover:bg-white">
             <p className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
@@ -757,7 +761,7 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
       <h2 className="w-full text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("AIXCO leadership")}
       </h2>
-      <div className="grid gap-2">
+      <div className="grid w-full gap-2">
         {team.map((member) => (
           <div key={member.name} className="grid grid-cols-[3.75rem_minmax(0,1fr)] gap-3 border border-foreground/10 bg-white/84 p-2.5">
             <div className="relative aspect-square overflow-hidden bg-muted">
@@ -795,7 +799,7 @@ function PartnersScene({ isActive, tx }: { isActive: boolean; tx: (copy: string)
       <h2 className="w-full text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("Group companies and strategic partners")}
       </h2>
-      <div className="grid grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+      <div className="grid w-full grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
         {featuredPartners.map((partner) => {
           const logo = aixcoLiveLogos[partner.logo as keyof typeof aixcoLiveLogos];
 
@@ -831,7 +835,7 @@ function FaqScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => s
       <h2 className="w-full text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("Frequently asked questions")}
       </h2>
-      <div className="divide-y divide-foreground/10 border-y border-foreground/10">
+      <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
         {highlightedFaqs.map((item) => (
           <div key={`${item.group}-${item.q}`} className="py-2.5">
             <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-primary/75">{tx(item.group)}</p>
@@ -868,12 +872,12 @@ function ContactScene({
       <p className="w-full text-[clamp(0.98rem,1.08vw,1.16rem)] leading-[1.56] text-white/76">
         {tx("Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.")}
       </p>
-      <div className="grid gap-2">
-        <a href="mailto:info@aixco.global" className="group flex items-center gap-3 border border-white/16 bg-white/10 p-3 text-white transition-colors hover:bg-white/14">
+      <div className="grid w-full gap-2">
+        <a href="mailto:info@aixco.global" className="group flex w-full items-center gap-3 border border-white/16 bg-white/10 p-3 text-white transition-colors hover:bg-white/14">
           <Mail className="h-5 w-5 text-primary-glow" aria-hidden />
           <span>info@aixco.global</span>
         </a>
-        <div className="flex items-center gap-3 border border-white/16 bg-white/10 p-3 text-white">
+        <div className="flex w-full items-center gap-3 border border-white/16 bg-white/10 p-3 text-white">
           <MapPin className="h-5 w-5 text-primary-glow" aria-hidden />
           <span className="text-[0.92rem]">{tx("Grungasse 16, 1050 Wien, Austria")}</span>
         </div>
