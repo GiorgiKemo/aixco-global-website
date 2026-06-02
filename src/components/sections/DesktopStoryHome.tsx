@@ -32,6 +32,12 @@ import {
 import { replaceLocationHash } from "@/lib/section-hash";
 import { getSafePublicAssetHref } from "@/lib/security/urls";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
+import {
+  formatMetricValue,
+  isHeadlineMetric,
+  parseFundDetail,
+  type DubaiFund,
+} from "./dubai/dubai-data";
 import { heroIntroText, heroPriceText } from "./hero/hero-ui";
 
 type StoryChapterKey =
@@ -298,10 +304,10 @@ function StorySceneBody({
 
   const densityClass =
     density === "dense"
-      ? "gap-[clamp(0.28rem,0.65svh,0.48rem)]"
+      ? "gap-[clamp(0.38rem,0.75svh,0.62rem)]"
       : density === "compact"
-        ? "gap-[clamp(0.32rem,0.75svh,0.55rem)]"
-        : "gap-[clamp(0.38rem,0.88svh,0.68rem)]";
+        ? "gap-[clamp(0.45rem,0.9svh,0.72rem)]"
+        : "gap-[clamp(0.55rem,1.15svh,0.9rem)]";
 
   useLayoutEffect(() => {
     const copy = copyRef.current;
@@ -316,7 +322,7 @@ function StorySceneBody({
       if (needed <= available + 2) return;
 
       const rawZoom = (available - 2) / needed;
-      const zoom = Math.max(0.84, Math.min(1, rawZoom));
+      const zoom = Math.max(0.88, Math.min(1, rawZoom));
       if (zoom < 0.985) {
         copy.style.setProperty("zoom", String(zoom));
         // Zoom shrinks layout width too — expand so scaled content still fills the column edge-to-edge.
@@ -385,8 +391,8 @@ function SceneShell({
         <div className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-12">
           <div
             data-story-scene-column
-            className={`relative z-10 flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-stretch justify-center overflow-hidden px-6 py-[clamp(2rem,4.75svh,4.25rem)] lg:px-8 ${
-              reverse ? "xl:order-2 xl:col-span-7" : "xl:order-1 xl:col-span-7"
+            className={`relative z-10 flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-stretch justify-center overflow-hidden ${
+              reverse ? "xl:order-2 xl:col-span-8" : "xl:order-1 xl:col-span-8"
             }`}
           >
             <StorySceneBody density={density}>{children}</StorySceneBody>
@@ -394,7 +400,7 @@ function SceneShell({
 
           <div
             data-story-scene-media
-            className={`relative h-full min-h-0 overflow-hidden ${reverse ? "xl:order-1 xl:col-span-5" : "xl:order-2 xl:col-span-5"}`}
+            className={`relative h-full min-h-0 overflow-hidden ${reverse ? "xl:order-1 xl:col-span-4" : "xl:order-2 xl:col-span-4"}`}
           >
             {media ? (
               <>
@@ -456,6 +462,36 @@ function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy:
   );
 }
 
+function StoryDubaiFundRow({ fund, tx }: { fund: DubaiFund; tx: (copy: string) => string }) {
+  const details = fund.details.map(parseFundDetail);
+  const headlineMetrics = details.filter((detail) => isHeadlineMetric(detail.label)).slice(0, 3);
+
+  return (
+    <div className="story-fund-row story-panel-cell">
+      <h3 className="story-card-title">{tx(fund.name)}</h3>
+      <div className="mt-2.5 grid w-full grid-cols-3 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+        {headlineMetrics.map((detail) => {
+          const metric = formatMetricValue(detail.value);
+          return (
+            <div key={`${detail.label}:${detail.value}`} className="bg-white/92 px-2.5 py-2">
+              <p className="story-metric-label">{tx(detail.label)}</p>
+              <p className="story-metric-value mt-1">
+                {metric.prefix ? `${tx(metric.prefix)} ` : ""}
+                {metric.value}
+                {metric.subtext ? (
+                  <span className="ml-0.5 text-[0.58em] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {tx(metric.subtext)}
+                  </span>
+                ) : null}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function AboutScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
   const { metrics } = useSiteContent();
 
@@ -465,22 +501,18 @@ function AboutScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
       media={{ kind: "image", src: aixcoLiveImages.aboutArchitecture, alt: tx("Batumi skyline and landmark towers") }}
       tone="light"
     >
-      <p className="eyebrow">{tx("About AIXCO")}</p>
-      <h2 className="w-full text-[clamp(2.65rem,4.6vw,5.25rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
-        {tx("AIXCO - Real Estate Platform")}
-      </h2>
-      <p className="w-full text-[clamp(0.98rem,1.1vw,1.2rem)] leading-[1.58] text-foreground/78">
+      <p className="eyebrow story-eyebrow">{tx("About AIXCO")}</p>
+      <h2 className="story-h2">{tx("AIXCO - Real Estate Platform")}</h2>
+      <p className="story-body text-foreground/78">
         {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
       </p>
-      <dl className="grid w-full grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+      <dl className="story-panel grid-cols-2">
         {metrics.slice(0, 4).map((metric) => (
-          <div key={metric.label} className="bg-white/88 p-3.5">
-            <dt className="font-display text-[clamp(1.85rem,2.5vw,3rem)] leading-none text-primary">
+          <div key={metric.label} className="story-panel-cell">
+            <dt className="story-metric-value">
               <CountUpText value={metric.value} />
             </dt>
-            <dd className="mt-2 text-[0.72rem] font-semibold uppercase leading-snug tracking-[0.12em] text-muted-foreground">
-              {tx(metric.label)}
-            </dd>
+            <dd className="story-metric-label mt-2">{tx(metric.label)}</dd>
           </div>
         ))}
       </dl>
@@ -496,16 +528,14 @@ function LegacyScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
       media={{ kind: "image", src: aixcoLiveImages.transactionBackdrop, alt: tx("AIXCO transaction backdrop"), position: "center" }}
       reverse
     >
-      <p className="eyebrow">{tx("Our journey")}</p>
-      <h2 className="w-full text-[clamp(2.35rem,3.5vw,4.25rem)] font-semibold leading-[0.96] tracking-[-0.03em]">
-        {tx("From Switzerland to Dubai to Batumi")}
-      </h2>
-      <div className="grid w-full gap-[clamp(0.55rem,1svh,0.85rem)]">
+      <p className="eyebrow story-eyebrow">{tx("Our journey")}</p>
+      <h2 className="story-h2">{tx("From Switzerland to Dubai to Batumi")}</h2>
+      <div className="grid w-full gap-[clamp(0.65rem,1.1svh,0.95rem)]">
         {legacyTimelineChapters.slice(0, 3).map((chapter, index) => (
-          <div key={chapter.id} className="border-l border-primary/30 pl-4">
-            <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-primary/80">{formatChapterNumber(index + 1)}</p>
-            <h3 className="text-[clamp(1.1rem,1.15vw,1.35rem)] font-semibold leading-tight">{tx(chapter.title)}</h3>
-            <p className="line-clamp-2 text-[clamp(0.88rem,0.95vw,0.98rem)] leading-snug text-foreground/70">{tx(chapter.highlight)}</p>
+          <div key={chapter.id} className="border-l-2 border-primary/35 pl-4">
+            <p className="story-metric-label text-primary/80">{formatChapterNumber(index + 1)}</p>
+            <h3 className="story-card-title mt-1">{tx(chapter.title)}</h3>
+            <p className="story-body line-clamp-2 text-foreground/72">{tx(chapter.highlight)}</p>
           </div>
         ))}
       </div>
@@ -529,19 +559,14 @@ function DubaiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
         title: tx(landingFund.name),
       }}
     >
-      <p className="eyebrow">{tx("Dubai - Legacy portfolio")}</p>
-      <h2 className="w-full text-[clamp(2.7rem,4.6vw,5.35rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
-        {tx("Our history in Dubai")}
-      </h2>
-      <p className="w-full text-[clamp(0.98rem,1.08vw,1.16rem)] leading-[1.56] text-foreground/78">
+      <p className="eyebrow story-eyebrow">{tx("Dubai - Legacy portfolio")}</p>
+      <h2 className="story-h2">{tx("Our history in Dubai")}</h2>
+      <p className="story-body text-foreground/78">
         {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
       </p>
-      <div className="grid w-full grid-cols-1 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+      <div data-layout="story-dubai-funds" className="story-panel">
         {[landingFund, secondFund].filter(Boolean).map((fund) => (
-          <div key={fund.id} className="bg-white/88 p-3.5">
-            <h3 className="font-display text-lg font-semibold leading-tight">{tx(fund.name)}</h3>
-            <p className="line-clamp-2 text-[0.82rem] leading-snug text-foreground/70">{tx(fund.details[1] ?? fund.details[0])}</p>
-          </div>
+          <StoryDubaiFundRow key={fund.id} fund={fund} tx={tx} />
         ))}
       </div>
     </SceneShell>
@@ -567,39 +592,35 @@ function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
         title: tx(firstProperty.name),
       }}
     >
-      <p className="eyebrow">{tx("Batumi - Current opportunity")}</p>
-      <h2 className="w-full text-[clamp(2.5rem,3.6vw,4.35rem)] font-semibold leading-[0.92] tracking-[-0.03em]">
-        {tx("Batumi")}
-      </h2>
-      <p className="w-full text-[clamp(1rem,1.05vw,1.14rem)] leading-[1.5] text-foreground/78">
+      <p className="eyebrow story-eyebrow">{tx("Batumi - Current opportunity")}</p>
+      <h2 className="story-h2">{tx("Batumi")}</h2>
+      <p className="story-body text-foreground/78">
         {tx("Opportunity-driven focus in Georgia - buy apartments with transparent euro pricing, strong rental potential, and full foreign ownership.")}
       </p>
       <div
         data-layout="story-batumi-benefits"
-        className="grid w-full gap-px overflow-hidden border border-foreground/10 bg-foreground/10 sm:grid-cols-2"
+        className="story-panel sm:grid-cols-2"
       >
         {batumiBenefits.slice(0, 4).map((benefit) => (
           <div
             key={benefit}
-            className="bg-white/90 p-3 text-[clamp(0.88rem,0.95vw,1rem)] font-medium leading-snug text-foreground/76"
+            className="story-panel-cell font-medium leading-snug text-foreground/80"
           >
             {tx(benefit)}
           </div>
         ))}
       </div>
-      <div data-layout="story-batumi-properties" className="grid w-full gap-2.5">
+      <div data-layout="story-batumi-properties" className="grid w-full gap-2">
         {[firstProperty, secondProperty].filter(Boolean).map((property) => (
           <Link
             key={property.id}
             href={`/aixco-global-op2/${property.url}`}
             prefetch={false}
-            className="group flex w-full items-center justify-between gap-4 border border-foreground/10 bg-white/78 p-3.5 transition-colors hover:border-primary/35 hover:bg-white"
+            className="group flex w-full items-center justify-between gap-4 border border-foreground/10 bg-white/82 p-3.5 transition-colors hover:border-primary/35 hover:bg-white"
           >
             <span className="min-w-0 flex-1">
-              <span className="block font-display text-[clamp(1.15rem,1.25vw,1.35rem)] font-semibold leading-tight">
-                {tx(property.name)}
-              </span>
-              <span className="line-clamp-2 block text-[clamp(0.88rem,0.95vw,0.98rem)] leading-snug text-foreground/62">
+              <span className="story-card-title block">{tx(property.name)}</span>
+              <span className="story-body line-clamp-2 block text-foreground/62">
                 {tx(property.summary)}
               </span>
             </span>
@@ -618,11 +639,9 @@ function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string
       tone="light"
       media={{ kind: "image", src: aixcoLiveImages.batumiOtium, alt: tx("Otium Batumi project reference") }}
     >
-      <p className="eyebrow">{tx("Client materials")}</p>
-      <h2 className="w-full text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
-        {tx("Materials & downloads")}
-      </h2>
-      <p className="w-full text-[clamp(0.98rem,1.06vw,1.14rem)] leading-[1.56] text-foreground/74">
+      <p className="eyebrow story-eyebrow">{tx("Client materials")}</p>
+      <h2 className="story-h2">{tx("Materials & downloads")}</h2>
+      <p className="story-body text-foreground/74">
         {tx("Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.")}
       </p>
       <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
@@ -635,15 +654,15 @@ function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string
               key={material.id}
               href={href}
               download={material.fileName}
-              className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 py-3"
+              className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 py-3.5"
               aria-label={`${tx("Download")} ${tx(material.title)}`}
             >
-              <span className="flex size-11 items-center justify-center border border-primary/20 bg-primary/10 text-primary">
-                <Icon size={20} aria-hidden />
+              <span className="flex size-12 items-center justify-center border border-primary/20 bg-primary/10 text-primary">
+                <Icon size={22} aria-hidden />
               </span>
               <span className="min-w-0">
-                <span className="block truncate font-display text-xl font-semibold">{tx(material.title)}</span>
-                <span className="mt-1 block truncate text-sm text-foreground/62">{material.format} / {tx(material.audience)}</span>
+                <span className="story-card-title block truncate">{tx(material.title)}</span>
+                <span className="story-body mt-0.5 block truncate text-foreground/62">{material.format} / {tx(material.audience)}</span>
               </span>
               <Download className="h-4 w-4 text-primary transition-transform group-hover:translate-y-0.5" aria-hidden />
             </a>
@@ -673,26 +692,26 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
         title: tx(primaryRoute.title),
       }}
     >
-      <p className="eyebrow">{tx("How to work with AIXCO")}</p>
-      <h2 className="w-full text-[clamp(2.25rem,3.2vw,4rem)] font-semibold leading-[0.96] tracking-[-0.03em]">
+      <p className="eyebrow story-eyebrow">{tx("How to work with AIXCO")}</p>
+      <h2 className="story-h2">
         <span className="text-gold">{tx("How")}</span> {tx("Customers/Partners Work")}
       </h2>
-      <p className="w-full text-[clamp(0.98rem,1.02vw,1.08rem)] leading-[1.5] text-foreground/76">
+      <p className="story-body text-foreground/76">
         {tx("Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
       </p>
-      <div className="grid w-full gap-2.5" data-layout="story-participation-routes">
+      <div className="grid w-full gap-2" data-layout="story-participation-routes">
         {[primaryRoute, ...remainingRoutes].map((route, index) => (
           <button
             key={route.id}
             type="button"
             data-participation-card={route.id}
             onClick={onRegister}
-            className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 border border-foreground/10 bg-white/82 p-3 text-left transition-colors hover:border-primary/35 hover:bg-white"
+            className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 border border-foreground/10 bg-white/82 p-3.5 text-left transition-colors hover:border-primary/35 hover:bg-white"
           >
-            <span className="font-display text-[clamp(1.35rem,1.5vw,1.65rem)] leading-none text-primary/45">{formatChapterNumber(index + 1)}</span>
+            <span className="story-metric-value text-primary/45">{formatChapterNumber(index + 1)}</span>
             <span className="min-w-0">
-              <span className="block font-display text-[clamp(1.05rem,1.12vw,1.2rem)] font-semibold leading-tight">{tx(route.title)}</span>
-              <span className="line-clamp-2 block text-[clamp(0.86rem,0.92vw,0.96rem)] leading-snug text-foreground/64">{tx(route.body)}</span>
+              <span className="story-card-title block">{tx(route.title)}</span>
+              <span className="story-body line-clamp-2 block text-foreground/64">{tx(route.body)}</span>
             </span>
             <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-1" aria-hidden />
           </button>
@@ -722,19 +741,17 @@ function HowScene({
       density="compact"
       media={{ kind: "image", src: aixcoLiveImages.contact, alt: tx("AIXCO contact and office reference"), position: "center" }}
     >
-      <p className="eyebrow">{tx("Journeys")}</p>
-      <h2 className="w-full text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
-        {tx("How AIXCO Works")}
-      </h2>
-      <p className="w-full text-[clamp(0.98rem,1.06vw,1.14rem)] leading-[1.56] text-foreground/76">
+      <p className="eyebrow story-eyebrow">{tx("Journeys")}</p>
+      <h2 className="story-h2">{tx("How AIXCO Works")}</h2>
+      <p className="story-body text-foreground/76">
         {tx("Choose the journey that fits your role. The process is structured, transparent, and digitally managed.")}
       </p>
-      <div className="grid w-full grid-cols-1 gap-px overflow-hidden border border-foreground/10 bg-foreground/10 sm:grid-cols-2">
+      <div className="story-panel sm:grid-cols-2">
         {journeys.map((journey, index) => (
-          <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group bg-white/90 p-3.5 text-left transition-colors hover:bg-white">
-            <p className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
-            <h3 className="font-display text-lg font-semibold leading-tight">{tx(journey.role)}</h3>
-            <p className="line-clamp-2 text-[0.8rem] leading-snug text-foreground/65">{tx(journey.summary)}</p>
+          <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="story-panel-cell group text-left transition-colors hover:bg-white">
+            <p className="story-metric-label text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
+            <h3 className="story-card-title mt-1">{tx(journey.role)}</h3>
+            <p className="story-body line-clamp-2 text-foreground/65">{tx(journey.summary)}</p>
           </button>
         ))}
       </div>
@@ -757,13 +774,11 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
       media={{ kind: "image", src: teamImageMap[team[0].image as keyof typeof teamImageMap], alt: tx(team[0].name), position: "center top" }}
       reverse
     >
-      <p className="eyebrow">{tx("Team")}</p>
-      <h2 className="w-full text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
-        {tx("AIXCO leadership")}
-      </h2>
+      <p className="eyebrow story-eyebrow">{tx("Team")}</p>
+      <h2 className="story-h2">{tx("AIXCO leadership")}</h2>
       <div className="grid w-full gap-2">
         {team.map((member) => (
-          <div key={member.name} className="grid grid-cols-[3.75rem_minmax(0,1fr)] gap-3 border border-foreground/10 bg-white/84 p-2.5">
+          <div key={member.name} className="grid grid-cols-[3.75rem_minmax(0,1fr)] gap-3 border border-foreground/10 bg-white/84 p-3">
             <div className="relative aspect-square overflow-hidden bg-muted">
               <Image
                 src={teamImageMap[member.image as keyof typeof teamImageMap]}
@@ -774,9 +789,9 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
               />
             </div>
             <div className="min-w-0 self-center">
-              <h3 className="font-display text-lg font-semibold leading-tight">{tx(member.name)}</h3>
-              <p className="text-[0.8rem] font-medium text-primary">{tx(member.role)}</p>
-              <p className="line-clamp-1 text-[0.8rem] leading-snug text-foreground/64">{tx(member.summary)}</p>
+              <h3 className="story-card-title">{tx(member.name)}</h3>
+              <p className="story-body font-medium text-primary">{tx(member.role)}</p>
+              <p className="story-body line-clamp-1 text-foreground/64">{tx(member.summary)}</p>
             </div>
           </div>
         ))}
@@ -795,22 +810,20 @@ function PartnersScene({ isActive, tx }: { isActive: boolean; tx: (copy: string)
       tone="light"
       media={{ kind: "image", src: aixcoLiveImages.dubaiHealthcare, alt: tx("Dubai Healthcare City legacy reference"), position: "center" }}
     >
-      <p className="eyebrow">{tx("Partners")}</p>
-      <h2 className="w-full text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
-        {tx("Group companies and strategic partners")}
-      </h2>
-      <div className="grid w-full grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+      <p className="eyebrow story-eyebrow">{tx("Partners")}</p>
+      <h2 className="story-h2">{tx("Group companies and strategic partners")}</h2>
+      <div className="story-panel grid-cols-2">
         {featuredPartners.map((partner) => {
           const logo = aixcoLiveLogos[partner.logo as keyof typeof aixcoLiveLogos];
 
           return (
-            <div key={partner.name} className="flex min-h-[4.5rem] flex-col justify-between bg-white/90 p-3">
+            <div key={partner.name} className="story-panel-cell flex min-h-[4.75rem] flex-col justify-between">
               {logo ? (
-                <Image src={logo} alt={tx(partner.name)} width={160} height={72} className="h-9 w-auto max-w-full object-contain object-left" />
+                <Image src={logo} alt={tx(partner.name)} width={160} height={72} className="h-10 w-auto max-w-full object-contain object-left" />
               ) : (
                 <Building2 className="h-7 w-7 text-primary" aria-hidden />
               )}
-              <p className="text-[0.8rem] font-semibold leading-tight">{tx(partner.name)}</p>
+              <p className="story-card-title mt-2">{tx(partner.name)}</p>
             </div>
           );
         })}
@@ -831,16 +844,14 @@ function FaqScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => s
       reverse
       media={{ kind: "image", src: aixcoLiveImages.batumiGuru, alt: tx("Guru Batumi project reference"), position: "center" }}
     >
-      <p className="eyebrow">{tx("FAQs")}</p>
-      <h2 className="w-full text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
-        {tx("Frequently asked questions")}
-      </h2>
+      <p className="eyebrow story-eyebrow">{tx("FAQs")}</p>
+      <h2 className="story-h2">{tx("Frequently asked questions")}</h2>
       <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
         {highlightedFaqs.map((item) => (
-          <div key={`${item.group}-${item.q}`} className="py-2.5">
-            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-primary/75">{tx(item.group)}</p>
-            <h3 className="font-display text-lg font-semibold leading-tight">{tx(item.q)}</h3>
-            <p className="line-clamp-1 text-[0.8rem] leading-snug text-foreground/66">{tx(item.a)}</p>
+          <div key={`${item.group}-${item.q}`} className="py-3">
+            <p className="story-metric-label text-primary/75">{tx(item.group)}</p>
+            <h3 className="story-card-title mt-1">{tx(item.q)}</h3>
+            <p className="story-body line-clamp-1 text-foreground/66">{tx(item.a)}</p>
           </div>
         ))}
       </div>
@@ -865,21 +876,19 @@ function ContactScene({
       tone="dark"
       media={{ kind: "image", src: aixcoLiveImages.contact, alt: tx("AIXCO contact office reference"), position: "center" }}
     >
-      <p className="eyebrow text-primary-glow">{tx("Contact")}</p>
-      <h2 className="w-full text-[clamp(2.75rem,4.6vw,5.35rem)] font-semibold leading-[0.94] tracking-[-0.03em] text-white">
-        {tx("Start with AIXCO")}
-      </h2>
-      <p className="w-full text-[clamp(0.98rem,1.08vw,1.16rem)] leading-[1.56] text-white/76">
+      <p className="eyebrow story-eyebrow text-primary-glow">{tx("Contact")}</p>
+      <h2 className="story-h2 text-white">{tx("Start with AIXCO")}</h2>
+      <p className="story-body text-white/76">
         {tx("Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.")}
       </p>
       <div className="grid w-full gap-2">
-        <a href="mailto:info@aixco.global" className="group flex w-full items-center gap-3 border border-white/16 bg-white/10 p-3 text-white transition-colors hover:bg-white/14">
+        <a href="mailto:info@aixco.global" className="group flex w-full items-center gap-3 border border-white/16 bg-white/10 p-3.5 text-white transition-colors hover:bg-white/14">
           <Mail className="h-5 w-5 text-primary-glow" aria-hidden />
-          <span>info@aixco.global</span>
+          <span className="story-body text-white">info@aixco.global</span>
         </a>
-        <div className="flex w-full items-center gap-3 border border-white/16 bg-white/10 p-3 text-white">
+        <div className="flex w-full items-center gap-3 border border-white/16 bg-white/10 p-3.5 text-white">
           <MapPin className="h-5 w-5 text-primary-glow" aria-hidden />
-          <span className="text-[0.92rem]">{tx("Grungasse 16, 1050 Wien, Austria")}</span>
+          <span className="story-body text-white">{tx("Grungasse 16, 1050 Wien, Austria")}</span>
         </div>
       </div>
       <div className="flex flex-wrap gap-2.5">

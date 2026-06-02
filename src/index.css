@@ -72,6 +72,30 @@
     --sidebar-accent-foreground: 220 25% 12%;
     --sidebar-border: 36 16% 84%;
     --sidebar-ring: 36 58% 34%;
+
+    /* Desktop story mode — editorial typography scale (overridden per section height) */
+    --story-h2-min: 3.25rem;
+    --story-h2-pref: 5.2vw;
+    --story-h2-max: 6.25rem;
+    --story-h2-lh: 0.92;
+    --story-h2-tracking: -0.035em;
+
+    --story-body-min: 1.125rem;
+    --story-body-pref: 1.22vw;
+    --story-body-max: 1.375rem;
+    --story-body-lh: 1.5;
+
+    --story-card-title-min: 1.3rem;
+    --story-card-title-pref: 1.5vw;
+    --story-card-title-max: 1.75rem;
+
+    --story-metric-min: 1.7rem;
+    --story-metric-pref: 2.25vw;
+    --story-metric-max: 2.65rem;
+
+    --story-copy-gap: clamp(0.55rem, 1.15svh, 0.9rem);
+    --story-col-py: clamp(1.35rem, 3.25svh, 2.75rem);
+    --story-col-px: clamp(1.25rem, 2vw, 2rem);
   }
 }
 
@@ -508,6 +532,68 @@
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
     @apply text-3xl md:text-5xl leading-[1.08] font-semibold tracking-tight;
     letter-spacing: -0.03em;
+  }
+
+  .story-h2 {
+    width: 100%;
+    max-width: none;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+    font-size: clamp(var(--story-h2-min), var(--story-h2-pref), var(--story-h2-max));
+    font-weight: 600;
+    line-height: var(--story-h2-lh);
+    letter-spacing: var(--story-h2-tracking);
+  }
+
+  .story-body {
+    width: 100%;
+    max-width: none;
+    font-size: clamp(var(--story-body-min), var(--story-body-pref), var(--story-body-max));
+    line-height: var(--story-body-lh);
+  }
+
+  .story-eyebrow {
+    font-size: clamp(0.72rem, 0.76vw, 0.88rem);
+    letter-spacing: 0.2em;
+  }
+
+  .story-card-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+    font-size: clamp(var(--story-card-title-min), var(--story-card-title-pref), var(--story-card-title-max));
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  .story-metric-value {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+    font-size: clamp(var(--story-metric-min), var(--story-metric-pref), var(--story-metric-max));
+    font-weight: 600;
+    line-height: 1;
+    color: hsl(var(--primary));
+  }
+
+  .story-metric-label {
+    font-size: clamp(0.62rem, 0.66vw, 0.72rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    line-height: 1.25;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .story-panel {
+    width: 100%;
+    max-width: none;
+    display: grid;
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid hsl(var(--foreground) / 0.1);
+    background: hsl(var(--foreground) / 0.1);
+  }
+
+  .story-panel-cell {
+    background: hsl(var(--background) / 0.9);
+    padding: clamp(0.75rem, 1.4svh, 1.1rem) clamp(0.85rem, 1.5vw, 1.15rem);
   }
 
   .text-gold {
@@ -1285,6 +1371,22 @@
       container-name: story-section;
       height: 100svh;
       max-height: 100svh;
+
+      --story-h2-min: 3.25rem;
+      --story-h2-pref: 5.2vw;
+      --story-h2-max: 6.25rem;
+      --story-body-min: 1.125rem;
+      --story-body-pref: 1.22vw;
+      --story-body-max: 1.375rem;
+      --story-card-title-min: 1.3rem;
+      --story-card-title-pref: 1.5vw;
+      --story-card-title-max: 1.75rem;
+      --story-metric-min: 1.7rem;
+      --story-metric-pref: 2.25vw;
+      --story-metric-max: 2.65rem;
+      --story-copy-gap: clamp(0.55rem, 1.15svh, 0.9rem);
+      --story-col-py: clamp(1.35rem, 3.25svh, 2.75rem);
+      --story-col-px: clamp(1.25rem, 2vw, 2rem);
     }
 
     [data-story-scene-copy] [class*="mt-"] {
@@ -1292,7 +1394,8 @@
     }
 
     [data-story-scene-column] {
-      padding-block: clamp(2.25rem, 5.5svh, 4.75rem);
+      padding-block: var(--story-col-py);
+      padding-inline: var(--story-col-px);
       width: 100%;
       min-width: 0;
     }
@@ -1302,6 +1405,7 @@
       max-width: none;
       min-width: 0;
       align-self: stretch;
+      gap: var(--story-copy-gap) !important;
     }
 
     [data-story-scene-copy] h2,
@@ -1309,7 +1413,8 @@
     [data-story-scene-copy] dl,
     [data-story-scene-copy] .grid,
     [data-story-scene-copy] .divide-y,
-    [data-story-scene-copy] [data-layout] {
+    [data-story-scene-copy] [data-layout],
+    [data-story-scene-copy] .story-panel {
       width: 100%;
       max-width: none;
     }
@@ -1322,149 +1427,80 @@
     }
 
     [data-story-scene-copy] [data-layout="story-batumi-benefits"] > * {
-      font-size: clamp(0.88rem, 0.95vw, 1rem);
+      font-size: clamp(0.95rem, 1.05vw, 1.125rem);
+      font-weight: 500;
     }
 
     [data-story-scene-copy] [data-layout="story-batumi-properties"] a {
-      padding: 0.85rem 1rem;
+      padding: clamp(0.85rem, 1.5svh, 1.1rem) clamp(0.95rem, 1.5vw, 1.15rem);
+    }
+
+    [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-fund-row + .story-fund-row {
+      border-top: 1px solid hsl(var(--foreground) / 0.1);
     }
 
     @container story-section (max-height: 62rem) {
-      [data-story-scene-copy] h2 {
-        font-size: clamp(2.25rem, 3.2vw, 4rem) !important;
-        line-height: 0.95 !important;
-      }
-
-      [data-story-scene-copy] p:not(.eyebrow) {
-        line-height: 1.5 !important;
+      [data-story-section] {
+        --story-h2-max: 5.5rem;
+        --story-h2-min: 3rem;
+        --story-metric-max: 2.35rem;
       }
     }
 
     @container story-section (max-height: 56rem) {
-      [data-story-scene-column] {
-        padding-block: clamp(1.85rem, 4.25svh, 3.5rem) !important;
-      }
-
-      [data-story-scene-copy] h2 {
-        font-size: clamp(2rem, 2.85vw, 3.5rem) !important;
-      }
-
-      [data-story-scene-copy] [data-layout="story-participation-routes"] button {
-        padding-block: 0.7rem;
-      }
-
-      [data-story-scene-copy] .font-display.text-xl {
-        font-size: 1.1rem;
+      [data-story-section] {
+        --story-h2-max: 4.75rem;
+        --story-h2-min: 2.75rem;
+        --story-h2-pref: 4.6vw;
+        --story-body-max: 1.25rem;
+        --story-card-title-max: 1.55rem;
+        --story-metric-max: 2.1rem;
+        --story-col-py: clamp(1.15rem, 2.75svh, 2.25rem);
+        --story-copy-gap: clamp(0.45rem, 0.95svh, 0.75rem);
       }
     }
 
     @container story-section (max-height: 48rem) {
-      [data-story-scene-column] {
-        padding-block: clamp(1.65rem, 3.75svh, 2.85rem) !important;
+      [data-story-section] {
+        --story-h2-max: 4rem;
+        --story-h2-min: 2.5rem;
+        --story-h2-pref: 4.2vw;
+        --story-body-min: 1.05rem;
+        --story-body-max: 1.15rem;
+        --story-card-title-min: 1.1rem;
+        --story-card-title-max: 1.35rem;
+        --story-metric-min: 1.45rem;
+        --story-metric-max: 1.85rem;
+        --story-col-py: clamp(1rem, 2.35svh, 1.85rem);
+        --story-copy-gap: clamp(0.38rem, 0.75svh, 0.62rem);
       }
 
-      [data-story-scene-copy] {
-        gap: clamp(0.32rem, 0.62svh, 0.55rem) !important;
+      [data-story-scene-copy] .story-eyebrow {
+        font-size: 0.68rem !important;
       }
 
-      [data-story-scene-copy] h2 {
-        font-size: clamp(1.95rem, 2.65vw, 3.1rem) !important;
-        line-height: 0.94 !important;
-      }
-
-      [data-story-scene-copy] p:not(.eyebrow) {
-        font-size: clamp(0.9rem, 0.98vw, 1.02rem) !important;
-        line-height: 1.46 !important;
-      }
-
-      [data-story-scene-copy] .eyebrow {
-        font-size: 0.7rem !important;
-      }
-
-      [data-story-scene-copy] dl > div {
-        padding: 0.65rem !important;
-      }
-
-      [data-story-scene-copy] dl dt {
-        font-size: clamp(1.45rem, 2vw, 2.15rem) !important;
-      }
-
-      [data-story-scene-copy] dl dd {
-        font-size: 0.64rem !important;
-        margin-top: 0.35rem !important;
-      }
-
-      [data-story-scene-copy] [data-layout="story-batumi-benefits"] > * {
-        font-size: clamp(0.84rem, 0.92vw, 0.96rem) !important;
-        padding: 0.65rem !important;
-      }
-
-      [data-story-scene-copy] [data-layout="story-participation-routes"] button,
-      [data-story-scene-copy] [data-layout="story-batumi-properties"] a,
-      [data-story-scene-copy] .grid.gap-2 > *,
-      [data-story-scene-copy] .divide-y > * {
-        padding-block: 0.6rem !important;
-      }
-
-      [data-story-scene-copy] .font-display.text-lg {
-        font-size: 1.05rem !important;
+      [data-story-scene-copy] .story-panel-cell {
+        padding: 0.65rem 0.75rem;
       }
     }
 
     @container story-section (max-height: 45rem) {
-      [data-story-scene-column] {
-        padding-block: clamp(1.25rem, 3svh, 2.15rem) !important;
-      }
-
-      [data-story-scene-copy] h2 {
-        font-size: clamp(1.75rem, 2.35vw, 2.65rem) !important;
-        line-height: 0.93 !important;
-      }
-
-      [data-story-scene-copy] p:not(.eyebrow) {
-        font-size: clamp(0.86rem, 0.94vw, 0.96rem) !important;
-        line-height: 1.4 !important;
-      }
-
-      [data-story-scene-copy] dl > div {
-        padding: 0.5rem !important;
-      }
-
-      [data-story-scene-copy] dl dt {
-        font-size: clamp(1.2rem, 1.65vw, 1.7rem) !important;
-      }
-
-      [data-story-scene-copy] .font-display.text-2xl {
-        font-size: 1.4rem !important;
-      }
-
-      [data-story-scene-copy] .font-display.text-xl {
-        font-size: 1rem !important;
-      }
-
-      [data-story-scene-copy] .font-display.text-lg {
-        font-size: 0.98rem !important;
-      }
-
-      [data-story-scene-copy] [data-layout="story-batumi-benefits"] > * {
-        font-size: clamp(0.8rem, 0.88vw, 0.92rem) !important;
+      [data-story-section] {
+        --story-h2-max: 3.35rem;
+        --story-h2-min: 2.25rem;
+        --story-h2-pref: 3.8vw;
+        --story-body-min: 1rem;
+        --story-body-max: 1.08rem;
+        --story-card-title-min: 1.05rem;
+        --story-card-title-max: 1.22rem;
+        --story-metric-min: 1.3rem;
+        --story-metric-max: 1.65rem;
+        --story-col-py: clamp(0.85rem, 2svh, 1.5rem);
+        --story-copy-gap: clamp(0.32rem, 0.62svh, 0.52rem);
       }
 
       [data-story-scene-copy] [data-layout="story-participation-routes"] button {
         padding: 0.55rem 0.65rem !important;
-        gap: 0.5rem !important;
-      }
-
-      [data-story-scene-copy] .grid.gap-2 {
-        gap: 0.4rem !important;
-      }
-
-      [data-story-scene-copy] .grid.gap-2 > * {
-        padding: 0.5rem 0.65rem !important;
-      }
-
-      [data-story-scene-copy] .divide-y > * {
-        padding-block: 0.5rem !important;
       }
 
       [data-story-scene-copy] .btn-gold,
