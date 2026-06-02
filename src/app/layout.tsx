@@ -50,7 +50,7 @@ const homeStoryBootScript = `
 (function () {
   try {
     var isHome = window.location.pathname === "/";
-    var supportsStory = window.matchMedia && window.matchMedia("(min-width: 1280px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)").matches;
+    var supportsStory = window.matchMedia && window.matchMedia("(min-width: 1280px) and (min-height: 700px)").matches;
     if (isHome && supportsStory) {
       document.body.classList.add("home-desktop-story-boot");
       document.body.classList.add("home-story-nav-hidden");

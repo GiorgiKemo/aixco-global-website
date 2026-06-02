@@ -15,7 +15,7 @@ import { clearPendingNavScrollTimers, scrollToNavHash } from "./nav/nav-scroll";
 import { useNavResponsiveMode } from "./nav/use-nav-responsive-mode";
 import { HOME_RETURN_HASH_SYNC_LOCK_MS, HOME_SECTION_IDS, type NavItem } from "./nav/nav-data";
 
-const desktopStoryNavQuery = "(min-width: 1280px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)";
+const desktopStoryNavQuery = "(min-width: 1280px) and (min-height: 700px)";
 
 function shouldHideNavForDesktopStory() {
   if (typeof window === "undefined" || typeof window.matchMedia !== "function") return false;

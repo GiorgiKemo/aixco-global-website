@@ -1247,7 +1247,7 @@
 
   }
 
-  @media (prefers-reduced-motion: no-preference) and (min-width: 1280px) and (min-height: 700px) {
+  @media (min-width: 1280px) and (min-height: 700px) {
     body.home-desktop-story-boot {
       background: hsl(var(--foreground)) !important;
     }

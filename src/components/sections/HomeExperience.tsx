@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { useLayoutEffect, useState, type ReactNode } from "react";
-import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 
 const DesktopStoryHome = dynamic(
   () => import("@/components/sections/DesktopStoryHome").then((module) => module.DesktopStoryHome),
@@ -25,7 +24,6 @@ function StoryBootSurface() {
 }
 
 export function HomeExperience({ children }: { children: ReactNode }) {
-  const shouldReduceMotion = useHydratedReducedMotion();
   const [shouldUseStory, setShouldUseStory] = useState(false);
 
   useLayoutEffect(() => {
@@ -33,13 +31,13 @@ export function HomeExperience({ children }: { children: ReactNode }) {
 
     const mediaQuery = window.matchMedia(desktopStoryQuery);
     const updateStoryMode = () => {
-      setShouldUseStory(mediaQuery.matches && !shouldReduceMotion);
+      setShouldUseStory(mediaQuery.matches);
     };
 
     updateStoryMode();
     mediaQuery.addEventListener("change", updateStoryMode);
     return () => mediaQuery.removeEventListener("change", updateStoryMode);
-  }, [shouldReduceMotion]);
+  }, []);
 
   useLayoutEffect(() => {
     if (typeof document === "undefined") return undefined;
