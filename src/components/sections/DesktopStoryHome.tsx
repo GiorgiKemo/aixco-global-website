@@ -294,15 +294,48 @@ function StorySceneBody({
   children: React.ReactNode;
   density?: "default" | "compact" | "dense";
 }) {
+  const copyRef = useRef<HTMLDivElement | null>(null);
+
   const densityClass =
     density === "dense"
-      ? "gap-[clamp(0.3rem,0.72svh,0.5rem)]"
+      ? "gap-[clamp(0.28rem,0.65svh,0.48rem)]"
       : density === "compact"
-        ? "gap-[clamp(0.38rem,0.85svh,0.6rem)]"
-        : "gap-[clamp(0.45rem,1svh,0.75rem)]";
+        ? "gap-[clamp(0.32rem,0.75svh,0.55rem)]"
+        : "gap-[clamp(0.38rem,0.88svh,0.68rem)]";
+
+  useLayoutEffect(() => {
+    const copy = copyRef.current;
+    const column = copy?.parentElement;
+    if (!copy || !column) return undefined;
+
+    const fitCopy = () => {
+      copy.style.removeProperty("zoom");
+      const available = column.clientHeight;
+      const needed = copy.scrollHeight;
+      if (needed > available + 2) {
+        const zoom = Math.max(0.62, (available - 2) / needed);
+        copy.style.setProperty("zoom", String(zoom));
+      }
+    };
+
+    const scheduleFit = () => window.requestAnimationFrame(fitCopy);
+    const observer = new ResizeObserver(scheduleFit);
+
+    observer.observe(copy);
+    observer.observe(column);
+    scheduleFit();
+    window.addEventListener("resize", scheduleFit);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", scheduleFit);
+      copy.style.removeProperty("zoom");
+    };
+  }, [children]);
 
   return (
     <div
+      ref={copyRef}
       data-story-scene-copy
       className={`flex min-h-0 w-full max-w-xl flex-col justify-center overflow-hidden ${densityClass}`}
     >
@@ -336,22 +369,26 @@ function SceneShell({
         : "bg-background text-foreground";
 
   return (
-    <div className={`relative h-full ${toneClass}`}>
+    <div className={`relative h-full min-h-0 ${toneClass}`}>
       <div
-        className="grid h-full"
+        className="grid h-full min-h-0"
         style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}
       >
         <div aria-hidden className="hidden xl:block" />
-        <div className={`grid min-h-0 grid-cols-1 xl:grid-cols-12 ${reverse ? "" : ""}`}>
+        <div className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-12">
           <div
-            className={`relative z-10 flex h-full min-h-0 flex-col justify-center overflow-hidden px-8 py-[clamp(4.25rem,9svh,6.5rem)] 2xl:px-12 ${
+            data-story-scene-column
+            className={`relative z-10 flex h-full min-h-0 flex-col justify-center overflow-hidden px-8 py-[clamp(2.25rem,5.5svh,4.75rem)] 2xl:px-12 ${
               reverse ? "xl:order-2 xl:col-span-5" : "xl:order-1 xl:col-span-5"
             }`}
           >
             <StorySceneBody density={density}>{children}</StorySceneBody>
           </div>
 
-          <div className={`relative min-h-0 overflow-hidden ${reverse ? "xl:order-1 xl:col-span-7" : "xl:order-2 xl:col-span-7"}`}>
+          <div
+            data-story-scene-media
+            className={`relative h-full min-h-0 overflow-hidden ${reverse ? "xl:order-1 xl:col-span-7" : "xl:order-2 xl:col-span-7"}`}
+          >
             {media ? (
               <>
                 <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
@@ -369,10 +406,10 @@ function SceneShell({
 
 function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy: string) => string; onRegister: () => void }) {
   return (
-    <div className="relative h-full overflow-hidden text-white">
-      <div className="relative z-10 grid h-full" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
+    <div className="relative h-full min-h-0 overflow-hidden text-white">
+      <div className="relative z-10 grid h-full min-h-0" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
         <div aria-hidden className="hidden xl:block" />
-        <div className="flex h-full items-end px-8 pb-[clamp(4rem,9svh,6.5rem)] pt-28 2xl:px-14">
+        <div className="flex h-full min-h-0 items-end overflow-hidden px-8 pb-[clamp(2.5rem,6svh,5rem)] pt-[clamp(5rem,8svh,7rem)] 2xl:px-14">
           <div className="max-w-[74rem]">
             <p className="mb-5 max-w-full text-[clamp(0.82rem,0.86vw,1.05rem)] font-medium uppercase tracking-normal text-white/88 drop-shadow-[0_3px_16px_rgba(0,0,0,0.45)]">
               {tx("Quality Real Estate - Buy / Broker / Manage")}
@@ -513,7 +550,7 @@ function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
     <SceneShell
       isActive={isActive}
       tone="surface"
-      density="compact"
+      density="dense"
       reverse
       media={{
         kind: "video",
@@ -665,6 +702,7 @@ function HowScene({
     <SceneShell
       isActive={isActive}
       tone="light"
+      density="compact"
       media={{ kind: "image", src: aixcoLiveImages.contact, alt: tx("AIXCO contact and office reference"), position: "center" }}
     >
       <p className="eyebrow">{tx("Journeys")}</p>
@@ -698,7 +736,7 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
     <SceneShell
       isActive={isActive}
       tone="surface"
-      density="compact"
+      density="dense"
       media={{ kind: "image", src: teamImageMap[team[0].image as keyof typeof teamImageMap], alt: tx(team[0].name), position: "center top" }}
       reverse
     >
@@ -772,7 +810,7 @@ function FaqScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => s
     <SceneShell
       isActive={isActive}
       tone="surface"
-      density="compact"
+      density="dense"
       reverse
       media={{ kind: "image", src: aixcoLiveImages.batumiGuru, alt: tx("Guru Batumi project reference"), position: "center" }}
     >
@@ -994,7 +1032,7 @@ export function DesktopStoryHome() {
               id={chapter.id}
               data-story-section={chapter.key}
               data-story-active={isActive ? "true" : "false"}
-              className="isolate h-[115svh] scroll-mt-0 overflow-hidden"
+              className="isolate h-[100svh] max-h-[100svh] scroll-mt-0 overflow-hidden"
             >
               {scene}
             </section>
