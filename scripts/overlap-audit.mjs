@@ -100,7 +100,7 @@ async function auditPage(page) {
 }
 
 async function scrollSections(page) {
-  const ids = ["about", "legacy", "dubai", "batumi", "partners", "contact"];
+  const ids = ["about", "legacy", "dubai", "batumi", "materials", "participate", "how", "team", "partners", "faqs", "contact"];
   for (const id of ids) {
     await page.evaluate((sectionId) => {
       const el = document.getElementById(sectionId);
@@ -142,15 +142,48 @@ async function auditParticipateTransition(page) {
       mediaOverlapPx = Math.max(0, Math.round(bottom - top));
     }
 
+    const copy = participate.querySelector("[data-story-scene-copy]");
+    const column = copy?.parentElement;
+    const overflowY = column ? window.getComputedStyle(column).overflowY : "";
+
     return {
       skipped: false,
       routePastSection,
       routeIntoHow,
       mediaOverlapPx,
-      sceneOverflow:
-        !!participate.querySelector(".relative.z-10.flex") &&
-        participate.querySelector(".relative.z-10.flex").scrollHeight >
-          participate.querySelector(".relative.z-10.flex").clientHeight + 4,
+      sceneOverflow: copy ? copy.scrollHeight > copy.clientHeight + 4 : false,
+      sceneScrollable: overflowY === "auto" || overflowY === "scroll",
+    };
+  });
+}
+
+async function auditStorySections(page) {
+  return page.evaluate(() => {
+    const sections = Array.from(document.querySelectorAll("[data-story-section]"));
+    if (!sections.length) return { skipped: true, reason: "not-story-mode" };
+
+    const overflowSections = [];
+    const scrollableColumns = [];
+
+    for (const section of sections) {
+      const key = section.getAttribute("data-story-section") ?? "unknown";
+      const copy = section.querySelector("[data-story-scene-copy]");
+      const column = copy?.parentElement;
+      if (copy && copy.scrollHeight > copy.clientHeight + 4) {
+        overflowSections.push(key);
+      }
+      if (column) {
+        const overflowY = window.getComputedStyle(column).overflowY;
+        if (overflowY === "auto" || overflowY === "scroll") {
+          scrollableColumns.push(key);
+        }
+      }
+    }
+
+    return {
+      skipped: false,
+      overflowSections,
+      scrollableColumns,
     };
   });
 }
@@ -185,31 +218,40 @@ async function main() {
       });
       await page.waitForTimeout(450);
       const participateTransition = await auditParticipateTransition(page);
+      const storySections = width >= 1280 ? await auditStorySections(page) : { skipped: true };
       const participateFail =
         !participateTransition.skipped &&
         (participateTransition.routeIntoHow > 2 ||
           participateTransition.mediaOverlapPx > 2 ||
-          participateTransition.routePastSection > 2);
+          participateTransition.routePastSection > 2 ||
+          participateTransition.sceneOverflow ||
+          participateTransition.sceneScrollable);
+      const storyFail =
+        !storySections.skipped &&
+        (storySections.overflowSections.length > 0 || storySections.scrollableColumns.length > 0);
 
       const hasOverflow = heroResult.overflow > 8;
       const hasOverlap = heroResult.issues.length > 0;
       const hasClip = heroResult.clipped.length > 0;
-      const fail = hasOverflow || hasOverlap || hasClip || participateFail;
+      const fail = hasOverflow || hasOverlap || hasClip || participateFail || storyFail;
 
       if (fail) {
         failCount += 1;
         const label = `${lang}-${width}`;
         const shot = path.join(OUT, `${label}.png`);
         await page.screenshot({ path: shot, fullPage: false });
-        findings.push({ lang, width, ...heroResult, participateTransition, screenshot: shot });
+        findings.push({ lang, width, ...heroResult, participateTransition, storySections, screenshot: shot });
       }
 
       const status = fail ? "FAIL" : "PASS";
       const participateNote = participateTransition.skipped
         ? "participate n/a"
         : `participate +${participateTransition.routeIntoHow}px`;
+      const storyNote = storySections.skipped
+        ? "story n/a"
+        : `story overflow ${storySections.overflowSections?.length ?? 0}`;
       console.log(
-        `${lang.padEnd(2)} ${String(width).padStart(4)}px | overflow ${heroResult.overflow}px | overlaps ${heroResult.issues.length} | clipped ${heroResult.clipped.length} | ${participateNote} | ${status}`,
+        `${lang.padEnd(2)} ${String(width).padStart(4)}px | overflow ${heroResult.overflow}px | overlaps ${heroResult.issues.length} | clipped ${heroResult.clipped.length} | ${participateNote} | ${storyNote} | ${status}`,
       );
     }
   }

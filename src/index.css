@@ -1279,5 +1279,39 @@
     html[data-home-experience="story"] [data-scroll-to-top-button="true"] {
       display: none !important;
     }
+
+    [data-story-section] {
+      container-type: size;
+      container-name: story-section;
+    }
+
+    [data-story-scene-copy] [class*="mt-"] {
+      margin-top: 0 !important;
+    }
+
+    @container story-section (max-height: 62rem) {
+      [data-story-scene-copy] h2 {
+        font-size: clamp(2.35rem, 3.8vw, 4.35rem) !important;
+        line-height: 0.95 !important;
+      }
+
+      [data-story-scene-copy] p {
+        line-height: 1.52 !important;
+      }
+    }
+
+    @container story-section (max-height: 56rem) {
+      [data-story-scene-copy] h2 {
+        font-size: clamp(2.1rem, 3.4vw, 3.85rem) !important;
+      }
+
+      [data-story-scene-copy] [data-layout="story-participation-routes"] button {
+        padding-block: 0.65rem;
+      }
+
+      [data-story-scene-copy] .font-display.text-xl {
+        font-size: 1.05rem;
+      }
+    }
   }
 }

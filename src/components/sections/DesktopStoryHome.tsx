@@ -287,12 +287,37 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
   );
 }
 
+function StorySceneBody({
+  children,
+  density = "default",
+}: {
+  children: React.ReactNode;
+  density?: "default" | "compact" | "dense";
+}) {
+  const densityClass =
+    density === "dense"
+      ? "gap-[clamp(0.3rem,0.72svh,0.5rem)]"
+      : density === "compact"
+        ? "gap-[clamp(0.38rem,0.85svh,0.6rem)]"
+        : "gap-[clamp(0.45rem,1svh,0.75rem)]";
+
+  return (
+    <div
+      data-story-scene-copy
+      className={`flex min-h-0 w-full max-w-xl flex-col justify-center overflow-hidden ${densityClass}`}
+    >
+      {children}
+    </div>
+  );
+}
+
 function SceneShell({
   children,
   media,
   priority,
   reverse = false,
   tone = "light",
+  density = "default",
   isActive,
 }: {
   children: React.ReactNode;
@@ -300,6 +325,7 @@ function SceneShell({
   priority?: boolean;
   reverse?: boolean;
   tone?: "light" | "dark" | "surface";
+  density?: "default" | "compact" | "dense";
   isActive: boolean;
 }) {
   const toneClass =
@@ -318,11 +344,11 @@ function SceneShell({
         <div aria-hidden className="hidden xl:block" />
         <div className={`grid min-h-0 grid-cols-1 xl:grid-cols-12 ${reverse ? "" : ""}`}>
           <div
-            className={`relative z-10 flex min-h-0 flex-col justify-center overflow-y-auto overscroll-contain px-8 pb-12 pt-28 2xl:px-12 ${
+            className={`relative z-10 flex h-full min-h-0 flex-col justify-center overflow-hidden px-8 py-[clamp(4.25rem,9svh,6.5rem)] 2xl:px-12 ${
               reverse ? "xl:order-2 xl:col-span-5" : "xl:order-1 xl:col-span-5"
             }`}
           >
-            {children}
+            <StorySceneBody density={density}>{children}</StorySceneBody>
           </div>
 
           <div className={`relative min-h-0 overflow-hidden ${reverse ? "xl:order-1 xl:col-span-7" : "xl:order-2 xl:col-span-7"}`}>
@@ -396,15 +422,15 @@ function AboutScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
       tone="light"
     >
       <p className="eyebrow">{tx("About AIXCO")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3rem,5vw,5.75rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.65rem,4.6vw,5.25rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("AIXCO - Real Estate Platform")}
       </h2>
-      <p className="mt-6 max-w-xl text-[clamp(1.05rem,1.2vw,1.28rem)] leading-[1.64] text-foreground/78">
+      <p className="max-w-xl text-[clamp(0.98rem,1.1vw,1.2rem)] leading-[1.58] text-foreground/78">
         {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
       </p>
-      <dl className="mt-8 grid max-w-xl grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+      <dl className="grid max-w-xl grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
         {metrics.slice(0, 4).map((metric) => (
-          <div key={metric.label} className="bg-white/88 p-4">
+          <div key={metric.label} className="bg-white/88 p-3">
             <dt className="font-display text-[clamp(1.65rem,2.3vw,2.8rem)] leading-none text-primary">
               <CountUpText value={metric.value} />
             </dt>
@@ -427,15 +453,15 @@ function LegacyScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
       reverse
     >
       <p className="eyebrow">{tx("Our journey")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3rem,4.6vw,5.35rem)] font-semibold leading-[0.96] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.65rem,4.4vw,5rem)] font-semibold leading-[0.96] tracking-[-0.03em]">
         {tx("From Switzerland to Dubai to Batumi")}
       </h2>
-      <div className="mt-8 grid gap-4">
+      <div className="grid gap-[clamp(0.55rem,1svh,0.85rem)]">
         {legacyTimelineChapters.slice(0, 3).map((chapter, index) => (
-          <div key={chapter.id} className="border-l border-primary/30 pl-5">
-            <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-primary/80">{formatChapterNumber(index + 1)}</p>
-            <h3 className="mt-1 text-[clamp(1.2rem,1.35vw,1.55rem)] font-semibold leading-tight">{tx(chapter.title)}</h3>
-            <p className="mt-1 text-sm leading-relaxed text-foreground/70">{tx(chapter.highlight)}</p>
+          <div key={chapter.id} className="border-l border-primary/30 pl-4">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary/80">{formatChapterNumber(index + 1)}</p>
+            <h3 className="text-[clamp(1.05rem,1.2vw,1.4rem)] font-semibold leading-tight">{tx(chapter.title)}</h3>
+            <p className="line-clamp-2 text-[0.82rem] leading-snug text-foreground/70">{tx(chapter.highlight)}</p>
           </div>
         ))}
       </div>
@@ -460,17 +486,17 @@ function DubaiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
       }}
     >
       <p className="eyebrow">{tx("Dubai - Legacy portfolio")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3.1rem,5vw,5.8rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.7rem,4.6vw,5.35rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("Our history in Dubai")}
       </h2>
-      <p className="mt-6 max-w-xl text-[clamp(1.03rem,1.12vw,1.22rem)] leading-[1.62] text-foreground/78">
+      <p className="max-w-xl text-[clamp(0.98rem,1.08vw,1.16rem)] leading-[1.56] text-foreground/78">
         {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
       </p>
-      <div className="mt-8 grid gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+      <div className="grid gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
         {[landingFund, secondFund].filter(Boolean).map((fund) => (
-          <div key={fund.id} className="bg-white/88 p-5">
-            <h3 className="font-display text-xl font-semibold leading-tight">{tx(fund.name)}</h3>
-            <p className="mt-3 text-sm leading-relaxed text-foreground/70">{tx(fund.details[1] ?? fund.details[0])}</p>
+          <div key={fund.id} className="bg-white/88 p-3.5">
+            <h3 className="font-display text-lg font-semibold leading-tight">{tx(fund.name)}</h3>
+            <p className="line-clamp-2 text-[0.82rem] leading-snug text-foreground/70">{tx(fund.details[1] ?? fund.details[0])}</p>
           </div>
         ))}
       </div>
@@ -487,6 +513,7 @@ function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
     <SceneShell
       isActive={isActive}
       tone="surface"
+      density="compact"
       reverse
       media={{
         kind: "video",
@@ -497,30 +524,30 @@ function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
       }}
     >
       <p className="eyebrow">{tx("Batumi - Current opportunity")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3.3rem,5.2vw,6rem)] font-semibold leading-[0.92] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.75rem,4.8vw,5.5rem)] font-semibold leading-[0.92] tracking-[-0.03em]">
         {tx("Batumi")}
       </h2>
-      <p className="mt-6 max-w-xl text-[clamp(1.03rem,1.12vw,1.24rem)] leading-[1.62] text-foreground/78">
+      <p className="max-w-xl text-[clamp(0.98rem,1.08vw,1.16rem)] leading-[1.56] text-foreground/78">
         {tx("Opportunity-driven focus in Georgia - buy apartments with transparent euro pricing, strong rental potential, and full foreign ownership.")}
       </p>
-      <div className="mt-8 grid gap-px overflow-hidden border border-foreground/10 bg-foreground/10 sm:grid-cols-2">
+      <div className="grid gap-px overflow-hidden border border-foreground/10 bg-foreground/10 sm:grid-cols-2">
         {batumiBenefits.slice(0, 4).map((benefit) => (
-          <div key={benefit} className="bg-white/90 p-4 text-sm font-medium leading-snug text-foreground/76">
+          <div key={benefit} className="bg-white/90 p-2.5 text-[0.8rem] font-medium leading-snug text-foreground/76">
             {tx(benefit)}
           </div>
         ))}
       </div>
-      <div className="mt-6 grid gap-3">
+      <div className="grid gap-2">
         {[firstProperty, secondProperty].filter(Boolean).map((property) => (
           <Link
             key={property.id}
             href={`/aixco-global-op2/${property.url}`}
             prefetch={false}
-            className="group flex items-center justify-between gap-4 border border-foreground/10 bg-white/78 p-4 transition-colors hover:border-primary/35 hover:bg-white"
+            className="group flex items-center justify-between gap-3 border border-foreground/10 bg-white/78 p-3 transition-colors hover:border-primary/35 hover:bg-white"
           >
             <span>
-              <span className="block font-display text-xl font-semibold">{tx(property.name)}</span>
-              <span className="mt-1 block text-sm text-foreground/62">{tx(property.summary)}</span>
+              <span className="block font-display text-lg font-semibold leading-tight">{tx(property.name)}</span>
+              <span className="line-clamp-1 block text-[0.82rem] text-foreground/62">{tx(property.summary)}</span>
             </span>
             <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-1" aria-hidden />
           </Link>
@@ -538,13 +565,13 @@ function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string
       media={{ kind: "image", src: aixcoLiveImages.batumiOtium, alt: tx("Otium Batumi project reference") }}
     >
       <p className="eyebrow">{tx("Client materials")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3rem,4.8vw,5.55rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("Materials & downloads")}
       </h2>
-      <p className="mt-6 max-w-xl text-[clamp(1.02rem,1.08vw,1.2rem)] leading-[1.62] text-foreground/74">
+      <p className="max-w-xl text-[clamp(0.98rem,1.06vw,1.14rem)] leading-[1.56] text-foreground/74">
         {tx("Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.")}
       </p>
-      <div className="mt-8 divide-y divide-foreground/10 border-y border-foreground/10">
+      <div className="divide-y divide-foreground/10 border-y border-foreground/10">
         {materialDownloads.slice(0, 4).map((material) => {
           const Icon = getMaterialIcon(material.format);
           const href = getSafePublicAssetHref(material.href, "#materials");
@@ -554,7 +581,7 @@ function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string
               key={material.id}
               href={href}
               download={material.fileName}
-              className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 py-4"
+              className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 py-3"
               aria-label={`${tx("Download")} ${tx(material.title)}`}
             >
               <span className="flex size-11 items-center justify-center border border-primary/20 bg-primary/10 text-primary">
@@ -582,6 +609,7 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
     <SceneShell
       isActive={isActive}
       tone="surface"
+      density="dense"
       reverse
       media={{
         kind: "video",
@@ -592,24 +620,25 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
       }}
     >
       <p className="eyebrow">{tx("How to work with AIXCO")}</p>
-      <h2 className="mt-5 max-w-xl text-[clamp(2.8rem,4.4vw,5.25rem)] font-semibold leading-[0.96] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.45rem,3.9vw,4.65rem)] font-semibold leading-[0.96] tracking-[-0.03em]">
         <span className="text-gold">{tx("How")}</span> {tx("Customers/Partners Work")}
       </h2>
-      <p className="mt-5 max-w-xl text-[clamp(1.02rem,1.08vw,1.2rem)] leading-[1.62] text-foreground/76">
+      <p className="max-w-xl text-[clamp(0.94rem,1.02vw,1.1rem)] leading-[1.54] text-foreground/76">
         {tx("Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
       </p>
-      <div className="mt-6 grid gap-2.5" data-layout="story-participation-routes">
+      <div className="grid gap-2" data-layout="story-participation-routes">
         {[primaryRoute, ...remainingRoutes].map((route, index) => (
           <button
             key={route.id}
             type="button"
+            data-participation-card={route.id}
             onClick={onRegister}
-            className="group grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 border border-foreground/10 bg-white/82 p-3.5 text-left transition-colors hover:border-primary/35 hover:bg-white"
+            className="group grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-2.5 border border-foreground/10 bg-white/82 p-2.5 text-left transition-colors hover:border-primary/35 hover:bg-white"
           >
-            <span className="font-display text-3xl leading-none text-primary/45">{formatChapterNumber(index + 1)}</span>
+            <span className="font-display text-2xl leading-none text-primary/45">{formatChapterNumber(index + 1)}</span>
             <span className="min-w-0">
-              <span className="block font-display text-xl font-semibold leading-tight">{tx(route.title)}</span>
-              <span className="mt-1 line-clamp-2 block text-sm leading-relaxed text-foreground/64">{tx(route.body)}</span>
+              <span className="block font-display text-lg font-semibold leading-tight">{tx(route.title)}</span>
+              <span className="line-clamp-1 block text-[0.8rem] leading-snug text-foreground/64">{tx(route.body)}</span>
             </span>
             <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-1" aria-hidden />
           </button>
@@ -639,22 +668,22 @@ function HowScene({
       media={{ kind: "image", src: aixcoLiveImages.contact, alt: tx("AIXCO contact and office reference"), position: "center" }}
     >
       <p className="eyebrow">{tx("Journeys")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3rem,4.8vw,5.55rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("How AIXCO Works")}
       </h2>
-      <p className="mt-6 max-w-xl text-[clamp(1.02rem,1.08vw,1.2rem)] leading-[1.62] text-foreground/76">
+      <p className="max-w-xl text-[clamp(0.98rem,1.06vw,1.14rem)] leading-[1.56] text-foreground/76">
         {tx("Choose the journey that fits your role. The process is structured, transparent, and digitally managed.")}
       </p>
-      <div className="mt-8 grid gap-px overflow-hidden border border-foreground/10 bg-foreground/10 sm:grid-cols-2">
+      <div className="grid gap-px overflow-hidden border border-foreground/10 bg-foreground/10 sm:grid-cols-2">
         {journeys.map((journey, index) => (
-          <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group bg-white/90 p-5 text-left transition-colors hover:bg-white">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
-            <h3 className="mt-2 font-display text-xl font-semibold leading-tight">{tx(journey.role)}</h3>
-            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-foreground/65">{tx(journey.summary)}</p>
+          <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group bg-white/90 p-3.5 text-left transition-colors hover:bg-white">
+            <p className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
+            <h3 className="font-display text-lg font-semibold leading-tight">{tx(journey.role)}</h3>
+            <p className="line-clamp-2 text-[0.8rem] leading-snug text-foreground/65">{tx(journey.summary)}</p>
           </button>
         ))}
       </div>
-      <button type="button" onClick={onRegister} className="btn-gold mt-6">
+      <button type="button" onClick={onRegister} className="btn-gold w-fit shrink-0">
         {tx("Register")}
         <ArrowRight className="h-4 w-4" aria-hidden />
       </button>
@@ -669,16 +698,17 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
     <SceneShell
       isActive={isActive}
       tone="surface"
+      density="compact"
       media={{ kind: "image", src: teamImageMap[team[0].image as keyof typeof teamImageMap], alt: tx(team[0].name), position: "center top" }}
       reverse
     >
       <p className="eyebrow">{tx("Team")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3rem,4.8vw,5.55rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("AIXCO leadership")}
       </h2>
-      <div className="mt-8 grid gap-3">
+      <div className="grid gap-2">
         {team.map((member) => (
-          <div key={member.name} className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-4 border border-foreground/10 bg-white/84 p-3">
+          <div key={member.name} className="grid grid-cols-[3.75rem_minmax(0,1fr)] gap-3 border border-foreground/10 bg-white/84 p-2.5">
             <div className="relative aspect-square overflow-hidden bg-muted">
               <Image
                 src={teamImageMap[member.image as keyof typeof teamImageMap]}
@@ -689,9 +719,9 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
               />
             </div>
             <div className="min-w-0 self-center">
-              <h3 className="font-display text-xl font-semibold leading-tight">{tx(member.name)}</h3>
-              <p className="mt-1 text-sm font-medium text-primary">{tx(member.role)}</p>
-              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-foreground/64">{tx(member.summary)}</p>
+              <h3 className="font-display text-lg font-semibold leading-tight">{tx(member.name)}</h3>
+              <p className="text-[0.8rem] font-medium text-primary">{tx(member.role)}</p>
+              <p className="line-clamp-1 text-[0.8rem] leading-snug text-foreground/64">{tx(member.summary)}</p>
             </div>
           </div>
         ))}
@@ -711,21 +741,21 @@ function PartnersScene({ isActive, tx }: { isActive: boolean; tx: (copy: string)
       media={{ kind: "image", src: aixcoLiveImages.dubaiHealthcare, alt: tx("Dubai Healthcare City legacy reference"), position: "center" }}
     >
       <p className="eyebrow">{tx("Partners")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3rem,4.8vw,5.55rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("Group companies and strategic partners")}
       </h2>
-      <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+      <div className="grid grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
         {featuredPartners.map((partner) => {
           const logo = aixcoLiveLogos[partner.logo as keyof typeof aixcoLiveLogos];
 
           return (
-            <div key={partner.name} className="flex min-h-24 flex-col justify-between bg-white/90 p-4">
+            <div key={partner.name} className="flex min-h-[4.5rem] flex-col justify-between bg-white/90 p-3">
               {logo ? (
                 <Image src={logo} alt={tx(partner.name)} width={160} height={72} className="h-9 w-auto max-w-full object-contain object-left" />
               ) : (
                 <Building2 className="h-7 w-7 text-primary" aria-hidden />
               )}
-              <p className="mt-4 text-sm font-semibold leading-tight">{tx(partner.name)}</p>
+              <p className="text-[0.8rem] font-semibold leading-tight">{tx(partner.name)}</p>
             </div>
           );
         })}
@@ -742,19 +772,20 @@ function FaqScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => s
     <SceneShell
       isActive={isActive}
       tone="surface"
+      density="compact"
       reverse
       media={{ kind: "image", src: aixcoLiveImages.batumiGuru, alt: tx("Guru Batumi project reference"), position: "center" }}
     >
       <p className="eyebrow">{tx("FAQs")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3rem,4.8vw,5.55rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
+      <h2 className="max-w-xl text-[clamp(2.65rem,4.5vw,5.1rem)] font-semibold leading-[0.94] tracking-[-0.03em]">
         {tx("Frequently asked questions")}
       </h2>
-      <div className="mt-8 divide-y divide-foreground/10 border-y border-foreground/10">
+      <div className="divide-y divide-foreground/10 border-y border-foreground/10">
         {highlightedFaqs.map((item) => (
-          <div key={`${item.group}-${item.q}`} className="py-4">
-            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-primary/75">{tx(item.group)}</p>
-            <h3 className="mt-1 font-display text-xl font-semibold leading-tight">{tx(item.q)}</h3>
-            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-foreground/66">{tx(item.a)}</p>
+          <div key={`${item.group}-${item.q}`} className="py-2.5">
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-primary/75">{tx(item.group)}</p>
+            <h3 className="font-display text-lg font-semibold leading-tight">{tx(item.q)}</h3>
+            <p className="line-clamp-1 text-[0.8rem] leading-snug text-foreground/66">{tx(item.a)}</p>
           </div>
         ))}
       </div>
@@ -780,23 +811,23 @@ function ContactScene({
       media={{ kind: "image", src: aixcoLiveImages.contact, alt: tx("AIXCO contact office reference"), position: "center" }}
     >
       <p className="eyebrow text-primary-glow">{tx("Contact")}</p>
-      <h2 className="mt-6 max-w-xl text-[clamp(3.2rem,5vw,5.8rem)] font-semibold leading-[0.94] tracking-[-0.03em] text-white">
+      <h2 className="max-w-xl text-[clamp(2.75rem,4.6vw,5.35rem)] font-semibold leading-[0.94] tracking-[-0.03em] text-white">
         {tx("Start with AIXCO")}
       </h2>
-      <p className="mt-6 max-w-xl text-[clamp(1.05rem,1.14vw,1.24rem)] leading-[1.62] text-white/76">
+      <p className="max-w-xl text-[clamp(0.98rem,1.08vw,1.16rem)] leading-[1.56] text-white/76">
         {tx("Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.")}
       </p>
-      <div className="mt-8 grid gap-3">
-        <a href="mailto:info@aixco.global" className="group flex items-center gap-4 border border-white/16 bg-white/10 p-4 text-white transition-colors hover:bg-white/14">
+      <div className="grid gap-2">
+        <a href="mailto:info@aixco.global" className="group flex items-center gap-3 border border-white/16 bg-white/10 p-3 text-white transition-colors hover:bg-white/14">
           <Mail className="h-5 w-5 text-primary-glow" aria-hidden />
           <span>info@aixco.global</span>
         </a>
-        <div className="flex items-center gap-4 border border-white/16 bg-white/10 p-4 text-white">
+        <div className="flex items-center gap-3 border border-white/16 bg-white/10 p-3 text-white">
           <MapPin className="h-5 w-5 text-primary-glow" aria-hidden />
-          <span>{tx("Grungasse 16, 1050 Wien, Austria")}</span>
+          <span className="text-[0.92rem]">{tx("Grungasse 16, 1050 Wien, Austria")}</span>
         </div>
       </div>
-      <div className="mt-8 flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2.5">
         <button type="button" onClick={onRegister} className="btn-gold">
           {tx("Register")}
           <ArrowRight className="h-4 w-4" aria-hidden />
