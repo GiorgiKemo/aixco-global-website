@@ -682,7 +682,7 @@ function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string
               key={material.id}
               href={href}
               download={material.fileName}
-              className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 py-3.5"
+              className="group grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3 py-3.5 transition-colors duration-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2"
               aria-label={`${tx("Download")} ${tx(material.title)}`}
             >
               <span className="flex size-12 shrink-0 items-center justify-center text-primary">

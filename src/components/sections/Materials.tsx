@@ -79,7 +79,7 @@ export function Materials() {
                       key={material.id}
                       href={href}
                       download={material.fileName}
-                      className="group grid min-h-24 gap-4 px-4 py-4 transition-[background-color] duration-200 hover:bg-primary/[0.045] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 sm:grid-cols-[auto_minmax(0,1fr)_minmax(8rem,0.26fr)_5rem_auto] sm:items-center sm:px-5"
+                      className="group grid min-h-24 cursor-pointer gap-4 px-4 py-4 transition-colors duration-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 sm:grid-cols-[auto_minmax(0,1fr)_minmax(8rem,0.26fr)_5rem_auto] sm:items-center sm:px-5"
                       aria-label={`${tx("Download")} ${tx(material.title)}`}
                     >
                       <div className="flex size-11 items-center justify-center border border-primary/20 bg-primary/10 text-primary sm:size-12">
