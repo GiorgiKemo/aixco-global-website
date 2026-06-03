@@ -586,6 +586,53 @@
     color: hsl(var(--muted-foreground));
   }
 
+  /* Desktop story sidebar — chapter links (Land of Tomorrow–style hover) */
+  .story-chapter-link {
+    @apply grid grid-cols-[1.6rem_minmax(0,1fr)] items-center gap-2 rounded-md px-1 py-2 text-left text-[0.76rem] font-medium leading-tight;
+    color: hsl(var(--foreground) / 0.78);
+    transition: color 250ms var(--ease-apple);
+  }
+
+  .story-chapter-link:hover,
+  .story-chapter-link:focus-visible {
+    color: hsl(var(--primary));
+  }
+
+  .story-chapter-link[data-active="true"] {
+    color: hsl(var(--primary));
+    font-weight: 600;
+  }
+
+  .story-chapter-link:focus-visible {
+    @apply outline-none ring-2 ring-primary/35 ring-offset-2 ring-offset-white;
+  }
+
+  .story-chapter-link__line {
+    display: block;
+    height: 1px;
+    width: 0.65rem;
+    background: hsl(var(--foreground) / 0.2);
+    transition:
+      width 280ms var(--ease-apple),
+      background-color 250ms var(--ease-apple);
+  }
+
+  .story-chapter-link:hover .story-chapter-link__line,
+  .story-chapter-link:focus-visible .story-chapter-link__line {
+    width: 100%;
+    background: hsl(var(--primary-glow));
+  }
+
+  .story-chapter-link[data-active="true"] .story-chapter-link__line {
+    width: 100%;
+    background: hsl(var(--primary));
+  }
+
+  .story-chapter-link[data-active="true"]:hover .story-chapter-link__line,
+  .story-chapter-link[data-active="true"]:focus-visible .story-chapter-link__line {
+    background: hsl(var(--primary));
+  }
+
   .story-panel {
     width: 100%;
     max-width: none;

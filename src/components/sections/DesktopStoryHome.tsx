@@ -233,21 +233,21 @@ function StoryChrome({
               />
               <span className="whitespace-nowrap text-sm font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
             </a>
-            <nav aria-label={tx("Story navigation")} className="grid gap-1.5">
+            <nav aria-label={tx("Story navigation")} className="grid gap-2">
               {storyChapters.map((chapter, index) => {
                 const isActive = activeIndex === index;
                 const href = chapter.id ? `#${chapter.id}` : "/";
-                const labelClass = isActive ? "text-primary" : "text-foreground/78 hover:text-foreground";
-                const lineClass = isActive ? "bg-primary" : "bg-foreground/20 group-hover:bg-foreground/45";
 
                 return (
                   <a
                     key={chapter.key}
                     href={href}
+                    aria-current={isActive ? "true" : undefined}
+                    data-active={isActive ? "true" : "false"}
                     onClick={(event) => onChapterClick(event, chapter)}
-                    className={`group grid grid-cols-[1.6rem_minmax(0,1fr)] items-center gap-2 rounded-md px-1 py-1.5 text-left text-[0.76rem] font-medium leading-tight transition-colors ${labelClass}`}
+                    className="story-chapter-link"
                   >
-                    <span className={`h-px transition-colors ${lineClass}`} />
+                    <span className="story-chapter-link__line" aria-hidden="true" />
                     <span className="truncate">{tx(chapter.label)}</span>
                   </a>
                 );
