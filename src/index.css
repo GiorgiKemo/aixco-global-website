@@ -589,16 +589,26 @@
   /* Desktop story sidebar — chapter links (Land of Tomorrow–style hover) */
   .story-chapter-link {
     @apply grid grid-cols-[1.6rem_minmax(0,1fr)] items-center gap-2 rounded-md px-1 py-2 text-left text-[0.76rem] font-medium leading-tight;
-    color: hsl(var(--foreground) / 0.78);
     transition: color 250ms var(--ease-apple);
   }
 
-  .story-chapter-link:hover,
-  .story-chapter-link:focus-visible {
-    color: hsl(var(--primary));
+  @media (hover: hover) and (pointer: fine) {
+    .story-chapter-link:hover,
+    .story-chapter-link:focus-visible {
+      color: hsl(var(--primary));
+    }
+
+    .story-chapter-link:hover .story-chapter-link__line,
+    .story-chapter-link:focus-visible .story-chapter-link__line,
+    .group\/story-chapter:hover .story-chapter-link__line,
+    .group\/story-chapter:focus-visible .story-chapter-link__line {
+      width: 100%;
+      background: hsl(var(--primary-glow));
+    }
   }
 
-  .story-chapter-link[data-active="true"] {
+  .story-chapter-link[data-active="true"],
+  .story-chapter-link--active {
     color: hsl(var(--primary));
     font-weight: 600;
   }
@@ -617,19 +627,17 @@
       background-color 250ms var(--ease-apple);
   }
 
-  .story-chapter-link:hover .story-chapter-link__line,
-  .story-chapter-link:focus-visible .story-chapter-link__line {
-    width: 100%;
-    background: hsl(var(--primary-glow));
-  }
-
-  .story-chapter-link[data-active="true"] .story-chapter-link__line {
+  .story-chapter-link[data-active="true"] .story-chapter-link__line,
+  .story-chapter-link__line--active,
+  .story-chapter-link--active .story-chapter-link__line {
     width: 100%;
     background: hsl(var(--primary));
   }
 
   .story-chapter-link[data-active="true"]:hover .story-chapter-link__line,
-  .story-chapter-link[data-active="true"]:focus-visible .story-chapter-link__line {
+  .story-chapter-link[data-active="true"]:focus-visible .story-chapter-link__line,
+  .story-chapter-link--active:hover .story-chapter-link__line,
+  .story-chapter-link--active:focus-visible .story-chapter-link__line {
     background: hsl(var(--primary));
   }
 

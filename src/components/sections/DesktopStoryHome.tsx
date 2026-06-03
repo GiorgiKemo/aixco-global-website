@@ -32,6 +32,7 @@ import {
 import { replaceLocationHash } from "@/lib/section-hash";
 import { getSafePublicAssetHref } from "@/lib/security/urls";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
+import { cn } from "@/lib/utils";
 import { StorySceneReveal } from "@/components/StoryReveal";
 import { motion } from "@/lib/framer-motion";
 import { revealTransition } from "@/lib/motion";
@@ -214,7 +215,7 @@ function StoryChrome({
   return (
     <>
       <aside
-        className="fixed bottom-0 left-0 top-0 z-40 hidden border-r border-foreground/10 bg-white px-7 pb-8 pt-8 text-foreground shadow-[18px_0_60px_-46px_rgba(0,0,0,0.42)] xl:block"
+        className="fixed bottom-0 left-0 top-0 z-50 hidden border-r border-foreground/10 bg-white px-7 pb-8 pt-8 text-foreground shadow-[18px_0_60px_-46px_rgba(0,0,0,0.42)] xl:block"
         style={{ width: storySidebarWidth }}
       >
         <div className="flex h-full flex-col justify-between">
@@ -233,7 +234,7 @@ function StoryChrome({
               />
               <span className="whitespace-nowrap text-sm font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
             </a>
-            <nav aria-label={tx("Story navigation")} className="grid gap-2">
+            <nav aria-label={tx("Story navigation")} className="mt-10 grid gap-2">
               {storyChapters.map((chapter, index) => {
                 const isActive = activeIndex === index;
                 const href = chapter.id ? `#${chapter.id}` : "/";
@@ -245,9 +246,19 @@ function StoryChrome({
                     aria-current={isActive ? "true" : undefined}
                     data-active={isActive ? "true" : "false"}
                     onClick={(event) => onChapterClick(event, chapter)}
-                    className="story-chapter-link"
+                    className={cn(
+                      "group/story-chapter story-chapter-link text-foreground/78 hover:text-primary focus-visible:text-primary",
+                      isActive && "story-chapter-link--active text-primary font-semibold",
+                    )}
                   >
-                    <span className="story-chapter-link__line" aria-hidden="true" />
+                    <span
+                      className={cn(
+                        "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 ease-[var(--ease-apple)]",
+                        "group-hover/story-chapter:w-full group-hover/story-chapter:bg-primary-glow group-focus-visible/story-chapter:w-full group-focus-visible/story-chapter:bg-primary-glow",
+                        isActive && "story-chapter-link__line--active w-full bg-primary",
+                      )}
+                      aria-hidden="true"
+                    />
                     <span className="truncate">{tx(chapter.label)}</span>
                   </a>
                 );
@@ -968,6 +979,10 @@ export function DesktopStoryHome() {
     const documentHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
     const scrollableDistance = Math.max(1, documentHeight - window.innerHeight);
     const nextProgress = clamp(window.scrollY / scrollableDistance, 0, 1);
+    setProgress(nextProgress);
+  }, []);
+
+  const syncActiveChapter = useCallback(() => {
     const viewportCenter = window.innerHeight / 2;
     let nextActiveIndex = 0;
     let closestDistance = Number.POSITIVE_INFINITY;
@@ -982,31 +997,59 @@ export function DesktopStoryHome() {
       }
     });
 
-    setProgress(nextProgress);
-    setActiveIndex(nextActiveIndex);
+    setActiveIndex((current) => (current === nextActiveIndex ? current : nextActiveIndex));
   }, []);
+
+  const requestScrollSync = useCallback(() => {
+    if (scrollFrameRef.current !== null) return;
+    scrollFrameRef.current = window.requestAnimationFrame(() => {
+      syncProgress();
+      syncActiveChapter();
+    });
+  }, [syncActiveChapter, syncProgress]);
 
   useEffect(() => {
     document.documentElement.dataset.homeExperience = "story";
     syncProgress();
+    syncActiveChapter();
 
-    const requestSync = () => {
-      if (scrollFrameRef.current !== null) return;
-      scrollFrameRef.current = window.requestAnimationFrame(syncProgress);
-    };
-
-    window.addEventListener("scroll", requestSync, { passive: true });
-    window.addEventListener("resize", requestSync);
+    window.addEventListener("scroll", requestScrollSync, { passive: true });
+    window.addEventListener("resize", requestScrollSync);
 
     return () => {
       delete document.documentElement.dataset.homeExperience;
-      window.removeEventListener("scroll", requestSync);
-      window.removeEventListener("resize", requestSync);
+      window.removeEventListener("scroll", requestScrollSync);
+      window.removeEventListener("resize", requestScrollSync);
       if (scrollFrameRef.current !== null) {
         window.cancelAnimationFrame(scrollFrameRef.current);
       }
     };
-  }, [syncProgress]);
+  }, [requestScrollSync, syncActiveChapter, syncProgress]);
+
+  useLayoutEffect(() => {
+    const sections = sectionRefs.current.filter((section): section is HTMLElement => Boolean(section));
+    if (!sections.length || typeof window.IntersectionObserver !== "function") return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const intersecting = entries.filter((entry) => entry.isIntersecting);
+        if (!intersecting.length) return;
+
+        const best = intersecting.reduce((winner, entry) =>
+          entry.intersectionRatio > winner.intersectionRatio ? entry : winner,
+        );
+        const index = sections.indexOf(best.target as HTMLElement);
+        if (index >= 0) {
+          setActiveIndex((current) => (current === index ? current : index));
+        }
+      },
+      { root: null, rootMargin: "-42% 0px -42% 0px", threshold: [0, 0.15, 0.35, 0.55, 0.75, 1] },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!window.location.hash) return undefined;
@@ -1014,28 +1057,35 @@ export function DesktopStoryHome() {
     const timers = chapterHashDelays.map((delay) =>
       window.setTimeout(() => {
         scrollToHash(window.location.hash, "auto");
-        syncProgress();
+        requestScrollSync();
       }, delay),
     );
 
     return () => timers.forEach((timer) => window.clearTimeout(timer));
-  }, [syncProgress]);
+  }, [requestScrollSync]);
 
   const handleChapterClick = useCallback(
     (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => {
       event.preventDefault();
 
+      const chapterIndex = storyChapters.findIndex((entry) => entry.key === chapter.key);
+      if (chapterIndex >= 0) {
+        setActiveIndex(chapterIndex);
+      }
+
       if (!chapter.id) {
         replaceLocationHash("");
         scrollToPageTop();
+        requestScrollSync();
         return;
       }
 
       const hash = `#${chapter.id}`;
       replaceLocationHash(hash);
       scrollToHash(hash);
+      requestScrollSync();
     },
-    [],
+    [requestScrollSync],
   );
 
   const scenes = useMemo(
