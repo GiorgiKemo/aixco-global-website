@@ -1570,6 +1570,45 @@
       object-fit: cover;
     }
 
+    .story-media-panel {
+      isolation: isolate;
+    }
+
+    .story-media-panel__stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .story-media-panel__ken-burns {
+      transform-origin: center center;
+      will-change: transform;
+    }
+
+    .story-media-panel__video,
+    .story-media-panel__image {
+      position: absolute;
+      inset: 0;
+    }
+
+    .story-media-panel__video > span,
+    .story-media-panel__video img {
+      object-fit: cover !important;
+    }
+
+    [data-story-media-active="true"] .story-media-panel__gradient {
+      opacity: 1;
+      transition: opacity 900ms var(--ease-apple);
+    }
+
+    [data-story-media-active="false"] .story-media-panel__gradient {
+      opacity: 0.82;
+    }
+
+    .story-media-panel__gradient {
+      transition: opacity 700ms var(--ease-apple);
+    }
+
     [data-story-scene-copy] [data-layout="story-batumi-benefits"] > * {
       font-size: clamp(0.95rem, 1.05vw, 1.125rem);
       font-weight: 500;

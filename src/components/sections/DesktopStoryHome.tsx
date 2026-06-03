@@ -24,6 +24,7 @@ import { useSiteContent } from "@/data/site-content-context";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
   aixcoHeroBackgroundVideo,
+  aixcoLiveAssetDetails,
   aixcoLiveImages,
   aixcoLiveLogos,
   aixcoLiveVideoPreviews,
@@ -33,7 +34,7 @@ import { replaceLocationHash } from "@/lib/section-hash";
 import { getSafePublicAssetHref } from "@/lib/security/urls";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 import { cn } from "@/lib/utils";
-import { StorySceneReveal } from "@/components/StoryReveal";
+import { StoryMediaReveal, StorySceneReveal } from "@/components/StoryReveal";
 import { motion } from "@/lib/framer-motion";
 import { revealTransition } from "@/lib/motion";
 import {
@@ -78,7 +79,10 @@ type StoryMedia =
       poster: string;
       title: string;
       fit?: "cover" | "contain";
+      position?: string;
     };
+
+type StoryMediaOverlay = "light" | "dark" | "contact";
 
 const storyChapters: StoryChapter[] = [
   { key: "hero", label: "AIXCO" },
@@ -167,6 +171,8 @@ function StoryMediaPanel({
   media: StoryMedia;
   priority?: boolean;
 }) {
+  const objectPosition = media.position ?? "center";
+
   if (media.kind === "video") {
     return (
       <LiveVideo
@@ -179,8 +185,9 @@ function StoryMediaPanel({
         autoplayPreview={isActive}
         smoothPreview={isActive}
         rootMargin="0px"
-        className="!h-full !w-full !rounded-none !bg-foreground !shadow-none"
+        className="story-media-panel__video !h-full !w-full !rounded-none !bg-foreground !shadow-none"
         videoClassName="h-full w-full"
+        videoStyle={{ objectPosition }}
       />
     );
   }
@@ -194,9 +201,53 @@ function StoryMediaPanel({
       fetchPriority={priority ? "high" : "auto"}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
-      sizes="(min-width: 1280px) 58vw, 100vw"
-      className="h-full w-full object-cover"
-      style={{ objectPosition: media.position ?? "center" }}
+      sizes="(min-width: 1280px) 42vw, 100vw"
+      className="story-media-panel__image h-full w-full object-cover"
+      style={{ objectPosition }}
+    />
+  );
+}
+
+function StoryMediaGradient({
+  overlay,
+  reverse,
+}: {
+  overlay: StoryMediaOverlay;
+  reverse: boolean;
+}) {
+  const direction = reverse ? "to left" : "to right";
+
+  if (overlay === "contact") {
+    return (
+      <div
+        aria-hidden
+        className="story-media-panel__gradient pointer-events-none absolute inset-0"
+        style={{
+          background: `linear-gradient(${direction}, rgba(17,16,14,0.72) 0%, rgba(17,16,14,0.18) 38%, rgba(17,16,14,0.42) 100%), linear-gradient(180deg, rgba(17,16,14,0.12), rgba(17,16,14,0.34))`,
+        }}
+      />
+    );
+  }
+
+  if (overlay === "dark") {
+    return (
+      <div
+        aria-hidden
+        className="story-media-panel__gradient pointer-events-none absolute inset-0"
+        style={{
+          background: `linear-gradient(${direction}, rgba(17,16,14,0.55) 0%, rgba(17,16,14,0.08) 42%, transparent 100%), linear-gradient(180deg, transparent, rgba(17,16,14,0.22))`,
+        }}
+      />
+    );
+  }
+
+  return (
+    <div
+      aria-hidden
+      className="story-media-panel__gradient pointer-events-none absolute inset-0"
+      style={{
+        background: `linear-gradient(${direction}, hsl(var(--background) / 0.82) 0%, hsl(var(--background) / 0.22) 36%, transparent 100%), linear-gradient(180deg, transparent, hsl(var(--foreground) / 0.18))`,
+      }}
     />
   );
 }
@@ -385,6 +436,7 @@ function StorySceneBody({
 function SceneShell({
   children,
   media,
+  mediaOverlay = "light",
   priority,
   reverse = false,
   tone = "light",
@@ -393,6 +445,7 @@ function SceneShell({
 }: {
   children: React.ReactNode;
   media?: StoryMedia;
+  mediaOverlay?: StoryMediaOverlay;
   priority?: boolean;
   reverse?: boolean;
   tone?: "light" | "dark" | "surface";
@@ -406,6 +459,9 @@ function SceneShell({
         ? "bg-surface text-foreground"
         : "bg-background text-foreground";
 
+  const resolvedOverlay: StoryMediaOverlay =
+    mediaOverlay === "light" && tone === "dark" ? "contact" : mediaOverlay;
+
   return (
     <div className={`relative h-full min-h-0 ${toneClass}`}>
       <div
@@ -417,7 +473,7 @@ function SceneShell({
           <div
             data-story-scene-column
             className={`relative z-10 flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-stretch justify-center overflow-hidden ${
-              reverse ? "xl:order-2 xl:col-span-8" : "xl:order-1 xl:col-span-8"
+              reverse ? "xl:order-2 xl:col-span-7" : "xl:order-1 xl:col-span-7"
             }`}
           >
             <StorySceneBody density={density} isActive={isActive}>
@@ -427,13 +483,18 @@ function SceneShell({
 
           <div
             data-story-scene-media
-            className={`relative h-full min-h-0 overflow-hidden ${reverse ? "xl:order-1 xl:col-span-4" : "xl:order-2 xl:col-span-4"}`}
+            data-story-media-active={isActive ? "true" : "false"}
+            className={`story-media-panel relative h-full min-h-0 overflow-hidden bg-foreground/5 ${
+              reverse ? "xl:order-1 xl:col-span-5" : "xl:order-2 xl:col-span-5"
+            }`}
           >
             {media ? (
-              <>
-                <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/28 via-transparent to-transparent" />
-              </>
+              <StoryMediaReveal isActive={isActive} reverse={reverse} className="absolute inset-0">
+                <div className="story-media-panel__stage relative h-full w-full overflow-hidden">
+                  <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
+                  <StoryMediaGradient overlay={resolvedOverlay} reverse={reverse} />
+                </div>
+              </StoryMediaReveal>
             ) : (
               <div className="h-full bg-gradient-to-br from-primary/12 via-background to-secondary/12" />
             )}
@@ -530,7 +591,14 @@ function AboutScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
   return (
     <SceneShell
       isActive={isActive}
-      media={{ kind: "image", src: aixcoLiveImages.aboutArchitecture, alt: tx("Batumi skyline and landmark towers") }}
+      media={{
+        kind: "video",
+        src: aixcoLiveVideos.batumiOverview,
+        previewSrc: aixcoLiveVideoPreviews.batumiOverview,
+        poster: aixcoLiveImages.batumiOverviewPoster,
+        title: tx("Batumi skyline and landmark towers"),
+        position: "55% center",
+      }}
       tone="light"
     >
       <p className="eyebrow story-eyebrow">{tx("About AIXCO")}</p>
@@ -557,7 +625,12 @@ function LegacyScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
     <SceneShell
       isActive={isActive}
       tone="surface"
-      media={{ kind: "image", src: aixcoLiveImages.transactionBackdrop, alt: tx("AIXCO transaction backdrop"), position: "center" }}
+      media={{
+        kind: "image",
+        src: aixcoLiveImages.transactionBackdrop,
+        alt: tx("AIXCO transaction backdrop"),
+        position: "42% center",
+      }}
       reverse
     >
       <p className="eyebrow story-eyebrow">{tx("Our journey")}</p>
@@ -589,6 +662,7 @@ function DubaiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
         src: media.src,
         poster: media.poster,
         title: tx(landingFund.name),
+        position: "center 38%",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Dubai - Legacy portfolio")}</p>
@@ -621,6 +695,7 @@ function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
         previewSrc: media.previewSrc,
         poster: media.poster,
         title: tx(firstProperty.name),
+        position: "center 42%",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Batumi - Current opportunity")}</p>
@@ -665,7 +740,12 @@ function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string
     <SceneShell
       isActive={isActive}
       tone="light"
-      media={{ kind: "image", src: aixcoLiveImages.batumiOtium, alt: tx("Otium Batumi project reference") }}
+      media={{
+        kind: "image",
+        src: aixcoLiveAssetDetails.otiumCatalog,
+        alt: tx("Otium Batumi project reference"),
+        position: "center 35%",
+      }}
     >
       <p className="eyebrow story-eyebrow">{tx("Client materials")}</p>
       <h2 className="story-h2">{tx("Materials & downloads")}</h2>
@@ -718,6 +798,7 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
         previewSrc: primaryMedia.previewSrc,
         poster: primaryMedia.poster,
         title: tx(primaryRoute.title),
+        position: "center 40%",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("How to work with AIXCO")}</p>
@@ -766,7 +847,12 @@ function HowScene({
     <SceneShell
       isActive={isActive}
       tone="light"
-      media={{ kind: "image", src: aixcoLiveImages.contact, alt: tx("AIXCO contact and office reference"), position: "center" }}
+      media={{
+        kind: "image",
+        src: aixcoLiveImages.aboutArchitecture,
+        alt: tx("AIXCO contact and office reference"),
+        position: "62% center",
+      }}
     >
       <p className="eyebrow story-eyebrow">{tx("Journeys")}</p>
       <h2 className="story-h2">{tx("How AIXCO Works")}</h2>
@@ -901,7 +987,13 @@ function ContactScene({
     <SceneShell
       isActive={isActive}
       tone="dark"
-      media={{ kind: "image", src: aixcoLiveImages.contact, alt: tx("AIXCO contact office reference"), position: "center" }}
+      media={{
+        kind: "image",
+        src: aixcoLiveImages.contact,
+        alt: tx("AIXCO contact office reference"),
+        position: "48% center",
+      }}
+      mediaOverlay="contact"
     >
       <p className="eyebrow story-eyebrow text-primary-glow">{tx("Contact")}</p>
       <h2 className="story-h2 text-white">{tx("Start with AIXCO")}</h2>

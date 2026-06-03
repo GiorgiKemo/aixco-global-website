@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { MotionReveal, StorySceneReveal } from "./StoryReveal";
+import { MotionReveal, StoryMediaReveal, StorySceneReveal } from "./StoryReveal";
 
 describe("StoryReveal", () => {
   it("renders motion reveal wrappers for native scroll", () => {
@@ -23,5 +23,15 @@ describe("StoryReveal", () => {
 
     expect(getByText("Eyebrow")).toBeInTheDocument();
     expect(getByText("Headline")).toBeInTheDocument();
+  });
+
+  it("renders cinematic story media reveal wrapper", () => {
+    const { getByTestId } = render(
+      <StoryMediaReveal isActive className="story-media-panel">
+        <div data-testid="story-media">Media frame</div>
+      </StoryMediaReveal>,
+    );
+
+    expect(getByTestId("story-media")).toBeInTheDocument();
   });
 });

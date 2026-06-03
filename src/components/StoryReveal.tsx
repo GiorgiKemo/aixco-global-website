@@ -2,7 +2,7 @@
 
 import { Children, useEffect, useState, type ReactNode } from "react";
 import { motion, type Variants } from "@/lib/framer-motion";
-import { premiumEase, reducedMotionTransition, revealTransition } from "@/lib/motion";
+import { imageSettleTransition, premiumEase, reducedMotionTransition, revealTransition } from "@/lib/motion";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 
 export const scrollRevealViewport = {
@@ -124,6 +124,93 @@ type StorySceneRevealProps = {
   isActive: boolean;
   className?: string;
 };
+
+export const storyMediaReveal: Variants = {
+  hidden: {
+    opacity: 0,
+    x: 56,
+    scale: 1.05,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: 1.05,
+      ease: premiumEase,
+      delay: 0.1,
+    },
+  },
+};
+
+export const storyMediaRevealReverse: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -56,
+    scale: 1.05,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: 1.05,
+      ease: premiumEase,
+      delay: 0.1,
+    },
+  },
+};
+
+type StoryMediaRevealProps = {
+  children: ReactNode;
+  isActive: boolean;
+  reverse?: boolean;
+  className?: string;
+};
+
+export function StoryMediaReveal({ children, isActive, reverse = false, className }: StoryMediaRevealProps) {
+  const shouldReduceMotion = useHydratedReducedMotion();
+  const [hasRevealed, setHasRevealed] = useState(isActive);
+
+  useEffect(() => {
+    if (isActive) {
+      setHasRevealed(true);
+    }
+  }, [isActive]);
+
+  const variants = reverse ? storyMediaRevealReverse : storyMediaReveal;
+
+  return (
+    <motion.div
+      className={className}
+      variants={variants}
+      initial="hidden"
+      animate={hasRevealed ? "visible" : "hidden"}
+      transition={shouldReduceMotion ? reducedMotionTransition : undefined}
+    >
+      <motion.div
+        className="story-media-panel__ken-burns h-full w-full"
+        initial={false}
+        animate={
+          shouldReduceMotion
+            ? { scale: 1 }
+            : isActive
+              ? { scale: 1.04 }
+              : { scale: 1.08 }
+        }
+        transition={
+          shouldReduceMotion
+            ? reducedMotionTransition
+            : isActive
+              ? { duration: 14, ease: "linear" }
+              : imageSettleTransition
+        }
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export function StorySceneReveal({ children, isActive, className }: StorySceneRevealProps) {
   const shouldReduceMotion = useHydratedReducedMotion();

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X } from "lucide-react";
@@ -11,6 +11,7 @@ type LiveVideoProps = {
   poster?: string;
   className?: string;
   videoClassName?: string;
+  videoStyle?: CSSProperties;
   fit?: "cover" | "contain";
   eager?: boolean;
   rootMargin?: string;
@@ -28,6 +29,7 @@ export function LiveVideo({
   poster,
   className = "",
   videoClassName = "",
+  videoStyle,
   fit = "cover",
   eager = false,
   rootMargin = "350px 0px",
@@ -245,6 +247,7 @@ export function LiveVideo({
           aria-label={title}
           title={tx(title)}
           className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}
+          style={videoStyle}
           autoPlay={autoplayPreview && isInFocus && shouldAttachVideo && !isExpanded}
           muted
           loop={autoplayPreview}
