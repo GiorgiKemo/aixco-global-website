@@ -309,10 +309,10 @@ function StorySceneBody({
 
   const densityClass =
     density === "dense"
-      ? "gap-[clamp(0.62rem,1.1svh,0.95rem)]"
+      ? "gap-[clamp(0.85rem,1.45svh,1.15rem)]"
       : density === "compact"
-        ? "gap-[clamp(0.72rem,1.35svh,1.1rem)]"
-        : "gap-[clamp(0.85rem,1.75svh,1.4rem)]";
+        ? "gap-[clamp(0.95rem,1.65svh,1.3rem)]"
+        : "gap-[clamp(1rem,2svh,1.55rem)]";
 
   useLayoutEffect(() => {
     const copy = copyRef.current;
@@ -326,14 +326,15 @@ function StorySceneBody({
       const copyAvailable = copy.clientHeight;
       const available =
         copyAvailable > 0 ? Math.min(columnAvailable, copyAvailable) : columnAvailable;
-      const needed = copy.scrollHeight;
-      if (needed <= available + 2) return;
 
-      const rawZoom = (available - 2) / needed;
-      const zoom = Math.max(0.88, Math.min(1, rawZoom));
-      if (zoom < 0.995) {
+      let zoom = 1;
+      for (let attempt = 0; attempt < 4; attempt += 1) {
+        const needed = copy.scrollHeight;
+        if (needed <= available + 2) break;
+
+        const rawZoom = (available - 2) / needed;
+        zoom = Math.max(0.8, Math.min(zoom, rawZoom));
         copy.style.setProperty("zoom", String(zoom));
-        // Zoom shrinks layout width too — expand so scaled content still fills the column edge-to-edge.
         copy.style.setProperty("width", `${100 / zoom}%`);
       }
     };
@@ -487,15 +488,15 @@ function StoryDubaiFundRow({ fund, tx }: { fund: DubaiFund; tx: (copy: string) =
   const headlineMetrics = details.filter((detail) => isHeadlineMetric(detail.label)).slice(0, 3);
 
   return (
-    <div className="story-fund-row py-[clamp(0.85rem,1.45svh,1.25rem)] first:pt-0 last:pb-0">
+    <div className="story-fund-row py-[clamp(0.95rem,1.55svh,1.35rem)] first:pt-0 last:pb-0">
       <h3 className="story-card-title">{tx(fund.name)}</h3>
-      <div className="mt-[clamp(0.65rem,1.1svh,0.95rem)] grid w-full grid-cols-3 gap-x-6 gap-y-[clamp(0.55rem,1svh,0.85rem)]">
+      <div className="grid w-full grid-cols-3 gap-x-6 gap-y-[clamp(0.75rem,1.25svh,1rem)]">
         {headlineMetrics.map((detail) => {
           const metric = formatMetricValue(detail.value);
           return (
             <div key={`${detail.label}:${detail.value}`}>
               <p className="story-metric-label">{tx(detail.label)}</p>
-              <p className="story-metric-value mt-[clamp(0.45rem,0.85svh,0.7rem)]">
+              <p className="story-metric-value">
                 {metric.prefix ? `${tx(metric.prefix)} ` : ""}
                 {metric.value}
                 {metric.subtext ? (
@@ -526,13 +527,13 @@ function AboutScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
       <p className="story-body text-foreground/78">
         {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
       </p>
-      <dl className="grid w-full grid-cols-2 gap-x-8 gap-y-[clamp(0.85rem,1.45svh,1.25rem)]">
+      <dl data-layout="story-about-metrics" className="grid w-full grid-cols-2">
         {metrics.slice(0, 4).map((metric) => (
           <div key={metric.label}>
             <dt className="story-metric-value">
               <CountUpText value={metric.value} />
             </dt>
-            <dd className="story-metric-label mt-[clamp(0.45rem,0.85svh,0.7rem)]">{tx(metric.label)}</dd>
+            <dd className="story-metric-label">{tx(metric.label)}</dd>
           </div>
         ))}
       </dl>
@@ -550,12 +551,12 @@ function LegacyScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
     >
       <p className="eyebrow story-eyebrow">{tx("Our journey")}</p>
       <h2 className="story-h2">{tx("From Switzerland to Dubai to Batumi")}</h2>
-      <div className="grid w-full gap-[clamp(0.85rem,1.45svh,1.25rem)]">
+      <div data-layout="story-legacy-timeline" className="grid w-full">
         {legacyTimelineChapters.slice(0, 3).map((chapter, index) => (
           <div key={chapter.id} className="border-l-2 border-primary/35 pl-5">
             <p className="story-metric-label text-primary/80">{formatChapterNumber(index + 1)}</p>
-            <h3 className="story-card-title mt-[clamp(0.35rem,0.75svh,0.6rem)]">{tx(chapter.title)}</h3>
-            <p className="story-body line-clamp-2 text-foreground/72">{tx(chapter.highlight)}</p>
+            <h3 className="story-card-title">{tx(chapter.title)}</h3>
+            <p className="story-body text-foreground/72">{tx(chapter.highlight)}</p>
           </div>
         ))}
       </div>
@@ -602,7 +603,6 @@ function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
     <SceneShell
       isActive={isActive}
       tone="surface"
-      density="compact"
       reverse
       media={{
         kind: "video",
@@ -619,7 +619,7 @@ function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
       </p>
       <div
         data-layout="story-batumi-benefits"
-        className="grid w-full gap-x-6 gap-y-2 sm:grid-cols-2"
+        className="grid w-full gap-x-6 gap-y-3 sm:grid-cols-2"
       >
         {batumiBenefits.slice(0, 4).map((benefit) => (
           <div key={benefit} className="font-medium leading-snug text-foreground/80">
@@ -633,11 +633,11 @@ function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
             key={property.id}
             href={`/aixco-global-op2/${property.url}`}
             prefetch={false}
-            className="group flex w-full items-center justify-between gap-4 py-3.5 transition-colors hover:text-primary"
+            className="group flex w-full items-center justify-between gap-4 py-4 transition-colors hover:text-primary"
           >
             <span className="min-w-0 flex-1">
               <span className="story-card-title block">{tx(property.name)}</span>
-              <span className="story-body line-clamp-2 block text-foreground/62">
+              <span className="story-body block text-foreground/62">
                 {tx(property.summary)}
               </span>
             </span>
@@ -699,7 +699,7 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
     <SceneShell
       isActive={isActive}
       tone="surface"
-      density="dense"
+      density="compact"
       reverse
       media={{
         kind: "video",
@@ -723,12 +723,12 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
             type="button"
             data-participation-card={route.id}
             onClick={onRegister}
-            className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-2.5 text-left transition-colors hover:text-primary"
+            className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-left transition-colors hover:text-primary"
           >
             <span className="story-metric-value text-primary/45">{formatChapterNumber(index + 1)}</span>
             <span className="min-w-0">
               <span className="story-card-title block">{tx(route.title)}</span>
-              <span className="story-body line-clamp-2 block text-foreground/64">{tx(route.body)}</span>
+              <span className="story-body block text-foreground/64">{tx(route.body)}</span>
             </span>
             <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-1" aria-hidden />
           </button>
@@ -755,7 +755,6 @@ function HowScene({
     <SceneShell
       isActive={isActive}
       tone="light"
-      density="compact"
       media={{ kind: "image", src: aixcoLiveImages.contact, alt: tx("AIXCO contact and office reference"), position: "center" }}
     >
       <p className="eyebrow story-eyebrow">{tx("Journeys")}</p>
@@ -763,12 +762,12 @@ function HowScene({
       <p className="story-body text-foreground/76">
         {tx("Choose the journey that fits your role. The process is structured, transparent, and digitally managed.")}
       </p>
-      <div className="grid w-full gap-x-6 gap-y-[clamp(0.65rem,1.1svh,0.95rem)] sm:grid-cols-2">
+      <div data-layout="story-journeys" className="grid w-full sm:grid-cols-2">
         {journeys.map((journey, index) => (
           <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group text-left transition-colors hover:text-primary">
             <p className="story-metric-label text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
-            <h3 className="story-card-title mt-1">{tx(journey.role)}</h3>
-            <p className="story-body line-clamp-2 text-foreground/65">{tx(journey.summary)}</p>
+            <h3 className="story-card-title">{tx(journey.role)}</h3>
+            <p className="story-body text-foreground/65">{tx(journey.summary)}</p>
           </button>
         ))}
       </div>
@@ -787,15 +786,15 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
     <SceneShell
       isActive={isActive}
       tone="surface"
-      density="dense"
+      density="compact"
       media={{ kind: "image", src: teamImageMap[team[0].image as keyof typeof teamImageMap], alt: tx(team[0].name), position: "center top" }}
       reverse
     >
       <p className="eyebrow story-eyebrow">{tx("Team")}</p>
       <h2 className="story-h2">{tx("AIXCO leadership")}</h2>
-      <div className="w-full divide-y divide-foreground/30">
+      <div data-layout="story-team-list" className="w-full divide-y divide-foreground/30">
         {team.map((member) => (
-          <div key={member.name} className="grid grid-cols-[3.75rem_minmax(0,1fr)] gap-3 py-3 first:pt-0 last:pb-0">
+          <div key={member.name} className="grid grid-cols-[3.75rem_minmax(0,1fr)] gap-3 first:pt-0 last:pb-0">
             <div className="relative aspect-square overflow-hidden">
               <Image
                 src={teamImageMap[member.image as keyof typeof teamImageMap]}
@@ -808,7 +807,7 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
             <div className="min-w-0 self-center">
               <h3 className="story-card-title">{tx(member.name)}</h3>
               <p className="story-body font-medium text-primary">{tx(member.role)}</p>
-              <p className="story-body line-clamp-1 text-foreground/64">{tx(member.summary)}</p>
+              <p className="story-body text-foreground/64">{tx(member.summary)}</p>
             </div>
           </div>
         ))}
@@ -829,7 +828,7 @@ function PartnersScene({ isActive, tx }: { isActive: boolean; tx: (copy: string)
     >
       <p className="eyebrow story-eyebrow">{tx("Partners")}</p>
       <h2 className="story-h2">{tx("Group companies and strategic partners")}</h2>
-      <div className="grid w-full grid-cols-2 gap-x-6 gap-y-[clamp(0.65rem,1.1svh,0.95rem)]">
+      <div data-layout="story-partners-grid" className="grid w-full grid-cols-2">
         {featuredPartners.map((partner) => {
           const logo = aixcoLiveLogos[partner.logo as keyof typeof aixcoLiveLogos];
 
@@ -851,24 +850,24 @@ function PartnersScene({ isActive, tx }: { isActive: boolean; tx: (copy: string)
 
 function FaqScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
   const { faqGroups } = useSiteContent();
-  const highlightedFaqs = faqGroups.flatMap((group) => group.items.slice(0, 2).map((item) => ({ ...item, group: group.group }))).slice(0, 5);
+  const highlightedFaqs = faqGroups.flatMap((group) => group.items.slice(0, 2).map((item) => ({ ...item, group: group.group }))).slice(0, 4);
 
   return (
     <SceneShell
       isActive={isActive}
       tone="surface"
-      density="dense"
+      density="compact"
       reverse
       media={{ kind: "image", src: aixcoLiveImages.batumiGuru, alt: tx("Guru Batumi project reference"), position: "center" }}
     >
       <p className="eyebrow story-eyebrow">{tx("FAQs")}</p>
       <h2 className="story-h2">{tx("Frequently asked questions")}</h2>
-      <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
+      <div data-layout="story-faq-list" className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
         {highlightedFaqs.map((item) => (
-          <div key={`${item.group}-${item.q}`} className="py-3">
+          <div key={`${item.group}-${item.q}`}>
             <p className="story-metric-label text-primary/75">{tx(item.group)}</p>
-            <h3 className="story-card-title mt-1">{tx(item.q)}</h3>
-            <p className="story-body line-clamp-1 text-foreground/66">{tx(item.a)}</p>
+            <h3 className="story-card-title">{tx(item.q)}</h3>
+            <p className="story-body text-foreground/66">{tx(item.a)}</p>
           </div>
         ))}
       </div>

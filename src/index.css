@@ -93,9 +93,12 @@
     --story-metric-pref: 2.25vw;
     --story-metric-max: 2.65rem;
 
-    --story-copy-gap: clamp(0.85rem, 1.75svh, 1.4rem);
-    --story-section-gap: clamp(1rem, 2svh, 1.65rem);
-    --story-metric-gap: clamp(0.55rem, 1svh, 0.85rem);
+    --story-copy-gap: clamp(1rem, 2svh, 1.65rem);
+    --story-section-gap: clamp(1.15rem, 2.25svh, 1.85rem);
+    --story-grid-row-gap: clamp(1.25rem, 2.25svh, 1.75rem);
+    --story-grid-col-gap: clamp(1.25rem, 2vw, 2rem);
+    --story-item-gap: clamp(0.75rem, 1.35svh, 1.15rem);
+    --story-metric-gap: clamp(0.65rem, 1.15svh, 0.95rem);
     --story-col-py: clamp(1.35rem, 3.25svh, 2.75rem);
     --story-col-px: clamp(1.25rem, 2vw, 2rem);
   }
@@ -1404,11 +1407,75 @@
       --story-metric-min: 1.7rem;
       --story-metric-pref: 2.25vw;
       --story-metric-max: 2.65rem;
-      --story-copy-gap: clamp(0.85rem, 1.75svh, 1.4rem);
-      --story-section-gap: clamp(1rem, 2svh, 1.65rem);
-      --story-metric-gap: clamp(0.55rem, 1svh, 0.85rem);
+      --story-copy-gap: clamp(1rem, 2svh, 1.65rem);
+      --story-section-gap: clamp(1.15rem, 2.25svh, 1.85rem);
+      --story-grid-row-gap: clamp(1.25rem, 2.25svh, 1.75rem);
+      --story-grid-col-gap: clamp(1.25rem, 2vw, 2rem);
+      --story-item-gap: clamp(0.75rem, 1.35svh, 1.15rem);
+      --story-metric-gap: clamp(0.65rem, 1.15svh, 0.95rem);
       --story-col-py: clamp(1.35rem, 3.25svh, 2.75rem);
       --story-col-px: clamp(1.25rem, 2vw, 2rem);
+    }
+
+    [data-story-scene-copy] [data-layout="story-journeys"],
+    [data-story-scene-copy] [data-layout="story-partners-grid"],
+    [data-story-scene-copy] [data-layout="story-about-metrics"] {
+      column-gap: var(--story-grid-col-gap);
+      row-gap: var(--story-grid-row-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-journeys"] .story-metric-label + .story-card-title,
+    [data-story-scene-copy] [data-layout="story-journeys"] .story-card-title + .story-body,
+    [data-story-scene-copy] [data-layout="story-legacy-timeline"] .story-metric-label + .story-card-title,
+    [data-story-scene-copy] [data-layout="story-legacy-timeline"] .story-card-title + .story-body,
+    [data-story-scene-copy] [data-layout="story-participation-routes"] .story-card-title + .story-body,
+    [data-story-scene-copy] [data-layout="story-batumi-properties"] .story-card-title + .story-body,
+    [data-story-scene-copy] [data-layout="story-team-list"] .story-card-title + .story-body,
+    [data-story-scene-copy] [data-layout="story-team-list"] .story-body + .story-body,
+    [data-story-scene-copy] [data-layout="story-faq-list"] .story-metric-label + .story-card-title,
+    [data-story-scene-copy] [data-layout="story-faq-list"] .story-card-title + .story-body {
+      margin-top: var(--story-item-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-journeys"] + .btn-gold {
+      margin-top: var(--story-section-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-journeys"] .story-body,
+    [data-story-scene-copy] [data-layout="story-legacy-timeline"] .story-body,
+    [data-story-scene-copy] [data-layout="story-participation-routes"] .story-body,
+    [data-story-scene-copy] [data-layout="story-batumi-properties"] .story-body,
+    [data-story-scene-copy] [data-layout="story-team-list"] .story-body:last-child,
+    [data-story-scene-copy] [data-layout="story-faq-list"] .story-body {
+      line-height: var(--story-body-lh);
+    }
+
+    [data-story-scene-copy] [data-layout="story-legacy-timeline"] > * + * {
+      margin-top: var(--story-grid-row-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-participation-routes"] button {
+      padding-block: clamp(0.85rem, 1.45svh, 1.15rem);
+    }
+
+    [data-story-scene-copy] [data-layout="story-team-list"] > * {
+      padding-block: clamp(0.85rem, 1.45svh, 1.15rem);
+    }
+
+    [data-story-scene-copy] [data-layout="story-faq-list"] > * {
+      padding-block: clamp(0.85rem, 1.35svh, 1.05rem);
+    }
+
+    [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-fund-row {
+      padding-block: clamp(0.95rem, 1.55svh, 1.35rem);
+    }
+
+    [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-card-title + .grid {
+      margin-top: var(--story-item-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-metric-label + .story-metric-value {
+      margin-top: var(--story-metric-gap);
     }
 
     [data-story-scene-copy] [class*="mt-"] {
@@ -1485,8 +1552,14 @@
         --story-card-title-max: 1.55rem;
         --story-metric-max: 2.1rem;
         --story-col-py: clamp(1.15rem, 2.75svh, 2.25rem);
-        --story-copy-gap: clamp(0.72rem, 1.35svh, 1.1rem);
-        --story-section-gap: clamp(0.85rem, 1.65svh, 1.35rem);
+        --story-copy-gap: clamp(0.85rem, 1.5svh, 1.25rem);
+        --story-section-gap: clamp(0.95rem, 1.85svh, 1.45rem);
+        --story-grid-row-gap: clamp(1rem, 1.85svh, 1.45rem);
+        --story-item-gap: clamp(0.65rem, 1.15svh, 0.95rem);
+      }
+
+      [data-story-scene-copy] [data-layout="story-faq-list"] > * {
+        padding-block: clamp(0.65rem, 1.1svh, 0.85rem);
       }
     }
 
@@ -1502,8 +1575,10 @@
         --story-metric-min: 1.45rem;
         --story-metric-max: 1.85rem;
         --story-col-py: clamp(1rem, 2.35svh, 1.85rem);
-        --story-copy-gap: clamp(0.62rem, 1.1svh, 0.95rem);
-        --story-section-gap: clamp(0.72rem, 1.35svh, 1.15rem);
+        --story-copy-gap: clamp(0.78rem, 1.25svh, 1.05rem);
+        --story-section-gap: clamp(0.85rem, 1.55svh, 1.25rem);
+        --story-grid-row-gap: clamp(0.95rem, 1.65svh, 1.25rem);
+        --story-item-gap: clamp(0.6rem, 1.05svh, 0.85rem);
       }
 
       [data-story-scene-copy] .story-eyebrow {
@@ -1524,8 +1599,10 @@
         --story-metric-min: 1.3rem;
         --story-metric-max: 1.65rem;
         --story-col-py: clamp(0.85rem, 2svh, 1.5rem);
-        --story-copy-gap: clamp(0.55rem, 0.95svh, 0.82rem);
-        --story-section-gap: clamp(0.65rem, 1.15svh, 1rem);
+        --story-copy-gap: clamp(0.72rem, 1.1svh, 0.95rem);
+        --story-section-gap: clamp(0.78rem, 1.35svh, 1.1rem);
+        --story-grid-row-gap: clamp(0.85rem, 1.45svh, 1.1rem);
+        --story-item-gap: clamp(0.55rem, 0.95svh, 0.78rem);
       }
 
       [data-story-scene-copy] [data-layout="story-participation-routes"] button {
