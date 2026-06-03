@@ -62,6 +62,10 @@ const nextConfig = {
         pathname: "/aixco-global-op2/media/**",
         search: "",
       },
+      {
+        pathname: "/aixco-global-op2/documents/**",
+        search: "",
+      },
     ],
   },
   turbopack: {
