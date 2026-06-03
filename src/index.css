@@ -1513,7 +1513,8 @@
       padding-block: clamp(0.85rem, 1.45svh, 1.15rem);
     }
 
-    [data-story-scene-copy] [data-layout="story-team-list"] > * {
+    [data-story-scene-copy] [data-layout="story-team-list"] > *,
+    [data-story-scene-copy] [data-layout="story-team-list"] > button {
       padding-block: clamp(0.85rem, 1.45svh, 1.15rem);
     }
 

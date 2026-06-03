@@ -35,8 +35,10 @@ import { getSafePublicAssetHref } from "@/lib/security/urls";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 import { cn } from "@/lib/utils";
 import { StoryMediaReveal, StorySceneReveal } from "@/components/StoryReveal";
-import { motion } from "@/lib/framer-motion";
-import { revealTransition } from "@/lib/motion";
+import { useTeamMemberRotation } from "@/hooks/use-team-member-rotation";
+import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
+import { AnimatePresence, motion } from "@/lib/framer-motion";
+import { imageSettleTransition, reducedMotionTransition, revealTransition } from "@/lib/motion";
 import {
   formatMetricValue,
   isHeadlineMetric,
@@ -160,6 +162,35 @@ function formatChapterNumber(index: number) {
 
 function getMaterialIcon(format: string) {
   return format === "PDF" ? FileText : ImageIcon;
+}
+
+function StoryCrossfadeMediaPanel({
+  media,
+  mediaKey,
+  isActive,
+  priority = false,
+}: {
+  media: StoryMedia;
+  mediaKey: string;
+  isActive: boolean;
+  priority?: boolean;
+}) {
+  const shouldReduceMotion = useHydratedReducedMotion();
+
+  return (
+    <AnimatePresence mode="sync" initial={false}>
+      <motion.div
+        key={mediaKey}
+        className="absolute inset-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={shouldReduceMotion ? reducedMotionTransition : imageSettleTransition}
+      >
+        <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
+      </motion.div>
+    </AnimatePresence>
+  );
 }
 
 function StoryMediaPanel({
@@ -436,6 +467,7 @@ function StorySceneBody({
 function SceneShell({
   children,
   media,
+  mediaCrossfadeKey,
   mediaOverlay = "light",
   priority,
   reverse = false,
@@ -445,6 +477,7 @@ function SceneShell({
 }: {
   children: React.ReactNode;
   media?: StoryMedia;
+  mediaCrossfadeKey?: string;
   mediaOverlay?: StoryMediaOverlay;
   priority?: boolean;
   reverse?: boolean;
@@ -491,7 +524,16 @@ function SceneShell({
             {media ? (
               <StoryMediaReveal isActive={isActive} reverse={reverse} className="absolute inset-0">
                 <div className="story-media-panel__stage relative h-full w-full overflow-hidden">
-                  <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
+                  {mediaCrossfadeKey ? (
+                    <StoryCrossfadeMediaPanel
+                      media={media}
+                      mediaKey={mediaCrossfadeKey}
+                      isActive={isActive}
+                      priority={priority}
+                    />
+                  ) : (
+                    <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
+                  )}
                   <StoryMediaGradient overlay={resolvedOverlay} reverse={reverse} />
                 </div>
               </StoryMediaReveal>
@@ -878,36 +920,76 @@ function HowScene({
 
 function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
   const { team } = useSiteContent();
+  const { activeIndex, selectMember, pauseRotation, resumeRotation } = useTeamMemberRotation({
+    memberCount: team.length,
+    isActive,
+  });
+  const activeMember = team[activeIndex] ?? team[0];
 
   return (
     <SceneShell
       isActive={isActive}
       tone="surface"
       density="compact"
-      media={{ kind: "image", src: teamImageMap[team[0].image as keyof typeof teamImageMap], alt: tx(team[0].name), position: "center top" }}
+      media={{
+        kind: "image",
+        src: teamImageMap[activeMember.image as keyof typeof teamImageMap],
+        alt: tx(activeMember.name),
+        position: "center top",
+      }}
+      mediaCrossfadeKey={activeMember.image}
       reverse
     >
       <p className="eyebrow story-eyebrow">{tx("Team")}</p>
       <h2 className="story-h2">{tx("AIXCO leadership")}</h2>
-      <div data-layout="story-team-list" className="w-full divide-y divide-foreground/30">
-        {team.map((member) => (
-          <div key={member.name} className="grid grid-cols-[3.75rem_minmax(0,1fr)] gap-3 first:pt-0 last:pb-0">
-            <div className="relative aspect-square overflow-hidden">
-              <Image
-                src={teamImageMap[member.image as keyof typeof teamImageMap]}
-                alt={tx(member.name)}
-                fill
-                sizes="5rem"
-                className="object-cover object-top"
+      <div
+        data-layout="story-team-list"
+        className="w-full divide-y divide-foreground/30"
+        onMouseLeave={resumeRotation}
+      >
+        {team.map((member, index) => {
+          const isSelected = activeIndex === index;
+
+          return (
+            <button
+              key={member.name}
+              type="button"
+              aria-pressed={isSelected}
+              data-active={isSelected ? "true" : "false"}
+              onClick={() => selectMember(index)}
+              onMouseEnter={pauseRotation}
+              onFocus={pauseRotation}
+              onBlur={resumeRotation}
+              className={cn(
+                "group/story-team-member relative grid w-full cursor-pointer grid-cols-[3.75rem_minmax(0,1fr)] gap-3 px-3 text-left transition-colors duration-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2",
+                isSelected && "bg-foreground/[0.04] text-primary",
+              )}
+            >
+              <span
+                className={cn(
+                  "absolute bottom-0 left-0 top-0 w-[0.2rem] bg-foreground/15 transition-[background-color] duration-300 ease-[var(--ease-apple)]",
+                  "group-hover/story-team-member:bg-primary-glow group-focus-visible/story-team-member:bg-primary-glow",
+                  isSelected && "bg-primary",
+                )}
+                aria-hidden="true"
               />
-            </div>
-            <div className="min-w-0 self-center">
-              <h3 className="story-card-title">{tx(member.name)}</h3>
-              <p className="story-body font-medium text-primary">{tx(member.role)}</p>
-              <p className="story-body text-foreground/64">{tx(member.summary)}</p>
-            </div>
-          </div>
-        ))}
+              <div className="relative aspect-square overflow-hidden">
+                <Image
+                  src={teamImageMap[member.image as keyof typeof teamImageMap]}
+                  alt={tx(member.name)}
+                  fill
+                  sizes="5rem"
+                  className="object-cover object-top"
+                />
+              </div>
+              <div className="min-w-0 self-center">
+                <h3 className={cn("story-card-title", isSelected && "text-primary")}>{tx(member.name)}</h3>
+                <p className="story-body font-medium text-primary">{tx(member.role)}</p>
+                <p className="story-body text-foreground/64">{tx(member.summary)}</p>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </SceneShell>
   );

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useSiteContent } from '@/data/site-content-context';
+import { useTeamMemberRotation } from '@/hooks/use-team-member-rotation';
 import { useI18n } from '@/i18n/I18nProvider';
 import { aixcoLiveImages } from '@/lib/aixco-live-assets';
 import { premiumPress, premiumSurfaceHover } from '@/lib/motion';
@@ -44,6 +45,10 @@ export function Team() {
   const [isTeamInView, setIsTeamInView] = useState(
     () => process.env.NODE_ENV === 'test' || process.env.VITEST === 'true',
   );
+  const { activeIndex, selectMember, pauseRotation, resumeRotation } = useTeamMemberRotation({
+    memberCount: team.length,
+    isActive: isTeamInView,
+  });
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -82,15 +87,31 @@ export function Team() {
           </p>
         </div>
 
-        <div data-layout="team-profile-grid" className="mx-auto grid w-full max-w-[65rem] gap-5 md:grid-cols-3 min-[1360px]:gap-6">
+        <div
+          data-layout="team-profile-grid"
+          className="mx-auto grid w-full max-w-[65rem] gap-5 md:grid-cols-3 min-[1360px]:gap-6"
+          onMouseLeave={resumeRotation}
+        >
           {team.map((m, index) => {
             const portraitLoading = getTeamPortraitLoading({ isTeamInView, index });
+            const isFeatured = activeIndex === index;
 
             return (
               <motion.button
                 key={m.name}
-                onClick={() => openTeam(m)}
-                className="scroll-reveal mac-card group flex h-full flex-col overflow-hidden text-left"
+                aria-pressed={isFeatured}
+                data-active={isFeatured ? 'true' : 'false'}
+                onClick={() => {
+                  selectMember(index);
+                  openTeam(m);
+                }}
+                onMouseEnter={pauseRotation}
+                onFocus={pauseRotation}
+                onBlur={resumeRotation}
+                className={cn(
+                  'scroll-reveal mac-card group flex h-full flex-col overflow-hidden text-left transition-[box-shadow,transform]',
+                  isFeatured && 'ring-2 ring-primary/70 ring-offset-2 ring-offset-background',
+                )}
                 whileHover={premiumSurfaceHover}
                 whileTap={premiumPress}
               >

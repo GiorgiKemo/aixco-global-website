@@ -84,4 +84,16 @@ describe("Team", () => {
       loading: "eager",
     });
   });
+
+  it("marks the first team card as featured by default", () => {
+    render(
+      <I18nProvider>
+        <Team />
+      </I18nProvider>,
+    );
+
+    const benjaminButton = screen.getByRole("button", { name: /Benjamin Fischer/i });
+    expect(benjaminButton).toHaveAttribute("aria-pressed", "true");
+    expect(benjaminButton).toHaveAttribute("data-active", "true");
+  });
 });
