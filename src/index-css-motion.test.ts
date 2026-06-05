@@ -42,6 +42,11 @@ describe("index.css motion rules", () => {
     expect(partnerCard).toContain("box-shadow 260ms");
   });
 
+  it("keeps partner marquee scrolling even when reduced motion is preferred", () => {
+    expect(css).not.toMatch(/\.partner-marquee-track\s*\{[^}]*animation:\s*none/);
+    expect(css).toContain("animation-duration: 52s !important");
+  });
+
   it("keeps partner modal logo panels opaque", () => {
     const partnerModalLogoStage = cssBlock(".partner-modal-logo-stage");
 

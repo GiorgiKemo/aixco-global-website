@@ -40,6 +40,7 @@ describe("Partners", () => {
     expect(card).toBeInTheDocument();
     expect(card?.querySelector(".partner-marquee-item__card img.partner-marquee-item__logo")).toBeInTheDocument();
     expect(card?.querySelector("img.partner-marquee-item__logo")).toHaveAttribute("loading", "lazy");
+    expect(card?.querySelector("img.partner-marquee-item__logo")?.getAttribute("src")).toContain("Globalpartners-marquee");
     expect(card?.querySelector(".partner-marquee-item__name")).toHaveTextContent("Global Partners");
     expect(container.querySelectorAll(".partner-marquee-set")).toHaveLength(4);
   });

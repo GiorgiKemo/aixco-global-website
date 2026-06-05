@@ -121,6 +121,7 @@ export const aixcoLiveLogos = {
   aixcoGlobal: `${liveImageBase}/AIXCOGlobalWlong.png`,
   aixcoMark: `${liveImageBase}/AIXW.png`,
   globalPartners: `${liveImageBase}/Globalpartners.png`,
+  globalPartnersMarquee: `${liveImageBase}/Globalpartners-marquee.png`,
   isp: `${liveImageBase}/isp.svg`,
   workwise: `${liveImageBase}/ww.png`,
   cleanElements: `${liveImageBase}/cleanelement.png`,

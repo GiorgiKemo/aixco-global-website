@@ -9,7 +9,7 @@ import { premiumPress } from "@/lib/motion";
 export type Partner = SiteContent["partners"][number];
 
 const logoMap: Record<string, string> = {
-  globalPartners: aixcoLiveLogos.globalPartners,
+  globalPartners: aixcoLiveLogos.globalPartnersMarquee,
   isp: aixcoLiveLogos.isp,
   workwise: aixcoLiveLogos.workwise,
   cleanElements: aixcoLiveLogos.cleanElements,

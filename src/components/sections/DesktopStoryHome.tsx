@@ -1357,48 +1357,68 @@ function ContactScene({
   onRegister: () => void;
   tx: (copy: string) => string;
 }) {
+  const { company } = useSiteContent();
+
   return (
     <SceneShell
       isActive={isActive}
       isRevealed={isRevealed}
-      tone="dark"
+      tone="light"
+      density="compact"
       media={{
         kind: "image",
         src: aixcoLiveImages.contact,
         alt: tx("AIXCO contact office reference"),
-        position: "48% center",
+        position: "50% 32%",
       }}
-      mediaOverlay="contact"
+      mediaOverlay="none"
     >
-      <p className="eyebrow story-eyebrow text-primary-glow">{tx("Contact")}</p>
-      <h2 className="story-h2 text-white">
+      <p className="eyebrow story-eyebrow">{tx("Contact")}</p>
+      <h2 className="story-h2">
         <StoryTextReveal label={tx("Start with AIXCO")} />
       </h2>
-      <p className="story-body text-white/76">
+      <p className="story-body text-foreground/76">
         {tx("Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.")}
       </p>
-      <div className="w-full divide-y divide-white/20">
-        <a href="mailto:info@aixco.global" className="group flex w-full items-center gap-3 py-3.5 text-white transition-colors hover:text-primary-glow">
-          <Mail className="h-5 w-5 text-primary-glow" aria-hidden />
-          <span className="story-body text-white">info@aixco.global</span>
+
+      <div data-layout="story-contact-details" className="grid w-full gap-3 sm:grid-cols-2">
+        <a href={`mailto:${company.email}`} className="story-contact-card group min-w-0">
+          <span className="story-metric-label text-primary/75">{tx("Email")}</span>
+          <span className="story-contact-card__row">
+            <Mail className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <span className="story-card-title min-w-0 text-[clamp(0.95rem,1vw,1.05rem)] font-medium leading-snug [overflow-wrap:anywhere]">
+              {company.email}
+            </span>
+          </span>
         </a>
-        <div className="flex w-full items-center gap-3 py-3.5 text-white">
-          <MapPin className="h-5 w-5 text-primary-glow" aria-hidden />
-          <span className="story-body text-white">{tx("Grungasse 16, 1050 Wien, Austria")}</span>
-        </div>
+        <a
+          href="https://maps.app.goo.gl/AVywyfokNdm4VuLD9"
+          target="_blank"
+          rel="noreferrer"
+          className="story-contact-card group min-w-0"
+        >
+          <span className="story-metric-label text-primary/75">{tx("Address")}</span>
+          <span className="story-contact-card__row">
+            <MapPin className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <span className="story-body min-w-0 text-foreground/82 [overflow-wrap:anywhere]">{company.address}</span>
+          </span>
+        </a>
       </div>
-      <div className="flex flex-wrap gap-2.5">
-        <button type="button" onClick={onRegister} className="btn-gold">
+
+      <div data-layout="story-contact-actions" className="flex w-full flex-col gap-3">
+        <button type="button" onClick={onRegister} className="btn-gold w-full sm:w-fit">
           {tx("Register")}
           <ArrowRight className="h-4 w-4" aria-hidden />
         </button>
-        <button type="button" onClick={onLogin} className="btn-ghost-gold border-white/28 bg-white/10 text-white hover:bg-white/16 hover:text-white">
-          {tx("Login")}
-        </button>
-        <Link href="/aixco-philosophy" prefetch={false} className="btn-ghost-gold border-white/28 bg-white/10 text-white hover:bg-white/16 hover:text-white">
-          <ShieldCheck className="h-4 w-4" aria-hidden />
-          {tx("Philosophy")}
-        </Link>
+        <div className="flex flex-wrap gap-2.5">
+          <button type="button" onClick={onLogin} className="btn-ghost-gold">
+            {tx("Login")}
+          </button>
+          <Link href="/aixco-philosophy" prefetch={false} className="btn-ghost-gold">
+            <ShieldCheck className="h-4 w-4" aria-hidden />
+            {tx("Philosophy")}
+          </Link>
+        </div>
       </div>
     </SceneShell>
   );

@@ -912,7 +912,7 @@
 
   .partner-marquee {
     --partner-marquee-gap: 1.75rem;
-    --partner-marquee-duration: 46s;
+    --partner-marquee-duration: 32s;
     --partner-item-width: 12rem;
     --partner-logo-stage-height: 7.5rem;
     position: relative;
@@ -927,7 +927,7 @@
 
   .partner-marquee--story {
     --partner-marquee-gap: 1.35rem;
-    --partner-marquee-duration: 38s;
+    --partner-marquee-duration: 26s;
     --partner-item-width: clamp(10rem, 12.5vw, 12rem);
     --partner-logo-stage-height: clamp(6.5rem, 10.5svh, 7.5rem);
     padding-block: 0.35rem 0.75rem;
@@ -942,11 +942,6 @@
     width: max-content;
     animation: partner-marquee var(--partner-marquee-duration) linear infinite;
     will-change: transform;
-  }
-
-  .partner-marquee:hover .partner-marquee-track,
-  .partner-marquee:focus-within .partner-marquee-track {
-    animation-play-state: paused;
   }
 
   .partner-marquee-track-reverse {
@@ -1045,9 +1040,11 @@
     max-height: clamp(2.5rem, 4.4svh, 3.35rem);
   }
 
+  /* Keep the uniform ink tone on hover (revealing full colour would hide
+     logos that contain white lettering on the light plate); intensify and
+     lift instead. */
   .partner-marquee-item:hover .partner-marquee-item__logo,
   .partner-marquee-item:focus-visible .partner-marquee-item__logo {
-    filter: none;
     opacity: 1;
     transform: scale(1.04);
   }
@@ -1088,10 +1085,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .partner-marquee-track {
-      animation: none;
-    }
-
     .partner-marquee-item__logo {
       filter: grayscale(1) brightness(0);
       opacity: 0.6;
@@ -1176,11 +1169,6 @@
     user-select: none;
     -webkit-user-drag: none;
     pointer-events: none;
-  }
-
-  .partner-marquee:hover .partner-marquee-track,
-  .partner-marquee:focus-within .partner-marquee-track {
-    animation-play-state: paused;
   }
 
   .story-batumi-benefit-grid {
@@ -1327,6 +1315,42 @@
     letter-spacing: 0.18em;
     line-height: 1;
     text-transform: uppercase;
+  }
+
+  .story-contact-card {
+    display: grid;
+    min-width: 0;
+    gap: 0.45rem;
+    border: 1px solid hsl(var(--foreground) / 0.1);
+    border-radius: 1rem;
+    background:
+      radial-gradient(120% 150% at 50% -10%, hsl(40 50% 100%), transparent 70%),
+      linear-gradient(168deg, hsl(40 42% 99%), hsl(36 26% 94%));
+    box-shadow:
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 18px 44px -32px hsl(220 28% 18% / 0.18);
+    padding: clamp(0.85rem, 1.35svh, 1.05rem) clamp(0.95rem, 1.5vw, 1.15rem);
+    color: hsl(var(--foreground));
+    transition:
+      transform 260ms var(--ease-apple),
+      border-color 260ms var(--ease-apple),
+      box-shadow 260ms var(--ease-apple);
+  }
+
+  .story-contact-card:hover,
+  .story-contact-card:focus-visible {
+    transform: translateY(-2px);
+    border-color: hsl(var(--primary) / 0.38);
+    box-shadow:
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 24px 52px -28px hsl(var(--primary-glow) / 0.24);
+  }
+
+  .story-contact-card__row {
+    display: flex;
+    min-width: 0;
+    align-items: flex-start;
+    gap: 0.65rem;
   }
 
   .news-ticker {
@@ -1692,7 +1716,7 @@
     }
 
     .partner-marquee-track {
-      animation-duration: 70s !important;
+      animation-duration: 52s !important;
     }
 
     .partner-marquee {
@@ -1788,9 +1812,18 @@
 
     [data-story-scene-copy] [data-layout="story-journeys"],
     [data-story-scene-copy] [data-layout="story-partners-marquee"],
-    [data-story-scene-copy] [data-layout="story-about-metrics"] {
+    [data-story-scene-copy] [data-layout="story-about-metrics"],
+    [data-story-scene-copy] [data-layout="story-contact-details"] {
       column-gap: var(--story-grid-col-gap);
       row-gap: var(--story-grid-row-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-contact-actions"] {
+      margin-top: var(--story-section-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-contact-details"] + [data-layout="story-contact-actions"] {
+      margin-top: var(--story-item-gap);
     }
 
     [data-story-scene-copy] [data-layout="story-journeys"] .story-metric-label + .story-card-title,
