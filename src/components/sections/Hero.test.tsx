@@ -149,11 +149,16 @@ describe("Hero", () => {
     expect(introCopy.className).toContain("font-normal");
     expect(introCopy.className).toContain("text-white/90");
     expect(priceLockup).toBeInTheDocument();
-    expect(priceLockup).toHaveAttribute("href", "#faqs");
+    expect(priceLockup).toHaveAttribute("href", "#batumi");
     expect(priceLockup?.className).toContain("hover:text-primary-glow");
     expect(priceLockup?.className).toContain("focus-visible:outline");
     expect(container.querySelector("[data-hero-price-rule='true']")).not.toBeInTheDocument();
-    expect(within(priceLockup as HTMLElement).getByText("Starting from €10,000")).toBeInTheDocument();
+    expect(within(priceLockup as HTMLElement).getByText("Enter Batumi real estate with AIXCO")).toBeInTheDocument();
+    expect(
+      within(priceLockup as HTMLElement).getByText(
+        "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.",
+      ),
+    ).toBeInTheDocument();
     expect(priceText?.className).toContain("text-[clamp(1.2rem,5vw,3.5rem)]");
     expect(priceText?.className).toContain("uppercase");
     expect(priceFootnote).toBeInTheDocument();
@@ -239,14 +244,14 @@ describe("Hero", () => {
     expect(arrow?.className).toContain("md:landscape:!w-12");
   });
 
-  it("translates the hero entry price text", async () => {
+  it("translates the hero real estate message", async () => {
     localStorage.setItem("aixco-lang", "de");
 
     const { container } = renderHero();
     const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
 
     await waitFor(() => {
-      expect(within(priceLockup as HTMLElement).getByText("Ab 10.000 €")).toBeInTheDocument();
+      expect(within(priceLockup as HTMLElement).getByText("Mit AIXCO in Batumi-Immobilien einsteigen")).toBeInTheDocument();
     });
     expect(within(priceLockup as HTMLElement).queryByText("Starting from €10,000")).not.toBeInTheDocument();
   });

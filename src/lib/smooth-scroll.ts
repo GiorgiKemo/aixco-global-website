@@ -4,9 +4,14 @@ type GlideScrollOptions = {
   easing?: number;
   multiplier?: number;
   momentum?: number;
+  wheelCarry?: number;
+  wheelCarryWindowMs?: number;
   storyEasing?: number;
   storyMultiplier?: number;
   storyMomentum?: number;
+  storyWheelCarry?: number;
+  storyWheelCarryWindowMs?: number;
+  signature?: string;
 };
 
 type ActiveLenis = InstanceType<typeof Lenis>;
@@ -125,13 +130,27 @@ function destroyActiveLenis() {
   activeLenis = null;
 }
 
+function clearGlideScrollDataset() {
+  document.documentElement.removeAttribute("data-glide-scroll");
+  document.documentElement.removeAttribute("data-glide-scroll-profile");
+  document.documentElement.removeAttribute("data-glide-scroll-lerp");
+  document.documentElement.removeAttribute("data-glide-scroll-wheel-multiplier");
+  document.documentElement.removeAttribute("data-glide-scroll-wheel-carry");
+  document.documentElement.removeAttribute("data-glide-scroll-signature");
+}
+
 export function installGlideScroll({
   easing = 0.16,
   multiplier = 1.05,
   momentum = 0,
+  wheelCarry = 0,
+  wheelCarryWindowMs = 420,
   storyEasing,
   storyMultiplier,
   storyMomentum,
+  storyWheelCarry,
+  storyWheelCarryWindowMs,
+  signature,
 }: GlideScrollOptions = {}) {
   if (typeof window === "undefined" || typeof document === "undefined") return () => {};
   if (usesCoarsePointer()) return () => {};
@@ -141,14 +160,23 @@ export function installGlideScroll({
   const resolvedEasing = clamp(easing, 0.04, 0.35);
   const resolvedMultiplier = clamp(multiplier, 0.35, 2);
   const resolvedMomentum = clamp(momentum, 0, 1);
+  const resolvedWheelCarry = clamp(wheelCarry, 0, 0.7);
+  const resolvedWheelCarryWindowMs = clamp(wheelCarryWindowMs, 80, 900);
   const resolvedStoryEasing = clamp(storyEasing ?? resolvedEasing, 0.04, 0.35);
   const resolvedStoryMultiplier = clamp(storyMultiplier ?? resolvedMultiplier, 0.25, 2);
   const resolvedStoryMomentum = clamp(storyMomentum ?? resolvedMomentum, 0, 1);
+  const resolvedStoryWheelCarry = clamp(storyWheelCarry ?? resolvedWheelCarry, 0, 0.7);
+  const resolvedStoryWheelCarryWindowMs = clamp(storyWheelCarryWindowMs ?? resolvedWheelCarryWindowMs, 80, 900);
   const isStoryExperience = isStoryScrollExperience();
   const activeEasing = isStoryExperience ? resolvedStoryEasing : resolvedEasing;
   const activeMultiplier = isStoryExperience
     ? resolvedStoryMultiplier + resolvedStoryMomentum
     : resolvedMultiplier + resolvedMomentum;
+  const activeWheelMultiplier = Number(activeMultiplier.toFixed(3));
+  const activeWheelCarry = isStoryExperience ? resolvedStoryWheelCarry : resolvedWheelCarry;
+  const activeWheelCarryWindowMs = isStoryExperience ? resolvedStoryWheelCarryWindowMs : resolvedWheelCarryWindowMs;
+  let previousWheelTime = 0;
+  let previousWheelDeltaY = 0;
 
   activeLenis = new Lenis({
     autoRaf: false,
@@ -156,13 +184,39 @@ export function installGlideScroll({
     smoothWheel: true,
     syncTouch: false,
     touchMultiplier: 1,
-    wheelMultiplier: Number(activeMultiplier.toFixed(3)),
+    wheelMultiplier: activeWheelMultiplier,
     gestureOrientation: "vertical",
     prevent: (node) => node instanceof HTMLElement && node.matches(nativeScrollSelector),
-    virtualScroll: ({ event }) => {
+    virtualScroll: (data) => {
+      const { event } = data;
       cancelActiveScroll();
       if (event instanceof WheelEvent) {
-        return !shouldUseNativeWheelScroll(event);
+        if (shouldUseNativeWheelScroll(event)) return false;
+
+        if (activeWheelCarry > 0 && Math.abs(data.deltaY) >= 1) {
+          const now = event.timeStamp || window.performance.now();
+          const gap = now - previousWheelTime;
+          const rawDeltaY = data.deltaY;
+          const direction = Math.sign(rawDeltaY);
+          const previousDirection = Math.sign(previousWheelDeltaY);
+
+          if (
+            direction !== 0 &&
+            direction === previousDirection &&
+            gap > 0 &&
+            gap <= activeWheelCarryWindowMs
+          ) {
+            const fade = 1 - gap / activeWheelCarryWindowMs;
+            const maxCarry = Math.abs(rawDeltaY) * 0.55;
+            const carry = clamp(previousWheelDeltaY * activeWheelCarry * fade, -maxCarry, maxCarry);
+            data.deltaY = rawDeltaY + carry;
+          }
+
+          previousWheelDeltaY = data.deltaY;
+          previousWheelTime = now;
+        }
+
+        return true;
       }
       return true;
     },
@@ -176,9 +230,18 @@ export function installGlideScroll({
   activeLenisFrame = window.requestAnimationFrame(raf);
 
   document.documentElement.dataset.glideScroll = "enabled";
+  document.documentElement.dataset.glideScrollProfile = isStoryExperience ? "story" : "page";
+  document.documentElement.dataset.glideScrollLerp = activeEasing.toFixed(3);
+  document.documentElement.dataset.glideScrollWheelMultiplier = activeWheelMultiplier.toFixed(3);
+  document.documentElement.dataset.glideScrollWheelCarry = activeWheelCarry.toFixed(3);
+  if (signature) {
+    document.documentElement.dataset.glideScrollSignature = signature;
+  } else {
+    document.documentElement.removeAttribute("data-glide-scroll-signature");
+  }
 
   return () => {
-    document.documentElement.removeAttribute("data-glide-scroll");
+    clearGlideScrollDataset();
     destroyActiveLenis();
   };
 }

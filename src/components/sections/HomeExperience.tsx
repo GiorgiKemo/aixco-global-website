@@ -44,6 +44,7 @@ export function HomeExperience({ children }: { children: ReactNode }) {
 
     if (shouldUseStory && supportsDesktopStory()) {
       document.body.classList.add("home-story-nav-hidden");
+      document.body.classList.remove("home-desktop-story-boot");
     } else {
       document.body.classList.remove("home-desktop-story-boot");
       document.body.classList.remove("home-story-nav-hidden");

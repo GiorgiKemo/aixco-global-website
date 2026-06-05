@@ -51,7 +51,7 @@ import {
   parseFundDetail,
   type DubaiFund,
 } from "./dubai/dubai-data";
-import { heroIntroText, heroPriceText } from "./hero/hero-ui";
+import { heroIntroText, heroOpportunityFootnote, heroOpportunityText } from "./hero/hero-ui";
 
 type StoryChapterKey =
   | "hero"
@@ -100,7 +100,7 @@ const storyChapters: StoryChapter[] = [
   { key: "dubai", id: "dubai", label: "Dubai" },
   { key: "batumi", id: "batumi", label: "Batumi" },
   { key: "materials", id: "materials", label: "Materials" },
-  { key: "participate", id: "participate", label: "Participate" },
+  { key: "participate", id: "participate", label: "How to work" },
   { key: "how", id: "how", label: "Journeys" },
   { key: "team", id: "team", label: "Team" },
   { key: "partners", id: "partners", label: "Partners" },
@@ -132,10 +132,17 @@ const participationVideoMap = {
 const dubaiVideoMap = {
   fundOne: {
     src: aixcoLiveVideos.fundOne,
+    previewSrc: aixcoLiveVideoPreviews.fundOne,
     poster: aixcoLiveImages.dubaiEdenHouse,
   },
   fundTwo: {
     src: aixcoLiveVideos.fundTwo,
+    previewSrc: aixcoLiveVideoPreviews.fundTwo,
+    poster: aixcoLiveImages.dubaiHealthcare,
+  },
+  fundThree: {
+    src: aixcoLiveVideos.fundThree,
+    previewSrc: aixcoLiveVideoPreviews.fundThree,
     poster: aixcoLiveImages.dubaiHealthcare,
   },
 } as const;
@@ -288,7 +295,7 @@ function StoryMediaPanel({
         fit={media.fit ?? "cover"}
         eager={priority || isActive}
         autoplayPreview={isActive}
-        smoothPreview={isActive}
+        smoothPreview={false}
         rootMargin="0px"
         className="story-media-panel__video !h-full !w-full !rounded-none !bg-foreground !shadow-none"
         videoClassName="h-full w-full"
@@ -675,17 +682,22 @@ function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy:
                 {tx("Register")}
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </button>
-              <a href="#about" onClick={(event) => {
+              <a href="#batumi" onClick={(event) => {
                 event.preventDefault();
-                replaceLocationHash("#about");
-                scrollToHash("#about");
+                replaceLocationHash("#batumi");
+                scrollToHash("#batumi");
               }} className="btn-ghost-gold border-white/35 bg-white/12 text-white hover:bg-white/18 hover:text-white">
-                {tx("Explore")}
+                {tx("Batumi apartments")}
               </a>
             </div>
-            <p className="mt-8 max-w-3xl text-[clamp(1.65rem,2.4vw,2.6rem)] font-light uppercase leading-none text-white/85">
-              {tx(heroPriceText)}
-            </p>
+            <div className="mt-8 max-w-3xl text-white/88">
+              <p className="text-[clamp(1.35rem,2.2vw,2.35rem)] font-light uppercase leading-none">
+                {tx(heroOpportunityText)}
+              </p>
+              <p className="mt-3 max-w-2xl text-sm font-normal normal-case leading-relaxed text-white/82 md:text-base">
+                {tx(heroOpportunityFootnote)}
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -909,6 +921,7 @@ function DubaiScene({
       media={{
         kind: "video",
         src: media.src,
+        previewSrc: media.previewSrc,
         poster: media.poster,
         title: tx(landingFund.name),
         position: "center 38%",
@@ -1316,7 +1329,12 @@ function FaqScene({
   tx: (copy: string) => string;
 }) {
   const { faqGroups } = useSiteContent();
-  const highlightedFaqs = faqGroups.flatMap((group) => group.items.slice(0, 2).map((item) => ({ ...item, group: group.group }))).slice(0, 4);
+  const coreFaqs = faqGroups.flatMap((group) => group.items.slice(0, 2).map((item) => ({ ...item, group: group.group }))).slice(0, 4);
+  const customerGroup = faqGroups.find((group) => group.group === "Customer");
+  const companyFinancingFaq = customerGroup?.items.find((item) => item.q === "Can I ask about AIXCO company financing?");
+  const highlightedFaqs = companyFinancingFaq
+    ? [...coreFaqs.slice(0, 3), { ...companyFinancingFaq, group: customerGroup?.group ?? "Customer" }]
+    : coreFaqs;
 
   return (
     <SceneShell
@@ -1437,6 +1455,7 @@ export function DesktopStoryHome() {
 
   useLayoutEffect(() => {
     const hiddenHeaders = new Map<HTMLElement, string>();
+    const previousHomeExperience = document.documentElement.dataset.homeExperience;
     const hideGlobalHeaders = () => {
       document
         .querySelectorAll<HTMLElement>('header[dir="ltr"], header.fixed.inset-x-0.top-0')
@@ -1448,6 +1467,7 @@ export function DesktopStoryHome() {
         });
     };
 
+    document.documentElement.dataset.homeExperience = "story";
     document.body.classList.add("home-story-nav-hidden");
     document.body.classList.remove("home-desktop-story-boot");
     hideGlobalHeaders();
@@ -1457,6 +1477,11 @@ export function DesktopStoryHome() {
 
     return () => {
       observer.disconnect();
+      if (previousHomeExperience === undefined) {
+        delete document.documentElement.dataset.homeExperience;
+      } else {
+        document.documentElement.dataset.homeExperience = previousHomeExperience;
+      }
       document.body.classList.remove("home-story-nav-hidden");
       hiddenHeaders.forEach((display, header) => {
         header.style.display = display;
@@ -1528,14 +1553,12 @@ export function DesktopStoryHome() {
   }, [syncProgress]);
 
   useEffect(() => {
-    document.documentElement.dataset.homeExperience = "story";
     syncProgress();
 
     window.addEventListener("scroll", requestScrollSync, { passive: true });
     window.addEventListener("resize", requestScrollSync);
 
     return () => {
-      delete document.documentElement.dataset.homeExperience;
       window.removeEventListener("scroll", requestScrollSync);
       window.removeEventListener("resize", requestScrollSync);
       if (scrollFrameRef.current !== null) {

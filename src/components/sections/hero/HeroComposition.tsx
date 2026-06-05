@@ -2,19 +2,19 @@ import { type MouseEvent } from "react";
 import Image from "next/image";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { HeroLottieArrow } from "./HeroLottieArrow";
-import { heroIntroText, heroPriceText } from "./hero-ui";
+import { heroIntroText, heroOpportunityFootnote, heroOpportunityText } from "./hero-ui";
 
 type HeroCompositionProps = {
   tx: (copy: string) => string;
   onAboutClick: (event: MouseEvent<HTMLAnchorElement>) => void;
-  onFaqClick: (event: MouseEvent<HTMLAnchorElement>) => void;
+  onBatumiClick: (event: MouseEvent<HTMLAnchorElement>) => void;
   preloadBrandMark?: boolean;
 };
 
 export function HeroComposition({
   tx,
   onAboutClick,
-  onFaqClick,
+  onBatumiClick,
   preloadBrandMark = true,
 }: HeroCompositionProps) {
   return (
@@ -64,8 +64,8 @@ export function HeroComposition({
         </p>
 
         <a
-          href="#faqs"
-          onClick={onFaqClick}
+          href="#batumi"
+          onClick={onBatumiClick}
           data-hero-price-lockup="true"
           className="mt-8 flex w-full min-w-0 max-w-full flex-col items-center justify-center gap-2 rounded-lg px-3 py-2 text-center text-white drop-shadow-[0_14px_34px_rgb(0_0_0/0.42)] transition-colors duration-200 hover:text-primary-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:mt-6 md:gap-2.5 md:px-0 lg:mt-8"
         >
@@ -73,13 +73,13 @@ export function HeroComposition({
             data-hero-price-text="true"
             className="hero-reference-font max-w-full text-[clamp(1.2rem,5vw,3.5rem)] font-light uppercase leading-none tracking-normal [overflow-wrap:anywhere] sm:text-[clamp(1.8rem,4vw,4rem)] md:text-[clamp(2rem,4vw,3rem)] lg:text-[clamp(2.8rem,3.8vw,4rem)]"
           >
-            {tx(heroPriceText)}
+            {tx(heroOpportunityText)}
           </span>
           <span
             data-hero-price-footnote="true"
             className="min-w-0 max-w-[min(100%,18rem)] break-words px-0.5 text-sm font-normal normal-case leading-snug text-white/88 [overflow-wrap:anywhere] [text-wrap:balance] sm:max-w-lg sm:text-base sm:leading-relaxed md:max-w-xl md:text-lg md:leading-relaxed lg:max-w-2xl"
           >
-            {tx("10% reservation may apply on selected €50,000 apartments — see FAQs")}
+            {tx(heroOpportunityFootnote)}
           </span>
         </a>
       </div>

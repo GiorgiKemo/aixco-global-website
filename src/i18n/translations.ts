@@ -1784,12 +1784,12 @@ export const attributeTranslations = {
     }
   },
   "content": {
-    "Buy selected Batumi apartments with transparent euro pricing from €50,000 (typical entry from €10,000). Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.": {
-      "de": "Ausgewählte Batumi-Wohnungen ab 50.000 € mit transparenter Euro-Preisgestaltung (Einstieg typisch ab 10.000 €). Kauf, Verkauf und Makler in der Schweiz, Dubai-Legacy und Georgien.",
-      "ru": "Покупка квартир в Батуми от €50 000 с прозрачными ценами (вход от €10 000). Покупка, продажа и брокеридж — Швейцария, legacy Дубая, Грузия.",
-      "ka": "ბათუმის ბინები €50,000-დან გამჭვირვალე ფასებით (შესვლა ხშირად €10,000-დან). ყიდვა-გაყიდვა-ბროკერობა შვეიცარიაში, დუბაის მემკვიდრეობასა და საქართველოში.",
-      "tr": "Batum'da 50.000 €'dan şeffaf euro fiyatlarla daireler (tipik giriş 10.000 €'dan). İsviçre, Dubai mirası ve Gürcistan'da alım-satım-aracılık.",
-      "ar": "شراء شقق باتومي من 50,000 يورو بأسعار شفافة (الدخول عادة من 10,000 يورو). شراء وبيع ووساطة في سويسرا وإرث دبي وجورجيا."
+    "Buy selected Batumi apartments with transparent euro pricing from €50,000. Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.": {
+      "de": "Ausgewählte Batumi-Wohnungen ab 50.000 € mit transparenter Euro-Preisgestaltung. Kauf, Verkauf und Makler in der Schweiz, Dubai-Legacy und Georgien.",
+      "ru": "Покупка квартир в Батуми от €50 000 с прозрачными ценами. Покупка, продажа и брокеридж — Швейцария, legacy Дубая, Грузия.",
+      "ka": "ბათუმის ბინები €50,000-დან გამჭვირვალე ფასებით. ყიდვა-გაყიდვა-ბროკერობა შვეიცარიაში, დუბაის მემკვიდრეობასა და საქართველოში.",
+      "tr": "Batum'da 50.000 €'dan şeffaf euro fiyatlarla daireler. İsviçre, Dubai mirası ve Gürcistan'da alım-satım-aracılık.",
+      "ar": "شراء شقق باتومي من 50,000 يورو بأسعار شفافة. شراء وبيع ووساطة في سويسرا وإرث دبي وجورجيا."
     }
   },
   "placeholder": {

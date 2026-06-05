@@ -126,6 +126,34 @@ describe("LiveVideo", () => {
     expect(expandedVideo).toHaveAttribute("poster", "/poster.jpg");
   });
 
+  it("attaches preview media when an existing story video becomes eager", () => {
+    const { rerender } = render(
+      <LiveVideo
+        src="/full-video.mp4"
+        previewSrc="/preview-video.mp4"
+        title="Story scene video"
+        poster="/poster.jpg"
+      />,
+    );
+
+    const inlineVideo = screen.getByLabelText("Story scene video");
+
+    expect(inlineVideo).not.toHaveAttribute("src");
+
+    rerender(
+      <LiveVideo
+        src="/full-video.mp4"
+        previewSrc="/preview-video.mp4"
+        title="Story scene video"
+        poster="/poster.jpg"
+        eager
+      />,
+    );
+
+    expect(inlineVideo).toHaveAttribute("src", "/preview-video.mp4");
+    expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
+  });
+
   it("can still use full media inline when smooth previews are explicitly enabled", () => {
     render(
       <LiveVideo
@@ -149,6 +177,7 @@ describe("LiveVideo", () => {
       expect.stringContaining("%2Fposter.jpg"),
     );
     expect(screen.getByLabelText("Batumi overview")).not.toHaveAttribute("src");
+    expect(screen.getByLabelText("Batumi overview")).toHaveAttribute("poster", "/poster.jpg");
 
     act(() => {
       MockIntersectionObserver.instances[0].trigger({ isIntersecting: true, intersectionRatio: 1 });

@@ -299,6 +299,44 @@ describe("installGlideScroll", () => {
     cleanup();
   });
 
+  it("carries same-direction story wheel deltas so repeated wheel ticks feel continuous", () => {
+    mockMatchMedia(() => false);
+    mockViewport();
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation(() => 1);
+    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => undefined);
+    document.documentElement.dataset.homeExperience = "story";
+
+    const cleanup = installGlideScroll({
+      easing: 0.18,
+      multiplier: 1,
+      storyEasing: 0.082,
+      storyMultiplier: 0.58,
+      storyMomentum: 0.14,
+      storyWheelCarry: 0.3,
+      storyWheelCarryWindowMs: 560,
+    });
+
+    const virtualScroll = lenisMockState.instances[0]?.options.virtualScroll as
+      | ((data: { event: WheelEvent; deltaX: number; deltaY: number }) => boolean)
+      | undefined;
+
+    const firstWheel = new WheelEvent("wheel", { deltaY: 100, cancelable: true, bubbles: true });
+    Object.defineProperty(firstWheel, "timeStamp", { configurable: true, value: 100 });
+    const firstData = { event: firstWheel, deltaX: 0, deltaY: 100 };
+
+    const secondWheel = new WheelEvent("wheel", { deltaY: 100, cancelable: true, bubbles: true });
+    Object.defineProperty(secondWheel, "timeStamp", { configurable: true, value: 260 });
+    const secondData = { event: secondWheel, deltaX: 0, deltaY: 100 };
+
+    expect(virtualScroll?.(firstData)).toBe(true);
+    expect(firstData.deltaY).toBe(100);
+    expect(virtualScroll?.(secondData)).toBe(true);
+    expect(secondData.deltaY).toBeGreaterThan(100);
+    expect(secondData.deltaY).toBeLessThanOrEqual(155);
+
+    cleanup();
+  });
+
   it("continues running Lenis frames after wheel release", () => {
     mockMatchMedia(() => false);
     mockViewport();

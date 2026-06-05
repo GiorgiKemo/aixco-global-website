@@ -52,7 +52,7 @@ describe("Contact", () => {
 
     expect(screen.getByRole("textbox", { name: "Name*" })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Email*" })).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: "Participation interest" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Real estate interest" })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Message*" })).toBeInTheDocument();
   });
 
@@ -84,7 +84,7 @@ describe("Contact", () => {
   it("allows the localized contact headline to wrap in narrow columns", () => {
     renderContact();
 
-    expect(screen.getByRole("heading", { name: /Start your participation/ })).toHaveClass("[overflow-wrap:anywhere]");
+    expect(screen.getByRole("heading", { name: /Start your Batumi real estate journey/ })).toHaveClass("[overflow-wrap:anywhere]");
   });
 
   it("moves focus to the first invalid contact field and associates validation copy", async () => {
@@ -103,7 +103,7 @@ describe("Contact", () => {
 
     fireEvent.change(screen.getByRole("textbox", { name: "Name*" }), { target: { value: "Audit User" } });
     fireEvent.change(screen.getByRole("textbox", { name: "Email*" }), { target: { value: "audit@example.com" } });
-    fireEvent.change(screen.getByRole("textbox", { name: "Participation interest" }), { target: { value: "Batumi apartments" } });
+    fireEvent.change(screen.getByRole("textbox", { name: "Real estate interest" }), { target: { value: "Batumi apartments" } });
     fireEvent.change(screen.getByRole("textbox", { name: "Message*" }), {
       target: { value: "I want more details about availability." },
     });

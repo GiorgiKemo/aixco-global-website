@@ -25,12 +25,12 @@ const keyedText: Record<string, string> = {
   "nav.more": "More",
   "cta.login": "Login",
   "cta.register": "Register",
-  "cta.start": "Starting from €10,000",
+  "cta.start": "Explore Batumi real estate",
   "cta.contact": "Contact AIXCO",
 };
 const pageTitle = "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage";
 const pageDescription =
-  "Buy selected Batumi apartments with transparent euro pricing from €50,000 (typical entry from €10,000). Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.";
+  "Buy selected Batumi apartments with transparent euro pricing from €50,000. Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.";
 const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
   "Checking the AIXCO website content...": {
     de: "AIXCO-Websiteinhalte werden geprueft...",
@@ -115,6 +115,84 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
   Start: { de: "Starten Sie", ru: "Начните", ka: "დაიწყეთ", tr: "Başlatın", ar: "ابدأ" },
   Login: { de: "Anmelden", ru: "Войти", ka: "შესვლა", tr: "Giriş", ar: "تسجيل الدخول" },
   Register: { de: "Registrieren", ru: "Регистрация", ka: "რეგისტრაცია", tr: "Kayıt Ol", ar: "التسجيل" },
+  "Explore Batumi real estate": {
+    de: "Batumi-Immobilien erkunden",
+    ru: "Explore Batumi real estate",
+    ka: "Explore Batumi real estate",
+    tr: "Explore Batumi real estate",
+    ar: "Explore Batumi real estate",
+  },
+  "Enter Batumi real estate with AIXCO": {
+    de: "Mit AIXCO in Batumi-Immobilien einsteigen",
+    ru: "Enter Batumi real estate with AIXCO",
+    ka: "Enter Batumi real estate with AIXCO",
+    tr: "Enter Batumi real estate with AIXCO",
+    ar: "Enter Batumi real estate with AIXCO",
+  },
+  "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.": {
+    de: "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.",
+    ru: "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.",
+    ka: "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.",
+    tr: "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.",
+    ar: "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.",
+  },
+  "How to work with AIXCO": {
+    de: "Mit AIXCO arbeiten",
+    ru: "How to work with AIXCO",
+    ka: "AIXCO-სთან მუშაობა",
+    tr: "How to work with AIXCO",
+    ar: "How to work with AIXCO",
+  },
+  "How AIXCO Works": {
+    de: "Wie AIXCO funktioniert",
+    ru: "How AIXCO Works",
+    ka: "როგორ მუშაობს AIXCO",
+    tr: "How AIXCO Works",
+    ar: "How AIXCO Works",
+  },
+  "How to work": { de: "Mit AIXCO arbeiten", ru: "How to work", ka: "AIXCO-სთან მუშაობა", tr: "How to work", ar: "How to work" },
+  "your Batumi real estate journey": {
+    de: "Ihre Batumi-Immobilienreise",
+    ru: "your Batumi real estate journey",
+    ka: "your Batumi real estate journey",
+    tr: "your Batumi real estate journey",
+    ar: "your Batumi real estate journey",
+  },
+  "Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration with the AIXCO team.": {
+    de: "Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration with the AIXCO team.",
+    ru: "Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration with the AIXCO team.",
+    ka: "Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration with the AIXCO team.",
+    tr: "Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration with the AIXCO team.",
+    ar: "Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration with the AIXCO team.",
+  },
+  "Real estate interest": {
+    de: "Immobilieninteresse",
+    ru: "Real estate interest",
+    ka: "Real estate interest",
+    tr: "Real estate interest",
+    ar: "Real estate interest",
+  },
+  "Selected Batumi apartments from €50,000. Reservation terms may start from 10% / €10,000 depending on project and agreement.": {
+    de: "Selected Batumi apartments from €50,000. Reservation terms may start from 10% / €10,000 depending on project and agreement.",
+    ru: "Selected Batumi apartments from €50,000. Reservation terms may start from 10% / €10,000 depending on project and agreement.",
+    ka: "Selected Batumi apartments from €50,000. Reservation terms may start from 10% / €10,000 depending on project and agreement.",
+    tr: "Selected Batumi apartments from €50,000. Reservation terms may start from 10% / €10,000 depending on project and agreement.",
+    ar: "Selected Batumi apartments from €50,000. Reservation terms may start from 10% / €10,000 depending on project and agreement.",
+  },
+  "Can I ask about AIXCO company financing?": {
+    de: "Can I ask about AIXCO company financing?",
+    ru: "Can I ask about AIXCO company financing?",
+    ka: "Can I ask about AIXCO company financing?",
+    tr: "Can I ask about AIXCO company financing?",
+    ar: "Can I ask about AIXCO company financing?",
+  },
+  "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page.": {
+    de: "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page.",
+    ru: "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page.",
+    ka: "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page.",
+    tr: "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page.",
+    ar: "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page.",
+  },
   How: { de: "Wie", ru: "Как", ka: "როგორ", tr: "Nasıl", ar: "كيف" },
   "starting from": { de: "ab", ru: "от", ka: "დაწყებული", tr: "başlayan", ar: "ابتداءً من" },
   "up to": { de: "bis zu", ru: "до", ka: "მდე", tr: "en fazla", ar: "حتى" },

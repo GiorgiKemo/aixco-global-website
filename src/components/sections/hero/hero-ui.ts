@@ -5,7 +5,9 @@ export const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 export const heroIntroText =
   "Buy, sell, and broker real estate with AIXCO—from apartment purchases in Batumi to end-to-end property administration.";
 
-export const heroPriceText = "Starting from \u20ac10,000";
+export const heroOpportunityText = "Enter Batumi real estate with AIXCO";
+export const heroOpportunityFootnote =
+  "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.";
 
 export const headlineVariants: Variants = {
   hidden: {},

@@ -931,6 +931,8 @@
     --partner-item-width: clamp(10rem, 12.5vw, 12rem);
     --partner-logo-stage-height: clamp(6.5rem, 10.5svh, 7.5rem);
     padding-block: 0.35rem 0.75rem;
+    mask-image: none;
+    -webkit-mask-image: none;
   }
 
   .partner-marquee::-webkit-scrollbar {
@@ -974,6 +976,7 @@
   /* Uniform refined plate — every logo sits on the identical surface so the
      wall reads consistently regardless of each source logo's colour. */
   .partner-marquee-item__card {
+    position: relative;
     display: flex;
     width: 100%;
     min-height: var(--partner-logo-stage-height);
@@ -993,6 +996,27 @@
       transform 260ms var(--ease-apple),
       border-color 260ms var(--ease-apple),
       box-shadow 260ms var(--ease-apple);
+  }
+
+  .partner-marquee-item__fallback {
+    position: absolute;
+    inset: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: hsl(var(--foreground) / 0.46);
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-size: clamp(0.82rem, 0.82vw, 0.95rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    text-align: center;
+    text-wrap: balance;
+    transition: opacity 180ms var(--ease-apple);
+  }
+
+  .partner-marquee-item__fallback[data-logo-state="loaded"] {
+    opacity: 0;
   }
 
   .partner-marquee-item:hover .partner-marquee-item__card,
@@ -1023,6 +1047,8 @@
   /* Normalise mixed-source logos to a single ink tone; reveal full colour on
      hover/focus for a premium "trusted by" wall. */
   .partner-marquee-item__logo {
+    position: relative;
+    z-index: 1;
     width: auto;
     height: auto;
     max-width: 84%;
@@ -1768,7 +1794,7 @@
     body.home-story-nav-hidden > header[dir="ltr"],
     body.home-story-nav-hidden header.fixed.inset-x-0.top-0,
     html[data-home-experience="story"] header[dir="ltr"],
-    html:has(main [data-home-experience-mode]) header[dir="ltr"] {
+    html:has(main [data-home-experience-mode="story"]) header[dir="ltr"] {
       opacity: 0 !important;
       pointer-events: none !important;
       transform: translateY(-100%) !important;

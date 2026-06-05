@@ -96,6 +96,7 @@ describe("site content backend", () => {
     expect(JSON.stringify(content.participationRoutes)).not.toMatch(/bond|guaranteed|30% return/i);
     expect(content.faqGroups[0].items[0].q).toBe("What is the minimum amount to reserve or buy?");
     expect(content.faqGroups[0].items[0].a).toContain("€10,000");
+    expect(content.faqGroups[0].items.some((item) => item.q === "Can I ask about AIXCO company financing?")).toBe(true);
   });
 
   it("uses distinct participation media for each route", () => {

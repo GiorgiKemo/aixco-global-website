@@ -114,7 +114,7 @@ export function AixcoPhilosophyPage() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
               <Link href="/#participate" prefetch={false} className="btn-gold">
-                Ways to participate
+                How to work with AIXCO
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
               <Link href="/#contact" prefetch={false} className="btn-ghost-gold">

@@ -49,6 +49,9 @@ export const aixcoLiveVideoPreviews = {
   batumiOverview: `${batumiGalleryPreviewBase}/batumi2-preview.mp4`,
   batumiBuy: `${batumiGalleryPreviewBase}/batumi1-preview.mp4`,
   bonds: `${previewVideoBase}/bonds-preview.mp4`,
+  fundOne: `${previewVideoBase}/fund1-preview.mp4`,
+  fundTwo: `${previewVideoBase}/fund2-preview.mp4`,
+  fundThree: `${previewVideoBase}/fund3-preview.mp4`,
   guruBatumi: `${previewVideoBase}/guru-batumi-preview.mp4`,
   otium: `${previewVideoBase}/otium-preview.mp4`,
 } as const;

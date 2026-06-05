@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { motion } from "@/lib/framer-motion";
@@ -63,6 +64,7 @@ export function PartnerMarquee({
                   openPartner={openPartner}
                   tx={tx}
                   isClone={setIndex === 1}
+                  variant={variant}
                 />
               ))}
             </div>
@@ -78,39 +80,50 @@ function PartnerMarqueeItem({
   openPartner,
   tx,
   isClone,
+  variant,
 }: {
   partner: Partner;
   openPartner: (partner: Partner) => void;
   tx: (text: string) => string;
   isClone: boolean;
+  variant: "native" | "story";
 }) {
   const logoSrc = partner.logo ? logoMap[partner.logo] : null;
+  const translatedName = tx(partner.name);
+  const eagerLoad = variant === "story";
+  const [logoState, setLogoState] = useState<"pending" | "loaded" | "error">(logoSrc ? "pending" : "error");
 
   return (
     <motion.button
       type="button"
       onClick={() => openPartner(partner)}
       tabIndex={isClone ? -1 : undefined}
-      aria-label={tx(partner.name)}
+      aria-label={translatedName}
       className={`partner-marquee-item group ${partner.featured ? "partner-marquee-item--featured" : ""}`}
       whileTap={premiumPress}
     >
       <span className="partner-marquee-item__card">
+        <span className="partner-marquee-item__fallback" data-logo-state={logoState} aria-hidden>
+          {translatedName}
+        </span>
         {logoSrc ? (
           <Image
             src={logoSrc}
             alt=""
             aria-hidden
-            loading="lazy"
-            decoding="async"
+            loading={eagerLoad ? "eager" : "lazy"}
+            fetchPriority={eagerLoad ? "high" : "auto"}
+            decoding={eagerLoad ? "sync" : "async"}
             width={240}
             height={120}
             sizes="(min-width: 768px) 11.25rem, 9.5rem"
             className="partner-marquee-item__logo"
+            onLoad={() => setLogoState("loaded")}
+            onError={() => setLogoState("error")}
           />
         ) : null}
       </span>
-      <span className="partner-marquee-item__name">{tx(partner.name)}</span>
+      <span className="partner-marquee-item__name">{translatedName}</span>
     </motion.button>
   );
 }

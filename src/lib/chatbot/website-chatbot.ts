@@ -383,13 +383,13 @@ function fallbackAnswer(content: SiteContent, query: string): WebsiteChatbotAnsw
 
 function maybeSeparateProductAnswer(content: SiteContent, query: string): WebsiteChatbotAnswer | null {
   const normalized = normalizeText(query);
-  if (!/\b(bond|6%|fixed income|coupon|subscription)\b/.test(normalized)) return null;
+  if (!/\b(bond|6%|fixed income|coupon|subscription|company financing|financing instrument)\b/.test(normalized)) return null;
 
   return {
     confidence: "high",
     matchedTopics: ["AIXCO real estate focus"],
     answer: sanitizeDisplayText(
-      `The current AIXCO.Global page is focused on real estate: buying Batumi apartments, brokerage, Dubai legacy projects, and property administration. It does not present a bond subscription route on the regular website. For product-specific questions, contact ${content.company.email}.`,
+      `AIXCO.Global is real-estate-first: buying Batumi apartments, brokerage, Dubai legacy projects, and property administration. Separate company-financing information may be available by direct contact with the AIXCO team, but it is secondary to the website journey and no bond terms are promoted here. For questions, contact ${content.company.email}.`,
     ),
   };
 }

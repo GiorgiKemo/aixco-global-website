@@ -18,7 +18,7 @@ export const MORE_NAV = [
 ] as const;
 
 export const ALL_NAV = [...NAV, ...MORE_NAV] as const;
-export const STARTING_FROM_NAV_TARGET = MORE_NAV.find((item) => item.key === "nav.faqs") ?? MORE_NAV[MORE_NAV.length - 1];
+export const PRIMARY_CTA_NAV_TARGET = NAV.find((item) => item.key === "nav.batumi") ?? NAV[0];
 export const HOME_SECTION_IDS = ["about", "legacy", "dubai", "batumi", "materials", "participate", "how", "team", "partners", "faqs", "contact"] as const;
 export const NAV_HASH_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
 export const HOME_RETURN_HASH_SYNC_LOCK_MS = 1800;
@@ -27,7 +27,7 @@ const DESKTOP_NAV_LABELS: Record<string, Record<string, string>> = {
   ka: {
     "nav.about": "AIXCO",
     "nav.legacy": "გზა",
-    "nav.participate": "გზები",
+    "nav.participate": "მუშაობა",
     "nav.how": "პროცესი",
     "nav.team": "გუნდი",
     "nav.faqs": "FAQ",

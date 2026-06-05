@@ -27,9 +27,20 @@ describe("website chatbot", () => {
   it("answers minimum investment questions from the FAQ", () => {
     const answer = ask("What is the minimum amount to reserve or buy?");
 
-    expect(answer.answer).toContain("starts from");
+    expect(answer.answer).toContain("Selected Batumi apartments");
     expect(answer.answer).toContain("\u20ac10,000");
     expect(answer.answer).not.toContain("\u00e2");
+  });
+
+  it("answers bond questions as secondary company-financing requests", () => {
+    const answer = ask("Can I buy the AIXCO bond?");
+
+    expect(answer.confidence).toBe("high");
+    expect(answer.answer).toContain("real-estate-first");
+    expect(answer.answer).toContain("company-financing");
+    expect(answer.answer).toContain("info@aixco.global");
+    expect(answer.answer).not.toMatch(/coupon|guaranteed/i);
+    expect(answer.answer).not.toContain("does not present a bond subscription route");
   });
 
   it("answers download and materials questions from the website content", () => {

@@ -4,7 +4,7 @@ import { ChevronDown, Globe, Menu, X } from "lucide-react";
 import type { MouseEvent } from "react";
 import { LANGS } from "@/i18n/I18nProvider";
 import type { Lang } from "@/i18n/languages";
-import { STARTING_FROM_NAV_TARGET, type NavItem } from "./nav-data";
+import { PRIMARY_CTA_NAV_TARGET, type NavItem } from "./nav-data";
 
 type NavControlsProps = {
   showCompactMenu: boolean;
@@ -99,8 +99,8 @@ export function NavControls({
       </div>
 
       <a
-        href="/#faqs"
-        onClick={(event) => onNavClick(event, STARTING_FROM_NAV_TARGET)}
+        href="/#batumi"
+        onClick={(event) => onNavClick(event, PRIMARY_CTA_NAV_TARGET)}
         className={`${showDesktopStart ? "hidden 2xl:inline-flex" : "hidden"} whitespace-nowrap btn-gold !px-4 !py-2 text-sm font-bold !text-white drop-shadow-[0_1px_1px_rgb(76_42_0/0.45)]`}
       >
         {t("cta.start")}

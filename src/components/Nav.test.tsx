@@ -86,20 +86,20 @@ describe("Nav", () => {
 
     const primary = screen.getByLabelText("Primary");
     await waitFor(() => {
-      expect(within(primary).getByRole("link", { name: "მონაწილეობის გზები" })).toBeInTheDocument();
+      expect(within(primary).getByRole("link", { name: "AIXCO-სთან მუშაობა" })).toBeInTheDocument();
     });
 
     const mobile = (() => {
       fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
       return screen.getByLabelText("Mobile");
     })();
-    const participateLink = within(primary).getByRole("link", { name: "მონაწილეობის გზები" });
+    const participateLink = within(primary).getByRole("link", { name: "AIXCO-სთან მუშაობა" });
     const howLink = within(primary).getByRole("link", { name: "როგორ მუშაობს AIXCO" });
 
-    expect(participateLink).toHaveTextContent("გზები");
+    expect(participateLink).toHaveTextContent("მუშაობა");
     expect(howLink).toHaveTextContent("პროცესი");
-    expect(within(mobile).getByRole("link", { name: "მონაწილეობის გზები" })).toHaveTextContent(
-      "მონაწილეობის გზები",
+    expect(within(mobile).getByRole("link", { name: "AIXCO-სთან მუშაობა" })).toHaveTextContent(
+      "AIXCO-სთან მუშაობა",
     );
     expect(within(mobile).getByRole("link", { name: "როგორ მუშაობს AIXCO" })).toHaveTextContent(
       "როგორ მუშაობს AIXCO",

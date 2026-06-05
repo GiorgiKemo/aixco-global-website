@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { heroIntroText } from "@/components/sections/hero/hero-ui";
+import { heroIntroText, heroOpportunityFootnote, heroOpportunityText } from "@/components/sections/hero/hero-ui";
 import { I18nProvider, hasTextTranslation, useI18n } from "./I18nProvider";
 
 function TranslationProbe() {
@@ -8,7 +8,7 @@ function TranslationProbe() {
 
   return (
     <div>
-      <p>{tx("Starting from €10,000")}</p>
+      <p>{tx("Explore Batumi real estate")}</p>
       <p>{tx("Rental income")}</p>
       <p>{tx("starting from")}</p>
       <p>{tx("Group company")}</p>
@@ -32,7 +32,7 @@ describe("I18nProvider", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getAllByText("Ab 10.000 €")).toHaveLength(2);
+      expect(screen.getAllByText("Batumi-Immobilien erkunden")).toHaveLength(2);
       expect(screen.getByText("Mieteinnahmen")).toBeInTheDocument();
       expect(screen.getByText("ab")).toBeInTheDocument();
       expect(screen.getByText("Konzerngesellschaft")).toBeInTheDocument();
@@ -58,8 +58,10 @@ describe("I18nProvider", () => {
 
     for (const locale of heroLocales) {
       await expect(hasTextTranslation(heroIntroText, locale)).resolves.toBe(true);
+      await expect(hasTextTranslation(heroOpportunityText, locale)).resolves.toBe(true);
+      await expect(hasTextTranslation(heroOpportunityFootnote, locale)).resolves.toBe(true);
       await expect(hasTextTranslation("Quality Real Estate — Buy · Broker · Manage", locale)).resolves.toBe(true);
-      await expect(hasTextTranslation("Starting from €10,000", locale)).resolves.toBe(true);
+      await expect(hasTextTranslation("Explore Batumi real estate", locale)).resolves.toBe(true);
     }
   });
 });

@@ -82,10 +82,10 @@ export function Contact() {
         <div className="scroll-reveal md:col-span-1 lg:col-span-5">
           <p className="eyebrow">{tx("Contact")}</p>
           <h2 className="heading-section mt-4 max-w-full [overflow-wrap:anywhere]">
-            <span className="text-gold">{tx("Start")}</span> {tx("your participation in Global real estate opportunities")}
+            <span className="text-gold">{tx("Start")}</span> {tx("your Batumi real estate journey")}
           </h2>
           <p className="mt-4 max-w-md leading-relaxed text-foreground/80">
-            {tx("Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration—typical entry from €10,000.")}
+            {tx("Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration with the AIXCO team.")}
           </p>
           <div className="mt-6 space-y-4">
             <a href={`mailto:${company.email}`} className="group flex items-start gap-4">
@@ -146,7 +146,7 @@ export function Contact() {
                 <Field label={tx("Name*")} name="name" error={errors.name} fieldRefs={fieldRefs} />
                 <Field label={tx("Email*")} name="email" type="email" error={errors.email} fieldRefs={fieldRefs} />
               </div>
-              <Field label={tx("Participation interest")} name="interest" fieldRefs={fieldRefs} />
+              <Field label={tx("Real estate interest")} name="interest" fieldRefs={fieldRefs} />
               <div>
                 <label htmlFor="message" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                   {tx("Message*")}

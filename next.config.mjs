@@ -40,10 +40,24 @@ const getContentSecurityPolicy = () => {
   ].join("; ");
 };
 
+const developmentNoCacheHeaders = isDevelopment
+  ? [
+      {
+        key: "Cache-Control",
+        value: "no-store, no-cache, must-revalidate, max-age=0",
+      },
+      {
+        key: "Pragma",
+        value: "no-cache",
+      },
+    ]
+  : [];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
   devIndicators: false,
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
   experimental: {
     webVitalsAttribution: ["CLS", "LCP", "INP"],
   },
@@ -100,17 +114,22 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: getContentSecurityPolicy(),
           },
+          ...developmentNoCacheHeaders,
         ],
       },
-      {
-        source: "/:all*(svg|jpg|jpeg|png|webp|avif|gif|ico|mp4|webm|woff2)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
+      ...(!isDevelopment
+        ? [
+            {
+              source: "/:all*(svg|jpg|jpeg|png|webp|avif|gif|ico|mp4|webm|woff2)",
+              headers: [
+                {
+                  key: "Cache-Control",
+                  value: "public, max-age=31536000, immutable",
+                },
+              ],
+            },
+          ]
+        : []),
     ];
   },
 };

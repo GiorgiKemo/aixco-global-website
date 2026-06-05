@@ -15,7 +15,7 @@ const NotFound = () => {
             This page is not available.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-white/72 md:text-lg">
-            The page may have moved, or the address may be incorrect. Return to AIXCO.Global to continue exploring selected real estate participation routes.
+            The page may have moved, or the address may be incorrect. Return to AIXCO.Global to continue exploring selected real estate services.
           </p>
           <div className="mt-8 flex justify-center">
             <Link href="/" prefetch={false} className="btn-gold">

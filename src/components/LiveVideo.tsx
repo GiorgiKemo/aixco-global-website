@@ -61,7 +61,11 @@ export function LiveVideo({
   };
 
   useEffect(() => {
-    if (eager || typeof window === "undefined") return;
+    if (eager) {
+      setShouldLoad(true);
+      return;
+    }
+    if (typeof window === "undefined") return;
 
     const node = wrapperRef.current;
     if (!node || typeof window.IntersectionObserver !== "function") {
@@ -84,6 +88,11 @@ export function LiveVideo({
   }, [eager, rootMargin]);
 
   useEffect(() => {
+    if (eager) {
+      setIsInFocus(true);
+      return;
+    }
+
     if (typeof window === "undefined") return;
 
     const node = wrapperRef.current;
@@ -102,7 +111,7 @@ export function LiveVideo({
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [eager]);
 
   useEffect(() => {
     setHasPreviewFrame(false);
@@ -243,7 +252,7 @@ export function LiveVideo({
         <video
           ref={videoRef}
           src={shouldAttachVideo ? inlineSrc : undefined}
-          poster={shouldAttachVideo ? poster : undefined}
+          poster={poster}
           aria-label={title}
           title={tx(title)}
           className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}

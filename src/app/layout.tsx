@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage",
   description:
-    "Buy selected Batumi apartments with transparent euro pricing from €50,000 (typical entry from €10,000). Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.",
+    "Buy selected Batumi apartments with transparent euro pricing from €50,000. Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.",
   openGraph: {
     title: "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage",
     description: "Buy Batumi apartments, broker property, and manage real estate with AIXCO since 2009.",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage",
-    description: "Selected real estate participation opportunities across Dubai and Batumi.",
+    description: "Selected Batumi apartments, brokerage, and property administration with AIXCO.",
     images: ["/aixco-global-op2/images/optimized/batumi.webp"],
   },
   icons: {
@@ -55,6 +55,13 @@ const homeStoryBootScript = `
     if (isHome && supportsStory) {
       document.body.classList.add("home-desktop-story-boot");
       document.body.classList.add("home-story-nav-hidden");
+      window.setTimeout(function () {
+        var storyMounted = document.querySelector('[data-home-experience-mode="story"]');
+        if (!storyMounted && document.body.classList.contains("home-desktop-story-boot")) {
+          document.body.classList.remove("home-desktop-story-boot");
+          document.body.classList.remove("home-story-nav-hidden");
+        }
+      }, 1800);
     }
   } catch (error) {}
 })();

@@ -163,10 +163,10 @@ export function Hero({ preloadBrandMark = true }: { preloadBrandMark?: boolean }
     scrollToHash("#about");
   };
 
-  const handleFaqClick = (event: MouseEvent<HTMLAnchorElement>) => {
+  const handleBatumiClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    replaceLocationHash("#faqs");
-    scrollToHash("#faqs");
+    replaceLocationHash("#batumi");
+    scrollToHash("#batumi");
   };
 
   return (
@@ -192,7 +192,7 @@ export function Hero({ preloadBrandMark = true }: { preloadBrandMark?: boolean }
       <HeroComposition
         tx={tx}
         onAboutClick={handleAboutClick}
-        onFaqClick={handleFaqClick}
+        onBatumiClick={handleBatumiClick}
         preloadBrandMark={preloadBrandMark}
       />
     </section>
