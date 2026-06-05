@@ -40,6 +40,7 @@ import { getSafePublicAssetHref } from "@/lib/security/urls";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 import { cn } from "@/lib/utils";
 import { StoryMediaReveal, StorySceneReveal } from "@/components/StoryReveal";
+import { PartnerMarquee } from "@/components/partners/PartnerMarquee";
 import { useTeamMemberRotation } from "@/hooks/use-team-member-rotation";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import { AnimatePresence, motion } from "@/lib/framer-motion";
@@ -1245,54 +1246,27 @@ function StoryPartnerRow({
   partners,
   tx,
   onPartnerClick,
+  reverse = false,
 }: {
   label: string;
   partners: StoryPartner[];
   tx: (copy: string) => string;
   onPartnerClick: (partner: StoryPartner) => void;
+  reverse?: boolean;
 }) {
   if (!partners.length) return null;
 
   return (
     <div className="story-partner-row">
       <p className="story-partner-row__label">{tx(label)}</p>
-      <div
-        className="story-partners-grid"
-        role="list"
-        aria-label={tx(label)}
-        style={{ "--story-partner-count": partners.length } as CSSProperties}
-      >
-        {partners.map((partner) => {
-          const logo = aixcoLiveLogos[partner.logo as keyof typeof aixcoLiveLogos];
-
-          return (
-            <button
-              key={partner.name}
-              type="button"
-              role="listitem"
-              className="story-partner-card"
-              onClick={() => onPartnerClick(partner)}
-            >
-              <span className="story-partner-card__logo-stage">
-                {logo ? (
-                  <Image
-                    src={logo}
-                    alt=""
-                    aria-hidden
-                    width={190}
-                    height={84}
-                    sizes="(min-width: 1280px) 9rem, 7rem"
-                    className="story-partner-card__logo"
-                  />
-                ) : (
-                  <Building2 className="h-7 w-7 text-primary-glow" aria-hidden />
-                )}
-              </span>
-              <span className="story-partner-card__name">{tx(partner.name)}</span>
-            </button>
-          );
-        })}
-      </div>
+      <PartnerMarquee
+        partners={partners}
+        openPartner={onPartnerClick}
+        tx={tx}
+        reverse={reverse}
+        variant="story"
+        ariaLabel={tx(label)}
+      />
     </div>
   );
 }
@@ -1324,9 +1298,9 @@ function PartnersScene({
       <h2 className="story-h2">
         <StoryTextReveal label={tx("Group companies and strategic partners")} />
       </h2>
-      <div data-layout="story-partners-grid" className="story-partners-section">
+      <div data-layout="story-partners-marquee" className="story-partners-section">
         <StoryPartnerRow label="Group companies" partners={groupCompanies} tx={tx} onPartnerClick={onPartnerClick} />
-        <StoryPartnerRow label="Strategic partners" partners={strategicPartners} tx={tx} onPartnerClick={onPartnerClick} />
+        <StoryPartnerRow label="Strategic partners" partners={strategicPartners} tx={tx} onPartnerClick={onPartnerClick} reverse />
       </div>
     </SceneShell>
   );

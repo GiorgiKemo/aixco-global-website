@@ -1,26 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useSiteContent } from "@/data/site-content-context";
-import type { SiteContent } from "@/lib/backend/site-content";
 import { useUI } from "../ui-state";
-import { motion } from "@/lib/framer-motion";
-import { premiumPress } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
-import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
-
-type Partner = SiteContent["partners"][number];
-
-const logoMap: Record<string, string> = {
-  globalPartners: aixcoLiveLogos.globalPartners,
-  isp: aixcoLiveLogos.isp,
-  workwise: aixcoLiveLogos.workwise,
-  cleanElements: aixcoLiveLogos.cleanElements,
-  revanta: aixcoLiveLogos.revanta,
-  gti: aixcoLiveLogos.gti,
-  bluerock: aixcoLiveLogos.bluerock,
-  daewoo: aixcoLiveLogos.daewoo,
-};
+import { PartnerMarquee } from "@/components/partners/PartnerMarquee";
 
 export function Partners() {
   const { openPartner } = useUI();
@@ -48,94 +31,5 @@ export function Partners() {
         />
       </div>
     </section>
-  );
-}
-
-function PartnerMarquee({
-  title,
-  partners: items,
-  openPartner,
-  tx,
-  reverse = false,
-}: {
-  title: string;
-  partners: Partner[];
-  openPartner: (partner: Partner) => void;
-  tx: (text: string) => string;
-  reverse?: boolean;
-}) {
-  if (items.length === 0) return null;
-
-  return (
-    <div className="mb-12 min-w-0 overflow-hidden last:mb-0">
-      <h3 className="scroll-reveal mb-5 min-w-0 font-display text-2xl [overflow-wrap:anywhere]">{tx(title)}</h3>
-      <div className="partner-marquee scroll-reveal" aria-label={tx(title)}>
-        <div className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""}`}>
-          {[0, 1].map((setIndex) => (
-            <div key={setIndex} className="partner-marquee-set" aria-hidden={setIndex === 1 ? "true" : undefined}>
-              {items.map((partner) => (
-                <PartnerCard
-                  key={`${setIndex}-${partner.name}`}
-                  partner={partner}
-                  openPartner={openPartner}
-                  tx={tx}
-                  isClone={setIndex === 1}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PartnerCard({
-  partner,
-  openPartner,
-  tx,
-  isClone,
-}: {
-  partner: Partner;
-  openPartner: (partner: Partner) => void;
-  tx: (text: string) => string;
-  isClone: boolean;
-}) {
-  return (
-    <motion.button
-      type="button"
-      onClick={() => openPartner(partner)}
-      tabIndex={isClone ? -1 : undefined}
-      className={`partner-flip-card group h-[236px] w-[min(78vw,300px)] shrink-0 text-center md:w-[300px] ${partner.featured ? "partner-flip-card-featured" : ""}`}
-      whileTap={premiumPress}
-    >
-      <span className="partner-flip-card-inner">
-        <span className="partner-flip-face partner-flip-front" aria-hidden="true">
-          {partner.logo && (
-            <span className="partner-logo-stage">
-              <Image
-                src={logoMap[partner.logo]}
-                alt={partner.name}
-                loading="lazy"
-                decoding="async"
-                width={240}
-                height={120}
-                sizes="240px"
-                className="partner-logo-image max-h-20 max-w-full object-contain"
-              />
-            </span>
-          )}
-        </span>
-        <span className="partner-flip-face partner-flip-back items-center text-center">
-          <span className="block max-w-full font-display text-xl leading-tight [overflow-wrap:anywhere]">{tx(partner.name)}</span>
-          <span className="mt-3 line-clamp-4 block max-w-full text-sm leading-relaxed text-foreground/80 [overflow-wrap:anywhere]">
-            {tx(partner.summary)}
-          </span>
-          <span className="mt-5 inline-block max-w-full text-[11px] uppercase tracking-widest text-primary [overflow-wrap:anywhere]">
-            {tx("Open profile")}
-          </span>
-        </span>
-      </span>
-    </motion.button>
   );
 }

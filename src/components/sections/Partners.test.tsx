@@ -27,28 +27,27 @@ describe("Partners", () => {
     uiMocks.openPartner.mockClear();
   });
 
-  it("renders logo-only flip cards inside the partner marquees", () => {
+  it("renders premium partner cards inside the scrolling marquees", () => {
     const { container } = renderPartners();
 
     const groupMarquee = screen.getByLabelText("Group companies");
     const strategicMarquee = screen.getByLabelText("Strategic partners");
-    const card = container.querySelector(".partner-flip-card");
+    const card = container.querySelector(".partner-marquee-item");
 
     expect(groupMarquee).toBeInTheDocument();
     expect(strategicMarquee).toBeInTheDocument();
     expect(container.querySelector(".scroll-reveal.mac-card.mb-10")).not.toBeInTheDocument();
     expect(card).toBeInTheDocument();
-    expect(card?.querySelector(".partner-flip-front img")).toBeInTheDocument();
-    expect(card?.querySelector(".partner-flip-front img")).toHaveAttribute("loading", "lazy");
-    expect(card?.querySelector(".partner-logo-stage")).toBeInTheDocument();
-    expect(card?.querySelector(".partner-flip-back")).toHaveTextContent("Open profile");
-    expect(card?.querySelector(".partner-flip-back span:nth-child(2)")).toHaveClass("[overflow-wrap:anywhere]");
+    expect(card?.querySelector(".partner-marquee-item__logo-panel img")).toBeInTheDocument();
+    expect(card?.querySelector(".partner-marquee-item__logo-panel img")).toHaveAttribute("loading", "lazy");
+    expect(card?.querySelector(".partner-marquee-item__name")).toHaveTextContent("Global Partners");
+    expect(container.querySelectorAll(".partner-marquee-set")).toHaveLength(4);
   });
 
   it("opens the partner profile when a real marquee card is clicked", () => {
     renderPartners();
 
-    fireEvent.click(screen.getByRole("button", { name: /Global Partners.*Open profile/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Global Partners" }));
 
     expect(uiMocks.openPartner).toHaveBeenCalledWith(partners[0]);
   });

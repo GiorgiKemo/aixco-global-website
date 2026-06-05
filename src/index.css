@@ -911,14 +911,26 @@
   }
 
   .partner-marquee {
-    --partner-marquee-gap: 1rem;
+    --partner-marquee-gap: 1.15rem;
     --partner-marquee-duration: 34s;
+    --partner-item-width: 11.75rem;
+    --partner-logo-panel-height: 5.75rem;
     position: relative;
     width: 100%;
     min-width: 0;
     overflow: hidden;
     padding-block: 0.35rem 1.15rem;
     scrollbar-width: none;
+    mask-image: linear-gradient(90deg, transparent, #000 2.5%, #000 97.5%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 2.5%, #000 97.5%, transparent);
+  }
+
+  .partner-marquee--story {
+    --partner-marquee-gap: 0.8rem;
+    --partner-marquee-duration: 26s;
+    --partner-item-width: clamp(7.5rem, 9vw, 9.25rem);
+    --partner-logo-panel-height: clamp(3.15rem, 5.25svh, 4.1rem);
+    padding-block: 0.1rem 0.45rem;
   }
 
   .partner-marquee::-webkit-scrollbar {
@@ -943,98 +955,101 @@
     padding-right: var(--partner-marquee-gap);
   }
 
-  .partner-flip-card {
-    position: relative;
-    display: block;
-    border: 0;
-    border-radius: var(--radius);
-    background: transparent;
-    color: hsl(var(--foreground));
-    perspective: 1100px;
-    transform-style: preserve-3d;
-    outline: none;
-  }
-
-  .partner-flip-card-inner {
-    position: absolute;
-    inset: 0;
-    display: block;
-    border-radius: inherit;
-    transform-style: preserve-3d;
-    transition: transform 420ms var(--ease-apple);
-  }
-
-  .partner-flip-card:hover .partner-flip-card-inner,
-  .partner-flip-card:focus-visible .partner-flip-card-inner {
-    transform: rotateY(180deg);
-  }
-
-  .partner-flip-card-featured .partner-flip-card-inner {
-    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.32);
-  }
-
-  .partner-flip-face {
-    position: absolute;
-    inset: 0;
+  .partner-marquee-item {
     display: flex;
-    height: 100%;
+    width: var(--partner-item-width);
     flex-direction: column;
-    justify-content: center;
-    border-radius: inherit;
-    overflow: hidden;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    box-shadow: 0 22px 62px -42px hsl(220 28% 18% / 0.42), 0 1px 0 hsl(0 0% 100% / 0.58) inset;
-  }
-
-  .partner-flip-front {
+    flex-shrink: 0;
     align-items: center;
-    isolation: isolate;
-    border: 1px solid hsl(var(--primary) / 0.22);
-    background:
-      radial-gradient(95% 120% at 50% 0%, hsl(0 0% 100% / 0.68), transparent 66%),
-      radial-gradient(120% 120% at 18% 0%, hsl(var(--primary-glow) / 0.28), transparent 58%),
-      linear-gradient(145deg, hsl(36 44% 98% / 0.58), hsl(220 18% 86% / 0.38) 48%, hsl(220 18% 72% / 0.26));
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
-    padding: 1.25rem;
+    gap: 0.62rem;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    text-align: center;
+    color: hsl(var(--foreground));
+    cursor: pointer;
+    outline: none;
+    transition: transform 220ms var(--ease-apple);
   }
 
-  .partner-flip-front::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background:
-      linear-gradient(120deg, hsl(0 0% 100% / 0.46), transparent 34%, hsl(0 0% 100% / 0.22) 68%, transparent),
-      linear-gradient(180deg, hsl(0 0% 100% / 0.36), transparent 58%);
-    opacity: 0.72;
+  .partner-marquee-item:hover,
+  .partner-marquee-item:focus-visible {
+    transform: translateY(-2px);
   }
 
-  .partner-logo-stage {
+  .partner-marquee-item__logo-panel {
     display: flex;
-    width: min(86%, 15.75rem);
-    min-height: 8rem;
+    width: 100%;
+    height: var(--partner-logo-panel-height);
     align-items: center;
     justify-content: center;
-    position: relative;
-    border: 1px solid hsl(0 0% 100% / 0.24);
-    border-radius: calc(var(--radius) - 2px);
+    overflow: hidden;
+    border: 1px solid hsl(var(--primary) / 0.14);
+    border-radius: calc(var(--radius) - 1px);
     background:
-      radial-gradient(100% 130% at 50% 0%, hsl(0 0% 100% / 0.18), transparent 64%),
-      linear-gradient(145deg, hsl(220 18% 31% / 0.74), hsl(220 18% 21% / 0.62));
+      linear-gradient(168deg, hsl(36 42% 99% / 0.96), hsl(220 14% 95% / 0.88)),
+      radial-gradient(120% 130% at 50% 0%, hsl(0 0% 100% / 0.9), transparent 72%);
     box-shadow:
-      0 1px 0 hsl(0 0% 100% / 0.24) inset,
-      0 24px 52px -38px hsl(220 28% 4% / 0.54);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
-    padding: 1.1rem;
+      0 1px 0 hsl(0 0% 100% / 0.72) inset,
+      0 16px 38px -32px hsl(220 28% 18% / 0.2);
+    padding: clamp(0.65rem, 1.1svh, 0.95rem) clamp(0.55rem, 0.9vw, 0.8rem);
+    transition:
+      border-color 220ms var(--ease-apple),
+      box-shadow 220ms var(--ease-apple);
   }
 
-  .partner-logo-image {
+  .partner-marquee-item:hover .partner-marquee-item__logo-panel,
+  .partner-marquee-item:focus-visible .partner-marquee-item__logo-panel {
+    border-color: hsl(var(--primary) / 0.34);
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.1),
+      0 1px 0 hsl(0 0% 100% / 0.72) inset,
+      0 20px 44px -30px hsl(var(--primary-glow) / 0.32);
+  }
+
+  .partner-marquee-item--featured .partner-marquee-item__logo-panel {
+    border-color: hsl(var(--primary) / 0.26);
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.12),
+      0 1px 0 hsl(0 0% 100% / 0.72) inset,
+      0 18px 40px -30px hsl(var(--primary-glow) / 0.24);
+  }
+
+  .partner-marquee-item__logo {
     width: auto;
     height: auto;
-    filter: drop-shadow(0 18px 28px hsl(220 28% 5% / 0.36));
+    max-width: 84%;
+    max-height: clamp(1.85rem, 3.2svh, 2.85rem);
+    object-fit: contain;
+    filter: drop-shadow(0 10px 18px hsl(220 28% 12% / 0.12));
+  }
+
+  .partner-marquee--story .partner-marquee-item__logo {
+    max-height: clamp(1.55rem, 2.65svh, 2rem);
+  }
+
+  .partner-marquee-item__name {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    color: hsl(var(--foreground));
+    font-size: clamp(0.76rem, 0.82vw, 0.88rem);
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .partner-marquee--story .partner-marquee-item__name {
+    font-size: clamp(0.66rem, 0.7vw, 0.76rem);
+    line-height: 1.2;
+  }
+
+  .partner-marquee-item:focus-visible .partner-marquee-item__logo-panel {
+    box-shadow:
+      0 0 0 2px hsl(var(--primary) / 0.42),
+      0 1px 0 hsl(0 0% 100% / 0.72) inset,
+      0 20px 44px -30px hsl(var(--primary-glow) / 0.28);
   }
 
   .partner-modal-logo-stage {
@@ -1115,22 +1130,6 @@
     user-select: none;
     -webkit-user-drag: none;
     pointer-events: none;
-  }
-
-  .partner-flip-back {
-    transform: rotateY(180deg);
-    align-items: flex-start;
-    min-width: 0;
-    border: 1px solid hsl(var(--primary) / 0.34);
-    background:
-      linear-gradient(145deg, hsl(var(--surface-elevated) / 0.98), hsl(var(--background) / 0.96)),
-      radial-gradient(90% 120% at 0% 0%, hsl(var(--primary-glow) / 0.18), transparent 70%);
-    overflow-wrap: anywhere;
-    padding: 1.55rem;
-  }
-
-  .partner-flip-card:focus-visible .partner-flip-face {
-    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.36), var(--shadow-soft);
   }
 
   .partner-marquee:hover .partner-marquee-track,
@@ -1266,13 +1265,13 @@
     display: grid;
     width: 100%;
     min-width: 0;
-    gap: clamp(0.65rem, 1.25svh, 1rem);
+    gap: clamp(0.4rem, 0.75svh, 0.65rem);
   }
 
   .story-partner-row {
     display: grid;
     min-width: 0;
-    gap: clamp(0.35rem, 0.65svh, 0.55rem);
+    gap: clamp(0.28rem, 0.5svh, 0.42rem);
   }
 
   .story-partner-row__label {
@@ -1282,79 +1281,6 @@
     letter-spacing: 0.18em;
     line-height: 1;
     text-transform: uppercase;
-  }
-
-  .story-partners-grid {
-    display: grid;
-    width: 100%;
-    min-width: 0;
-    grid-template-columns: repeat(var(--story-partner-count, 4), minmax(0, 1fr));
-    gap: clamp(0.45rem, 0.85svh, 0.7rem) clamp(0.45rem, 0.75vw, 0.65rem);
-  }
-
-  .story-partner-card {
-    display: grid;
-    min-width: 0;
-    gap: clamp(0.35rem, 0.6svh, 0.5rem);
-    border: 0;
-    background: transparent;
-    padding: 0;
-    text-align: center;
-    color: inherit;
-    cursor: pointer;
-    outline: none;
-    transition: transform 220ms var(--ease-apple), opacity 220ms var(--ease-apple);
-  }
-
-  .story-partner-card:hover,
-  .story-partner-card:focus-visible {
-    transform: translateY(-1px);
-  }
-
-  .story-partner-card:focus-visible .story-partner-card__logo-stage {
-    box-shadow:
-      0 0 0 2px hsl(var(--primary) / 0.55),
-      0 1px 0 hsl(0 0% 100% / 0.14) inset,
-      0 20px 44px -34px hsl(220 28% 5% / 0.7);
-  }
-
-  .story-partner-card__logo-stage {
-    display: flex;
-    width: 100%;
-    height: clamp(3.75rem, 6.5svh, 5rem);
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 1px solid hsl(var(--primary) / 0.28);
-    border-radius: calc(var(--radius) - 1px);
-    background:
-      radial-gradient(90% 130% at 50% 0%, hsl(0 0% 100% / 0.16), transparent 62%),
-      linear-gradient(145deg, hsl(220 18% 18% / 0.98), hsl(34 28% 12% / 0.96));
-    box-shadow:
-      0 1px 0 hsl(0 0% 100% / 0.14) inset,
-      0 20px 44px -34px hsl(220 28% 5% / 0.7);
-    padding: clamp(0.55rem, 1svh, 0.8rem);
-  }
-
-  .story-partner-card__logo {
-    width: auto;
-    height: auto;
-    max-width: 88%;
-    max-height: clamp(1.75rem, 3.2svh, 2.35rem);
-    object-fit: contain;
-    filter: drop-shadow(0 12px 22px hsl(220 28% 4% / 0.42));
-  }
-
-  .story-partner-card__name {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    color: hsl(var(--foreground));
-    font-size: clamp(0.78rem, 0.82vw, 0.92rem);
-    font-weight: 700;
-    line-height: 1.2;
-    text-align: center;
-    text-wrap: balance;
   }
 
   .news-ticker {
@@ -1723,6 +1649,11 @@
       animation-duration: 70s !important;
     }
 
+    .partner-marquee {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+
     .story-letter-reveal__char,
     .story-letter-reveal__char::before {
       animation: none !important;
@@ -1810,7 +1741,7 @@
     }
 
     [data-story-scene-copy] [data-layout="story-journeys"],
-    [data-story-scene-copy] [data-layout="story-partners-grid"],
+    [data-story-scene-copy] [data-layout="story-partners-marquee"],
     [data-story-scene-copy] [data-layout="story-about-metrics"] {
       column-gap: var(--story-grid-col-gap);
       row-gap: var(--story-grid-row-gap);

@@ -34,13 +34,14 @@ describe("index.css motion rules", () => {
     expect(macCard).not.toContain("transition-all");
   });
 
-  it("keeps partner flip hover responsive", () => {
-    const partnerInner = cssBlock(".partner-flip-card-inner");
-    const partnerBack = cssBlock(".partner-flip-back");
+  it("keeps partner marquee hover responsive", () => {
+    const partnerItem = cssBlock(".partner-marquee-item");
+    const partnerLogoPanel = cssBlock(".partner-marquee-item__logo-panel");
 
-    expect(partnerInner).toContain("transform 420ms");
-    expect(partnerInner).not.toContain("720ms");
-    expect(partnerBack).toContain("overflow-wrap: anywhere");
+    expect(partnerItem).toContain("transform 220ms");
+    expect(partnerItem).not.toContain("420ms");
+    expect(partnerLogoPanel).toContain("border-color 220ms");
+    expect(partnerLogoPanel).toContain("box-shadow 220ms");
   });
 
   it("keeps partner modal logo panels opaque", () => {
