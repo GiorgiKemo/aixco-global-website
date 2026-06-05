@@ -911,26 +911,26 @@
   }
 
   .partner-marquee {
-    --partner-marquee-gap: 1.5rem;
-    --partner-marquee-duration: 42s;
-    --partner-item-width: 11.25rem;
-    --partner-logo-stage-height: 7rem;
+    --partner-marquee-gap: 1.75rem;
+    --partner-marquee-duration: 46s;
+    --partner-item-width: 12rem;
+    --partner-logo-stage-height: 7.5rem;
     position: relative;
     width: 100%;
     min-width: 0;
     overflow: hidden;
-    padding-block: 0.5rem 1.35rem;
+    padding-block: 0.65rem 1.5rem;
     scrollbar-width: none;
-    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
   }
 
   .partner-marquee--story {
-    --partner-marquee-gap: 1.15rem;
-    --partner-marquee-duration: 34s;
-    --partner-item-width: clamp(9.5rem, 12vw, 11.25rem);
-    --partner-logo-stage-height: clamp(6.25rem, 10svh, 7rem);
-    padding-block: 0.25rem 0.65rem;
+    --partner-marquee-gap: 1.35rem;
+    --partner-marquee-duration: 38s;
+    --partner-item-width: clamp(10rem, 12.5vw, 12rem);
+    --partner-logo-stage-height: clamp(6.5rem, 10.5svh, 7.5rem);
+    padding-block: 0.35rem 0.75rem;
   }
 
   .partner-marquee::-webkit-scrollbar {
@@ -942,6 +942,11 @@
     width: max-content;
     animation: partner-marquee var(--partner-marquee-duration) linear infinite;
     will-change: transform;
+  }
+
+  .partner-marquee:hover .partner-marquee-track,
+  .partner-marquee:focus-within .partner-marquee-track {
+    animation-play-state: paused;
   }
 
   .partner-marquee-track-reverse {
@@ -961,7 +966,7 @@
     flex-direction: column;
     flex-shrink: 0;
     align-items: stretch;
-    gap: 0.75rem;
+    gap: 0.85rem;
     border: 0;
     background: transparent;
     padding: 0;
@@ -971,18 +976,24 @@
     outline: none;
   }
 
+  /* Uniform refined plate — every logo sits on the identical surface so the
+     wall reads consistently regardless of each source logo's colour. */
   .partner-marquee-item__card {
-    display: block;
+    display: flex;
     width: 100%;
-    border: 1px solid hsl(var(--primary) / 0.22);
-    border-radius: 0.75rem;
+    min-height: var(--partner-logo-stage-height);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid hsl(36 26% 82% / 0.7);
+    border-radius: 1rem;
     background:
-      radial-gradient(120% 140% at 50% 0%, hsl(36 42% 99% / 0.92), transparent 68%),
-      linear-gradient(168deg, hsl(36 38% 96%), hsl(34 28% 91%));
+      radial-gradient(120% 150% at 50% -10%, hsl(40 50% 100%), transparent 70%),
+      linear-gradient(168deg, hsl(40 42% 99%), hsl(36 26% 94%));
     box-shadow:
-      0 1px 0 hsl(0 0% 100% / 0.78) inset,
-      0 14px 36px -28px hsl(220 28% 18% / 0.22);
-    padding: 0.7rem;
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 18px 44px -32px hsl(220 28% 18% / 0.3);
+    padding: 1.35rem 1.4rem;
     transition:
       transform 260ms var(--ease-apple),
       border-color 260ms var(--ease-apple),
@@ -991,59 +1002,54 @@
 
   .partner-marquee-item:hover .partner-marquee-item__card,
   .partner-marquee-item:focus-visible .partner-marquee-item__card {
-    transform: scale(1.02);
-    border-color: hsl(var(--primary) / 0.38);
+    transform: translateY(-4px);
+    border-color: hsl(var(--primary) / 0.45);
     box-shadow:
-      0 0 0 1px hsl(var(--primary) / 0.12),
-      0 1px 0 hsl(0 0% 100% / 0.82) inset,
-      0 22px 48px -26px hsl(var(--primary-glow) / 0.28);
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 26px 54px -28px hsl(var(--primary-glow) / 0.4);
   }
 
   .partner-marquee-item--featured .partner-marquee-item__card {
-    border-color: hsl(var(--primary) / 0.42);
+    border-color: hsl(var(--primary) / 0.4);
     box-shadow:
-      0 0 0 1px hsl(var(--primary-glow) / 0.22),
-      0 1px 0 hsl(0 0% 100% / 0.8) inset,
-      0 18px 42px -26px hsl(var(--primary-glow) / 0.32);
+      0 0 0 1px hsl(var(--primary-glow) / 0.28),
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 20px 46px -30px hsl(var(--primary-glow) / 0.36);
   }
 
   .partner-marquee-item--featured:hover .partner-marquee-item__card,
   .partner-marquee-item--featured:focus-visible .partner-marquee-item__card {
     box-shadow:
-      0 0 0 2px hsl(var(--primary-glow) / 0.34),
-      0 1px 0 hsl(0 0% 100% / 0.84) inset,
-      0 24px 52px -24px hsl(var(--primary-glow) / 0.38);
+      0 0 0 1.5px hsl(var(--primary-glow) / 0.38),
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 28px 58px -26px hsl(var(--primary-glow) / 0.42);
   }
 
-  .partner-marquee-item__logo-stage {
-    display: flex;
-    width: 100%;
-    min-height: var(--partner-logo-stage-height);
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 1px solid hsl(0 0% 100% / 0.1);
-    border-radius: calc(var(--radius) + 1px);
-    background:
-      radial-gradient(90% 120% at 48% 0%, hsl(0 0% 100% / 0.12), transparent 66%),
-      linear-gradient(152deg, hsl(220 14% 28%), hsl(220 18% 12%));
-    box-shadow:
-      0 1px 0 hsl(0 0% 100% / 0.16) inset,
-      0 12px 28px -22px hsl(220 28% 5% / 0.55);
-    padding: 1rem 0.85rem;
-  }
-
+  /* Normalise mixed-source logos to a single ink tone; reveal full colour on
+     hover/focus for a premium "trusted by" wall. */
   .partner-marquee-item__logo {
     width: auto;
     height: auto;
-    max-width: 90%;
-    max-height: clamp(2.85rem, 5svh, 4.25rem);
+    max-width: 84%;
+    max-height: clamp(2.85rem, 5svh, 3.75rem);
     object-fit: contain;
-    filter: drop-shadow(0 8px 16px hsl(220 28% 5% / 0.38));
+    filter: grayscale(1) brightness(0);
+    opacity: 0.6;
+    transition:
+      filter 320ms var(--ease-apple),
+      opacity 320ms var(--ease-apple),
+      transform 320ms var(--ease-apple);
   }
 
   .partner-marquee--story .partner-marquee-item__logo {
-    max-height: clamp(2.5rem, 4.4svh, 3.5rem);
+    max-height: clamp(2.5rem, 4.4svh, 3.35rem);
+  }
+
+  .partner-marquee-item:hover .partner-marquee-item__logo,
+  .partner-marquee-item:focus-visible .partner-marquee-item__logo {
+    filter: none;
+    opacity: 1;
+    transform: scale(1.04);
   }
 
   .partner-marquee-item__name {
@@ -1051,7 +1057,7 @@
     width: 100%;
     min-width: 0;
     margin-top: 0.05rem;
-    color: hsl(var(--foreground));
+    color: hsl(var(--foreground) / 0.62);
     font-family: var(--font-display), ui-serif, Georgia, serif;
     font-size: clamp(0.9375rem, 0.95vw, 1rem);
     font-weight: 600;
@@ -1059,6 +1065,16 @@
     line-height: 1.35;
     text-align: center;
     text-wrap: balance;
+    transition: color 260ms var(--ease-apple);
+  }
+
+  .partner-marquee-item:hover .partner-marquee-item__name,
+  .partner-marquee-item:focus-visible .partner-marquee-item__name {
+    color: hsl(var(--foreground));
+  }
+
+  .partner-marquee-item--featured .partner-marquee-item__name {
+    color: hsl(var(--primary));
   }
 
   .partner-marquee--story .partner-marquee-item__name {
@@ -1069,6 +1085,17 @@
   .partner-marquee-item:focus-visible .partner-marquee-item__card {
     outline: 2px solid hsl(var(--primary) / 0.5);
     outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .partner-marquee-track {
+      animation: none;
+    }
+
+    .partner-marquee-item__logo {
+      filter: grayscale(1) brightness(0);
+      opacity: 0.6;
+    }
   }
 
   .partner-modal-logo-stage {

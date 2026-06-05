@@ -96,21 +96,19 @@ function PartnerMarqueeItem({
       whileTap={premiumPress}
     >
       <span className="partner-marquee-item__card">
-        <span className="partner-marquee-item__logo-stage">
-          {logoSrc ? (
-            <Image
-              src={logoSrc}
-              alt=""
-              aria-hidden
-              loading="lazy"
-              decoding="async"
-              width={240}
-              height={120}
-              sizes="(min-width: 768px) 11.25rem, 9.5rem"
-              className="partner-marquee-item__logo"
-            />
-          ) : null}
-        </span>
+        {logoSrc ? (
+          <Image
+            src={logoSrc}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            decoding="async"
+            width={240}
+            height={120}
+            sizes="(min-width: 768px) 11.25rem, 9.5rem"
+            className="partner-marquee-item__logo"
+          />
+        ) : null}
       </span>
       <span className="partner-marquee-item__name">{tx(partner.name)}</span>
     </motion.button>
