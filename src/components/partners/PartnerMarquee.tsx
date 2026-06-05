@@ -19,6 +19,9 @@ const logoMap: Record<string, string> = {
   daewoo: aixcoLiveLogos.daewoo,
 };
 
+/** Dark logos need a light panel; light/white logos need the default dark panel. */
+const lightLogoPanels = new Set(["isp", "workwise", "revanta", "bluerock"]);
+
 export function PartnerMarquee({
   title,
   partners: items,
@@ -85,6 +88,7 @@ function PartnerMarqueeItem({
   isClone: boolean;
 }) {
   const logoSrc = partner.logo ? logoMap[partner.logo] : null;
+  const logoPanelTheme = partner.logo && lightLogoPanels.has(partner.logo) ? "light" : "dark";
 
   return (
     <motion.button
@@ -95,7 +99,11 @@ function PartnerMarqueeItem({
       className={`partner-marquee-item group ${partner.featured ? "partner-marquee-item--featured" : ""}`}
       whileTap={premiumPress}
     >
-      <span className="partner-marquee-item__logo-panel">
+      <span
+        className={`partner-marquee-item__logo-panel ${
+          logoPanelTheme === "light" ? "partner-marquee-item__logo-panel--light" : ""
+        }`}
+      >
         {logoSrc ? (
           <Image
             src={logoSrc}
@@ -103,9 +111,9 @@ function PartnerMarqueeItem({
             aria-hidden
             loading="lazy"
             decoding="async"
-            width={200}
-            height={96}
-            sizes="(min-width: 768px) 9rem, 7.5rem"
+            width={240}
+            height={120}
+            sizes="(min-width: 768px) 10.625rem, 8.75rem"
             className="partner-marquee-item__logo"
           />
         ) : null}
