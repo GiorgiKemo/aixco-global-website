@@ -35,13 +35,11 @@ describe("index.css motion rules", () => {
   });
 
   it("keeps partner marquee hover responsive", () => {
-    const partnerItem = cssBlock(".partner-marquee-item");
-    const partnerLogoPanel = cssBlock(".partner-marquee-item__logo-panel");
+    const partnerCard = cssBlock(".partner-marquee-item__card");
 
-    expect(partnerItem).toContain("transform 220ms");
-    expect(partnerItem).not.toContain("420ms");
-    expect(partnerLogoPanel).toContain("border-color 220ms");
-    expect(partnerLogoPanel).toContain("box-shadow 220ms");
+    expect(partnerCard).toContain("transform 260ms");
+    expect(partnerCard).toContain("border-color 260ms");
+    expect(partnerCard).toContain("box-shadow 260ms");
   });
 
   it("keeps partner modal logo panels opaque", () => {

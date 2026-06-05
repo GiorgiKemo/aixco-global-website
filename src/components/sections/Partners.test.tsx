@@ -38,8 +38,8 @@ describe("Partners", () => {
     expect(strategicMarquee).toBeInTheDocument();
     expect(container.querySelector(".scroll-reveal.mac-card.mb-10")).not.toBeInTheDocument();
     expect(card).toBeInTheDocument();
-    expect(card?.querySelector(".partner-marquee-item__logo-panel img")).toBeInTheDocument();
-    expect(card?.querySelector(".partner-marquee-item__logo-panel img")).toHaveAttribute("loading", "lazy");
+    expect(card?.querySelector(".partner-marquee-item__logo-stage img")).toBeInTheDocument();
+    expect(card?.querySelector(".partner-marquee-item__logo-stage img")).toHaveAttribute("loading", "lazy");
     expect(card?.querySelector(".partner-marquee-item__name")).toHaveTextContent("Global Partners");
     expect(container.querySelectorAll(".partner-marquee-set")).toHaveLength(4);
   });
