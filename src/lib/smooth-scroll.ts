@@ -1,13 +1,20 @@
+import Lenis from "lenis";
+
 type GlideScrollOptions = {
   easing?: number;
   multiplier?: number;
+  momentum?: number;
+  storyEasing?: number;
+  storyMultiplier?: number;
+  storyMomentum?: number;
 };
+
+type ActiveLenis = InstanceType<typeof Lenis>;
 
 let activeScrollFrame: number | null = null;
 let activeScrollCancelCleanup: (() => void) | null = null;
-let activeGlideFrame: number | null = null;
-let glideCurrentTop = 0;
-let glideTargetTop = 0;
+let activeLenis: ActiveLenis | null = null;
+let activeLenisFrame: number | null = null;
 
 export const HASH_SCROLL_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
 
@@ -29,15 +36,6 @@ function easeInOutCubic(progress: number) {
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
-}
-
-function getMaxScrollTop() {
-  if (typeof document === "undefined" || typeof window === "undefined") return 0;
-  return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-}
-
-function prefersReducedMotion() {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 function usesCoarsePointer() {
@@ -76,21 +74,10 @@ function installActiveScrollUserCancel() {
 }
 
 export function cancelGlideScroll() {
-  if (activeGlideFrame !== null) {
-    window.cancelAnimationFrame(activeGlideFrame);
-    activeGlideFrame = null;
+  if (activeLenis) {
+    activeLenis.stop();
+    activeLenis.start();
   }
-
-  if (typeof window !== "undefined") {
-    glideCurrentTop = window.scrollY;
-    glideTargetTop = window.scrollY;
-  }
-}
-
-function normalizeWheelDelta(event: WheelEvent) {
-  if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 18;
-  if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return event.deltaY * window.innerHeight;
-  return event.deltaY;
 }
 
 function canElementScrollInDirection(element: HTMLElement, deltaY: number) {
@@ -103,7 +90,8 @@ function canElementScrollInDirection(element: HTMLElement, deltaY: number) {
   return deltaY < 0 ? element.scrollTop > 0 : element.scrollTop < maxScrollTop;
 }
 
-function shouldUseNativeWheelScroll(event: WheelEvent, deltaY: number) {
+function shouldUseNativeWheelScroll(event: WheelEvent) {
+  const deltaY = event.deltaY;
   if (!event.cancelable || event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return true;
   if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return true;
   if (Math.abs(deltaY) < 1) return true;
@@ -120,48 +108,78 @@ function shouldUseNativeWheelScroll(event: WheelEvent, deltaY: number) {
   return false;
 }
 
-export function installGlideScroll({ easing = 0.16, multiplier = 1.05 }: GlideScrollOptions = {}) {
+function isStoryScrollExperience() {
+  return (
+    document.documentElement.dataset.homeExperience === "story" ||
+    document.body.classList.contains("home-desktop-story-boot")
+  );
+}
+
+function destroyActiveLenis() {
+  if (activeLenisFrame !== null && typeof window !== "undefined") {
+    window.cancelAnimationFrame(activeLenisFrame);
+    activeLenisFrame = null;
+  }
+
+  activeLenis?.destroy();
+  activeLenis = null;
+}
+
+export function installGlideScroll({
+  easing = 0.16,
+  multiplier = 1.05,
+  momentum = 0,
+  storyEasing,
+  storyMultiplier,
+  storyMomentum,
+}: GlideScrollOptions = {}) {
   if (typeof window === "undefined" || typeof document === "undefined") return () => {};
   if (usesCoarsePointer()) return () => {};
 
-  const resolvedEasing = clamp(easing, 0.08, 1);
+  destroyActiveLenis();
+
+  const resolvedEasing = clamp(easing, 0.04, 0.35);
   const resolvedMultiplier = clamp(multiplier, 0.35, 2);
+  const resolvedMomentum = clamp(momentum, 0, 1);
+  const resolvedStoryEasing = clamp(storyEasing ?? resolvedEasing, 0.04, 0.35);
+  const resolvedStoryMultiplier = clamp(storyMultiplier ?? resolvedMultiplier, 0.25, 2);
+  const resolvedStoryMomentum = clamp(storyMomentum ?? resolvedMomentum, 0, 1);
+  const isStoryExperience = isStoryScrollExperience();
+  const activeEasing = isStoryExperience ? resolvedStoryEasing : resolvedEasing;
+  const activeMultiplier = isStoryExperience
+    ? resolvedStoryMultiplier + resolvedStoryMomentum
+    : resolvedMultiplier + resolvedMomentum;
 
-  const step = () => {
-    glideCurrentTop += (glideTargetTop - glideCurrentTop) * resolvedEasing;
+  activeLenis = new Lenis({
+    autoRaf: false,
+    lerp: activeEasing,
+    smoothWheel: true,
+    syncTouch: false,
+    touchMultiplier: 1,
+    wheelMultiplier: Number(activeMultiplier.toFixed(3)),
+    gestureOrientation: "vertical",
+    prevent: (node) => node instanceof HTMLElement && node.matches(nativeScrollSelector),
+    virtualScroll: ({ event }) => {
+      cancelActiveScroll();
+      if (event instanceof WheelEvent) {
+        return !shouldUseNativeWheelScroll(event);
+      }
+      return true;
+    },
+  });
 
-    if (Math.abs(glideTargetTop - glideCurrentTop) < 0.5) {
-      window.scrollTo({ top: glideTargetTop, left: 0, behavior: "auto" });
-      activeGlideFrame = null;
-      return;
-    }
-
-    window.scrollTo({ top: glideCurrentTop, left: 0, behavior: "auto" });
-    activeGlideFrame = window.requestAnimationFrame(step);
+  const raf = (time: number) => {
+    activeLenis?.raf(time);
+    activeLenisFrame = window.requestAnimationFrame(raf);
   };
 
-  const onWheel = (event: WheelEvent) => {
-    const deltaY = normalizeWheelDelta(event);
-    if (shouldUseNativeWheelScroll(event, deltaY)) return;
-
-    event.preventDefault();
-    cancelActiveScroll();
-
-    glideCurrentTop = activeGlideFrame === null ? window.scrollY : glideCurrentTop;
-    glideTargetTop = clamp((activeGlideFrame === null ? window.scrollY : glideTargetTop) + deltaY * resolvedMultiplier, 0, getMaxScrollTop());
-
-    if (activeGlideFrame === null) {
-      activeGlideFrame = window.requestAnimationFrame(step);
-    }
-  };
+  activeLenisFrame = window.requestAnimationFrame(raf);
 
   document.documentElement.dataset.glideScroll = "enabled";
-  document.addEventListener("wheel", onWheel, { passive: false });
 
   return () => {
-    document.removeEventListener("wheel", onWheel);
     document.documentElement.removeAttribute("data-glide-scroll");
-    cancelGlideScroll();
+    destroyActiveLenis();
   };
 }
 
@@ -173,6 +191,11 @@ function animateScrollTo(top: number, behavior?: ScrollBehavior) {
 
   cancelGlideScroll();
   cancelActiveScroll();
+
+  if (activeLenis) {
+    activeLenis.scrollTo(targetTop, { immediate: resolvedBehavior !== "smooth" });
+    return;
+  }
 
   if (resolvedBehavior !== "smooth") {
     window.scrollTo({ top: targetTop, left: 0, behavior: "auto" });

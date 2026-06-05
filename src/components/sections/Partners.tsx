@@ -106,7 +106,7 @@ function PartnerCard({
       type="button"
       onClick={() => openPartner(partner)}
       tabIndex={isClone ? -1 : undefined}
-      className={`partner-flip-card group h-[236px] w-[min(78vw,300px)] shrink-0 text-left md:w-[300px] ${partner.featured ? "partner-flip-card-featured" : ""}`}
+      className={`partner-flip-card group h-[236px] w-[min(78vw,300px)] shrink-0 text-center md:w-[300px] ${partner.featured ? "partner-flip-card-featured" : ""}`}
       whileTap={premiumPress}
     >
       <span className="partner-flip-card-inner">
@@ -126,8 +126,8 @@ function PartnerCard({
             </span>
           )}
         </span>
-        <span className="partner-flip-face partner-flip-back">
-          <span className="block max-w-full font-display text-xl leading-tight [overflow-wrap:anywhere]">{partner.name}</span>
+        <span className="partner-flip-face partner-flip-back items-center text-center">
+          <span className="block max-w-full font-display text-xl leading-tight [overflow-wrap:anywhere]">{tx(partner.name)}</span>
           <span className="mt-3 line-clamp-4 block max-w-full text-sm leading-relaxed text-foreground/80 [overflow-wrap:anywhere]">
             {tx(partner.summary)}
           </span>

@@ -38,7 +38,17 @@ export function ScrollManager() {
     };
   }, []);
 
-  useEffect(() => installGlideScroll(), []);
+  useEffect(
+    () =>
+      installGlideScroll({
+        easing: 0.18,
+        multiplier: 1,
+        storyEasing: 0.18,
+        storyMultiplier: 0.52,
+        storyMomentum: 0.18,
+      }),
+    [],
+  );
 
   useEffect(() => {
     if (typeof window === "undefined") {

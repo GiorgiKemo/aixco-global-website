@@ -110,6 +110,11 @@ export function Nav() {
     const updateScrollState = (syncUrlHash: boolean) => {
       setScrolled(window.scrollY > 88);
       if (location.pathname !== "/") return;
+      if (hideForDesktopStory || document.documentElement.dataset.homeExperience === "story") {
+        setReturningHome(false);
+        setActive(window.location.hash);
+        return;
+      }
 
       if (homeHashSyncLockedUntilRef.current > window.performance.now()) {
         replaceLocationHash("");
@@ -128,7 +133,7 @@ export function Nav() {
     updateScrollState(false);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [location.pathname]);
+  }, [hideForDesktopStory, location.pathname]);
 
   useEffect(() => {
     setOpen(false);

@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, useEffect, useState, type ReactNode } from "react";
+import { Children, type ReactNode } from "react";
 import { motion, type Variants } from "@/lib/framer-motion";
 import { imageSettleTransition, premiumEase, reducedMotionTransition, revealTransition } from "@/lib/motion";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
@@ -39,6 +39,38 @@ export const staggerContainer: Variants = {
       staggerChildren: 0.12,
       delayChildren: 0.06,
     },
+  },
+};
+
+export const storySceneContainer: Variants = {
+  hidden: {
+    opacity: 0,
+    transition: {
+      duration: 0.32,
+      ease: premiumEase,
+      when: "afterChildren",
+      staggerChildren: 0.04,
+      staggerDirection: -1,
+    },
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.64,
+      ease: premiumEase,
+      staggerChildren: 0.1,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const storySceneItem: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: revealTransition,
   },
 };
 
@@ -170,22 +202,15 @@ type StoryMediaRevealProps = {
 
 export function StoryMediaReveal({ children, isActive, reverse = false, className }: StoryMediaRevealProps) {
   const shouldReduceMotion = useHydratedReducedMotion();
-  const [hasRevealed, setHasRevealed] = useState(isActive);
-
-  useEffect(() => {
-    if (isActive) {
-      setHasRevealed(true);
-    }
-  }, [isActive]);
-
   const variants = reverse ? storyMediaRevealReverse : storyMediaReveal;
 
   return (
     <motion.div
       className={className}
+      data-story-media-reveal-active={isActive ? "true" : "false"}
       variants={variants}
       initial="hidden"
-      animate={hasRevealed ? "visible" : "hidden"}
+      animate={isActive ? "visible" : "hidden"}
       transition={shouldReduceMotion ? reducedMotionTransition : undefined}
     >
       <motion.div
@@ -214,20 +239,14 @@ export function StoryMediaReveal({ children, isActive, reverse = false, classNam
 
 export function StorySceneReveal({ children, isActive, className }: StorySceneRevealProps) {
   const shouldReduceMotion = useHydratedReducedMotion();
-  const [hasRevealed, setHasRevealed] = useState(isActive);
-
-  useEffect(() => {
-    if (isActive) {
-      setHasRevealed(true);
-    }
-  }, [isActive]);
 
   return (
     <motion.div
       className={className}
-      variants={staggerContainer}
+      data-story-scene-reveal-active={isActive ? "true" : "false"}
+      variants={storySceneContainer}
       initial="hidden"
-      animate={hasRevealed ? "visible" : "hidden"}
+      animate={isActive ? "visible" : "hidden"}
       transition={
         shouldReduceMotion
           ? reducedMotionTransition
@@ -239,7 +258,7 @@ export function StorySceneReveal({ children, isActive, className }: StorySceneRe
       }
     >
       {Children.map(children, (child, index) => (
-        <motion.div key={index} variants={staggerItem}>
+        <motion.div key={index} variants={storySceneItem}>
           {child}
         </motion.div>
       ))}

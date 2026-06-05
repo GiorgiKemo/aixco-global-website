@@ -4,23 +4,28 @@ import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
+  BadgeEuro,
   Building2,
+  CirclePercent,
   Download,
   ExternalLink,
   FileText,
   Image as ImageIcon,
+  KeyRound,
   Mail,
   MapPin,
   ShieldCheck,
+  TrendingUp,
   Users,
 } from "lucide-react";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { CountUpText } from "@/components/CountUpText";
 import { LiveVideo } from "@/components/LiveVideo";
 import { useUI } from "@/components/ui-state";
 import { legacyTimelineChapters } from "@/data/legacy-timeline";
 import { materialDownloads } from "@/data/materials";
 import { useSiteContent } from "@/data/site-content-context";
+import type { SiteContent } from "@/lib/backend/site-content";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
   aixcoHeroBackgroundVideo,
@@ -73,6 +78,7 @@ type StoryMedia =
       src: string | StaticImageData;
       alt: string;
       position?: string;
+      sizes?: string;
     }
   | {
       kind: "video";
@@ -82,9 +88,9 @@ type StoryMedia =
       title: string;
       fit?: "cover" | "contain";
       position?: string;
-    };
+  };
 
-type StoryMediaOverlay = "light" | "dark" | "contact";
+type StoryMediaOverlay = "light" | "dark" | "contact" | "none";
 
 const storyChapters: StoryChapter[] = [
   { key: "hero", label: "AIXCO" },
@@ -133,19 +139,6 @@ const dubaiVideoMap = {
   },
 } as const;
 
-const propertyMediaMap = {
-  guruBatumi: {
-    src: aixcoLiveVideos.guruBatumi,
-    previewSrc: aixcoLiveVideoPreviews.guruBatumi,
-    poster: aixcoLiveImages.batumiGuru,
-  },
-  otium: {
-    src: aixcoLiveVideos.otium,
-    previewSrc: aixcoLiveVideoPreviews.otium,
-    poster: aixcoLiveImages.batumiOtium,
-  },
-} as const;
-
 const teamImageMap = {
   "team-benjamin": aixcoLiveImages.teamBenjamin,
   "team-owais": aixcoLiveImages.teamOwais,
@@ -158,6 +151,86 @@ function clamp(value: number, min: number, max: number) {
 
 function formatChapterNumber(index: number) {
   return String(index).padStart(2, "0");
+}
+
+function useStorySceneActive(rootRef: React.RefObject<HTMLElement | null>) {
+  const [isActive, setIsActive] = useState(false);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current?.closest<HTMLElement>("[data-story-section]");
+    if (!root) return;
+
+    const syncActiveState = () => {
+      setIsActive(root.getAttribute("data-story-active") === "true");
+    };
+
+    syncActiveState();
+    const observer = new MutationObserver(syncActiveState);
+    observer.observe(root, { attributes: true, attributeFilter: ["data-story-active"] });
+
+    return () => observer.disconnect();
+  }, [rootRef]);
+
+  return isActive;
+}
+
+function StoryTextReveal({
+  label,
+}: {
+  children?: React.ReactNode;
+  label: string;
+}) {
+  const rootRef = useRef<HTMLSpanElement>(null);
+  const isActive = useStorySceneActive(rootRef);
+  const tokens = useMemo(() => label.split(/(\s+)/u), [label]);
+  const letterCount = useMemo(() => Array.from(label).filter((character) => !/\s/u.test(character)).length, [label]);
+  const [animationRun, setAnimationRun] = useState(0);
+
+  useEffect(() => {
+    if (isActive) {
+      setAnimationRun((current) => current + 1);
+    }
+  }, [isActive, label]);
+
+  let revealIndex = 0;
+
+  return (
+    <span
+      ref={rootRef}
+      className={cn("story-text-reveal story-letter-reveal", isActive && "story-letter-reveal--active")}
+      aria-label={label}
+      data-text-reveal-active={isActive ? "true" : "false"}
+      style={{ "--story-letter-count": letterCount } as CSSProperties}
+    >
+      <span key={animationRun} className="story-letter-reveal__text" aria-hidden="true">
+        {tokens.map((token, tokenIndex) => (
+          token.trim() ? (
+            <span key={`${token}-${tokenIndex}`} className="story-letter-reveal__word">
+              {Array.from(token).map((character, characterIndex) => {
+                const characterRevealIndex = revealIndex;
+                revealIndex += 1;
+
+                return (
+                  <span
+                    key={`${character}-${tokenIndex}-${characterIndex}`}
+                    className="story-letter-reveal__char"
+                    data-char={character}
+                    style={{ "--story-char-index": characterRevealIndex } as CSSProperties}
+                  >
+                    {character}
+                  </span>
+                );
+              })}
+            </span>
+          ) : (
+            <span key={`${token}-${tokenIndex}`} className="story-letter-reveal__space">
+              {token}
+            </span>
+          )
+        ))}
+      </span>
+    </span>
+  );
 }
 
 function getMaterialIcon(format: string) {
@@ -232,7 +305,8 @@ function StoryMediaPanel({
       fetchPriority={priority ? "high" : "auto"}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
-      sizes="(min-width: 1280px) 42vw, 100vw"
+      quality={95}
+      sizes={media.sizes ?? "(min-width: 1280px) 56vw, 100vw"}
       className="story-media-panel__image h-full w-full object-cover"
       style={{ objectPosition }}
     />
@@ -246,6 +320,10 @@ function StoryMediaGradient({
   overlay: StoryMediaOverlay;
   reverse: boolean;
 }) {
+  if (overlay === "none" || overlay === "light") {
+    return null;
+  }
+
   const direction = reverse ? "to left" : "to right";
 
   if (overlay === "contact") {
@@ -272,26 +350,16 @@ function StoryMediaGradient({
     );
   }
 
-  return (
-    <div
-      aria-hidden
-      className="story-media-panel__gradient pointer-events-none absolute inset-0"
-      style={{
-        background: `linear-gradient(${direction}, hsl(var(--background) / 0.82) 0%, hsl(var(--background) / 0.22) 36%, transparent 100%), linear-gradient(180deg, transparent, hsl(var(--foreground) / 0.18))`,
-      }}
-    />
-  );
+  return null;
 }
 
 function StoryChrome({
   activeIndex,
   onChapterClick,
-  progress,
   tx,
 }: {
   activeIndex: number;
   onChapterClick: (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => void;
-  progress: number;
   tx: (copy: string) => string;
 }) {
   return (
@@ -352,14 +420,14 @@ function StoryChrome({
               {formatChapterNumber(activeIndex + 1)} / {formatChapterNumber(storyChapters.length)}
             </p>
             <div className="h-px w-full bg-foreground/12">
-              <div className="h-px bg-primary transition-[width] duration-150" style={{ width: `${progress * 100}%` }} />
+              <div className="h-px bg-primary transition-[width] duration-150" style={{ width: "var(--story-page-progress, 0%)" }} />
             </div>
           </div>
         </div>
       </aside>
 
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-px bg-foreground/10">
-        <div className="h-px bg-primary transition-[width] duration-150" style={{ width: `${progress * 100}%` }} />
+        <div className="h-px bg-primary transition-[width] duration-150" style={{ width: "var(--story-page-progress, 0%)" }} />
       </div>
     </>
   );
@@ -392,11 +460,11 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
 function StorySceneBody({
   children,
   density = "default",
-  isActive,
+  isRevealed,
 }: {
   children: React.ReactNode;
   density?: "default" | "compact" | "dense";
-  isActive: boolean;
+  isRevealed: boolean;
 }) {
   const copyRef = useRef<HTMLDivElement | null>(null);
 
@@ -412,7 +480,16 @@ function StorySceneBody({
     const column = copy?.parentElement;
     if (!copy || !column) return undefined;
 
+    if (!isRevealed) {
+      copy.style.removeProperty("zoom");
+      copy.style.removeProperty("width");
+      return undefined;
+    }
+
+    let fitFrame: number | null = null;
+
     const fitCopy = () => {
+      fitFrame = null;
       copy.style.removeProperty("zoom");
       copy.style.removeProperty("width");
       const columnAvailable = column.clientHeight;
@@ -432,10 +509,15 @@ function StorySceneBody({
       }
     };
 
-    const scheduleFit = () => window.requestAnimationFrame(fitCopy);
+    const scheduleFit = () => {
+      if (fitFrame !== null) {
+        window.cancelAnimationFrame(fitFrame);
+      }
+      fitFrame = window.requestAnimationFrame(fitCopy);
+    };
+
     const observer = new ResizeObserver(scheduleFit);
 
-    observer.observe(copy);
     observer.observe(column);
     scheduleFit();
     window.addEventListener("resize", scheduleFit);
@@ -443,10 +525,13 @@ function StorySceneBody({
     return () => {
       observer.disconnect();
       window.removeEventListener("resize", scheduleFit);
+      if (fitFrame !== null) {
+        window.cancelAnimationFrame(fitFrame);
+      }
       copy.style.removeProperty("zoom");
       copy.style.removeProperty("width");
     };
-  }, [children, isActive]);
+  }, [children, isRevealed]);
 
   return (
     <div
@@ -455,7 +540,7 @@ function StorySceneBody({
       className="flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center overflow-hidden"
     >
       <StorySceneReveal
-        isActive={isActive}
+        isActive={isRevealed}
         className={`flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center ${densityClass}`}
       >
         {children}
@@ -467,6 +552,7 @@ function StorySceneBody({
 function SceneShell({
   children,
   media,
+  mediaContent,
   mediaCrossfadeKey,
   mediaOverlay = "light",
   priority,
@@ -474,9 +560,11 @@ function SceneShell({
   tone = "light",
   density = "default",
   isActive,
+  isRevealed = isActive,
 }: {
   children: React.ReactNode;
   media?: StoryMedia;
+  mediaContent?: React.ReactNode;
   mediaCrossfadeKey?: string;
   mediaOverlay?: StoryMediaOverlay;
   priority?: boolean;
@@ -484,6 +572,7 @@ function SceneShell({
   tone?: "light" | "dark" | "surface";
   density?: "default" | "compact" | "dense";
   isActive: boolean;
+  isRevealed?: boolean;
 }) {
   const toneClass =
     tone === "dark"
@@ -509,7 +598,7 @@ function SceneShell({
               reverse ? "xl:order-2 xl:col-span-7" : "xl:order-1 xl:col-span-7"
             }`}
           >
-            <StorySceneBody density={density} isActive={isActive}>
+            <StorySceneBody density={density} isRevealed={isRevealed}>
               {children}
             </StorySceneBody>
           </div>
@@ -521,8 +610,14 @@ function SceneShell({
               reverse ? "xl:order-1 xl:col-span-5" : "xl:order-2 xl:col-span-5"
             }`}
           >
-            {media ? (
-              <StoryMediaReveal isActive={isActive} reverse={reverse} className="absolute inset-0">
+            {mediaContent ? (
+              <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
+                <div className="story-media-panel__stage story-media-panel__stage--custom relative h-full w-full overflow-hidden">
+                  {mediaContent}
+                </div>
+              </StoryMediaReveal>
+            ) : media ? (
+              <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
                 <div className="story-media-panel__stage relative h-full w-full overflow-hidden">
                   {mediaCrossfadeKey ? (
                     <StoryCrossfadeMediaPanel
@@ -627,12 +722,101 @@ function StoryDubaiFundRow({ fund, tx }: { fund: DubaiFund; tx: (copy: string) =
   );
 }
 
-function AboutScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
+function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
+  const tiles = [
+    {
+      key: "architecture",
+      src: aixcoLiveImages.aboutArchitecture,
+      alt: tx("Batumi residential architecture and public realm"),
+      className: "story-batumi-mosaic__tile--tall",
+      style: { "--tile-x": "-3rem", "--tile-y": "2.6rem" } as CSSProperties,
+    },
+    {
+      key: "guru",
+      src: aixcoLiveImages.batumiBuyPoster,
+      alt: tx("Batumi city real estate district at sunset"),
+      className: "story-batumi-mosaic__tile--wide",
+      style: { "--tile-x": "3.2rem", "--tile-y": "1.8rem" } as CSSProperties,
+    },
+    {
+      key: "otium",
+      src: aixcoLiveImages.batumiOverviewPoster,
+      alt: tx("Batumi skyline at night"),
+      className: "story-batumi-mosaic__tile--lower",
+      style: { "--tile-x": "-2.2rem", "--tile-y": "-2.4rem" } as CSSProperties,
+    },
+  ] satisfies Array<{
+    key: string;
+    src: string;
+    alt: string;
+    className: string;
+    style: CSSProperties;
+  }>;
+
+  return (
+    <div className="story-batumi-mosaic" aria-label={tx("Batumi project image composition")}>
+      <div className="story-batumi-mosaic__wash" aria-hidden />
+      <div className="story-batumi-mosaic__waves" aria-hidden />
+      {tiles.map((tile) => (
+        <div key={tile.key} className={cn("story-batumi-mosaic__tile", tile.className)} style={tile.style}>
+          <Image
+            src={tile.src}
+            alt={tile.alt}
+            fill
+            sizes="(min-width: 1280px) 36vw, 100vw"
+            quality={95}
+            className="object-cover"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BatumiBenefitIconGrid({
+  benefits,
+  tx,
+}: {
+  benefits: readonly string[];
+  tx: (copy: string) => string;
+}) {
+  const items = [
+    { icon: CirclePercent, metric: "8%+", label: benefits[0] ?? "Rental income scenarios from 8%" },
+    { icon: TrendingUp, metric: "12%", label: benefits[1] ?? "Annual price growth of up to 12%" },
+    { icon: BadgeEuro, metric: "€50k", label: benefits[2] ?? "Property prices starting from €50,000" },
+    { icon: KeyRound, metric: "100%", label: benefits[3] ?? "Full foreign ownership permitted" },
+  ];
+
+  return (
+    <div data-layout="story-batumi-benefits" className="story-batumi-benefit-grid">
+      {items.map(({ icon: Icon, label, metric }) => (
+        <div key={label} className="story-batumi-benefit">
+          <Icon className="story-batumi-benefit__icon" aria-hidden />
+          <div className="min-w-0">
+            <span className="story-batumi-benefit__metric">{metric}</span>
+            <span className="story-batumi-benefit__label">{tx(label)}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AboutScene({
+  isActive,
+  isRevealed,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+}) {
   const { metrics } = useSiteContent();
 
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       media={{
         kind: "video",
         src: aixcoLiveVideos.batumiOverview,
@@ -644,7 +828,9 @@ function AboutScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
       tone="light"
     >
       <p className="eyebrow story-eyebrow">{tx("About AIXCO")}</p>
-      <h2 className="story-h2">{tx("AIXCO - Real Estate Platform")}</h2>
+      <h2 className="story-h2">
+        <StoryTextReveal label={tx("AIXCO - Real Estate Platform")} />
+      </h2>
       <p className="story-body text-foreground/78">
         {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
       </p>
@@ -662,10 +848,19 @@ function AboutScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
   );
 }
 
-function LegacyScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
+function LegacyScene({
+  isActive,
+  isRevealed,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+}) {
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="surface"
       media={{
         kind: "image",
@@ -676,7 +871,9 @@ function LegacyScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
       reverse
     >
       <p className="eyebrow story-eyebrow">{tx("Our journey")}</p>
-      <h2 className="story-h2">{tx("From Switzerland to Dubai to Batumi")}</h2>
+      <h2 className="story-h2">
+        <StoryTextReveal label={tx("From Switzerland to Dubai to Batumi")} />
+      </h2>
       <div data-layout="story-legacy-timeline" className="grid w-full">
         {legacyTimelineChapters.slice(0, 3).map((chapter, index) => (
           <div key={chapter.id} className="border-l-2 border-primary/35 pl-5">
@@ -690,7 +887,15 @@ function LegacyScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
   );
 }
 
-function DubaiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
+function DubaiScene({
+  isActive,
+  isRevealed,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+}) {
   const { dubaiFunds } = useSiteContent();
   const [landingFund, secondFund] = dubaiFunds;
   const media = dubaiVideoMap[landingFund.video as keyof typeof dubaiVideoMap];
@@ -698,6 +903,7 @@ function DubaiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="light"
       media={{
         kind: "video",
@@ -708,7 +914,9 @@ function DubaiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Dubai - Legacy portfolio")}</p>
-      <h2 className="story-h2">{tx("Our history in Dubai")}</h2>
+      <h2 className="story-h2">
+        <StoryTextReveal label={tx("Our history in Dubai")} />
+      </h2>
       <p className="story-body text-foreground/78">
         {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
       </p>
@@ -721,40 +929,35 @@ function DubaiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =>
   );
 }
 
-function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
+function BatumiScene({
+  isActive,
+  isRevealed,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+}) {
   const { batumiBenefits, batumiProperties } = useSiteContent();
   const [firstProperty, secondProperty] = batumiProperties;
-  const media = propertyMediaMap[firstProperty.video as keyof typeof propertyMediaMap];
 
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="surface"
       reverse
-      media={{
-        kind: "video",
-        src: media.src,
-        previewSrc: media.previewSrc,
-        poster: media.poster,
-        title: tx(firstProperty.name),
-        position: "center 42%",
-      }}
+      mediaContent={<BatumiVisualMosaic tx={tx} />}
+      mediaOverlay="none"
     >
       <p className="eyebrow story-eyebrow">{tx("Batumi - Current opportunity")}</p>
-      <h2 className="story-h2">{tx("Batumi")}</h2>
+      <h2 className="story-h2">
+        <StoryTextReveal label={tx("Batumi")} />
+      </h2>
       <p className="story-body text-foreground/78">
         {tx("Opportunity-driven focus in Georgia - buy apartments with transparent euro pricing, strong rental potential, and full foreign ownership.")}
       </p>
-      <div
-        data-layout="story-batumi-benefits"
-        className="grid w-full gap-x-6 gap-y-3 sm:grid-cols-2"
-      >
-        {batumiBenefits.slice(0, 4).map((benefit) => (
-          <div key={benefit} className="font-medium leading-snug text-foreground/80">
-            {tx(benefit)}
-          </div>
-        ))}
-      </div>
+      <BatumiBenefitIconGrid benefits={batumiBenefits} tx={tx} />
       <div data-layout="story-batumi-properties" className="w-full divide-y divide-foreground/30">
         {[firstProperty, secondProperty].filter(Boolean).map((property) => (
           <Link
@@ -777,10 +980,19 @@ function BatumiScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) =
   );
 }
 
-function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
+function MaterialsScene({
+  isActive,
+  isRevealed,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+}) {
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="light"
       media={{
         kind: "image",
@@ -790,7 +1002,9 @@ function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Client materials")}</p>
-      <h2 className="story-h2">{tx("Materials & downloads")}</h2>
+      <h2 className="story-h2">
+        <StoryTextReveal label={tx("Materials & downloads")} />
+      </h2>
       <p className="story-body text-foreground/74">
         {tx("Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.")}
       </p>
@@ -823,7 +1037,17 @@ function MaterialsScene({ isActive, tx }: { isActive: boolean; tx: (copy: string
   );
 }
 
-function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy: string) => string; onRegister: () => void }) {
+function ParticipateScene({
+  isActive,
+  isRevealed,
+  onRegister,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  onRegister: () => void;
+  tx: (copy: string) => string;
+}) {
   const { participationRoutes } = useSiteContent();
   const [primaryRoute, ...remainingRoutes] = participationRoutes;
   const primaryMedia = participationVideoMap[primaryRoute.video as keyof typeof participationVideoMap];
@@ -831,6 +1055,7 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="surface"
       density="compact"
       reverse
@@ -845,7 +1070,7 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
     >
       <p className="eyebrow story-eyebrow">{tx("How to work with AIXCO")}</p>
       <h2 className="story-h2">
-        <span className="text-gold">{tx("How")}</span> {tx("Customers/Partners Work")}
+        <StoryTextReveal label={`${tx("How")} ${tx("Customers/Partners Work")}`} />
       </h2>
       <p className="story-body text-foreground/76">
         {tx("Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
@@ -874,11 +1099,13 @@ function ParticipateScene({ isActive, tx, onRegister }: { isActive: boolean; tx:
 
 function HowScene({
   isActive,
+  isRevealed,
   onJourney,
   onRegister,
   tx,
 }: {
   isActive: boolean;
+  isRevealed: boolean;
   onJourney: (journey: ReturnType<typeof useSiteContent>["journeys"][number]) => void;
   onRegister: () => void;
   tx: (copy: string) => string;
@@ -888,6 +1115,7 @@ function HowScene({
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="light"
       media={{
         kind: "image",
@@ -897,7 +1125,9 @@ function HowScene({
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Journeys")}</p>
-      <h2 className="story-h2">{tx("How AIXCO Works")}</h2>
+      <h2 className="story-h2">
+        <StoryTextReveal label={tx("How AIXCO Works")} />
+      </h2>
       <p className="story-body text-foreground/76">
         {tx("Choose the journey that fits your role. The process is structured, transparent, and digitally managed.")}
       </p>
@@ -918,7 +1148,15 @@ function HowScene({
   );
 }
 
-function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
+function TeamScene({
+  isActive,
+  isRevealed,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+}) {
   const { team } = useSiteContent();
   const { activeIndex, selectMember, pauseRotation, resumeRotation } = useTeamMemberRotation({
     memberCount: team.length,
@@ -929,6 +1167,7 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="surface"
       density="compact"
       media={{
@@ -936,12 +1175,16 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
         src: teamImageMap[activeMember.image as keyof typeof teamImageMap],
         alt: tx(activeMember.name),
         position: "center top",
+        sizes: "(min-width: 1280px) 70vw, 100vw",
       }}
       mediaCrossfadeKey={activeMember.image}
+      mediaOverlay="none"
       reverse
     >
       <p className="eyebrow story-eyebrow">{tx("Team")}</p>
-      <h2 className="story-h2">{tx("AIXCO leadership")}</h2>
+      <h2 className="story-h2">
+        <StoryTextReveal label={tx("AIXCO leadership")} />
+      </h2>
       <div
         data-layout="story-team-list"
         className="w-full divide-y divide-foreground/30"
@@ -995,52 +1238,125 @@ function TeamScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => 
   );
 }
 
-function PartnersScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
+type StoryPartner = SiteContent["partners"][number];
+
+function StoryPartnerRow({
+  label,
+  partners,
+  tx,
+  onPartnerClick,
+}: {
+  label: string;
+  partners: StoryPartner[];
+  tx: (copy: string) => string;
+  onPartnerClick: (partner: StoryPartner) => void;
+}) {
+  if (!partners.length) return null;
+
+  return (
+    <div className="story-partner-row">
+      <p className="story-partner-row__label">{tx(label)}</p>
+      <div
+        className="story-partners-grid"
+        role="list"
+        aria-label={tx(label)}
+        style={{ "--story-partner-count": partners.length } as CSSProperties}
+      >
+        {partners.map((partner) => {
+          const logo = aixcoLiveLogos[partner.logo as keyof typeof aixcoLiveLogos];
+
+          return (
+            <button
+              key={partner.name}
+              type="button"
+              role="listitem"
+              className="story-partner-card"
+              onClick={() => onPartnerClick(partner)}
+            >
+              <span className="story-partner-card__logo-stage">
+                {logo ? (
+                  <Image
+                    src={logo}
+                    alt=""
+                    aria-hidden
+                    width={190}
+                    height={84}
+                    sizes="(min-width: 1280px) 9rem, 7rem"
+                    className="story-partner-card__logo"
+                  />
+                ) : (
+                  <Building2 className="h-7 w-7 text-primary-glow" aria-hidden />
+                )}
+              </span>
+              <span className="story-partner-card__name">{tx(partner.name)}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PartnersScene({
+  isActive,
+  isRevealed,
+  tx,
+  onPartnerClick,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+  onPartnerClick: (partner: StoryPartner) => void;
+}) {
   const { partners } = useSiteContent();
-  const featuredPartners = partners.slice(0, 8);
+  const groupCompanies = partners.filter((partner) => partner.group === "Group companies");
+  const strategicPartners = partners.filter((partner) => partner.group === "Strategic partners");
 
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="light"
+      density="compact"
       media={{ kind: "image", src: aixcoLiveImages.dubaiHealthcare, alt: tx("Dubai Healthcare City legacy reference"), position: "center" }}
     >
       <p className="eyebrow story-eyebrow">{tx("Partners")}</p>
-      <h2 className="story-h2">{tx("Group companies and strategic partners")}</h2>
-      <div data-layout="story-partners-grid" className="grid w-full grid-cols-2">
-        {featuredPartners.map((partner) => {
-          const logo = aixcoLiveLogos[partner.logo as keyof typeof aixcoLiveLogos];
-
-          return (
-            <div key={partner.name} className="flex min-h-[4.75rem] flex-col justify-between">
-              {logo ? (
-                <Image src={logo} alt={tx(partner.name)} width={160} height={72} className="h-10 w-auto max-w-full object-contain object-left" />
-              ) : (
-                <Building2 className="h-7 w-7 text-primary" aria-hidden />
-              )}
-              <p className="story-card-title mt-2">{tx(partner.name)}</p>
-            </div>
-          );
-        })}
+      <h2 className="story-h2">
+        <StoryTextReveal label={tx("Group companies and strategic partners")} />
+      </h2>
+      <div data-layout="story-partners-grid" className="story-partners-section">
+        <StoryPartnerRow label="Group companies" partners={groupCompanies} tx={tx} onPartnerClick={onPartnerClick} />
+        <StoryPartnerRow label="Strategic partners" partners={strategicPartners} tx={tx} onPartnerClick={onPartnerClick} />
       </div>
     </SceneShell>
   );
 }
 
-function FaqScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => string }) {
+function FaqScene({
+  isActive,
+  isRevealed,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+}) {
   const { faqGroups } = useSiteContent();
   const highlightedFaqs = faqGroups.flatMap((group) => group.items.slice(0, 2).map((item) => ({ ...item, group: group.group }))).slice(0, 4);
 
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="surface"
       density="compact"
       reverse
       media={{ kind: "image", src: aixcoLiveImages.batumiGuru, alt: tx("Guru Batumi project reference"), position: "center" }}
     >
       <p className="eyebrow story-eyebrow">{tx("FAQs")}</p>
-      <h2 className="story-h2">{tx("Frequently asked questions")}</h2>
+      <h2 className="story-h2">
+        <StoryTextReveal label={tx("Frequently asked questions")} />
+      </h2>
       <div data-layout="story-faq-list" className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
         {highlightedFaqs.map((item) => (
           <div key={`${item.group}-${item.q}`}>
@@ -1056,11 +1372,13 @@ function FaqScene({ isActive, tx }: { isActive: boolean; tx: (copy: string) => s
 
 function ContactScene({
   isActive,
+  isRevealed,
   onLogin,
   onRegister,
   tx,
 }: {
   isActive: boolean;
+  isRevealed: boolean;
   onLogin: () => void;
   onRegister: () => void;
   tx: (copy: string) => string;
@@ -1068,6 +1386,7 @@ function ContactScene({
   return (
     <SceneShell
       isActive={isActive}
+      isRevealed={isRevealed}
       tone="dark"
       media={{
         kind: "image",
@@ -1078,7 +1397,9 @@ function ContactScene({
       mediaOverlay="contact"
     >
       <p className="eyebrow story-eyebrow text-primary-glow">{tx("Contact")}</p>
-      <h2 className="story-h2 text-white">{tx("Start with AIXCO")}</h2>
+      <h2 className="story-h2 text-white">
+        <StoryTextReveal label={tx("Start with AIXCO")} />
+      </h2>
       <p className="story-body text-white/76">
         {tx("Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.")}
       </p>
@@ -1113,9 +1434,11 @@ export function DesktopStoryHome() {
   const storyRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<Array<HTMLElement | null>>([]);
   const scrollFrameRef = useRef<number | null>(null);
+  const pageProgressRef = useRef(-1);
+  const textRevealProgressRef = useRef<number[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const { openJourney, openLogin, openRegister } = useUI();
+  const [sectionPresence, setSectionPresence] = useState<boolean[]>(() => storyChapters.map((_, index) => index === 0));
+  const { openJourney, openLogin, openPartner, openRegister } = useUI();
   const { tx } = useI18n();
 
   useLayoutEffect(() => {
@@ -1150,42 +1473,69 @@ export function DesktopStoryHome() {
 
   const syncProgress = useCallback(() => {
     scrollFrameRef.current = null;
+    const viewportHeight = Math.max(1, window.innerHeight);
+    const scrollY = window.scrollY;
     const documentHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
-    const scrollableDistance = Math.max(1, documentHeight - window.innerHeight);
-    const nextProgress = clamp(window.scrollY / scrollableDistance, 0, 1);
-    setProgress(nextProgress);
-  }, []);
+    const scrollableDistance = Math.max(1, documentHeight - viewportHeight);
+    const nextProgress = clamp(scrollY / scrollableDistance, 0, 1);
+    if (
+      Math.abs(nextProgress - pageProgressRef.current) >= 0.002 ||
+      nextProgress === 0 ||
+      nextProgress === 1
+    ) {
+      pageProgressRef.current = nextProgress;
+      storyRef.current?.style.setProperty("--story-page-progress", `${(nextProgress * 100).toFixed(2)}%`);
+    }
 
-  const syncActiveChapter = useCallback(() => {
-    const viewportCenter = window.innerHeight / 2;
-    let nextActiveIndex = 0;
-    let closestDistance = Number.POSITIVE_INFINITY;
+    const nextActiveIndex = clamp(Math.round(scrollY / viewportHeight), 0, storyChapters.length - 1);
+    const nearbyStart = Math.max(0, nextActiveIndex - 1);
+    const nearbyEnd = Math.min(storyChapters.length - 1, nextActiveIndex + 1);
+    const revealDistance = Math.max(1, viewportHeight * 0.95);
+    const nextSectionPresence = storyChapters.map(() => false);
 
-    sectionRefs.current.forEach((section, index) => {
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
-      const distance = Math.abs(rect.top + rect.height / 2 - viewportCenter);
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        nextActiveIndex = index;
+    for (let index = nearbyStart; index <= nearbyEnd; index += 1) {
+      const section = sectionRefs.current[index];
+      if (!section) continue;
+
+      const top = (index * viewportHeight) - scrollY;
+      const bottom = top + viewportHeight;
+      const localProgress = (viewportHeight - top) / revealDistance;
+      const textProgress = clamp(localProgress, 0, 1);
+      const previousProgress = textRevealProgressRef.current[index] ?? -1;
+      if (
+        Math.abs(textProgress - previousProgress) >= 0.006 ||
+        textProgress === 0 ||
+        textProgress === 1
+      ) {
+        textRevealProgressRef.current[index] = textProgress;
+        section.style.setProperty("--story-text-reveal-progress", textProgress.toFixed(3));
       }
-    });
+
+      nextSectionPresence[index] = top < viewportHeight * 0.98 && bottom > viewportHeight * 0.02;
+    }
 
     setActiveIndex((current) => (current === nextActiveIndex ? current : nextActiveIndex));
+
+    setSectionPresence((current) => {
+      if (
+        current.length === nextSectionPresence.length &&
+        current.every((value, index) => value === nextSectionPresence[index])
+      ) {
+        return current;
+      }
+
+      return nextSectionPresence;
+    });
   }, []);
 
   const requestScrollSync = useCallback(() => {
     if (scrollFrameRef.current !== null) return;
-    scrollFrameRef.current = window.requestAnimationFrame(() => {
-      syncProgress();
-      syncActiveChapter();
-    });
-  }, [syncActiveChapter, syncProgress]);
+    scrollFrameRef.current = window.requestAnimationFrame(syncProgress);
+  }, [syncProgress]);
 
   useEffect(() => {
     document.documentElement.dataset.homeExperience = "story";
     syncProgress();
-    syncActiveChapter();
 
     window.addEventListener("scroll", requestScrollSync, { passive: true });
     window.addEventListener("resize", requestScrollSync);
@@ -1198,32 +1548,7 @@ export function DesktopStoryHome() {
         window.cancelAnimationFrame(scrollFrameRef.current);
       }
     };
-  }, [requestScrollSync, syncActiveChapter, syncProgress]);
-
-  useLayoutEffect(() => {
-    const sections = sectionRefs.current.filter((section): section is HTMLElement => Boolean(section));
-    if (!sections.length || typeof window.IntersectionObserver !== "function") return undefined;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const intersecting = entries.filter((entry) => entry.isIntersecting);
-        if (!intersecting.length) return;
-
-        const best = intersecting.reduce((winner, entry) =>
-          entry.intersectionRatio > winner.intersectionRatio ? entry : winner,
-        );
-        const index = sections.indexOf(best.target as HTMLElement);
-        if (index >= 0) {
-          setActiveIndex((current) => (current === index ? current : index));
-        }
-      },
-      { root: null, rootMargin: "-42% 0px -42% 0px", threshold: [0, 0.15, 0.35, 0.55, 0.75, 1] },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    return () => observer.disconnect();
-  }, []);
+  }, [requestScrollSync, syncProgress]);
 
   useEffect(() => {
     if (!window.location.hash) return undefined;
@@ -1263,27 +1588,31 @@ export function DesktopStoryHome() {
   );
 
   const scenes = useMemo(
-    () => [
+    () => {
+      const isRevealed = (index: number) => Boolean(sectionPresence[index] ?? index === 0);
+
+      return [
       <HeroScene key="hero" isActive={activeIndex === 0} tx={tx} onRegister={openRegister} />,
-      <AboutScene key="about" isActive={activeIndex === 1} tx={tx} />,
-      <LegacyScene key="legacy" isActive={activeIndex === 2} tx={tx} />,
-      <DubaiScene key="dubai" isActive={activeIndex === 3} tx={tx} />,
-      <BatumiScene key="batumi" isActive={activeIndex === 4} tx={tx} />,
-      <MaterialsScene key="materials" isActive={activeIndex === 5} tx={tx} />,
-      <ParticipateScene key="participate" isActive={activeIndex === 6} tx={tx} onRegister={openRegister} />,
-      <HowScene key="how" isActive={activeIndex === 7} tx={tx} onJourney={openJourney} onRegister={openRegister} />,
-      <TeamScene key="team" isActive={activeIndex === 8} tx={tx} />,
-      <PartnersScene key="partners" isActive={activeIndex === 9} tx={tx} />,
-      <FaqScene key="faqs" isActive={activeIndex === 10} tx={tx} />,
-      <ContactScene key="contact" isActive={activeIndex === 11} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
-    ],
-    [activeIndex, openJourney, openLogin, openRegister, tx],
+      <AboutScene key="about" isActive={activeIndex === 1} isRevealed={isRevealed(1)} tx={tx} />,
+      <LegacyScene key="legacy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
+      <DubaiScene key="dubai" isActive={activeIndex === 3} isRevealed={isRevealed(3)} tx={tx} />,
+      <BatumiScene key="batumi" isActive={activeIndex === 4} isRevealed={isRevealed(4)} tx={tx} />,
+      <MaterialsScene key="materials" isActive={activeIndex === 5} isRevealed={isRevealed(5)} tx={tx} />,
+      <ParticipateScene key="participate" isActive={activeIndex === 6} isRevealed={isRevealed(6)} tx={tx} onRegister={openRegister} />,
+      <HowScene key="how" isActive={activeIndex === 7} isRevealed={isRevealed(7)} tx={tx} onJourney={openJourney} onRegister={openRegister} />,
+      <TeamScene key="team" isActive={activeIndex === 8} isRevealed={isRevealed(8)} tx={tx} />,
+      <PartnersScene key="partners" isActive={activeIndex === 9} isRevealed={isRevealed(9)} tx={tx} onPartnerClick={openPartner} />,
+      <FaqScene key="faqs" isActive={activeIndex === 10} isRevealed={isRevealed(10)} tx={tx} />,
+      <ContactScene key="contact" isActive={activeIndex === 11} isRevealed={isRevealed(11)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
+      ];
+    },
+    [activeIndex, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
   );
 
   return (
-    <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background">
+    <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress": "0%" } as CSSProperties}>
       <FixedHeroBackdrop visible={activeIndex === 0} />
-      <StoryChrome activeIndex={activeIndex} progress={progress} tx={tx} onChapterClick={handleChapterClick} />
+      <StoryChrome activeIndex={activeIndex} tx={tx} onChapterClick={handleChapterClick} />
       <div className="relative z-10">
         {scenes.map((scene, index) => {
           const chapter = storyChapters[index];
@@ -1298,7 +1627,7 @@ export function DesktopStoryHome() {
               id={chapter.id}
               data-story-section={chapter.key}
               data-story-active={isActive ? "true" : "false"}
-              className="isolate h-[100svh] max-h-[100svh] scroll-mt-0 overflow-hidden"
+              className="isolate relative h-[100svh] max-h-[100svh] scroll-mt-0 overflow-hidden"
             >
               {scene}
             </section>

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import "lenis/dist/lenis.css";
 import "@/index.css";
 import { ClientShell } from "./client-shell";
 import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
