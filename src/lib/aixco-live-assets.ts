@@ -18,13 +18,21 @@ const healthcareGalleryVersion = "healthcare-gallery-20260506";
 const versionHealthcareImage = (src: string) => `${src}?v=${healthcareGalleryVersion}`;
 
 export const aixcoLiveImages = {
+  batumi: `${optimizedImageBase}/batumi.webp`,
   aboutArchitecture: `${optimizedImageBase}/batumip.webp`,
-  contact: `${optimizedImageBase}/trans.webp`,
+  contact: `${batumiGalleryBase}/herovideo-poster.webp`,
   dubaiEdenHouse: `${liveImageBase}/fund/fund1.jpeg`,
+  dubaiEdenHouseRendering: `${liveImageBase}/fund1.png`,
   dubaiHealthcare: `${optimizedImageBase}/fund2.webp`,
+  dubaiHealthcareMap: `${optimizedImageBase}/dubai-map-fund-2.webp`,
   transactionBackdrop: `${optimizedImageBase}/trans.webp`,
+  batumiPortPoster: `${batumiGalleryBase}/batumi-short-poster.webp`,
   batumiOverviewPoster: `${batumiGalleryBase}/batumi2-poster.webp`,
   batumiBuyPoster: `${batumiGalleryBase}/batumi1-poster.webp`,
+  batumiSeafrontPoster: `${batumiGalleryBase}/batumi3-poster.webp`,
+  batumiUrbanPoster: `${batumiGalleryBase}/batumi4-poster.webp`,
+  batumiFogPoster: `${batumiGalleryBase}/batumi5-poster.webp`,
+  batumiNightRoadPoster: `${batumiGalleryBase}/herovideo-poster.webp`,
   batumiGuru: `${optimizedImageBase}/guru.webp`,
   batumiOtium: `${optimizedImageBase}/otium-reverance.webp`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,

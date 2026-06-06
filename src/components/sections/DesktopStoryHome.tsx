@@ -19,7 +19,6 @@ import {
   Users,
 } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from "react";
-import { CountUpText } from "@/components/CountUpText";
 import { LiveVideo } from "@/components/LiveVideo";
 import { useUI } from "@/components/ui-state";
 import { legacyTimelineChapters } from "@/data/legacy-timeline";
@@ -29,7 +28,6 @@ import type { SiteContent } from "@/lib/backend/site-content";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
   aixcoHeroBackgroundVideo,
-  aixcoLiveAssetDetails,
   aixcoLiveImages,
   aixcoLiveLogos,
   aixcoLiveVideoPreviews,
@@ -56,6 +54,8 @@ import { heroIntroText, heroOpportunityFootnote, heroOpportunityText } from "./h
 type StoryChapterKey =
   | "hero"
   | "about"
+  | "aboutObjectives"
+  | "aboutAccess"
   | "legacy"
   | "dubai"
   | "batumi"
@@ -96,6 +96,8 @@ type StoryMediaOverlay = "light" | "dark" | "contact" | "none";
 const storyChapters: StoryChapter[] = [
   { key: "hero", label: "AIXCO" },
   { key: "about", id: "about", label: "About" },
+  { key: "aboutObjectives", id: "about-objectives", label: "Objectives" },
+  { key: "aboutAccess", id: "about-access", label: "Access" },
   { key: "legacy", id: "legacy", label: "Legacy" },
   { key: "dubai", id: "dubai", label: "Dubai" },
   { key: "batumi", id: "batumi", label: "Batumi" },
@@ -739,22 +741,22 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
   const tiles = [
     {
       key: "architecture",
-      src: aixcoLiveImages.aboutArchitecture,
-      alt: tx("Batumi residential architecture and public realm"),
+      src: aixcoLiveImages.batumiUrbanPoster,
+      alt: tx("Batumi urban development district"),
       className: "story-batumi-mosaic__tile--tall",
       style: { "--tile-x": "-3rem", "--tile-y": "2.6rem" } as CSSProperties,
     },
     {
       key: "guru",
-      src: aixcoLiveImages.batumiBuyPoster,
-      alt: tx("Batumi city real estate district at sunset"),
+      src: aixcoLiveImages.batumiFogPoster,
+      alt: tx("Batumi towers rising above coastal fog"),
       className: "story-batumi-mosaic__tile--wide",
       style: { "--tile-x": "3.2rem", "--tile-y": "1.8rem" } as CSSProperties,
     },
     {
       key: "otium",
-      src: aixcoLiveImages.batumiOverviewPoster,
-      alt: tx("Batumi skyline at night"),
+      src: aixcoLiveImages.batumiPortPoster,
+      alt: tx("Batumi port and city coastline"),
       className: "story-batumi-mosaic__tile--lower",
       style: { "--tile-x": "-2.2rem", "--tile-y": "-2.4rem" } as CSSProperties,
     },
@@ -824,40 +826,186 @@ function AboutScene({
   isRevealed: boolean;
   tx: (copy: string) => string;
 }) {
-  const { metrics } = useSiteContent();
+  const metrics = [
+    { value: "5,000+", label: "Trusted clients" },
+    { value: "$400M", label: "Gross Development Value (GDV)" },
+    { value: "500+", label: "Total transactions" },
+    { value: "2009", label: "In business since" },
+  ];
 
   return (
-    <SceneShell
-      isActive={isActive}
-      isRevealed={isRevealed}
-      media={{
-        kind: "video",
-        src: aixcoLiveVideos.batumiOverview,
-        previewSrc: aixcoLiveVideoPreviews.batumiOverview,
-        poster: aixcoLiveImages.batumiOverviewPoster,
-        title: tx("Batumi skyline and landmark towers"),
-        position: "55% center",
-      }}
-      tone="light"
-    >
-      <p className="eyebrow story-eyebrow">{tx("About AIXCO")}</p>
-      <h2 className="story-h2">
-        <StoryTextReveal label={tx("AIXCO - Real Estate Platform")} />
-      </h2>
-      <p className="story-body text-foreground/78">
-        {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
-      </p>
-      <dl data-layout="story-about-metrics" className="grid w-full grid-cols-2">
-        {metrics.slice(0, 4).map((metric) => (
-          <div key={metric.label}>
-            <dt className="story-metric-value">
-              <CountUpText value={metric.value} />
-            </dt>
-            <dd className="story-metric-label">{tx(metric.label)}</dd>
+    <div className="story-about-cinematic-stage relative h-full min-h-0 bg-[#11100e] text-white">
+      <div className="grid h-full min-h-0" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
+        <div aria-hidden className="hidden xl:block" />
+        <div className="relative h-full min-h-0 overflow-hidden">
+          <StoryMediaReveal isActive={isRevealed} className="story-about-cinematic-media absolute inset-0">
+            <div className="story-about-cinematic-image relative h-full w-full">
+              <Image
+                src={aixcoLiveImages.batumi}
+                alt={tx("Batumi skyline at sunset")}
+                fill
+                loading="lazy"
+                decoding="async"
+                quality={95}
+                sizes="(min-width: 1280px) calc(100vw - 14rem), 100vw"
+                className="h-full w-full object-cover"
+                style={{ objectPosition: "center 42%" }}
+              />
+            </div>
+          </StoryMediaReveal>
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.32),transparent_34%),linear-gradient(90deg,rgba(17,16,14,0.48),rgba(17,16,14,0.10)_46%,rgba(17,16,14,0.70)),linear-gradient(180deg,rgba(17,16,14,0.04),rgba(17,16,14,0.78))]"
+          />
+          <StorySceneReveal
+            isActive={isRevealed}
+            className="story-about-cinematic-copy relative z-10 flex h-full min-h-0 flex-col justify-end px-[clamp(2rem,5vw,5.5rem)] pb-[clamp(2.8rem,7svh,5.6rem)] pt-[clamp(4rem,8svh,6rem)]"
+          >
+            <div data-layout="story-about-cinematic" className="max-w-[52rem]">
+              <p className="mb-5 flex items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-white/78">
+                <span className="h-px w-8 bg-white/58" aria-hidden />
+                {tx("About AIXCO")}
+              </p>
+              <h2 className="max-w-[10ch] text-[clamp(3.2rem,6.8vw,7.6rem)] font-semibold leading-[0.9] tracking-normal text-white drop-shadow-[0_18px_48px_rgba(0,0,0,0.36)]">
+                <StoryTextReveal label={tx("AIXCO - Real Estate Platform")} />
+              </h2>
+              <p className="mt-[clamp(1.2rem,2.4svh,2rem)] max-w-[46rem] text-[clamp(1.05rem,1.28vw,1.34rem)] leading-[1.62] text-white/88">
+                {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
+              </p>
+            </div>
+            <dl className="mt-[clamp(1.7rem,3.4svh,2.6rem)] grid max-w-[48rem] grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
+              {metrics.slice(0, 4).map((metric) => (
+                <div key={metric.label} className="border-l border-white/28 pl-4">
+                  <dt className="text-[clamp(1.55rem,2.45vw,2.7rem)] font-light leading-none text-primary-glow">
+                    {metric.value}
+                  </dt>
+                  <dd className="mt-2 text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-white/70">
+                    {tx(metric.label)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </StorySceneReveal>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AboutObjectivesScene({
+  isActive,
+  isRevealed,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+}) {
+  return (
+    <div className="relative h-full min-h-0 bg-surface text-foreground">
+      <div className="grid h-full min-h-0" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
+        <div aria-hidden className="hidden xl:block" />
+        <div className="relative flex h-full min-h-0 items-center justify-center overflow-hidden px-[clamp(2rem,6vw,7rem)] py-[clamp(3rem,8svh,6rem)]">
+          <div aria-hidden className="absolute inset-x-0 bottom-0 h-[26svh] overflow-hidden opacity-70">
+            <Image
+              src={aixcoLiveImages.aboutArchitecture}
+              alt=""
+              fill
+              loading="lazy"
+              decoding="async"
+              quality={95}
+              sizes="(min-width: 1280px) calc(100vw - 14rem), 100vw"
+              className="h-full w-full object-cover"
+              style={{ objectPosition: "center 64%" }}
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--surface))_0%,hsl(var(--surface)/0.72)_42%,hsl(var(--surface)/0.22)_100%)]" />
           </div>
-        ))}
-      </dl>
-    </SceneShell>
+          <StorySceneReveal isActive={isRevealed} className="relative z-10 mx-auto w-full max-w-[70rem] text-center">
+            <p className="eyebrow story-eyebrow justify-center text-primary/80">{tx("Client objectives")}</p>
+            <h2 className="mx-auto mt-6 max-w-[20ch] text-[clamp(2.2rem,4.3vw,5.2rem)] font-light leading-[1.15] tracking-normal text-foreground/72">
+              <StoryTextReveal label={tx("Every client starts with a different objective")} />
+            </h2>
+            <div data-layout="story-about-objectives" className="mx-auto mt-[clamp(1.6rem,3.2svh,2.4rem)] grid max-w-[54rem] gap-4">
+              <p className="text-[clamp(1.02rem,1.18vw,1.28rem)] leading-[1.7] text-foreground/70">
+                {tx("Some are looking to build long-term wealth through real estate ownership. Others want recurring income, international diversification, or simply a way to participate in a market they believe has strong future potential.")}
+              </p>
+              <p className="text-[clamp(1rem,1.08vw,1.18rem)] leading-[1.68] text-foreground/62">
+                {tx("Rather than offering a one-size-fits-all solution, we begin by understanding what matters most to you.")}
+              </p>
+            </div>
+          </StorySceneReveal>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AboutAccessScene({
+  isActive,
+  isRevealed,
+  tx,
+}: {
+  isActive: boolean;
+  isRevealed: boolean;
+  tx: (copy: string) => string;
+}) {
+  return (
+    <div className="relative h-full min-h-0 bg-[#11100e] text-white">
+      <div className="grid h-full min-h-0" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
+        <div aria-hidden className="hidden xl:block" />
+        <div className="relative h-full min-h-0 overflow-hidden">
+          <StoryMediaReveal isActive={isRevealed} className="story-about-access-media absolute inset-0">
+            <div className="story-about-access-image relative h-full w-full">
+              <Image
+                src={aixcoLiveImages.batumiSeafrontPoster}
+                alt={tx("Selected Batumi property opportunity")}
+                fill
+                loading="lazy"
+                decoding="async"
+                quality={95}
+                sizes="(min-width: 1280px) calc(100vw - 14rem), 100vw"
+                className="h-full w-full object-cover"
+                style={{ objectPosition: "center 45%" }}
+              />
+            </div>
+          </StoryMediaReveal>
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[radial-gradient(circle_at_68%_36%,rgba(255,255,255,0.26),transparent_28%),linear-gradient(90deg,rgba(17,16,14,0.68),rgba(17,16,14,0.18)_48%,rgba(17,16,14,0.30)),linear-gradient(180deg,rgba(17,16,14,0.08),rgba(17,16,14,0.76))]"
+          />
+          <StorySceneReveal
+            isActive={isRevealed}
+            className="relative z-10 flex h-full min-h-0 flex-col justify-end px-[clamp(2rem,5.4vw,6rem)] pb-[clamp(3rem,7.2svh,5.5rem)] pt-[clamp(4rem,8svh,6rem)]"
+          >
+            <p className="eyebrow story-eyebrow text-white/78">{tx("Client approach")}</p>
+            <div data-layout="story-about-access" className="grid max-w-[72rem] gap-[clamp(1rem,2.6svh,2rem)] lg:grid-cols-[minmax(0,0.92fr)_minmax(26rem,0.75fr)] lg:items-end">
+              <div>
+                <p className="text-[clamp(4.6rem,10vw,11rem)] font-light leading-none tracking-normal text-white drop-shadow-[0_18px_44px_rgba(0,0,0,0.42)]">
+                  2009
+                </p>
+                <p className="mt-3 max-w-[23rem] text-[clamp(1.1rem,1.35vw,1.45rem)] leading-snug text-white/82">
+                  {tx("in business, supporting clients across property ownership, brokerage, and administration.")}
+                </p>
+              </div>
+              <div className="max-w-[34rem]">
+                <h2 className="text-[clamp(2.1rem,3.6vw,4.3rem)] font-semibold leading-[0.98] tracking-normal text-white">
+                  <StoryTextReveal label={tx("Ownership or flexible participation")} />
+                </h2>
+                <p className="mt-5 text-[clamp(1rem,1.12vw,1.18rem)] leading-[1.65] text-white/80">
+                  {tx("For many clients, this leads to direct ownership of carefully selected properties in emerging, profitable, sustainable markets.")}
+                </p>
+                <p className="mt-4 text-[clamp(0.98rem,1.05vw,1.1rem)] leading-[1.65] text-white/72">
+                  {tx("For others, AIXCO offers an alternative participation program for clients who would like exposure to the market without the commitments that come with owning and managing property themselves.")}
+                </p>
+                <p className="mt-4 text-[clamp(0.98rem,1.05vw,1.1rem)] leading-[1.65] text-white/72">
+                  {tx("Our commitment remains the same: transparent guidance, long-term support, and access to opportunities that align with your personal goals.")}
+                </p>
+              </div>
+            </div>
+          </StorySceneReveal>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -877,9 +1025,9 @@ function LegacyScene({
       tone="surface"
       media={{
         kind: "image",
-        src: aixcoLiveImages.transactionBackdrop,
-        alt: tx("AIXCO transaction backdrop"),
-        position: "42% center",
+        src: aixcoLiveImages.dubaiEdenHouseRendering,
+        alt: tx("Dubai waterfront residential real estate development"),
+        position: "center 56%",
       }}
       reverse
     >
@@ -1010,9 +1158,9 @@ function MaterialsScene({
       tone="light"
       media={{
         kind: "image",
-        src: aixcoLiveAssetDetails.otiumCatalog,
-        alt: tx("Otium Batumi project reference"),
-        position: "center 35%",
+        src: aixcoLiveImages.batumiOverviewPoster,
+        alt: tx("Batumi skyline at night"),
+        position: "50% center",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Client materials")}</p>
@@ -1133,9 +1281,9 @@ function HowScene({
       tone="light"
       media={{
         kind: "image",
-        src: aixcoLiveImages.aboutArchitecture,
-        alt: tx("AIXCO contact and office reference"),
-        position: "62% center",
+        src: aixcoLiveImages.batumiFogPoster,
+        alt: tx("Batumi skyline above coastal fog"),
+        position: "center 44%",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Journeys")}</p>
@@ -1385,9 +1533,9 @@ function ContactScene({
       density="compact"
       media={{
         kind: "image",
-        src: aixcoLiveImages.contact,
-        alt: tx("AIXCO contact office reference"),
-        position: "50% 32%",
+        src: aixcoLiveImages.transactionBackdrop,
+        alt: tx("AIXCO contact architecture reference"),
+        position: "50% 42%",
       }}
       mediaOverlay="none"
     >
@@ -1506,18 +1654,50 @@ export function DesktopStoryHome() {
       storyRef.current?.style.setProperty("--story-page-progress", `${(nextProgress * 100).toFixed(2)}%`);
     }
 
-    const nextActiveIndex = clamp(Math.round(scrollY / viewportHeight), 0, storyChapters.length - 1);
-    const nearbyStart = Math.max(0, nextActiveIndex - 1);
-    const nearbyEnd = Math.min(storyChapters.length - 1, nextActiveIndex + 1);
     const revealDistance = Math.max(1, viewportHeight * 0.95);
     const nextSectionPresence = storyChapters.map(() => false);
+    const viewportCenter = viewportHeight * 0.5;
+    let nextActiveIndex = 0;
+    let closestSectionDistance = Number.POSITIVE_INFINITY;
+
+    for (let index = 0; index < storyChapters.length; index += 1) {
+      const section = sectionRefs.current[index];
+      if (!section) continue;
+
+      const rect = section.getBoundingClientRect();
+      const top = rect.top;
+      const bottom = rect.bottom;
+      const sectionHeight = Math.max(1, rect.height);
+      const sectionCenter = top + (sectionHeight * 0.5);
+      const sectionDistance = Math.abs(sectionCenter - viewportCenter);
+      if (top <= viewportCenter && bottom >= viewportCenter) {
+        nextActiveIndex = index;
+        closestSectionDistance = 0;
+      } else if (closestSectionDistance > 0 && sectionDistance < closestSectionDistance) {
+        nextActiveIndex = index;
+        closestSectionDistance = sectionDistance;
+      }
+    }
+
+    const nearbyStart = Math.max(0, nextActiveIndex - 1);
+    const nearbyEnd = Math.min(storyChapters.length - 1, nextActiveIndex + 1);
 
     for (let index = nearbyStart; index <= nearbyEnd; index += 1) {
       const section = sectionRefs.current[index];
       if (!section) continue;
 
-      const top = (index * viewportHeight) - scrollY;
-      const bottom = top + viewportHeight;
+      const rect = section.getBoundingClientRect();
+      const top = rect.top;
+      const bottom = rect.bottom;
+      const sectionHeight = Math.max(1, rect.height);
+      const isAboutSection = storyChapters[index]?.key === "about";
+      const isAboutAccessSection = storyChapters[index]?.key === "aboutAccess";
+      const exitRange = isAboutSection
+        ? viewportHeight
+        : sectionHeight > viewportHeight
+          ? sectionHeight - viewportHeight
+          : viewportHeight;
+      const exitProgress = clamp(-top / Math.max(1, exitRange), 0, 1);
       const localProgress = (viewportHeight - top) / revealDistance;
       const textProgress = clamp(localProgress, 0, 1);
       const previousProgress = textRevealProgressRef.current[index] ?? -1;
@@ -1528,6 +1708,13 @@ export function DesktopStoryHome() {
       ) {
         textRevealProgressRef.current[index] = textProgress;
         section.style.setProperty("--story-text-reveal-progress", textProgress.toFixed(3));
+      }
+      if (isAboutSection) {
+        section.style.setProperty("--story-section-exit-progress", exitProgress.toFixed(3));
+      }
+      if (isAboutAccessSection) {
+        section.style.setProperty("--story-section-exit-progress", exitProgress.toFixed(3));
+        section.style.setProperty("--story-about-access-zoom-progress", clamp(exitProgress * 2, 0, 1).toFixed(3));
       }
 
       nextSectionPresence[index] = top < viewportHeight * 0.98 && bottom > viewportHeight * 0.02;
@@ -1611,16 +1798,18 @@ export function DesktopStoryHome() {
       return [
       <HeroScene key="hero" isActive={activeIndex === 0} tx={tx} onRegister={openRegister} />,
       <AboutScene key="about" isActive={activeIndex === 1} isRevealed={isRevealed(1)} tx={tx} />,
-      <LegacyScene key="legacy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
-      <DubaiScene key="dubai" isActive={activeIndex === 3} isRevealed={isRevealed(3)} tx={tx} />,
-      <BatumiScene key="batumi" isActive={activeIndex === 4} isRevealed={isRevealed(4)} tx={tx} />,
-      <MaterialsScene key="materials" isActive={activeIndex === 5} isRevealed={isRevealed(5)} tx={tx} />,
-      <ParticipateScene key="participate" isActive={activeIndex === 6} isRevealed={isRevealed(6)} tx={tx} onRegister={openRegister} />,
-      <HowScene key="how" isActive={activeIndex === 7} isRevealed={isRevealed(7)} tx={tx} onJourney={openJourney} onRegister={openRegister} />,
-      <TeamScene key="team" isActive={activeIndex === 8} isRevealed={isRevealed(8)} tx={tx} />,
-      <PartnersScene key="partners" isActive={activeIndex === 9} isRevealed={isRevealed(9)} tx={tx} onPartnerClick={openPartner} />,
-      <FaqScene key="faqs" isActive={activeIndex === 10} isRevealed={isRevealed(10)} tx={tx} />,
-      <ContactScene key="contact" isActive={activeIndex === 11} isRevealed={isRevealed(11)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
+      <AboutObjectivesScene key="about-objectives" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
+      <AboutAccessScene key="about-access" isActive={activeIndex === 3} isRevealed={isRevealed(3)} tx={tx} />,
+      <LegacyScene key="legacy" isActive={activeIndex === 4} isRevealed={isRevealed(4)} tx={tx} />,
+      <DubaiScene key="dubai" isActive={activeIndex === 5} isRevealed={isRevealed(5)} tx={tx} />,
+      <BatumiScene key="batumi" isActive={activeIndex === 6} isRevealed={isRevealed(6)} tx={tx} />,
+      <MaterialsScene key="materials" isActive={activeIndex === 7} isRevealed={isRevealed(7)} tx={tx} />,
+      <ParticipateScene key="participate" isActive={activeIndex === 8} isRevealed={isRevealed(8)} tx={tx} onRegister={openRegister} />,
+      <HowScene key="how" isActive={activeIndex === 9} isRevealed={isRevealed(9)} tx={tx} onJourney={openJourney} onRegister={openRegister} />,
+      <TeamScene key="team" isActive={activeIndex === 10} isRevealed={isRevealed(10)} tx={tx} />,
+      <PartnersScene key="partners" isActive={activeIndex === 11} isRevealed={isRevealed(11)} tx={tx} onPartnerClick={openPartner} />,
+      <FaqScene key="faqs" isActive={activeIndex === 12} isRevealed={isRevealed(12)} tx={tx} />,
+      <ContactScene key="contact" isActive={activeIndex === 13} isRevealed={isRevealed(13)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
     [activeIndex, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
@@ -1644,7 +1833,12 @@ export function DesktopStoryHome() {
               id={chapter.id}
               data-story-section={chapter.key}
               data-story-active={isActive ? "true" : "false"}
-              className="isolate relative h-[100svh] max-h-[100svh] scroll-mt-0 overflow-hidden"
+              className={cn(
+                "isolate relative scroll-mt-0 overflow-hidden",
+                chapter.key === "about"
+                  ? "story-about-scroll-section h-[100svh] max-h-[100svh]"
+                  : "h-[100svh] max-h-[100svh]",
+              )}
             >
               {scene}
             </section>

@@ -559,8 +559,8 @@
     width: 100%;
     max-width: 100%;
     color: inherit;
-    --story-char-step: 32ms;
-    --story-char-duration: 720ms;
+    --story-char-step: 28ms;
+    --story-char-duration: 680ms;
   }
 
   .story-letter-reveal__text {
@@ -579,79 +579,35 @@
   .story-letter-reveal__char {
     position: relative;
     display: inline-block;
-    opacity: 1;
-    transform: none;
+    opacity: 0;
+    transform: translate3d(-0.34em, 0, 0);
     filter: none;
     text-shadow: none;
-    will-change: opacity, transform, filter;
+    will-change: opacity, transform;
   }
 
   .story-letter-reveal__char::before {
-    content: attr(data-char);
-    position: absolute;
-    inset: 0;
-    color: #9c6a21;
-    opacity: 0;
-    pointer-events: none;
-    transform: translate3d(-0.55em, 0.08em, 0) scale(0.98);
-    filter: blur(2px);
-    text-shadow:
-      -0.14em -0.04em 0 rgba(214, 178, 96, 0.32),
-      -0.08em 0.08em 0 rgba(156, 106, 33, 0.24),
-      0.06em -0.06em 0 rgba(214, 178, 96, 0.2);
+    content: none;
   }
 
   .story-letter-reveal--active .story-letter-reveal__char {
-    animation: story-letter-main-in var(--story-char-duration) cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: story-letter-left-in var(--story-char-duration) cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: calc(var(--story-char-index) * var(--story-char-step));
   }
 
-  .story-letter-reveal--active .story-letter-reveal__char::before {
-    animation: story-letter-dust-in var(--story-char-duration) cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: calc(var(--story-char-index) * var(--story-char-step));
-  }
-
-  @keyframes story-letter-main-in {
+  @keyframes story-letter-left-in {
     0% {
-      opacity: 0.86;
-      transform: translate3d(-0.14em, 0.02em, 0) scale(0.995);
-      filter: none;
+      opacity: 0;
+      transform: translate3d(-0.34em, 0, 0);
     }
 
-    46% {
-      opacity: 0.96;
-      filter: none;
+    58% {
+      opacity: 1;
     }
 
     100% {
       opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-      filter: blur(0);
-    }
-  }
-
-  @keyframes story-letter-dust-in {
-    0% {
-      opacity: 0;
-      transform: translate3d(-0.42em, 0.06em, 0) scale(0.98);
-      filter: blur(3px);
-    }
-
-    28% {
-      opacity: 0.22;
-    }
-
-    62% {
-      opacity: 0.08;
-      transform: translate3d(-0.08em, 0.02em, 0) scale(1);
-      filter: blur(2px);
-    }
-
-    100% {
-      opacity: 0;
-      transform: translate3d(0, 0, 0) scale(1);
-      filter: blur(0);
-      text-shadow: none;
+      transform: translate3d(0, 0, 0);
     }
   }
 
@@ -1750,16 +1706,8 @@
       -webkit-mask-image: none;
     }
 
-    .story-letter-reveal__char,
     .story-letter-reveal__char::before {
-      animation: none !important;
-      opacity: 1 !important;
-      transform: none !important;
-      filter: none !important;
-      text-shadow: none !important;
-    }
-
-    .story-letter-reveal__char::before {
+      content: none !important;
       opacity: 0 !important;
     }
 
@@ -1834,6 +1782,20 @@
       --story-metric-gap: clamp(0.65rem, 1.15svh, 0.95rem);
       --story-col-py: clamp(1.35rem, 3.25svh, 2.75rem);
       --story-col-px: clamp(1.25rem, 2vw, 2rem);
+    }
+
+    [data-story-section="about"].story-about-scroll-section {
+      height: 100svh;
+      max-height: 100svh;
+      overflow: hidden;
+    }
+
+    [data-story-section="about"] .story-about-cinematic-stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      max-height: 100svh;
+      overflow: hidden;
     }
 
     [data-story-scene-copy] [data-layout="story-journeys"],
@@ -1981,6 +1943,30 @@
 
     .story-media-panel__gradient {
       transition: opacity 700ms var(--ease-apple);
+    }
+
+    [data-story-section="about"] .story-about-cinematic-image {
+      transform: translate3d(0, calc(var(--story-section-exit-progress, 0) * -36svh), 0)
+        scale(calc(1.035 + (var(--story-section-exit-progress, 0) * 0.065)));
+      transform-origin: center center;
+      will-change: transform;
+    }
+
+    [data-story-section="about"] .story-about-cinematic-copy {
+      opacity: 1;
+      transform: translate3d(0, calc(var(--story-section-exit-progress, 0) * -10svh), 0);
+      will-change: transform, opacity;
+    }
+
+    [data-story-section="aboutAccess"] .story-about-access-media .story-media-panel__ken-burns {
+      transform: none !important;
+    }
+
+    [data-story-section="aboutAccess"] .story-about-access-image {
+      transform: translate3d(0, calc(var(--story-about-access-zoom-progress, 0) * -2svh), 0)
+        scale(calc(1.18 - (var(--story-about-access-zoom-progress, 0) * 0.18)));
+      transform-origin: center center;
+      will-change: transform;
     }
 
     [data-story-scene-copy] [data-layout="story-batumi-benefits"] > * {

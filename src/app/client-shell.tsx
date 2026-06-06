@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
 import { SiteContentProvider } from "@/data/SiteContentProvider";
+import { DevRuntimeRefresh } from "@/components/DevRuntimeRefresh";
 import { ScrollManager } from "@/components/ScrollManager";
 import { useDelayedIdleReady } from "@/hooks/use-idle-ready";
 import type { SiteContent, SiteContentResult } from "@/lib/backend/site-content";
@@ -80,6 +81,7 @@ export function ClientShell({
         <UIProvider>
           <QueryClientProvider client={queryClient}>
             <TooltipProvider>
+              <DevRuntimeRefresh />
               {!isAdminRoute && <ScrollManager />}
               {children}
               <DeferredShellUi isAdminRoute={isAdminRoute} />
