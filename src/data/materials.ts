@@ -13,16 +13,6 @@ export type MaterialDownload = {
 
 export const materialDownloads: MaterialDownload[] = [
   {
-    id: "guru-brochure",
-    title: "Guru brochure",
-    category: "Batumi project brochure",
-    description: "Full Guru project PDF for clients reviewing the Batumi apartment route.",
-    audience: "Clients and brokers",
-    format: "PDF",
-    href: aixcoLiveDocuments.guru,
-    fileName: "aixco-guru-brochure.pdf",
-  },
-  {
     id: "otium-brochure",
     title: "Otium brochure",
     category: "Batumi project brochure",
@@ -31,16 +21,6 @@ export const materialDownloads: MaterialDownload[] = [
     format: "PDF",
     href: aixcoLiveDocuments.otium,
     fileName: "aixco-otium-brochure.pdf",
-  },
-  {
-    id: "guru-catalog-sheet",
-    title: "Guru catalog sheet",
-    category: "Catalog sheet",
-    description: "High-resolution Guru catalog image for quick sharing and offline review.",
-    audience: "Clients and sales partners",
-    format: "JPEG",
-    href: aixcoLiveAssetDetails.guruCatalog,
-    fileName: "aixco-guru-catalog.jpeg",
   },
   {
     id: "otium-catalog-sheet",

@@ -25,39 +25,38 @@ describe("home page performance structure", () => {
     expect(deferredSource).toContain("dynamic(");
   });
 
-  it("uses the Next 16 image preload API instead of the deprecated priority prop", () => {
-    const philosophySource = readSource("src/views/AixcoPhilosophyPage.tsx");
+  it("keeps philosophy content inside the home experience instead of a separate page", () => {
+    const homeSource = readSource("src/views/HomePage.tsx");
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const navSource = readSource("src/components/nav/nav-data.ts");
+    const sitemapSource = readSource("src/app/sitemap.ts");
 
-    expect(philosophySource).toContain("preload");
-    expect(philosophySource).not.toContain("priority");
+    expect(homeSource).toContain("<PhilosophyCallout />");
+    expect(desktopStorySource).toContain('{ key: "philosophy", id: "philosophy", label: "Philosophy" }');
+    expect(desktopStorySource).toContain('{ key: "philosophyOrigins", id: "philosophy-origins", label: "Origins" }');
+    expect(desktopStorySource).toContain('{ key: "philosophyPlatform", id: "philosophy-platform", label: "Principles" }');
+    expect(desktopStorySource).toContain("<PhilosophyScene");
+    expect(desktopStorySource).toContain("<PhilosophyDetailScene");
+    expect(navSource).toContain('hash: "#philosophy"');
+    expect(sitemapSource).not.toContain("/aixco-philosophy");
   });
 
-  it("keeps the philosophy hero fitted to viewport breakpoints", () => {
-    const philosophySource = readSource("src/views/AixcoPhilosophyPage.tsx");
+  it("keeps the in-page philosophy story section compact and media-backed", () => {
+    const philosophySource = readSource("src/components/sections/DesktopStoryHome.tsx");
 
-    expect(philosophySource).toContain("min-h-svh");
-    expect(philosophySource).toContain("min-h-[calc(100svh-6rem)]");
-    expect(philosophySource).toContain("md:min-h-[calc(100svh-7rem)]");
-    expect(philosophySource).toContain("lg:min-h-[calc(100svh-8rem)]");
-    expect(philosophySource).toContain("justify-end");
-    expect(philosophySource).toContain("md:justify-between");
-    expect(philosophySource).toContain("md:pt-8");
-    expect(philosophySource).toContain("lg:pt-10");
-    expect(philosophySource).toContain("md:mt-8 md:text-6xl md:leading-[1.12]");
-    expect(philosophySource).toContain("md:mt-9 md:text-xl md:leading-10");
-    expect(philosophySource).toContain("grid-cols-2");
-    expect(philosophySource).toContain("lg:grid-cols-4");
-    expect(philosophySource).toContain("uppercase");
-    expect(philosophySource).toContain("tracking-[0.16em]");
-    expect(philosophySource).toContain("md:tracking-[0.32em]");
-    expect(philosophySource).toContain("grid-cols-[1rem_minmax(0,1fr)]");
-    expect(philosophySource).toContain("md:grid-cols-[1.25rem_minmax(0,1fr)]");
-    expect(philosophySource).toContain("text-left");
-    expect(philosophySource).toContain("max-w-full break-words");
-    expect(philosophySource).toContain("text-[clamp(1.95rem,8vw,2.75rem)]");
-    expect(philosophySource).toContain("md:text-[clamp(2.35rem,4.2vw,2.9rem)]");
-    expect(philosophySource).toContain("xl:text-5xl");
-    expect(philosophySource).toContain("bg-primary/75");
+    expect(philosophySource).toContain("function PhilosophyScene");
+    expect(philosophySource).toContain("function PhilosophyDetailScene");
+    expect(philosophySource).toContain("function PhilosophyPlatformScene");
+    expect(philosophySource).toContain("philosophyHero.title");
+    expect(philosophySource).toContain("philosophyOwnershipSections");
+    expect(philosophySource).toContain("philosophyPlatformSections");
+    expect(philosophySource).toContain("aixcoLiveImages.aboutArchitecture");
+    expect(philosophySource).toContain('data-layout="story-philosophy-stats"');
+    expect(philosophySource).toContain('data-layout="story-philosophy-principles"');
+    expect(philosophySource).toContain('data-layout="story-philosophy-detail"');
+    expect(philosophySource).toContain('data-layout="story-philosophy-platform-stats"');
+    expect(philosophySource).toContain('data-layout="story-philosophy-platform-panels"');
+    expect(philosophySource).toContain("fitContent={false}");
   });
 
   it("keeps legacy insight articles unpublished until the copy is rewritten", () => {

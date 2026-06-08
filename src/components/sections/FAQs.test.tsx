@@ -24,7 +24,7 @@ describe("FAQs", () => {
         items: [
           {
             q: "What is the minimum amount to reserve or buy?",
-            a: "Selected Batumi apartments from €50,000. Reservation terms may start from 10% / €10,000 depending on project and agreement.",
+            a: "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
           },
           {
             q: "Can I buy property directly?",
@@ -32,15 +32,15 @@ describe("FAQs", () => {
           },
           {
             q: "Is rental income guaranteed?",
-            a: "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
+            a: "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, project delivery, and external factors.",
           },
           {
             q: "Will I receive reporting?",
-            a: "Yes. Reporting, documents, and project updates are available through the portal.",
+            a: "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified system.",
           },
           {
             q: "Can foreigners buy property in Batumi?",
-            a: "Yes. Foreigners can purchase and own real estate with minimal restrictions.",
+            a: "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
           },
           {
             q: "Can I ask about AIXCO company financing?",

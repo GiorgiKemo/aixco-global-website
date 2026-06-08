@@ -233,7 +233,7 @@ export function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[
       title: "Why Batumi",
       priority: 10,
       keywords: ["batumi", "georgia", "yield", "tax", "ownership", "financing", "price", "growth"],
-      answer: `The Batumi section highlights ${content.batumiBenefits.join(", ")}. The website also says foreigners can purchase and own real estate with minimal restrictions.`,
+      answer: `The Batumi section highlights ${content.batumiBenefits.join(", ")}. Final availability, financing, commission, tax, and rental assumptions should be confirmed directly with AIXCO for the selected project and agreement.`,
     }),
   );
 

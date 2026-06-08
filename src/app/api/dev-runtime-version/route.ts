@@ -8,6 +8,7 @@ export const revalidate = 0;
 const watchedFiles = [
   "src/index.css",
   "src/components/sections/DesktopStoryHome.tsx",
+  "src/components/DevRuntimeRefresh.tsx",
   "src/components/ScrollManager.tsx",
   "src/app/client-shell.tsx",
 ];

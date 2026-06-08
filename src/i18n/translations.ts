@@ -150,6 +150,13 @@ export const textTranslations = {
     "tr": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.",
     "ar": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai."
   },
+  "Real Estate": {
+    "de": "Immobilien",
+    "ru": "Недвижимость",
+    "ka": "უძრავი ქონება",
+    "tr": "Gayrimenkul",
+    "ar": "العقارات"
+  },
   "Trusted Clients": {
     "de": "Vertrauensvolle Kunden",
     "ru": "Надежные клиенты",
@@ -158,7 +165,7 @@ export const textTranslations = {
     "ar": "عملاء موثوقون"
   },
   "Gross Development Value (GDV)": {
-    "de": "Bruttoentwicklungswert (GDV)",
+    "de": "Entwicklungswert (GDV)",
     "ru": "Общая стоимость развития (GDV)",
     "ka": "სრული განვითარების ღირებულება (GDV)",
     "tr": "Toplam Geliştirme Değeri (GDV)",
@@ -255,54 +262,82 @@ export const textTranslations = {
     "tr": "Gürcistan, Avrupa ile Asya'nın kesişim noktasında yer alır ve komşu ülkelerin yanı sıra AB, Amerika Birleşik Devletleri ve Asya pazarlarıyla güçlü ilişkiler sürdürür. Batum, güvenlik, eğitim ve şeffaflıkta en yüksek standartlara giderek yaklaşan gelişmekte olan bir pazara giriş için nadir bir fırsat sunar. Aynı zamanda esnek, düşük düzenlemeli bir ortamdan ve güçlü uzun vadeli büyüme potansiyelinden yararlanır.",
     "ar": "تقع جورجيا عند مفترق الطرق بين أوروبا وآسيا، وتحافظ على علاقات قوية مع الدول المجاورة وكذلك مع الاتحاد الأوروبي والولايات المتحدة والأسواق الآسيوية. وتوفر باتومي فرصة نادرة لدخول سوق ناشئة تتجه بثبات نحو أعلى معايير السلامة والتعليم والشفافية. وفي الوقت نفسه، تستفيد من بيئة مرنة منخفضة التنظيم وإمكانات نمو قوية على المدى الطويل."
   },
-  "Rental income scenarios from 8%": {
-    "de": "Netto-Mietrenditen ab 8%",
-    "ru": "Чистая арендная доходность от 8%",
-    "ka": "სუფთა საიჯარო შემოსავალი 8%-დან",
-    "tr": "Net kira getirileri %8'den başlar",
-    "ar": "عوائد إيجار صافية تبدأ من 8٪"
+  "Selected projects and apartments available exclusively through AIXCO": {
+    "de": "Ausgewählte Projekte und Apartments exklusiv über AIXCO verfügbar",
+    "ru": "Избранные проекты и апартаменты доступны эксклюзивно через AIXCO",
+    "ka": "შერჩეული პროექტები და ბინები ექსკლუზიურად ხელმისაწვდომია AIXCO-ს მეშვეობით",
+    "tr": "Seçili projeler ve daireler yalnızca AIXCO üzerinden sunulur",
+    "ar": "مشاريع وشقق مختارة متاحة حصريًا عبر AIXCO"
   },
-  "Annual price growth of up to 12%": {
-    "de": "Jährliches Preiswachstum von bis zu 12%",
-    "ru": "Годовой рост цен до 12%",
-    "ka": "წლიური ფასის ზრდა 12%-მდე",
-    "tr": "Yıllık fiyat artışı %12'ye kadar",
-    "ar": "نمو سنوي للأسعار يصل إلى 12٪"
+  "100% foreign ownership": {
+    "de": "100% ausländisches Eigentum",
+    "ru": "100% иностранная собственность",
+    "ka": "100% უცხოური საკუთრება",
+    "tr": "%100 yabancı mülkiyeti",
+    "ar": "ملكية أجنبية بنسبة 100٪"
   },
-  "Property prices starting from €50,000": {
-    "de": "Immobilienpreise ab 50.000 €",
-    "ru": "Цены на недвижимость от 50 000 €",
-    "ka": "უძრავი ქონების ფასები იწყება 50,000 ევროდან",
-    "tr": "Gayrimenkul fiyatları 50.000 €'dan başlar",
-    "ar": "أسعار العقارات تبدأ من 50,000 يورو"
+  "No residency permit required": {
+    "de": "Keine Aufenthaltsgenehmigung erforderlich",
+    "ru": "Вид на жительство не требуется",
+    "ka": "ბინადრობის ნებართვა საჭირო არ არის",
+    "tr": "Oturum izni gerekli değildir",
+    "ar": "لا يلزم تصريح إقامة"
   },
-  "Full foreign ownership permitted": {
-    "de": "Volles ausländisches Eigentum erlaubt",
-    "ru": "Полное иностранное владение разрешено",
-    "ka": "სრულად ნებადართულია უცხოელთა საკუთრება",
-    "tr": "Tam yabancı mülkiyetine izin verilir",
-    "ar": "يُسمح بالملكية الأجنبية الكاملة"
+  "Entry from €50,000": {
+    "de": "Einstieg ab 50.000 €",
+    "ru": "Вход от 50 000 €",
+    "ka": "შესვლა €50,000-დან",
+    "tr": "50.000 €'dan giriş",
+    "ar": "الدخول من 50,000 يورو"
   },
-  "Low rental tax of 1% (up to €180,000/year)": {
-    "de": "Niedrige Mietsteuer von 1% (bis 180.000 €/Jahr)",
-    "ru": "Низкий налог на аренду 1% (до 180 000 €/год)",
-    "ka": "დაბალი საიჯარო გადასახადი 1% (180,000 ევრომდე/წელიწადში)",
-    "tr": "Düşük kira vergisi %1 (yılda 180.000 €'ya kadar)",
-    "ar": "ضريبة إيجار منخفضة بنسبة 1٪ (حتى 180,000 يورو سنويًا)"
+  "Bank financing available from 60% of the property value": {
+    "de": "Bankfinanzierung ab 60% des Immobilienwerts verfügbar",
+    "ru": "Банковское финансирование доступно от 60% стоимости недвижимости",
+    "ka": "საბანკო დაფინანსება ხელმისაწვდომია ქონების ღირებულების 60%-დან",
+    "tr": "Mülk değerinin %60'ından başlayan banka finansmanı mevcuttur",
+    "ar": "تمويل مصرفي متاح من 60٪ من قيمة العقار"
   },
-  "Capital gains tax exemption after 2 years": {
-    "de": "Befreiung von der Kapitalertragssteuer nach 2 Jahren",
-    "ru": "Освобождение от налога на прирост капитала через 2 года",
-    "ka": "კაპიტალის მოგების გადასახადისგან გათავისუფლება 2 წლის შემდეგ",
-    "tr": "2 yıl sonra sermaye kazancı vergisi muafiyeti",
-    "ar": "إعفاء من ضريبة أرباح رأس المال بعد سنتين"
+  "Approx. 8% net rental yields": {
+    "de": "Ca. 8% Nettomietrenditen",
+    "ru": "Около 8% чистой арендной доходности",
+    "ka": "დაახლოებით 8% სუფთა საიჯარო შემოსავალი",
+    "tr": "Yaklaşık %8 net kira getirisi",
+    "ar": "عوائد إيجار صافية تقارب 8٪"
   },
-  "Financing 60% of property value": {
-    "de": "Finanzierung bis 60% des Immobilienwerts",
-    "ru": "Финансирование 60% стоимости объекта",
-    "ka": "ქონების ღირებულების 60%-ის დაფინანსება",
-    "tr": "Gayrimenkul değerinin %60'ına kadar finansman",
-    "ar": "تمويل حتى 60٪ من قيمة العقار"
+  "Full commission payable from only a 10% down payment": {
+    "de": "Volle Provision zahlbar bereits ab 10% Anzahlung",
+    "ru": "Полная комиссия выплачивается уже с первоначального взноса 10%",
+    "ka": "სრული საკომისიო გადახდადია მხოლოდ 10%-იანი პირველადი შენატანიდან",
+    "tr": "Tam komisyon yalnızca %10 peşinatla ödenebilir",
+    "ar": "العمولة الكاملة قابلة للدفع من دفعة أولى بنسبة 10٪ فقط"
+  },
+  "0% capital gains tax after 2 years of ownership": {
+    "de": "0% Kapitalertragssteuer nach 2 Jahren Eigentum",
+    "ru": "0% налог на прирост капитала после 2 лет владения",
+    "ka": "0% კაპიტალის მოგების გადასახადი საკუთრების 2 წლის შემდეგ",
+    "tr": "2 yıl mülkiyetten sonra %0 sermaye kazancı vergisi",
+    "ar": "0٪ ضريبة أرباح رأسمالية بعد عامين من الملكية"
+  },
+  "1% tax on rental income": {
+    "de": "1% Steuer auf Mieteinnahmen",
+    "ru": "1% налог на арендный доход",
+    "ka": "1% გადასახადი საიჯარო შემოსავალზე",
+    "tr": "Kira gelirinde %1 vergi",
+    "ar": "ضريبة 1٪ على دخل الإيجار"
+  },
+  "Full transparency through an ISO-certified system": {
+    "de": "Volle Transparenz durch ein ISO-zertifiziertes System",
+    "ru": "Полная прозрачность через ISO-сертифицированную систему",
+    "ka": "სრული გამჭვირვალობა ISO-სერტიფიცირებული სისტემით",
+    "tr": "ISO sertifikalı sistemle tam şeffaflık",
+    "ar": "شفافية كاملة من خلال نظام معتمد من ISO"
+  },
+  "Prime apartments from our own stock at the best available prices": {
+    "de": "Prime-Apartments aus eigenem Bestand zu den besten verfügbaren Preisen",
+    "ru": "Премиальные апартаменты из собственного фонда по лучшим доступным ценам",
+    "ka": "პრემიუმ ბინები ჩვენი საკუთარი მარაგიდან საუკეთესო ხელმისაწვდომ ფასებში",
+    "tr": "Kendi stokumuzdan en iyi mevcut fiyatlarla prime daireler",
+    "ar": "شقق مميزة من مخزوننا الخاص بأفضل الأسعار المتاحة"
   },
   "Customers/Partners Profit": {
     "de": "Gewinn für Kunden/Partner",
@@ -822,6 +857,13 @@ export const textTranslations = {
     "tr": "Minimum yatırım tutarı nedir?",
     "ar": "ما هو الحد الأدنى للاستثمار؟"
   },
+  "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
+    "de": "Einstieg ab 50.000 € für ausgewählte Batumi-Projekte und Apartments, die exklusiv über AIXCO verfügbar sind. Die volle Provision kann bereits ab 10% Anzahlung zahlbar sein; finale Bedingungen hängen von Projekt und Vereinbarung ab.",
+    "ru": "Вход от 50 000 € для избранных проектов и апартаментов в Батуми, доступных эксклюзивно через AIXCO. Полная комиссия может выплачиваться уже с 10% первоначального взноса; финальные условия зависят от проекта и договора.",
+    "ka": "შესვლა €50,000-დან შერჩეულ ბათუმის პროექტებსა და ბინებზე, რომლებიც ექსკლუზიურად ხელმისაწვდომია AIXCO-ს მეშვეობით. სრული საკომისიო შეიძლება გადახდადი იყოს მხოლოდ 10%-იანი პირველადი შენატანიდან; საბოლოო პირობები დამოკიდებულია პროექტსა და შეთანხმებაზე.",
+    "tr": "AIXCO üzerinden özel olarak sunulan seçili Batum projeleri ve daireleri için giriş 50.000 €'dan başlar. Tam komisyon yalnızca %10 peşinatla ödenebilir; nihai şartlar proje ve sözleşmeye bağlıdır.",
+    "ar": "يبدأ الدخول من 50,000 يورو للمشاريع والشقق المختارة في باتومي والمتاحة حصريًا عبر AIXCO. يمكن دفع العمولة الكاملة من دفعة أولى بنسبة 10٪ فقط، مع اعتماد الشروط النهائية على المشروع والاتفاق."
+  },
   "Can I buy property directly?": {
     "de": "Kann ich Immobilien direkt kaufen?",
     "ru": "Могу ли я купить недвижимость напрямую?",
@@ -857,26 +899,26 @@ export const textTranslations = {
     "tr": "Evet. Müşteriler doğrudan satın alma, yapılandırılmış katılım veya her ikisini de tercih edebilir.",
     "ar": "نعم. يمكن للعملاء اختيار الشراء المباشر أو المشاركة المنظمة أو كليهما."
   },
-  "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.": {
-    "de": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
-    "ru": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
-    "ka": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
-    "tr": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery.",
-    "ar": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery."
+  "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, project delivery, and external factors.": {
+    "de": "Nein. Ca. 8% Nettomietrenditen sind szenariobasiert und hängen von Belegung, Marktbedingungen, Verwaltung, Projektlieferung und externen Faktoren ab.",
+    "ru": "Нет. Около 8% чистой арендной доходности является сценарным показателем и зависит от заполняемости, рынка, управления, реализации проекта и внешних факторов.",
+    "ka": "არა. დაახლოებით 8% სუფთა საიჯარო შემოსავალი არის სცენარზე დაფუძნებული და დამოკიდებულია დატვირთულობაზე, ბაზარზე, ქონების მართვაზე, პროექტის მიწოდებასა და გარე ფაქტორებზე.",
+    "tr": "Hayır. Yaklaşık %8 net kira getirisi senaryoya dayalıdır ve doluluk, piyasa koşulları, mülk yönetimi, proje teslimi ve dış faktörlere bağlıdır.",
+    "ar": "لا. عوائد الإيجار الصافية البالغة حوالي 8٪ مبنية على سيناريوهات وتعتمد على الإشغال وظروف السوق وإدارة العقار وتسليم المشروع والعوامل الخارجية."
   },
-  "Yes. Reporting, documents, and project updates are available through the portal.": {
-    "de": "Ja. Berichte, Dokumente und Projekt-Updates sind über das Portal verfügbar.",
-    "ru": "Да. Отчеты, документы и обновления проектов доступны через портал.",
-    "ka": "დიახ. ანგარიშები, დოკუმენტები და პროექტის განახლებები ხელმისაწვდომია პორტალიდან.",
-    "tr": "Evet. Raporlar, belgeler ve proje güncellemeleri portal üzerinden erişilebilir.",
-    "ar": "نعم. التقارير والمستندات وتحديثات المشاريع متاحة عبر البوابة."
+  "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified system.": {
+    "de": "Ja. Reporting, Dokumente, Projektupdates und transparente Workflows sind über das Portal und das ISO-zertifizierte System verfügbar.",
+    "ru": "Да. Отчётность, документы, обновления проекта и прозрачный процесс доступны через портал и ISO-сертифицированную систему.",
+    "ka": "დიახ. ანგარიშგება, დოკუმენტები, პროექტის სიახლეები და გამჭვირვალე პროცესი ხელმისაწვდომია პორტალში და ISO-სერტიფიცირებულ სისტემაში.",
+    "tr": "Evet. Raporlama, belgeler, proje güncellemeleri ve şeffaf iş akışı portal ve ISO sertifikalı sistem üzerinden sunulur.",
+    "ar": "نعم. التقارير والوثائق وتحديثات المشاريع وسير العمل الشفاف متاحة عبر البوابة والنظام المعتمد من ISO."
   },
-  "Yes. Foreigners can purchase and own real estate with minimal restrictions.": {
-    "de": "Ja. Ausländer können Immobilien mit minimalen Einschränkungen erwerben und besitzen.",
-    "ru": "Да. Иностранцы могут покупать и владеть недвижимостью с минимальными ограничениями.",
-    "ka": "დიახ. უცხოელებს შეუძლიათ უძრავი ქონების შეძენა და ფლობა მინიმალური შეზღუდვებით.",
-    "tr": "Evet. Yabancılar, asgari kısıtlamalarla gayrimenkul satın alabilir ve sahip olabilir.",
-    "ar": "نعم. يمكن للأجانب شراء العقارات وامتلاكها مع قيود محدودة."
+  "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.": {
+    "de": "Ja. Ausgewählte Batumi-Apartments erlauben 100% ausländisches Eigentum, und für den Kauf ist keine Aufenthaltsgenehmigung erforderlich.",
+    "ru": "Да. Избранные апартаменты в Батуми допускают 100% иностранную собственность, и для покупки не требуется вид на жительство.",
+    "ka": "დიახ. შერჩეული ბათუმის ბინები იძლევა 100% უცხოურ საკუთრებას და შესაძენად ბინადრობის ნებართვა საჭირო არ არის.",
+    "tr": "Evet. Seçili Batum dairelerinde %100 yabancı mülkiyeti mümkündür ve satın almak için oturum izni gerekmez.",
+    "ar": "نعم. تتيح الشقق المختارة في باتومي ملكية أجنبية بنسبة 100٪ ولا يلزم تصريح إقامة للشراء."
   },
   "For intermediaries managing clients, tours, and deal flow.": {
     "de": "Für Vermittler, die Kunden, Besichtigungen und Dealflow verwalten.",
@@ -1242,13 +1284,6 @@ export const textTranslations = {
     "tr": "Geliştirici onboardingini başlat",
     "ar": "ابدأ إعداد المطور"
   },
-  "Guru": {
-    "de": "Guru",
-    "ru": "Guru",
-    "ka": "Guru",
-    "tr": "Guru",
-    "ar": "Guru"
-  },
   "Our journey": { de: "Unsere Reise", ru: "Наш путь", ka: "ჩვენი გზა", tr: "Yolculuğumuz", ar: "رحلتنا" },
   "From Switzerland to Dubai to Batumi": { de: "Von der Schweiz über Dubai nach Batumi", ru: "От Швейцарии через Дубай к Батуми", ka: "შვეიცარიიდან დუბაიმდე და ბათუმამდე", tr: "İsviçre'den Dubai'ye ve Batum'a", ar: "من سويسرا إلى دبي إلى باتومي" },
   "nav.legacy": { de: "Unsere Reise", ru: "Наш путь", ka: "ჩვენი გზა", tr: "Yolculuğumuz", ar: "رحلتنا" },
@@ -1511,6 +1546,90 @@ export const textTranslations = {
     "ka": "შესაძლებლობაზე ორიენტირებული ფოკუსი",
     "tr": "Gürcistan'da fırsat odağı",
     "ar": "تركيز الفرص في جورجيا"
+  },
+  "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.": {
+    "de": "Ausgewählte Batumi-Projekte und Apartments über AIXCO, mit Einstieg ab 50.000 €, 100% ausländischem Eigentum, Bankfinanzierung und transparentem ISO-zertifiziertem Prozess.",
+    "ru": "Избранные проекты и апартаменты в Батуми через AIXCO: вход от 50 000 €, 100% иностранная собственность, банковское финансирование и прозрачный ISO-сертифицированный процесс.",
+    "ka": "შერჩეული ბათუმის პროექტები და ბინები AIXCO-ს მეშვეობით, €50,000-დან შესვლით, 100% უცხოური საკუთრებით, საბანკო დაფინანსებით და გამჭვირვალე ISO-სერტიფიცირებული პროცესით.",
+    "tr": "AIXCO üzerinden seçili Batum projeleri ve daireleri: 50.000 €'dan giriş, %100 yabancı mülkiyeti, banka finansmanı ve şeffaf ISO sertifikalı süreç.",
+    "ar": "مشاريع وشقق مختارة في باتومي عبر AIXCO، مع دخول من 50,000 يورو وملكية أجنبية 100٪ وخيارات تمويل مصرفي وعملية شفافة معتمدة من ISO."
+  },
+  "Entry": {
+    "de": "Einstieg",
+    "ru": "Вход",
+    "ka": "შესვლა",
+    "tr": "Giriş",
+    "ar": "الدخول"
+  },
+  "Bank financing": {
+    "de": "Bankfinanzierung",
+    "ru": "Банковское финансирование",
+    "ka": "საბანკო დაფინანსება",
+    "tr": "Banka finansmanı",
+    "ar": "تمويل مصرفي"
+  },
+  "property value": {
+    "de": "Immobilienwert",
+    "ru": "стоимость объекта",
+    "ka": "ქონების ღირებულება",
+    "tr": "mülk değeri",
+    "ar": "قيمة العقار"
+  },
+  "Net rental yields": {
+    "de": "Nettomietrenditen",
+    "ru": "Чистая арендная доходность",
+    "ka": "სუფთა საიჯარო შემოსავალი",
+    "tr": "Net kira getirileri",
+    "ar": "عوائد إيجار صافية"
+  },
+  "approx.": {
+    "de": "ca.",
+    "ru": "ок.",
+    "ka": "დაახლ.",
+    "tr": "yakl.",
+    "ar": "تقريبًا"
+  },
+  "Exclusive access": {
+    "de": "Exklusiver Zugang",
+    "ru": "Эксклюзивный доступ",
+    "ka": "ექსკლუზიური წვდომა",
+    "tr": "Özel erişim",
+    "ar": "وصول حصري"
+  },
+  "Tax & transparency": {
+    "de": "Steuern & Transparenz",
+    "ru": "Налоги и прозрачность",
+    "ka": "გადასახადი და გამჭვირვალობა",
+    "tr": "Vergi ve şeffaflık",
+    "ar": "الضرائب والشفافية"
+  },
+  "Selected apartments from €50,000": {
+    "de": "Ausgewählte Apartments ab 50.000 €",
+    "ru": "Избранные апартаменты от 50 000 €",
+    "ka": "შერჩეული ბინები €50,000-დან",
+    "tr": "50.000 €'dan seçili daireler",
+    "ar": "شقق مختارة من 50,000 يورو"
+  },
+  "Today, AIXCO is focused on selected Batumi projects and apartments available exclusively through AIXCO, with 100% foreign ownership, no residency permit requirement, bank financing from 60% of property value, and an ISO-certified transparency process.": {
+    "de": "Heute konzentriert sich AIXCO auf ausgewählte Batumi-Projekte und Apartments, die exklusiv über AIXCO verfügbar sind, mit 100% ausländischem Eigentum, keiner Aufenthaltsgenehmigung, Bankfinanzierung ab 60% des Immobilienwerts und einem ISO-zertifizierten Transparenzprozess.",
+    "ru": "Сегодня AIXCO сфокусирована на избранных проектах и апартаментах в Батуми, доступных эксклюзивно через AIXCO, со 100% иностранной собственностью, без требования ВНЖ, банковским финансированием от 60% стоимости и ISO-сертифицированной прозрачностью.",
+    "ka": "დღეს AIXCO ფოკუსირებულია შერჩეულ ბათუმის პროექტებსა და ბინებზე, რომლებიც ექსკლუზიურად ხელმისაწვდომია AIXCO-ს მეშვეობით, 100% უცხოური საკუთრებით, ბინადრობის ნებართვის გარეშე, საბანკო დაფინანსებით ქონების ღირებულების 60%-დან და ISO-სერტიფიცირებული გამჭვირვალობის პროცესით.",
+    "tr": "Bugün AIXCO, yalnızca AIXCO üzerinden sunulan seçili Batum projeleri ve dairelerine odaklanır; %100 yabancı mülkiyeti, oturum izni gerektirmeme, mülk değerinin %60'ından banka finansmanı ve ISO sertifikalı şeffaflık süreci sunar.",
+    "ar": "تركز AIXCO اليوم على مشاريع وشقق مختارة في باتومي متاحة حصريًا عبر AIXCO، مع ملكية أجنبية 100٪، ومن دون شرط تصريح إقامة، وتمويل مصرفي من 60٪ من قيمة العقار، وعملية شفافية معتمدة من ISO."
+  },
+  "Entry from": {
+    "de": "Einstieg ab",
+    "ru": "Вход от",
+    "ka": "შესვლა",
+    "tr": "Giriş",
+    "ar": "الدخول من"
+  },
+  "Approx. net rental yields": {
+    "de": "Ca. Nettomietrenditen",
+    "ru": "Около чистой арендной доходности",
+    "ka": "დაახლ. სუფთა საიჯარო შემოსავალი",
+    "tr": "Yakl. net kira getirileri",
+    "ar": "عوائد إيجار صافية تقريبية"
   },
   "Apartment pricing": {
     "de": "Wohnungspreise",

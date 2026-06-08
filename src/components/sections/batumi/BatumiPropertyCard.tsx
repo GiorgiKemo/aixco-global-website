@@ -27,8 +27,7 @@ export function BatumiPropertyCard({ property, idx, tx }: BatumiPropertyCardProp
   const copyOrderClass = imageFirst ? "order-1 md:order-2 lg:order-2" : "order-1 md:order-1 lg:order-1";
   const documentKey = getSafeAssetKey(property.url, property.id);
   const documentHref = getSafePublicAssetHref(batumiDetailAssetMap[documentKey] ?? batumiDocumentMap[documentKey], "#batumi");
-  const mediaHeightClass = property.id === "guru" ? "batumi-match-otium-video-height" : "min-h-[22rem] md:min-h-0 lg:min-h-0";
-  const videoMatteCropClass = property.id === "guru" ? "guru-video-matte-crop" : "";
+  const mediaHeightClass = "min-h-[22rem] md:min-h-0 lg:min-h-0";
 
   return (
     <motion.article
@@ -50,7 +49,6 @@ export function BatumiPropertyCard({ property, idx, tx }: BatumiPropertyCardProp
           title={tx(property.name)}
           poster={batumiImageMap[property.image]}
           className="aspect-[4/5] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
-          videoClassName={videoMatteCropClass}
           fit="cover"
           rootMargin="700px 0px"
         />

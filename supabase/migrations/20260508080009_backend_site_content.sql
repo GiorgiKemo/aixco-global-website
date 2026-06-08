@@ -135,13 +135,17 @@ values
   30,
   true,
   $$[
-    "Rental income scenarios from 8%",
-    "Annual price growth of up to 12%",
-    "Property prices starting from \u20ac50,000",
-    "Full foreign ownership permitted",
-    "Low rental tax of 1% (up to \u20ac180,000/year)",
-    "Capital gains tax exemption after 2 years",
-    "Financing 60% of property value"
+    "Selected projects and apartments available exclusively through AIXCO",
+    "100% foreign ownership",
+    "No residency permit required",
+    "Entry from \u20ac50,000",
+    "Bank financing available from 60% of the property value",
+    "Approx. 8% net rental yields",
+    "Full commission payable from only a 10% down payment",
+    "0% capital gains tax after 2 years of ownership",
+    "1% tax on rental income",
+    "Full transparency through an ISO-certified system",
+    "Prime apartments from our own stock at the best available prices"
   ]$$::jsonb
 ),
 (
@@ -151,24 +155,6 @@ values
   40,
   true,
   $$[
-    {
-      "id": "guru",
-      "name": "Guru",
-      "url": "guru",
-      "image": "batumi-guru",
-      "video": "guruBatumi",
-      "summary": "Guru Status is in its final construction phase: a Batumi residence with 29 floors, 667 apartments, 85% sold, and a location about 150 meters from the sea.",
-      "metrics": [
-        { "label": "Floors", "value": "29", "subtext": "floors" },
-        { "label": "Apartments", "value": "667", "subtext": "units" },
-        { "label": "Sold", "value": "85%", "subtext": "apartments", "highlight": true }
-      ],
-      "highlights": [
-        { "label": "Scale", "value": "3,000 sqm of infrastructure area and 4,000 sqm total site area." },
-        { "label": "Location", "value": "About 150 meters from the sea, with the beach 5 minutes away and Grand Mall 8 minutes away by car." },
-        { "label": "Rental case", "value": "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck." }
-      ]
-    },
     {
       "id": "otium",
       "name": "Otium",
@@ -451,11 +437,12 @@ values
       "group": "Customer",
       "description": "Buying property, reserving apartments, or working with AIXCO on real estate services.",
       "items": [
-        { "q": "What is the minimum amount to reserve or buy?", "a": "Typical entry starts from \u20ac10,000. On selected Batumi apartments from \u20ac50,000, a 10% reservation (from \u20ac5,000) may be available\u2014final terms depend on the project and purchase agreement." },
+        { "q": "What is the minimum amount to reserve or buy?", "a": "Entry starts from \u20ac50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement." },
         { "q": "Can I buy property directly?", "a": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration." },
-        { "q": "Is rental income guaranteed?", "a": "No. Rental income, resale value, and timing depend on market conditions, occupancy, property management, and project delivery." },
-        { "q": "Will I receive reporting?", "a": "Yes. Reporting, documents, and project updates are available through the portal." },
-        { "q": "Can foreigners buy property in Batumi?", "a": "Yes. Foreigners can purchase and own real estate with minimal restrictions." }
+        { "q": "Is rental income guaranteed?", "a": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, project delivery, and external factors." },
+        { "q": "Will I receive reporting?", "a": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified system." },
+        { "q": "Can foreigners buy property in Batumi?", "a": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy." },
+        { "q": "Can I ask about AIXCO company financing?", "a": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page." }
       ]
     },
     {

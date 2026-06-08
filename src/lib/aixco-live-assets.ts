@@ -33,7 +33,12 @@ export const aixcoLiveImages = {
   batumiUrbanPoster: `${batumiGalleryBase}/batumi4-poster.webp`,
   batumiFogPoster: `${batumiGalleryBase}/batumi5-poster.webp`,
   batumiNightRoadPoster: `${batumiGalleryBase}/herovideo-poster.webp`,
-  batumiGuru: `${optimizedImageBase}/guru.webp`,
+  batumiMosaicDayAerial: `${liveImageBase}/batumi-mosaic-hd/batumi-day-aerial.jpg`,
+  batumiMosaicNightSkyline: `${liveImageBase}/batumi-mosaic-hd/batumi-night-skyline.jpg`,
+  batumiMosaicNatureAerial: `${liveImageBase}/batumi-mosaic-hd/batumi-nature-aerial.jpg`,
+  batumiMosaicBlueTower: `${liveImageBase}/batumi-mosaic-hd/batumi-blue-tower.jpg`,
+  batumiMosaicModernCoastline: `${liveImageBase}/batumi-mosaic-hd/batumi-modern-coastline.jpg`,
+  batumiMosaicSunsetCoastline: `${liveImageBase}/batumi-mosaic-hd/batumi-sunset-coastline.jpg`,
   batumiOtium: `${optimizedImageBase}/otium-reverance.webp`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
   teamOwais: `${optimizedImageBase}/owais.webp`,
@@ -47,9 +52,7 @@ export const aixcoLiveVideos = {
   fundOne: `${optimizedVideoBase}/fund1-optimized.mp4`,
   fundTwo: `${optimizedVideoBase}/fund2-optimized.mp4`,
   fundThree: `${optimizedVideoBase}/fund3-optimized.mp4`,
-  guru: `${optimizedVideoBase}/guru-optimized.mp4`,
   tempo: `${optimizedVideoBase}/tempo-optimized.mp4`,
-  guruBatumi: `${optimizedVideoBase}/guru-batumi-optimized.mp4`,
   otium: `${optimizedVideoBase}/otium-optimized.mp4`,
 } as const;
 
@@ -60,7 +63,6 @@ export const aixcoLiveVideoPreviews = {
   fundOne: `${previewVideoBase}/fund1-preview.mp4`,
   fundTwo: `${previewVideoBase}/fund2-preview.mp4`,
   fundThree: `${previewVideoBase}/fund3-preview.mp4`,
-  guruBatumi: `${previewVideoBase}/guru-batumi-preview.mp4`,
   otium: `${previewVideoBase}/otium-preview.mp4`,
 } as const;
 
@@ -80,16 +82,13 @@ export const aixcoBatumiGalleryVideos = [
 ] as const;
 
 export const aixcoLiveDocuments = {
-  guru: `${documentBase}/guru.pdf`,
   otium: `${documentBase}/otium.pdf`,
 } as const;
 
 export const aixcoLiveAssetDetails = {
   dubaiFundOne: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiFundTwo: `${liveImageBase}/fund2.png`,
-  guruCatalog: `${documentBase}/guru-catalog.jpeg`,
   otiumCatalog: `${documentBase}/otium-catalog.jpeg`,
-  guruPdf: aixcoLiveDocuments.guru,
   otiumPdf: aixcoLiveDocuments.otium,
 } as const;
 

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { CountUpText } from "@/components/CountUpText";
-import { aixcoLiveImages } from "@/lib/aixco-live-assets";
+import { aixcoLiveImages, aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useSiteContent } from "@/data/site-content-context";
 
@@ -20,10 +20,23 @@ export function About() {
         <div aria-label="About AIXCO story and media" className="scroll-reveal self-start lg:self-center">
           <p className="eyebrow">{tx("About AIXCO")}</p>
           <h2
+            aria-label="AIXCO.GLOBAL"
             data-scale="reduced"
+            data-brand-lockup="about"
             className="mt-6 max-w-xl font-display text-[2.35rem] font-semibold leading-[1.04] tracking-normal text-foreground md:text-[2.45rem] lg:text-[clamp(2rem,2.25vw,2.85rem)]"
           >
-            {tx("AIXCO - Real Estate Platform")}
+            <span className="flex min-w-0 items-center gap-3 md:gap-4">
+              <Image
+                src={aixcoLiveLogos.aixcoMark}
+                alt=""
+                aria-hidden="true"
+                width={780}
+                height={704}
+                sizes="(min-width: 1024px) 86px, 68px"
+                className="h-[1.52em] w-[1.52em] shrink-0 object-contain [filter:brightness(0)_saturate(100%)]"
+              />
+              <span className="text-[0.78em] font-semibold uppercase tracking-[-0.03em]">AIXCO.GLOBAL</span>
+            </span>
           </h2>
           <p className="mt-6 max-w-[38rem] text-base leading-[1.62] text-foreground/80 md:text-lg lg:text-[1.05rem]">
             {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}

@@ -202,11 +202,6 @@
     transition: opacity 640ms var(--ease-apple);
   }
 
-  .guru-video-matte-crop {
-    transform: scaleY(1.06) !important;
-    transform-origin: center !important;
-  }
-
   .batumi-match-otium-video-height {
     min-height: 22rem;
   }
@@ -1195,86 +1190,129 @@
     line-height: 1.2;
   }
 
-  .story-batumi-mosaic {
-    position: relative;
-    height: 100%;
-    width: 100%;
+  .story-batumi-gallery {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) clamp(5.8rem, 13svh, 7.8rem);
+    gap: clamp(0.45rem, 0.9svh, 0.72rem);
+    min-height: 0;
     overflow: hidden;
+    padding: clamp(0.32rem, 0.72vw, 0.6rem);
     background:
-      radial-gradient(90% 80% at 82% 12%, hsl(var(--primary-glow) / 0.22), transparent 58%),
-      linear-gradient(145deg, hsl(42 22% 88%), hsl(40 28% 95%) 42%, hsl(var(--surface)) 100%);
+      linear-gradient(90deg, hsl(42 20% 91% / 0.92), hsl(40 32% 98% / 0.98) 48%, hsl(42 22% 91% / 0.9)),
+      hsl(40 30% 98%);
   }
 
-  .story-batumi-mosaic__wash {
+  .story-batumi-gallery__wash {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(90deg, hsl(var(--background) / 0.72), transparent 35%, hsl(var(--foreground) / 0.08)),
-      linear-gradient(180deg, hsl(0 0% 100% / 0.18), transparent 52%, hsl(var(--foreground) / 0.08));
+      radial-gradient(80% 80% at 22% 12%, hsl(0 0% 100% / 0.18), transparent 62%),
+      linear-gradient(180deg, hsl(0 0% 100% / 0.08), transparent 56%, hsl(var(--foreground) / 0.06));
     pointer-events: none;
-    z-index: 2;
-  }
-
-  .story-batumi-mosaic__waves {
-    position: absolute;
-    left: -9%;
-    top: 11%;
-    width: 63%;
-    height: 74%;
-    opacity: 0.18;
-    background-image: url("data:image/svg+xml,%3Csvg width='120' height='44' viewBox='0 0 120 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 22c20 0 20-18 40-18s20 18 40 18 20-18 40-18' fill='none' stroke='%239C6A21' stroke-width='13' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-size: 7.5rem 2.75rem;
-    transform: translate3d(calc((1 - var(--story-text-reveal-progress, 0)) * -2.5rem), 0, 0);
-    transition: transform 120ms linear;
     z-index: 1;
   }
 
-  .story-batumi-mosaic__tile {
-    position: absolute;
-    z-index: 3;
-    overflow: hidden;
-    border: 1px solid hsl(0 0% 100% / 0.48);
-    background: hsl(var(--foreground) / 0.08);
-    box-shadow: 0 30px 70px -46px hsl(220 26% 5% / 0.68);
-    opacity: calc(0.58 + (var(--story-text-reveal-progress, 0) * 0.42));
-    transform:
-      translate3d(
-        calc((1 - var(--story-text-reveal-progress, 0)) * var(--tile-x, 0rem)),
-        calc((1 - var(--story-text-reveal-progress, 0)) * var(--tile-y, 0rem)),
-        0
-      )
-      scale(calc(0.965 + (var(--story-text-reveal-progress, 0) * 0.035)));
-    transition:
-      opacity 120ms linear,
-      transform 120ms linear;
-  }
-
-  .story-batumi-mosaic__tile img {
+  .story-batumi-gallery__hero {
+    position: relative;
+    z-index: 2;
     display: block;
     height: 100%;
+    min-height: 0;
     width: 100%;
-    object-fit: cover;
+    overflow: hidden;
+    border: 1px solid hsl(0 0% 100% / 0.72);
+    background: hsl(40 28% 94% / 0.86);
+    box-shadow:
+      0 1px 0 hsl(0 0% 100% / 0.42) inset,
+      0 24px 54px -38px hsl(220 26% 5% / 0.58);
+    cursor: zoom-in;
   }
 
-  .story-batumi-mosaic__tile--tall {
-    left: 8%;
-    top: 10%;
-    width: 58%;
-    height: 45%;
+  .story-batumi-gallery__hero:focus-visible {
+    outline: 2px solid hsl(var(--primary) / 0.72);
+    outline-offset: 3px;
   }
 
-  .story-batumi-mosaic__tile--wide {
-    right: 5%;
-    top: 36%;
-    width: 70%;
-    height: 33%;
+  .story-batumi-gallery__hero-image,
+  .story-batumi-gallery__thumb-image {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
   }
 
-  .story-batumi-mosaic__tile--lower {
-    left: 14%;
-    bottom: 7%;
-    width: 62%;
-    height: 28%;
+  .story-batumi-gallery__hero-image {
+    transition: transform 340ms var(--ease-apple);
+  }
+
+  .story-batumi-gallery__hero:hover .story-batumi-gallery__hero-image,
+  .story-batumi-gallery__hero:focus-visible .story-batumi-gallery__hero-image {
+    transform: scale(1.018);
+  }
+
+  .story-batumi-gallery__carousel {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0 0 clamp(0.08rem, 0.2svh, 0.16rem);
+    --batumi-carousel-gap: clamp(0.38rem, 0.68vw, 0.62rem);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent);
+  }
+
+  .story-batumi-gallery__track {
+    display: flex;
+    width: max-content;
+    height: 100%;
+    gap: var(--batumi-carousel-gap);
+    animation: story-batumi-gallery-loop 34s linear infinite;
+    will-change: transform;
+  }
+
+  .story-batumi-gallery__thumb {
+    position: relative;
+    flex: 0 0 clamp(6.6rem, 9.4vw, 8.8rem);
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid hsl(var(--foreground) / 0.14);
+    background: hsl(40 28% 94% / 0.92);
+    opacity: 0.72;
+    cursor: pointer;
+    transition:
+      opacity 180ms var(--ease-apple),
+      border-color 180ms var(--ease-apple),
+      box-shadow 180ms var(--ease-apple),
+      transform 180ms var(--ease-apple);
+  }
+
+  .story-batumi-gallery__thumb:hover,
+  .story-batumi-gallery__thumb:focus-visible,
+  .story-batumi-gallery__thumb--active {
+    opacity: 1;
+    border-color: hsl(var(--primary-glow) / 0.74);
+    box-shadow: 0 16px 36px -28px hsl(var(--primary-glow) / 0.48);
+  }
+
+  .story-batumi-gallery__thumb:focus-visible {
+    outline: 2px solid hsl(var(--primary) / 0.72);
+    outline-offset: 2px;
+  }
+
+  .story-batumi-gallery__thumb:hover {
+    transform: translateY(-1px);
+  }
+
+  @keyframes story-batumi-gallery-loop {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+
+    to {
+      transform: translate3d(calc(-50% - (var(--batumi-carousel-gap) / 2)), 0, 0);
+    }
   }
 
   .story-partners-section {
@@ -1333,6 +1371,42 @@
     min-width: 0;
     align-items: flex-start;
     gap: 0.65rem;
+  }
+
+  .story-philosophy-stat {
+    display: grid;
+    min-width: 0;
+    gap: 0.2rem;
+    border: 1px solid hsl(var(--foreground) / 0.08);
+    border-radius: 0.85rem;
+    background: hsl(0 0% 100% / 0.82);
+    box-shadow: 0 14px 36px -30px hsl(220 28% 18% / 0.14);
+    padding: clamp(0.6rem, 1svh, 0.8rem) clamp(0.65rem, 0.95vw, 0.85rem);
+  }
+
+  .story-philosophy-stat .story-metric-value {
+    font-size: clamp(1.35rem, 1.85vw, 1.85rem);
+  }
+
+  .story-philosophy-panel {
+    display: grid;
+    min-width: 0;
+    align-content: start;
+    gap: 0.25rem;
+    border: 1px solid hsl(36 26% 82% / 0.65);
+    border-radius: 1rem;
+    background:
+      radial-gradient(120% 150% at 50% -10%, hsl(40 50% 100%), transparent 70%),
+      linear-gradient(168deg, hsl(40 42% 99%), hsl(36 26% 94%));
+    box-shadow:
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 18px 44px -32px hsl(220 28% 18% / 0.16);
+    padding: clamp(0.8rem, 1.25svh, 1rem) clamp(0.9rem, 1.35vw, 1.1rem);
+  }
+
+  .story-philosophy-platform-title {
+    max-width: 100%;
+    text-wrap: balance;
   }
 
   .news-ticker {
@@ -1869,6 +1943,106 @@
       margin-top: var(--story-metric-gap);
     }
 
+    [data-story-section="philosophy"] {
+      --story-h2-min: 2.5rem;
+      --story-h2-pref: 3.6vw;
+      --story-h2-max: 4.05rem;
+      --story-body-min: 1rem;
+      --story-body-pref: 1.05vw;
+      --story-body-max: 1.16rem;
+      --story-card-title-min: 1.05rem;
+      --story-card-title-pref: 1.18vw;
+      --story-card-title-max: 1.28rem;
+      --story-copy-gap: clamp(0.9rem, 1.55svh, 1.25rem);
+    }
+
+    [data-story-section="philosophy"] [data-story-scene-column] {
+      padding-inline: clamp(1.75rem, 3.2vw, 3.75rem);
+    }
+
+    [data-story-section="philosophy"] [data-story-scene-copy],
+    [data-story-section="philosophy"] [data-story-scene-copy] > * {
+      max-width: 100%;
+      overflow: visible;
+    }
+
+    [data-story-section="philosophy"] .story-philosophy-title {
+      max-width: 100%;
+      text-wrap: balance;
+    }
+
+    [data-story-section="philosophy"] .story-philosophy-title .story-text-reveal,
+    [data-story-section="philosophy"] .story-philosophy-title .story-letter-reveal__text {
+      max-width: 100%;
+      overflow-wrap: normal;
+    }
+
+    [data-story-section="philosophy"] [data-layout="story-philosophy-stats"] {
+      max-width: min(100%, 48rem);
+    }
+
+    [data-story-section="philosophy"] [data-layout="story-philosophy-stats"] > * {
+      min-width: 0;
+      padding: clamp(0.85rem, 1.45svh, 1.15rem) clamp(0.9rem, 1.35vw, 1.15rem);
+    }
+
+    [data-story-section="philosophy"] [data-layout="story-philosophy-stats"] dd {
+      font-size: clamp(1.65rem, 2.15vw, 2.45rem);
+    }
+
+    [data-story-section="philosophy"] [data-layout="story-philosophy-principles"] {
+      max-width: min(100%, 48rem);
+    }
+
+    [data-story-section="philosophyOrigins"],
+    [data-story-section="philosophyPlatform"] {
+      --story-h2-min: 2.35rem;
+      --story-h2-pref: 3.7vw;
+      --story-h2-max: 4.2rem;
+      --story-body-min: 0.98rem;
+      --story-body-pref: 1vw;
+      --story-body-max: 1.08rem;
+      --story-card-title-min: 1.1rem;
+      --story-card-title-pref: 1.3vw;
+      --story-card-title-max: 1.45rem;
+      --story-copy-gap: clamp(0.76rem, 1.25svh, 1rem);
+    }
+
+    [data-story-section="philosophyOrigins"] [data-story-scene-column],
+    [data-story-section="philosophyPlatform"] [data-story-scene-column] {
+      padding-inline: clamp(1.6rem, 2.65vw, 3.1rem);
+    }
+
+    [data-story-section="philosophyOrigins"] [data-layout="story-philosophy-detail"],
+    [data-story-section="philosophyPlatform"] [data-layout="story-philosophy-platform-stats"],
+    [data-story-section="philosophyPlatform"] [data-layout="story-philosophy-platform-panels"] {
+      max-width: min(100%, 56rem);
+      gap: clamp(0.75rem, 1.2svh, 1rem);
+    }
+
+    [data-story-section="philosophyPlatform"] [data-layout="story-philosophy-platform-panels"] {
+      max-width: 100%;
+    }
+
+    [data-story-section="philosophyPlatform"] .story-philosophy-platform-title {
+      max-width: 100%;
+      text-wrap: balance;
+    }
+
+    .story-philosophy-detail-title {
+      max-width: 13ch;
+      text-wrap: balance;
+    }
+
+    .story-philosophy-detail-card {
+      box-shadow: 0 20px 58px -48px hsl(220 26% 5% / 0.48);
+    }
+
+    .story-philosophy-detail-body {
+      font-size: clamp(0.9rem, 0.95vw, 1rem);
+      line-height: 1.55;
+    }
+
     [data-story-scene-copy] [class*="mt-"] {
       margin-top: 0 !important;
     }
@@ -2067,6 +2241,53 @@
       [data-story-scene-copy] .btn-ghost-gold {
         padding-block: 0.58rem !important;
         font-size: 0.86rem !important;
+      }
+
+      [data-story-section="philosophy"] {
+        --story-h2-max: 3.15rem;
+        --story-h2-min: 2.15rem;
+        --story-h2-pref: 3.25vw;
+        --story-copy-gap: clamp(0.64rem, 0.95svh, 0.82rem);
+      }
+
+      [data-story-section="philosophy"] [data-layout="story-philosophy-stats"] dd {
+        font-size: clamp(1.35rem, 1.55vw, 1.75rem);
+      }
+
+      [data-story-section="philosophy"] [data-layout="story-philosophy-principles"] > * {
+        padding-block: 0.58rem;
+      }
+
+      [data-story-section="philosophyOrigins"],
+      [data-story-section="philosophyPlatform"] {
+        --story-h2-max: 3rem;
+        --story-h2-min: 2rem;
+        --story-h2-pref: 3vw;
+        --story-copy-gap: clamp(0.5rem, 0.78svh, 0.68rem);
+      }
+
+      [data-story-section="philosophyOrigins"] [data-story-scene-column],
+      [data-story-section="philosophyPlatform"] [data-story-scene-column] {
+        padding-inline: clamp(1.1rem, 2vw, 2rem);
+      }
+
+      [data-story-section="philosophyOrigins"] .story-philosophy-detail-card,
+      [data-story-section="philosophyPlatform"] .story-philosophy-panel {
+        padding-block: 0.7rem;
+      }
+
+      [data-story-section="philosophyPlatform"] .story-philosophy-stat {
+        padding: 0.55rem 0.6rem;
+      }
+
+      [data-story-section="philosophyPlatform"] .story-philosophy-stat .story-metric-value {
+        font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+      }
+
+      [data-story-section="philosophyOrigins"] .story-philosophy-detail-body,
+      [data-story-section="philosophyPlatform"] .story-philosophy-panel .story-body {
+        font-size: 0.86rem;
+        line-height: 1.45;
       }
     }
   }

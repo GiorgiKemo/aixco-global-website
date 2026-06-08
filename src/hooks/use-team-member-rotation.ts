@@ -46,6 +46,15 @@ export function useTeamMemberRotation({
     [scheduleResume],
   );
 
+  const previewMember = useCallback(
+    (index: number) => {
+      setActiveIndex(index);
+      setIsPaused(true);
+      clearResumeTimeout();
+    },
+    [clearResumeTimeout],
+  );
+
   const pauseRotation = useCallback(() => {
     setIsPaused(true);
     clearResumeTimeout();
@@ -80,6 +89,7 @@ export function useTeamMemberRotation({
   return {
     activeIndex,
     selectMember,
+    previewMember,
     pauseRotation,
     resumeRotation,
   };

@@ -8,7 +8,7 @@ export function PhilosophyCallout() {
   const { tx } = useI18n();
 
   return (
-    <section aria-label="AIXCO Philosophy" className="border-y border-border/70 bg-surface/45">
+    <section id="philosophy" aria-label="AIXCO Philosophy" className="scroll-mt-16 border-y border-border/70 bg-surface/45 md:scroll-mt-20">
       <div className="container-x grid gap-7 py-10 md:grid-cols-[1fr_auto] md:items-center md:py-12">
         <div>
           <p className="eyebrow">{tx("Our philosophy")}</p>
@@ -20,7 +20,7 @@ export function PhilosophyCallout() {
           </p>
         </div>
 
-        <Link href="/aixco-philosophy" prefetch={false} className="btn-gold w-full sm:w-auto">
+        <Link href="#philosophy" prefetch={false} className="btn-gold w-full sm:w-auto">
           <ShieldCheck className="h-4 w-4" aria-hidden />
           {tx("Read AIXCO Philosophy")}
           <ArrowRight className="h-4 w-4" aria-hidden />

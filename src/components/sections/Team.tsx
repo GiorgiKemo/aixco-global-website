@@ -45,7 +45,7 @@ export function Team() {
   const [isTeamInView, setIsTeamInView] = useState(
     () => process.env.NODE_ENV === 'test' || process.env.VITEST === 'true',
   );
-  const { activeIndex, selectMember, pauseRotation, resumeRotation } = useTeamMemberRotation({
+  const { activeIndex, selectMember, previewMember, resumeRotation } = useTeamMemberRotation({
     memberCount: team.length,
     isActive: isTeamInView,
   });
@@ -105,8 +105,8 @@ export function Team() {
                   selectMember(index);
                   openTeam(m);
                 }}
-                onMouseEnter={pauseRotation}
-                onFocus={pauseRotation}
+                onMouseEnter={() => previewMember(index)}
+                onFocus={() => previewMember(index)}
                 onBlur={resumeRotation}
                 className={cn(
                   'scroll-reveal mac-card group flex h-full flex-col overflow-hidden text-left transition-[box-shadow,transform]',

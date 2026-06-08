@@ -95,7 +95,8 @@ describe("site content backend", () => {
     expect(content.participationRoutes.map((route) => route.id)).toEqual(["apartment", "brokerage", "management"]);
     expect(JSON.stringify(content.participationRoutes)).not.toMatch(/bond|guaranteed|30% return/i);
     expect(content.faqGroups[0].items[0].q).toBe("What is the minimum amount to reserve or buy?");
-    expect(content.faqGroups[0].items[0].a).toContain("€10,000");
+    expect(content.faqGroups[0].items[0].a).toContain("Entry starts from €50,000");
+    expect(content.faqGroups[0].items[0].a).toContain("10% down payment");
     expect(content.faqGroups[0].items.some((item) => item.q === "Can I ask about AIXCO company financing?")).toBe(true);
   });
 

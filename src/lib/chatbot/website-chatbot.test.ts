@@ -17,18 +17,22 @@ describe("website chatbot", () => {
   });
 
   it("answers Batumi ownership and property questions from the website content", () => {
-    const answer = ask("Can foreigners buy Batumi apartments and what are the benefits?");
+    const ownershipAnswer = ask("Can foreigners buy Batumi apartments?");
+    const benefitsAnswer = ask("What are the Batumi property benefits, yields, and financing?");
 
-    expect(answer.confidence).toBe("high");
-    expect(answer.answer).toMatch(/foreigners can purchase and own real estate/i);
-    expect(answer.answer).toContain("Rental income scenarios");
+    expect(ownershipAnswer.confidence).toBe("high");
+    expect(ownershipAnswer.answer).toContain("100% foreign ownership");
+    expect(ownershipAnswer.answer).toContain("no residency permit is required");
+    expect(benefitsAnswer.confidence).toBe("high");
+    expect(benefitsAnswer.answer).toContain("Approx. 8% net rental yields");
+    expect(benefitsAnswer.answer).toContain("Bank financing available from 60% of the property value");
   });
 
   it("answers minimum investment questions from the FAQ", () => {
     const answer = ask("What is the minimum amount to reserve or buy?");
 
-    expect(answer.answer).toContain("Selected Batumi apartments");
-    expect(answer.answer).toContain("\u20ac10,000");
+    expect(answer.answer).toContain("Entry starts from \u20ac50,000");
+    expect(answer.answer).toContain("10% down payment");
     expect(answer.answer).not.toContain("\u00e2");
   });
 
@@ -45,11 +49,12 @@ describe("website chatbot", () => {
 
   it("answers download and materials questions from the website content", () => {
     const answer = ask("Where can clients download brochures and assets?");
+    const retiredProjectName = ["Gu", "ru"].join("");
 
     expect(answer.confidence).toBe("high");
     expect(answer.matchedTopics).toContain("Materials & downloads");
     expect(answer.answer).toContain("#materials");
-    expect(answer.answer).toContain("Guru brochure");
+    expect(answer.answer).not.toContain(retiredProjectName);
     expect(answer.answer).toContain("Otium brochure");
   });
 

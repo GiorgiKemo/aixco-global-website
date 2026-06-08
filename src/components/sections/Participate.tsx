@@ -19,16 +19,16 @@ const videoMap: Record<string, { src: string; previewSrc: string; poster: string
 
 const apartmentMetrics = [
   {
-    value: "€50K+",
+    value: "€50K",
     label: "Entry pricing",
   },
   {
-    value: "8%+",
-    label: "Rental income",
+    value: "8%",
+    label: "Approx. net rental yields",
   },
   {
     value: "60%",
-    label: "Financing option",
+    label: "Bank financing",
   },
   {
     value: "100%",

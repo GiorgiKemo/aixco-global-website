@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { About } from "./About";
@@ -18,10 +18,12 @@ describe("About", () => {
     expect(container.querySelector('[data-section-layout="about-balanced-two-column"]')).toBeInTheDocument();
     expect(screen.getByLabelText("About AIXCO story and media")).toBeInTheDocument();
     expect(screen.getByLabelText("AIXCO performance metrics")).toHaveAttribute("data-density", "compact");
-    expect(screen.getByRole("heading", { name: "AIXCO - Real Estate Platform" })).toHaveAttribute(
-      "data-scale",
-      "reduced",
-    );
+    const headline = screen.getByRole("heading", { name: "AIXCO.GLOBAL" });
+    expect(headline).toHaveAttribute("data-scale", "reduced");
+    expect(headline).toHaveAttribute("data-brand-lockup", "about");
+    expect(within(headline).getByText("AIXCO.GLOBAL")).toBeInTheDocument();
+    expect(headline.querySelector("img")).toHaveAttribute("src", expect.stringContaining("AIXW"));
+    expect(screen.queryByRole("heading", { name: "AIXCO - Real Estate Platform" })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /Read AIXCO Philosophy/i })).not.toBeInTheDocument();
 
     const storyImage = screen.getByRole("img", {

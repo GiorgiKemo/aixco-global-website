@@ -13,14 +13,12 @@ describe("aixcoLiveImages", () => {
   it("uses compressed web images for large rendered surfaces", () => {
     expect(aixcoLiveImages.aboutArchitecture).toContain("batumip.webp");
     expect(aixcoLiveImages.batumiBuyPoster).toContain("batumi1-poster.webp");
-    expect(aixcoLiveImages.batumiGuru).toContain("guru.webp");
     expect(aixcoLiveImages.batumiOtium).toContain("otium-reverance.webp");
   });
 
   it("publishes the clickable asset-detail catalogs and source images", () => {
     expect(aixcoLiveAssetDetails.dubaiFundOne).toContain("/images/fund/fund1.jpeg");
     expect(aixcoLiveAssetDetails.dubaiFundTwo).toContain("/images/fund2.png");
-    expect(aixcoLiveAssetDetails.guruCatalog).toContain("/documents/guru-catalog.jpeg");
     expect(aixcoLiveAssetDetails.otiumCatalog).toContain("/documents/otium-catalog.jpeg");
   });
 
@@ -44,7 +42,6 @@ describe("aixcoLiveImages", () => {
     expect(aixcoLiveVideoPreviews.batumiOverview).toContain("/aixco-global-op2/media/batumi-gallery/previews/batumi2-preview.mp4");
     expect(aixcoLiveVideoPreviews.bonds).toContain("/aixco-global-op2/media/previews/bonds-preview.mp4");
     expect(aixcoLiveVideoPreviews.batumiBuy).toContain("/aixco-global-op2/media/batumi-gallery/previews/batumi1-preview.mp4");
-    expect(aixcoLiveVideoPreviews.guruBatumi).toContain("/aixco-global-op2/media/previews/guru-batumi-preview.mp4");
     expect(aixcoLiveVideoPreviews.otium).toContain("/aixco-global-op2/media/previews/otium-preview.mp4");
     expect(aixcoBatumiGalleryVideos.every(({ previewSrc }) => previewSrc.includes("/media/batumi-gallery/previews/"))).toBe(true);
     expect(aixcoBatumiGalleryVideos.every(({ src, previewSrc }) => src !== previewSrc)).toBe(true);

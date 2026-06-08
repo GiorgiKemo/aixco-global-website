@@ -43,13 +43,13 @@ export const legacyTimelineChapters: LegacyTimelineChapter[] = [
     id: "batumi",
     eyebrow: "Batumi · Current opportunity",
     title: "Opportunity-driven focus in Georgia",
-    highlight: "Buy apartments from €50,000",
+    highlight: "Selected apartments from €50,000",
     body:
-      "Today, AIXCO is focused on Batumi—helping buyers purchase apartments, supporting brokers, and administering property with transparent euro pricing. Entry typically starts from €10,000, with 10% reservation options on selected units from €50,000.",
+      "Today, AIXCO is focused on selected Batumi projects and apartments available exclusively through AIXCO, with 100% foreign ownership, no residency permit requirement, bank financing from 60% of property value, and an ISO-certified transparency process.",
     stats: [
-      { value: "€50K+", label: "Apartment pricing" },
-      { value: "8%+", label: "Rental income scenarios" },
-      { value: "Now", label: "Active market" },
+      { value: "€50K+", label: "Entry from" },
+      { value: "60%", label: "Bank financing" },
+      { value: "8%", label: "Approx. net rental yields" },
     ],
     status: "current",
   },

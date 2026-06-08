@@ -55,7 +55,7 @@ export const philosophySections = [
     title: "Integrity, stability, discipline, and responsible risk assessment",
     paragraphs: [
       "Integrity, stability, discipline, and responsible risk assessment remain central to every aspect of our real estate practice.",
-      "As AIXCO continues to grow internationally, its vision remains unchanged: to build a resilient real estate services platform—buy, broker, and manage property—rooted in Swiss heritage, disciplined execution, and enduring long-term value.",
+      "As AIXCO continues to grow internationally, its vision remains unchanged: to build a resilient real estate services platform - buy, broker, and manage property - rooted in Swiss heritage, disciplined execution, and enduring long-term value.",
     ],
   },
 ] as const;

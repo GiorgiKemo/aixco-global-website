@@ -80,57 +80,33 @@ describe("Batumi", () => {
     expect(container.querySelector('section[id="batumi"]')).not.toBeInTheDocument();
   });
 
-  it("renders Guru and Otium as alternating Dubai-style project profile cards", () => {
+  it("renders Otium as the Batumi project profile card and excludes the retired Batumi project", () => {
     const { container } = renderBatumi();
+    const retiredProjectId = ["g", "uru"].join("");
+    const retiredProjectName = ["Gu", "ru"].join("");
 
     const profileGrid = container.querySelector("[data-layout='batumi-project-profile-cards']");
-    const guruCard = container.querySelector("[data-batumi-property-card='guru']");
     const otiumCard = container.querySelector("[data-batumi-property-card='otium']");
-    const guruMedia = guruCard?.querySelector("[data-batumi-property-media]");
     const otiumMedia = otiumCard?.querySelector("[data-batumi-property-media]");
-    const guruMetrics = guruCard?.querySelector("[data-batumi-property-highlight-grid='guru']");
     const otiumMetrics = otiumCard?.querySelector("[data-batumi-property-highlight-grid='otium']");
-    const guruDetails = guruCard?.querySelector("[data-batumi-property-detail-notes='guru']");
     const otiumDetails = otiumCard?.querySelector("[data-batumi-property-detail-notes='otium']");
-    const guruTitle = guruCard?.querySelector("[data-batumi-property-title]");
     const otiumTitle = otiumCard?.querySelector("[data-batumi-property-title]");
-    const guruAssetLink = within(guruCard as HTMLElement).getByRole("link", { name: /View Asset Details: Guru/ });
     const otiumAssetLink = within(otiumCard as HTMLElement).getByRole("link", { name: /View Asset Details: Otium/ });
 
     expect(profileGrid).toBeInTheDocument();
-    expect(guruCard).toHaveAttribute("data-design-source", "dubai-card-reference");
+    expect(container.querySelector(`[data-batumi-property-card='${retiredProjectId}']`)).not.toBeInTheDocument();
+    expect(screen.queryByText(retiredProjectName)).not.toBeInTheDocument();
     expect(otiumCard).toHaveAttribute("data-design-source", "dubai-card-reference");
-    expect(guruCard).toHaveAttribute("data-image-position", "left");
-    expect(otiumCard).toHaveAttribute("data-image-position", "right");
-    expect(guruCard).toHaveAttribute("data-density", "standard");
-    expect(guruCard?.className).toContain("transition-[transform,box-shadow,border-color]");
-    expect(guruCard?.className).not.toContain("transition-all");
-    expect(guruCard?.className).toContain("md:grid-cols-12");
-    expect(guruMedia?.className).toContain("md:col-span-5");
-    expect(guruMedia?.className).toContain("batumi-match-otium-video-height");
-    expect(otiumMedia?.className).toContain("md:order-2");
+    expect(otiumCard).toHaveAttribute("data-image-position", "left");
+    expect(otiumCard).toHaveAttribute("data-density", "standard");
+    expect(otiumCard?.className).toContain("transition-[transform,box-shadow,border-color]");
+    expect(otiumCard?.className).not.toContain("transition-all");
+    expect(otiumCard?.className).toContain("md:grid-cols-12");
+    expect(otiumMedia?.className).toContain("md:col-span-5");
+    expect(otiumMedia?.className).toContain("min-h-[22rem]");
     expect(otiumMedia?.className).not.toContain("batumi-match-otium-video-height");
-    expect(within(guruCard as HTMLElement).getByRole("heading", { name: "Guru" })).toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).getByRole("heading", { name: "Otium" })).toBeInTheDocument();
-    expect(guruTitle?.className).toContain("border-b");
-    expect(guruTitle?.className).toContain("lg:p-10");
-    expect(guruTitle?.querySelector("p")).not.toBeInTheDocument();
     expect(otiumTitle?.querySelector("p")).not.toBeInTheDocument();
-    expect(guruCard).toHaveTextContent("667");
-    expect(guruCard).toHaveTextContent("units");
-    expect(guruCard).toHaveTextContent("150 meters from the sea");
-    expect(guruMetrics).toHaveTextContent("29");
-    expect(guruMetrics).toHaveTextContent("667");
-    expect(guruMetrics).toHaveTextContent("85%");
-    expect(guruDetails).toHaveTextContent("3,000 sqm");
-    expect(guruDetails).toHaveTextContent("$600/month");
-    expect(guruDetails).toHaveTextContent("90% potential occupancy");
-    expect(guruCard).not.toHaveTextContent("Guru PDF");
-    expect(within(guruCard as HTMLElement).getByLabelText("Guru")).toHaveClass("guru-video-matte-crop");
-    expect(guruAssetLink).toHaveClass("asset-detail-cta");
-    expect(guruAssetLink.className).not.toContain("bottom-8");
-    expect(guruAssetLink.querySelector(".asset-detail-cta__label")).toHaveTextContent("View Asset Details");
-    expect(guruAssetLink.querySelector(".asset-detail-cta__icon")).toBeInTheDocument();
     expect(otiumCard).toHaveTextContent("59 Adlia Street");
     expect(otiumCard).toHaveTextContent("408");
     expect(otiumCard).toHaveTextContent("total units");
@@ -142,15 +118,11 @@ describe("Batumi", () => {
     expect(otiumDetails).toHaveTextContent("45,000 sqm");
     expect(otiumDetails).toHaveTextContent("$80/night");
     expect(otiumCard).not.toHaveTextContent("Otium PDF");
-    expect(within(otiumCard as HTMLElement).getByLabelText("Otium")).not.toHaveClass("guru-video-matte-crop");
-    expect(within(guruCard as HTMLElement).getByRole("button", { name: /Play video: Guru/ })).toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).getByRole("button", { name: /Play video: Otium/ })).toBeInTheDocument();
-    expect(guruAssetLink).toHaveAttribute("href", expect.stringContaining("guru-catalog.jpeg"));
     expect(otiumAssetLink).toHaveAttribute("href", expect.stringContaining("otium-catalog.jpeg"));
     expect(otiumAssetLink).toHaveClass("asset-detail-cta");
-    expect(within(guruCard as HTMLElement).queryByRole("link", { name: /Open Guru profile/ })).not.toBeInTheDocument();
     expect(within(otiumCard as HTMLElement).queryByRole("link", { name: /Open Otium profile/ })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Guru" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: retiredProjectName })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Otium" })).not.toBeInTheDocument();
   });
 
@@ -177,7 +149,7 @@ describe("Batumi", () => {
 
     expect(marketMedia).not.toHaveTextContent("01");
     expect(propertyCards[0].querySelector("[data-batumi-property-media]")).not.toHaveTextContent("02");
-    expect(propertyCards[1].querySelector("[data-batumi-property-media]")).not.toHaveTextContent("03");
+    expect(propertyCards).toHaveLength(1);
   });
 
   it("does not use a CMS property URL as an external asset link", () => {
@@ -199,9 +171,9 @@ describe("Batumi", () => {
       </I18nProvider>,
     );
 
-    expect(screen.getByRole("link", { name: /View Asset Details: Guru/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /View Asset Details: Otium/ })).toHaveAttribute(
       "href",
-      expect.stringContaining("guru-catalog.jpeg"),
+      expect.stringContaining("otium-catalog.jpeg"),
     );
   });
 });

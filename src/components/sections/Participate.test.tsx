@@ -95,7 +95,8 @@ describe("Participate", () => {
       "text-[clamp(2.45rem,2.85vw,3rem)]",
     );
     expect(within(apartmentCopy as HTMLElement).getByText("Entry pricing")).toBeInTheDocument();
-    expect(within(apartmentCopy as HTMLElement).getByText("Rental income")).toBeInTheDocument();
+    expect(within(apartmentCopy as HTMLElement).getByText("Approx. net rental yields")).toBeInTheDocument();
+    expect(within(apartmentCopy as HTMLElement).getByText("Bank financing")).toBeInTheDocument();
     expect(within(apartmentCopy as HTMLElement).getByText("Foreign ownership")).toBeInTheDocument();
     expect(within(brokerageCopy as HTMLElement).getByRole("button", { name: /Register/ }).className).not.toContain("mt-auto");
     expect(within(brokerageCopy as HTMLElement).getByRole("button", { name: /Register/ })).toHaveClass("self-start");

@@ -12,10 +12,10 @@ function renderPhilosophyCallout() {
 }
 
 describe("PhilosophyCallout", () => {
-  it("surfaces the philosophy page as a visible home-page callout", () => {
+  it("surfaces philosophy as an in-page home section", () => {
     renderPhilosophyCallout();
 
-    expect(screen.getByLabelText("AIXCO Philosophy")).toBeInTheDocument();
+    expect(screen.getByLabelText("AIXCO Philosophy")).toHaveAttribute("id", "philosophy");
     expect(
       screen.getByRole("heading", {
         name: "From Switzerland to Dubai to Batumi—disciplined real estate execution since 2009.",
@@ -23,7 +23,7 @@ describe("PhilosophyCallout", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Read AIXCO Philosophy/i })).toHaveAttribute(
       "href",
-      "/aixco-philosophy",
+      "#philosophy",
     );
   });
 });

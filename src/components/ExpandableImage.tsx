@@ -4,6 +4,7 @@ import {
   useId,
   useRef,
   useState,
+  type CSSProperties,
   type MouseEvent as ReactMouseEvent,
   type ReactNode,
   type TouchEvent as ReactTouchEvent,
@@ -18,10 +19,11 @@ type ExpandableImageProps = {
   title: string;
   className?: string;
   children: ReactNode;
+  style?: CSSProperties;
   tabIndex?: number;
 };
 
-export function ExpandableImage({ src, title, className = "", children, tabIndex }: ExpandableImageProps) {
+export function ExpandableImage({ src, title, className = "", children, style, tabIndex }: ExpandableImageProps) {
   const tx = useOptionalI18n()?.tx ?? ((text: string) => text);
   const imageId = useId();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -196,6 +198,7 @@ export function ExpandableImage({ src, title, className = "", children, tabIndex
         aria-label={`${tx("Expand image")}: ${tx(title)}`}
         className={`expandable-image-trigger block overflow-hidden border-0 bg-transparent p-0 text-left ${className}`}
         data-expandable-image-trigger
+        style={style}
         tabIndex={tabIndex}
         onClick={handleClick}
         onMouseDown={handleMouseDown}

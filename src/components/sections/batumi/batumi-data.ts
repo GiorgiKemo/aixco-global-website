@@ -14,29 +14,25 @@ export type BatumiBenefits = SiteContent["batumiBenefits"];
 export type Translate = (copy: string) => string;
 
 export const batumiImageMap: Record<string, string> = {
-  "batumi-guru": aixcoLiveImages.batumiGuru,
   "batumi-otium": aixcoLiveImages.batumiOtium,
 };
 
 export const batumiVideoMap: Record<string, { src: string; previewSrc: string }> = {
-  guruBatumi: { src: aixcoLiveVideos.guruBatumi, previewSrc: aixcoLiveVideoPreviews.guruBatumi },
   otium: { src: aixcoLiveVideos.otium, previewSrc: aixcoLiveVideoPreviews.otium },
 };
 
 export const batumiDocumentMap: Record<string, string> = {
-  guru: aixcoLiveDocuments.guru,
   otium: aixcoLiveDocuments.otium,
 };
 
 export const batumiDetailAssetMap: Record<string, string> = {
-  guru: aixcoLiveAssetDetails.guruCatalog,
   otium: aixcoLiveAssetDetails.otiumCatalog,
 };
 
 export const batumiMarketMetrics = [
-  { label: "Rental income", value: "8%", subtext: "scenario from", subtextPosition: "before" },
-  { label: "Annual growth", value: "12%", subtext: "up to", subtextPosition: "before" },
-  { label: "Entry price", value: "EUR 50k", subtext: "from", subtextPosition: "before", highlight: true },
+  { label: "Entry", value: "EUR 50k", subtext: "from", subtextPosition: "before", highlight: true },
+  { label: "Bank financing", value: "60%", subtext: "property value", subtextPosition: "after" },
+  { label: "Net rental yields", value: "8%", subtext: "approx.", subtextPosition: "before" },
 ] as const;
 
 export const batumiMarketDetailIcons: LucideIcon[] = [Home, Percent, TrendingUp, ShieldCheck];
@@ -44,9 +40,9 @@ export const batumiProjectDetailIcons: LucideIcon[] = [Building2, FileText, Tren
 
 export function getBatumiMarketDetails(benefits: BatumiBenefits) {
   return [
-    { label: "Ownership", content: benefits[3] },
-    { label: "Tax", content: benefits[4] },
-    { label: "Capital gains", content: benefits[5] },
-    { label: "Financing", content: benefits[6] },
+    { label: "Exclusive access", content: [benefits[0], benefits[3], benefits[10]].filter(Boolean).join(" ") },
+    { label: "Ownership", content: [benefits[1], benefits[2]].filter(Boolean).join(" ") },
+    { label: "Financing", content: [benefits[4], benefits[6]].filter(Boolean).join(" ") },
+    { label: "Tax & transparency", content: [benefits[7], benefits[8], benefits[9]].filter(Boolean).join(" ") },
   ].filter((detail): detail is { label: string; content: string } => Boolean(detail.content));
 }
