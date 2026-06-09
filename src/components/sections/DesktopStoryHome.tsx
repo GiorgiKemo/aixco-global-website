@@ -1601,10 +1601,16 @@ function DubaiScene({
       </div>
       {galleryGroups.length > 0 && (
         <div data-layout="story-dubai-marquee" className="w-full">
-          {galleryGroups.slice(0, 2).map((group) => (
+          {galleryGroups.slice(0, 2).map((group, index) => (
             <div key={group.title} className="min-w-0">
-              <p className="story-metric-label mb-3 text-primary/80">{tx(group.title)}</p>
-              <DubaiImageMarquee group={group} shouldReduceMotion={shouldReduceMotion} tx={tx} />
+              <p className="story-dubai-gallery-title">{tx(group.title)}</p>
+              <DubaiImageMarquee
+                group={group}
+                reverse={index % 2 === 1}
+                shouldReduceMotion={shouldReduceMotion}
+                speed="slow"
+                tx={tx}
+              />
             </div>
           ))}
         </div>

@@ -7,10 +7,11 @@ export const company = {
   founded: 2009,
   offices: ["Vienna", "Dubai", "Batumi"],
   socials: {
-    linkedin: "https://www.linkedin.com/company/aixco-global",
-    instagram: "https://www.instagram.com/aixco.global",
-    youtube: "https://www.youtube.com/@aixco-global",
-    x: "https://x.com/aixcoglobal",
+    website: "https://aixco.group/",
+    linkedin: "https://www.linkedin.com/company/aixco",
+    instagram: "",
+    youtube: "",
+    x: "",
   },
   portals: {
     customerLogin: "https://workw.com/realestate/customer/login",

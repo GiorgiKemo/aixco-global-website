@@ -1909,6 +1909,24 @@
       overflow: hidden;
     }
 
+    [data-story-section="dubai"] {
+      --story-dubai-section-height: clamp(68rem, 152svh, 78rem);
+      height: var(--story-dubai-section-height) !important;
+      min-height: var(--story-dubai-section-height) !important;
+      max-height: none;
+      overflow: visible;
+    }
+
+    [data-story-section="dubai"] > div,
+    [data-story-section="dubai"] [data-story-scene-column],
+    [data-story-section="dubai"] [data-story-scene-media],
+    [data-story-section="dubai"] [data-story-scene-copy],
+    [data-story-section="dubai"] [data-story-scene-copy] > * {
+      height: 100%;
+      min-height: 100svh;
+      overflow: visible;
+    }
+
     [data-story-section="contact"] .story-footer {
       height: 100%;
       min-height: 0;
@@ -2000,19 +2018,41 @@
       padding-block: clamp(0.95rem, 1.55svh, 1.35rem);
     }
 
+    [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-metric-label {
+      max-width: 100%;
+      font-size: clamp(0.68rem, 0.85vw, 0.78rem);
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: auto;
+      letter-spacing: clamp(0.04em, 0.08vw, 0.075em);
+      line-height: 1.22;
+    }
+
     [data-story-scene-copy] [data-layout="story-dubai-marquee"] {
       display: grid;
-      gap: clamp(0.8rem, 1.35svh, 1.05rem);
+      gap: clamp(1rem, 1.7svh, 1.35rem);
       margin-top: var(--story-section-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-dubai-marquee"] .story-dubai-gallery-title {
+      margin-bottom: clamp(0.45rem, 0.8svh, 0.65rem);
+      color: hsl(var(--primary));
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 1.7vw, 1.35rem);
+      font-weight: 650;
+      letter-spacing: 0;
+      line-height: 1.12;
     }
 
     [data-story-scene-copy] [data-layout="story-dubai-marquee"] .dubai-image-marquee {
       --dubai-image-marquee-gap: clamp(0.65rem, 1.2vw, 0.9rem);
+      padding-block: 0;
     }
 
     [data-story-scene-copy] [data-layout="story-dubai-marquee"] .dubai-gallery-tile {
-      flex-basis: clamp(12rem, 22vw, 20rem);
-      height: clamp(7rem, 14svh, 10rem);
+      flex-basis: clamp(18rem, 32vw, 28rem);
+      height: clamp(10.25rem, 18svh, 14.75rem);
+      border-radius: calc(var(--radius) * 1.2);
     }
 
     [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-card-title + .grid {

@@ -47,9 +47,12 @@ describe("Footer", () => {
     expect(screen.getByRole("link", { name: /Official systems certified/i })).toHaveClass("min-h-12");
     expect(screen.getByRole("button", { name: "Terms & Conditions" })).toHaveClass("min-h-10");
     expect(screen.getByRole("button", { name: "Privacy Policy" })).toHaveClass("min-h-10");
-    for (const label of ["Instagram", "LinkedIn", "YouTube", "X"]) {
+    for (const label of ["AIXCO Group website", "LinkedIn"]) {
       expect(screen.getByRole("link", { name: label })).toHaveClass("h-11", "w-11");
     }
+    expect(screen.queryByRole("link", { name: "Instagram" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "YouTube" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "X" })).not.toBeInTheDocument();
   });
 
   it("falls back when social URLs are outside the expected platforms", () => {
@@ -62,6 +65,7 @@ describe("Footer", () => {
               ...siteContentDefaults.company,
               socials: {
                 ...siteContentDefaults.company.socials,
+                website: "https://evil.example/",
                 instagram: "javascript:alert(1)",
                 linkedin: "https://evil.example/company/aixco-global",
                 youtube: "https://evil.example/@aixco-global",
@@ -77,18 +81,16 @@ describe("Footer", () => {
       </I18nProvider>,
     );
 
-    expect(screen.getByRole("link", { name: "Instagram" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "AIXCO Group website" })).toHaveAttribute(
       "href",
-      "https://www.instagram.com/aixco.global",
+      "https://aixco.group/",
     );
     expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
       "href",
-      "https://www.linkedin.com/company/aixco-global",
+      "https://www.linkedin.com/company/aixco",
     );
-    expect(screen.getByRole("link", { name: "YouTube" })).toHaveAttribute(
-      "href",
-      "https://www.youtube.com/@aixco-global",
-    );
-    expect(screen.getByRole("link", { name: "X" })).toHaveAttribute("href", "https://x.com/aixcoglobal");
+    expect(screen.queryByRole("link", { name: "Instagram" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "YouTube" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "X" })).not.toBeInTheDocument();
   });
 });

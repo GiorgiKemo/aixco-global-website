@@ -43,11 +43,19 @@ function getGalleryWheelDelta(event: WheelEvent) {
 
 type DubaiImageMarqueeProps = {
   group: DubaiFundGalleryGroup;
+  reverse?: boolean;
   shouldReduceMotion: boolean | null;
+  speed?: "standard" | "slow";
   tx: Translate;
 };
 
-export function DubaiImageMarquee({ group, shouldReduceMotion, tx }: DubaiImageMarqueeProps) {
+export function DubaiImageMarquee({
+  group,
+  reverse = false,
+  shouldReduceMotion,
+  speed = "standard",
+  tx,
+}: DubaiImageMarqueeProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const loopWidthRef = useRef(0);
@@ -158,8 +166,12 @@ export function DubaiImageMarquee({ group, shouldReduceMotion, tx }: DubaiImageM
     const deltaSeconds = Math.min(delta, 64) / 1000;
     if (deltaSeconds <= 0) return;
 
-    targetOffset.set(targetOffset.get() + (shouldReduceMotion ? 22 : 46) * deltaSeconds);
-  });
+    const speedPixels = speed === "slow" ? 24 : 34;
+    const reducedSpeedPixels = speed === "slow" ? 12 : 18;
+    const direction = reverse ? -1 : 1;
+
+    targetOffset.set(targetOffset.get() + direction * (shouldReduceMotion ? reducedSpeedPixels : speedPixels) * deltaSeconds);
+  },);
 
   const updateDrag = useCallback((clientX: number, timeStamp: number) => {
     const drag = dragRef.current;
@@ -255,6 +267,8 @@ export function DubaiImageMarquee({ group, shouldReduceMotion, tx }: DubaiImageM
       data-auto-scroll="continuous"
       data-motion-preference={shouldReduceMotion ? "reduced" : "standard"}
       data-motion-engine="framer-motion"
+      data-scroll-direction={reverse ? "reverse" : "forward"}
+      data-scroll-speed={speed}
       data-visual-scroll="framer-transform"
       data-glide-scroll-native="true"
       data-scroll-easing="true"

@@ -1,6 +1,6 @@
 "use client";
 
-import { Instagram, Linkedin, Twitter, Youtube, type LucideIcon } from "lucide-react";
+import { Globe2, Linkedin, type LucideIcon } from "lucide-react";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { getSafeHttpsUrl } from "@/lib/security/urls";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,7 @@ type SocialLink = {
   label: string;
   fallback: string;
   allowedHosts: string[];
+  allowedPath: string;
   Icon: LucideIcon;
 };
 
@@ -25,32 +26,20 @@ type SocialLinksProps = {
 
 const socialLinks: SocialLink[] = [
   {
-    key: "instagram",
-    label: "Instagram",
-    fallback: "https://www.instagram.com/aixco.global",
-    allowedHosts: ["instagram.com", "www.instagram.com"],
-    Icon: Instagram,
+    key: "website",
+    label: "AIXCO Group website",
+    fallback: "https://aixco.group/",
+    allowedHosts: ["aixco.group", "www.aixco.group"],
+    allowedPath: "/",
+    Icon: Globe2,
   },
   {
     key: "linkedin",
     label: "LinkedIn",
-    fallback: "https://www.linkedin.com/company/aixco-global",
+    fallback: "https://www.linkedin.com/company/aixco",
     allowedHosts: ["linkedin.com", "www.linkedin.com"],
+    allowedPath: "/company/aixco",
     Icon: Linkedin,
-  },
-  {
-    key: "youtube",
-    label: "YouTube",
-    fallback: "https://www.youtube.com/@aixco-global",
-    allowedHosts: ["youtube.com", "www.youtube.com", "youtu.be"],
-    Icon: Youtube,
-  },
-  {
-    key: "x",
-    label: "X",
-    fallback: "https://x.com/aixcoglobal",
-    allowedHosts: ["x.com", "www.x.com", "twitter.com", "www.twitter.com"],
-    Icon: Twitter,
   },
 ];
 
@@ -71,25 +60,30 @@ export function SocialLinks({
 
   return (
     <div aria-label={ariaLabel} className={cn("flex items-center gap-2", className)}>
-      {socialLinks.map(({ key, label, fallback, allowedHosts, Icon }) => (
-        <a
-          key={key}
-          aria-label={label}
-          href={getSafeHttpsUrl(socials[key], fallback, allowedHosts)}
-          target="_blank"
-          rel="noreferrer"
-          className={resolvedLinkClassName}
-        >
-          <span
-            className={cn(
-              "absolute inset-0 bg-gradient-to-br via-transparent to-white/8 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
-              theme === "light" ? "from-primary/10" : "from-primary/18",
-            )}
-            aria-hidden
-          />
-          <Icon className="relative h-5 w-5" aria-hidden="true" />
-        </a>
-      ))}
+      {socialLinks.map(({ key, label, fallback, allowedHosts, allowedPath, Icon }) => {
+        const safeHref = getSafeHttpsUrl(socials[key], fallback, allowedHosts);
+        const href = new URL(safeHref).pathname.replace(/\/$/, "") === allowedPath.replace(/\/$/, "") ? safeHref : fallback;
+
+        return (
+          <a
+            key={key}
+            aria-label={label}
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            className={resolvedLinkClassName}
+          >
+            <span
+              className={cn(
+                "absolute inset-0 bg-gradient-to-br via-transparent to-white/8 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+                theme === "light" ? "from-primary/10" : "from-primary/18",
+              )}
+              aria-hidden
+            />
+            <Icon className="relative h-5 w-5" aria-hidden="true" />
+          </a>
+        );
+      })}
     </div>
   );
 }
