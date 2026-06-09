@@ -97,8 +97,41 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
   "Clients and sales partners": { de: "Clients and sales partners", ru: "Clients and sales partners", ka: "Clients and sales partners", tr: "Clients and sales partners", ar: "Clients and sales partners" },
   "Clients and partners": { de: "Clients and partners", ru: "Clients and partners", ka: "Clients and partners", tr: "Clients and partners", ar: "Clients and partners" },
   Start: { de: "Starten Sie", ru: "Начните", ka: "დაიწყეთ", tr: "Başlatın", ar: "ابدأ" },
+  About: { de: "Ueber AIXCO", ru: "About", ka: "About", tr: "About", ar: "About" },
   Login: { de: "Anmelden", ru: "Войти", ka: "შესვლა", tr: "Giriş", ar: "تسجيل الدخول" },
   Register: { de: "Registrieren", ru: "Регистрация", ka: "რეგისტრაცია", tr: "Kayıt Ol", ar: "التسجيل" },
+  "Open menu": { de: "Menü öffnen", ru: "Открыть меню", ka: "მენიუს გახსნა", tr: "Menüyü aç", ar: "افتح القائمة" },
+  "Close menu": { de: "Menü schließen", ru: "Закрыть меню", ka: "მენიუს დახურვა", tr: "Menüyü kapat", ar: "أغلق القائمة" },
+  "Social media": { de: "Social Media", ru: "Социальные сети", ka: "სოციალური მედია", tr: "Sosyal medya", ar: "وسائل التواصل الاجتماعي" },
+  "AIXCO footer introduction": { de: "AIXCO Footer-Einfuehrung", ru: "AIXCO footer introduction", ka: "AIXCO footer introduction", tr: "AIXCO footer introduction", ar: "AIXCO footer introduction" },
+  "AIXCO social media links": { de: "AIXCO Social-Media-Links", ru: "AIXCO social media links", ka: "AIXCO social media links", tr: "AIXCO social media links", ar: "AIXCO social media links" },
+  "Buy, broker, and manage selected real estate routes with AIXCO.": {
+    de: "Ausgewaehlte Immobilienwege mit AIXCO kaufen, vermitteln und verwalten.",
+    ru: "Buy, broker, and manage selected real estate routes with AIXCO.",
+    ka: "Buy, broker, and manage selected real estate routes with AIXCO.",
+    tr: "Buy, broker, and manage selected real estate routes with AIXCO.",
+    ar: "Buy, broker, and manage selected real estate routes with AIXCO.",
+  },
+  "Buy, broker, and manage real estate with AIXCO.": {
+    de: "Immobilien mit AIXCO kaufen, vermitteln und verwalten.",
+    ru: "Buy, broker, and manage real estate with AIXCO.",
+    ka: "Buy, broker, and manage real estate with AIXCO.",
+    tr: "Buy, broker, and manage real estate with AIXCO.",
+    ar: "Buy, broker, and manage real estate with AIXCO.",
+  },
+  "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.": {
+    de: "Pruefen Sie Batumi-Apartments, Immobilienreferenzen, Kundenmaterialien und den passenden Onboarding-Weg an einem Ort.",
+    ru: "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.",
+    ka: "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.",
+    tr: "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.",
+    ar: "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.",
+  },
+  "Email AIXCO": { de: "AIXCO per E-Mail kontaktieren", ru: "Email AIXCO", ka: "Email AIXCO", tr: "Email AIXCO", ar: "Email AIXCO" },
+  "Real estate routes": { de: "Immobilienwege", ru: "Real estate routes", ka: "Real estate routes", tr: "Real estate routes", ar: "Real estate routes" },
+  Routes: { de: "Wege", ru: "Routes", ka: "Routes", tr: "Routes", ar: "Routes" },
+  "Buy in Batumi": { de: "In Batumi kaufen", ru: "Buy in Batumi", ka: "Buy in Batumi", tr: "Buy in Batumi", ar: "Buy in Batumi" },
+  "Dubai legacy": { de: "Dubai-Legacy", ru: "Dubai legacy", ka: "Dubai legacy", tr: "Dubai legacy", ar: "Dubai legacy" },
+  "Official systems certified": { de: "Offizielle Systeme zertifiziert", ru: "Official systems certified", ka: "Official systems certified", tr: "Official systems certified", ar: "Official systems certified" },
   "Explore Batumi real estate": {
     de: "Batumi-Immobilien erkunden",
     ru: "Explore Batumi real estate",
@@ -106,12 +139,12 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "Explore Batumi real estate",
     ar: "Explore Batumi real estate",
   },
-  "Enter Batumi real estate with AIXCO": {
-    de: "Mit AIXCO in Batumi-Immobilien einsteigen",
-    ru: "Enter Batumi real estate with AIXCO",
-    ka: "Enter Batumi real estate with AIXCO",
-    tr: "Enter Batumi real estate with AIXCO",
-    ar: "Enter Batumi real estate with AIXCO",
+  "Enter Uprising real estate with AIXCO": {
+    de: "Mit AIXCO in Uprising-Immobilien einsteigen",
+    ru: "Enter Uprising real estate with AIXCO",
+    ka: "Enter Uprising real estate with AIXCO",
+    tr: "Enter Uprising real estate with AIXCO",
+    ar: "Enter Uprising real estate with AIXCO",
   },
   "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.": {
     de: "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.",
@@ -135,6 +168,7 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "How AIXCO Works",
   },
   "How to work": { de: "Mit AIXCO arbeiten", ru: "How to work", ka: "AIXCO-სთან მუშაობა", tr: "How to work", ar: "How to work" },
+  "How it works": { de: "So funktioniert es", ru: "How it works", ka: "How it works", tr: "How it works", ar: "How it works" },
   "your Batumi real estate journey": {
     de: "Ihre Batumi-Immobilienreise",
     ru: "your Batumi real estate journey",
@@ -658,7 +692,340 @@ type LoadedTranslationCatalogs = {
   attributes: AttributeTranslationCatalog;
 };
 
+const germanQualityTranslations: TranslationSource = {
+  Home: { de: "Startseite" },
+  "About AIXCO": { de: "Über AIXCO" },
+  "Our journey": { de: "Unsere Reise" },
+  Materials: { de: "Materialien" },
+  "How to work with AIXCO": { de: "Mit AIXCO arbeiten" },
+  "How AIXCO Works": { de: "So arbeitet AIXCO" },
+  "Our Team": { de: "Unser Team" },
+  Partners: { de: "Partner" },
+  Contact: { de: "Kontakt" },
+  "AIXCO Philosophy": { de: "AIXCO Philosophie" },
+  More: { de: "Mehr" },
+  "Explore Batumi real estate": { de: "Batumi-Immobilien erkunden" },
+  "Contact AIXCO": { de: "AIXCO kontaktieren" },
+  "Open menu": { de: "Menü öffnen" },
+  "Close menu": { de: "Menü schließen" },
+  Philosophy: { de: "Philosophie" },
+  Origins: { de: "Ursprung" },
+  Principles: { de: "Grundsaetze" },
+  Objectives: { de: "Ziele" },
+  Legacy: { de: "Historie" },
+  "How to work": { de: "Zusammenarbeit" },
+  Journeys: { de: "Ablauf" },
+  "Quality Real Estate - Buy / Broker / Manage": { de: "Qualitätsimmobilien - Kaufen / Vermitteln / Verwalten" },
+  Explore: { de: "Entdecken" },
+  "Batumi apartments": { de: "Wohnungen in Batumi" },
+  "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.": {
+    de: "Kaufen Sie eine Wohnung, prüfen Sie ausgewählte Apartments und entdecken Sie mit dem AIXCO-Team einen chancenreichen aufstrebenden Markt.",
+  },
+  "Enter uprising real estate with AIXCO": { de: "Mit AIXCO in Uprising-Immobilien einsteigen" },
+  "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on Batumi, with a legacy track record in Switzerland and Dubai.": {
+    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und der Golfregion - heute mit Fokus auf Batumi und einer nachgewiesenen Historie in der Schweiz und Dubai.",
+  },
+  "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.": {
+    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und der Golfregion - heute mit Fokus auf Batumi und einer nachgewiesenen Historie in der Schweiz und Dubai.",
+  },
+  "Disciplined ownership of real assets, shaped by Swiss real estate heritage.": {
+    de: "Diszipliniertes Eigentum an Sachwerten, geprägt durch Schweizer Immobilienerfahrung.",
+  },
+  "AIXCO Global was built on disciplined real estate ownership, practical execution, and long-term property services.": {
+    de: "AIXCO Global basiert auf diszipliniertem Immobilieneigentum, praktischer Umsetzung und langfristigen Immobiliendienstleistungen.",
+  },
+  "First acquisition": { de: "Erster Erwerb" },
+  "Gross development value": { de: "Brutto-Entwicklungswert" },
+  "Transactions completed": { de: "Abgeschlossene Transaktionen" },
+  "Real estate transacted across markets": { de: "Immobilienwert über Märkte hinweg" },
+  "Disciplined ownership": { de: "Diszipliniertes Eigentum" },
+  "Property administration": { de: "Immobilienverwaltung" },
+  "Responsible risk assessment": { de: "Verantwortungsvolle Risikoprüfung" },
+  "Long-term value creation": { de: "Langfristige Wertschaffung" },
+  ownership: { de: "Eigentum" },
+  Risk: { de: "Risiko" },
+  Platform: { de: "Plattform" },
+  "Swiss discipline in practice": { de: "Schweizer Disziplin in der Praxis" },
+  "Long-term platform": { de: "Langfristige Plattform" },
+  "A real estate foundation built through ownership": { de: "Ein Immobilienfundament, aufgebaut durch Eigentum" },
+  "AIXCO's philosophy starts with ownership: durable assets, conservative risk assessment, and recurring income generation.": {
+    de: "Die Philosophie von AIXCO beginnt mit Eigentum: langlebige Sachwerte, konservative Risikoprüfung und wiederkehrende Erträge.",
+  },
+  "Since its first acquisition in 2009, the company has steadily expanded within the Swiss residential real estate market, developing a portfolio defined by resilience, stability, and recurring income generation.": {
+    de: "Seit dem ersten Erwerb im Jahr 2009 hat sich das Unternehmen im Schweizer Wohnimmobilienmarkt stetig erweitert und ein Portfolio aufgebaut, das von Widerstandsfähigkeit, Stabilität und wiederkehrenden Erträgen geprägt ist.",
+  },
+  "Over the decades, AIXCO has evolved into a diversified international group combining Swiss real estate heritage with modern asset-backed acquisitions.": {
+    de: "Im Laufe der Jahrzehnte hat sich AIXCO zu einer diversifizierten internationalen Gruppe entwickelt, die Schweizer Immobilienerfahrung mit modernen sachwertbasierten Akquisitionen verbindet.",
+  },
+  "A distinctly Swiss philosophy of managing risk": { de: "Eine klar Schweizer Philosophie im Risikomanagement" },
+  "At the core of AIXCO lies a distinctly Swiss philosophy of managing risk. AIXCO approaches real estate decisions with discipline, conservatism, and a long-term perspective, focusing on durable properties and practical operating fundamentals.": {
+    de: "Im Kern von AIXCO steht eine klar Schweizer Philosophie im Umgang mit Risiko. AIXCO trifft Immobilienentscheidungen mit Disziplin, konservativem Blick und langfristiger Perspektive - mit Fokus auf langlebige Immobilien und solide operative Grundlagen.",
+  },
+  "Through carefully selected real estate purchases, sales, brokerage mandates, and property administration, AIXCO focuses on durable assets, practical risk assessment, and sustainable long-term growth.": {
+    de: "Durch sorgfältig ausgewählte Immobilienkäufe, Verkäufe, Vermittlungsmandate und Immobilienverwaltung konzentriert sich AIXCO auf langlebige Sachwerte, praktische Risikoprüfung und nachhaltiges langfristiges Wachstum.",
+  },
+  "International expansion through selected opportunities": { de: "Internationale Expansion durch ausgewählte Chancen" },
+  "The platform connects selected opportunities, international teams, and service discipline around long-term property value.": {
+    de: "Die Plattform verbindet ausgewählte Chancen, internationale Teams und Servicedisziplin rund um langfristigen Immobilienwert.",
+  },
+  "Built upon decades of market experience and responsible ownership, AIXCO continues to expand internationally through selected opportunities in Dubai and Georgia.": {
+    de: "Aufbauend auf jahrzehntelanger Markterfahrung und verantwortungsvollem Eigentum expandiert AIXCO international weiter - über ausgewählte Chancen in Dubai und Georgien.",
+  },
+  "Today, AIXCO manages projects representing more than $400 million in gross development value, supported by an international team of over 90 professionals and a global network of clients, brokers, developers, and partners.": {
+    de: "Heute betreut AIXCO Projekte mit einem Brutto-Entwicklungswert von mehr als 400 Millionen US-Dollar, getragen von einem internationalen Team aus über 90 Fachleuten und einem globalen Netzwerk aus Kunden, Maklern, Entwicklern und Partnern.",
+  },
+  "AIXCO has completed more than 2,000 real estate transactions and transacted over $4.2 billion in property value across international markets.": {
+    de: "AIXCO hat mehr als 2.000 Immobilientransaktionen abgeschlossen und über internationale Märkte hinweg Immobilienwerte von mehr als 4,2 Milliarden US-Dollar umgesetzt.",
+  },
+  "Integrity, stability, discipline, and responsible risk assessment": {
+    de: "Integrität, Stabilität, Disziplin und verantwortungsvolle Risikoprüfung",
+  },
+  "Integrity, stability, discipline, and responsible risk assessment remain central to every aspect of our real estate practice.": {
+    de: "Integrität, Stabilität, Disziplin und verantwortungsvolle Risikoprüfung bleiben zentral für jeden Bereich unserer Immobilienpraxis.",
+  },
+  "As AIXCO continues to grow internationally, its vision remains unchanged: to build a resilient real estate services platform - buy, broker, and manage property - rooted in Swiss heritage, disciplined execution, and enduring long-term value.": {
+    de: "Während AIXCO international weiter wächst, bleibt die Vision unverändert: eine widerstandsfähige Immobiliendienstleistungsplattform aufzubauen - Kaufen, Vermitteln und Verwalten - verwurzelt in Schweizer Herkunft, disziplinierter Umsetzung und dauerhaftem langfristigem Wert.",
+  },
+  "Client objectives": { de: "Kundenziele" },
+  "Every client starts with a different objective": { de: "Jeder Kunde startet mit einem anderen Ziel" },
+  client: { de: "Kunde" },
+  "Some are looking to build long-term wealth through real estate ownership. Others want recurring income, international diversification, or simply a way to participate in a market they believe has strong future potential.": {
+    de: "Einige möchten durch Immobilieneigentum langfristig Vermögen aufbauen. Andere suchen wiederkehrende Erträge, internationale Diversifikation oder einfach einen Weg, an einem Markt teilzunehmen, dem sie starkes Zukunftspotenzial zutrauen.",
+  },
+  "Rather than offering a one-size-fits-all solution, we begin by understanding what matters most to you.": {
+    de: "Statt eine Einheitslösung anzubieten, beginnen wir damit zu verstehen, was für Sie am wichtigsten ist.",
+  },
+  "Client approach": { de: "Kundenansatz" },
+  "in business, supporting clients across property ownership, brokerage, and administration.": {
+    de: "am Markt, mit Unterstützung für Kunden bei Immobilieneigentum, Vermittlung und Verwaltung.",
+  },
+  "Ownership or flexible participation": { de: "Eigentum oder flexible Beteiligung" },
+  Ownership: { de: "Eigentum" },
+  "For many clients, this leads to direct ownership of carefully selected properties in emerging, profitable, sustainable markets.": {
+    de: "Fuer viele Kunden fuehrt dies zu direktem Eigentum an sorgfaeltig ausgewaehlten Immobilien in aufstrebenden, profitablen und nachhaltigen Maerkten.",
+  },
+  "For others, AIXCO offers an alternative participation program for clients who would like exposure to the market without the commitments that come with owning and managing property themselves.": {
+    de: "Fuer andere bietet AIXCO ein alternatives Beteiligungsprogramm fuer Kunden, die Marktzugang wuenschen, ohne die Verpflichtungen aus eigenem Immobilienbesitz und eigener Verwaltung zu uebernehmen.",
+  },
+  "Our commitment remains the same: transparent guidance, long-term support, and access to opportunities that align with your personal goals.": {
+    de: "Unser Anspruch bleibt derselbe: transparente Beratung, langfristige Unterstuetzung und Zugang zu Chancen, die zu Ihren persoenlichen Zielen passen.",
+  },
+  "Dubai - Legacy portfolio": { de: "Dubai - Historisches Portfolio" },
+  "Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.": {
+    de: "Historischer Markt - wir eroeffnen keine neuen Immobilienangebote in Dubai. Unten sehen Sie eine Momentaufnahme des realisierten und laufenden Immobilienvolumens.",
+  },
+  "Legacy market â€” we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.": {
+    de: "Historischer Markt - wir eroeffnen keine neuen Immobilienangebote in Dubai. Unten sehen Sie eine Momentaufnahme des realisierten und laufenden Immobilienvolumens.",
+  },
+  "Batumi - Current opportunity": { de: "Batumi - Aktuelle Chance" },
+  "Opportunity-driven focus in Georgia - buy apartments with transparent euro pricing, strong rental potential, and full foreign ownership.": {
+    de: "Chancenorientierter Fokus in Georgien - Wohnungen mit transparenter Euro-Preisgestaltung, starkem Mietpotenzial und vollstaendigem auslaendischem Eigentum kaufen.",
+  },
+  "Selected projects and apartments available exclusively through AIXCO": {
+    de: "Ausgewaehlte Projekte und Apartments exklusiv ueber AIXCO verfuegbar",
+  },
+  "100% foreign ownership": { de: "100% auslaendisches Eigentum" },
+  "No residency permit required": { de: "Keine Aufenthaltsgenehmigung erforderlich" },
+  "Entry from €50,000": { de: "Einstieg ab 50.000 EUR" },
+  "Entry from â‚¬50,000": { de: "Einstieg ab 50.000 EUR" },
+  "Bank financing available from 60% of the property value": {
+    de: "Bankfinanzierung ab 60% des Immobilienwerts verfuegbar",
+  },
+  "Approx. 8% net rental yields": { de: "Ca. 8% Nettomietrendite" },
+  "Full commission payable from only a 10% down payment": { de: "Volle Provision bereits ab 10% Anzahlung zahlbar" },
+  "0% capital gains tax after 2 years of ownership": { de: "0% Kapitalertragsteuer nach 2 Jahren Eigentum" },
+  "1% tax on rental income": { de: "1% Steuer auf Mieteinnahmen" },
+  "Full transparency through an ISO-certified system": { de: "Volle Transparenz durch ein ISO-zertifiziertes System" },
+  "Prime apartments from our own stock at the best available prices": {
+    de: "Prime-Apartments aus eigenem Bestand zu den besten verfuegbaren Preisen",
+  },
+  "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.": {
+    de: "Ausgewaehlte Batumi-Projekte und Apartments ueber AIXCO, mit Einstieg ab 50.000 EUR, 100% auslaendischem Eigentum, Bankfinanzierungsoptionen und transparentem ISO-zertifiziertem Prozess.",
+  },
+  "Selected Batumi property opportunity": { de: "Ausgewaehlte Immobilienchance in Batumi" },
+  "Client materials": { de: "Kundenmaterialien" },
+  "Materials & downloads": { de: "Materialien & Downloads" },
+  "Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.": {
+    de: "Laden Sie Broschueren, Katalogblaetter und Immobilienreferenzen fuer die auf dieser Seite gezeigten Immobilienwege herunter.",
+  },
+  "Available files": { de: "Verfuegbare Dateien" },
+  Audience: { de: "Zielgruppe" },
+  Download: { de: "Herunterladen" },
+  "Batumi project brochure": { de: "Batumi-Projektbroschuere" },
+  "Otium brochure": { de: "Otium-Broschuere" },
+  "Full Otium project PDF for clients comparing Batumi apartment options.": {
+    de: "Vollstaendige Otium-Projekt-PDF fuer Kunden, die Apartmentoptionen in Batumi vergleichen.",
+  },
+  "Catalog sheet": { de: "Katalogblatt" },
+  "Otium catalog sheet": { de: "Otium-Katalogblatt" },
+  "High-resolution Otium catalog image for quick sharing and offline review.": {
+    de: "Hochaufgeloestes Otium-Katalogbild fuer schnelle Weitergabe und Offline-Pruefung.",
+  },
+  "Dubai legacy reference": { de: "Dubai-Historiereferenz" },
+  "Eden House legacy image": { de: "Eden-House-Historienbild" },
+  "Downloadable legacy visual reference for Eden House in Dubai.": {
+    de: "Herunterladbare visuelle Historiereferenz fuer Eden House in Dubai.",
+  },
+  "Dubai Healthcare City image": { de: "Dubai-Healthcare-City-Bild" },
+  "Downloadable legacy visual reference for Dubai Healthcare City.": {
+    de: "Herunterladbare visuelle Historiereferenz fuer Dubai Healthcare City.",
+  },
+  "Clients and brokers": { de: "Kunden und Makler" },
+  "Clients and sales partners": { de: "Kunden und Vertriebspartner" },
+  "Clients and partners": { de: "Kunden und Partner" },
+  "Customers/Partners Work": { de: "Zusammenarbeit mit Kunden und Partnern" },
+  "How Customers/Partners Work": { de: "So arbeiten Kunden und Partner mit AIXCO" },
+  "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.": {
+    de: "Kaufen Sie als Hauptweg ein Apartment in Batumi, vermitteln Sie qualifizierte Kaeufer oder arbeiten Sie nach dem Kauf mit AIXCO bei der Immobilienverwaltung zusammen.",
+  },
+  "Buy an Apartment in Batumi": { de: "Apartment in Batumi kaufen" },
+  "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase with the AIXCO team.": {
+    de: "Kunden registrieren sich, pruefen ausgewaehlte Apartments in Batumi, buchen eine private Besichtigung und durchlaufen Reservierung und Kauf mit dem AIXCO-Team.",
+  },
+  "Broker Real Estate with AIXCO": { de: "Immobilien mit AIXCO vermitteln" },
+  "Brokers and partners can introduce qualified buyers, coordinate tours, and manage deal flow through a structured real estate sales process.": {
+    de: "Makler und Partner koennen qualifizierte Kaeufer vorstellen, Besichtigungen koordinieren und den Dealflow ueber einen strukturierten Immobilienverkaufsprozess steuern.",
+  },
+  "Administer Your Property": { de: "Ihre Immobilie verwalten" },
+  "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.": {
+    de: "Immobilieneigentuemer koennen nach dem Kauf mit AIXCO bei Dokumentation, Kaeuferuebergabe, Reporting, Mietkoordination und laufender Verwaltung zusammenarbeiten.",
+  },
+  "Choose the journey that fits your role. The process is structured, transparent, and digitally managed.": {
+    de: "Waehlen Sie den Ablauf, der zu Ihrer Rolle passt. Der Prozess ist strukturiert, transparent und digital gesteuert.",
+  },
+  "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.": {
+    de: "Waehlen Sie den Ablauf, der zu Ihrer Rolle passt. Ob Sie Immobilien kaufen, Kunden vermitteln, eine Einheit verwalten oder Projekte in den Markt bringen - der Prozess ist strukturiert, transparent und digital gesteuert.",
+  },
+  "Journey 01": { de: "Ablauf 01" },
+  "Journey 02": { de: "Ablauf 02" },
+  "Journey 03": { de: "Ablauf 03" },
+  "Journey 04": { de: "Ablauf 04" },
+  "Customer Real Estate Buyer": { de: "Immobilienkaeufer" },
+  "For clients buying apartments or reserving units in Batumi through a guided digital process.": {
+    de: "Fuer Kunden, die Apartments in Batumi ueber einen gefuehrten digitalen Prozess kaufen oder reservieren.",
+  },
+  "Property Owner Administration": { de: "Verwaltung fuer Immobilieneigentuemer" },
+  "For owners who want AIXCO support after purchase with handover, rental coordination, documents, and reporting.": {
+    de: "Fuer Eigentuemer, die nach dem Kauf AIXCO-Unterstuetzung bei Uebergabe, Mietkoordination, Dokumenten und Reporting wuenschen.",
+  },
+  Broker: { de: "Makler" },
+  "For intermediaries and distribution partners introducing clients and managing deal flow.": {
+    de: "Fuer Vermittler und Vertriebspartner, die Kunden vorstellen und Dealflow steuern.",
+  },
+  Developer: { de: "Entwickler" },
+  "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.": {
+    de: "Fuer Entwickler, die Projektpraesenz, Kaeuferzugang, Besichtigungskoordination und einen staerkeren Immobilienvertriebskanal suchen.",
+  },
+  "AIXCO leadership": { de: "AIXCO-Fuehrung" },
+  leadership: { de: "Fuehrung" },
+  Founder: { de: "Gruender" },
+  Partner: { de: "Partner" },
+  "Leadership, vision, and overall group direction.": { de: "Fuehrung, Vision und strategische Gesamtsteuerung der Gruppe." },
+  "Capital markets, banking relationships, and financial structuring.": {
+    de: "Kapitalmaerkte, Bankbeziehungen und Finanzstrukturierung.",
+  },
+  "Product positioning, channel development, and distribution strategy.": {
+    de: "Produktpositionierung, Kanalentwicklung und Vertriebsstrategie.",
+  },
+  "Group companies and strategic partners": { de: "Konzerngesellschaften und strategische Partner" },
+  "Group companies": { de: "Konzerngesellschaften" },
+  "Strategic partners": { de: "Strategische Partner" },
+  "Frequently asked questions": { de: "Haeufig gestellte Fragen" },
+  Customer: { de: "Kunde" },
+  "Buying property, reserving apartments, or working with AIXCO on real estate services.": {
+    de: "Immobilien kaufen, Apartments reservieren oder mit AIXCO an Immobiliendienstleistungen arbeiten.",
+  },
+  "What is the minimum amount to reserve or buy?": { de: "Welcher Mindestbetrag gilt fuer Reservierung oder Kauf?" },
+  "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
+    de: "Der Einstieg beginnt ab 50.000 EUR fuer ausgewaehlte Batumi-Projekte und Apartments, die exklusiv ueber AIXCO verfuegbar sind. Die volle Provision kann bereits ab 10% Anzahlung zahlbar sein; die endgueltigen Bedingungen haengen von Projekt und Vereinbarung ab.",
+  },
+  "Can I buy property directly?": { de: "Kann ich direkt eine Immobilie kaufen?" },
+  "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.": {
+    de: "Ja. Kunden koennen einen direkten Apartmentkauf, Maklerunterstuetzung oder Immobilienverwaltung nutzen.",
+  },
+  "Is rental income guaranteed?": { de: "Sind Mieteinnahmen garantiert?" },
+  "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, project delivery, and external factors.": {
+    de: "Nein. Ca. 8% Nettomietrendite ist szenariobasiert und haengt von Auslastung, Marktbedingungen, Immobilienverwaltung, Projektfertigstellung und externen Faktoren ab.",
+  },
+  "Will I receive reporting?": { de: "Erhalte ich Reporting?" },
+  "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified system.": {
+    de: "Ja. Reporting, Dokumente, Projektupdates und transparente Workflows sind ueber das Portal und das ISO-zertifizierte System verfuegbar.",
+  },
+  "Can foreigners buy property in Batumi?": { de: "Koennen Auslaender Immobilien in Batumi kaufen?" },
+  "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.": {
+    de: "Ja. Ausgewaehlte Apartments in Batumi erlauben 100% auslaendisches Eigentum, und fuer den Kauf ist keine Aufenthaltsgenehmigung erforderlich.",
+  },
+  "Can I ask about AIXCO company financing?": { de: "Kann ich Informationen zur AIXCO-Unternehmensfinanzierung anfragen?" },
+  "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page.": {
+    de: "Ja. AIXCO.Global wird zuerst als Immobilienplattform fuer Kauf, Vermittlung und Verwaltung dargestellt. Separate Informationen zur Unternehmensfinanzierung koennen auf Anfrage beim AIXCO-Team verfuegbar sein; dies ist kein primaerer Website-Ablauf und auf dieser Seite werden keine Bond-Konditionen beworben.",
+  },
+  "Start with AIXCO": { de: "Mit AIXCO starten" },
+  "Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.": {
+    de: "Registrieren Sie sich fuer den passenden Kunden-, Makler-, Eigentuemer- oder Entwicklerablauf. Das AIXCO-Team meldet sich anschliessend.",
+  },
+  "Batumi property profile": { de: "Batumi-Immobilienprofil" },
+  "Property profile": { de: "Immobilienprofil" },
+  "Back to Batumi": { de: "Zurueck zu Batumi" },
+  Back: { de: "Zurueck" },
+  "View catalog": { de: "Katalog ansehen" },
+  "Download brochure": { de: "Broschuere herunterladen" },
+  "Premium residential complex": { de: "Premium-Wohnkomplex" },
+  Floors: { de: "Etagen" },
+  "per building": { de: "pro Gebaeude" },
+  Apartments: { de: "Apartments" },
+  "total units": { de: "Einheiten gesamt" },
+  Completion: { de: "Fertigstellung" },
+  target: { de: "Zieltermin" },
+  Scale: { de: "Groesse" },
+  Location: { de: "Lage" },
+  "Rental case": { de: "Mietannahme" },
+  "Exclusive access": { de: "Exklusiver Zugang" },
+  Financing: { de: "Finanzierung" },
+  "Tax & transparency": { de: "Steuern & Transparenz" },
+  "Reverance by Otium is a premium residential complex at 59 Adlia Street, planned with 17 floors per building, 408 apartments, and completion targeted for June 2028.": {
+    de: "Reverance by Otium ist ein Premium-Wohnkomplex in der 59 Adlia Street, geplant mit 17 Etagen pro Gebaeude, 408 Apartments und einer angestrebten Fertigstellung im Juni 2028.",
+  },
+  "25,000 sqm of comfort and community infrastructure across a 45,000 sqm planned site.": {
+    de: "25.000 m2 Komfort- und Gemeinschaftsinfrastruktur auf einem geplanten Areal von 45.000 m2.",
+  },
+  "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away.": {
+    de: "59 Adlia Street, mit New Boulevard in 5 Minuten Entfernung, Einkaufsmoeglichkeiten und Flughafenanschluss in 7 Minuten sowie dem Batumi Medical Center in 8 Minuten Entfernung.",
+  },
+  "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck.": {
+    de: "600 USD durchschnittliche Langzeitmiete pro Monat, 80 USD durchschnittliche Kurzzeitmiete pro Nacht und 90% potenzielle Auslastung laut Projektunterlagen.",
+  },
+  "Selected projects and apartments available exclusively through AIXCO Entry from €50,000 Prime apartments from our own stock at the best available prices": {
+    de: "Ausgewaehlte Projekte und Apartments exklusiv ueber AIXCO verfuegbar. Einstieg ab 50.000 EUR. Prime-Apartments aus eigenem Bestand zu den besten verfuegbaren Preisen.",
+  },
+  "Selected projects and apartments available exclusively through AIXCO Entry from â‚¬50,000 Prime apartments from our own stock at the best available prices": {
+    de: "Ausgewaehlte Projekte und Apartments exklusiv ueber AIXCO verfuegbar. Einstieg ab 50.000 EUR. Prime-Apartments aus eigenem Bestand zu den besten verfuegbaren Preisen.",
+  },
+  "100% foreign ownership No residency permit required": {
+    de: "100% auslaendisches Eigentum. Keine Aufenthaltsgenehmigung erforderlich.",
+  },
+  "Bank financing available from 60% of the property value Full commission payable from only a 10% down payment": {
+    de: "Bankfinanzierung ab 60% des Immobilienwerts verfuegbar. Volle Provision bereits ab 10% Anzahlung zahlbar.",
+  },
+  "0% capital gains tax after 2 years of ownership 1% tax on rental income Full transparency through an ISO-certified system": {
+    de: "0% Kapitalertragsteuer nach 2 Jahren Eigentum. 1% Steuer auf Mieteinnahmen. Volle Transparenz durch ein ISO-zertifiziertes System.",
+  },
+  "This page is not available.": { de: "Diese Seite ist nicht verfuegbar." },
+  "The page may have moved, or the address may be incorrect. Return to AIXCO.Global to continue exploring selected real estate services.": {
+    de: "Die Seite wurde moeglicherweise verschoben oder die Adresse ist falsch. Kehren Sie zu AIXCO.Global zurueck, um ausgewaehlte Immobiliendienstleistungen weiter zu erkunden.",
+  },
+  "Return to Home": { de: "Zur Startseite" },
+  "Register ownership details": { de: "Eigentumsdetails registrieren" },
+  "Confirm service scope": { de: "Serviceumfang bestaetigen" },
+  "Upload documents": { de: "Dokumente hochladen" },
+  "Coordinate handover": { de: "Uebergabe koordinieren" },
+  "Manage updates": { de: "Updates verwalten" },
+  "Review reporting": { de: "Reporting pruefen" },
+  "Prepare the listing": { de: "Listing vorbereiten" },
+  "Ongoing coordination": { de: "Laufende Koordination" },
+};
+
 const baseCatalogSources: TranslationSource[] = [
+  germanQualityTranslations,
   supplementalTranslations,
   clientBriefPassthroughTranslations,
 ];
@@ -682,10 +1049,12 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
-        ...baseCatalogSources,
+        germanQualityTranslations,
+        supplementalTranslations,
         translations.textTranslations,
         assets.assetTranslations,
         siteContent.siteContentTranslations,
+        clientBriefPassthroughTranslations,
         attributes.placeholder,
         attributes.content,
         attributes.title,

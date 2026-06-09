@@ -6,34 +6,50 @@ import { siteContentDefaults } from "@/lib/backend/site-content";
 import { UIProvider } from "./ui-state";
 import { Footer } from "./Footer";
 
-function renderFooter() {
+function renderFooter(variant: "default" | "story" = "default") {
   return render(
     <I18nProvider>
       <UIProvider>
-        <Footer />
+        <Footer variant={variant} />
       </UIProvider>
     </I18nProvider>,
   );
 }
 
 describe("Footer", () => {
-  it("renders one brand logo treatment in the footer", () => {
+  it("renders a minimal footer with legal content below contact details", () => {
     const { container } = renderFooter();
 
     expect(screen.getByRole("link", { name: /aixco\.global home/i })).toBeInTheDocument();
     expect(screen.queryByRole("img", { name: "AIXCO Global" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "Platform sections" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "Resources and support" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Register" })).not.toBeInTheDocument();
+    expect(screen.getByText("info@aixco.global")).toBeInTheDocument();
+    expect(screen.getByText("Grüngasse 16, 1050 Wien, Austria")).toBeInTheDocument();
     expect(screen.getByText(/AIXCO Global 2026/)).toBeInTheDocument();
-    expect(container.querySelector("[data-footer-actions]")).toHaveClass("md:pr-24", "lg:pr-0");
+
+    const legalBar = container.querySelector(".site-footer-legal");
+    const logo = screen.getByRole("link", { name: /aixco\.global home/i });
+    expect(legalBar?.compareDocumentPosition(logo) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy();
+  });
+
+  it("marks the homepage story footer variant for the story-mode display override", () => {
+    const { container } = renderFooter("story");
+
+    expect(container.querySelector("footer")).toHaveAttribute("data-story-footer", "true");
+    expect(container.querySelector("footer")).toHaveClass("story-footer");
   });
 
   it("keeps footer legal and social actions large enough for touch interaction", () => {
     renderFooter();
 
-    expect(screen.getByRole("link", { name: /ISO 27001-2022 Certified Systems/i })).toHaveClass("min-h-10");
+    expect(screen.getByRole("link", { name: /Official systems certified/i })).toHaveClass("min-h-12");
     expect(screen.getByRole("button", { name: "Terms & Conditions" })).toHaveClass("min-h-10");
     expect(screen.getByRole("button", { name: "Privacy Policy" })).toHaveClass("min-h-10");
-    expect(screen.getByRole("link", { name: "Instagram" })).toHaveClass("h-10", "w-10");
-    expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveClass("h-10", "w-10");
+    for (const label of ["Instagram", "LinkedIn", "YouTube", "X"]) {
+      expect(screen.getByRole("link", { name: label })).toHaveClass("h-11", "w-11");
+    }
   });
 
   it("falls back when social URLs are outside the expected platforms", () => {
@@ -48,6 +64,8 @@ describe("Footer", () => {
                 ...siteContentDefaults.company.socials,
                 instagram: "javascript:alert(1)",
                 linkedin: "https://evil.example/company/aixco-global",
+                youtube: "https://evil.example/@aixco-global",
+                x: "data:text/html,alert(1)",
               },
             },
           }}
@@ -67,5 +85,10 @@ describe("Footer", () => {
       "href",
       "https://www.linkedin.com/company/aixco-global",
     );
+    expect(screen.getByRole("link", { name: "YouTube" })).toHaveAttribute(
+      "href",
+      "https://www.youtube.com/@aixco-global",
+    );
+    expect(screen.getByRole("link", { name: "X" })).toHaveAttribute("href", "https://x.com/aixcoglobal");
   });
 });

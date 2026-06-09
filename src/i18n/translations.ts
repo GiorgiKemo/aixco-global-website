@@ -115,12 +115,12 @@ export const textTranslations = {
     "tr": "Kaliteli Gayrimenkul — Satın Alma · Aracılık · Yönetim",
     "ar": "عقارات عالية الجودة — شراء · وساطة · إدارة"
   },
-  "Buy, sell, and broker real estate with AIXCO—from apartment purchases in Batumi to end-to-end property administration.": {
-    "de": "Mit AIXCO Immobilien kaufen, verkaufen und vermitteln—von Wohnungskäufen in Batumi bis zur umfassenden Immobilienverwaltung.",
-    "ru": "Покупайте, продавайте и брокеруйте недвижимость с AIXCO — от покупки квартир в Батуми до комплексного управления объектами.",
-    "ka": "AIXCO-თან ერთად იყიდეთ, გაყიდეთ და დააბროკერეთ უძრავი ქონება—ბათუმში ბინების შეძენიდან ობიექტების სრულ ადმინისტრირებამდე.",
-    "tr": "AIXCO ile gayrimenkul alın, satın ve aracılık yapın—Batumi'de daire alımlarından uçtan uca mülk yönetimine kadar.",
-    "ar": "اشترِ وبِعْ وبَسِّط العقارات مع AIXCO — من شراء الشقق في باتومي إلى الإدارة الشاملة للعقارات."
+  "Buy, sell, and broker real estate with AIXCO—from apartment purchases to end-to-end property administration.": {
+    "de": "Mit AIXCO Immobilien kaufen, verkaufen und vermitteln—von Wohnungskäufen bis zur umfassenden Immobilienverwaltung.",
+    "ru": "Покупайте, продавайте и брокеруйте недвижимость с AIXCO — от покупки квартир до комплексного управления объектами.",
+    "ka": "AIXCO-თან ერთად იყიდეთ, გაყიდეთ და დააბროკერეთ უძრავი ქონება—ბინების შეძენიდან ობიექტების სრულ ადმინისტრირებამდე.",
+    "tr": "AIXCO ile gayrimenkul alın, satın ve aracılık yapın—daire alımlarından uçtan uca mülk yönetimine kadar.",
+    "ar": "اشترِ وبِعْ وبَسِّط العقارات مع AIXCO — من شراء الشقق إلى الإدارة الشاملة للعقارات."
   },
   "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects, starting from €10,000.": {
     "de": "Beteiligen Sie sich dort, wo Wachstum, Stabilität und langfristige Wertschöpfung zusammenkommen. AIXCO bietet privaten Partnern einen einfachen und transparenten Zugang zu ausgewählten Immobilienprojekten ab 10.000 €.",
@@ -214,7 +214,7 @@ export const textTranslations = {
     "ar": "الأسواق المخدومة"
   },
   "Delivered legacy real estate milestones across markets": {
-    "de": "Delivered legacy real estate milestones across markets",
+    "de": "Historische Immobilien-Meilensteine in allen Märkten realisiert",
     "ru": "Delivered legacy real estate milestones across markets",
     "ka": "Delivered legacy real estate milestones across markets",
     "tr": "Delivered legacy real estate milestones across markets",
@@ -354,28 +354,28 @@ export const textTranslations = {
     "ar": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase."
   },
   "Administer Your Property": {
-    "de": "Administer Your Property",
+    "de": "Verwalten Sie Ihre Immobilie",
     "ru": "Administer Your Property",
     "ka": "Administer Your Property",
     "tr": "Administer Your Property",
     "ar": "Administer Your Property"
   },
   "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.": {
-    "de": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
+    "de": "Eigentümer können nach dem Kauf mit AIXCO bei der Dokumentation, der Käuferübergabe, der Berichterstattung, der Mietkoordination und der laufenden Verwaltung zusammenarbeiten.",
     "ru": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
     "ka": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
     "tr": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
     "ar": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase."
   },
   "Coordinate handover, documentation, rental coordination, and owner reporting": {
-    "de": "Coordinate handover, documentation, rental coordination, and owner reporting",
+    "de": "Übergabe, Dokumentation, Mietabwicklung und Eigentümerberichte koordinieren",
     "ru": "Coordinate handover, documentation, rental coordination, and owner reporting",
     "ka": "Coordinate handover, documentation, rental coordination, and owner reporting",
     "tr": "Coordinate handover, documentation, rental coordination, and owner reporting",
     "ar": "Coordinate handover, documentation, rental coordination, and owner reporting"
   },
   "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.": {
-    "de": "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.",
+    "de": "AIXCO unterstützt Eigentümer nach dem Kauf bei der Dokumentation, der Übergabe, der Mietkoordination und der Berichterstattung.",
     "ru": "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.",
     "ka": "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.",
     "tr": "AIXCO supports property owners after purchase with documentation, handover, rental coordination, and reporting support.",

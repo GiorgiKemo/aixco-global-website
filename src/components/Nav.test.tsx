@@ -119,6 +119,17 @@ describe("Nav", () => {
     expect(drawer).not.toHaveAttribute("aria-hidden");
   });
 
+  it("hides the compact header A mark while keeping the brand home link clickable", () => {
+    const { container } = renderNav();
+
+    const logoLink = screen.getByRole("link", { name: /aixco\.global home/i });
+    const logoImage = logoLink.querySelector("img");
+
+    expect(container.querySelector("header")).toBeInTheDocument();
+    expect(logoLink).toHaveTextContent("AIXCO.GLOBAL");
+    expect(logoImage?.className).toContain("hidden");
+  });
+
   it("marks the hash target active before scroll sync catches up", () => {
     renderNav("/#batumi");
 

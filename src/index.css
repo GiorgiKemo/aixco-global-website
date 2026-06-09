@@ -562,6 +562,10 @@
     display: inline;
   }
 
+  .story-text-reveal__mobile-plain {
+    display: none;
+  }
+
   .story-letter-reveal__word {
     display: inline-block;
     white-space: nowrap;
@@ -1826,7 +1830,7 @@
 
   }
 
-  @media (min-width: 1280px) and (min-height: 700px) {
+  @media (min-width: 0px) {
     html[data-home-experience="story"] {
       scroll-padding-top: 0 !important;
     }
@@ -1840,6 +1844,16 @@
     body.home-desktop-story-boot main > [data-home-experience-mode="native"],
     body.home-desktop-story-boot main > [data-home-experience-mode="story-loading"] {
       display: none !important;
+    }
+
+    body.home-story-nav-hidden footer.story-footer {
+      display: block !important;
+    }
+
+    @media (min-width: 768px) {
+      html[data-home-experience="story"] footer.story-footer .container-x {
+        padding-left: max(2.5rem, calc(clamp(13.5rem, 15vw, 16rem) + 2.5rem));
+      }
     }
 
     body.home-story-nav-hidden > header[dir="ltr"],
@@ -1864,6 +1878,8 @@
       container-name: story-section;
       height: 100svh;
       max-height: 100svh;
+      --story-shell-columns: minmax(0, 1fr);
+      --story-fixed-backdrop-left: 0px;
 
       --story-h2-min: 3.25rem;
       --story-h2-pref: 5.2vw;
@@ -1893,6 +1909,17 @@
       overflow: hidden;
     }
 
+    [data-story-section="contact"] .story-footer {
+      height: 100%;
+      min-height: 0;
+    }
+
+    @media (min-width: 1024px) {
+      [data-story-section="contact"] [data-layout="story-contact-panel"] {
+        padding-top: calc(1.05em + var(--story-item-gap));
+      }
+    }
+
     [data-story-section="about"] .story-about-cinematic-stage {
       position: sticky;
       top: 0;
@@ -1913,7 +1940,11 @@
       margin-top: var(--story-section-gap);
     }
 
-    [data-story-scene-copy] [data-layout="story-contact-details"] + [data-layout="story-contact-actions"] {
+    [data-story-scene-copy] [data-layout="story-contact-details"] + [data-layout="story-contact-socials"] {
+      margin-top: var(--story-item-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-contact-socials"] + [data-layout="story-contact-actions"] {
       margin-top: var(--story-item-gap);
     }
 
@@ -1967,6 +1998,21 @@
 
     [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-fund-row {
       padding-block: clamp(0.95rem, 1.55svh, 1.35rem);
+    }
+
+    [data-story-scene-copy] [data-layout="story-dubai-marquee"] {
+      display: grid;
+      gap: clamp(0.8rem, 1.35svh, 1.05rem);
+      margin-top: var(--story-section-gap);
+    }
+
+    [data-story-scene-copy] [data-layout="story-dubai-marquee"] .dubai-image-marquee {
+      --dubai-image-marquee-gap: clamp(0.65rem, 1.2vw, 0.9rem);
+    }
+
+    [data-story-scene-copy] [data-layout="story-dubai-marquee"] .dubai-gallery-tile {
+      flex-basis: clamp(12rem, 22vw, 20rem);
+      height: clamp(7rem, 14svh, 10rem);
     }
 
     [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-card-title + .grid {
@@ -2366,6 +2412,174 @@
         font-size: 0.86rem;
         line-height: 1.45;
       }
+    }
+  }
+
+  @media (min-width: 1280px) {
+    [data-story-section] {
+      --story-shell-columns: 15rem minmax(0, 1fr);
+      --story-fixed-backdrop-left: 15rem;
+    }
+  }
+
+  @media (max-width: 1279px) {
+    [data-story-section] {
+      padding-top: 0;
+      height: auto;
+      min-height: 100svh;
+      max-height: none;
+      overflow: visible;
+    }
+
+    [data-story-section] > div {
+      height: auto;
+      min-height: 100svh;
+      max-height: none;
+    }
+
+    [data-story-section="about"].story-about-scroll-section {
+      height: auto;
+      min-height: 100svh;
+      max-height: none;
+      overflow: visible;
+    }
+
+    [data-story-section="about"] .story-about-cinematic-stage {
+      position: relative;
+      height: auto;
+      min-height: 100svh;
+      max-height: none;
+      overflow: hidden;
+    }
+
+    [data-story-section="about"] .story-about-cinematic-copy {
+      min-height: 100svh;
+      justify-content: center;
+      padding: clamp(6rem, 13svh, 7.25rem) clamp(1.25rem, 6vw, 2.25rem) clamp(2rem, 7svh, 3rem);
+      transform: none;
+    }
+
+    [data-story-section="about"] [data-layout="story-about-cinematic"] {
+      max-width: min(100%, 38rem);
+    }
+
+    [data-story-section="about"] [data-brand-lockup="story-about"] {
+      max-width: 100%;
+    }
+
+    [data-story-section="about"] [data-brand-lockup="story-about"] > span {
+      gap: clamp(0.45rem, 2.4vw, 0.8rem);
+    }
+
+    [data-story-section="about"] [data-brand-lockup="story-about"] img {
+      width: clamp(3rem, 16vw, 4.25rem) !important;
+      height: clamp(3rem, 16vw, 4.25rem) !important;
+    }
+
+    [data-story-section="about"] [data-brand-lockup="story-about"] span span {
+      font-size: clamp(2rem, 10vw, 3.2rem) !important;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+    }
+
+    [data-story-section="about"] dl {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: min(100%, 34rem);
+      gap: 1rem 0.75rem;
+    }
+
+    [data-story-section="about"] dd {
+      overflow-wrap: normal !important;
+      word-break: normal;
+      letter-spacing: 0.1em !important;
+      line-height: 1.35 !important;
+    }
+
+    [data-story-section="aboutAccess"] > div,
+    [data-story-section="aboutObjectives"] > div,
+    [data-story-section="philosophyOrigins"] > div,
+    [data-story-section="philosophyPlatform"] > div {
+      min-height: 100svh;
+    }
+
+    [data-story-scene-column] {
+      padding-inline: clamp(1.25rem, 5vw, 2rem);
+    }
+
+    [data-story-scene-media] {
+      display: none;
+    }
+
+    .story-h2 {
+      font-size: clamp(2.35rem, 10.4vw, 2.95rem);
+      line-height: 1.16;
+      letter-spacing: -0.025em;
+      padding-top: 0.42em;
+    }
+
+    [data-brand-lockup="story-hero"] {
+      max-width: 100%;
+      font-size: clamp(2.2rem, 10vw, 2.95rem) !important;
+      letter-spacing: -0.035em !important;
+      white-space: nowrap;
+    }
+
+    [data-story-hero-title-mark="true"] {
+      height: 0.9em !important;
+      width: 0.9em !important;
+    }
+
+    [data-story-scene-copy] {
+      justify-content: flex-start;
+      padding-top: clamp(6rem, 13svh, 7.25rem);
+    }
+
+    [data-story-section="materials"] .truncate {
+      overflow: visible;
+      text-overflow: clip;
+      white-space: normal;
+    }
+
+    [data-story-scene-copy] .story-letter-reveal__text {
+      display: none !important;
+    }
+
+    [data-story-scene-copy] .story-text-reveal__mobile-plain {
+      display: block;
+      color: hsl(var(--foreground)) !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .story-metric-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.09em;
+    }
+
+    [data-story-scene-copy] [data-layout="story-dubai-funds"] .story-metric-label {
+      overflow-wrap: normal;
+      text-wrap: balance;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1279px) {
+    [data-story-section] {
+      padding-top: 0;
+    }
+
+    [data-story-section] > div {
+      min-height: 100svh;
+    }
+
+    [data-story-section="about"] .story-about-cinematic-stage,
+    [data-story-section="about"] .story-about-cinematic-copy,
+    [data-story-section="aboutAccess"] > div,
+    [data-story-section="aboutObjectives"] > div,
+    [data-story-section="philosophyOrigins"] > div,
+    [data-story-section="philosophyPlatform"] > div {
+      min-height: 100svh;
     }
   }
 }

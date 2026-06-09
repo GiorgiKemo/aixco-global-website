@@ -47,11 +47,27 @@ export function HeroComposition({
         />
         <h1
           data-hero-title="true"
+          aria-label="AIXCO.Global"
           className="hero-reference-font hero-title-shadow max-w-full min-w-0 break-words text-[clamp(1.85rem,8vw,7.45rem)] font-semibold leading-[0.82] tracking-normal text-white sm:max-w-full sm:text-[clamp(2.9rem,10.25vw,7.45rem)] md:text-[clamp(3.25rem,7.2vw,4.75rem)] lg:text-[clamp(5rem,8vw,7.45rem)]"
         >
           <span className="block pb-[0.08em]">
-            <span className="block max-w-full break-words [overflow-wrap:anywhere] sm:whitespace-nowrap">
-              AIXCO<span data-hero-brand-dot="true" className="hero-title-dot text-primary-glow">.</span>Global
+            <span className="inline-flex max-w-full min-w-0 items-center justify-center gap-[0.06em] align-middle sm:whitespace-nowrap">
+              <Image
+                data-hero-title-mark="true"
+                src={aixcoLiveLogos.aixcoMark}
+                alt=""
+                aria-hidden="true"
+                width={780}
+                height={704}
+                sizes="(min-width: 1024px) 9rem, (min-width: 768px) 6rem, 4.5rem"
+                loading={preloadBrandMark ? "eager" : "lazy"}
+                fetchPriority={preloadBrandMark ? "high" : "auto"}
+                className="h-[0.98em] w-[0.98em] shrink-0 object-contain drop-shadow-[0_10px_22px_rgb(0_0_0/0.22)]"
+                decoding="async"
+              />
+              <span className="min-w-0 break-words [overflow-wrap:anywhere]">
+                IXCO<span data-hero-brand-dot="true" className="hero-title-dot text-primary-glow">.</span>Global
+              </span>
             </span>
           </span>
         </h1>

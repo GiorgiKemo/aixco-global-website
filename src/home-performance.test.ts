@@ -7,22 +7,19 @@ function readSource(path: string) {
 }
 
 describe("home page performance structure", () => {
-  it("keeps media-heavy below-fold sections out of the initial home module", () => {
+  it("keeps the legacy native section stack out of the home module", () => {
     const homeSource = readSource("src/views/HomePage.tsx");
 
-    expect(homeSource).toContain('import { DeferredHomeSections } from "@/components/sections/DeferredHomeSections"');
+    expect(homeSource).toContain('import { HomeExperience } from "@/components/sections/HomeExperience"');
+    expect(homeSource).not.toContain('import { Nav }');
+    expect(homeSource).not.toContain('import { Footer }');
+    expect(homeSource).not.toContain('from "@/components/sections/Hero"');
+    expect(homeSource).not.toContain('from "@/components/sections/About"');
+    expect(homeSource).not.toContain('from "@/components/sections/DeferredHomeSections"');
     expect(homeSource).not.toContain('from "@/components/sections/Dubai"');
     expect(homeSource).not.toContain('from "@/components/sections/Batumi"');
     expect(homeSource).not.toContain('from "@/components/sections/Participate"');
     expect(homeSource).not.toContain('from "@/components/sections/Team"');
-  });
-
-  it("loads the deferred home section chunk through next dynamic imports", () => {
-    const deferredSource = readSource("src/components/sections/DeferredHomeSections.tsx");
-
-    expect(deferredSource).toContain('import dynamic from "next/dynamic"');
-    expect(deferredSource).toContain("DeferredHomeSectionsContent");
-    expect(deferredSource).toContain("dynamic(");
   });
 
   it("keeps philosophy content inside the home experience instead of a separate page", () => {
@@ -31,7 +28,7 @@ describe("home page performance structure", () => {
     const navSource = readSource("src/components/nav/nav-data.ts");
     const sitemapSource = readSource("src/app/sitemap.ts");
 
-    expect(homeSource).toContain("<PhilosophyCallout />");
+    expect(homeSource).toContain("<HomeExperience />");
     expect(desktopStorySource).toContain('{ key: "philosophy", id: "philosophy", label: "Philosophy" }');
     expect(desktopStorySource).toContain('{ key: "philosophyOrigins", id: "philosophy-origins", label: "Origins" }');
     expect(desktopStorySource).toContain('{ key: "philosophyPlatform", id: "philosophy-platform", label: "Principles" }');
@@ -63,16 +60,18 @@ describe("home page performance structure", () => {
     const articleSource = readSource("src/app/aixco-global-op2/[slug]/page.tsx");
 
     expect(articleSource).toContain("generateStaticParams");
-    expect(articleSource).toContain("index: false");
+    expect(articleSource).toContain("getPropertyBySlug");
+    expect(articleSource).toContain("PropertyPageContent");
     expect(articleSource).toContain("notFound()");
-    expect(articleSource).not.toContain("LegacyInsightArticle");
+    expect(articleSource).not.toContain("<Nav />");
   });
 
   it("keeps the not-found page aligned with the public brand layout", () => {
     const notFoundSource = readSource("src/views/NotFoundView.tsx");
 
-    expect(notFoundSource).toContain("<Nav />");
-    expect(notFoundSource).toContain("<Footer />");
+    expect(notFoundSource).not.toContain("<Nav />");
+    expect(notFoundSource).not.toContain("<Footer />");
+    expect(notFoundSource).toContain("aixcoLiveLogos.aixcoMark");
     expect(notFoundSource).toContain("bg-[#11100e]");
     expect(notFoundSource).toContain("btn-gold");
   });

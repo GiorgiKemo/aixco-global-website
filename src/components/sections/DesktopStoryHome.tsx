@@ -15,14 +15,19 @@ import {
   Image as ImageIcon,
   KeyRound,
   Mail,
+  Menu,
   MapPin,
   ShieldCheck,
   TrendingUp,
   Users,
+  X,
 } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { LiveVideo } from "@/components/LiveVideo";
 import { ExpandableImage } from "@/components/ExpandableImage";
+import { FooterLegalBar } from "@/components/Footer";
+import { Logo } from "@/components/Logo";
+import { SocialLinks } from "@/components/SocialLinks";
 import { useUI } from "@/components/ui-state";
 import { legacyTimelineChapters } from "@/data/legacy-timeline";
 import {
@@ -55,10 +60,13 @@ import { AnimatePresence, motion } from "@/lib/framer-motion";
 import { premiumEase, reducedMotionTransition, revealTransition } from "@/lib/motion";
 import {
   formatMetricValue,
+  fundAssetGalleries,
+  hasAssetGallery,
   isHeadlineMetric,
   parseFundDetail,
   type DubaiFund,
 } from "./dubai/dubai-data";
+import { DubaiImageMarquee } from "./dubai/DubaiImageMarquee";
 import { heroIntroText, heroOpportunityFootnote, heroOpportunityText } from "./hero/hero-ui";
 
 type StoryChapterKey =
@@ -242,6 +250,7 @@ function StoryTextReveal({
       data-text-reveal-active={isActive ? "true" : "false"}
       style={{ "--story-letter-count": letterCount } as CSSProperties}
     >
+      <span className="story-text-reveal__mobile-plain">{label}</span>
       <span key={animationRun} className="story-letter-reveal__text" aria-hidden="true">
         {tokens.map((token, tokenIndex) => (
           token.trim() ? (
@@ -411,14 +420,135 @@ function StoryChrome({
   tx: (copy: string) => string;
 }) {
   const currentLangName = LANGS.find((item) => item.code === lang)?.native ?? lang.toUpperCase();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const activeChapterKey = storyChapters[activeIndex]?.key ?? "hero";
+  const useLightMobileLogo = ["hero", "about", "aboutAccess", "contact"].includes(activeChapterKey);
 
   const handleChapterLink = (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => {
     setLangOpen(false);
+    setMenuOpen(false);
     onChapterClick(event, chapter);
   };
 
   return (
     <>
+      <div className="fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-2 border-b border-transparent bg-transparent px-3 py-3 text-white sm:px-4 xl:hidden">
+        <a
+          href="/"
+          aria-label="AIXCO.GLOBAL home"
+          onClick={(event) => handleChapterLink(event, storyChapters[0])}
+          className={cn(
+            "inline-flex min-w-0 items-center gap-1.5 drop-shadow-[0_3px_14px_rgb(0_0_0/0.34)] sm:gap-2",
+            useLightMobileLogo ? "text-white" : "text-foreground",
+          )}
+        >
+          <img
+            src={aixcoLiveLogos.aixcoMark}
+            alt=""
+            aria-hidden="true"
+            className={cn(
+              "h-auto w-10 shrink-0 object-contain sm:w-11",
+              !useLightMobileLogo && "[filter:brightness(0)_saturate(100%)]",
+            )}
+          />
+          <span className="whitespace-nowrap text-[0.78rem] font-semibold tracking-[-0.02em] sm:text-sm">AIXCO.GLOBAL</span>
+        </a>
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setLangOpen((value) => !value)}
+            aria-haspopup="listbox"
+            aria-expanded={langOpen}
+            aria-label={`${currentLangName} Change language`}
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-foreground/10 bg-white px-3 text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
+          >
+            <Globe className="h-3.5 w-3.5" aria-hidden />
+            {currentLangName}
+            <ChevronDown className="h-3 w-3 opacity-70" aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((value) => !value)}
+            aria-expanded={menuOpen}
+            aria-controls="story-mobile-menu"
+            aria-label={menuOpen ? tx("Close menu") : tx("Open menu")}
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-foreground/10 bg-white text-foreground"
+          >
+            {menuOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
+          </button>
+        </div>
+        {langOpen && (
+          <ul
+            role="listbox"
+            className="absolute right-16 top-[calc(100%+0.5rem)] z-[70] w-64 rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
+          >
+            {LANGS.map((option) => (
+              <li key={option.code}>
+                <button
+                  role="option"
+                  data-lang={option.code}
+                  aria-selected={option.code === lang}
+                  onClick={() => {
+                    setLang(option.code);
+                    setLangOpen(false);
+                  }}
+                  className={cn(
+                    "flex min-h-10 w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
+                    option.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70",
+                  )}
+                >
+                  <span>{option.label}</span>
+                  <span className="text-[12px] uppercase tracking-widest opacity-70">{option.native}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {menuOpen && (
+        <div className="fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm xl:hidden" onClick={() => setMenuOpen(false)} aria-hidden="true" />
+      )}
+
+      <aside
+        id="story-mobile-menu"
+        className={cn(
+          "fixed bottom-0 right-0 top-0 z-50 w-[min(21rem,88vw)] border-l border-foreground/10 bg-white px-5 pb-6 pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] transition-transform duration-300 ease-[var(--ease-apple)] xl:hidden",
+          menuOpen ? "translate-x-0" : "translate-x-full",
+        )}
+        aria-hidden={!menuOpen}
+      >
+        <nav aria-label={tx("Story navigation")} className="grid gap-1">
+          {storyChapters.map((chapter, index) => {
+            const isActive = activeIndex === index;
+            const href = chapter.id ? `#${chapter.id}` : "/";
+
+            return (
+              <a
+                key={chapter.key}
+                href={href}
+                aria-current={isActive ? "true" : undefined}
+                data-active={isActive ? "true" : "false"}
+                onClick={(event) => handleChapterLink(event, chapter)}
+                className={cn(
+                  "group/story-chapter story-chapter-link text-foreground/78 hover:text-primary focus-visible:text-primary",
+                  isActive && "story-chapter-link--active text-primary font-semibold",
+                )}
+              >
+                <span
+                  className={cn(
+                    "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 ease-[var(--ease-apple)]",
+                    isActive && "story-chapter-link__line--active w-full bg-primary",
+                  )}
+                  aria-hidden="true"
+                />
+                <span className="truncate">{tx(chapter.label)}</span>
+              </a>
+            );
+          })}
+        </nav>
+      </aside>
+
       <aside
         className="fixed bottom-0 left-0 top-0 z-50 hidden border-r border-foreground/10 bg-white px-5 pb-6 pt-6 text-foreground shadow-[18px_0_60px_-46px_rgba(0,0,0,0.42)] 2xl:px-6 xl:block"
         style={{ width: storySidebarWidth }}
@@ -538,7 +668,7 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
       className={`pointer-events-none fixed bottom-0 right-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 ease-[var(--ease-apple)] ${
         visible ? "opacity-100" : "opacity-0"
       }`}
-      style={{ left: storySidebarWidth }}
+      style={{ left: "var(--story-fixed-backdrop-left, 0px)" }}
     >
       <video
         src={aixcoHeroBackgroundVideo.src}
@@ -693,7 +823,7 @@ function SceneShell({
     <div className={`relative h-full min-h-0 ${toneClass}`}>
       <div
         className="grid h-full min-h-0"
-        style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}
+        style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}
       >
         <div aria-hidden className="hidden xl:block" />
         <div className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-12">
@@ -750,7 +880,7 @@ function SceneShell({
 function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy: string) => string; onRegister: () => void }) {
   return (
     <div className="relative h-full min-h-0 overflow-hidden text-white">
-      <div className="relative z-10 grid h-full min-h-0" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
+      <div className="relative z-10 grid h-full min-h-0" style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}>
         <div aria-hidden className="hidden xl:block" />
         <div className="flex h-full min-h-0 items-end overflow-hidden px-8 pb-[clamp(2.5rem,6svh,5rem)] pt-[clamp(5rem,8svh,7rem)] 2xl:px-14">
           <motion.div
@@ -762,18 +892,26 @@ function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy:
             <p className="mb-5 max-w-full text-[clamp(0.82rem,0.86vw,1.05rem)] font-medium uppercase tracking-normal text-white/88 drop-shadow-[0_3px_16px_rgba(0,0,0,0.45)]">
               {tx("Quality Real Estate - Buy / Broker / Manage")}
             </p>
+            <img
+              src={aixcoLiveLogos.aixcoMark}
+              alt=""
+              aria-hidden="true"
+              data-story-hero-standalone-mark="true"
+              className="mb-3 h-[clamp(7rem,12vw,13rem)] w-[clamp(7rem,12vw,13rem)] shrink-0 object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.3)]"
+            />
             <h1
               aria-label="AIXCO.GLOBAL"
               data-brand-lockup="story-hero"
-              className="flex max-w-full items-center gap-[clamp(0.65rem,1.15vw,1.15rem)] font-semibold uppercase leading-none tracking-[-0.045em] text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)]"
+              className="mt-[clamp(1rem,3svh,2.5rem)] flex max-w-full items-center gap-[0.06em] font-semibold uppercase leading-none tracking-[-0.045em] text-[clamp(3.2rem,6.45vw,7.1rem)] text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)]"
             >
               <img
                 src={aixcoLiveLogos.aixcoMark}
                 alt=""
                 aria-hidden="true"
-                className="h-[clamp(8.6rem,16vw,18rem)] w-[clamp(8.6rem,16vw,18rem)] shrink-0 object-contain drop-shadow-[0_20px_34px_rgba(0,0,0,0.34)]"
+                data-story-hero-title-mark="true"
+                className="h-[0.98em] w-[0.98em] shrink-0 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.24)]"
               />
-              <span className="min-w-0 text-[clamp(3.2rem,6.45vw,7.1rem)]">AIXCO.GLOBAL</span>
+              <span className="min-w-0">IXCO.GLOBAL</span>
             </h1>
             <p className="mt-8 max-w-3xl text-[clamp(1.1rem,1.4vw,1.45rem)] leading-[1.55] text-white/86">
               {tx(heroIntroText)}
@@ -813,7 +951,7 @@ function StoryDubaiFundRow({ fund, tx }: { fund: DubaiFund; tx: (copy: string) =
   return (
     <div className="story-fund-row py-[clamp(0.95rem,1.55svh,1.35rem)] first:pt-0 last:pb-0">
       <h3 className="story-card-title">{tx(fund.name)}</h3>
-      <div className="grid w-full grid-cols-3 gap-x-6 gap-y-[clamp(0.75rem,1.25svh,1rem)]">
+      <div className="grid w-full grid-cols-2 gap-x-4 gap-y-[clamp(0.75rem,1.25svh,1rem)] sm:grid-cols-3 sm:gap-x-6">
         {headlineMetrics.map((detail) => {
           const metric = formatMetricValue(detail.value);
           return (
@@ -989,7 +1127,10 @@ function AboutScene({
 
   return (
     <div className="story-about-cinematic-stage relative h-full min-h-0 bg-[#11100e] text-white">
-      <div className="grid h-full min-h-0" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
+      <div
+        className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
+        style={{ "--story-custom-sidebar": storySidebarWidth } as CSSProperties}
+      >
         <div aria-hidden className="hidden xl:block" />
         <div className="relative h-full min-h-0 overflow-hidden">
           <StoryMediaReveal isActive={isRevealed} className="story-about-cinematic-media absolute inset-0">
@@ -1023,7 +1164,7 @@ function AboutScene({
               <h2
                 aria-label="AIXCO.GLOBAL"
                 data-brand-lockup="story-about"
-                className="max-w-[12ch] font-semibold leading-[0.9] tracking-normal text-white drop-shadow-[0_18px_48px_rgba(0,0,0,0.36)]"
+                className="max-w-none font-semibold leading-[0.9] tracking-normal text-white drop-shadow-[0_18px_48px_rgba(0,0,0,0.36)]"
               >
                 <span className="flex min-w-0 items-center gap-[clamp(0.9rem,1.6vw,1.35rem)]">
                   <Image
@@ -1266,7 +1407,10 @@ function AboutObjectivesScene({
 }) {
   return (
     <div className="relative h-full min-h-0 bg-surface text-foreground">
-      <div className="grid h-full min-h-0" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
+      <div
+        className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
+        style={{ "--story-custom-sidebar": storySidebarWidth } as CSSProperties}
+      >
         <div aria-hidden className="hidden xl:block" />
         <div className="relative flex h-full min-h-0 items-center justify-center overflow-hidden px-[clamp(2rem,6vw,7rem)] py-[clamp(3rem,8svh,6rem)]">
           <div aria-hidden className="absolute inset-x-0 bottom-0 h-[26svh] overflow-hidden opacity-70">
@@ -1314,7 +1458,10 @@ function AboutAccessScene({
 }) {
   return (
     <div className="relative h-full min-h-0 bg-[#11100e] text-white">
-      <div className="grid h-full min-h-0" style={{ gridTemplateColumns: `${storySidebarWidth} minmax(0, 1fr)` }}>
+      <div
+        className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
+        style={{ "--story-custom-sidebar": storySidebarWidth } as CSSProperties}
+      >
         <div aria-hidden className="hidden xl:block" />
         <div className="relative h-full min-h-0 overflow-hidden">
           <StoryMediaReveal isActive={isRevealed} className="story-about-access-media absolute inset-0">
@@ -1421,8 +1568,10 @@ function DubaiScene({
   tx: (copy: string) => string;
 }) {
   const { dubaiFunds } = useSiteContent();
+  const shouldReduceMotion = useHydratedReducedMotion();
   const [landingFund, secondFund] = dubaiFunds;
   const media = dubaiVideoMap[landingFund.video as keyof typeof dubaiVideoMap];
+  const galleryGroups = hasAssetGallery(landingFund.id) ? fundAssetGalleries[landingFund.id].groups : [];
 
   return (
     <SceneShell
@@ -1450,6 +1599,16 @@ function DubaiScene({
           <StoryDubaiFundRow key={fund.id} fund={fund} tx={tx} />
         ))}
       </div>
+      {galleryGroups.length > 0 && (
+        <div data-layout="story-dubai-marquee" className="w-full">
+          {galleryGroups.slice(0, 2).map((group) => (
+            <div key={group.title} className="min-w-0">
+              <p className="story-metric-label mb-3 text-primary/80">{tx(group.title)}</p>
+              <DubaiImageMarquee group={group} shouldReduceMotion={shouldReduceMotion} tx={tx} />
+            </div>
+          ))}
+        </div>
+      )}
     </SceneShell>
   );
 }
@@ -1877,7 +2036,6 @@ function FaqScene({
 }
 
 function ContactScene({
-  isActive,
   isRevealed,
   onLogin,
   onRegister,
@@ -1890,69 +2048,90 @@ function ContactScene({
   tx: (copy: string) => string;
 }) {
   const { company } = useSiteContent();
+  const { openTerms, openPrivacy } = useUI();
 
   return (
-    <SceneShell
-      isActive={isActive}
-      isRevealed={isRevealed}
-      tone="light"
-      density="compact"
-      media={{
-        kind: "image",
-        src: aixcoLiveImages.transactionBackdrop,
-        alt: tx("AIXCO contact architecture reference"),
-        position: "50% 42%",
-      }}
-      mediaOverlay="none"
+    <footer
+      data-story-footer="true"
+      className="story-footer site-footer flex h-full min-h-0 flex-col bg-background text-foreground"
     >
-      <p className="eyebrow story-eyebrow">{tx("Contact")}</p>
-      <h2 className="story-h2">
-        <StoryTextReveal label={tx("Start with AIXCO")} />
-      </h2>
-      <p className="story-body text-foreground/76">
-        {tx("Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.")}
-      </p>
+      <div className="container-x flex h-full min-h-0 w-full flex-col py-5 md:py-6 lg:py-7">
+        <div className="min-h-0 flex-1">
+          <StorySceneBody density="compact" fitContent isRevealed={isRevealed}>
+          <div className="flex w-full flex-col gap-4 md:gap-5">
+            <Logo />
 
-      <div data-layout="story-contact-details" className="grid w-full gap-3 sm:grid-cols-2">
-        <a href={`mailto:${company.email}`} className="story-contact-card group min-w-0">
-          <span className="story-metric-label text-primary/75">{tx("Email")}</span>
-          <span className="story-contact-card__row">
-            <Mail className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-            <span className="story-card-title min-w-0 text-[clamp(0.95rem,1vw,1.05rem)] font-medium leading-snug [overflow-wrap:anywhere]">
-              {company.email}
-            </span>
-          </span>
-        </a>
-        <a
-          href="https://maps.app.goo.gl/AVywyfokNdm4VuLD9"
-          target="_blank"
-          rel="noreferrer"
-          className="story-contact-card group min-w-0"
-        >
-          <span className="story-metric-label text-primary/75">{tx("Address")}</span>
-          <span className="story-contact-card__row">
-            <MapPin className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-            <span className="story-body min-w-0 text-foreground/82 [overflow-wrap:anywhere]">{company.address}</span>
-          </span>
-        </a>
-      </div>
+            <div
+              data-layout="story-contact-layout"
+              className="grid w-full items-start gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-x-10 xl:gap-x-14"
+            >
+              <div className="story-contact-intro flex min-w-0 flex-col gap-4">
+                <p className="eyebrow story-eyebrow">{tx("Contact")}</p>
+                <div className="space-y-[var(--story-item-gap)]">
+                  <h2 className="story-h2">
+                    <StoryTextReveal label={tx("Start with AIXCO")} />
+                  </h2>
+                  <p className="story-body text-foreground/76">
+                    {tx("Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.")}
+                  </p>
+                </div>
 
-      <div data-layout="story-contact-actions" className="flex w-full flex-col gap-3">
-        <button type="button" onClick={onRegister} className="btn-gold w-full sm:w-fit">
-          {tx("Register")}
-          <ArrowRight className="h-4 w-4" aria-hidden />
-        </button>
-        <div className="flex flex-wrap gap-2.5">
-          <button type="button" onClick={onLogin} className="btn-ghost-gold">
-            {tx("Login")}
-          </button>
-          <Link href="/#philosophy" prefetch={false} className="btn-ghost-gold">
-            <ShieldCheck className="h-4 w-4" aria-hidden />
-            {tx("Philosophy")}
-          </Link>
+                <div data-layout="story-contact-actions" className="flex w-full flex-wrap gap-2.5">
+                  <button type="button" onClick={onLogin} className="btn-ghost-gold">
+                    {tx("Login")}
+                  </button>
+                  <button type="button" onClick={onRegister} className="btn-gold">
+                    {tx("Register")}
+                    <ArrowRight className="h-4 w-4" aria-hidden />
+                  </button>
+                </div>
+              </div>
+
+              <div data-layout="story-contact-panel" className="flex min-w-0 flex-col gap-3">
+                <div data-layout="story-contact-details" className="grid w-full gap-3 sm:grid-cols-2">
+                  <a href={`mailto:${company.email}`} className="story-contact-card group min-w-0">
+                    <span className="story-metric-label text-primary/75">{tx("Email")}</span>
+                    <span className="story-contact-card__row">
+                      <Mail className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                      <span className="story-card-title min-w-0 text-[clamp(0.95rem,1vw,1.05rem)] font-medium leading-snug [overflow-wrap:anywhere]">
+                        {company.email}
+                      </span>
+                    </span>
+                  </a>
+                  <a
+                    href="https://maps.app.goo.gl/AVywyfokNdm4VuLD9"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="story-contact-card group min-w-0"
+                  >
+                    <span className="story-metric-label text-primary/75">{tx("Address")}</span>
+                    <span className="story-contact-card__row">
+                      <MapPin className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                      <span className="story-body min-w-0 text-foreground/82 [overflow-wrap:anywhere]">{company.address}</span>
+                    </span>
+                  </a>
+                </div>
+
+                <div data-layout="story-contact-socials" className="story-contact-card min-w-0">
+                  <span className="story-metric-label text-primary/75">{tx("Social media")}</span>
+                  <div className="mt-3 flex flex-wrap items-center gap-3">
+                    <SocialLinks
+                      socials={company.socials}
+                      theme="light"
+                      className="gap-2.5"
+                      aria-label={tx("AIXCO social media links")}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </StorySceneBody>
         </div>
+
+        <FooterLegalBar tx={tx} openTerms={openTerms} openPrivacy={openPrivacy} compact />
       </div>
-    </SceneShell>
+    </footer>
   );
 }
 
@@ -2228,10 +2407,10 @@ export function DesktopStoryHome() {
               data-story-section={chapter.key}
               data-story-active={isActive ? "true" : "false"}
               className={cn(
-                "isolate relative scroll-mt-0 overflow-hidden",
+                "isolate relative scroll-mt-0",
                 chapter.key === "about"
-                  ? "story-about-scroll-section h-[100svh] max-h-[100svh]"
-                  : "h-[100svh] max-h-[100svh]",
+                  ? "story-about-scroll-section h-[100svh] max-h-[100svh] overflow-hidden"
+                  : "h-[100svh] max-h-[100svh] overflow-hidden",
               )}
             >
               {scene}

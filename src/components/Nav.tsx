@@ -218,7 +218,7 @@ export function Nav() {
         <div ref={logoSlotRef} className="shrink-0">
           <Logo
             className={solidNav ? "" : "text-white drop-shadow-[0_3px_14px_rgb(0_0_0/0.34)]"}
-            iconClassName={solidNav ? undefined : "[filter:brightness(0)_invert(1)]"}
+            iconClassName="hidden"
             onHomeClick={beginHomeReturn}
           />
         </div>
