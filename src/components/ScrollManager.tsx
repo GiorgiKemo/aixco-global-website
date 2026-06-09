@@ -30,6 +30,18 @@ const glideScrollConfigSignature = [
   glideScrollOptions.storyWheelCarryWindowMs,
 ].join(':');
 
+const PENDING_HASH_SCROLL_KEY = 'aixco-pending-hash-scroll';
+
+function rememberPendingHashScroll(hash: string) {
+  if (!hash) return;
+
+  try {
+    window.sessionStorage.setItem(PENDING_HASH_SCROLL_KEY, hash);
+  } catch {
+    // Session storage can be unavailable in restricted browser modes.
+  }
+}
+
 function getGlideScrollMode() {
   return document.documentElement.dataset.homeExperience === 'story' ||
     document.body.classList.contains('home-desktop-story-boot')
@@ -153,6 +165,7 @@ export function ScrollManager() {
     const frame = window.requestAnimationFrame(() => {
       const hash = window.location.hash;
       if (hash) {
+        rememberPendingHashScroll(hash);
         const didScroll = scrollToHash(
           hash,
           isFirstRender ? 'auto' : undefined
@@ -187,6 +200,7 @@ export function ScrollManager() {
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash) {
+        rememberPendingHashScroll(hash);
         scrollToHash(hash);
         stabilizeHashScroll(hash);
       } else {

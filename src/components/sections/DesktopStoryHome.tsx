@@ -136,6 +136,12 @@ const storyTeamSwitchIntervalMs = 2400;
 const storyTeamResumeDelayMs = 3200;
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
+const philosophyPlatformStats = [
+  { ...philosophyStats[0], shortLabel: "First acquisition" },
+  { ...philosophyStats[1], shortLabel: "GDV" },
+  { ...philosophyStats[2], shortLabel: "Transactions" },
+  { ...philosophyStats[3], shortLabel: "Value transacted" },
+] as const;
 
 const participationVideoMap = {
   batumiBuy: {
@@ -414,7 +420,7 @@ function StoryChrome({
   return (
     <>
       <aside
-        className="fixed bottom-0 left-0 top-0 z-50 hidden border-r border-foreground/10 bg-white px-5 pb-8 pt-8 text-foreground shadow-[18px_0_60px_-46px_rgba(0,0,0,0.42)] 2xl:px-6 xl:block"
+        className="fixed bottom-0 left-0 top-0 z-50 hidden border-r border-foreground/10 bg-white px-5 pb-6 pt-6 text-foreground shadow-[18px_0_60px_-46px_rgba(0,0,0,0.42)] 2xl:px-6 xl:block"
         style={{ width: storySidebarWidth }}
       >
         <div className="flex h-full flex-col justify-between">
@@ -423,7 +429,7 @@ function StoryChrome({
               href="/"
               aria-label="AIXCO.GLOBAL home"
               onClick={(event) => handleChapterLink(event, storyChapters[0])}
-              className="mb-8 inline-flex min-h-16 items-center gap-2 text-foreground transition-colors hover:text-primary"
+              className="mb-5 inline-flex min-h-16 items-center gap-2 text-foreground transition-colors hover:text-primary"
             >
               <img
                 src={aixcoLiveLogos.aixcoMark}
@@ -433,7 +439,7 @@ function StoryChrome({
               />
               <span className="whitespace-nowrap text-[0.84rem] font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
             </a>
-            <div className="relative mb-8">
+            <div className="relative mb-5">
               <button
                 type="button"
                 onClick={() => setLangOpen((value) => !value)}
@@ -476,7 +482,7 @@ function StoryChrome({
                 </ul>
               )}
             </div>
-            <nav aria-label={tx("Story navigation")} className="mt-8 grid gap-2">
+            <nav aria-label={tx("Story navigation")} className="grid gap-1">
               {storyChapters.map((chapter, index) => {
                 const isActive = activeIndex === index;
                 const href = chapter.id ? `#${chapter.id}` : "/";
@@ -599,7 +605,6 @@ function StorySceneBody({
         const rawZoom = (available - 2) / needed;
         zoom = Math.max(0.8, Math.min(zoom, rawZoom));
         copy.style.setProperty("zoom", String(zoom));
-        copy.style.setProperty("width", `${100 / zoom}%`);
       }
     };
 
@@ -1128,7 +1133,7 @@ function PhilosophyPlatformScene({
       isRevealed={isRevealed}
       tone="light"
       density="dense"
-      fitContent={false}
+      fitContent
       media={{
         kind: "image",
         src: aixcoLiveImages.batumiMosaicNightSkyline,
@@ -1146,9 +1151,9 @@ function PhilosophyPlatformScene({
       </p>
 
       <dl data-layout="story-philosophy-platform-stats" className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
-        {philosophyStats.map((stat) => (
+        {philosophyPlatformStats.map((stat) => (
           <div key={stat.label} className="story-philosophy-stat">
-            <dt className="story-metric-label text-foreground/52">{tx(stat.label)}</dt>
+            <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
             <dd className="story-metric-value mt-1 leading-none text-primary">{stat.value}</dd>
           </div>
         ))}

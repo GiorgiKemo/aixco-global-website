@@ -13,7 +13,7 @@ export function FAQs() {
   const { faqGroups } = useSiteContent();
 
   return (
-    <section id="faqs" className="relative scroll-mt-16 py-16 md:scroll-mt-20 md:py-20 lg:py-24">
+    <section id="faqs" className="relative scroll-mt-24 py-16 pb-28 md:scroll-mt-28 md:py-20 md:pb-32 lg:py-24 lg:pb-36">
       <div className="container-x grid lg:grid-cols-12 gap-12">
         <div className="scroll-reveal lg:col-span-4 lg:sticky lg:top-28 self-start">
           <p className="eyebrow">{tx("FAQs")}</p>

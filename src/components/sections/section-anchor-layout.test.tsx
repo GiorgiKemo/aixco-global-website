@@ -49,8 +49,8 @@ describe("section anchor layout", () => {
       const anchor = document.getElementById(id);
 
       expect(anchor, `Missing #${id}`).toBeInTheDocument();
-      expect(anchor?.className, `#${id} should account for the fixed mobile nav`).toContain("scroll-mt-16");
-      expect(anchor?.className, `#${id} should preserve tablet/desktop header clearance`).toContain("md:scroll-mt-20");
+      expect(anchor?.className, `#${id} should account for the fixed mobile nav`).toContain(id === "faqs" ? "scroll-mt-24" : "scroll-mt-16");
+      expect(anchor?.className, `#${id} should preserve tablet/desktop header clearance`).toContain(id === "faqs" ? "md:scroll-mt-28" : "md:scroll-mt-20");
       expect(anchor?.className, `#${id} should not use a zero scroll margin`).not.toContain("scroll-mt-0");
     }
   });
