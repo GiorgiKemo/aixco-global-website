@@ -1,0 +1,1214 @@
+[
+  {
+    "viewport": {
+      "name": "desktop-1280x720",
+      "width": 1280,
+      "height": 720
+    },
+    "entries": [
+      {
+        "kind": "story",
+        "key": "hero",
+        "selector": "[data-story-section=\"hero\"]",
+        "section": "hero",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "about",
+        "selector": "[data-story-section=\"about\"]",
+        "section": "about",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophy",
+        "selector": "[data-story-section=\"philosophy\"]",
+        "section": "philosophy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyOrigins",
+        "selector": "[data-story-section=\"philosophyOrigins\"]",
+        "section": "philosophyOrigins",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyPlatform",
+        "selector": "[data-story-section=\"philosophyPlatform\"]",
+        "section": "philosophyPlatform",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutObjectives",
+        "selector": "[data-story-section=\"aboutObjectives\"]",
+        "section": "aboutObjectives",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutAccess",
+        "selector": "[data-story-section=\"aboutAccess\"]",
+        "section": "aboutAccess",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "legacy",
+        "selector": "[data-story-section=\"legacy\"]",
+        "section": "legacy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "dubai",
+        "selector": "[data-story-section=\"dubai\"]",
+        "section": "dubai",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "batumi",
+        "selector": "[data-story-section=\"batumi\"]",
+        "section": "batumi",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "materials",
+        "selector": "[data-story-section=\"materials\"]",
+        "section": "materials",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "participate",
+        "selector": "[data-story-section=\"participate\"]",
+        "section": "participate",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "how",
+        "selector": "[data-story-section=\"how\"]",
+        "section": "how",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "team",
+        "selector": "[data-story-section=\"team\"]",
+        "section": "team",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "partners",
+        "selector": "[data-story-section=\"partners\"]",
+        "section": "partners",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "faqs",
+        "selector": "[data-story-section=\"faqs\"]",
+        "section": "faqs",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "contact",
+        "selector": "[data-story-section=\"contact\"]",
+        "section": "contact",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 0
+  },
+  {
+    "viewport": {
+      "name": "desktop-1365x768",
+      "width": 1365,
+      "height": 768
+    },
+    "entries": [
+      {
+        "kind": "story",
+        "key": "hero",
+        "selector": "[data-story-section=\"hero\"]",
+        "section": "hero",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "about",
+        "selector": "[data-story-section=\"about\"]",
+        "section": "about",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophy",
+        "selector": "[data-story-section=\"philosophy\"]",
+        "section": "philosophy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyOrigins",
+        "selector": "[data-story-section=\"philosophyOrigins\"]",
+        "section": "philosophyOrigins",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyPlatform",
+        "selector": "[data-story-section=\"philosophyPlatform\"]",
+        "section": "philosophyPlatform",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutObjectives",
+        "selector": "[data-story-section=\"aboutObjectives\"]",
+        "section": "aboutObjectives",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutAccess",
+        "selector": "[data-story-section=\"aboutAccess\"]",
+        "section": "aboutAccess",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "legacy",
+        "selector": "[data-story-section=\"legacy\"]",
+        "section": "legacy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "dubai",
+        "selector": "[data-story-section=\"dubai\"]",
+        "section": "dubai",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "batumi",
+        "selector": "[data-story-section=\"batumi\"]",
+        "section": "batumi",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "materials",
+        "selector": "[data-story-section=\"materials\"]",
+        "section": "materials",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "participate",
+        "selector": "[data-story-section=\"participate\"]",
+        "section": "participate",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "how",
+        "selector": "[data-story-section=\"how\"]",
+        "section": "how",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "team",
+        "selector": "[data-story-section=\"team\"]",
+        "section": "team",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "partners",
+        "selector": "[data-story-section=\"partners\"]",
+        "section": "partners",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "faqs",
+        "selector": "[data-story-section=\"faqs\"]",
+        "section": "faqs",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "contact",
+        "selector": "[data-story-section=\"contact\"]",
+        "section": "contact",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 0
+  },
+  {
+    "viewport": {
+      "name": "desktop-1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    "entries": [
+      {
+        "kind": "story",
+        "key": "hero",
+        "selector": "[data-story-section=\"hero\"]",
+        "section": "hero",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "about",
+        "selector": "[data-story-section=\"about\"]",
+        "section": "about",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophy",
+        "selector": "[data-story-section=\"philosophy\"]",
+        "section": "philosophy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyOrigins",
+        "selector": "[data-story-section=\"philosophyOrigins\"]",
+        "section": "philosophyOrigins",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyPlatform",
+        "selector": "[data-story-section=\"philosophyPlatform\"]",
+        "section": "philosophyPlatform",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutObjectives",
+        "selector": "[data-story-section=\"aboutObjectives\"]",
+        "section": "aboutObjectives",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutAccess",
+        "selector": "[data-story-section=\"aboutAccess\"]",
+        "section": "aboutAccess",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "legacy",
+        "selector": "[data-story-section=\"legacy\"]",
+        "section": "legacy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "dubai",
+        "selector": "[data-story-section=\"dubai\"]",
+        "section": "dubai",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "batumi",
+        "selector": "[data-story-section=\"batumi\"]",
+        "section": "batumi",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "materials",
+        "selector": "[data-story-section=\"materials\"]",
+        "section": "materials",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "participate",
+        "selector": "[data-story-section=\"participate\"]",
+        "section": "participate",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "how",
+        "selector": "[data-story-section=\"how\"]",
+        "section": "how",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "team",
+        "selector": "[data-story-section=\"team\"]",
+        "section": "team",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "partners",
+        "selector": "[data-story-section=\"partners\"]",
+        "section": "partners",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "faqs",
+        "selector": "[data-story-section=\"faqs\"]",
+        "section": "faqs",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "contact",
+        "selector": "[data-story-section=\"contact\"]",
+        "section": "contact",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 0
+  },
+  {
+    "viewport": {
+      "name": "desktop-1600x900",
+      "width": 1600,
+      "height": 900
+    },
+    "entries": [
+      {
+        "kind": "story",
+        "key": "hero",
+        "selector": "[data-story-section=\"hero\"]",
+        "section": "hero",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "about",
+        "selector": "[data-story-section=\"about\"]",
+        "section": "about",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophy",
+        "selector": "[data-story-section=\"philosophy\"]",
+        "section": "philosophy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyOrigins",
+        "selector": "[data-story-section=\"philosophyOrigins\"]",
+        "section": "philosophyOrigins",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyPlatform",
+        "selector": "[data-story-section=\"philosophyPlatform\"]",
+        "section": "philosophyPlatform",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutObjectives",
+        "selector": "[data-story-section=\"aboutObjectives\"]",
+        "section": "aboutObjectives",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutAccess",
+        "selector": "[data-story-section=\"aboutAccess\"]",
+        "section": "aboutAccess",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "legacy",
+        "selector": "[data-story-section=\"legacy\"]",
+        "section": "legacy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "dubai",
+        "selector": "[data-story-section=\"dubai\"]",
+        "section": "dubai",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "batumi",
+        "selector": "[data-story-section=\"batumi\"]",
+        "section": "batumi",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "materials",
+        "selector": "[data-story-section=\"materials\"]",
+        "section": "materials",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "participate",
+        "selector": "[data-story-section=\"participate\"]",
+        "section": "participate",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "how",
+        "selector": "[data-story-section=\"how\"]",
+        "section": "how",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "team",
+        "selector": "[data-story-section=\"team\"]",
+        "section": "team",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "partners",
+        "selector": "[data-story-section=\"partners\"]",
+        "section": "partners",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "faqs",
+        "selector": "[data-story-section=\"faqs\"]",
+        "section": "faqs",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "contact",
+        "selector": "[data-story-section=\"contact\"]",
+        "section": "contact",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 0
+  },
+  {
+    "viewport": {
+      "name": "tablet-820x1180",
+      "width": 820,
+      "height": 1180
+    },
+    "entries": [
+      {
+        "kind": "native",
+        "key": "section-0",
+        "selector": "[data-audit-section=\"section-0\"]",
+        "section": "section-0",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "about",
+        "selector": "#about",
+        "section": "about",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "philosophy",
+        "selector": "#philosophy",
+        "section": "philosophy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "legacy",
+        "selector": "#legacy",
+        "section": "legacy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "dubai",
+        "selector": "#dubai",
+        "section": "dubai",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "batumi",
+        "selector": "#batumi",
+        "section": "batumi",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "materials",
+        "selector": "#materials",
+        "section": "materials",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "participate",
+        "selector": "#participate",
+        "section": "participate",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "how",
+        "selector": "#how",
+        "section": "how",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "team",
+        "selector": "#team",
+        "section": "team",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "partners",
+        "selector": "#partners",
+        "section": "partners",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "faqs",
+        "selector": "#faqs",
+        "section": "faqs",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "coveredBy": "P.text-[11px] uppercase tracking-[0.3em] text-primary mb-2"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 9
+      },
+      {
+        "kind": "native",
+        "key": "contact",
+        "selector": "#contact",
+        "section": "contact",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 9
+  },
+  {
+    "viewport": {
+      "name": "mobile-390x844",
+      "width": 390,
+      "height": 844
+    },
+    "entries": [
+      {
+        "kind": "native",
+        "key": "section-0",
+        "selector": "[data-audit-section=\"section-0\"]",
+        "section": "section-0",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "about",
+        "selector": "#about",
+        "section": "about",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "philosophy",
+        "selector": "#philosophy",
+        "section": "philosophy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "legacy",
+        "selector": "#legacy",
+        "section": "legacy",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "dubai",
+        "selector": "#dubai",
+        "section": "dubai",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "batumi",
+        "selector": "#batumi",
+        "section": "batumi",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "materials",
+        "selector": "#materials",
+        "section": "materials",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "participate",
+        "selector": "#participate",
+        "section": "participate",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "how",
+        "selector": "#how",
+        "section": "how",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "team",
+        "selector": "#team",
+        "section": "team",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "partners",
+        "selector": "#partners",
+        "section": "partners",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "faqs",
+        "selector": "#faqs",
+        "section": "faqs",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "coveredBy": "P.text-[11px] uppercase tracking-[0.3em] text-primary mb-2"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "coveredBy": "P.mb-4 text-sm text-muted-foreground"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "coveredBy": "P.mb-4 text-sm text-muted-foreground"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "coveredBy": "DIV.scroll-reveal"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 20
+      },
+      {
+        "kind": "native",
+        "key": "contact",
+        "selector": "#contact",
+        "section": "contact",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 20
+  }
+]

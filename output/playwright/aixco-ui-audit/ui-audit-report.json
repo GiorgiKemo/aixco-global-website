@@ -1,0 +1,2501 @@
+[
+  {
+    "viewport": {
+      "name": "desktop-1365x768",
+      "width": 1365,
+      "height": 768
+    },
+    "mode": "story",
+    "issues": [
+      {
+        "sectionKey": "philosophy",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 575,
+              "height": 768,
+              "bottom": 768,
+              "right": 791
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "legacy",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 479,
+              "height": 768,
+              "bottom": 768,
+              "right": 695
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "dubai",
+        "issues": [
+          {
+            "type": "media-not-loaded",
+            "image": {
+              "tag": "video",
+              "complete": true,
+              "naturalWidth": 0,
+              "naturalHeight": 0,
+              "rect": {
+                "x": 869,
+                "y": -28,
+                "width": 514,
+                "height": 825,
+                "bottom": 796,
+                "right": 1383
+              },
+              "objectFit": "cover"
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "button",
+                "className": "absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 h",
+                "text": "Play video",
+                "rect": {
+                  "x": 869,
+                  "y": -28,
+                  "width": 514,
+                  "height": 825,
+                  "bottom": 796,
+                  "right": 1383
+                },
+                "scroll": {
+                  "scrollWidth": 479,
+                  "clientWidth": 479,
+                  "scrollHeight": 768,
+                  "clientHeight": 768
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "batumi",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 670,
+              "height": 768,
+              "bottom": 768,
+              "right": 886
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "participate",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 479,
+              "height": 768,
+              "bottom": 768,
+              "right": 695
+            }
+          },
+          {
+            "type": "media-not-loaded",
+            "image": {
+              "tag": "video",
+              "complete": true,
+              "naturalWidth": 0,
+              "naturalHeight": 0,
+              "rect": {
+                "x": 198,
+                "y": -28,
+                "width": 514,
+                "height": 825,
+                "bottom": 796,
+                "right": 712
+              },
+              "objectFit": "cover"
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "button",
+                "className": "absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 h",
+                "text": "Play video",
+                "rect": {
+                  "x": 198,
+                  "y": -28,
+                  "width": 514,
+                  "height": 825,
+                  "bottom": 796,
+                  "right": 712
+                },
+                "scroll": {
+                  "scrollWidth": 479,
+                  "clientWidth": 479,
+                  "scrollHeight": 768,
+                  "clientHeight": 768
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "team",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 479,
+              "height": 768,
+              "bottom": 768,
+              "right": 695
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "partners",
+        "issues": [
+          {
+            "type": "copy-overflow",
+            "overflowY": 0,
+            "overflowX": 922,
+            "rect": {
+              "x": 243,
+              "y": 25,
+              "width": 616,
+              "height": 718,
+              "bottom": 743,
+              "right": 859
+            },
+            "scrollHeight": 718,
+            "clientHeight": 718,
+            "scrollWidth": 1538,
+            "clientWidth": 616
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "p",
+                "className": "story-partner-row__label",
+                "text": "Group companies",
+                "rect": {
+                  "x": 243,
+                  "y": 314,
+                  "width": 1538,
+                  "height": 30,
+                  "bottom": 344,
+                  "right": 1781
+                },
+                "scroll": {
+                  "scrollWidth": 1538,
+                  "clientWidth": 1538,
+                  "scrollHeight": 30,
+                  "clientHeight": 30
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group partner-marquee-item--featured",
+                "text": "Global PartnersGlobal Partners",
+                "rect": {
+                  "x": -66,
+                  "y": 354,
+                  "width": 171,
+                  "height": 135,
+                  "bottom": 489,
+                  "right": 105
+                },
+                "scroll": {
+                  "scrollWidth": 171,
+                  "clientWidth": 171,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Clean ElementsClean Elements",
+                "rect": {
+                  "x": 1280,
+                  "y": 354,
+                  "width": 171,
+                  "height": 135,
+                  "bottom": 489,
+                  "right": 1450
+                },
+                "scroll": {
+                  "scrollWidth": 171,
+                  "clientWidth": 171,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-partner-row__label",
+                "text": "Strategic partners",
+                "rect": {
+                  "x": 243,
+                  "y": 521,
+                  "width": 1538,
+                  "height": 30,
+                  "bottom": 551,
+                  "right": 1781
+                },
+                "scroll": {
+                  "scrollWidth": 1538,
+                  "clientWidth": 1538,
+                  "scrollHeight": 30,
+                  "clientHeight": 30
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Revanta CapitalRevanta Capital",
+                "rect": {
+                  "x": -217,
+                  "y": 561,
+                  "width": 171,
+                  "height": 135,
+                  "bottom": 697,
+                  "right": -46
+                },
+                "scroll": {
+                  "scrollWidth": 171,
+                  "clientWidth": 171,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Groupe GTIGroupe GTI",
+                "rect": {
+                  "x": -24,
+                  "y": 561,
+                  "width": 171,
+                  "height": 135,
+                  "bottom": 697,
+                  "right": 146
+                },
+                "scroll": {
+                  "scrollWidth": 171,
+                  "clientWidth": 171,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "faqs",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 479,
+              "height": 768,
+              "bottom": 768,
+              "right": 695
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "h2",
+                "className": "story-h2",
+                "text": "Frequently asked questions",
+                "rect": {
+                  "x": 722,
+                  "y": 69,
+                  "width": 700,
+                  "height": 115,
+                  "bottom": 184,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 145,
+                  "clientHeight": 131
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Customer",
+                "rect": {
+                  "x": 722,
+                  "y": 208,
+                  "width": 700,
+                  "height": 12,
+                  "bottom": 220,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 13,
+                  "clientHeight": 13
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "What is the minimum amount to reserve or buy?",
+                "rect": {
+                  "x": 722,
+                  "y": 230,
+                  "width": 700,
+                  "height": 20,
+                  "bottom": 250,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 25,
+                  "clientHeight": 22
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable fr",
+                "rect": {
+                  "x": 722,
+                  "y": 260,
+                  "width": 700,
+                  "height": 75,
+                  "bottom": 335,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 85,
+                  "clientHeight": 85
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Customer",
+                "rect": {
+                  "x": 722,
+                  "y": 355,
+                  "width": 700,
+                  "height": 12,
+                  "bottom": 366,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 13,
+                  "clientHeight": 13
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "Can I buy property directly?",
+                "rect": {
+                  "x": 722,
+                  "y": 377,
+                  "width": 700,
+                  "height": 20,
+                  "bottom": 397,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 25,
+                  "clientHeight": 22
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+                "rect": {
+                  "x": 722,
+                  "y": 407,
+                  "width": 700,
+                  "height": 50,
+                  "bottom": 457,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 57,
+                  "clientHeight": 57
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Broker",
+                "rect": {
+                  "x": 722,
+                  "y": 477,
+                  "width": 700,
+                  "height": 12,
+                  "bottom": 488,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 13,
+                  "clientHeight": 13
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "What are the benefits for brokers?",
+                "rect": {
+                  "x": 722,
+                  "y": 499,
+                  "width": 700,
+                  "height": 20,
+                  "bottom": 519,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 25,
+                  "clientHeight": 22
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+                "rect": {
+                  "x": 722,
+                  "y": 529,
+                  "width": 700,
+                  "height": 50,
+                  "bottom": 579,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 57,
+                  "clientHeight": 57
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Customer",
+                "rect": {
+                  "x": 722,
+                  "y": 598,
+                  "width": 700,
+                  "height": 12,
+                  "bottom": 610,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 13,
+                  "clientHeight": 13
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "Can I ask about AIXCO company financing?",
+                "rect": {
+                  "x": 722,
+                  "y": 621,
+                  "width": 700,
+                  "height": 20,
+                  "bottom": 641,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 25,
+                  "clientHeight": 22
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing",
+                "rect": {
+                  "x": 722,
+                  "y": 651,
+                  "width": 700,
+                  "height": 75,
+                  "bottom": 726,
+                  "right": 1422
+                },
+                "scroll": {
+                  "scrollWidth": 796,
+                  "clientWidth": 796,
+                  "scrollHeight": 85,
+                  "clientHeight": 85
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": {
+      "name": "desktop-1280x720",
+      "width": 1280,
+      "height": 720
+    },
+    "mode": "story",
+    "issues": [
+      {
+        "sectionKey": "philosophy",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 532,
+              "height": 720,
+              "bottom": 720,
+              "right": 748
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "legacy",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 443,
+              "height": 720,
+              "bottom": 720,
+              "right": 659
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "dubai",
+        "issues": [
+          {
+            "type": "media-not-loaded",
+            "image": {
+              "tag": "video",
+              "complete": true,
+              "naturalWidth": 0,
+              "naturalHeight": 0,
+              "rect": {
+                "x": 820,
+                "y": -27,
+                "width": 476,
+                "height": 773,
+                "bottom": 747,
+                "right": 1296
+              },
+              "objectFit": "cover"
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "button",
+                "className": "absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 h",
+                "text": "Play video",
+                "rect": {
+                  "x": 820,
+                  "y": -27,
+                  "width": 476,
+                  "height": 773,
+                  "bottom": 747,
+                  "right": 1296
+                },
+                "scroll": {
+                  "scrollWidth": 443,
+                  "clientWidth": 443,
+                  "scrollHeight": 720,
+                  "clientHeight": 720
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "batumi",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 621,
+              "height": 720,
+              "bottom": 720,
+              "right": 837
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "participate",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 443,
+              "height": 720,
+              "bottom": 720,
+              "right": 659
+            }
+          },
+          {
+            "type": "media-not-loaded",
+            "image": {
+              "tag": "video",
+              "complete": true,
+              "naturalWidth": 0,
+              "naturalHeight": 0,
+              "rect": {
+                "x": 200,
+                "y": -27,
+                "width": 476,
+                "height": 773,
+                "bottom": 747,
+                "right": 676
+              },
+              "objectFit": "cover"
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "h2",
+                "className": "story-h2",
+                "text": "How Customers/Partners Work",
+                "rect": {
+                  "x": 685,
+                  "y": 76,
+                  "width": 615,
+                  "height": 170,
+                  "bottom": 246,
+                  "right": 1300
+                },
+                "scroll": {
+                  "scrollWidth": 665,
+                  "clientWidth": 665,
+                  "scrollHeight": 196,
+                  "clientHeight": 184
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/76",
+                "text": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
+                "rect": {
+                  "x": 685,
+                  "y": 260,
+                  "width": 615,
+                  "height": 53,
+                  "bottom": 313,
+                  "right": 1300
+                },
+                "scroll": {
+                  "scrollWidth": 665,
+                  "clientWidth": 665,
+                  "scrollHeight": 57,
+                  "clientHeight": 57
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-le",
+                "text": "01Buy an Apartment in BatumiCustomers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purc",
+                "rect": {
+                  "x": 685,
+                  "y": 327,
+                  "width": 615,
+                  "height": 127,
+                  "bottom": 454,
+                  "right": 1300
+                },
+                "scroll": {
+                  "scrollWidth": 665,
+                  "clientWidth": 665,
+                  "scrollHeight": 137,
+                  "clientHeight": 137
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-le",
+                "text": "02Broker Real Estate with AIXCOBrokers and partners can introduce qualified buyers, coordinate tours, and manage deal flow through a structu",
+                "rect": {
+                  "x": 685,
+                  "y": 454,
+                  "width": 615,
+                  "height": 102,
+                  "bottom": 556,
+                  "right": 1300
+                },
+                "scroll": {
+                  "scrollWidth": 665,
+                  "clientWidth": 665,
+                  "scrollHeight": 109,
+                  "clientHeight": 109
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-le",
+                "text": "03Administer Your PropertyProperty owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing ",
+                "rect": {
+                  "x": 685,
+                  "y": 556,
+                  "width": 615,
+                  "height": 128,
+                  "bottom": 684,
+                  "right": 1300
+                },
+                "scroll": {
+                  "scrollWidth": 665,
+                  "clientWidth": 665,
+                  "scrollHeight": 137,
+                  "clientHeight": 137
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 h",
+                "text": "Play video",
+                "rect": {
+                  "x": 200,
+                  "y": -27,
+                  "width": 476,
+                  "height": 773,
+                  "bottom": 747,
+                  "right": 676
+                },
+                "scroll": {
+                  "scrollWidth": 443,
+                  "clientWidth": 443,
+                  "scrollHeight": 720,
+                  "clientHeight": 720
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "team",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 443,
+              "height": 720,
+              "bottom": 720,
+              "right": 659
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "partners",
+        "issues": [
+          {
+            "type": "copy-overflow",
+            "overflowY": 0,
+            "overflowX": 884,
+            "rect": {
+              "x": 242,
+              "y": 23,
+              "width": 569,
+              "height": 673,
+              "bottom": 697,
+              "right": 811
+            },
+            "scrollHeight": 673,
+            "clientHeight": 673,
+            "scrollWidth": 1453,
+            "clientWidth": 569
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "p",
+                "className": "story-partner-row__label",
+                "text": "Group companies",
+                "rect": {
+                  "x": 242,
+                  "y": 284,
+                  "width": 1453,
+                  "height": 30,
+                  "bottom": 314,
+                  "right": 1694
+                },
+                "scroll": {
+                  "scrollWidth": 1453,
+                  "clientWidth": 1453,
+                  "scrollHeight": 30,
+                  "clientHeight": 30
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group partner-marquee-item--featured",
+                "text": "Global PartnersGlobal Partners",
+                "rect": {
+                  "x": -49,
+                  "y": 324,
+                  "width": 160,
+                  "height": 135,
+                  "bottom": 459,
+                  "right": 111
+                },
+                "scroll": {
+                  "scrollWidth": 160,
+                  "clientWidth": 160,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Clean ElementsClean Elements",
+                "rect": {
+                  "x": 1222,
+                  "y": 324,
+                  "width": 160,
+                  "height": 135,
+                  "bottom": 459,
+                  "right": 1382
+                },
+                "scroll": {
+                  "scrollWidth": 160,
+                  "clientWidth": 160,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-partner-row__label",
+                "text": "Strategic partners",
+                "rect": {
+                  "x": 242,
+                  "y": 491,
+                  "width": 1453,
+                  "height": 30,
+                  "bottom": 521,
+                  "right": 1694
+                },
+                "scroll": {
+                  "scrollWidth": 1453,
+                  "clientWidth": 1453,
+                  "scrollHeight": 30,
+                  "clientHeight": 30
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Revanta CapitalRevanta Capital",
+                "rect": {
+                  "x": -194,
+                  "y": 531,
+                  "width": 160,
+                  "height": 135,
+                  "bottom": 666,
+                  "right": -34
+                },
+                "scroll": {
+                  "scrollWidth": 160,
+                  "clientWidth": 160,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Groupe GTIGroupe GTI",
+                "rect": {
+                  "x": -13,
+                  "y": 531,
+                  "width": 160,
+                  "height": 135,
+                  "bottom": 666,
+                  "right": 147
+                },
+                "scroll": {
+                  "scrollWidth": 160,
+                  "clientWidth": 160,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "faqs",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 443,
+              "height": 720,
+              "bottom": 720,
+              "right": 659
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "h2",
+                "className": "story-h2",
+                "text": "Frequently asked questions",
+                "rect": {
+                  "x": 685,
+                  "y": 103,
+                  "width": 684,
+                  "height": 51,
+                  "bottom": 154,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 74,
+                  "clientHeight": 61
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Customer",
+                "rect": {
+                  "x": 685,
+                  "y": 176,
+                  "width": 684,
+                  "height": 11,
+                  "bottom": 187,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 13,
+                  "clientHeight": 13
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "What is the minimum amount to reserve or buy?",
+                "rect": {
+                  "x": 685,
+                  "y": 197,
+                  "width": 684,
+                  "height": 19,
+                  "bottom": 216,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 24,
+                  "clientHeight": 22
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable fr",
+                "rect": {
+                  "x": 685,
+                  "y": 226,
+                  "width": 684,
+                  "height": 71,
+                  "bottom": 297,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 85,
+                  "clientHeight": 85
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Customer",
+                "rect": {
+                  "x": 685,
+                  "y": 315,
+                  "width": 684,
+                  "height": 11,
+                  "bottom": 326,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 13,
+                  "clientHeight": 13
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "Can I buy property directly?",
+                "rect": {
+                  "x": 685,
+                  "y": 336,
+                  "width": 684,
+                  "height": 19,
+                  "bottom": 355,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 24,
+                  "clientHeight": 22
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+                "rect": {
+                  "x": 685,
+                  "y": 365,
+                  "width": 684,
+                  "height": 24,
+                  "bottom": 389,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 28,
+                  "clientHeight": 28
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Broker",
+                "rect": {
+                  "x": 685,
+                  "y": 407,
+                  "width": 684,
+                  "height": 11,
+                  "bottom": 418,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 13,
+                  "clientHeight": 13
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "What are the benefits for brokers?",
+                "rect": {
+                  "x": 685,
+                  "y": 428,
+                  "width": 684,
+                  "height": 19,
+                  "bottom": 447,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 24,
+                  "clientHeight": 22
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+                "rect": {
+                  "x": 685,
+                  "y": 457,
+                  "width": 684,
+                  "height": 47,
+                  "bottom": 504,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 57,
+                  "clientHeight": 57
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Customer",
+                "rect": {
+                  "x": 685,
+                  "y": 522,
+                  "width": 684,
+                  "height": 11,
+                  "bottom": 533,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 13,
+                  "clientHeight": 13
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "Can I ask about AIXCO company financing?",
+                "rect": {
+                  "x": 685,
+                  "y": 543,
+                  "width": 684,
+                  "height": 19,
+                  "bottom": 562,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 24,
+                  "clientHeight": 22
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing",
+                "rect": {
+                  "x": 685,
+                  "y": 572,
+                  "width": 684,
+                  "height": 71,
+                  "bottom": 643,
+                  "right": 1369
+                },
+                "scroll": {
+                  "scrollWidth": 822,
+                  "clientWidth": 822,
+                  "scrollHeight": 85,
+                  "clientHeight": 85
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": {
+      "name": "desktop-1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    "mode": "story",
+    "issues": [
+      {
+        "sectionKey": "philosophy",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 612,
+              "height": 900,
+              "bottom": 900,
+              "right": 828
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "legacy",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 510,
+              "height": 900,
+              "bottom": 900,
+              "right": 726
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "dubai",
+        "issues": [
+          {
+            "type": "media-not-loaded",
+            "image": {
+              "tag": "video",
+              "complete": true,
+              "naturalWidth": 0,
+              "naturalHeight": 0,
+              "rect": {
+                "x": 911,
+                "y": -33,
+                "width": 548,
+                "height": 966,
+                "bottom": 933,
+                "right": 1459
+              },
+              "objectFit": "cover"
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "button",
+                "className": "absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 h",
+                "text": "Play video",
+                "rect": {
+                  "x": 911,
+                  "y": -33,
+                  "width": 548,
+                  "height": 966,
+                  "bottom": 933,
+                  "right": 1459
+                },
+                "scroll": {
+                  "scrollWidth": 510,
+                  "clientWidth": 510,
+                  "scrollHeight": 900,
+                  "clientHeight": 900
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "batumi",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 714,
+              "height": 900,
+              "bottom": 900,
+              "right": 930
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "participate",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 510,
+              "height": 900,
+              "bottom": 900,
+              "right": 726
+            }
+          },
+          {
+            "type": "media-not-loaded",
+            "image": {
+              "tag": "video",
+              "complete": true,
+              "naturalWidth": 0,
+              "naturalHeight": 0,
+              "rect": {
+                "x": 197,
+                "y": -33,
+                "width": 548,
+                "height": 966,
+                "bottom": 933,
+                "right": 745
+              },
+              "objectFit": "cover"
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "button",
+                "className": "absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 h",
+                "text": "Play video",
+                "rect": {
+                  "x": 197,
+                  "y": -33,
+                  "width": 548,
+                  "height": 966,
+                  "bottom": 933,
+                  "right": 745
+                },
+                "scroll": {
+                  "scrollWidth": 510,
+                  "clientWidth": 510,
+                  "scrollHeight": 900,
+                  "clientHeight": 900
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "team",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 510,
+              "height": 900,
+              "bottom": 900,
+              "right": 726
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "partners",
+        "issues": [
+          {
+            "type": "copy-overflow",
+            "overflowY": 0,
+            "overflowX": 957,
+            "rect": {
+              "x": 245,
+              "y": 29,
+              "width": 656,
+              "height": 842,
+              "bottom": 871,
+              "right": 901
+            },
+            "scrollHeight": 842,
+            "clientHeight": 842,
+            "scrollWidth": 1613,
+            "clientWidth": 656
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "p",
+                "className": "story-partner-row__label",
+                "text": "Group companies",
+                "rect": {
+                  "x": 245,
+                  "y": 385,
+                  "width": 1613,
+                  "height": 30,
+                  "bottom": 415,
+                  "right": 1858
+                },
+                "scroll": {
+                  "scrollWidth": 1613,
+                  "clientWidth": 1613,
+                  "scrollHeight": 30,
+                  "clientHeight": 30
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group partner-marquee-item--featured",
+                "text": "Global PartnersGlobal Partners",
+                "rect": {
+                  "x": -80,
+                  "y": 425,
+                  "width": 180,
+                  "height": 135,
+                  "bottom": 561,
+                  "right": 100
+                },
+                "scroll": {
+                  "scrollWidth": 180,
+                  "clientWidth": 180,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Clean ElementsClean Elements",
+                "rect": {
+                  "x": 1331,
+                  "y": 425,
+                  "width": 180,
+                  "height": 135,
+                  "bottom": 561,
+                  "right": 1511
+                },
+                "scroll": {
+                  "scrollWidth": 180,
+                  "clientWidth": 180,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-partner-row__label",
+                "text": "Strategic partners",
+                "rect": {
+                  "x": 245,
+                  "y": 593,
+                  "width": 1613,
+                  "height": 30,
+                  "bottom": 623,
+                  "right": 1858
+                },
+                "scroll": {
+                  "scrollWidth": 1613,
+                  "clientWidth": 1613,
+                  "scrollHeight": 30,
+                  "clientHeight": 30
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Revanta CapitalRevanta Capital",
+                "rect": {
+                  "x": -236,
+                  "y": 633,
+                  "width": 180,
+                  "height": 135,
+                  "bottom": 769,
+                  "right": -56
+                },
+                "scroll": {
+                  "scrollWidth": 180,
+                  "clientWidth": 180,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Groupe GTIGroupe GTI",
+                "rect": {
+                  "x": -35,
+                  "y": 633,
+                  "width": 180,
+                  "height": 135,
+                  "bottom": 769,
+                  "right": 145
+                },
+                "scroll": {
+                  "scrollWidth": 180,
+                  "clientWidth": 180,
+                  "scrollHeight": 135,
+                  "clientHeight": 135
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "faqs",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 216,
+              "y": 0,
+              "width": 510,
+              "height": 900,
+              "bottom": 900,
+              "right": 726
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": {
+      "name": "desktop-1600x900",
+      "width": 1600,
+      "height": 900
+    },
+    "mode": "story",
+    "issues": [
+      {
+        "sectionKey": "philosophy",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 240,
+              "y": 0,
+              "width": 680,
+              "height": 900,
+              "bottom": 900,
+              "right": 920
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "legacy",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 240,
+              "y": 0,
+              "width": 567,
+              "height": 900,
+              "bottom": 900,
+              "right": 807
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "dubai",
+        "issues": [
+          {
+            "type": "media-not-loaded",
+            "image": {
+              "tag": "video",
+              "complete": true,
+              "naturalWidth": 0,
+              "naturalHeight": 0,
+              "rect": {
+                "x": 1012,
+                "y": -33,
+                "width": 608,
+                "height": 966,
+                "bottom": 933,
+                "right": 1621
+              },
+              "objectFit": "cover"
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "button",
+                "className": "absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 h",
+                "text": "Play video",
+                "rect": {
+                  "x": 1012,
+                  "y": -33,
+                  "width": 608,
+                  "height": 966,
+                  "bottom": 933,
+                  "right": 1621
+                },
+                "scroll": {
+                  "scrollWidth": 567,
+                  "clientWidth": 567,
+                  "scrollHeight": 900,
+                  "clientHeight": 900
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "batumi",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 240,
+              "y": 0,
+              "width": 793,
+              "height": 900,
+              "bottom": 900,
+              "right": 1033
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "participate",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 240,
+              "y": 0,
+              "width": 567,
+              "height": 900,
+              "bottom": 900,
+              "right": 807
+            }
+          },
+          {
+            "type": "media-not-loaded",
+            "image": {
+              "tag": "video",
+              "complete": true,
+              "naturalWidth": 0,
+              "naturalHeight": 0,
+              "rect": {
+                "x": 219,
+                "y": -33,
+                "width": 608,
+                "height": 966,
+                "bottom": 933,
+                "right": 828
+              },
+              "objectFit": "cover"
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "button",
+                "className": "absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 h",
+                "text": "Play video",
+                "rect": {
+                  "x": 219,
+                  "y": -33,
+                  "width": 608,
+                  "height": 966,
+                  "bottom": 933,
+                  "right": 828
+                },
+                "scroll": {
+                  "scrollWidth": 567,
+                  "clientWidth": 567,
+                  "scrollHeight": 900,
+                  "clientHeight": 900
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "team",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 240,
+              "y": 0,
+              "width": 567,
+              "height": 900,
+              "bottom": 900,
+              "right": 807
+            }
+          }
+        ]
+      },
+      {
+        "sectionKey": "partners",
+        "issues": [
+          {
+            "type": "copy-overflow",
+            "overflowY": 0,
+            "overflowX": 980,
+            "rect": {
+              "x": 272,
+              "y": 29,
+              "width": 729,
+              "height": 842,
+              "bottom": 871,
+              "right": 1001
+            },
+            "scrollHeight": 842,
+            "clientHeight": 842,
+            "scrollWidth": 1709,
+            "clientWidth": 729
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "p",
+                "className": "story-partner-row__label",
+                "text": "Group companies",
+                "rect": {
+                  "x": 272,
+                  "y": 395,
+                  "width": 1709,
+                  "height": 30,
+                  "bottom": 426,
+                  "right": 1981
+                },
+                "scroll": {
+                  "scrollWidth": 1709,
+                  "clientWidth": 1709,
+                  "scrollHeight": 30,
+                  "clientHeight": 30
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group partner-marquee-item--featured",
+                "text": "Global PartnersGlobal Partners",
+                "rect": {
+                  "x": -77,
+                  "y": 436,
+                  "width": 192,
+                  "height": 137,
+                  "bottom": 572,
+                  "right": 115
+                },
+                "scroll": {
+                  "scrollWidth": 192,
+                  "clientWidth": 192,
+                  "scrollHeight": 137,
+                  "clientHeight": 137
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Clean ElementsClean Elements",
+                "rect": {
+                  "x": 1418,
+                  "y": 436,
+                  "width": 192,
+                  "height": 137,
+                  "bottom": 572,
+                  "right": 1610
+                },
+                "scroll": {
+                  "scrollWidth": 192,
+                  "clientWidth": 192,
+                  "scrollHeight": 137,
+                  "clientHeight": 137
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-partner-row__label",
+                "text": "Strategic partners",
+                "rect": {
+                  "x": 272,
+                  "y": 605,
+                  "width": 1709,
+                  "height": 30,
+                  "bottom": 635,
+                  "right": 1981
+                },
+                "scroll": {
+                  "scrollWidth": 1709,
+                  "clientWidth": 1709,
+                  "scrollHeight": 30,
+                  "clientHeight": 30
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Revanta CapitalRevanta Capital",
+                "rect": {
+                  "x": -233,
+                  "y": 645,
+                  "width": 192,
+                  "height": 137,
+                  "bottom": 782,
+                  "right": -41
+                },
+                "scroll": {
+                  "scrollWidth": 192,
+                  "clientWidth": 192,
+                  "scrollHeight": 137,
+                  "clientHeight": 137
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "button",
+                "className": "partner-marquee-item group ",
+                "text": "Groupe GTIGroupe GTI",
+                "rect": {
+                  "x": -19,
+                  "y": 645,
+                  "width": 192,
+                  "height": 137,
+                  "bottom": 782,
+                  "right": 173
+                },
+                "scroll": {
+                  "scrollWidth": 192,
+                  "clientWidth": 192,
+                  "scrollHeight": 137,
+                  "clientHeight": 137
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sectionKey": "faqs",
+        "issues": [
+          {
+            "type": "media-small-or-offscreen",
+            "rect": {
+              "x": 240,
+              "y": 0,
+              "width": 567,
+              "height": 900,
+              "bottom": 900,
+              "right": 807
+            }
+          },
+          {
+            "type": "text-clipping",
+            "nodes": [
+              {
+                "tag": "h2",
+                "className": "story-h2",
+                "text": "Frequently asked questions",
+                "rect": {
+                  "x": 839,
+                  "y": 81,
+                  "width": 795,
+                  "height": 140,
+                  "bottom": 221,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 169,
+                  "clientHeight": 153
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Customer",
+                "rect": {
+                  "x": 839,
+                  "y": 249,
+                  "width": 795,
+                  "height": 13,
+                  "bottom": 262,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 14,
+                  "clientHeight": 14
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "What is the minimum amount to reserve or buy?",
+                "rect": {
+                  "x": 839,
+                  "y": 273,
+                  "width": 795,
+                  "height": 24,
+                  "bottom": 297,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 28,
+                  "clientHeight": 26
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable fr",
+                "rect": {
+                  "x": 839,
+                  "y": 308,
+                  "width": 795,
+                  "height": 85,
+                  "bottom": 393,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 93,
+                  "clientHeight": 93
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Customer",
+                "rect": {
+                  "x": 839,
+                  "y": 419,
+                  "width": 795,
+                  "height": 13,
+                  "bottom": 432,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 14,
+                  "clientHeight": 14
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "Can I buy property directly?",
+                "rect": {
+                  "x": 839,
+                  "y": 443,
+                  "width": 795,
+                  "height": 24,
+                  "bottom": 467,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 28,
+                  "clientHeight": 26
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+                "rect": {
+                  "x": 839,
+                  "y": 478,
+                  "width": 795,
+                  "height": 57,
+                  "bottom": 534,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 62,
+                  "clientHeight": 62
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Broker",
+                "rect": {
+                  "x": 839,
+                  "y": 560,
+                  "width": 795,
+                  "height": 13,
+                  "bottom": 573,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 14,
+                  "clientHeight": 14
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "What are the benefits for brokers?",
+                "rect": {
+                  "x": 839,
+                  "y": 585,
+                  "width": 795,
+                  "height": 24,
+                  "bottom": 608,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 28,
+                  "clientHeight": 26
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+                "rect": {
+                  "x": 839,
+                  "y": 619,
+                  "width": 795,
+                  "height": 57,
+                  "bottom": 676,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 62,
+                  "clientHeight": 62
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-metric-label text-primary/75",
+                "text": "Customer",
+                "rect": {
+                  "x": 839,
+                  "y": 702,
+                  "width": 795,
+                  "height": 13,
+                  "bottom": 715,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 14,
+                  "clientHeight": 14
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "h3",
+                "className": "story-card-title",
+                "text": "Can I ask about AIXCO company financing?",
+                "rect": {
+                  "x": 839,
+                  "y": 726,
+                  "width": 795,
+                  "height": 24,
+                  "bottom": 750,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 28,
+                  "clientHeight": 26
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              },
+              {
+                "tag": "p",
+                "className": "story-body text-foreground/66",
+                "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing",
+                "rect": {
+                  "x": 839,
+                  "y": 761,
+                  "width": 795,
+                  "height": 85,
+                  "bottom": 846,
+                  "right": 1634
+                },
+                "scroll": {
+                  "scrollWidth": 867,
+                  "clientWidth": 867,
+                  "scrollHeight": 93,
+                  "clientHeight": 93
+                },
+                "overflow": {
+                  "x": "visible",
+                  "y": "visible"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

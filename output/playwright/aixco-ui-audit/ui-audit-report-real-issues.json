@@ -1,0 +1,5963 @@
+[
+  {
+    "viewport": {
+      "name": "desktop-1280x720",
+      "width": 1280,
+      "height": 720
+    },
+    "mode": "unknown",
+    "entries": [
+      {
+        "kind": "story",
+        "key": "hero",
+        "selector": "[data-story-section=\"hero\"]",
+        "section": "hero",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "about",
+        "selector": "[data-story-section=\"about\"]",
+        "section": "about",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophy",
+        "selector": "[data-story-section=\"philosophy\"]",
+        "section": "philosophy",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyOrigins",
+        "selector": "[data-story-section=\"philosophyOrigins\"]",
+        "section": "philosophyOrigins",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyPlatform",
+        "selector": "[data-story-section=\"philosophyPlatform\"]",
+        "section": "philosophyPlatform",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutObjectives",
+        "selector": "[data-story-section=\"aboutObjectives\"]",
+        "section": "aboutObjectives",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutAccess",
+        "selector": "[data-story-section=\"aboutAccess\"]",
+        "section": "aboutAccess",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "legacy",
+        "selector": "[data-story-section=\"legacy\"]",
+        "section": "legacy",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "dubai",
+        "selector": "[data-story-section=\"dubai\"]",
+        "section": "dubai",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "batumi",
+        "selector": "[data-story-section=\"batumi\"]",
+        "section": "batumi",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "materials",
+        "selector": "[data-story-section=\"materials\"]",
+        "section": "materials",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "participate",
+        "selector": "[data-story-section=\"participate\"]",
+        "section": "participate",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "how",
+        "selector": "[data-story-section=\"how\"]",
+        "section": "how",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "team",
+        "selector": "[data-story-section=\"team\"]",
+        "section": "team",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "partners",
+        "selector": "[data-story-section=\"partners\"]",
+        "section": "partners",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "faqs",
+        "selector": "[data-story-section=\"faqs\"]",
+        "section": "faqs",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "contact",
+        "selector": "[data-story-section=\"contact\"]",
+        "section": "contact",
+        "sectionRect": {
+          "left": 0,
+          "right": 1280,
+          "top": 0,
+          "bottom": 720,
+          "width": 1280,
+          "height": 720
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 0
+  },
+  {
+    "viewport": {
+      "name": "desktop-1365x768",
+      "width": 1365,
+      "height": 768
+    },
+    "mode": "unknown",
+    "entries": [
+      {
+        "kind": "story",
+        "key": "hero",
+        "selector": "[data-story-section=\"hero\"]",
+        "section": "hero",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "about",
+        "selector": "[data-story-section=\"about\"]",
+        "section": "about",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophy",
+        "selector": "[data-story-section=\"philosophy\"]",
+        "section": "philosophy",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyOrigins",
+        "selector": "[data-story-section=\"philosophyOrigins\"]",
+        "section": "philosophyOrigins",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyPlatform",
+        "selector": "[data-story-section=\"philosophyPlatform\"]",
+        "section": "philosophyPlatform",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutObjectives",
+        "selector": "[data-story-section=\"aboutObjectives\"]",
+        "section": "aboutObjectives",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutAccess",
+        "selector": "[data-story-section=\"aboutAccess\"]",
+        "section": "aboutAccess",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "legacy",
+        "selector": "[data-story-section=\"legacy\"]",
+        "section": "legacy",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "dubai",
+        "selector": "[data-story-section=\"dubai\"]",
+        "section": "dubai",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "batumi",
+        "selector": "[data-story-section=\"batumi\"]",
+        "section": "batumi",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "materials",
+        "selector": "[data-story-section=\"materials\"]",
+        "section": "materials",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "participate",
+        "selector": "[data-story-section=\"participate\"]",
+        "section": "participate",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "how",
+        "selector": "[data-story-section=\"how\"]",
+        "section": "how",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "team",
+        "selector": "[data-story-section=\"team\"]",
+        "section": "team",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "partners",
+        "selector": "[data-story-section=\"partners\"]",
+        "section": "partners",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "faqs",
+        "selector": "[data-story-section=\"faqs\"]",
+        "section": "faqs",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "contact",
+        "selector": "[data-story-section=\"contact\"]",
+        "section": "contact",
+        "sectionRect": {
+          "left": 0,
+          "right": 1365,
+          "top": 0,
+          "bottom": 768,
+          "width": 1365,
+          "height": 768
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 0
+  },
+  {
+    "viewport": {
+      "name": "desktop-1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    "mode": "unknown",
+    "entries": [
+      {
+        "kind": "story",
+        "key": "hero",
+        "selector": "[data-story-section=\"hero\"]",
+        "section": "hero",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "about",
+        "selector": "[data-story-section=\"about\"]",
+        "section": "about",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophy",
+        "selector": "[data-story-section=\"philosophy\"]",
+        "section": "philosophy",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [
+          {
+            "text": "First acquisition",
+            "rect": {
+              "left": 893,
+              "right": 1010,
+              "top": 463,
+              "bottom": 476
+            },
+            "tag": "DT",
+            "className": "story-metric-label text-foreground/58",
+            "coveredBy": "DD.mt-2 font-display text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary"
+          },
+          {
+            "text": "Gross development value",
+            "rect": {
+              "left": 1153,
+              "right": 1324,
+              "top": 463,
+              "bottom": 476
+            },
+            "tag": "DT",
+            "className": "story-metric-label text-foreground/58",
+            "coveredBy": "DD.mt-2 font-display text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary"
+          },
+          {
+            "text": "Real estate transacted across markets",
+            "rect": {
+              "left": 1153,
+              "right": 1208,
+              "top": 549,
+              "bottom": 562
+            },
+            "tag": "DT",
+            "className": "story-metric-label text-foreground/58",
+            "coveredBy": "DD.mt-2 font-display text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 3
+      },
+      {
+        "kind": "story",
+        "key": "philosophyOrigins",
+        "selector": "[data-story-section=\"philosophyOrigins\"]",
+        "section": "philosophyOrigins",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyPlatform",
+        "selector": "[data-story-section=\"philosophyPlatform\"]",
+        "section": "philosophyPlatform",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutObjectives",
+        "selector": "[data-story-section=\"aboutObjectives\"]",
+        "section": "aboutObjectives",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutAccess",
+        "selector": "[data-story-section=\"aboutAccess\"]",
+        "section": "aboutAccess",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "legacy",
+        "selector": "[data-story-section=\"legacy\"]",
+        "section": "legacy",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "dubai",
+        "selector": "[data-story-section=\"dubai\"]",
+        "section": "dubai",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "batumi",
+        "selector": "[data-story-section=\"batumi\"]",
+        "section": "batumi",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "materials",
+        "selector": "[data-story-section=\"materials\"]",
+        "section": "materials",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "participate",
+        "selector": "[data-story-section=\"participate\"]",
+        "section": "participate",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "how",
+        "selector": "[data-story-section=\"how\"]",
+        "section": "how",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "team",
+        "selector": "[data-story-section=\"team\"]",
+        "section": "team",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "partners",
+        "selector": "[data-story-section=\"partners\"]",
+        "section": "partners",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "faqs",
+        "selector": "[data-story-section=\"faqs\"]",
+        "section": "faqs",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "contact",
+        "selector": "[data-story-section=\"contact\"]",
+        "section": "contact",
+        "sectionRect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 3
+  },
+  {
+    "viewport": {
+      "name": "desktop-1600x900",
+      "width": 1600,
+      "height": 900
+    },
+    "mode": "unknown",
+    "entries": [
+      {
+        "kind": "story",
+        "key": "hero",
+        "selector": "[data-story-section=\"hero\"]",
+        "section": "hero",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "about",
+        "selector": "[data-story-section=\"about\"]",
+        "section": "about",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophy",
+        "selector": "[data-story-section=\"philosophy\"]",
+        "section": "philosophy",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyOrigins",
+        "selector": "[data-story-section=\"philosophyOrigins\"]",
+        "section": "philosophyOrigins",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "philosophyPlatform",
+        "selector": "[data-story-section=\"philosophyPlatform\"]",
+        "section": "philosophyPlatform",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutObjectives",
+        "selector": "[data-story-section=\"aboutObjectives\"]",
+        "section": "aboutObjectives",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "aboutAccess",
+        "selector": "[data-story-section=\"aboutAccess\"]",
+        "section": "aboutAccess",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "legacy",
+        "selector": "[data-story-section=\"legacy\"]",
+        "section": "legacy",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "dubai",
+        "selector": "[data-story-section=\"dubai\"]",
+        "section": "dubai",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "batumi",
+        "selector": "[data-story-section=\"batumi\"]",
+        "section": "batumi",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "materials",
+        "selector": "[data-story-section=\"materials\"]",
+        "section": "materials",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "participate",
+        "selector": "[data-story-section=\"participate\"]",
+        "section": "participate",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "how",
+        "selector": "[data-story-section=\"how\"]",
+        "section": "how",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "team",
+        "selector": "[data-story-section=\"team\"]",
+        "section": "team",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "partners",
+        "selector": "[data-story-section=\"partners\"]",
+        "section": "partners",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "faqs",
+        "selector": "[data-story-section=\"faqs\"]",
+        "section": "faqs",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "story",
+        "key": "contact",
+        "selector": "[data-story-section=\"contact\"]",
+        "section": "contact",
+        "sectionRect": {
+          "left": 0,
+          "right": 1600,
+          "top": 0,
+          "bottom": 900,
+          "width": 1600,
+          "height": 900
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 0
+  },
+  {
+    "viewport": {
+      "name": "tablet-820x1180",
+      "width": 820,
+      "height": 1180
+    },
+    "mode": "unknown",
+    "entries": [
+      {
+        "kind": "native",
+        "key": "section-0",
+        "selector": "[data-audit-section=\"section-0\"]",
+        "section": "section-0",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": 0,
+          "bottom": 1180,
+          "width": 820,
+          "height": 1180
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "about",
+        "selector": "#about",
+        "section": "about",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": -77,
+          "bottom": 1426,
+          "width": 820,
+          "height": 1503
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "Employees",
+            "rect": {
+              "left": 64,
+              "right": 154,
+              "top": 1175,
+              "bottom": 1193,
+              "width": 90,
+              "height": 18
+            },
+            "tag": "P",
+            "className": "mt-4 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Real Estate Transacted",
+            "rect": {
+              "left": 435,
+              "right": 642,
+              "top": 1175,
+              "bottom": 1193,
+              "width": 207,
+              "height": 18
+            },
+            "tag": "P",
+            "className": "mt-4 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Developments Underway",
+            "rect": {
+              "left": 64,
+              "right": 282,
+              "top": 1302,
+              "bottom": 1320,
+              "width": 218,
+              "height": 18
+            },
+            "tag": "P",
+            "className": "mt-4 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Markets Served",
+            "rect": {
+              "left": 435,
+              "right": 572,
+              "top": 1302,
+              "bottom": 1320,
+              "width": 138,
+              "height": 18
+            },
+            "tag": "P",
+            "className": "mt-4 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground [overflow-wrap:anywhere]"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "About AIXCO",
+            "rect": {
+              "left": 72,
+              "right": 186,
+              "top": 14,
+              "bottom": 30
+            },
+            "tag": "P",
+            "className": "eyebrow",
+            "coveredBy": "A.inline-flex min-h-11 shrink-0 items-center gap-2.5 text-foreground "
+          },
+          {
+            "text": "AIXCO.GLOBAL",
+            "rect": {
+              "left": 116,
+              "right": 313,
+              "top": 60,
+              "bottom": 101
+            },
+            "tag": "SPAN",
+            "className": "text-[0.78em] font-semibold uppercase tracking-[-0.03em]",
+            "coveredBy": "HEADER.fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow,backdrop-filter] dur"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 6
+      },
+      {
+        "kind": "native",
+        "key": "philosophy",
+        "selector": "#philosophy",
+        "section": "philosophy",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": 470,
+          "bottom": 878,
+          "width": 820,
+          "height": 409
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "legacy",
+        "selector": "#legacy",
+        "section": "legacy",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": 168,
+          "bottom": 2220,
+          "width": 820,
+          "height": 2052
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "Gulf developments delivered",
+            "rect": {
+              "left": 77,
+              "right": 292,
+              "top": 1191,
+              "bottom": 1225,
+              "width": 215,
+              "height": 35
+            },
+            "tag": "H3",
+            "className": "mt-4 font-display text-[clamp(1.65rem,2.8vw,2.35rem)] leading-[1.08] [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Gulf developments delivered",
+            "rect": {
+              "left": 77,
+              "right": 181,
+              "top": 1219,
+              "bottom": 1254,
+              "width": 104,
+              "height": 35
+            },
+            "tag": "H3",
+            "className": "mt-4 font-display text-[clamp(1.65rem,2.8vw,2.35rem)] leading-[1.08] [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "USD 800m+ development volume",
+            "rect": {
+              "left": 77,
+              "right": 236,
+              "top": 1261,
+              "bottom": 1301,
+              "width": 159,
+              "height": 40
+            },
+            "tag": "P",
+            "className": "mt-3 font-display text-2xl text-gold md:text-3xl"
+          },
+          {
+            "text": "USD 800m+ development volume",
+            "rect": {
+              "left": 77,
+              "right": 354,
+              "top": 1297,
+              "bottom": 1336,
+              "width": 277,
+              "height": 40
+            },
+            "tag": "P",
+            "className": "mt-3 font-display text-2xl text-gold md:text-3xl"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 77,
+              "right": 330,
+              "top": 1350,
+              "bottom": 1370,
+              "width": 253,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 77,
+              "right": 379,
+              "top": 1375,
+              "bottom": 1396,
+              "width": 302,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 77,
+              "right": 376,
+              "top": 1401,
+              "bottom": 1421,
+              "width": 299,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 77,
+              "right": 367,
+              "top": 1426,
+              "bottom": 1447,
+              "width": 290,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 77,
+              "right": 338,
+              "top": 1452,
+              "bottom": 1473,
+              "width": 261,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 77,
+              "right": 200,
+              "top": 1477,
+              "bottom": 1498,
+              "width": 123,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "View Dubai legacy portfolio",
+            "rect": {
+              "left": 77,
+              "right": 277,
+              "top": 1523,
+              "bottom": 1543,
+              "width": 200,
+              "height": 21
+            },
+            "tag": "A",
+            "className": "mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-primary"
+          },
+          {
+            "text": "Units delivered (Eden House)",
+            "rect": {
+              "left": 430,
+              "right": 477,
+              "top": 1174,
+              "bottom": 1192,
+              "width": 47,
+              "height": 18
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "Units delivered (Eden House)",
+            "rect": {
+              "left": 430,
+              "right": 514,
+              "top": 1194,
+              "bottom": 1212,
+              "width": 84,
+              "height": 18
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "Units delivered (Eden House)",
+            "rect": {
+              "left": 430,
+              "right": 543,
+              "top": 1213,
+              "bottom": 1231,
+              "width": 112,
+              "height": 18
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "Eden House development value",
+            "rect": {
+              "left": 597,
+              "right": 697,
+              "top": 1174,
+              "bottom": 1192,
+              "width": 100,
+              "height": 18
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "Eden House development value",
+            "rect": {
+              "left": 597,
+              "right": 710,
+              "top": 1194,
+              "bottom": 1212,
+              "width": 113,
+              "height": 18
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "Eden House development value",
+            "rect": {
+              "left": 597,
+              "right": 646,
+              "top": 1213,
+              "bottom": 1231,
+              "width": 49,
+              "height": 18
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "Legacy",
+            "rect": {
+              "left": 430,
+              "right": 490,
+              "top": 1269,
+              "bottom": 1296,
+              "width": 60,
+              "height": 27
+            },
+            "tag": "DT",
+            "className": "font-display text-[clamp(1.25rem,2vw,1.85rem)] leading-none text-gold [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Market status",
+            "rect": {
+              "left": 430,
+              "right": 555,
+              "top": 1300,
+              "bottom": 1318,
+              "width": 125,
+              "height": 18
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "Batumi · Current opportunity",
+            "rect": {
+              "left": 108,
+              "right": 265,
+              "top": 1676,
+              "bottom": 1691,
+              "width": 157,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "Batumi · Current opportunity",
+            "rect": {
+              "left": 108,
+              "right": 224,
+              "top": 1695,
+              "bottom": 1711,
+              "width": 116,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "Current focus",
+            "rect": {
+              "left": 87,
+              "right": 189,
+              "top": 1729,
+              "bottom": 1743,
+              "width": 102,
+              "height": 14
+            },
+            "tag": "SPAN",
+            "className": "rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] bg-[#f1dfbf] text-[#5f3f11]"
+          },
+          {
+            "text": "Opportunity-driven focus in Georgia",
+            "rect": {
+              "left": 77,
+              "right": 366,
+              "top": 1758,
+              "bottom": 1793,
+              "width": 289,
+              "height": 35
+            },
+            "tag": "H3",
+            "className": "mt-4 font-display text-[clamp(1.65rem,2.8vw,2.35rem)] leading-[1.08] [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Opportunity-driven focus in Georgia",
+            "rect": {
+              "left": 77,
+              "right": 194,
+              "top": 1786,
+              "bottom": 1821,
+              "width": 117,
+              "height": 35
+            },
+            "tag": "H3",
+            "className": "mt-4 font-display text-[clamp(1.65rem,2.8vw,2.35rem)] leading-[1.08] [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Selected apartments from €50,000",
+            "rect": {
+              "left": 77,
+              "right": 344,
+              "top": 1828,
+              "bottom": 1868,
+              "width": 267,
+              "height": 40
+            },
+            "tag": "P",
+            "className": "mt-3 font-display text-2xl text-gold md:text-3xl"
+          }
+        ],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 25
+      },
+      {
+        "kind": "native",
+        "key": "dubai",
+        "selector": "#dubai",
+        "section": "dubai",
+        "sectionRect": {
+          "left": 40,
+          "right": 780,
+          "top": 124,
+          "bottom": 1224,
+          "width": 740,
+          "height": 1100
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "flex",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "batumi",
+        "selector": "#batumi",
+        "section": "batumi",
+        "sectionRect": {
+          "left": 40,
+          "right": 780,
+          "top": 124,
+          "bottom": 1224,
+          "width": 740,
+          "height": 1100
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 30,
+        "rootDisplay": "flex",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "materials",
+        "selector": "#materials",
+        "section": "materials",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": -75,
+          "bottom": 1423,
+          "width": 820,
+          "height": 1498
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "Dubai Healthcare City image",
+            "rect": {
+              "left": 125,
+              "right": 351,
+              "top": 1193,
+              "bottom": 1225,
+              "width": 226,
+              "height": 32
+            },
+            "tag": "H3",
+            "className": "font-display text-xl font-semibold leading-tight text-foreground sm:text-2xl"
+          },
+          {
+            "text": "Dubai Healthcare City image",
+            "rect": {
+              "left": 125,
+              "right": 190,
+              "top": 1225,
+              "bottom": 1257,
+              "width": 65,
+              "height": 32
+            },
+            "tag": "H3",
+            "className": "font-display text-xl font-semibold leading-tight text-foreground sm:text-2xl"
+          },
+          {
+            "text": "Downloadable legacy visual reference for Dubai Healthcare City.",
+            "rect": {
+              "left": 125,
+              "right": 320,
+              "top": 1267,
+              "bottom": 1288,
+              "width": 195,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-2xl text-sm leading-relaxed text-foreground/72"
+          },
+          {
+            "text": "Downloadable legacy visual reference for Dubai Healthcare City.",
+            "rect": {
+              "left": 125,
+              "right": 377,
+              "top": 1293,
+              "bottom": 1314,
+              "width": 252,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-2xl text-sm leading-relaxed text-foreground/72"
+          },
+          {
+            "text": "Audience",
+            "rect": {
+              "left": 397,
+              "right": 457,
+              "top": 1217,
+              "bottom": 1230,
+              "width": 60,
+              "height": 13
+            },
+            "tag": "P",
+            "className": "text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-foreground/55"
+          },
+          {
+            "text": "Clients and partners",
+            "rect": {
+              "left": 397,
+              "right": 478,
+              "top": 1240,
+              "bottom": 1262,
+              "width": 82,
+              "height": 22
+            },
+            "tag": "P",
+            "className": "mt-1"
+          },
+          {
+            "text": "Clients and partners",
+            "rect": {
+              "left": 397,
+              "right": 458,
+              "top": 1268,
+              "bottom": 1290,
+              "width": 61,
+              "height": 22
+            },
+            "tag": "P",
+            "className": "mt-1"
+          },
+          {
+            "text": "PNG",
+            "rect": {
+              "left": 552,
+              "right": 586,
+              "top": 1245,
+              "bottom": 1263,
+              "width": 34,
+              "height": 18
+            },
+            "tag": "SPAN",
+            "className": "hidden justify-self-start border border-foreground/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/80 sm:inline-flex"
+          },
+          {
+            "text": "Download",
+            "rect": {
+              "left": 673,
+              "right": 747,
+              "top": 1244,
+              "bottom": 1265,
+              "width": 74,
+              "height": 21
+            },
+            "tag": "SPAN",
+            "className": "hidden md:inline"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "Client materials",
+            "rect": {
+              "left": 72,
+              "right": 229,
+              "top": 0,
+              "bottom": 16
+            },
+            "tag": "P",
+            "className": "eyebrow",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          },
+          {
+            "text": "Materials & downloads",
+            "rect": {
+              "left": 40,
+              "right": 508,
+              "top": 29,
+              "bottom": 93
+            },
+            "tag": "H2",
+            "className": "heading-section mt-5 max-w-2xl",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 11
+      },
+      {
+        "kind": "native",
+        "key": "participate",
+        "selector": "#participate",
+        "section": "participate",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": -558,
+          "bottom": 1825,
+          "width": 820,
+          "height": 2383
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "How to work with AIXCO",
+            "rect": {
+              "left": 76,
+              "right": 305,
+              "top": -494,
+              "bottom": -479,
+              "width": 229,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "How",
+            "rect": {
+              "left": 44,
+              "right": 128,
+              "top": -464,
+              "bottom": -408,
+              "width": 84,
+              "height": 56
+            },
+            "tag": "SPAN",
+            "className": "text-gold"
+          },
+          {
+            "text": "Customers",
+            "rect": {
+              "left": 138,
+              "right": 329,
+              "top": -464,
+              "bottom": -408,
+              "width": 190,
+              "height": 56
+            },
+            "tag": "H2",
+            "className": "heading-section mt-4 max-w-full text-[clamp(2.25rem,10vw,3.5rem)] leading-[1.02] [overflow-wrap:anywhere] sm:text-[clamp(2.65rem,4.1vw,3.5rem)]"
+          },
+          {
+            "text": "Partners Work",
+            "rect": {
+              "left": 345,
+              "right": 599,
+              "top": -464,
+              "bottom": -408,
+              "width": 255,
+              "height": 56
+            },
+            "tag": "H2",
+            "className": "heading-section mt-4 max-w-full text-[clamp(2.25rem,10vw,3.5rem)] leading-[1.02] [overflow-wrap:anywhere] sm:text-[clamp(2.65rem,4.1vw,3.5rem)]"
+          },
+          {
+            "text": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration afte",
+            "rect": {
+              "left": 44,
+              "right": 745,
+              "top": -395,
+              "bottom": -373,
+              "width": 700,
+              "height": 23
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80"
+          },
+          {
+            "text": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration afte",
+            "rect": {
+              "left": 44,
+              "right": 338,
+              "top": -368,
+              "bottom": -345,
+              "width": 294,
+              "height": 23
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80"
+          },
+          {
+            "text": "Buy an Apartment in Batumi",
+            "rect": {
+              "left": 65,
+              "right": 418,
+              "top": -167,
+              "bottom": -115,
+              "width": 353,
+              "height": 52
+            },
+            "tag": "H3",
+            "className": "font-display text-[clamp(2.45rem,2.85vw,3rem)] leading-[1.03]"
+          },
+          {
+            "text": "Buy an Apartment in Batumi",
+            "rect": {
+              "left": 65,
+              "right": 186,
+              "top": -127,
+              "bottom": -75,
+              "width": 121,
+              "height": 52
+            },
+            "tag": "H3",
+            "className": "font-display text-[clamp(2.45rem,2.85vw,3rem)] leading-[1.03]"
+          },
+          {
+            "text": "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase wit",
+            "rect": {
+              "left": 65,
+              "right": 417,
+              "top": -59,
+              "bottom": -34,
+              "width": 352,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase wit",
+            "rect": {
+              "left": 65,
+              "right": 489,
+              "top": -29,
+              "bottom": -4,
+              "width": 424,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Administer Your Property",
+            "rect": {
+              "left": 77,
+              "right": 347,
+              "top": 1340,
+              "bottom": 1392,
+              "width": 270,
+              "height": 51
+            },
+            "tag": "H3",
+            "className": "font-display text-[clamp(2.45rem,2.85vw,3rem)] leading-[1.03]"
+          },
+          {
+            "text": "Administer Your Property",
+            "rect": {
+              "left": 77,
+              "right": 224,
+              "top": 1380,
+              "bottom": 1432,
+              "width": 147,
+              "height": 51
+            },
+            "tag": "H3",
+            "className": "font-display text-[clamp(2.45rem,2.85vw,3rem)] leading-[1.03]"
+          },
+          {
+            "text": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing admini",
+            "rect": {
+              "left": 77,
+              "right": 412,
+              "top": 1448,
+              "bottom": 1473,
+              "width": 335,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing admini",
+            "rect": {
+              "left": 77,
+              "right": 428,
+              "top": 1477,
+              "bottom": 1502,
+              "width": 351,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing admini",
+            "rect": {
+              "left": 77,
+              "right": 346,
+              "top": 1507,
+              "bottom": 1532,
+              "width": 269,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing admini",
+            "rect": {
+              "left": 77,
+              "right": 320,
+              "top": 1537,
+              "bottom": 1561,
+              "width": 243,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guide",
+            "rect": {
+              "left": 77,
+              "right": 408,
+              "top": 1577,
+              "bottom": 1598,
+              "width": 331,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72"
+          },
+          {
+            "text": "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guide",
+            "rect": {
+              "left": 77,
+              "right": 412,
+              "top": 1602,
+              "bottom": 1622,
+              "width": 335,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72"
+          },
+          {
+            "text": "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guide",
+            "rect": {
+              "left": 77,
+              "right": 346,
+              "top": 1626,
+              "bottom": 1647,
+              "width": 269,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72"
+          },
+          {
+            "text": "Register",
+            "rect": {
+              "left": 97,
+              "right": 153,
+              "top": 1682,
+              "bottom": 1703,
+              "width": 56,
+              "height": 21
+            },
+            "tag": "BUTTON",
+            "className": "btn-gold w-auto self-start"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase wit",
+            "rect": {
+              "left": 65,
+              "right": 453,
+              "top": 1,
+              "bottom": 26
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          },
+          {
+            "text": "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guide",
+            "rect": {
+              "left": 65,
+              "right": 466,
+              "top": 42,
+              "bottom": 63
+            },
+            "tag": "P",
+            "className": "text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          },
+          {
+            "text": "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guide",
+            "rect": {
+              "left": 65,
+              "right": 467,
+              "top": 67,
+              "bottom": 88
+            },
+            "tag": "P",
+            "className": "text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 23
+      },
+      {
+        "kind": "native",
+        "key": "how",
+        "selector": "#how",
+        "section": "how",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": 124,
+          "bottom": 1223,
+          "width": 820,
+          "height": 1099
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "team",
+        "selector": "#team",
+        "section": "team",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": 124,
+          "bottom": 1224,
+          "width": 820,
+          "height": 1100
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "flex",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "partners",
+        "selector": "#partners",
+        "section": "partners",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": 253,
+          "bottom": 1095,
+          "width": 820,
+          "height": 842
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "faqs",
+        "selector": "#faqs",
+        "section": "faqs",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": 168,
+          "bottom": 1851,
+          "width": 820,
+          "height": 1682
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "For intermediaries managing clients, tours, and deal flow.",
+            "rect": {
+              "left": 44,
+              "right": 443,
+              "top": 1166,
+              "bottom": 1187,
+              "width": 398,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mb-4 text-sm text-muted-foreground"
+          },
+          {
+            "text": "What are the benefits for brokers?",
+            "rect": {
+              "left": 65,
+              "right": 363,
+              "top": 1226,
+              "bottom": 1253,
+              "width": 297,
+              "height": 27
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+            "rect": {
+              "left": 65,
+              "right": 712,
+              "top": 1275,
+              "bottom": 1296,
+              "width": 646,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+            "rect": {
+              "left": 65,
+              "right": 204,
+              "top": 1301,
+              "bottom": 1322,
+              "width": 139,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Can I book a tour for my customer?",
+            "rect": {
+              "left": 65,
+              "right": 374,
+              "top": 1294,
+              "bottom": 1321,
+              "width": 309,
+              "height": 27
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. The platform supports tour coordination and a smoother customer journey.",
+            "rect": {
+              "left": 65,
+              "right": 621,
+              "top": 1344,
+              "bottom": 1364,
+              "width": 556,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Do login and registration do different things?",
+            "rect": {
+              "left": 65,
+              "right": 460,
+              "top": 1362,
+              "bottom": 1389,
+              "width": 395,
+              "height": 27
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Login opens the relevant portal. Register starts the onboarding process for access approval.",
+            "rect": {
+              "left": 65,
+              "right": 663,
+              "top": 1412,
+              "bottom": 1433,
+              "width": 598,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Yes. Login opens the relevant portal. Register starts the onboarding process for access approval.",
+            "rect": {
+              "left": 65,
+              "right": 130,
+              "top": 1437,
+              "bottom": 1458,
+              "width": 64,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "What support is available after sign-up?",
+            "rect": {
+              "left": 65,
+              "right": 411,
+              "top": 1431,
+              "bottom": 1457,
+              "width": 346,
+              "height": 27
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "AIXCO provides follow-up support, coordination, and a more guided service model rather than simple self-service.",
+            "rect": {
+              "left": 65,
+              "right": 724,
+              "top": 1480,
+              "bottom": 1501,
+              "width": 659,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "AIXCO provides follow-up support, coordination, and a more guided service model rather than simple self-service.",
+            "rect": {
+              "left": 65,
+              "right": 196,
+              "top": 1506,
+              "bottom": 1526,
+              "width": 131,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Developer",
+            "rect": {
+              "left": 44,
+              "right": 149,
+              "top": 1531,
+              "bottom": 1549,
+              "width": 105,
+              "height": 18
+            },
+            "tag": "P",
+            "className": "text-[11px] uppercase tracking-[0.3em] text-primary mb-2"
+          },
+          {
+            "text": "For developers listing projects and using AIXCO as a sales channel.",
+            "rect": {
+              "left": 44,
+              "right": 507,
+              "top": 1560,
+              "bottom": 1581,
+              "width": 463,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mb-4 text-sm text-muted-foreground"
+          },
+          {
+            "text": "What do developers gain by registering?",
+            "rect": {
+              "left": 65,
+              "right": 418,
+              "top": 1620,
+              "bottom": 1647,
+              "width": 353,
+              "height": 27
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Developers gain stronger project exposure, better inquiry handling, coordinated tours, and a more premium end-to-end sal",
+            "rect": {
+              "left": 65,
+              "right": 709,
+              "top": 1670,
+              "bottom": 1690,
+              "width": 644,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Developers gain stronger project exposure, better inquiry handling, coordinated tours, and a more premium end-to-end sal",
+            "rect": {
+              "left": 65,
+              "right": 329,
+              "top": 1695,
+              "bottom": 1716,
+              "width": 264,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Can AIXCO help distribute projects?",
+            "rect": {
+              "left": 65,
+              "right": 376,
+              "top": 1688,
+              "bottom": 1715,
+              "width": 310,
+              "height": 27
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. AIXCO can function as a structured distribution and presentation channel for selected listings.",
+            "rect": {
+              "left": 65,
+              "right": 690,
+              "top": 1738,
+              "bottom": 1758,
+              "width": 625,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Yes. AIXCO can function as a structured distribution and presentation channel for selected listings.",
+            "rect": {
+              "left": 65,
+              "right": 117,
+              "top": 1763,
+              "bottom": 1784,
+              "width": 52,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Does AIXCO support the sales process?",
+            "rect": {
+              "left": 65,
+              "right": 406,
+              "top": 1756,
+              "bottom": 1783,
+              "width": 341,
+              "height": 27
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Support can include project visibility, lead handling, tours, and documentation flow.",
+            "rect": {
+              "left": 65,
+              "right": 677,
+              "top": 1806,
+              "bottom": 1827,
+              "width": 612,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "rect": {
+              "left": 61,
+              "right": 672,
+              "top": 776,
+              "bottom": 797
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "rect": {
+              "left": 61,
+              "right": 166,
+              "top": 802,
+              "bottom": 823
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "rect": {
+              "left": 61,
+              "right": 675,
+              "top": 845,
+              "bottom": 866
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "rect": {
+              "left": 61,
+              "right": 569,
+              "top": 871,
+              "bottom": 892
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "rect": {
+              "left": 61,
+              "right": 709,
+              "top": 914,
+              "bottom": 935
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "rect": {
+              "left": 61,
+              "right": 311,
+              "top": 940,
+              "bottom": 961
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "rect": {
+              "left": 61,
+              "right": 701,
+              "top": 983,
+              "bottom": 1004
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "rect": {
+              "left": 61,
+              "right": 174,
+              "top": 1009,
+              "bottom": 1030
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "rect": {
+              "left": 61,
+              "right": 129,
+              "top": 1130,
+              "bottom": 1151
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "P.text-[11px] uppercase tracking-[0.3em] text-primary mb-2"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 31
+      },
+      {
+        "kind": "native",
+        "key": "contact",
+        "selector": "#contact",
+        "section": "contact",
+        "sectionRect": {
+          "left": 0,
+          "right": 820,
+          "top": 124,
+          "bottom": 1224,
+          "width": 820,
+          "height": 1100
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      }
+    ],
+    "issueCount": 96
+  },
+  {
+    "viewport": {
+      "name": "mobile-390x844",
+      "width": 390,
+      "height": 844
+    },
+    "mode": "unknown",
+    "entries": [
+      {
+        "kind": "native",
+        "key": "section-0",
+        "selector": "[data-audit-section=\"section-0\"]",
+        "section": "section-0",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": 0,
+          "bottom": 844,
+          "width": 390,
+          "height": 844
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "about",
+        "selector": "#about",
+        "section": "about",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": -306,
+          "bottom": 1302,
+          "width": 390,
+          "height": 1608
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "About AIXCO",
+            "rect": {
+              "left": 56,
+              "right": 170,
+              "top": -231,
+              "bottom": -215,
+              "width": 114,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "AIXCO.GLOBAL",
+            "rect": {
+              "left": 93,
+              "right": 282,
+              "top": -186,
+              "bottom": -147,
+              "width": 189,
+              "height": 39
+            },
+            "tag": "SPAN",
+            "className": "text-[0.78em] font-semibold uppercase tracking-[-0.03em]"
+          },
+          {
+            "text": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a ",
+            "rect": {
+              "left": 24,
+              "right": 310,
+              "top": -117,
+              "bottom": -96,
+              "width": 286,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-6 max-w-[38rem] text-base leading-[1.62] text-foreground/80 md:text-lg lg:text-[1.05rem]"
+          },
+          {
+            "text": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a ",
+            "rect": {
+              "left": 24,
+              "right": 359,
+              "top": -91,
+              "bottom": -70,
+              "width": 335,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-6 max-w-[38rem] text-base leading-[1.62] text-foreground/80 md:text-lg lg:text-[1.05rem]"
+          },
+          {
+            "text": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a ",
+            "rect": {
+              "left": 24,
+              "right": 355,
+              "top": -66,
+              "bottom": -45,
+              "width": 331,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-6 max-w-[38rem] text-base leading-[1.62] text-foreground/80 md:text-lg lg:text-[1.05rem]"
+          },
+          {
+            "text": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a ",
+            "rect": {
+              "left": 24,
+              "right": 253,
+              "top": -40,
+              "bottom": -19,
+              "width": 229,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-6 max-w-[38rem] text-base leading-[1.62] text-foreground/80 md:text-lg lg:text-[1.05rem]"
+          },
+          {
+            "text": "Employees",
+            "rect": {
+              "left": 44,
+              "right": 131,
+              "top": 845,
+              "bottom": 862,
+              "width": 87,
+              "height": 17
+            },
+            "tag": "P",
+            "className": "mt-4 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "0.0",
+            "rect": {
+              "left": 63,
+              "right": 110,
+              "top": 904,
+              "bottom": 952,
+              "width": 47,
+              "height": 48
+            },
+            "tag": "SPAN",
+            "className": ""
+          },
+          {
+            "text": "Real Estate Transacted",
+            "rect": {
+              "left": 44,
+              "right": 246,
+              "top": 961,
+              "bottom": 978,
+              "width": 202,
+              "height": 17
+            },
+            "tag": "P",
+            "className": "mt-4 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Developments Underway",
+            "rect": {
+              "left": 44,
+              "right": 256,
+              "top": 1077,
+              "bottom": 1094,
+              "width": 212,
+              "height": 17
+            },
+            "tag": "P",
+            "className": "mt-4 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Markets Served",
+            "rect": {
+              "left": 44,
+              "right": 178,
+              "top": 1193,
+              "bottom": 1210,
+              "width": 134,
+              "height": 17
+            },
+            "tag": "P",
+            "className": "mt-4 text-xs uppercase leading-relaxed tracking-[0.16em] text-muted-foreground [overflow-wrap:anywhere]"
+          }
+        ],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 11
+      },
+      {
+        "kind": "native",
+        "key": "philosophy",
+        "selector": "#philosophy",
+        "section": "philosophy",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": 271,
+          "bottom": 725,
+          "width": 390,
+          "height": 454
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "legacy",
+        "selector": "#legacy",
+        "section": "legacy",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": 152,
+          "bottom": 3016,
+          "width": 390,
+          "height": 2864
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "AIXCO’s roots trace to Switzerland, where the group built a substantial residential and commercial real estate track rec",
+            "rect": {
+              "left": 49,
+              "right": 124,
+              "top": 828,
+              "bottom": 849,
+              "width": 75,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "Explore Swiss heritage at x-co-group.com",
+            "rect": {
+              "left": 49,
+              "right": 267,
+              "top": 874,
+              "bottom": 895,
+              "width": 218,
+              "height": 21
+            },
+            "tag": "A",
+            "className": "mt-5 inline-flex max-w-full items-center gap-2 text-sm font-medium text-primary link-underline [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Explore Swiss heritage at x-co-group.com",
+            "rect": {
+              "left": 49,
+              "right": 126,
+              "top": 899,
+              "bottom": 920,
+              "width": 77,
+              "height": 21
+            },
+            "tag": "A",
+            "className": "mt-5 inline-flex max-w-full items-center gap-2 text-sm font-medium text-primary link-underline [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "CHF 1.1B",
+            "rect": {
+              "left": 65,
+              "right": 144,
+              "top": 958,
+              "bottom": 985,
+              "width": 79,
+              "height": 27
+            },
+            "tag": "DT",
+            "className": "font-display text-[clamp(1.25rem,2vw,1.85rem)] leading-none text-gold [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Real estate activity",
+            "rect": {
+              "left": 65,
+              "right": 195,
+              "top": 990,
+              "bottom": 1003,
+              "width": 130,
+              "height": 13
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "2009",
+            "rect": {
+              "left": 65,
+              "right": 108,
+              "top": 1059,
+              "bottom": 1086,
+              "width": 43,
+              "height": 27
+            },
+            "tag": "DT",
+            "className": "font-display text-[clamp(1.25rem,2vw,1.85rem)] leading-none text-gold [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Group origins",
+            "rect": {
+              "left": 65,
+              "right": 159,
+              "top": 1091,
+              "bottom": 1104,
+              "width": 94,
+              "height": 13
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "Swiss",
+            "rect": {
+              "left": 65,
+              "right": 112,
+              "top": 1160,
+              "bottom": 1187,
+              "width": 47,
+              "height": 27
+            },
+            "tag": "DT",
+            "className": "font-display text-[clamp(1.25rem,2vw,1.85rem)] leading-none text-gold [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Market heritage",
+            "rect": {
+              "left": 65,
+              "right": 172,
+              "top": 1192,
+              "bottom": 1205,
+              "width": 107,
+              "height": 13
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "Dubai · Legacy portfolio",
+            "rect": {
+              "left": 82,
+              "right": 312,
+              "top": 1364,
+              "bottom": 1380,
+              "width": 230,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "Legacy",
+            "rect": {
+              "left": 61,
+              "right": 107,
+              "top": 1397,
+              "bottom": 1411,
+              "width": 46,
+              "height": 14
+            },
+            "tag": "SPAN",
+            "className": "rounded-full px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] bg-muted text-muted-foreground"
+          },
+          {
+            "text": "Gulf developments delivered",
+            "rect": {
+              "left": 51,
+              "right": 266,
+              "top": 1427,
+              "bottom": 1461,
+              "width": 215,
+              "height": 35
+            },
+            "tag": "H3",
+            "className": "mt-4 font-display text-[clamp(1.65rem,2.8vw,2.35rem)] leading-[1.08] [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Gulf developments delivered",
+            "rect": {
+              "left": 51,
+              "right": 155,
+              "top": 1455,
+              "bottom": 1489,
+              "width": 104,
+              "height": 35
+            },
+            "tag": "H3",
+            "className": "mt-4 font-display text-[clamp(1.65rem,2.8vw,2.35rem)] leading-[1.08] [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "USD 800m+ development volume",
+            "rect": {
+              "left": 51,
+              "right": 322,
+              "top": 1499,
+              "bottom": 1531,
+              "width": 271,
+              "height": 32
+            },
+            "tag": "P",
+            "className": "mt-3 font-display text-2xl text-gold md:text-3xl"
+          },
+          {
+            "text": "USD 800m+ development volume",
+            "rect": {
+              "left": 51,
+              "right": 128,
+              "top": 1531,
+              "bottom": 1562,
+              "width": 77,
+              "height": 32
+            },
+            "tag": "P",
+            "className": "mt-3 font-display text-2xl text-gold md:text-3xl"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 51,
+              "right": 304,
+              "top": 1578,
+              "bottom": 1598,
+              "width": 253,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 51,
+              "right": 285,
+              "top": 1603,
+              "bottom": 1624,
+              "width": 234,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 51,
+              "right": 274,
+              "top": 1629,
+              "bottom": 1649,
+              "width": 223,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 51,
+              "right": 337,
+              "top": 1654,
+              "bottom": 1675,
+              "width": 286,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 51,
+              "right": 339,
+              "top": 1680,
+              "bottom": 1701,
+              "width": 288,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. ",
+            "rect": {
+              "left": 51,
+              "right": 293,
+              "top": 1705,
+              "bottom": 1726,
+              "width": 242,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-xl text-[clamp(0.98rem,0.95vw,1.08rem)] leading-[1.65] text-foreground/80"
+          },
+          {
+            "text": "View Dubai legacy portfolio",
+            "rect": {
+              "left": 51,
+              "right": 246,
+              "top": 1751,
+              "bottom": 1771,
+              "width": 195,
+              "height": 21
+            },
+            "tag": "A",
+            "className": "mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-primary"
+          },
+          {
+            "text": "600+",
+            "rect": {
+              "left": 67,
+              "right": 112,
+              "top": 1809,
+              "bottom": 1836,
+              "width": 45,
+              "height": 27
+            },
+            "tag": "DT",
+            "className": "font-display text-[clamp(1.25rem,2vw,1.85rem)] leading-none text-gold [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Units delivered (Eden House)",
+            "rect": {
+              "left": 67,
+              "right": 254,
+              "top": 1841,
+              "bottom": 1854,
+              "width": 188,
+              "height": 13
+            },
+            "tag": "DD",
+            "className": "mt-2 text-[0.62rem] uppercase leading-[1.45] tracking-[0.1em] text-muted-foreground [overflow-wrap:anywhere] sm:text-[0.68rem] sm:tracking-[0.12em]"
+          },
+          {
+            "text": "USD 462m",
+            "rect": {
+              "left": 67,
+              "right": 159,
+              "top": 1909,
+              "bottom": 1936,
+              "width": 92,
+              "height": 27
+            },
+            "tag": "DT",
+            "className": "font-display text-[clamp(1.25rem,2vw,1.85rem)] leading-none text-gold [overflow-wrap:anywhere]"
+          }
+        ],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 25
+      },
+      {
+        "kind": "native",
+        "key": "dubai",
+        "selector": "#dubai",
+        "section": "dubai",
+        "sectionRect": {
+          "left": 24,
+          "right": 366,
+          "top": -131,
+          "bottom": 1127,
+          "width": 342,
+          "height": 1258
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "flex",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "Dubai · Legacy portfolio",
+            "rect": {
+              "left": 56,
+              "right": 289,
+              "top": -120,
+              "bottom": -104,
+              "width": 233,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "Our history in Dubai",
+            "rect": {
+              "left": 24,
+              "right": 282,
+              "top": -87,
+              "bottom": -47,
+              "width": 258,
+              "height": 40
+            },
+            "tag": "H2",
+            "className": "heading-section mt-4 max-w-2xl [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Legacy market — we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real e",
+            "rect": {
+              "left": 24,
+              "right": 361,
+              "top": -31,
+              "bottom": -10,
+              "width": 337,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base"
+          },
+          {
+            "text": "Legacy market — we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real e",
+            "rect": {
+              "left": 24,
+              "right": 301,
+              "top": -6,
+              "bottom": 15,
+              "width": 277,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "Legacy market — we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real e",
+            "rect": {
+              "left": 24,
+              "right": 336,
+              "top": 20,
+              "bottom": 41
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 5
+      },
+      {
+        "kind": "native",
+        "key": "batumi",
+        "selector": "#batumi",
+        "section": "batumi",
+        "sectionRect": {
+          "left": 24,
+          "right": 366,
+          "top": -326,
+          "bottom": 1322,
+          "width": 342,
+          "height": 1648
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "flex",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "Batumi · Current opportunity",
+            "rect": {
+              "left": 58,
+              "right": 336,
+              "top": -278,
+              "bottom": -263,
+              "width": 279,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "Batumi",
+            "rect": {
+              "left": 26,
+              "right": 116,
+              "top": -245,
+              "bottom": -206,
+              "width": 90,
+              "height": 40
+            },
+            "tag": "H2",
+            "className": "heading-section mt-4 max-w-2xl [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing o",
+            "rect": {
+              "left": 26,
+              "right": 306,
+              "top": -190,
+              "bottom": -169,
+              "width": 280,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base"
+          },
+          {
+            "text": "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing o",
+            "rect": {
+              "left": 26,
+              "right": 345,
+              "top": -165,
+              "bottom": -144,
+              "width": 319,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base"
+          },
+          {
+            "text": "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing o",
+            "rect": {
+              "left": 26,
+              "right": 347,
+              "top": -140,
+              "bottom": -119,
+              "width": 321,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base"
+          },
+          {
+            "text": "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing o",
+            "rect": {
+              "left": 26,
+              "right": 254,
+              "top": -115,
+              "bottom": -94,
+              "width": 228,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base"
+          },
+          {
+            "text": "Play video",
+            "rect": {
+              "left": 194,
+              "right": 268,
+              "top": 1146,
+              "bottom": 1168,
+              "width": 74,
+              "height": 22
+            },
+            "tag": "SPAN",
+            "className": "sr-only"
+          },
+          {
+            "text": "Why Batumi",
+            "rect": {
+              "left": 41,
+              "right": 211,
+              "top": -94,
+              "bottom": -51,
+              "width": 170,
+              "height": 43
+            },
+            "tag": "H3",
+            "className": "max-w-[42rem] font-display text-[clamp(2rem,4.7vw,3rem)] font-semibold leading-[1.04] tracking-tight text-foreground md:text-[clamp(2.15rem,3.1vw,3.5rem)] lg:text-[clamp(2.2rem,3.05vw,3.6rem)]"
+          },
+          {
+            "text": "Georgia sits at the crossroads of Europe and Asia, maintaining strong relationships with neighboring countries as well a",
+            "rect": {
+              "left": 41,
+              "right": 322,
+              "top": -48,
+              "bottom": -27,
+              "width": 281,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-[45rem] text-[clamp(1rem,0.98vw,1.08rem)] leading-[1.32] text-foreground/76"
+          },
+          {
+            "text": "Georgia sits at the crossroads of Europe and Asia, maintaining strong relationships with neighboring countries as well a",
+            "rect": {
+              "left": 41,
+              "right": 337,
+              "top": -27,
+              "bottom": -6,
+              "width": 296,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-[45rem] text-[clamp(1rem,0.98vw,1.08rem)] leading-[1.32] text-foreground/76"
+          },
+          {
+            "text": "Georgia sits at the crossroads of Europe and Asia, maintaining strong relationships with neighboring countries as well a",
+            "rect": {
+              "left": 41,
+              "right": 336,
+              "top": -6,
+              "bottom": 15,
+              "width": 295,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-[45rem] text-[clamp(1rem,0.98vw,1.08rem)] leading-[1.32] text-foreground/76"
+          },
+          {
+            "text": "Bank financing available from 60% of the property value Full commission payable from only a 10% down payment",
+            "rect": {
+              "left": 39,
+              "right": 206,
+              "top": 832,
+              "bottom": 851,
+              "width": 167,
+              "height": 19
+            },
+            "tag": "P",
+            "className": "font-medium text-foreground/78 [overflow-wrap:anywhere] text-[0.88rem] leading-[1.32]"
+          },
+          {
+            "text": "Tax & transparency",
+            "rect": {
+              "left": 79,
+              "right": 262,
+              "top": 865,
+              "bottom": 882,
+              "width": 183,
+              "height": 17
+            },
+            "tag": "SPAN",
+            "className": "text-[0.68rem] min-w-0 font-bold uppercase leading-[1.35] tracking-[0.12em] text-muted-foreground [overflow-wrap:anywhere] min-[1280px]:tracking-[0.16em] min-[1440px]:tracking-[0.18em]"
+          },
+          {
+            "text": "0% capital gains tax after 2 years of ownership 1% tax on rental income Full transparency through an ISO-certified syste",
+            "rect": {
+              "left": 39,
+              "right": 336,
+              "top": 899,
+              "bottom": 918,
+              "width": 297,
+              "height": 19
+            },
+            "tag": "P",
+            "className": "font-medium text-foreground/78 [overflow-wrap:anywhere] text-[0.88rem] leading-[1.32]"
+          },
+          {
+            "text": "0% capital gains tax after 2 years of ownership 1% tax on rental income Full transparency through an ISO-certified syste",
+            "rect": {
+              "left": 39,
+              "right": 304,
+              "top": 917,
+              "bottom": 936,
+              "width": 265,
+              "height": 19
+            },
+            "tag": "P",
+            "className": "font-medium text-foreground/78 [overflow-wrap:anywhere] text-[0.88rem] leading-[1.32]"
+          },
+          {
+            "text": "0% capital gains tax after 2 years of ownership 1% tax on rental income Full transparency through an ISO-certified syste",
+            "rect": {
+              "left": 39,
+              "right": 243,
+              "top": 936,
+              "bottom": 955,
+              "width": 204,
+              "height": 19
+            },
+            "tag": "P",
+            "className": "font-medium text-foreground/78 [overflow-wrap:anywhere] text-[0.88rem] leading-[1.32]"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "Georgia sits at the crossroads of Europe and Asia, maintaining strong relationships with neighboring countries as well a",
+            "rect": {
+              "left": 41,
+              "right": 293,
+              "top": 15,
+              "bottom": 36
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-[45rem] text-[clamp(1rem,0.98vw,1.08rem)] leading-[1.32] text-foreground/76",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          },
+          {
+            "text": "Georgia sits at the crossroads of Europe and Asia, maintaining strong relationships with neighboring countries as well a",
+            "rect": {
+              "left": 41,
+              "right": 331,
+              "top": 36,
+              "bottom": 57
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-[45rem] text-[clamp(1rem,0.98vw,1.08rem)] leading-[1.32] text-foreground/76",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 18
+      },
+      {
+        "kind": "native",
+        "key": "materials",
+        "selector": "#materials",
+        "section": "materials",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": -471,
+          "bottom": 1468,
+          "width": 390,
+          "height": 1939
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "Client materials",
+            "rect": {
+              "left": 58,
+              "right": 213,
+              "top": -367,
+              "bottom": -351,
+              "width": 155,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "Materials & downloads",
+            "rect": {
+              "left": 26,
+              "right": 315,
+              "top": -334,
+              "bottom": -295,
+              "width": 289,
+              "height": 40
+            },
+            "tag": "H2",
+            "className": "heading-section mt-5 max-w-2xl"
+          },
+          {
+            "text": "Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.",
+            "rect": {
+              "left": 26,
+              "right": 313,
+              "top": -279,
+              "bottom": -258,
+              "width": 287,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-5 max-w-2xl text-base leading-relaxed text-foreground/75 md:text-lg"
+          },
+          {
+            "text": "Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.",
+            "rect": {
+              "left": 26,
+              "right": 363,
+              "top": -253,
+              "bottom": -233,
+              "width": 337,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-5 max-w-2xl text-base leading-relaxed text-foreground/75 md:text-lg"
+          },
+          {
+            "text": "Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.",
+            "rect": {
+              "left": 26,
+              "right": 166,
+              "top": -228,
+              "bottom": -207,
+              "width": 140,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-5 max-w-2xl text-base leading-relaxed text-foreground/75 md:text-lg"
+          },
+          {
+            "text": "Available files",
+            "rect": {
+              "left": 51,
+              "right": 114,
+              "top": -129,
+              "bottom": -116,
+              "width": 63,
+              "height": 13
+            },
+            "tag": "P",
+            "className": "mt-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-foreground/60"
+          },
+          {
+            "text": "Available files",
+            "rect": {
+              "left": 67,
+              "right": 98,
+              "top": -113,
+              "bottom": -100,
+              "width": 31,
+              "height": 13
+            },
+            "tag": "P",
+            "className": "mt-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-foreground/60"
+          },
+          {
+            "text": "PDF",
+            "rect": {
+              "left": 184,
+              "right": 206,
+              "top": -129,
+              "bottom": -116,
+              "width": 22,
+              "height": 13
+            },
+            "tag": "P",
+            "className": "mt-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-foreground/60"
+          },
+          {
+            "text": "JPEG / PNG",
+            "rect": {
+              "left": 274,
+              "right": 341,
+              "top": -129,
+              "bottom": -116,
+              "width": 67,
+              "height": 13
+            },
+            "tag": "P",
+            "className": "mt-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-foreground/60"
+          },
+          {
+            "text": "Batumi project brochure",
+            "rect": {
+              "left": 56,
+              "right": 293,
+              "top": -20,
+              "bottom": -4,
+              "width": 237,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "JPEG / PNG",
+            "rect": {
+              "left": 26,
+              "right": 104,
+              "top": 854,
+              "bottom": 875,
+              "width": 78,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-3 max-w-xs text-sm leading-relaxed text-foreground/65"
+          },
+          {
+            "text": "Eden House legacy image",
+            "rect": {
+              "left": 43,
+              "right": 264,
+              "top": 972,
+              "bottom": 999,
+              "width": 221,
+              "height": 27
+            },
+            "tag": "H3",
+            "className": "font-display text-xl font-semibold leading-tight text-foreground sm:text-2xl"
+          },
+          {
+            "text": "Downloadable legacy visual reference for Eden House in Dubai.",
+            "rect": {
+              "left": 43,
+              "right": 323,
+              "top": 1008,
+              "bottom": 1028,
+              "width": 280,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-2xl text-sm leading-relaxed text-foreground/72"
+          },
+          {
+            "text": "Downloadable legacy visual reference for Eden House in Dubai.",
+            "rect": {
+              "left": 43,
+              "right": 189,
+              "top": 1033,
+              "bottom": 1053,
+              "width": 146,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-2xl text-sm leading-relaxed text-foreground/72"
+          },
+          {
+            "text": "JPEG",
+            "rect": {
+              "left": 43,
+              "right": 80,
+              "top": 1069,
+              "bottom": 1085,
+              "width": 37,
+              "height": 17
+            },
+            "tag": "P",
+            "className": "mt-3 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/55 sm:hidden"
+          },
+          {
+            "text": "Clients and partners",
+            "rect": {
+              "left": 96,
+              "right": 284,
+              "top": 1069,
+              "bottom": 1085,
+              "width": 188,
+              "height": 17
+            },
+            "tag": "P",
+            "className": "mt-3 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/55 sm:hidden"
+          },
+          {
+            "text": "Dubai Healthcare City image",
+            "rect": {
+              "left": 43,
+              "right": 288,
+              "top": 1233,
+              "bottom": 1259,
+              "width": 245,
+              "height": 27
+            },
+            "tag": "H3",
+            "className": "font-display text-xl font-semibold leading-tight text-foreground sm:text-2xl"
+          },
+          {
+            "text": "Downloadable legacy visual reference for Dubai Healthcare City.",
+            "rect": {
+              "left": 43,
+              "right": 323,
+              "top": 1268,
+              "bottom": 1289,
+              "width": 280,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-2xl text-sm leading-relaxed text-foreground/72"
+          },
+          {
+            "text": "Downloadable legacy visual reference for Dubai Healthcare City.",
+            "rect": {
+              "left": 43,
+              "right": 194,
+              "top": 1293,
+              "bottom": 1314,
+              "width": 152,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-2 max-w-2xl text-sm leading-relaxed text-foreground/72"
+          },
+          {
+            "text": "PNG",
+            "rect": {
+              "left": 43,
+              "right": 76,
+              "top": 1329,
+              "bottom": 1346,
+              "width": 33,
+              "height": 17
+            },
+            "tag": "P",
+            "className": "mt-3 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/55 sm:hidden"
+          },
+          {
+            "text": "Clients and partners",
+            "rect": {
+              "left": 92,
+              "right": 280,
+              "top": 1329,
+              "bottom": 1346,
+              "width": 188,
+              "height": 17
+            },
+            "tag": "P",
+            "className": "mt-3 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/55 sm:hidden"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "PDF",
+            "rect": {
+              "left": 24,
+              "right": 51,
+              "top": 13,
+              "bottom": 34
+            },
+            "tag": "P",
+            "className": "mt-3 max-w-xs text-sm leading-relaxed text-foreground/65",
+            "coveredBy": "IMG.h-8 w-8 shrink-0 object-contain md:h-9 md:w-9 [filter:brightness(0)_saturate(100%)]"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 22
+      },
+      {
+        "kind": "native",
+        "key": "participate",
+        "selector": "#participate",
+        "section": "participate",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": -1312,
+          "bottom": 2244,
+          "width": 390,
+          "height": 3556
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "How to work with AIXCO",
+            "rect": {
+              "left": 58,
+              "right": 286,
+              "top": -1216,
+              "bottom": -1200,
+              "width": 229,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "How",
+            "rect": {
+              "left": 26,
+              "right": 103,
+              "top": -1186,
+              "bottom": -1135,
+              "width": 77,
+              "height": 51
+            },
+            "tag": "SPAN",
+            "className": "text-gold"
+          },
+          {
+            "text": "Customers",
+            "rect": {
+              "left": 113,
+              "right": 288,
+              "top": -1186,
+              "bottom": -1135,
+              "width": 175,
+              "height": 51
+            },
+            "tag": "H2",
+            "className": "heading-section mt-4 max-w-full text-[clamp(2.25rem,10vw,3.5rem)] leading-[1.02] [overflow-wrap:anywhere] sm:text-[clamp(2.65rem,4.1vw,3.5rem)]"
+          },
+          {
+            "text": "Partners Work",
+            "rect": {
+              "left": 26,
+              "right": 260,
+              "top": -1147,
+              "bottom": -1096,
+              "width": 234,
+              "height": 51
+            },
+            "tag": "H2",
+            "className": "heading-section mt-4 max-w-full text-[clamp(2.25rem,10vw,3.5rem)] leading-[1.02] [overflow-wrap:anywhere] sm:text-[clamp(2.65rem,4.1vw,3.5rem)]"
+          },
+          {
+            "text": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration afte",
+            "rect": {
+              "left": 26,
+              "right": 319,
+              "top": -1081,
+              "bottom": -1059,
+              "width": 293,
+              "height": 23
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80"
+          },
+          {
+            "text": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration afte",
+            "rect": {
+              "left": 26,
+              "right": 351,
+              "top": -1054,
+              "bottom": -1031,
+              "width": 325,
+              "height": 23
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80"
+          },
+          {
+            "text": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration afte",
+            "rect": {
+              "left": 26,
+              "right": 321,
+              "top": -1026,
+              "bottom": -1003,
+              "width": 295,
+              "height": 23
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80"
+          },
+          {
+            "text": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration afte",
+            "rect": {
+              "left": 26,
+              "right": 98,
+              "top": -998,
+              "bottom": -976,
+              "width": 72,
+              "height": 23
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80"
+          },
+          {
+            "text": "Play video",
+            "rect": {
+              "left": 194,
+              "right": 268,
+              "top": -13,
+              "bottom": 9,
+              "width": 74,
+              "height": 22
+            },
+            "tag": "SPAN",
+            "className": "sr-only"
+          },
+          {
+            "text": "Buy an Apartment in Batumi",
+            "rect": {
+              "left": 53,
+              "right": 169,
+              "top": -888,
+              "bottom": -836,
+              "width": 116,
+              "height": 52
+            },
+            "tag": "H3",
+            "className": "font-display text-[clamp(2.45rem,2.85vw,3rem)] leading-[1.03]"
+          },
+          {
+            "text": "Buy an Apartment in Batumi",
+            "rect": {
+              "left": 53,
+              "right": 280,
+              "top": -848,
+              "bottom": -796,
+              "width": 227,
+              "height": 52
+            },
+            "tag": "H3",
+            "className": "font-display text-[clamp(2.45rem,2.85vw,3rem)] leading-[1.03]"
+          },
+          {
+            "text": "Buy an Apartment in Batumi",
+            "rect": {
+              "left": 53,
+              "right": 174,
+              "top": -807,
+              "bottom": -755,
+              "width": 121,
+              "height": 52
+            },
+            "tag": "H3",
+            "className": "font-display text-[clamp(2.45rem,2.85vw,3rem)] leading-[1.03]"
+          },
+          {
+            "text": "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase wit",
+            "rect": {
+              "left": 53,
+              "right": 269,
+              "top": -739,
+              "bottom": -714,
+              "width": 216,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase wit",
+            "rect": {
+              "left": 53,
+              "right": 334,
+              "top": -709,
+              "bottom": -684,
+              "width": 281,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase wit",
+            "rect": {
+              "left": 53,
+              "right": 327,
+              "top": -679,
+              "bottom": -654,
+              "width": 274,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase wit",
+            "rect": {
+              "left": 53,
+              "right": 332,
+              "top": -649,
+              "bottom": -624,
+              "width": 279,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase wit",
+            "rect": {
+              "left": 53,
+              "right": 157,
+              "top": -619,
+              "bottom": -594,
+              "width": 104,
+              "height": 25
+            },
+            "tag": "P",
+            "className": "text-[clamp(1.17rem,1.12vw,1.3rem)] leading-[1.6]"
+          },
+          {
+            "text": "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guide",
+            "rect": {
+              "left": 53,
+              "right": 300,
+              "top": -578,
+              "bottom": -557,
+              "width": 247,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72"
+          },
+          {
+            "text": "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guide",
+            "rect": {
+              "left": 53,
+              "right": 248,
+              "top": -554,
+              "bottom": -533,
+              "width": 195,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72"
+          },
+          {
+            "text": "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guide",
+            "rect": {
+              "left": 53,
+              "right": 281,
+              "top": -529,
+              "bottom": -508,
+              "width": 228,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72"
+          },
+          {
+            "text": "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guide",
+            "rect": {
+              "left": 53,
+              "right": 325,
+              "top": -504,
+              "bottom": -483,
+              "width": 272,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-[clamp(1rem,0.96vw,1.12rem)] leading-[1.55] text-foreground/72"
+          },
+          {
+            "text": "Entry pricing",
+            "rect": {
+              "left": 66,
+              "right": 154,
+              "top": -446,
+              "bottom": -433,
+              "width": 88,
+              "height": 13
+            },
+            "tag": "DT",
+            "className": "text-[0.62rem] font-semibold uppercase tracking-[0.13em] text-foreground/55"
+          },
+          {
+            "text": "€50K",
+            "rect": {
+              "left": 66,
+              "right": 113,
+              "top": -427,
+              "bottom": -399,
+              "width": 47,
+              "height": 28
+            },
+            "tag": "DD",
+            "className": "mt-2 font-display text-[clamp(1.35rem,1.55vw,1.95rem)] leading-none text-primary"
+          },
+          {
+            "text": "Approx. net rental yields",
+            "rect": {
+              "left": 208,
+              "right": 283,
+              "top": -446,
+              "bottom": -433,
+              "width": 76,
+              "height": 13
+            },
+            "tag": "DT",
+            "className": "text-[0.62rem] font-semibold uppercase tracking-[0.13em] text-foreground/55"
+          },
+          {
+            "text": "Approx. net rental yields",
+            "rect": {
+              "left": 208,
+              "right": 293,
+              "top": -430,
+              "bottom": -417,
+              "width": 86,
+              "height": 13
+            },
+            "tag": "DT",
+            "className": "text-[0.62rem] font-semibold uppercase tracking-[0.13em] text-foreground/55"
+          }
+        ],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 25
+      },
+      {
+        "kind": "native",
+        "key": "how",
+        "selector": "#how",
+        "section": "how",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": -438,
+          "bottom": 1435,
+          "width": 390,
+          "height": 1873
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "Journeys",
+            "rect": {
+              "left": 58,
+              "right": 141,
+              "top": -334,
+              "bottom": -319,
+              "width": 84,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "How AIXCO Works",
+            "rect": {
+              "left": 26,
+              "right": 329,
+              "top": -303,
+              "bottom": -253,
+              "width": 303,
+              "height": 50
+            },
+            "tag": "H2",
+            "className": "heading-section mt-5 text-[clamp(2.4rem,3.8vw,3.55rem)] leading-[1.03] min-[1360px]:text-[clamp(2.75rem,4.1vw,4rem)]"
+          },
+          {
+            "text": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bri",
+            "rect": {
+              "left": 26,
+              "right": 354,
+              "top": -239,
+              "bottom": -218,
+              "width": 328,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-5 max-w-4xl text-[clamp(1rem,0.95vw,1.12rem)] leading-[1.62] text-foreground/80 min-[1360px]:text-[clamp(1.12rem,1.02vw,1.28rem)]"
+          },
+          {
+            "text": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bri",
+            "rect": {
+              "left": 26,
+              "right": 322,
+              "top": -213,
+              "bottom": -193,
+              "width": 296,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-5 max-w-4xl text-[clamp(1rem,0.95vw,1.12rem)] leading-[1.62] text-foreground/80 min-[1360px]:text-[clamp(1.12rem,1.02vw,1.28rem)]"
+          },
+          {
+            "text": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bri",
+            "rect": {
+              "left": 26,
+              "right": 330,
+              "top": -188,
+              "bottom": -167,
+              "width": 304,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-5 max-w-4xl text-[clamp(1rem,0.95vw,1.12rem)] leading-[1.62] text-foreground/80 min-[1360px]:text-[clamp(1.12rem,1.02vw,1.28rem)]"
+          },
+          {
+            "text": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bri",
+            "rect": {
+              "left": 26,
+              "right": 344,
+              "top": -162,
+              "bottom": -141,
+              "width": 318,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-5 max-w-4xl text-[clamp(1rem,0.95vw,1.12rem)] leading-[1.62] text-foreground/80 min-[1360px]:text-[clamp(1.12rem,1.02vw,1.28rem)]"
+          },
+          {
+            "text": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bri",
+            "rect": {
+              "left": 26,
+              "right": 185,
+              "top": -137,
+              "bottom": -116,
+              "width": 159,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-5 max-w-4xl text-[clamp(1rem,0.95vw,1.12rem)] leading-[1.62] text-foreground/80 min-[1360px]:text-[clamp(1.12rem,1.02vw,1.28rem)]"
+          },
+          {
+            "text": "Journey 01",
+            "rect": {
+              "left": 57,
+              "right": 147,
+              "top": -74,
+              "bottom": -58,
+              "width": 90,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground min-[1360px]:text-[0.82rem] min-[1360px]:tracking-[0.18em]"
+          },
+          {
+            "text": "Customer Real Estate Buyer",
+            "rect": {
+              "left": 57,
+              "right": 327,
+              "top": -46,
+              "bottom": -15,
+              "width": 270,
+              "height": 31
+            },
+            "tag": "H3",
+            "className": "font-display mt-3 text-[clamp(1.42rem,1.25vw,1.58rem)] leading-[1.1] [overflow-wrap:anywhere] min-[1360px]:mt-4 min-[1360px]:text-[clamp(1.7rem,1.45vw,2.05rem)] min-[1360px]:leading-[1.08]"
+          },
+          {
+            "text": "For clients buying apartments or reserving units in Batumi through a guided digital process.",
+            "rect": {
+              "left": 57,
+              "right": 277,
+              "top": -5,
+              "bottom": 16,
+              "width": 220,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-3 text-[clamp(0.96rem,0.9vw,1.05rem)] leading-[1.6] text-foreground/78 min-[1360px]:mt-4 min-[1360px]:text-[clamp(1.06rem,0.98vw,1.18rem)] min-[1360px]:leading-[1.7]"
+          },
+          {
+            "text": "Broker",
+            "rect": {
+              "left": 56,
+              "right": 103,
+              "top": 899,
+              "bottom": 921,
+              "width": 47,
+              "height": 22
+            },
+            "tag": "SPAN",
+            "className": "sr-only"
+          },
+          {
+            "text": "Journey 04",
+            "rect": {
+              "left": 59,
+              "right": 149,
+              "top": 1032,
+              "bottom": 1048,
+              "width": 91,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground min-[1360px]:text-[0.82rem] min-[1360px]:tracking-[0.18em]"
+          },
+          {
+            "text": "Developer",
+            "rect": {
+              "left": 59,
+              "right": 159,
+              "top": 1060,
+              "bottom": 1090,
+              "width": 100,
+              "height": 31
+            },
+            "tag": "H3",
+            "className": "font-display mt-3 text-[clamp(1.42rem,1.25vw,1.58rem)] leading-[1.1] [overflow-wrap:anywhere] min-[1360px]:mt-4 min-[1360px]:text-[clamp(1.7rem,1.45vw,2.05rem)] min-[1360px]:leading-[1.08]"
+          },
+          {
+            "text": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+            "rect": {
+              "left": 59,
+              "right": 325,
+              "top": 1100,
+              "bottom": 1121,
+              "width": 266,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-3 text-[clamp(0.96rem,0.9vw,1.05rem)] leading-[1.6] text-foreground/78 min-[1360px]:mt-4 min-[1360px]:text-[clamp(1.06rem,0.98vw,1.18rem)] min-[1360px]:leading-[1.7]"
+          },
+          {
+            "text": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+            "rect": {
+              "left": 59,
+              "right": 313,
+              "top": 1124,
+              "bottom": 1145,
+              "width": 254,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-3 text-[clamp(0.96rem,0.9vw,1.05rem)] leading-[1.6] text-foreground/78 min-[1360px]:mt-4 min-[1360px]:text-[clamp(1.06rem,0.98vw,1.18rem)] min-[1360px]:leading-[1.7]"
+          },
+          {
+            "text": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+            "rect": {
+              "left": 59,
+              "right": 284,
+              "top": 1149,
+              "bottom": 1169,
+              "width": 226,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mt-3 text-[clamp(0.96rem,0.9vw,1.05rem)] leading-[1.6] text-foreground/78 min-[1360px]:mt-4 min-[1360px]:text-[clamp(1.06rem,0.98vw,1.18rem)] min-[1360px]:leading-[1.7]"
+          },
+          {
+            "text": "Our Partners",
+            "rect": {
+              "left": 47,
+              "right": 134,
+              "top": 1379,
+              "bottom": 1399,
+              "width": 87,
+              "height": 21
+            },
+            "tag": "A",
+            "className": "btn-ghost-gold"
+          },
+          {
+            "text": "Register",
+            "rect": {
+              "left": 186,
+              "right": 242,
+              "top": 1379,
+              "bottom": 1399,
+              "width": 56,
+              "height": 21
+            },
+            "tag": "BUTTON",
+            "className": "btn-gold"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "For clients buying apartments or reserving units in Batumi through a guided digital process.",
+            "rect": {
+              "left": 57,
+              "right": 295,
+              "top": 20,
+              "bottom": 41
+            },
+            "tag": "P",
+            "className": "mt-3 text-[clamp(0.96rem,0.9vw,1.05rem)] leading-[1.6] text-foreground/78 min-[1360px]:mt-4 min-[136",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          },
+          {
+            "text": "For clients buying apartments or reserving units in Batumi through a guided digital process.",
+            "rect": {
+              "left": 57,
+              "right": 210,
+              "top": 44,
+              "bottom": 65
+            },
+            "tag": "P",
+            "className": "mt-3 text-[clamp(0.96rem,0.9vw,1.05rem)] leading-[1.6] text-foreground/78 min-[1360px]:mt-4 min-[136",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 20
+      },
+      {
+        "kind": "native",
+        "key": "team",
+        "selector": "#team",
+        "section": "team",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": -482,
+          "bottom": 1479,
+          "width": 390,
+          "height": 1961
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "Our Team",
+            "rect": {
+              "left": 168,
+              "right": 254,
+              "top": -379,
+              "bottom": -363,
+              "width": 86,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "Our Team",
+            "rect": {
+              "left": 119,
+              "right": 271,
+              "top": -348,
+              "bottom": -299,
+              "width": 152,
+              "height": 48
+            },
+            "tag": "H2",
+            "className": "heading-section mt-4 text-[clamp(2.32rem,3.45vw,3.35rem)] leading-[1.03] min-[1360px]:text-[clamp(2.6rem,3.35vw,3.75rem)]"
+          },
+          {
+            "text": "Meet the leadership team shaping AIXCO’s strategic direction, partnerships, and distribution platform.",
+            "rect": {
+              "left": 46,
+              "right": 344,
+              "top": -285,
+              "bottom": -264,
+              "width": 298,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mx-auto mt-3 max-w-[56rem] text-[clamp(1rem,0.92vw,1.1rem)] leading-[1.5] text-foreground/82 min-[1360px]:text-[clamp(1.04rem,0.96vw,1.16rem)]"
+          },
+          {
+            "text": "Meet the leadership team shaping AIXCO’s strategic direction, partnerships, and distribution platform.",
+            "rect": {
+              "left": 68,
+              "right": 322,
+              "top": -259,
+              "bottom": -238,
+              "width": 254,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mx-auto mt-3 max-w-[56rem] text-[clamp(1rem,0.92vw,1.1rem)] leading-[1.5] text-foreground/82 min-[1360px]:text-[clamp(1.04rem,0.96vw,1.16rem)]"
+          },
+          {
+            "text": "Meet the leadership team shaping AIXCO’s strategic direction, partnerships, and distribution platform.",
+            "rect": {
+              "left": 121,
+              "right": 269,
+              "top": -233,
+              "bottom": -213,
+              "width": 148,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mx-auto mt-3 max-w-[56rem] text-[clamp(1rem,0.92vw,1.1rem)] leading-[1.5] text-foreground/82 min-[1360px]:text-[clamp(1.04rem,0.96vw,1.16rem)]"
+          },
+          {
+            "text": "Walter Schuster",
+            "rect": {
+              "left": 43,
+              "right": 178,
+              "top": 1306,
+              "bottom": 1332,
+              "width": 135,
+              "height": 26
+            },
+            "tag": "P",
+            "className": "font-display text-[clamp(1.24rem,1.05vw,1.42rem)] leading-[1.12]"
+          },
+          {
+            "text": "Partner",
+            "rect": {
+              "left": 43,
+              "right": 88,
+              "top": 1337,
+              "bottom": 1357,
+              "width": 45,
+              "height": 20
+            },
+            "tag": "P",
+            "className": "mt-1.5 text-[0.9rem] text-primary"
+          },
+          {
+            "text": "Product positioning, channel development, and distribution strategy.",
+            "rect": {
+              "left": 43,
+              "right": 333,
+              "top": 1367,
+              "bottom": 1385,
+              "width": 290,
+              "height": 19
+            },
+            "tag": "P",
+            "className": "mt-2 text-[0.88rem] leading-[1.48] text-muted-foreground"
+          },
+          {
+            "text": "Product positioning, channel development, and distribution strategy.",
+            "rect": {
+              "left": 43,
+              "right": 170,
+              "top": 1387,
+              "bottom": 1406,
+              "width": 127,
+              "height": 19
+            },
+            "tag": "P",
+            "className": "mt-2 text-[0.88rem] leading-[1.48] text-muted-foreground"
+          },
+          {
+            "text": "View profile",
+            "rect": {
+              "left": 43,
+              "right": 127,
+              "top": 1421,
+              "bottom": 1435,
+              "width": 85,
+              "height": 15
+            },
+            "tag": "SPAN",
+            "className": "mt-3 inline-flex text-[0.72rem] uppercase tracking-widest text-primary"
+          }
+        ],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 10
+      },
+      {
+        "kind": "native",
+        "key": "partners",
+        "selector": "#partners",
+        "section": "partners",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": 101,
+          "bottom": 895,
+          "width": 390,
+          "height": 794
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [],
+        "coveredText": [],
+        "imageIssues": [],
+        "issueCount": 0
+      },
+      {
+        "kind": "native",
+        "key": "faqs",
+        "selector": "#faqs",
+        "section": "faqs",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": -549,
+          "bottom": 1546,
+          "width": 390,
+          "height": 2095
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "FAQs",
+            "rect": {
+              "left": 58,
+              "right": 99,
+              "top": -437,
+              "bottom": -422,
+              "width": 42,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "FAQs - Frequently Asked Questions",
+            "rect": {
+              "left": 26,
+              "right": 335,
+              "top": -404,
+              "bottom": -365,
+              "width": 308,
+              "height": 40
+            },
+            "tag": "H2",
+            "className": "heading-section mt-5"
+          },
+          {
+            "text": "FAQs - Frequently Asked Questions",
+            "rect": {
+              "left": 26,
+              "right": 153,
+              "top": -372,
+              "bottom": -333,
+              "width": 126,
+              "height": 40
+            },
+            "tag": "H2",
+            "className": "heading-section mt-5"
+          },
+          {
+            "text": "Register Now",
+            "rect": {
+              "left": 42,
+              "right": 121,
+              "top": -297,
+              "bottom": -281,
+              "width": 79,
+              "height": 17
+            },
+            "tag": "BUTTON",
+            "className": "btn-gold !py-2 !px-4 text-[12px]"
+          },
+          {
+            "text": "Login",
+            "rect": {
+              "left": 165,
+              "right": 198,
+              "top": -297,
+              "bottom": -281,
+              "width": 33,
+              "height": 17
+            },
+            "tag": "BUTTON",
+            "className": "btn-ghost-gold !py-2 !px-4 text-[12px]"
+          },
+          {
+            "text": "Call AIXCO",
+            "rect": {
+              "left": 243,
+              "right": 307,
+              "top": -297,
+              "bottom": -281,
+              "width": 63,
+              "height": 17
+            },
+            "tag": "A",
+            "className": "btn-ghost-gold !py-2 !px-4 text-[12px]"
+          },
+          {
+            "text": "Customer",
+            "rect": {
+              "left": 24,
+              "right": 122,
+              "top": -251,
+              "bottom": -234,
+              "width": 98,
+              "height": 17
+            },
+            "tag": "P",
+            "className": "text-[11px] uppercase tracking-[0.3em] text-primary mb-2"
+          },
+          {
+            "text": "Buying property, reserving apartments, or working with AIXCO on real estate services.",
+            "rect": {
+              "left": 24,
+              "right": 311,
+              "top": -223,
+              "bottom": -202,
+              "width": 287,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mb-4 text-sm text-muted-foreground"
+          },
+          {
+            "text": "Buying property, reserving apartments, or working with AIXCO on real estate services.",
+            "rect": {
+              "left": 24,
+              "right": 321,
+              "top": -198,
+              "bottom": -177,
+              "width": 297,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "mb-4 text-sm text-muted-foreground"
+          },
+          {
+            "text": "What is the minimum amount to reserve or buy?",
+            "rect": {
+              "left": 45,
+              "right": 282,
+              "top": -135,
+              "bottom": -111,
+              "width": 237,
+              "height": 24
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "What is the minimum amount to reserve or buy?",
+            "rect": {
+              "left": 45,
+              "right": 188,
+              "top": -107,
+              "bottom": -83,
+              "width": 143,
+              "height": 24
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commissi",
+            "rect": {
+              "left": 45,
+              "right": 303,
+              "top": -59,
+              "bottom": -38,
+              "width": 258,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commissi",
+            "rect": {
+              "left": 45,
+              "right": 331,
+              "top": -34,
+              "bottom": -13,
+              "width": 286,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commissi",
+            "rect": {
+              "left": 45,
+              "right": 259,
+              "top": -9,
+              "bottom": 12,
+              "width": 214,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+            "rect": {
+              "left": 45,
+              "right": 137,
+              "top": 834,
+              "bottom": 855,
+              "width": 92,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Yes. The platform supports tour coordination and a smoother customer journey.",
+            "rect": {
+              "left": 45,
+              "right": 262,
+              "top": 855,
+              "bottom": 876,
+              "width": 217,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Yes. The platform supports tour coordination and a smoother customer journey.",
+            "rect": {
+              "left": 45,
+              "right": 315,
+              "top": 880,
+              "bottom": 901,
+              "width": 270,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Yes. The platform supports tour coordination and a smoother customer journey.",
+            "rect": {
+              "left": 45,
+              "right": 100,
+              "top": 906,
+              "bottom": 927,
+              "width": 55,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Do login and registration do different things?",
+            "rect": {
+              "left": 45,
+              "right": 270,
+              "top": 876,
+              "bottom": 900,
+              "width": 225,
+              "height": 24
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Do login and registration do different things?",
+            "rect": {
+              "left": 45,
+              "right": 175,
+              "top": 904,
+              "bottom": 928,
+              "width": 130,
+              "height": 24
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Login opens the relevant portal. Register starts the onboarding process for access approval.",
+            "rect": {
+              "left": 45,
+              "right": 295,
+              "top": 952,
+              "bottom": 973,
+              "width": 250,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Yes. Login opens the relevant portal. Register starts the onboarding process for access approval.",
+            "rect": {
+              "left": 45,
+              "right": 335,
+              "top": 977,
+              "bottom": 998,
+              "width": 290,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "Yes. Login opens the relevant portal. Register starts the onboarding process for access approval.",
+            "rect": {
+              "left": 45,
+              "right": 157,
+              "top": 1003,
+              "bottom": 1024,
+              "width": 112,
+              "height": 21
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl"
+          },
+          {
+            "text": "What support is available after sign-up?",
+            "rect": {
+              "left": 45,
+              "right": 287,
+              "top": 973,
+              "bottom": 997,
+              "width": 242,
+              "height": 24
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          },
+          {
+            "text": "What support is available after sign-up?",
+            "rect": {
+              "left": 45,
+              "right": 114,
+              "top": 1001,
+              "bottom": 1025,
+              "width": 69,
+              "height": 24
+            },
+            "tag": "SPAN",
+            "className": "font-display text-lg md:text-xl"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commissi",
+            "rect": {
+              "left": 45,
+              "right": 319,
+              "top": 17,
+              "bottom": 38
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          },
+          {
+            "text": "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commissi",
+            "rect": {
+              "left": 45,
+              "right": 297,
+              "top": 42,
+              "bottom": 63
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "DIV.mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between gap-4 px-6 md:h-20 md:px-10"
+          },
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "rect": {
+              "left": 45,
+              "right": 277,
+              "top": 186,
+              "bottom": 207
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "rect": {
+              "left": 45,
+              "right": 343,
+              "top": 211,
+              "bottom": 232
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            "rect": {
+              "left": 45,
+              "right": 212,
+              "top": 237,
+              "bottom": 258
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "rect": {
+              "left": 45,
+              "right": 293,
+              "top": 255,
+              "bottom": 276
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "rect": {
+              "left": 45,
+              "right": 341,
+              "top": 280,
+              "bottom": 301
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "rect": {
+              "left": 45,
+              "right": 336,
+              "top": 306,
+              "bottom": 327
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, pro",
+            "rect": {
+              "left": 45,
+              "right": 299,
+              "top": 331,
+              "bottom": 352
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "rect": {
+              "left": 45,
+              "right": 284,
+              "top": 324,
+              "bottom": 345
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "rect": {
+              "left": 45,
+              "right": 311,
+              "top": 349,
+              "bottom": 370
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "rect": {
+              "left": 45,
+              "right": 303,
+              "top": 375,
+              "bottom": 396
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified ",
+            "rect": {
+              "left": 45,
+              "right": 157,
+              "top": 400,
+              "bottom": 421
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "rect": {
+              "left": 45,
+              "right": 309,
+              "top": 421,
+              "bottom": 442
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "rect": {
+              "left": 45,
+              "right": 339,
+              "top": 446,
+              "bottom": 467
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            "rect": {
+              "left": 45,
+              "right": 220,
+              "top": 472,
+              "bottom": 493
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "rect": {
+              "left": 45,
+              "right": 302,
+              "top": 569,
+              "bottom": 590
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "P.text-[11px] uppercase tracking-[0.3em] text-primary mb-2"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "rect": {
+              "left": 45,
+              "right": 319,
+              "top": 594,
+              "bottom": 615
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "P.mb-4 text-sm text-muted-foreground"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "rect": {
+              "left": 45,
+              "right": 339,
+              "top": 620,
+              "bottom": 641
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "P.mb-4 text-sm text-muted-foreground"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "rect": {
+              "left": 45,
+              "right": 332,
+              "top": 645,
+              "bottom": 666
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "DIV.scroll-reveal"
+          },
+          {
+            "text": "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separa",
+            "rect": {
+              "left": 45,
+              "right": 318,
+              "top": 670,
+              "bottom": 691
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+            "rect": {
+              "left": 45,
+              "right": 247,
+              "top": 758,
+              "bottom": 779
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "BUTTON.flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-backgr"
+          },
+          {
+            "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+            "rect": {
+              "left": 45,
+              "right": 315,
+              "top": 783,
+              "bottom": 804
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          },
+          {
+            "text": "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+            "rect": {
+              "left": 45,
+              "right": 250,
+              "top": 809,
+              "bottom": 830
+            },
+            "tag": "P",
+            "className": "text-sm text-foreground/80 leading-relaxed max-w-2xl",
+            "coveredBy": "SPAN.font-display text-lg md:text-xl"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 49
+      },
+      {
+        "kind": "native",
+        "key": "contact",
+        "selector": "#contact",
+        "section": "contact",
+        "sectionRect": {
+          "left": 0,
+          "right": 390,
+          "top": -169,
+          "bottom": 1165,
+          "width": 390,
+          "height": 1334
+        },
+        "bodyMode": "unknown",
+        "rootOverflowX": 0,
+        "rootOverflowY": 0,
+        "rootDisplay": "block",
+        "visibleIssues": [],
+        "textOffscreen": [
+          {
+            "text": "Contact",
+            "rect": {
+              "left": 56,
+              "right": 132,
+              "top": -79,
+              "bottom": -63,
+              "width": 76,
+              "height": 16
+            },
+            "tag": "P",
+            "className": "eyebrow"
+          },
+          {
+            "text": "Start",
+            "rect": {
+              "left": 24,
+              "right": 84,
+              "top": -45,
+              "bottom": -5,
+              "width": 60,
+              "height": 40
+            },
+            "tag": "SPAN",
+            "className": "text-gold"
+          },
+          {
+            "text": "your Batumi real estate journey",
+            "rect": {
+              "left": 92,
+              "right": 302,
+              "top": -45,
+              "bottom": -5,
+              "width": 210,
+              "height": 40
+            },
+            "tag": "H2",
+            "className": "heading-section mt-4 max-w-full [overflow-wrap:anywhere]"
+          },
+          {
+            "text": "your Batumi real estate journey",
+            "rect": {
+              "left": 24,
+              "right": 205,
+              "top": -13,
+              "bottom": 27,
+              "width": 181,
+              "height": 40
+            },
+            "tag": "H2",
+            "className": "heading-section mt-4 max-w-full [overflow-wrap:anywhere]"
+          }
+        ],
+        "coveredText": [
+          {
+            "text": "Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration with the AIXCO te",
+            "rect": {
+              "left": 24,
+              "right": 281,
+              "top": 43,
+              "bottom": 65
+            },
+            "tag": "P",
+            "className": "mt-4 max-w-md leading-relaxed text-foreground/80",
+            "coveredBy": "DIV.shrink-0"
+          }
+        ],
+        "imageIssues": [],
+        "issueCount": 5
+      }
+    ],
+    "issueCount": 190
+  }
+]
