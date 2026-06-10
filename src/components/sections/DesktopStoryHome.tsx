@@ -142,6 +142,7 @@ const storyMediaSwitchTransition = {
 };
 const storyTeamSwitchIntervalMs = 2400;
 const storyTeamResumeDelayMs = 3200;
+const maxAnimatedStoryLetters = 30;
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
 const philosophyPlatformStats = [
@@ -232,6 +233,7 @@ function StoryTextReveal({
   const isActive = useStorySceneActive(rootRef);
   const tokens = useMemo(() => label.split(/(\s+)/u), [label]);
   const letterCount = useMemo(() => Array.from(label).filter((character) => !/\s/u.test(character)).length, [label]);
+  const useCompactReveal = letterCount > maxAnimatedStoryLetters;
   const [animationRun, setAnimationRun] = useState(0);
 
   useEffect(() => {
@@ -245,38 +247,46 @@ function StoryTextReveal({
   return (
     <span
       ref={rootRef}
-      className={cn("story-text-reveal story-letter-reveal", isActive && "story-letter-reveal--active")}
+      className={cn(
+        "story-text-reveal story-letter-reveal",
+        useCompactReveal && "story-letter-reveal--compact",
+        isActive && "story-letter-reveal--active",
+      )}
       aria-label={label}
       data-text-reveal-active={isActive ? "true" : "false"}
       style={{ "--story-letter-count": letterCount } as CSSProperties}
     >
       <span className="story-text-reveal__mobile-plain">{label}</span>
       <span key={animationRun} className="story-letter-reveal__text" aria-hidden="true">
-        {tokens.map((token, tokenIndex) => (
-          token.trim() ? (
-            <span key={`${token}-${tokenIndex}`} className="story-letter-reveal__word">
-              {Array.from(token).map((character, characterIndex) => {
-                const characterRevealIndex = revealIndex;
-                revealIndex += 1;
+        {useCompactReveal ? (
+          <span className="story-letter-reveal__chunk">{label}</span>
+        ) : (
+          tokens.map((token, tokenIndex) => (
+            token.trim() ? (
+              <span key={`${token}-${tokenIndex}`} className="story-letter-reveal__word">
+                {Array.from(token).map((character, characterIndex) => {
+                  const characterRevealIndex = revealIndex;
+                  revealIndex += 1;
 
-                return (
-                  <span
-                    key={`${character}-${tokenIndex}-${characterIndex}`}
-                    className="story-letter-reveal__char"
-                    data-char={character}
-                    style={{ "--story-char-index": characterRevealIndex } as CSSProperties}
-                  >
-                    {character}
-                  </span>
-                );
-              })}
-            </span>
-          ) : (
-            <span key={`${token}-${tokenIndex}`} className="story-letter-reveal__space">
-              {token}
-            </span>
-          )
-        ))}
+                  return (
+                    <span
+                      key={`${character}-${tokenIndex}-${characterIndex}`}
+                      className="story-letter-reveal__char"
+                      data-char={character}
+                      style={{ "--story-char-index": characterRevealIndex } as CSSProperties}
+                    >
+                      {character}
+                    </span>
+                  );
+                })}
+              </span>
+            ) : (
+              <span key={`${token}-${tokenIndex}`} className="story-letter-reveal__space">
+                {token}
+              </span>
+            )
+          ))
+        )}
       </span>
     </span>
   );
@@ -662,6 +672,26 @@ function StoryChrome({
 }
 
 function FixedHeroBackdrop({ visible }: { visible: boolean }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [shouldRenderVideo, setShouldRenderVideo] = useState(visible);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (visible) {
+      setShouldRenderVideo(true);
+      void video?.play().catch(() => undefined);
+      return undefined;
+    }
+
+    video?.pause();
+    const cleanupTimer = window.setTimeout(() => {
+      setShouldRenderVideo(false);
+    }, 760);
+
+    return () => window.clearTimeout(cleanupTimer);
+  }, [visible]);
+
   return (
     <div
       aria-hidden="true"
@@ -670,16 +700,19 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
       }`}
       style={{ left: "var(--story-fixed-backdrop-left, 0px)" }}
     >
-      <video
-        src={aixcoHeroBackgroundVideo.src}
-        poster={aixcoHeroBackgroundVideo.poster}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        className="h-full w-full object-cover brightness-[1.08] saturate-[1.08]"
-      />
+      {shouldRenderVideo && (
+        <video
+          ref={videoRef}
+          src={aixcoHeroBackgroundVideo.src}
+          poster={aixcoHeroBackgroundVideo.poster}
+          autoPlay={visible}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-cover brightness-[1.08] saturate-[1.08]"
+        />
+      )}
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.20)_44%,rgba(17,16,14,0.54)),linear-gradient(180deg,rgba(17,16,14,0.16),rgba(17,16,14,0.58))]" />
     </div>
   );
@@ -2207,29 +2240,13 @@ export function DesktopStoryHome() {
     }
 
     const revealDistance = Math.max(1, viewportHeight * 0.95);
-    const nextSectionPresence = storyChapters.map(() => false);
     const viewportCenter = viewportHeight * 0.5;
-    let nextActiveIndex = 0;
-    let closestSectionDistance = Number.POSITIVE_INFINITY;
-
-    for (let index = 0; index < storyChapters.length; index += 1) {
-      const section = sectionRefs.current[index];
-      if (!section) continue;
-
-      const rect = section.getBoundingClientRect();
-      const top = rect.top;
-      const bottom = rect.bottom;
-      const sectionHeight = Math.max(1, rect.height);
-      const sectionCenter = top + (sectionHeight * 0.5);
-      const sectionDistance = Math.abs(sectionCenter - viewportCenter);
-      if (top <= viewportCenter && bottom >= viewportCenter) {
-        nextActiveIndex = index;
-        closestSectionDistance = 0;
-      } else if (closestSectionDistance > 0 && sectionDistance < closestSectionDistance) {
-        nextActiveIndex = index;
-        closestSectionDistance = sectionDistance;
-      }
-    }
+    const nextActiveIndex = clamp(
+      Math.floor((scrollY + viewportCenter) / viewportHeight),
+      0,
+      storyChapters.length - 1,
+    );
+    const nextSectionPresence = storyChapters.map((_, index) => Math.abs(index - nextActiveIndex) <= 1);
 
     const nearbyStart = Math.max(0, nextActiveIndex - 1);
     const nearbyEnd = Math.min(storyChapters.length - 1, nextActiveIndex + 1);
@@ -2412,6 +2429,7 @@ export function DesktopStoryHome() {
               id={chapter.id}
               data-story-section={chapter.key}
               data-story-active={isActive ? "true" : "false"}
+              data-story-revealed={sectionPresence[index] ? "true" : "false"}
               className={cn(
                 "isolate relative scroll-mt-0",
                 chapter.key === "about"

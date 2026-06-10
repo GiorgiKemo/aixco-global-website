@@ -99,7 +99,6 @@ Expected: `ok`
 **Files:**
 - Create: `public/aixco-global-op2/media/previews/bonds-preview.mp4`
 - Create: `public/aixco-global-op2/media/previews/batumibuy-preview.mp4`
-- Create: `public/aixco-global-op2/media/previews/guru-batumi-preview.mp4`
 - Create: `public/aixco-global-op2/media/previews/otium-preview.mp4`
 - Create: `public/aixco-global-op2/media/batumi-gallery/previews/batumi1-preview.mp4`
 - Create: `public/aixco-global-op2/media/batumi-gallery/previews/batumi2-preview.mp4`
@@ -122,7 +121,6 @@ Run FFmpeg with 10 seconds, no audio, 24 fps, 720px max width, H.264, and fast-s
 $jobs = @(
   @("public\aixco-global-op2\media\bonds-optimized.mp4", "public\aixco-global-op2\media\previews\bonds-preview.mp4"),
   @("public\aixco-global-op2\media\batumibuy-optimized.mp4", "public\aixco-global-op2\media\previews\batumibuy-preview.mp4"),
-  @("public\aixco-global-op2\media\guru-batumi-optimized.mp4", "public\aixco-global-op2\media\previews\guru-batumi-preview.mp4"),
   @("public\aixco-global-op2\media\otium-optimized.mp4", "public\aixco-global-op2\media\previews\otium-preview.mp4"),
   @("public\aixco-global-op2\media\batumi-gallery\batumi1.mp4", "public\aixco-global-op2\media\batumi-gallery\previews\batumi1-preview.mp4"),
   @("public\aixco-global-op2\media\batumi-gallery\batumi2.mp4", "public\aixco-global-op2\media\batumi-gallery\previews\batumi2-preview.mp4"),

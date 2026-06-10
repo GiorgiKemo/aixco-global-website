@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 const devRuntimeEndpoint = "/api/dev-runtime-version";
-const pollIntervalMs = 1400;
+const pollIntervalMs = 6000;
 const reloadCooldownMs = 5000;
 const runtimeStorageKey = "aixco-dev-runtime-version";
 const runtimeReloadTokenKey = "aixco-dev-runtime-reload-token";
@@ -20,6 +20,7 @@ export function DevRuntimeRefresh() {
     let currentVersion: string | null = null;
     let lastReloadAt = 0;
     let disposed = false;
+    let checkInFlight = false;
 
     const cleanRuntimeReloadParam = () => {
       const currentUrl = new URL(window.location.href);
@@ -53,6 +54,9 @@ export function DevRuntimeRefresh() {
     };
 
     const checkVersion = async () => {
+      if (checkInFlight || document.visibilityState === "hidden") return;
+
+      checkInFlight = true;
       try {
         const response = await fetch(`${devRuntimeEndpoint}?t=${Date.now()}`, {
           cache: "no-store",
@@ -114,6 +118,8 @@ export function DevRuntimeRefresh() {
         cleanRuntimeReloadParam();
       } catch {
         // Development-only guard: failed checks should never affect the page.
+      } finally {
+        checkInFlight = false;
       }
     };
 

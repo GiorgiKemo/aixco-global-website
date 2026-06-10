@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { motion } from "@/lib/framer-motion";
+import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import { premiumPress } from "@/lib/motion";
 
 export type Partner = SiteContent["partners"][number];
@@ -39,9 +40,30 @@ export function PartnerMarquee({
   ariaLabel?: string;
   className?: string;
 }) {
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useHydratedReducedMotion();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const marquee = marqueeRef.current;
+    if (!marquee || typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { rootMargin: "220px 0px", threshold: 0.01 },
+    );
+
+    observer.observe(marquee);
+    return () => observer.disconnect();
+  }, []);
+
   if (items.length === 0) return null;
 
   const marqueeLabel = ariaLabel ?? (title ? tx(title) : undefined);
+  const shouldPauseMarquee = shouldReduceMotion || !isVisible;
 
   return (
     <div className={`${variant === "story" ? "mb-0" : "mb-12 min-w-0 overflow-hidden last:mb-0"} ${className}`.trim()}>
@@ -51,10 +73,12 @@ export function PartnerMarquee({
         </h3>
       ) : null}
       <div
+        ref={marqueeRef}
         className={`partner-marquee ${variant === "story" ? "partner-marquee--story" : ""} ${variant === "native" ? "scroll-reveal" : ""}`}
         aria-label={marqueeLabel}
+        data-marquee-paused={shouldPauseMarquee ? "true" : "false"}
       >
-        <div className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""}`}>
+        <div className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""} ${shouldPauseMarquee ? "partner-marquee-track-paused" : ""}`}>
           {[0, 1].map((setIndex) => (
             <div key={setIndex} className="partner-marquee-set" aria-hidden={setIndex === 1 ? "true" : undefined}>
               {items.map((partner) => (

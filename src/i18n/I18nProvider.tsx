@@ -1077,12 +1077,27 @@ function lookupTranslation(text: string, lang: Lang, sources: TranslationSource[
 
   const normalizedText = text.trim().toLocaleLowerCase("en-US");
   for (const source of sources) {
-    const key = Object.keys(source).find((candidate) => candidate.trim().toLocaleLowerCase("en-US") === normalizedText);
+    const key = getNormalizedTranslationKeys(source).get(normalizedText);
     const value = key ? source[key]?.[lang] : undefined;
     if (value) return value;
   }
 
   return undefined;
+}
+
+const normalizedTranslationKeys = new WeakMap<TranslationSource, Map<string, string>>();
+
+function getNormalizedTranslationKeys(source: TranslationSource) {
+  const cached = normalizedTranslationKeys.get(source);
+  if (cached) return cached;
+
+  const normalizedKeys = new Map<string, string>();
+  for (const key of Object.keys(source)) {
+    normalizedKeys.set(key.trim().toLocaleLowerCase("en-US"), key);
+  }
+
+  normalizedTranslationKeys.set(source, normalizedKeys);
+  return normalizedKeys;
 }
 
 export async function hasTextTranslation(text: string, lang: Lang) {
@@ -1106,6 +1121,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const dir = lang === "ar" ? "rtl" : "ltr";
   const activeCatalogSources = translationCatalogs?.sources ?? baseCatalogSources;
   const activeAttributeTranslations = translationCatalogs?.attributes ?? emptyAttributeTranslations;
+  const translationLookupCache = useMemo(() => ({
+    lang,
+    sources: activeCatalogSources,
+    entries: new Map<string, string>(),
+  }), [activeCatalogSources, lang]);
 
   useEffect(() => {
     try {
@@ -1179,13 +1199,26 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     dir,
     tx: (text) => {
       if (lang === "en") return text;
-      return lookupTranslation(text, lang, activeCatalogSources) ?? text;
+      const cached = translationLookupCache.entries.get(text);
+      if (cached !== undefined) return cached;
+
+      const translated = lookupTranslation(text, lang, activeCatalogSources) ?? text;
+      translationLookupCache.entries.set(text, translated);
+      return translated;
     },
     t: (key) => {
       const text = keyedText[key] ?? key;
-      return lang === "en" ? text : lookupTranslation(text, lang, activeCatalogSources) ?? text;
+      if (lang === "en") return text;
+
+      const cacheKey = `key:${key}\n${text}`;
+      const cached = translationLookupCache.entries.get(cacheKey);
+      if (cached !== undefined) return cached;
+
+      const translated = lookupTranslation(text, lang, activeCatalogSources) ?? text;
+      translationLookupCache.entries.set(cacheKey, translated);
+      return translated;
     },
-  }), [lang, dir, activeCatalogSources]);
+  }), [lang, dir, activeCatalogSources, translationLookupCache]);
 
   return <I18nCtx.Provider value={value}>{children}</I18nCtx.Provider>;
 }

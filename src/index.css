@@ -594,6 +594,23 @@
     animation-delay: calc(var(--story-char-index) * var(--story-char-step));
   }
 
+  .story-letter-reveal--compact .story-letter-reveal__text {
+    display: inline-block;
+    width: 100%;
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translate3d(-0.16em, 0, 0);
+    will-change: opacity, clip-path, transform;
+  }
+
+  .story-letter-reveal--compact .story-letter-reveal__chunk {
+    display: inline;
+  }
+
+  .story-letter-reveal--active.story-letter-reveal--compact .story-letter-reveal__text {
+    animation: story-text-left-wipe 980ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
   @keyframes story-letter-left-in {
     0% {
       opacity: 0;
@@ -606,6 +623,24 @@
 
     100% {
       opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes story-text-left-wipe {
+    0% {
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+      transform: translate3d(-0.16em, 0, 0);
+    }
+
+    22% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 1;
+      clip-path: inset(0 0 0 0);
       transform: translate3d(0, 0, 0);
     }
   }
@@ -899,6 +934,10 @@
     width: max-content;
     animation: partner-marquee var(--partner-marquee-duration) linear infinite;
     will-change: transform;
+  }
+
+  .partner-marquee-track-paused {
+    animation-play-state: paused;
   }
 
   .partner-marquee-track-reverse {
@@ -1296,6 +1335,11 @@
     gap: var(--batumi-carousel-gap);
     animation: story-batumi-gallery-loop 34s linear infinite;
     will-change: transform;
+  }
+
+  [data-story-revealed="false"] .story-batumi-gallery__track {
+    animation-play-state: paused;
+    will-change: auto;
   }
 
   .story-batumi-gallery__thumb {
@@ -1818,6 +1862,19 @@
       opacity: 0 !important;
     }
 
+    .story-letter-reveal--compact .story-letter-reveal__text {
+      opacity: 1 !important;
+      clip-path: none !important;
+      transform: none !important;
+      animation: none !important;
+      will-change: auto !important;
+    }
+
+    .partner-marquee-track {
+      animation-play-state: paused !important;
+      will-change: auto !important;
+    }
+
     .news-ticker-track {
       animation: none !important;
     }
@@ -1833,6 +1890,11 @@
   @media (min-width: 0px) {
     html[data-home-experience="story"] {
       scroll-padding-top: 0 !important;
+      overflow-x: clip;
+    }
+
+    body.home-story-nav-hidden {
+      overflow-x: clip;
     }
 
     body.home-desktop-story-boot {
@@ -2587,6 +2649,17 @@
     [data-story-scene-copy] .story-text-reveal__mobile-plain {
       display: block;
       color: hsl(var(--foreground)) !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .story-letter-reveal__text {
+      display: none !important;
+    }
+
+    .story-text-reveal__mobile-plain {
+      display: block;
+      color: inherit !important;
       opacity: 1 !important;
       transform: none !important;
     }
