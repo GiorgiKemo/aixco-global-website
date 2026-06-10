@@ -2177,7 +2177,21 @@
       max-width: min(100%, 48rem);
     }
 
-    [data-story-section="philosophyOrigins"],
+    [data-story-section="philosophyOrigins"] {
+      --story-h2-min: 2.45rem;
+      --story-h2-pref: 3.85vw;
+      --story-h2-max: 4.2rem;
+      --story-h2-lh: 1.02;
+      --story-body-min: 1.02rem;
+      --story-body-pref: 1.05vw;
+      --story-body-max: 1.14rem;
+      --story-body-lh: 1.52;
+      --story-card-title-min: 1.12rem;
+      --story-card-title-pref: 1.22vw;
+      --story-card-title-max: 1.32rem;
+      --story-copy-gap: clamp(0.72rem, 1.1svh, 1rem);
+    }
+
     [data-story-section="philosophyPlatform"] {
       --story-h2-min: 2.15rem;
       --story-h2-pref: 3.35vw;
@@ -2198,11 +2212,68 @@
       padding-inline: clamp(1.6rem, 2.65vw, 3.1rem);
     }
 
+    [data-story-section="philosophyOrigins"] .story-philosophy-detail-stage,
+    [data-story-section="philosophyOrigins"] [data-story-scene-copy] {
+      background: hsl(var(--surface));
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      filter: none;
+    }
+
+    [data-story-section="philosophyOrigins"] [data-story-scene-media],
+    [data-story-section="philosophyOrigins"] .story-media-panel__gradient {
+      display: none !important;
+    }
+
     [data-story-section="philosophyOrigins"] [data-layout="story-philosophy-detail"],
     [data-story-section="philosophyPlatform"] [data-layout="story-philosophy-platform-stats"],
     [data-story-section="philosophyPlatform"] [data-layout="story-philosophy-platform-panels"] {
-      max-width: min(100%, 56rem);
-      gap: clamp(0.75rem, 1.2svh, 1rem);
+      max-width: 100%;
+      gap: clamp(0.85rem, 1.35svh, 1.15rem);
+    }
+
+    [data-story-section="philosophyOrigins"] .story-philosophy-detail-title {
+      max-width: 100%;
+      text-wrap: balance;
+    }
+
+    [data-story-section="philosophyOrigins"] .story-philosophy-detail-column {
+      min-width: 0;
+      border-top: 1px solid hsl(var(--primary) / 0.28);
+      padding-top: clamp(0.85rem, 1.2svh, 1.05rem);
+    }
+
+    [data-story-section="philosophyOrigins"] .story-philosophy-detail-column .story-card-title {
+      text-wrap: balance;
+      line-height: 1.2;
+    }
+
+    [data-story-section="philosophyOrigins"] .story-philosophy-detail-column .story-body {
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-wrap: pretty;
+    }
+
+    [data-story-section="philosophyOrigins"] [data-story-scene-copy] {
+      justify-content: center;
+    }
+
+    html[lang="de"] [data-story-section="philosophyOrigins"] {
+      --story-h2-max: 3.85rem;
+      --story-h2-min: 2.2rem;
+      --story-h2-pref: 3.5vw;
+      --story-body-min: 0.98rem;
+      --story-body-pref: 1vw;
+      --story-body-max: 1.08rem;
+      --story-body-lh: 1.5;
+      --story-card-title-min: 1.06rem;
+      --story-card-title-pref: 1.14vw;
+      --story-card-title-max: 1.24rem;
+      --story-copy-gap: clamp(0.58rem, 0.9svh, 0.82rem);
+    }
+
+    html[lang="de"] [data-story-section="philosophyOrigins"] [data-layout="story-philosophy-detail"] {
+      gap: clamp(0.7rem, 1.05svh, 0.95rem);
     }
 
     [data-story-section="philosophyPlatform"] [data-layout="story-philosophy-platform-panels"] {
@@ -2255,17 +2326,8 @@
     }
 
     .story-philosophy-detail-title {
-      max-width: 13ch;
+      max-width: 100%;
       text-wrap: balance;
-    }
-
-    .story-philosophy-detail-card {
-      box-shadow: 0 20px 58px -48px hsl(220 26% 5% / 0.48);
-    }
-
-    .story-philosophy-detail-body {
-      font-size: clamp(0.9rem, 0.95vw, 1rem);
-      line-height: 1.55;
     }
 
     [data-story-scene-copy] [class*="mt-"] {
@@ -2483,7 +2545,13 @@
         padding-block: 0.58rem;
       }
 
-      [data-story-section="philosophyOrigins"],
+      [data-story-section="philosophyOrigins"] {
+        --story-h2-max: 3.45rem;
+        --story-h2-min: 2.15rem;
+        --story-h2-pref: 3.35vw;
+        --story-copy-gap: clamp(0.62rem, 0.9svh, 0.82rem);
+      }
+
       [data-story-section="philosophyPlatform"] {
         --story-h2-max: 3rem;
         --story-h2-min: 2rem;
@@ -2496,9 +2564,15 @@
         padding-inline: clamp(1.1rem, 2vw, 2rem);
       }
 
-      [data-story-section="philosophyOrigins"] .story-philosophy-detail-card,
+      [data-story-section="philosophyOrigins"] .story-philosophy-detail-column,
       [data-story-section="philosophyPlatform"] .story-philosophy-panel {
         padding-block: 0.7rem;
+      }
+
+      [data-story-section="philosophyOrigins"] .story-philosophy-detail-column .story-body,
+      [data-story-section="philosophyPlatform"] .story-philosophy-panel .story-body {
+        font-size: 0.94rem;
+        line-height: 1.48;
       }
 
       [data-story-section="philosophyPlatform"] .story-philosophy-stat {
@@ -2507,12 +2581,6 @@
 
       [data-story-section="philosophyPlatform"] .story-philosophy-stat .story-metric-value {
         font-size: clamp(1.1rem, 1.5vw, 1.45rem);
-      }
-
-      [data-story-section="philosophyOrigins"] .story-philosophy-detail-body,
-      [data-story-section="philosophyPlatform"] .story-philosophy-panel .story-body {
-        font-size: 0.86rem;
-        line-height: 1.45;
       }
     }
   }

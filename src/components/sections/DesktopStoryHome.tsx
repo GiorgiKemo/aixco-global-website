@@ -1360,7 +1360,6 @@ function PhilosophyDetailScene({
   title,
   summary,
   sections,
-  media,
 }: {
   isActive: boolean;
   isRevealed: boolean;
@@ -1369,52 +1368,35 @@ function PhilosophyDetailScene({
   title: string;
   summary: string;
   sections: Array<(typeof philosophySections)[number]>;
-  media: StoryMedia;
+  media?: StoryMedia;
 }) {
-  if (media.kind !== "image") {
-    return null;
-  }
-
   return (
     <div className="relative h-full min-h-0 bg-surface text-foreground">
       <div
-        className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-[var(--story-detail-sidebar)_minmax(0,1fr)]"
-        style={{ "--story-detail-sidebar": storySidebarWidth } as CSSProperties}
+        className="grid h-full min-h-0"
+        style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}
       >
         <div aria-hidden className="hidden xl:block" />
-        <div data-story-media-active={isActive ? "true" : "false"} className="relative flex h-full min-h-0 items-center justify-center overflow-hidden px-[clamp(2rem,6vw,7rem)] py-[clamp(2.5rem,6svh,5rem)]">
-          <div aria-hidden className="absolute inset-x-0 bottom-0 h-[30svh] overflow-hidden opacity-72">
-            <Image
-              src={media.src}
-              alt=""
-              fill
-              loading="lazy"
-              decoding="async"
-              quality={95}
-              sizes="(min-width: 1280px) calc(100vw - 14rem), 100vw"
-              className="h-full w-full object-cover"
-              style={{ objectPosition: media.position ?? "center" }}
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--surface))_0%,hsl(var(--surface)/0.82)_32%,hsl(var(--surface)/0.28)_100%)]" />
-          </div>
-          <StorySceneReveal isActive={isRevealed} className="relative z-10 mx-auto grid w-full max-w-[76rem] gap-[clamp(1rem,2.2svh,1.6rem)] text-center">
-            <p className="eyebrow story-eyebrow justify-center text-primary/80">{tx(eyebrow)}</p>
-            <h2 className="mx-auto max-w-[21ch] text-[clamp(2.35rem,4.5vw,5rem)] font-light leading-[1.12] tracking-normal text-foreground/84">
+        <div
+          data-story-scene-column
+          data-story-media-active={isActive ? "true" : "false"}
+          className="story-philosophy-detail-stage relative z-10 flex h-full min-h-0 flex-col overflow-hidden bg-surface"
+        >
+          <StorySceneBody fitContent isRevealed={isRevealed}>
+            <p className="eyebrow story-eyebrow">{tx(eyebrow)}</p>
+            <h2 className="story-h2 story-philosophy-detail-title">
               <StoryTextReveal label={tx(title)} />
             </h2>
-            <p className="mx-auto max-w-[58rem] text-[clamp(1.02rem,1.15vw,1.28rem)] leading-[1.68] text-foreground/64">
-              {tx(summary)}
-            </p>
-            <div data-layout="story-philosophy-detail" className="mx-auto grid w-full max-w-[66rem] gap-4 text-left lg:grid-cols-2">
+            <p className="story-body text-foreground/76">{tx(summary)}</p>
+
+            <div data-layout="story-philosophy-detail" className="grid w-full gap-6 lg:grid-cols-2 lg:gap-x-8 lg:gap-y-5">
               {sections.map((section) => (
-                <article key={section.title} className="border-t border-primary/35 bg-surface/62 px-5 py-4 backdrop-blur-sm">
+                <article key={section.title} className="story-philosophy-detail-column min-w-0">
                   <p className="story-metric-label text-primary/78">{tx(section.eyebrow)}</p>
-                  <h3 className="mt-2 text-[clamp(1.08rem,1.32vw,1.45rem)] font-semibold leading-tight text-foreground">
-                    {tx(section.title)}
-                  </h3>
-                  <div className="mt-3 grid gap-2.5">
+                  <h3 className="story-card-title mt-2">{tx(section.title)}</h3>
+                  <div className="mt-3 grid gap-3">
                     {section.paragraphs.map((paragraph) => (
-                      <p key={paragraph} className="text-[clamp(0.9rem,0.95vw,1rem)] leading-[1.54] text-foreground/66">
+                      <p key={paragraph} className="story-body text-foreground/72">
                         {tx(paragraph)}
                       </p>
                     ))}
@@ -1422,7 +1404,7 @@ function PhilosophyDetailScene({
                 </article>
               ))}
             </div>
-          </StorySceneReveal>
+          </StorySceneBody>
         </div>
       </div>
     </div>

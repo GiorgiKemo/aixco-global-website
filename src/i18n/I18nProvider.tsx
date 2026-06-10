@@ -756,17 +756,17 @@ const germanQualityTranslations: TranslationSource = {
     de: "Die Philosophie von AIXCO beginnt mit Eigentum: langlebige Sachwerte, konservative Risikoprüfung und wiederkehrende Erträge.",
   },
   "Since its first acquisition in 2009, the company has steadily expanded within the Swiss residential real estate market, developing a portfolio defined by resilience, stability, and recurring income generation.": {
-    de: "Seit dem ersten Erwerb im Jahr 2009 hat sich das Unternehmen im Schweizer Wohnimmobilienmarkt stetig erweitert und ein Portfolio aufgebaut, das von Widerstandsfähigkeit, Stabilität und wiederkehrenden Erträgen geprägt ist.",
+    de: "Seit dem ersten Erwerb 2009 hat sich das Unternehmen im Schweizer Wohnimmobilienmarkt stetig ausgebaut - mit einem Portfolio aus Widerstandsfähigkeit, Stabilität und wiederkehrenden Erträgen.",
   },
   "Over the decades, AIXCO has evolved into a diversified international group combining Swiss real estate heritage with modern asset-backed acquisitions.": {
-    de: "Im Laufe der Jahrzehnte hat sich AIXCO zu einer diversifizierten internationalen Gruppe entwickelt, die Schweizer Immobilienerfahrung mit modernen sachwertbasierten Akquisitionen verbindet.",
+    de: "AIXCO ist zu einer internationalen Gruppe geworden, die Schweizer Immobilienerfahrung mit modernen sachwertbasierten Akquisitionen verbindet.",
   },
-  "A distinctly Swiss philosophy of managing risk": { de: "Eine klar Schweizer Philosophie im Risikomanagement" },
+  "A distinctly Swiss philosophy of managing risk": { de: "Klare Schweizer Disziplin im Risikomanagement" },
   "At the core of AIXCO lies a distinctly Swiss philosophy of managing risk. AIXCO approaches real estate decisions with discipline, conservatism, and a long-term perspective, focusing on durable properties and practical operating fundamentals.": {
-    de: "Im Kern von AIXCO steht eine klar Schweizer Philosophie im Umgang mit Risiko. AIXCO trifft Immobilienentscheidungen mit Disziplin, konservativem Blick und langfristiger Perspektive - mit Fokus auf langlebige Immobilien und solide operative Grundlagen.",
+    de: "Im Kern von AIXCO steht eine klare Schweizer Risikodisziplin. Entscheidungen werden mit Konservatismus und langfristiger Perspektive getroffen - mit Fokus auf langlebige Immobilien und solide Betriebsgrundlagen.",
   },
   "Through carefully selected real estate purchases, sales, brokerage mandates, and property administration, AIXCO focuses on durable assets, practical risk assessment, and sustainable long-term growth.": {
-    de: "Durch sorgfältig ausgewählte Immobilienkäufe, Verkäufe, Vermittlungsmandate und Immobilienverwaltung konzentriert sich AIXCO auf langlebige Sachwerte, praktische Risikoprüfung und nachhaltiges langfristiges Wachstum.",
+    de: "Über ausgewählte Käufe, Verkäufe, Vermittlungsmandate und Verwaltung konzentriert sich AIXCO auf langlebige Sachwerte, praktische Risikoprüfung und nachhaltiges Wachstum.",
   },
   "International expansion through selected opportunities": { de: "Internationale Expansion durch ausgewählte Chancen" },
   "The platform connects selected opportunities, international teams, and service discipline around long-term property value.": {
