@@ -142,7 +142,7 @@ const storyMediaSwitchTransition = {
 };
 const storyTeamSwitchIntervalMs = 2400;
 const storyTeamResumeDelayMs = 3200;
-const maxAnimatedStoryLetters = 30;
+const maxAnimatedStoryLetters = 72;
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
 const philosophyPlatformStats = [
