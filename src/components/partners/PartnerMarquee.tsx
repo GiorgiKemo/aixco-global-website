@@ -45,6 +45,10 @@ export function PartnerMarquee({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (variant === "story") {
+      return undefined;
+    }
+
     const marquee = marqueeRef.current;
     if (!marquee || typeof IntersectionObserver === "undefined") {
       setIsVisible(true);
@@ -58,12 +62,15 @@ export function PartnerMarquee({
 
     observer.observe(marquee);
     return () => observer.disconnect();
-  }, []);
+  }, [variant]);
 
   if (items.length === 0) return null;
 
   const marqueeLabel = ariaLabel ?? (title ? tx(title) : undefined);
-  const shouldPauseMarquee = shouldReduceMotion || !isVisible;
+  const shouldPauseMarquee =
+    variant === "story"
+      ? false
+      : shouldReduceMotion || !isVisible;
 
   return (
     <div className={`${variant === "story" ? "mb-0" : "mb-12 min-w-0 overflow-hidden last:mb-0"} ${className}`.trim()}>

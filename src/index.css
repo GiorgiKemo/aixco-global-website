@@ -566,6 +566,14 @@
     display: none;
   }
 
+  .story-letter-reveal:not(.story-letter-reveal--active) .story-text-reveal__mobile-plain {
+    display: block;
+  }
+
+  .story-letter-reveal:not(.story-letter-reveal--active) .story-letter-reveal__text {
+    display: none;
+  }
+
   .story-letter-reveal__word {
     display: inline-block;
     white-space: nowrap;
@@ -921,8 +929,8 @@
     --partner-item-width: clamp(10rem, 12.5vw, 12rem);
     --partner-logo-stage-height: clamp(6.5rem, 10.5svh, 7.5rem);
     padding-block: 0.35rem 0.75rem;
-    mask-image: none;
-    -webkit-mask-image: none;
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
   }
 
   .partner-marquee::-webkit-scrollbar {
@@ -1392,6 +1400,33 @@
     max-width: 100%;
     overflow: hidden;
     gap: clamp(0.4rem, 0.75svh, 0.65rem);
+  }
+
+  .story-partners-title {
+    max-width: 100%;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    font-size: clamp(1.75rem, 2.85vw, 2.95rem);
+    line-height: 1.08;
+  }
+
+  html[lang="de"] .story-partners-title {
+    font-size: clamp(1.65rem, 2.55vw, 2.65rem);
+    line-height: 1.1;
+  }
+
+  [data-story-section="partners"] {
+    --story-h2-max: 3.35rem;
+    --story-h2-min: 1.95rem;
+    --story-h2-pref: 3.1vw;
+    --story-h2-lh: 1.06;
+  }
+
+  html[lang="de"] [data-story-section="partners"] {
+    --story-h2-max: 2.95rem;
+    --story-h2-min: 1.75rem;
+    --story-h2-pref: 2.75vw;
+    --story-h2-lh: 1.08;
   }
 
   .story-partner-row {
@@ -1870,9 +1905,20 @@
       will-change: auto !important;
     }
 
-    .partner-marquee-track {
+    .partner-marquee:not(.partner-marquee--story) .partner-marquee-track {
       animation-play-state: paused !important;
       will-change: auto !important;
+    }
+
+    .partner-marquee--story .partner-marquee-track {
+      animation-play-state: running !important;
+      animation-duration: 52s !important;
+    }
+
+    .story-letter-reveal--active .story-letter-reveal__char {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
     }
 
     .news-ticker-track {

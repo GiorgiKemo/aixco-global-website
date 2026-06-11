@@ -2002,9 +2002,7 @@ function PartnersScene({
       media={{ kind: "image", src: aixcoLiveImages.dubaiHealthcare, alt: tx("Dubai Healthcare City legacy reference"), position: "center" }}
     >
       <p className="eyebrow story-eyebrow">{tx("Partners")}</p>
-      <h2 className="story-h2">
-        <StoryTextReveal label={tx("Group companies and strategic partners")} />
-      </h2>
+      <h2 className="story-h2 story-partners-title">{tx("Group companies and strategic partners")}</h2>
       <div data-layout="story-partners-marquee" className="story-partners-section">
         <StoryPartnerRow label="Group companies" partners={groupCompanies} tx={tx} onPartnerClick={onPartnerClick} />
         <StoryPartnerRow label="Strategic partners" partners={strategicPartners} tx={tx} onPartnerClick={onPartnerClick} reverse />

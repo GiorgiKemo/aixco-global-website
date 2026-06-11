@@ -43,6 +43,20 @@ describe("PartnerMarquee", () => {
     });
   });
 
+  it("keeps story marquees running continuously", () => {
+    const { container } = render(
+      <PartnerMarquee
+        partners={partners}
+        openPartner={vi.fn()}
+        tx={(copy) => copy}
+        variant="story"
+      />,
+    );
+
+    expect(container.querySelector(".partner-marquee-track-paused")).toBeNull();
+    expect(container.querySelector('[data-marquee-paused="false"]')).toBeInTheDocument();
+  });
+
   it("keeps non-story logos lazy-loaded", () => {
     const { container } = render(
       <PartnerMarquee
