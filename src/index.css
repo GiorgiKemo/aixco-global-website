@@ -566,11 +566,11 @@
     display: none;
   }
 
-  .story-letter-reveal:not(.story-letter-reveal--active) .story-text-reveal__mobile-plain {
+  .story-letter-reveal:not(.story-letter-reveal--active):not(.story-letter-reveal--played) .story-text-reveal__mobile-plain {
     display: block;
   }
 
-  .story-letter-reveal:not(.story-letter-reveal--active) .story-letter-reveal__text {
+  .story-letter-reveal:not(.story-letter-reveal--active):not(.story-letter-reveal--played) .story-letter-reveal__text {
     display: none;
   }
 
@@ -602,6 +602,12 @@
     animation-delay: calc(var(--story-char-index) * var(--story-char-step));
   }
 
+  .story-letter-reveal--played .story-letter-reveal__char {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
   .story-letter-reveal--compact .story-letter-reveal__text {
     display: inline-block;
     width: 100%;
@@ -617,6 +623,13 @@
 
   .story-letter-reveal--active.story-letter-reveal--compact .story-letter-reveal__text {
     animation: story-text-left-wipe 980ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .story-letter-reveal--played.story-letter-reveal--compact .story-letter-reveal__text {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: none;
+    will-change: auto;
   }
 
   @keyframes story-letter-left-in {
@@ -1343,11 +1356,6 @@
     gap: var(--batumi-carousel-gap);
     animation: story-batumi-gallery-loop 34s linear infinite;
     will-change: transform;
-  }
-
-  [data-story-revealed="false"] .story-batumi-gallery__track {
-    animation-play-state: paused;
-    will-change: auto;
   }
 
   .story-batumi-gallery__thumb {

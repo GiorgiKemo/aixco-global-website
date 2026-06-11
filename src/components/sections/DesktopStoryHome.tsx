@@ -202,25 +202,26 @@ function formatChapterNumber(index: number) {
   return String(index).padStart(2, "0");
 }
 
-function useStorySceneActive(rootRef: React.RefObject<HTMLElement | null>) {
-  const [isActive, setIsActive] = useState(false);
+function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
+  const [isInView, setIsInView] = useState(false);
 
-  useLayoutEffect(() => {
-    const root = rootRef.current?.closest<HTMLElement>("[data-story-section]");
-    if (!root) return;
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || typeof IntersectionObserver === "undefined") {
+      setIsInView(true);
+      return undefined;
+    }
 
-    const syncActiveState = () => {
-      setIsActive(root.getAttribute("data-story-active") === "true");
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.01 },
+    );
 
-    syncActiveState();
-    const observer = new MutationObserver(syncActiveState);
-    observer.observe(root, { attributes: true, attributeFilter: ["data-story-active"] });
-
+    observer.observe(root);
     return () => observer.disconnect();
   }, [rootRef]);
 
-  return isActive;
+  return isInView;
 }
 
 function StoryTextReveal({
@@ -230,19 +231,38 @@ function StoryTextReveal({
   label: string;
 }) {
   const rootRef = useRef<HTMLSpanElement>(null);
-  const isActive = useStorySceneActive(rootRef);
+  const isInView = useStoryTextInView(rootRef);
   const tokens = useMemo(() => label.split(/(\s+)/u), [label]);
   const letterCount = useMemo(() => Array.from(label).filter((character) => !/\s/u.test(character)).length, [label]);
   const useCompactReveal = letterCount > maxAnimatedStoryLetters;
+  const animationDurationMs = useMemo(
+    () => useCompactReveal ? 1100 : Math.min(2800, letterCount * 28 + 780),
+    [letterCount, useCompactReveal],
+  );
+  const [animationState, setAnimationState] = useState<"idle" | "animating" | "played">("idle");
   const [animationRun, setAnimationRun] = useState(0);
 
   useEffect(() => {
-    if (isActive) {
-      setAnimationRun((current) => current + 1);
-    }
-  }, [isActive, label]);
+    setAnimationState("idle");
+    setAnimationRun(0);
+  }, [label]);
+
+  useEffect(() => {
+    if (!isInView || animationState !== "idle") return;
+    setAnimationRun((current) => current + 1);
+    setAnimationState("animating");
+  }, [animationState, isInView]);
+
+  useEffect(() => {
+    if (animationState !== "animating") return undefined;
+
+    const timer = window.setTimeout(() => setAnimationState("played"), animationDurationMs);
+    return () => window.clearTimeout(timer);
+  }, [animationDurationMs, animationState]);
 
   let revealIndex = 0;
+  const isAnimating = animationState === "animating";
+  const hasPlayed = animationState === "played";
 
   return (
     <span
@@ -250,10 +270,12 @@ function StoryTextReveal({
       className={cn(
         "story-text-reveal story-letter-reveal",
         useCompactReveal && "story-letter-reveal--compact",
-        isActive && "story-letter-reveal--active",
+        isAnimating && "story-letter-reveal--active",
+        hasPlayed && "story-letter-reveal--played",
       )}
       aria-label={label}
-      data-text-reveal-active={isActive ? "true" : "false"}
+      data-text-reveal-active={isAnimating ? "true" : "false"}
+      data-text-reveal-state={animationState}
       style={{ "--story-letter-count": letterCount } as CSSProperties}
     >
       <span className="story-text-reveal__mobile-plain">{label}</span>
