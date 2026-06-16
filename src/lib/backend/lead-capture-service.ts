@@ -86,7 +86,7 @@ function getInterestFromMessages(messages: ChatMessageInput[]) {
   if (visitorText.includes("broker")) return "Broker partnership";
   if (visitorText.includes("developer")) return "Developer partnership";
   if (visitorText.includes("batumi") || visitorText.includes("apartment") || visitorText.includes("property")) {
-    return "Batumi apartments";
+    return "Emerging market opportunities";
   }
 
   return null;

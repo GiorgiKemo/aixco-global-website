@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+﻿import { render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { UIProvider } from "@/components/ui-state";
 import { I18nProvider } from "@/i18n/I18nProvider";
@@ -91,30 +91,30 @@ describe("Participate", () => {
     expect(within(brokerageCopy as HTMLElement).getByRole("heading", { name: "Broker Real Estate with AIXCO" })).toHaveClass(
       "text-[clamp(2.45rem,2.85vw,3rem)]",
     );
-    expect(within(apartmentCopy as HTMLElement).getByRole("heading", { name: "Buy an Apartment in Batumi" })).toHaveClass(
+    expect(within(apartmentCopy as HTMLElement).getByRole("heading", { name: "Buy an Apartment with AIXCO" })).toHaveClass(
       "text-[clamp(2.45rem,2.85vw,3rem)]",
     );
     expect(within(apartmentCopy as HTMLElement).getByText("Entry pricing")).toBeInTheDocument();
     expect(within(apartmentCopy as HTMLElement).getByText("Approx. net rental yields")).toBeInTheDocument();
-    expect(within(apartmentCopy as HTMLElement).getByText("Bank financing")).toBeInTheDocument();
+    expect(within(apartmentCopy as HTMLElement).getByText("Bank financing minimum")).toBeInTheDocument();
     expect(within(apartmentCopy as HTMLElement).getByText("Foreign ownership")).toBeInTheDocument();
     expect(within(brokerageCopy as HTMLElement).getByRole("button", { name: /Register/ }).className).not.toContain("mt-auto");
     expect(within(brokerageCopy as HTMLElement).getByRole("button", { name: /Register/ })).toHaveClass("self-start");
     expect(within(brokerageCopy as HTMLElement).getByRole("button", { name: /Register/ }).className).not.toContain("w-full");
     expect(screen.getAllByLabelText("Broker Real Estate with AIXCO")[0]).toHaveClass("object-cover");
-    expect(screen.getByLabelText("Buy an Apartment in Batumi")).toHaveClass("object-cover");
+    expect(screen.getByLabelText("Buy an Apartment with AIXCO")).toHaveClass("object-cover");
     expect(container.querySelector(".scroll-reveal.mt-10")).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "How AIXCO Works" })).not.toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: /Register/ })).toHaveLength(3);
   });
 
-  it("allows the slash-separated participation headline to wrap on narrow phones", () => {
+  it("keeps the participation headline wrapped safely on narrow phones", () => {
     const { container } = renderParticipate();
 
-    const heading = screen.getByRole("heading", { name: /Customers\/\s*Partners Work/ });
+    const heading = screen.getByRole("heading", { name: "How it works" });
 
     expect(heading).toHaveClass("[overflow-wrap:anywhere]");
-    expect(heading.querySelector("wbr")).toBeInTheDocument();
+    expect(heading).toHaveTextContent("How it works");
     expect(container.querySelector("section#participate")).toHaveClass("overflow-x-hidden");
     expect(container.querySelector("section#participate")).toHaveClass("md:pb-20");
     expect(container.querySelector("[data-layout='alternating-participation-cards']")).toHaveClass("md:pb-8");

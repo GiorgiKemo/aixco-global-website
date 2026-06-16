@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+﻿import { render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { aixcoHeroBackgroundVideo } from "@/lib/aixco-live-assets";
@@ -107,9 +107,6 @@ describe("Hero", () => {
     const heroKicker = container.querySelector("[data-hero-kicker='true']");
     const brandDot = heading.querySelector("[data-hero-brand-dot='true']");
     const titleMark = heading.querySelector("[data-hero-title-mark='true']");
-    const introCopy = within(hero).getByText(
-      "Buy, sell, and broker real estate with AIXCO—from apartment purchases to end-to-end property administration.",
-    );
     const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
     const priceText = container.querySelector("[data-hero-price-text='true']");
     const priceFootnote = container.querySelector("[data-hero-price-footnote='true']");
@@ -127,49 +124,29 @@ describe("Hero", () => {
     expect(composition?.className).toContain("text-center");
     expect(contentStack).toBeInTheDocument();
     expect(contentStack?.className).toContain("translate-y-[clamp(1rem,4svh,3.5rem)]");
-    const qualityLine = within(hero).getByText("Quality Real Estate — Buy · Broker · Manage");
-    expect(heroKicker).toBe(qualityLine);
-    expect(qualityLine).toBeInTheDocument();
+    const investmentLine = within(hero).getByText("Real Estate Investment");
+    expect(heroKicker).toBe(investmentLine);
+    expect(investmentLine).toBeInTheDocument();
     expect(heading).toHaveAttribute("data-hero-title", "true");
-    expect(qualityLine.className).toContain("self-start");
-    expect(qualityLine.className).toContain("sm:ml-[clamp(0rem,20vw,18rem)]");
+    expect(investmentLine.className).toContain("self-start");
+    expect(investmentLine.className).toContain("sm:ml-[clamp(0rem,20vw,18rem)]");
     expect(within(hero).queryByText("GLOBAL VISION. INFINITE VALUE")).not.toBeInTheDocument();
     const standaloneMark = container.querySelector("[data-hero-brand-mark='standalone']");
-    expect(standaloneMark).toBeInTheDocument();
-    expect(standaloneMark).toHaveAttribute("loading", "eager");
-    expect(standaloneMark).toHaveAttribute("fetchpriority", "high");
-    expect(standaloneMark?.parentElement).not.toBe(heading);
+    expect(standaloneMark).not.toBeInTheDocument();
     expect(titleMark).toBeInTheDocument();
     expect(titleMark).toHaveAttribute("aria-hidden", "true");
-    expect(heading).toHaveAttribute("aria-label", "AIXCO.Global");
-    expect(heading).toHaveTextContent("IXCO.Global");
-    expect(heading).not.toHaveTextContent("Starting from");
-    expect(introCopy).toBeInTheDocument();
-    expect(introCopy.className).toContain("max-w-[50rem]");
-    expect(introCopy.className).toContain("text-[clamp(0.98rem,2.4vw,1.46rem)]");
-    expect(introCopy.className).toContain("font-normal");
-    expect(introCopy.className).toContain("text-white/90");
+    expect(heading).toHaveAttribute("aria-label", "AIXCO.GLOBAL");
+    expect(heading).toHaveTextContent("IXCO.GLOBAL");
+    expect(container.querySelector("[data-hero-intro-copy='true']")).not.toBeInTheDocument();
     expect(priceLockup).toBeInTheDocument();
     expect(priceLockup).toHaveAttribute("href", "#batumi");
     expect(priceLockup?.className).toContain("hover:text-primary-glow");
     expect(priceLockup?.className).toContain("focus-visible:outline");
     expect(container.querySelector("[data-hero-price-rule='true']")).not.toBeInTheDocument();
-    expect(within(priceLockup as HTMLElement).getByText("Enter Uprising real estate with AIXCO")).toBeInTheDocument();
-    expect(
-      within(priceLockup as HTMLElement).getByText(
-        "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.",
-      ),
-    ).toBeInTheDocument();
+    expect(within(priceLockup as HTMLElement).getByText("Emerging market opportunities with AIXCO")).toBeInTheDocument();
     expect(priceText?.className).toContain("text-[clamp(1.2rem,5vw,3.5rem)]");
     expect(priceText?.className).toContain("uppercase");
-    expect(priceFootnote).toBeInTheDocument();
-    expect(priceFootnote?.className).toContain("text-sm");
-    expect(priceFootnote?.className).toContain("sm:text-base");
-    expect(priceFootnote?.className).toContain("md:text-lg");
-    expect(priceFootnote?.className).toContain("leading-relaxed");
-    expect(priceFootnote?.className).toContain("text-white/88");
-    expect(priceFootnote?.className).not.toContain("text-[0.72rem]");
-    expect(priceFootnote?.className).not.toContain("text-white/75");
+    expect(priceFootnote).not.toBeInTheDocument();
     expect(scrollLink).toHaveAttribute("data-hero-scroll-cue", "viewport");
     expect(scrollLink.parentElement).toHaveAttribute("data-hero-composition", "reference-center");
     expect(scrollLink.closest("[data-hero-content-stack='true']")).not.toBeInTheDocument();
@@ -207,9 +184,6 @@ describe("Hero", () => {
     const composition = container.querySelector("[data-hero-composition='reference-center']");
     const contentStack = container.querySelector("[data-hero-content-stack='true']");
     const heading = within(hero as HTMLElement).getByRole("heading", { level: 1 });
-    const introCopy = within(hero as HTMLElement).getByText(
-      "Buy, sell, and broker real estate with AIXCO—from apartment purchases to end-to-end property administration.",
-    );
     const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
     const priceText = container.querySelector("[data-hero-price-text='true']");
     const priceFootnote = container.querySelector("[data-hero-price-footnote='true']");
@@ -228,14 +202,12 @@ describe("Hero", () => {
     expect(heading.className).toContain("break-words");
     expect(heading.className).toContain("md:text-[clamp(3.25rem,7.2vw,4.75rem)]");
     expect(heading.className).toContain("lg:text-[clamp(5rem,8vw,7.45rem)]");
-    expect(introCopy.className).toContain("md:max-w-[42rem]");
-    expect(introCopy.className).toContain("md:text-[clamp(1rem,1.9vw,1.2rem)]");
+    expect(container.querySelector("[data-hero-intro-copy='true']")).not.toBeInTheDocument();
     expect(priceLockup?.className).toContain("md:mt-6");
     expect(priceLockup?.className).toContain("flex-col");
     expect(priceLockup?.className).toContain("gap-2");
     expect(priceText?.className).toContain("md:text-[clamp(2rem,4vw,3rem)]");
-    expect(priceFootnote?.className).toContain("md:max-w-xl");
-    expect(priceFootnote?.className).toContain("lg:max-w-2xl");
+    expect(priceFootnote).not.toBeInTheDocument();
     expect(priceText?.className).toContain("lg:text-[clamp(2.8rem,3.8vw,4rem)]");
     expect(contentStack?.className).toContain("md:landscape:translate-y-0");
     expect(contentStack?.className).toContain("lg:landscape:-translate-y-[clamp(0.5rem,3svh,1.5rem)]");
@@ -252,30 +224,23 @@ describe("Hero", () => {
     const priceLockup = container.querySelector("[data-hero-price-lockup='true']");
 
     await waitFor(() => {
-      expect(within(priceLockup as HTMLElement).getByText("Mit AIXCO in Uprising-Immobilien einsteigen")).toBeInTheDocument();
+      expect(within(priceLockup as HTMLElement).getByText("Chancen in aufstrebenden Maerkten mit AIXCO")).toBeInTheDocument();
     });
-    expect(within(priceLockup as HTMLElement).queryByText("Starting from €10,000")).not.toBeInTheDocument();
+    expect(within(priceLockup as HTMLElement).queryByText("Entry from €50,000")).not.toBeInTheDocument();
   });
 
-  it("translates hero kicker and intro copy in Georgian", async () => {
+  it("translates hero kicker without rendering removed intro copy", async () => {
     localStorage.setItem("aixco-lang", "ka");
 
     const { container } = renderHero();
     const hero = container.querySelector("section");
 
     await waitFor(() => {
-      expect(
-        within(hero as HTMLElement).getByText("ხარისხიანი უძრავი ქონება — ყიდვა · ბროკერინგი · მართვა"),
-      ).toBeInTheDocument();
-      expect(
-        within(hero as HTMLElement).getByText(
-          "AIXCO-თან ერთად იყიდეთ, გაყიდეთ და დააბროკერეთ უძრავი ქონება—ბინების შეძენიდან ობიექტების სრულ ადმინისტრირებამდე.",
-        ),
-      ).toBeInTheDocument();
+      expect(within(hero as HTMLElement).getByText("უძრავი ქონების ინვესტიცია")).toBeInTheDocument();
     });
     expect(
       within(hero as HTMLElement).queryByText(
-        "Buy, sell, and broker real estate with AIXCO—from apartment purchases to end-to-end property administration.",
+        "Explore selected real estate opportunities with AIXCO.",
       ),
     ).not.toBeInTheDocument();
     expect(
@@ -283,13 +248,10 @@ describe("Hero", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("keeps hero intro copy fluid on narrow viewports", () => {
+  it("does not render removed hero intro copy on narrow viewports", () => {
     const { container } = renderHero();
     const introCopy = container.querySelector("[data-hero-intro-copy='true']");
 
-    expect(introCopy?.className).toContain("w-full");
-    expect(introCopy?.className).toContain("min-w-0");
-    expect(introCopy?.className).not.toContain("w-[18rem]");
-    expect(introCopy?.className).toContain("[overflow-wrap:anywhere]");
+    expect(introCopy).not.toBeInTheDocument();
   });
 });

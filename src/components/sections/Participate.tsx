@@ -1,11 +1,10 @@
-"use client";
+﻿"use client";
 
 import { ArrowRight } from "lucide-react";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { useUI } from "../ui-state";
 import { motion } from "@/lib/framer-motion";
-import { Fragment } from "react";
 import { premiumPress, premiumSurfaceHover } from "@/lib/motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveImages, aixcoLiveVideoPreviews, aixcoLiveVideos } from "@/lib/aixco-live-assets";
@@ -14,7 +13,7 @@ import { LiveVideo } from "@/components/LiveVideo";
 const videoMap: Record<string, { src: string; previewSrc: string; poster: string }> = {
   batumiBuy: { src: aixcoLiveVideos.batumiBuy, previewSrc: aixcoLiveVideoPreviews.batumiBuy, poster: aixcoLiveImages.batumiBuyPoster },
   batumiOverview: { src: aixcoLiveVideos.batumiOverview, previewSrc: aixcoLiveVideoPreviews.batumiOverview, poster: aixcoLiveImages.batumiOverviewPoster },
-  otium: { src: aixcoLiveVideos.otium, previewSrc: aixcoLiveVideoPreviews.otium, poster: aixcoLiveImages.batumiOtium },
+  currentProject: { src: aixcoLiveVideos.currentProject, previewSrc: aixcoLiveVideoPreviews.currentProject, poster: aixcoLiveImages.batumiCurrentProject },
 };
 
 const apartmentMetrics = [
@@ -23,12 +22,12 @@ const apartmentMetrics = [
     label: "Entry pricing",
   },
   {
-    value: "8%",
+    value: "10-12%",
     label: "Approx. net rental yields",
   },
   {
-    value: "60%",
-    label: "Bank financing",
+    value: "60%+",
+    label: "Bank financing minimum",
   },
   {
     value: "100%",
@@ -36,27 +35,9 @@ const apartmentMetrics = [
   },
 ];
 
+const formatMetricValue = (value: string) => value.replace(/\u00e2\u201a\u00ac/g, "€");
+
 type ParticipationRoute = SiteContent["participationRoutes"][number];
-
-function SlashBreakText({ text }: { text: string }) {
-  const parts = text.split("/");
-
-  return (
-    <>
-      {parts.map((part, index) => (
-        <Fragment key={`${part}-${index}`}>
-          {part}
-          {index < parts.length - 1 && (
-            <>
-              /
-              <wbr />
-            </>
-          )}
-        </Fragment>
-      ))}
-    </>
-  );
-}
 
 function ParticipationRouteCard({
   route,
@@ -110,7 +91,7 @@ function ParticipationRouteCard({
           poster={videoMap[route.video].poster}
           className="!absolute !inset-0 !h-full !w-full !rounded-none !shadow-none"
           fit="cover"
-          rootMargin="700px 0px"
+          rootMargin="220px 0px"
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-foreground/45 via-foreground/10 to-transparent" aria-hidden />
       </div>
@@ -138,7 +119,7 @@ function ParticipationRouteCard({
               {apartmentMetrics.map((metric) => (
                 <div key={metric.label} className="bg-white p-3">
                   <dt className="text-[0.62rem] font-semibold uppercase tracking-[0.13em] text-foreground/55">{tx(metric.label)}</dt>
-                  <dd className="mt-2 font-display text-[clamp(1.35rem,1.55vw,1.95rem)] leading-none text-primary">{tx(metric.value)}</dd>
+                  <dd className="mt-2 font-display text-[clamp(1.35rem,1.55vw,1.95rem)] leading-none text-primary">{tx(formatMetricValue(metric.value))}</dd>
                 </div>
               ))}
             </dl>
@@ -177,10 +158,10 @@ export function Participate() {
           <div className="scroll-reveal mb-4 max-w-6xl shrink-0 md:mb-4">
           <p className="eyebrow">{tx("How to work with AIXCO")}</p>
           <h2 className="heading-section mt-4 max-w-full text-[clamp(2.25rem,10vw,3.5rem)] leading-[1.02] [overflow-wrap:anywhere] sm:text-[clamp(2.65rem,4.1vw,3.5rem)]">
-            <span className="text-gold">{tx("How")}</span> <SlashBreakText text={tx("Customers/Partners Work")} />
+            {tx("How it works")}
           </h2>
           <p className="mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80">
-            {tx("Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
+            {tx("Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
           </p>
         </div>
 

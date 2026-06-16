@@ -39,7 +39,7 @@ export const aixcoLiveImages = {
   batumiMosaicBlueTower: `${liveImageBase}/batumi-mosaic-hd/batumi-blue-tower.jpg`,
   batumiMosaicModernCoastline: `${liveImageBase}/batumi-mosaic-hd/batumi-modern-coastline.jpg`,
   batumiMosaicSunsetCoastline: `${liveImageBase}/batumi-mosaic-hd/batumi-sunset-coastline.jpg`,
-  batumiOtium: `${optimizedImageBase}/otium-reverance.webp`,
+  batumiCurrentProject: `${optimizedImageBase}/current-project-reverance.webp`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
   teamOwais: `${optimizedImageBase}/owais.webp`,
   teamWalter: `${optimizedImageBase}/walter.webp`,
@@ -53,7 +53,7 @@ export const aixcoLiveVideos = {
   fundTwo: `${optimizedVideoBase}/fund2-optimized.mp4`,
   fundThree: `${optimizedVideoBase}/fund3-optimized.mp4`,
   tempo: `${optimizedVideoBase}/tempo-optimized.mp4`,
-  otium: `${optimizedVideoBase}/otium-optimized.mp4`,
+  currentProject: `${optimizedVideoBase}/current-project-optimized.mp4`,
 } as const;
 
 export const aixcoLiveVideoPreviews = {
@@ -63,7 +63,7 @@ export const aixcoLiveVideoPreviews = {
   fundOne: `${previewVideoBase}/fund1-preview.mp4`,
   fundTwo: `${previewVideoBase}/fund2-preview.mp4`,
   fundThree: `${previewVideoBase}/fund3-preview.mp4`,
-  otium: `${previewVideoBase}/otium-preview.mp4`,
+  currentProject: `${previewVideoBase}/current-project-preview.mp4`,
 } as const;
 
 export const aixcoHeroBackgroundVideo = {
@@ -82,14 +82,16 @@ export const aixcoBatumiGalleryVideos = [
 ] as const;
 
 export const aixcoLiveDocuments = {
-  otium: `${documentBase}/otium.pdf`,
+  clientBrochure: `${documentBase}/aixco-client-brochure.pdf`,
+  currentProject: `${documentBase}/current-project.pdf`,
 } as const;
 
 export const aixcoLiveAssetDetails = {
   dubaiFundOne: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiFundTwo: `${liveImageBase}/fund2.png`,
-  otiumCatalog: `${documentBase}/otium-catalog.jpeg`,
-  otiumPdf: aixcoLiveDocuments.otium,
+  clientBrochurePdf: aixcoLiveDocuments.clientBrochure,
+  currentProjectCatalog: `${documentBase}/current-project-catalog.jpeg`,
+  currentProjectPdf: aixcoLiveDocuments.currentProject,
 } as const;
 
 export const aixcoDubaiEdenHouseCanalGallery = [

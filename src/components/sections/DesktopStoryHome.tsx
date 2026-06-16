@@ -22,7 +22,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from "react";
+import { startTransition, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { LiveVideo } from "@/components/LiveVideo";
 import { ExpandableImage } from "@/components/ExpandableImage";
 import { FooterLegalBar } from "@/components/Footer";
@@ -67,7 +67,7 @@ import {
   type DubaiFund,
 } from "./dubai/dubai-data";
 import { DubaiImageMarquee } from "./dubai/DubaiImageMarquee";
-import { heroIntroText, heroOpportunityFootnote, heroOpportunityText } from "./hero/hero-ui";
+import { heroIntroText, heroOpportunityFootnote, heroStoryStatementLines } from "./hero/hero-ui";
 
 type StoryChapterKey =
   | "hero"
@@ -140,14 +140,21 @@ const storyMediaSwitchTransition = {
   duration: 0.48,
   ease: premiumEase,
 };
+
+type StorySectionMetric = {
+  height: number;
+  top: number;
+};
+
 const storyTeamSwitchIntervalMs = 2400;
 const storyTeamResumeDelayMs = 3200;
-const maxAnimatedStoryLetters = 72;
+const maxAnimatedStoryLetters = 64;
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
 const philosophyPlatformStats = [
   { ...philosophyStats[0], shortLabel: "First acquisition" },
   { ...philosophyStats[1], shortLabel: "GDV" },
+  { value: "90+", label: "Professional and highly skilled employees", shortLabel: "Skilled employees" },
   { ...philosophyStats[2], shortLabel: "Transactions" },
   { ...philosophyStats[3], shortLabel: "Value transacted" },
 ] as const;
@@ -163,10 +170,10 @@ const participationVideoMap = {
     previewSrc: aixcoLiveVideoPreviews.batumiOverview,
     poster: aixcoLiveImages.batumiOverviewPoster,
   },
-  otium: {
-    src: aixcoLiveVideos.otium,
-    previewSrc: aixcoLiveVideoPreviews.otium,
-    poster: aixcoLiveImages.batumiOtium,
+  currentProject: {
+    src: aixcoLiveVideos.currentProject,
+    previewSrc: aixcoLiveVideoPreviews.currentProject,
+    poster: aixcoLiveImages.batumiCurrentProject,
   },
 } as const;
 
@@ -236,7 +243,7 @@ function StoryTextReveal({
   const letterCount = useMemo(() => Array.from(label).filter((character) => !/\s/u.test(character)).length, [label]);
   const useCompactReveal = letterCount > maxAnimatedStoryLetters;
   const animationDurationMs = useMemo(
-    () => useCompactReveal ? 1100 : Math.min(2800, letterCount * 28 + 780),
+    () => useCompactReveal ? 1450 : Math.min(3200, letterCount * 30 + 850),
     [letterCount, useCompactReveal],
   );
   const [animationState, setAnimationState] = useState<"idle" | "animating" | "played">("idle");
@@ -251,6 +258,11 @@ function StoryTextReveal({
     if (!isInView || animationState !== "idle") return;
     setAnimationRun((current) => current + 1);
     setAnimationState("animating");
+  }, [animationState, isInView]);
+
+  useEffect(() => {
+    if (isInView || animationState === "idle") return;
+    setAnimationState("idle");
   }, [animationState, isInView]);
 
   useEffect(() => {
@@ -285,7 +297,13 @@ function StoryTextReveal({
         ) : (
           tokens.map((token, tokenIndex) => (
             token.trim() ? (
-              <span key={`${token}-${tokenIndex}`} className="story-letter-reveal__word">
+              <span
+                key={`${token}-${tokenIndex}`}
+                className={cn(
+                  "story-letter-reveal__word",
+                  Array.from(token).length > 14 && "story-letter-reveal__word--long",
+                )}
+              >
                 {Array.from(token).map((character, characterIndex) => {
                   const characterRevealIndex = revealIndex;
                   revealIndex += 1;
@@ -454,7 +472,7 @@ function StoryChrome({
   const currentLangName = LANGS.find((item) => item.code === lang)?.native ?? lang.toUpperCase();
   const [menuOpen, setMenuOpen] = useState(false);
   const activeChapterKey = storyChapters[activeIndex]?.key ?? "hero";
-  const useLightMobileLogo = ["hero", "about", "aboutAccess", "contact"].includes(activeChapterKey);
+  const useLightMobileLogo = ["hero", "about", "aboutAccess"].includes(activeChapterKey);
 
   const handleChapterLink = (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => {
     setLangOpen(false);
@@ -574,7 +592,7 @@ function StoryChrome({
                   )}
                   aria-hidden="true"
                 />
-                <span className="truncate">{tx(chapter.label)}</span>
+                <span className="min-w-0 [overflow-wrap:anywhere]">{tx(chapter.label)}</span>
               </a>
             );
           })}
@@ -669,7 +687,7 @@ function StoryChrome({
                       )}
                       aria-hidden="true"
                     />
-                    <span className="truncate">{tx(chapter.label)}</span>
+                    <span className="min-w-0 [overflow-wrap:anywhere]">{tx(chapter.label)}</span>
                   </a>
                 );
               })}
@@ -821,7 +839,7 @@ function StorySceneBody({
     <div
       ref={copyRef}
       data-story-scene-copy
-      className="flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center overflow-hidden"
+      className="flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center overflow-visible"
     >
       <StorySceneReveal
         isActive={isRevealed}
@@ -844,6 +862,7 @@ function SceneShell({
   tone = "light",
   density = "default",
   mediaWeight = "default",
+  fullWidth = false,
   isActive,
   isRevealed = isActive,
   fitContent = true,
@@ -858,6 +877,7 @@ function SceneShell({
   tone?: "light" | "dark" | "surface";
   density?: "default" | "compact" | "dense";
   mediaWeight?: "default" | "wide" | "gallery";
+  fullWidth?: boolean;
   isActive: boolean;
   isRevealed?: boolean;
   fitContent?: boolean;
@@ -871,20 +891,20 @@ function SceneShell({
 
   const resolvedOverlay: StoryMediaOverlay =
     mediaOverlay === "light" && tone === "dark" ? "contact" : mediaOverlay;
-  const copyColumnSpan = mediaWeight === "gallery" ? "xl:col-span-5" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-7";
+  const copyColumnSpan = fullWidth ? "xl:col-span-12" : mediaWeight === "gallery" ? "xl:col-span-5" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-7";
   const mediaColumnSpan = mediaWeight === "gallery" ? "xl:col-span-7" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-5";
 
   return (
-    <div className={`relative h-full min-h-0 ${toneClass}`}>
+    <div className={`relative min-h-[100svh] ${toneClass}`}>
       <div
-        className="grid h-full min-h-0"
+        className="grid min-h-[100svh]"
         style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}
       >
         <div aria-hidden className="hidden xl:block" />
-        <div className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-12">
+        <div className="grid min-h-[100svh] grid-cols-1 xl:grid-cols-12">
           <div
             data-story-scene-column
-            className={`relative z-10 flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-stretch justify-center overflow-hidden ${
+            className={`relative z-10 flex min-h-[100svh] w-full min-w-0 flex-1 flex-col items-stretch justify-center overflow-visible ${
               reverse ? `xl:order-2 ${copyColumnSpan}` : `xl:order-1 ${copyColumnSpan}`
             }`}
           >
@@ -893,39 +913,41 @@ function SceneShell({
             </StorySceneBody>
           </div>
 
-          <div
-            data-story-scene-media
-            data-story-media-active={isActive ? "true" : "false"}
-            className={`story-media-panel relative h-full min-h-0 overflow-hidden bg-foreground/5 ${
-              reverse ? `xl:order-1 ${mediaColumnSpan}` : `xl:order-2 ${mediaColumnSpan}`
-            }`}
-          >
-            {mediaContent ? (
-              <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
-                <div className="story-media-panel__stage story-media-panel__stage--custom relative h-full w-full overflow-hidden">
-                  {mediaContent}
-                </div>
-              </StoryMediaReveal>
-            ) : media ? (
-              <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
-                <div className="story-media-panel__stage relative h-full w-full overflow-hidden">
-                  {mediaCrossfadeKey ? (
-                    <StoryCrossfadeMediaPanel
-                      media={media}
-                      mediaKey={mediaCrossfadeKey}
-                      isActive={isActive}
-                      priority={priority}
-                    />
-                  ) : (
-                    <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
-                  )}
-                  <StoryMediaGradient overlay={resolvedOverlay} reverse={reverse} />
-                </div>
-              </StoryMediaReveal>
-            ) : (
-              <div className="h-full bg-gradient-to-br from-primary/12 via-background to-secondary/12" />
-            )}
-          </div>
+          {fullWidth ? null : (
+            <div
+              data-story-scene-media
+              data-story-media-active={isActive ? "true" : "false"}
+              className={`story-media-panel relative min-h-[28rem] overflow-hidden bg-foreground/5 xl:min-h-[100svh] ${
+                reverse ? `xl:order-1 ${mediaColumnSpan}` : `xl:order-2 ${mediaColumnSpan}`
+              }`}
+            >
+              {mediaContent ? (
+                <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
+                  <div className="story-media-panel__stage story-media-panel__stage--custom relative h-full w-full overflow-hidden">
+                    {mediaContent}
+                  </div>
+                </StoryMediaReveal>
+              ) : media ? (
+                <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
+                  <div className="story-media-panel__stage relative h-full w-full overflow-hidden">
+                    {mediaCrossfadeKey ? (
+                      <StoryCrossfadeMediaPanel
+                        media={media}
+                        mediaKey={mediaCrossfadeKey}
+                        isActive={isActive}
+                        priority={priority}
+                      />
+                    ) : (
+                      <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
+                    )}
+                    <StoryMediaGradient overlay={resolvedOverlay} reverse={reverse} />
+                  </div>
+                </StoryMediaReveal>
+              ) : (
+                <div className="h-full bg-gradient-to-br from-primary/12 via-background to-secondary/12" />
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -933,64 +955,72 @@ function SceneShell({
 }
 
 function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy: string) => string; onRegister: () => void }) {
+  const statementLabel = heroStoryStatementLines.map((line) => tx(line)).join(" ");
+
   return (
     <div className="relative h-full min-h-0 overflow-hidden text-white">
       <div className="relative z-10 grid h-full min-h-0" style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}>
         <div aria-hidden className="hidden xl:block" />
-        <div className="flex h-full min-h-0 items-end overflow-hidden px-8 pb-[clamp(2.5rem,6svh,5rem)] pt-[clamp(5rem,8svh,7rem)] 2xl:px-14">
+        <div className="story-hero-copy">
           <motion.div
-            className="max-w-[74rem]"
-            initial={{ opacity: 0, y: 32 }}
-            animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0.92, y: 8 }}
+            className="story-hero-lockup hero-reference-font"
+            initial={{ opacity: 0, y: 28 }}
+            animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0.94, y: 6 }}
             transition={revealTransition}
           >
-            <p className="mb-5 max-w-full text-[clamp(0.82rem,0.86vw,1.05rem)] font-medium uppercase tracking-normal text-white/88 drop-shadow-[0_3px_16px_rgba(0,0,0,0.45)]">
-              {tx("Quality Real Estate - Buy / Broker / Manage")}
-            </p>
-            <img
-              src={aixcoLiveLogos.aixcoMark}
-              alt=""
-              aria-hidden="true"
-              data-story-hero-standalone-mark="true"
-              className="mb-3 h-[clamp(7rem,12vw,13rem)] w-[clamp(7rem,12vw,13rem)] shrink-0 object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.3)]"
-            />
-            <h1
-              aria-label="AIXCO.GLOBAL"
-              data-brand-lockup="story-hero"
-              className="mt-[clamp(1rem,3svh,2.5rem)] flex max-w-full items-center gap-[0.06em] font-semibold uppercase leading-none tracking-[-0.045em] text-[clamp(3.2rem,6.45vw,7.1rem)] text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.38)]"
+            <header className="story-hero-brand">
+              <p className="story-hero-kicker">{tx("Real Estate Investment")}</p>
+              <h1 aria-label="AIXCO.GLOBAL" data-brand-lockup="story-hero" className="story-hero-wordmark hero-title-shadow">
+                <img
+                  src={aixcoLiveLogos.aixcoMark}
+                  alt=""
+                  aria-hidden="true"
+                  data-story-hero-title-mark="true"
+                  className="story-hero-wordmark__mark"
+                />
+                <span className="story-hero-wordmark__text">
+                  IXCO<span className="hero-title-dot text-primary-glow">.</span>GLOBAL
+                </span>
+              </h1>
+            </header>
+
+            <div className="story-hero-rule" aria-hidden="true" />
+
+            {heroIntroText ? (
+              <p className="story-hero-intro">{tx(heroIntroText)}</p>
+            ) : null}
+
+            <div
+              className="story-hero-statement"
+              aria-label={statementLabel}
+              role="group"
             >
-              <img
-                src={aixcoLiveLogos.aixcoMark}
-                alt=""
-                aria-hidden="true"
-                data-story-hero-title-mark="true"
-                className="h-[0.98em] w-[0.98em] shrink-0 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.24)]"
-              />
-              <span className="min-w-0">IXCO.GLOBAL</span>
-            </h1>
-            <p className="mt-8 max-w-3xl text-[clamp(1.1rem,1.4vw,1.45rem)] leading-[1.55] text-white/86">
-              {tx(heroIntroText)}
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+              {heroStoryStatementLines.map((line) => (
+                <span key={line} className="story-hero-statement__line">
+                  {tx(line)}
+                </span>
+              ))}
+              {heroOpportunityFootnote ? (
+                <p className="story-hero-statement__note">{tx(heroOpportunityFootnote)}</p>
+              ) : null}
+            </div>
+
+            <div className="story-hero-actions">
               <button type="button" onClick={onRegister} className="btn-gold">
                 {tx("Register")}
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </button>
-              <a href="#batumi" onClick={(event) => {
-                event.preventDefault();
-                replaceLocationHash("#batumi");
-                scrollToHash("#batumi");
-              }} className="btn-ghost-gold border-white/35 bg-white/12 text-white hover:bg-white/18 hover:text-white">
-                {tx("Batumi apartments")}
+              <a
+                href="#batumi"
+                onClick={(event) => {
+                  event.preventDefault();
+                  replaceLocationHash("#batumi");
+                  scrollToHash("#batumi");
+                }}
+                className="btn-ghost-gold story-hero-actions__ghost"
+              >
+                {tx("Explore opportunities")}
               </a>
-            </div>
-            <div className="mt-8 max-w-3xl text-white/88">
-              <p className="text-[clamp(1.35rem,2.2vw,2.35rem)] font-light uppercase leading-none">
-                {tx(heroOpportunityText)}
-              </p>
-              <p className="mt-3 max-w-2xl text-sm font-normal normal-case leading-relaxed text-white/82 md:text-base">
-                {tx(heroOpportunityFootnote)}
-              </p>
             </div>
           </motion.div>
         </div>
@@ -1009,17 +1039,26 @@ function StoryDubaiFundRow({ fund, tx }: { fund: DubaiFund; tx: (copy: string) =
       <div className="grid w-full grid-cols-2 gap-x-4 gap-y-[clamp(0.75rem,1.25svh,1rem)] sm:grid-cols-3 sm:gap-x-6">
         {headlineMetrics.map((detail) => {
           const metric = formatMetricValue(detail.value);
+          const translatedFullValue = tx(detail.value);
+          const useTranslatedFullValue =
+            translatedFullValue !== detail.value && (Boolean(metric.prefix) || Boolean(metric.subtext));
           return (
             <div key={`${detail.label}:${detail.value}`}>
               <p className="story-metric-label">{tx(detail.label)}</p>
               <p className="story-metric-value">
-                {metric.prefix ? `${tx(metric.prefix)} ` : ""}
-                {metric.value}
-                {metric.subtext ? (
-                  <span className="ml-0.5 text-[0.58em] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                    {tx(metric.subtext)}
-                  </span>
-                ) : null}
+                {useTranslatedFullValue ? (
+                  translatedFullValue
+                ) : (
+                  <>
+                    {metric.prefix ? `${tx(metric.prefix)} ` : ""}
+                    {tx(metric.value)}
+                    {metric.subtext ? (
+                      <span className="ml-0.5 text-[0.58em] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                        {tx(metric.subtext)}
+                      </span>
+                    ) : null}
+                  </>
+                )}
               </p>
             </div>
           );
@@ -1144,8 +1183,8 @@ function BatumiBenefitIconGrid({
   const items = [
     { icon: BadgeEuro, metric: "€50k", label: benefits[3] ?? "Entry from €50,000" },
     { icon: KeyRound, metric: "100%", label: benefits[1] ?? "100% foreign ownership" },
-    { icon: TrendingUp, metric: "60%", label: benefits[4] ?? "Bank financing available from 60% of the property value" },
-    { icon: CirclePercent, metric: "8%", label: benefits[5] ?? "Approx. 8% net rental yields" },
+    { icon: TrendingUp, metric: "60%+", label: benefits[4] ?? "Bank financing minimum 60%" },
+    { icon: CirclePercent, metric: "10-12%", label: benefits[5] ?? "Approx. 10-12% net rental yields" },
   ];
 
   return (
@@ -1237,7 +1276,7 @@ function AboutScene({
                 </span>
               </h2>
               <p className="mt-[clamp(1.2rem,2.4svh,2rem)] max-w-[46rem] text-[clamp(1.05rem,1.28vw,1.34rem)] leading-[1.62] text-white/88">
-                {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
+                {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on selected emerging-market opportunities, with a legacy track record in Switzerland and Dubai.")}
               </p>
             </div>
             <dl className="mt-[clamp(1.7rem,3.4svh,2.6rem)] grid max-w-[48rem] grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
@@ -1329,7 +1368,7 @@ function PhilosophyPlatformScene({
       isRevealed={isRevealed}
       tone="light"
       density="dense"
-      fitContent
+      fitContent={false}
       media={{
         kind: "image",
         src: aixcoLiveImages.batumiMosaicNightSkyline,
@@ -1338,15 +1377,15 @@ function PhilosophyPlatformScene({
       }}
       mediaOverlay="none"
     >
-      <p className="eyebrow story-eyebrow">{tx("Long-term platform")}</p>
+      <p className="eyebrow story-eyebrow">{tx("Global opportunities")}</p>
       <h2 className="story-h2 story-philosophy-platform-title">
-        <StoryTextReveal label={tx("International expansion through selected opportunities")} />
+        <StoryTextReveal label={tx("Expanding through carefully selected opportunities")} />
       </h2>
       <p className="story-body text-foreground/76">
-        {tx("The platform connects selected opportunities, international teams, and service discipline around long-term property value.")}
+        {tx("AIXCO combines local market expertise with international experience to provide access to opportunities positioned for long-term growth and capital appreciation.")}
       </p>
 
-      <dl data-layout="story-philosophy-platform-stats" className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+      <dl data-layout="story-philosophy-platform-stats" className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
         {philosophyPlatformStats.map((stat) => (
           <div key={stat.label} className="story-philosophy-stat">
             <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
@@ -1382,6 +1421,7 @@ function PhilosophyDetailScene({
   title,
   summary,
   sections,
+  media,
 }: {
   isActive: boolean;
   isRevealed: boolean;
@@ -1393,25 +1433,33 @@ function PhilosophyDetailScene({
   media?: StoryMedia;
 }) {
   return (
-    <div className="relative h-full min-h-0 bg-surface text-foreground">
+    <div className="relative min-h-[100svh] overflow-visible bg-surface text-foreground">
+      {media ? (
+        <div aria-hidden className="story-philosophy-detail-media absolute inset-0">
+          <StoryMediaPanel media={media} isActive={isActive} />
+          <div className="story-philosophy-detail-media__wash absolute inset-0" />
+        </div>
+      ) : null}
       <div
-        className="grid h-full min-h-0"
+        className="relative z-10 grid min-h-[100svh]"
         style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}
       >
         <div aria-hidden className="hidden xl:block" />
         <div
           data-story-scene-column
           data-story-media-active={isActive ? "true" : "false"}
-          className="story-philosophy-detail-stage relative z-10 flex h-full min-h-0 flex-col overflow-hidden bg-surface"
+          className="story-philosophy-detail-stage relative z-10 flex min-h-[100svh] flex-col"
         >
-          <StorySceneBody fitContent isRevealed={isRevealed}>
-            <p className="eyebrow story-eyebrow">{tx(eyebrow)}</p>
-            <h2 className="story-h2 story-philosophy-detail-title">
-              <StoryTextReveal label={tx(title)} />
-            </h2>
-            <p className="story-body text-foreground/76">{tx(summary)}</p>
+          <StorySceneReveal isActive={isRevealed} className="story-philosophy-detail-copy relative z-10 w-full">
+            <div className="story-philosophy-detail-intro">
+              <p className="eyebrow story-eyebrow">{tx(eyebrow)}</p>
+              <h2 className="story-philosophy-detail-title">
+                <StoryTextReveal label={tx(title)} />
+              </h2>
+              <p className="story-philosophy-detail-summary">{tx(summary)}</p>
+            </div>
 
-            <div data-layout="story-philosophy-detail" className="grid w-full gap-6 lg:grid-cols-2 lg:gap-x-8 lg:gap-y-5">
+            <div data-layout="story-philosophy-detail" className="story-philosophy-detail-grid">
               {sections.map((section) => (
                 <article key={section.title} className="story-philosophy-detail-column min-w-0">
                   <p className="story-metric-label text-primary/78">{tx(section.eyebrow)}</p>
@@ -1426,7 +1474,7 @@ function PhilosophyDetailScene({
                 </article>
               ))}
             </div>
-          </StorySceneBody>
+          </StorySceneReveal>
         </div>
       </div>
     </div>
@@ -1443,14 +1491,14 @@ function AboutObjectivesScene({
   tx: (copy: string) => string;
 }) {
   return (
-    <div className="relative h-full min-h-0 bg-surface text-foreground">
+    <div className="relative min-h-[100svh] bg-surface text-foreground">
       <div
-        className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
+        className="grid min-h-[100svh] grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
         style={{ "--story-custom-sidebar": storySidebarWidth } as CSSProperties}
       >
         <div aria-hidden className="hidden xl:block" />
-        <div className="relative flex h-full min-h-0 items-center justify-center overflow-hidden px-[clamp(2rem,6vw,7rem)] py-[clamp(3rem,8svh,6rem)]">
-          <div aria-hidden className="absolute inset-x-0 bottom-0 h-[26svh] overflow-hidden opacity-70">
+        <div className="story-objectives-stage relative flex min-h-[100svh] items-center overflow-hidden px-[clamp(1.5rem,5vw,6rem)] py-[clamp(3rem,8svh,6rem)]">
+          <div aria-hidden className="story-objectives-media absolute inset-0 overflow-hidden">
             <Image
               src={aixcoLiveImages.aboutArchitecture}
               alt=""
@@ -1462,20 +1510,22 @@ function AboutObjectivesScene({
               className="h-full w-full object-cover"
               style={{ objectPosition: "center 64%" }}
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--surface))_0%,hsl(var(--surface)/0.72)_42%,hsl(var(--surface)/0.22)_100%)]" />
+            <div className="story-objectives-media__wash absolute inset-0" />
           </div>
-          <StorySceneReveal isActive={isRevealed} className="relative z-10 mx-auto w-full max-w-[70rem] text-center">
-            <p className="eyebrow story-eyebrow justify-center text-primary/80">{tx("Client objectives")}</p>
-            <h2 className="mx-auto mt-6 max-w-[20ch] text-[clamp(2.2rem,4.3vw,5.2rem)] font-light leading-[1.15] tracking-normal text-foreground/72">
-              <StoryTextReveal label={tx("Every client starts with a different objective")} />
-            </h2>
-            <div data-layout="story-about-objectives" className="mx-auto mt-[clamp(1.6rem,3.2svh,2.4rem)] grid max-w-[54rem] gap-4">
-              <p className="text-[clamp(1.02rem,1.18vw,1.28rem)] leading-[1.7] text-foreground/70">
-                {tx("Some are looking to build long-term wealth through real estate ownership. Others want recurring income, international diversification, or simply a way to participate in a market they believe has strong future potential.")}
-              </p>
-              <p className="text-[clamp(1rem,1.08vw,1.18rem)] leading-[1.68] text-foreground/62">
-                {tx("Rather than offering a one-size-fits-all solution, we begin by understanding what matters most to you.")}
-              </p>
+          <StorySceneReveal isActive={isRevealed} className="story-objectives-copy relative z-10 w-full">
+            <p className="eyebrow story-eyebrow text-primary/80">{tx("Client objectives")}</p>
+            <div data-layout="story-about-objectives" className="story-objectives-grid mt-[clamp(1.4rem,3svh,2.4rem)] grid w-full gap-[clamp(1.4rem,4vw,4.5rem)]">
+              <h2 className="story-objectives-title font-light tracking-normal text-foreground">
+                <StoryTextReveal label={tx("Every client starts with a different objective")} />
+              </h2>
+              <div className="story-objectives-text grid gap-4">
+                <p className="story-objectives-lead text-foreground/74">
+                  {tx("Some are looking to build long-term wealth through real estate ownership. Others want recurring income, international diversification, or simply a way to participate in a market they believe has strong future potential.")}
+                </p>
+                <p className="story-objectives-support text-foreground/66">
+                  {tx("Rather than offering a one-size-fits-all solution, we begin by understanding what matters most to you.")}
+                </p>
+              </div>
             </div>
           </StorySceneReveal>
         </div>
@@ -1494,18 +1544,18 @@ function AboutAccessScene({
   tx: (copy: string) => string;
 }) {
   return (
-    <div className="relative h-full min-h-0 bg-[#11100e] text-white">
+    <div className="relative min-h-[100svh] bg-[#11100e] text-white">
       <div
-        className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
+        className="grid min-h-[100svh] grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
         style={{ "--story-custom-sidebar": storySidebarWidth } as CSSProperties}
       >
         <div aria-hidden className="hidden xl:block" />
-        <div className="relative h-full min-h-0 overflow-hidden">
+        <div className="relative min-h-[100svh] overflow-hidden">
           <StoryMediaReveal isActive={isRevealed} className="story-about-access-media absolute inset-0">
             <div className="story-about-access-image relative h-full w-full">
               <Image
                 src={aixcoLiveImages.batumiSeafrontPoster}
-                alt={tx("Selected Batumi property opportunity")}
+                alt={tx("Selected emerging market property opportunity")}
                 fill
                 loading="lazy"
                 decoding="async"
@@ -1522,7 +1572,7 @@ function AboutAccessScene({
           />
           <StorySceneReveal
             isActive={isRevealed}
-            className="relative z-10 flex h-full min-h-0 flex-col justify-end px-[clamp(2rem,5.4vw,6rem)] pb-[clamp(3rem,7.2svh,5.5rem)] pt-[clamp(4rem,8svh,6rem)]"
+            className="relative z-10 flex min-h-[100svh] flex-col justify-end px-[clamp(2rem,5.4vw,6rem)] pb-[clamp(3rem,7.2svh,5.5rem)] pt-[clamp(4rem,8svh,6rem)]"
           >
             <p className="eyebrow story-eyebrow text-white/78">{tx("Client approach")}</p>
             <div data-layout="story-about-access" className="grid max-w-[72rem] gap-[clamp(1rem,2.6svh,2rem)] lg:grid-cols-[minmax(0,0.92fr)_minmax(26rem,0.75fr)] lg:items-end">
@@ -1675,15 +1725,16 @@ function BatumiScene({
       tone="surface"
       reverse
       mediaWeight="gallery"
+      fitContent={false}
       mediaContent={<BatumiVisualMosaic tx={tx} />}
       mediaOverlay="none"
     >
-      <p className="eyebrow story-eyebrow">{tx("Batumi - Current opportunity")}</p>
+      <p className="eyebrow story-eyebrow">{tx("Emerging market opportunity")}</p>
       <h2 className="story-h2">
         <StoryTextReveal label={tx("Batumi")} />
       </h2>
       <p className="story-body text-foreground/78">
-        {tx("Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.")}
+        {tx("Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €50,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.")}
       </p>
       <BatumiBenefitIconGrid benefits={batumiBenefits} tx={tx} />
       <div data-layout="story-batumi-properties" className="w-full divide-y divide-foreground/30">
@@ -1722,6 +1773,7 @@ function MaterialsScene({
       isActive={isActive}
       isRevealed={isRevealed}
       tone="light"
+      fitContent={false}
       media={{
         kind: "image",
         src: aixcoLiveImages.batumiOverviewPoster,
@@ -1737,7 +1789,7 @@ function MaterialsScene({
         {tx("Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.")}
       </p>
       <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
-        {materialDownloads.slice(0, 4).map((material) => {
+        {materialDownloads.map((material) => {
           const Icon = getMaterialIcon(material.format);
           const href = getSafePublicAssetHref(material.href, "#materials");
 
@@ -1753,8 +1805,8 @@ function MaterialsScene({
                 <Icon size={22} aria-hidden />
               </span>
               <span className="min-w-0">
-                <span className="story-card-title block truncate">{tx(material.title)}</span>
-                <span className="story-body mt-0.5 block truncate text-foreground/62">{material.format} / {tx(material.audience)}</span>
+                <span className="story-card-title block [overflow-wrap:anywhere]">{tx(material.title)}</span>
+                <span className="story-body mt-0.5 block text-foreground/62 [overflow-wrap:anywhere]">{material.format} / {tx(material.audience)}</span>
               </span>
               <Download className="h-4 w-4 text-primary transition-transform group-hover:translate-y-0.5" aria-hidden />
             </a>
@@ -1786,6 +1838,7 @@ function ParticipateScene({
       isRevealed={isRevealed}
       tone="surface"
       density="compact"
+      fitContent={false}
       reverse
       media={{
         kind: "video",
@@ -1798,10 +1851,10 @@ function ParticipateScene({
     >
       <p className="eyebrow story-eyebrow">{tx("How to work with AIXCO")}</p>
       <h2 className="story-h2">
-        <StoryTextReveal label={`${tx("How")} ${tx("Customers/Partners Work")}`} />
+        <StoryTextReveal label={tx("How it works")} />
       </h2>
       <p className="story-body text-foreground/76">
-        {tx("Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
+        {tx("Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
       </p>
       <div className="w-full divide-y divide-foreground/30" data-layout="story-participation-routes">
         {[primaryRoute, ...remainingRoutes].map((route, index) => (
@@ -1845,6 +1898,7 @@ function HowScene({
       isActive={isActive}
       isRevealed={isRevealed}
       tone="light"
+      fitContent={false}
       media={{
         kind: "image",
         src: aixcoLiveImages.batumiFogPoster,
@@ -2033,6 +2087,50 @@ function PartnersScene({
   );
 }
 
+type StoryFaqItem = SiteContent["faqGroups"][number]["items"][number] & { group: string };
+
+function StoryFaqDropdown({
+  item,
+  tx,
+  openId,
+  setOpenId,
+}: {
+  item: StoryFaqItem;
+  tx: (copy: string) => string;
+  openId: string | null;
+  setOpenId: (id: string | null) => void;
+}) {
+  const itemId = `${item.group}-${item.q}`;
+  const panelId = `story-faq-panel-${itemId.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase()}`;
+  const isOpen = openId === itemId;
+
+  return (
+    <article className="story-faq-item">
+      <button
+        type="button"
+        className="story-faq-trigger"
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        onClick={() => setOpenId(openId === itemId ? null : itemId)}
+      >
+        <span className="min-w-0">
+          <span className="story-metric-label text-primary/75">{tx(item.group)}</span>
+          <span className="story-faq-question">{tx(item.q)}</span>
+        </span>
+        <ChevronDown className={cn("story-faq-icon", isOpen && "story-faq-icon--open")} aria-hidden />
+      </button>
+      <div
+        id={panelId}
+        className={cn("story-faq-answer", isOpen && "story-faq-answer--open")}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <p>{tx(item.a)}</p>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function FaqScene({
   isActive,
   isRevealed,
@@ -2043,12 +2141,8 @@ function FaqScene({
   tx: (copy: string) => string;
 }) {
   const { faqGroups } = useSiteContent();
-  const coreFaqs = faqGroups.flatMap((group) => group.items.slice(0, 2).map((item) => ({ ...item, group: group.group }))).slice(0, 4);
-  const customerGroup = faqGroups.find((group) => group.group === "Customer");
-  const companyFinancingFaq = customerGroup?.items.find((item) => item.q === "Can I ask about AIXCO company financing?");
-  const highlightedFaqs = companyFinancingFaq
-    ? [...coreFaqs.slice(0, 3), { ...companyFinancingFaq, group: customerGroup?.group ?? "Customer" }]
-    : coreFaqs;
+  const allFaqs = faqGroups.flatMap((group) => group.items.map((item) => ({ ...item, group: group.group })));
+  const [openId, setOpenId] = useState<string | null>(null);
 
   return (
     <SceneShell
@@ -2056,20 +2150,25 @@ function FaqScene({
       isRevealed={isRevealed}
       tone="surface"
       density="compact"
-      reverse
-      media={{ kind: "image", src: aixcoLiveImages.batumiMosaicModernCoastline, alt: tx("Batumi coastal real estate reference"), position: "center" }}
+      fullWidth
+      fitContent={false}
     >
       <p className="eyebrow story-eyebrow">{tx("FAQs")}</p>
-      <h2 className="story-h2">
-        <StoryTextReveal label={tx("Frequently asked questions")} />
+      <h2 className="story-h2 story-faq-title">
+        <StoryTextReveal label={tx("FAQ essentials")} />
       </h2>
-      <div data-layout="story-faq-list" className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
-        {highlightedFaqs.map((item) => (
-          <div key={`${item.group}-${item.q}`}>
-            <p className="story-metric-label text-primary/75">{tx(item.group)}</p>
-            <h3 className="story-card-title">{tx(item.q)}</h3>
-            <p className="story-body text-foreground/66">{tx(item.a)}</p>
-          </div>
+      <p className="story-body text-foreground/70">
+        {tx("Click a question to read the answer.")}
+      </p>
+      <div data-layout="story-faq-list" className="story-faq-list">
+        {allFaqs.map((item) => (
+          <StoryFaqDropdown
+            key={`${item.group}-${item.q}`}
+            item={item}
+            tx={tx}
+            openId={openId}
+            setOpenId={setOpenId}
+          />
         ))}
       </div>
     </SceneShell>
@@ -2094,11 +2193,11 @@ function ContactScene({
   return (
     <footer
       data-story-footer="true"
-      className="story-footer site-footer flex h-full min-h-0 flex-col bg-background text-foreground"
+      className="story-footer site-footer flex min-h-[100svh] flex-col bg-background text-foreground"
     >
-      <div className="container-x flex h-full min-h-0 w-full flex-col py-5 md:py-6 lg:py-7">
+      <div className="container-x flex min-h-[100svh] w-full flex-col py-5 md:py-6 lg:py-7">
         <div className="min-h-0 flex-1">
-          <StorySceneBody density="compact" fitContent isRevealed={isRevealed}>
+          <StorySceneBody density="compact" fitContent={false} isRevealed={isRevealed}>
           <div className="flex w-full flex-col gap-4 md:gap-5">
             <Logo />
 
@@ -2179,12 +2278,14 @@ function ContactScene({
 export function DesktopStoryHome() {
   const storyRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<Array<HTMLElement | null>>([]);
+  const sectionMetricsRef = useRef<Array<StorySectionMetric | null>>([]);
   const scrollFrameRef = useRef<number | null>(null);
   const pageProgressRef = useRef(-1);
-  const textRevealProgressRef = useRef<number[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [langOpen, setLangOpen] = useState(false);
   const [sectionPresence, setSectionPresence] = useState<boolean[]>(() => storyChapters.map((_, index) => index === 0));
+  const activeIndexRef = useRef(0);
+  const sectionPresenceRef = useRef(sectionPresence);
   const { openJourney, openLogin, openPartner, openRegister } = useUI();
   const { lang, setLang, tx } = useI18n();
 
@@ -2225,6 +2326,19 @@ export function DesktopStoryHome() {
     };
   }, []);
 
+  const refreshSectionMetrics = useCallback(() => {
+    sectionMetricsRef.current = storyChapters.map((_, index) => {
+      const section = sectionRefs.current[index];
+      if (!section) return null;
+
+      const rect = section.getBoundingClientRect();
+      return {
+        height: Math.max(1, rect.height),
+        top: rect.top + window.scrollY,
+      };
+    });
+  }, []);
+
   const syncProgress = useCallback(() => {
     scrollFrameRef.current = null;
     const viewportHeight = Math.max(1, window.innerHeight);
@@ -2233,7 +2347,7 @@ export function DesktopStoryHome() {
     const scrollableDistance = Math.max(1, documentHeight - viewportHeight);
     const nextProgress = clamp(scrollY / scrollableDistance, 0, 1);
     if (
-      Math.abs(nextProgress - pageProgressRef.current) >= 0.002 ||
+      Math.abs(nextProgress - pageProgressRef.current) >= 0.006 ||
       nextProgress === 0 ||
       nextProgress === 1
     ) {
@@ -2241,23 +2355,50 @@ export function DesktopStoryHome() {
       storyRef.current?.style.setProperty("--story-page-progress", `${(nextProgress * 100).toFixed(2)}%`);
     }
 
-    const revealDistance = Math.max(1, viewportHeight * 0.95);
     const viewportCenter = viewportHeight * 0.5;
-    const nextActiveIndex = clamp(
-      Math.floor((scrollY + viewportCenter) / viewportHeight),
-      0,
-      storyChapters.length - 1,
-    );
-    const nextSectionPresence = storyChapters.map((_, index) => Math.abs(index - nextActiveIndex) <= 1);
+    if (sectionMetricsRef.current.length !== storyChapters.length) {
+      refreshSectionMetrics();
+    }
 
-    const nearbyStart = Math.max(0, nextActiveIndex - 1);
-    const nearbyEnd = Math.min(storyChapters.length - 1, nextActiveIndex + 1);
+    const sectionRects = storyChapters.map((_, index) => {
+      const metric = sectionMetricsRef.current[index];
+      if (!metric) return null;
 
-    for (let index = nearbyStart; index <= nearbyEnd; index += 1) {
+      const top = metric.top - scrollY;
+      return {
+        bottom: top + metric.height,
+        height: metric.height,
+        top,
+      };
+    });
+    let nextActiveIndex = 0;
+    let closestDistance = Number.POSITIVE_INFINITY;
+
+    sectionRects.forEach((rect, index) => {
+      if (!rect) return;
+
+      const isCentered = rect.top <= viewportCenter && rect.bottom >= viewportCenter;
+      const distance = isCentered
+        ? 0
+        : Math.min(Math.abs(rect.top - viewportCenter), Math.abs(rect.bottom - viewportCenter));
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        nextActiveIndex = index;
+      }
+    });
+
+    nextActiveIndex = clamp(nextActiveIndex, 0, storyChapters.length - 1);
+    const nextSectionPresence = sectionRects.map((rect, index) => {
+      if (!rect) return Math.abs(index - nextActiveIndex) <= 1;
+      return rect.top < viewportHeight * 1.05 && rect.bottom > -viewportHeight * 0.05;
+    });
+
+    for (let index = 0; index < sectionRects.length; index += 1) {
       const section = sectionRefs.current[index];
-      if (!section) continue;
+      const rect = sectionRects[index];
+      if (!section || !rect || (!nextSectionPresence[index] && Math.abs(index - nextActiveIndex) > 1)) continue;
 
-      const rect = section.getBoundingClientRect();
       const top = rect.top;
       const bottom = rect.bottom;
       const sectionHeight = Math.max(1, rect.height);
@@ -2269,17 +2410,6 @@ export function DesktopStoryHome() {
           ? sectionHeight - viewportHeight
           : viewportHeight;
       const exitProgress = clamp(-top / Math.max(1, exitRange), 0, 1);
-      const localProgress = (viewportHeight - top) / revealDistance;
-      const textProgress = clamp(localProgress, 0, 1);
-      const previousProgress = textRevealProgressRef.current[index] ?? -1;
-      if (
-        Math.abs(textProgress - previousProgress) >= 0.006 ||
-        textProgress === 0 ||
-        textProgress === 1
-      ) {
-        textRevealProgressRef.current[index] = textProgress;
-        section.style.setProperty("--story-text-reveal-progress", textProgress.toFixed(3));
-      }
       if (isAboutSection) {
         section.style.setProperty("--story-section-exit-progress", exitProgress.toFixed(3));
       }
@@ -2291,19 +2421,21 @@ export function DesktopStoryHome() {
       nextSectionPresence[index] = top < viewportHeight * 0.98 && bottom > viewportHeight * 0.02;
     }
 
-    setActiveIndex((current) => (current === nextActiveIndex ? current : nextActiveIndex));
+    if (activeIndexRef.current !== nextActiveIndex) {
+      activeIndexRef.current = nextActiveIndex;
+      startTransition(() => setActiveIndex(nextActiveIndex));
+    }
 
-    setSectionPresence((current) => {
-      if (
-        current.length === nextSectionPresence.length &&
-        current.every((value, index) => value === nextSectionPresence[index])
-      ) {
-        return current;
-      }
+    const currentPresence = sectionPresenceRef.current;
+    const hasPresenceChanged =
+      currentPresence.length !== nextSectionPresence.length ||
+      currentPresence.some((value, index) => value !== nextSectionPresence[index]);
 
-      return nextSectionPresence;
-    });
-  }, []);
+    if (hasPresenceChanged) {
+      sectionPresenceRef.current = nextSectionPresence;
+      startTransition(() => setSectionPresence(nextSectionPresence));
+    }
+  }, [refreshSectionMetrics]);
 
   const requestScrollSync = useCallback(() => {
     if (scrollFrameRef.current !== null) return;
@@ -2311,19 +2443,38 @@ export function DesktopStoryHome() {
   }, [syncProgress]);
 
   useEffect(() => {
+    refreshSectionMetrics();
     syncProgress();
 
+    const refreshAndSync = () => {
+      refreshSectionMetrics();
+      requestScrollSync();
+    };
+    const refreshTimers = [120, 620, 1400].map((delay) => window.setTimeout(refreshAndSync, delay));
+
     window.addEventListener("scroll", requestScrollSync, { passive: true });
-    window.addEventListener("resize", requestScrollSync);
+    window.addEventListener("resize", refreshAndSync);
+    window.addEventListener("load", refreshAndSync);
 
     return () => {
+      refreshTimers.forEach((timer) => window.clearTimeout(timer));
       window.removeEventListener("scroll", requestScrollSync);
-      window.removeEventListener("resize", requestScrollSync);
+      window.removeEventListener("resize", refreshAndSync);
+      window.removeEventListener("load", refreshAndSync);
       if (scrollFrameRef.current !== null) {
         window.cancelAnimationFrame(scrollFrameRef.current);
       }
     };
-  }, [requestScrollSync, syncProgress]);
+  }, [refreshSectionMetrics, requestScrollSync, syncProgress]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      refreshSectionMetrics();
+      requestScrollSync();
+    }, 80);
+
+    return () => window.clearTimeout(timer);
+  }, [lang, refreshSectionMetrics, requestScrollSync]);
 
   useEffect(() => {
     if (!window.location.hash) return undefined;
@@ -2344,6 +2495,7 @@ export function DesktopStoryHome() {
 
       const chapterIndex = storyChapters.findIndex((entry) => entry.key === chapter.key);
       if (chapterIndex >= 0) {
+        activeIndexRef.current = chapterIndex;
         setActiveIndex(chapterIndex);
       }
 
@@ -2436,7 +2588,9 @@ export function DesktopStoryHome() {
                 "isolate relative scroll-mt-0",
                 chapter.key === "about"
                   ? "story-about-scroll-section h-[100svh] max-h-[100svh] overflow-hidden"
-                  : "h-[100svh] max-h-[100svh] overflow-hidden",
+                  : chapter.key === "hero"
+                    ? "h-[100svh] max-h-[100svh] overflow-hidden"
+                    : "min-h-[100svh] overflow-visible",
               )}
             >
               {scene}

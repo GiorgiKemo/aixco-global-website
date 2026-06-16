@@ -26,7 +26,8 @@ export function BatumiPropertyCard({ property, idx, tx }: BatumiPropertyCardProp
   const mediaOrderClass = imageFirst ? "order-2 md:order-1 lg:order-1" : "order-2 md:order-2 lg:order-2";
   const copyOrderClass = imageFirst ? "order-1 md:order-2 lg:order-2" : "order-1 md:order-1 lg:order-1";
   const documentKey = getSafeAssetKey(property.url, property.id);
-  const documentHref = getSafePublicAssetHref(batumiDetailAssetMap[documentKey] ?? batumiDocumentMap[documentKey], "#batumi");
+  const documentAsset = batumiDetailAssetMap[documentKey] ?? batumiDocumentMap[documentKey];
+  const documentHref = documentAsset ? getSafePublicAssetHref(documentAsset, "#batumi") : null;
   const mediaHeightClass = "min-h-[22rem] md:min-h-0 lg:min-h-0";
 
   return (
@@ -50,19 +51,21 @@ export function BatumiPropertyCard({ property, idx, tx }: BatumiPropertyCardProp
           poster={batumiImageMap[property.image]}
           className="aspect-[4/5] w-full !rounded-none !shadow-none md:aspect-auto md:h-full md:min-h-0"
           fit="cover"
-          rootMargin="700px 0px"
+          rootMargin="220px 0px"
         />
-        <a
-          href={documentHref}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={`${tx("View Asset Details")}: ${tx(property.name)}`}
-          className="asset-detail-cta"
-          onClick={(event) => event.stopPropagation()}
-        >
-          <span className="asset-detail-cta__label">{tx("View Asset Details")}</span>
-          <ArrowRight size={17} className="asset-detail-cta__icon" />
-        </a>
+        {documentHref ? (
+          <a
+            href={documentHref}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`${tx("View Asset Details")}: ${tx(property.name)}`}
+            className="asset-detail-cta"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <span className="asset-detail-cta__label">{tx("View Asset Details")}</span>
+            <ArrowRight size={17} className="asset-detail-cta__icon" />
+          </a>
+        ) : null}
       </div>
       <div
         data-batumi-property-copy

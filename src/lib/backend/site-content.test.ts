@@ -96,17 +96,18 @@ describe("site content backend", () => {
 
     expect(content.participationRoutes.map((route) => route.id)).toEqual(["apartment", "brokerage", "management"]);
     expect(JSON.stringify(content.participationRoutes)).not.toMatch(/bond|guaranteed|30% return/i);
-    expect(content.faqGroups[0].items[0].q).toBe("What is the minimum amount to reserve or buy?");
-    expect(content.faqGroups[0].items[0].a).toContain("Entry starts from €50,000");
-    expect(content.faqGroups[0].items[0].a).toContain("10% down payment");
-    expect(content.faqGroups[0].items.some((item) => item.q === "Can I ask about AIXCO company financing?")).toBe(true);
+    expect(content.faqGroups[0].group).toBe("Real Estate Investment");
+    expect(content.faqGroups[0].items[0].q).toBe("How do I get started?");
+    expect(content.faqGroups[0].items[1].q).toBe("What is the minimum investment amount?");
+    expect(content.faqGroups[0].items[1].a).toContain("€5,000");
+    expect(content.faqGroups[0].items.some((item) => item.q === "Can foreigners buy property in Batumi, Georgia?")).toBe(true);
   });
 
   it("uses distinct participation media for each route", () => {
     expect(siteContentDefaults.participationRoutes.map((route) => route.video)).toEqual([
       "batumiBuy",
       "batumiOverview",
-      "otium",
+      "currentProject",
     ]);
     expect(new Set(siteContentDefaults.participationRoutes.map((route) => route.video)).size).toBe(
       siteContentDefaults.participationRoutes.length,

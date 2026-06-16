@@ -91,7 +91,7 @@ export function LegacyTimeline() {
                       onClick={(event) => handleChapterNav(event, anchor)}
                       className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-primary"
                     >
-                      {chapter.id === "batumi" ? tx("View Batumi opportunities") : tx("View Dubai legacy portfolio")}
+                      {chapter.id === "batumi" ? tx("View emerging market opportunities") : tx("View Dubai legacy portfolio")}
                       <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
                     </Link>
                   ) : null}

@@ -101,7 +101,9 @@ export function FooterLegalBar({
             <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" />
             {tx("Official systems certified")}
           </span>
-          <span className="truncate text-xs text-muted-foreground">{tx("ISO 27001-2022 Certified Systems.")}</span>
+          <span className="min-w-0 text-xs leading-snug text-muted-foreground [overflow-wrap:anywhere]">
+            {tx("ISO 27001-2022 Certified Systems.")}
+          </span>
         </span>
       </a>
 

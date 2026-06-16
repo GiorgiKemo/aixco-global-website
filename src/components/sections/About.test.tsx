@@ -23,7 +23,7 @@ describe("About", () => {
     expect(headline).toHaveAttribute("data-brand-lockup", "about");
     expect(within(headline).getByText("AIXCO.GLOBAL")).toBeInTheDocument();
     expect(headline.querySelector("img")).toHaveAttribute("src", expect.stringContaining("AIXW"));
-    expect(screen.queryByRole("heading", { name: "AIXCO - Real Estate Platform" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "AIXCO - Real Estate Investment" })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /Read AIXCO Philosophy/i })).not.toBeInTheDocument();
 
     const storyImage = screen.getByRole("img", {

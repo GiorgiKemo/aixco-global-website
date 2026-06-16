@@ -21,14 +21,14 @@ describe("Contact", () => {
     const href = createContactMailtoHref({
       name: "Audit User",
       email: "audit@example.com",
-      interest: "Batumi apartments",
+      interest: "Emerging market opportunities",
       message: "I want more details about availability.",
     });
 
     expect(href).toContain("mailto:info@aixco.global");
     expect(decodeURIComponent(href)).toContain("Name: Audit User");
     expect(decodeURIComponent(href)).toContain("Email: audit@example.com");
-    expect(decodeURIComponent(href)).toContain("Interest: Batumi apartments");
+    expect(decodeURIComponent(href)).toContain("Interest: Emerging market opportunities");
     expect(decodeURIComponent(href)).toContain("I want more details about availability.");
   });
 
@@ -37,7 +37,7 @@ describe("Contact", () => {
       {
         name: "Audit User",
         email: "audit@example.com",
-        interest: "Batumi apartments",
+        interest: "Emerging market opportunities",
         message: "I want more details about availability.",
       },
       "info@aixco.global\r\nbcc:attacker@example.com",
@@ -84,7 +84,7 @@ describe("Contact", () => {
   it("allows the localized contact headline to wrap in narrow columns", () => {
     renderContact();
 
-    expect(screen.getByRole("heading", { name: /Start your Batumi real estate journey/ })).toHaveClass("[overflow-wrap:anywhere]");
+    expect(screen.getByRole("heading", { name: /Start your emerging-market real estate journey/ })).toHaveClass("[overflow-wrap:anywhere]");
   });
 
   it("moves focus to the first invalid contact field and associates validation copy", async () => {
@@ -103,7 +103,7 @@ describe("Contact", () => {
 
     fireEvent.change(screen.getByRole("textbox", { name: "Name*" }), { target: { value: "Audit User" } });
     fireEvent.change(screen.getByRole("textbox", { name: "Email*" }), { target: { value: "audit@example.com" } });
-    fireEvent.change(screen.getByRole("textbox", { name: "Real estate interest" }), { target: { value: "Batumi apartments" } });
+    fireEvent.change(screen.getByRole("textbox", { name: "Real estate interest" }), { target: { value: "Emerging market opportunities" } });
     fireEvent.change(screen.getByRole("textbox", { name: "Message*" }), {
       target: { value: "I want more details about availability." },
     });

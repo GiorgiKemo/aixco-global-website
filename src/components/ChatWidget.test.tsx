@@ -47,9 +47,9 @@ describe("ChatWidget", () => {
   it("opens a live chat panel, sends a visitor message, and prepares an email transcript", async () => {
     vi.mocked(requestWebsiteChatbotReply).mockResolvedValueOnce({
       ok: true,
-      answer: "Batumi apartments start from the website's selected property route, with ownership, tours, rental income, and next steps covered by AIXCO.",
+      answer: "Emerging market opportunities start from the website's selected property route, with ownership, tours, rental income, and next steps covered by AIXCO.",
       confidence: "high",
-      matchedTopics: ["Buy an Apartment in Batumi"],
+      matchedTopics: ["Emerging market opportunities"],
     });
     renderWidget();
 
@@ -58,21 +58,21 @@ describe("ChatWidget", () => {
     expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(/message/i), {
-      target: { value: "I want to invest in Batumi apartments." },
+      target: { value: "I want to explore emerging market opportunities." },
     });
     fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
 
-    expect(screen.getByText("I want to invest in Batumi apartments.")).toBeInTheDocument();
-    expect(await screen.findByText(/Batumi apartments start from the website's selected property route/i)).toBeInTheDocument();
+    expect(screen.getByText("I want to explore emerging market opportunities.")).toBeInTheDocument();
+    expect(await screen.findByText(/Emerging market opportunities start from the website's selected property route/i)).toBeInTheDocument();
     expect(requestWebsiteChatbotReply).toHaveBeenCalledWith(
       expect.arrayContaining([
-        expect.objectContaining({ role: "visitor", text: "I want to invest in Batumi apartments." }),
+        expect.objectContaining({ role: "visitor", text: "I want to explore emerging market opportunities." }),
       ]),
     );
 
     const emailTranscript = screen.getByRole("link", { name: /email transcript/i });
     expect(emailTranscript).toHaveAttribute("href", expect.stringContaining("mailto:info@aixco.global"));
-    expect(emailTranscript).toHaveAttribute("href", expect.stringContaining("Batumi%20apartments"));
+    expect(emailTranscript).toHaveAttribute("href", expect.stringContaining("emerging%20market%20opportunities"));
   });
 
   it("automatically saves visitor chats to the backend with a stable live session id", async () => {

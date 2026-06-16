@@ -21,11 +21,11 @@ export function Batumi() {
           className="flex min-h-[calc(100svh-4rem)] scroll-mt-16 flex-col md:min-h-[calc(100svh-5rem)] md:scroll-mt-20"
         >
           <div className="scroll-reveal mb-5 shrink-0 md:mb-4 lg:mb-4">
-            <p className="eyebrow">{tx("Batumi · Current opportunity")}</p>
+            <p className="eyebrow">{tx("Emerging market opportunity")}</p>
             <h2 className="heading-section mt-4 max-w-2xl [overflow-wrap:anywhere]">{tx("Batumi")}</h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base">
               {tx(
-                "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.",
+                "Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €50,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.",
               )}
             </p>
           </div>
@@ -61,7 +61,7 @@ export function Batumi() {
                 title={tx(video.title)}
                 poster={video.poster}
                 className="aspect-[9/16]"
-                rootMargin="700px 0px"
+                rootMargin="220px 0px"
               />
             ))}
           </div>

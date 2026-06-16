@@ -182,7 +182,7 @@ export function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[
       title: "AIXCO.Global company profile",
       priority: 9,
       keywords: ["company", "about", "offices", "founded", "address", "email", "contact"],
-      answer: `${content.company.name} is a real estate buy-sell-brokerage platform founded in ${content.company.founded}, with offices in ${content.company.offices.join(", ")}. AIXCO helps clients buy Batumi apartments, broker property, and administer real estate—with legacy track records in Switzerland and Dubai. Contact: ${content.company.email}. Address: ${content.company.address}.`,
+      answer: `${content.company.name} is a real estate buy-sell-brokerage company founded in ${content.company.founded}, with offices in ${content.company.offices.join(", ")}. AIXCO helps clients access emerging-market real estate opportunities, broker property, and administer real estate—with legacy track records in Switzerland and Dubai. Contact: ${content.company.email}. Address: ${content.company.address}.`,
     }),
     entry({
       id: "contact",
@@ -368,6 +368,14 @@ function scoreEntry(query: string, queryTokens: string[], candidate: KnowledgeEn
     score += 18;
   }
 
+  if (candidate.section === "faq") {
+    const titleTokens = tokenize(candidate.title);
+    const titleOverlap = titleTokens.filter((token) => queryTokens.includes(token)).length;
+    if (titleOverlap >= 2) {
+      score += 8 + titleOverlap * 2;
+    }
+  }
+
   return score;
 }
 
@@ -376,7 +384,7 @@ function fallbackAnswer(content: SiteContent, query: string): WebsiteChatbotAnsw
     confidence: "low",
     matchedTopics: [],
     answer: sanitizeDisplayText(
-      `I can answer from the AIXCO website about Batumi apartments, client materials and downloads, Dubai legacy projects, property administration, broker and developer onboarding, partners, FAQs, and contact details. I do not have enough website content to answer "${query}" precisely. Please add a little more context, or contact ${content.company.email} for the AIXCO team.`,
+      `I can answer from the AIXCO website about emerging-market opportunities, client materials and downloads, Dubai legacy projects, property administration, broker and developer onboarding, partners, FAQs, and contact details. I do not have enough website content to answer "${query}" precisely. Please add a little more context, or contact ${content.company.email} for the AIXCO team.`,
     ),
   };
 }
@@ -389,7 +397,7 @@ function maybeSeparateProductAnswer(content: SiteContent, query: string): Websit
     confidence: "high",
     matchedTopics: ["AIXCO real estate focus"],
     answer: sanitizeDisplayText(
-      `AIXCO.Global is real-estate-first: buying Batumi apartments, brokerage, Dubai legacy projects, and property administration. Separate company-financing information may be available by direct contact with the AIXCO team, but it is secondary to the website journey and no bond terms are promoted here. For questions, contact ${content.company.email}.`,
+      `AIXCO.Global is real-estate-first: selected emerging-market opportunities, brokerage, Dubai legacy projects, and property administration. Separate company-financing information may be available by direct contact with the AIXCO team, but it is secondary to the website journey and no bond terms are promoted here. For questions, contact ${content.company.email}.`,
     ),
   };
 }
@@ -422,7 +430,7 @@ export function answerWebsiteChat(messages: ChatMessageInput[], content: SiteCon
     return {
       confidence: "low",
       matchedTopics: [],
-      answer: "Ask me about Batumi apartments, client materials and downloads, Dubai legacy projects, property administration, broker onboarding, developer partnerships, partners, team, or FAQs.",
+      answer: "Ask me about emerging-market opportunities, client materials and downloads, Dubai legacy projects, property administration, broker onboarding, developer partnerships, partners, team, or FAQs.",
     };
   }
 
@@ -430,7 +438,7 @@ export function answerWebsiteChat(messages: ChatMessageInput[], content: SiteCon
     return {
       confidence: "high",
       matchedTopics: ["AIXCO website assistant"],
-      answer: "Hello. I can answer questions from the AIXCO website about Batumi apartments, client materials and downloads, Dubai legacy projects, property administration, broker and developer onboarding, partners, team, FAQs, and contact details.",
+      answer: "Hello. I can answer questions from the AIXCO website about emerging-market opportunities, client materials and downloads, Dubai legacy projects, property administration, broker and developer onboarding, partners, team, FAQs, and contact details.",
     };
   }
 

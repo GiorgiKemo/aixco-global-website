@@ -108,40 +108,33 @@ export const textTranslations = {
     "tr": "Gizlilik Politikası",
     "ar": "سياسة الخصوصية"
   },
-  "Quality Real Estate — Buy · Broker · Manage": {
-    "de": "Qualitäts-Immobilien — Kaufen · Makeln · Verwalten",
-    "ru": "Качественная недвижимость — Покупка · Брокеридж · Управление",
-    "ka": "ხარისხიანი უძრავი ქონება — ყიდვა · ბროკერინგი · მართვა",
-    "tr": "Kaliteli Gayrimenkul — Satın Alma · Aracılık · Yönetim",
-    "ar": "عقارات عالية الجودة — شراء · وساطة · إدارة"
+  "Real Estate Investment": {
+    "de": "Immobilieninvestment",
+    "ru": "Real Estate Investment",
+    "ka": "Real Estate Investment",
+    "tr": "Real Estate Investment",
+    "ar": "Real Estate Investment"
   },
-  "Buy, sell, and broker real estate with AIXCO—from apartment purchases to end-to-end property administration.": {
+  "Explore selected real estate opportunities with AIXCO.": {
     "de": "Mit AIXCO Immobilien kaufen, verkaufen und vermitteln—von Wohnungskäufen bis zur umfassenden Immobilienverwaltung.",
     "ru": "Покупайте, продавайте и брокеруйте недвижимость с AIXCO — от покупки квартир до комплексного управления объектами.",
     "ka": "AIXCO-თან ერთად იყიდეთ, გაყიდეთ და დააბროკერეთ უძრავი ქონება—ბინების შეძენიდან ობიექტების სრულ ადმინისტრირებამდე.",
     "tr": "AIXCO ile gayrimenkul alın, satın ve aracılık yapın—daire alımlarından uçtan uca mülk yönetimine kadar.",
     "ar": "اشترِ وبِعْ وبَسِّط العقارات مع AIXCO — من شراء الشقق إلى الإدارة الشاملة للعقارات."
   },
-  "Participate where growth, stability, and long term value creation meet. AIXCO gives private partners a simple and transparent way to join selected real estate projects, starting from €10,000.": {
-    "de": "Beteiligen Sie sich dort, wo Wachstum, Stabilität und langfristige Wertschöpfung zusammenkommen. AIXCO bietet privaten Partnern einen einfachen und transparenten Zugang zu ausgewählten Immobilienprojekten ab 10.000 €.",
-    "ru": "Участвуйте там, где сочетаются рост, стабильность и долгосрочное создание стоимости. AIXCO предлагает частным партнерам простой и прозрачный способ присоединиться к выбранным проектам недвижимости, начиная от €10 000.",
-    "ka": "მიიღეთ მონაწილეობა იქ, სადაც ერთიანდება ზრდა, სტაბილურობა და გრძელვადიანი ღირებულების შექმნა. AIXCO კერძო პარტნიორებს სთავაზობს მარტივ და გამჭვირვალე გზას შერჩეულ უძრავი ქონების პროექტებში მონაწილეობის მისაღებად, დაწყებული €10,000-დან.",
-    "tr": "Büyüme, istikrar ve uzun vadeli değer yaratımının buluştuğu yerde yer alın. AIXCO, özel ortaklara seçilmiş gayrimenkul projelerine 10.000 €'dan başlayan tutarlarla katılmaları için basit ve şeffaf bir yol sunar.",
-    "ar": "شارك حيث يلتقي النمو والاستقرار وخلق القيمة على المدى الطويل. تمنح AIXCO الشركاء من القطاع الخاص طريقة بسيطة وشفافة للانضمام إلى مشاريع عقارية مختارة بدءًا من 10,000 يورو."
+  "Explore selected real estate opportunities through AIXCO with transparent guidance, long-term support, and direct contact.": {
+    "de": "Ausgewählte Immobilienchancen über AIXCO mit transparenter Beratung, langfristiger Unterstützung und direktem Kontakt erkunden.",
+    "ru": "Explore selected real estate opportunities through AIXCO with transparent guidance, long-term support, and direct contact.",
+    "ka": "Explore selected real estate opportunities through AIXCO with transparent guidance, long-term support, and direct contact.",
+    "tr": "Explore selected real estate opportunities through AIXCO with transparent guidance, long-term support, and direct contact.",
+    "ar": "Explore selected real estate opportunities through AIXCO with transparent guidance, long-term support, and direct contact."
   },
-  "Starting from €10,000": {
-    "de": "Ab 10.000 €",
-    "ru": "От 10 000 €",
-    "ka": "10,000 ევროდან",
-    "tr": "10.000 €'dan başlayan",
-    "ar": "ابتداءً من 10,000 يورو"
-  },
-  "AIXCO - Real Estate Platform": {
-    "de": "AIXCO - Real Estate Platform",
-    "ru": "AIXCO - Real Estate Platform",
-    "ka": "AIXCO - Real Estate Platform",
-    "tr": "AIXCO - Real Estate Platform",
-    "ar": "AIXCO - Real Estate Platform"
+  "AIXCO - Real Estate Investment": {
+    "de": "AIXCO - Real Estate Investment",
+    "ru": "AIXCO - Real Estate Investment",
+    "ka": "AIXCO - Real Estate Investment",
+    "tr": "AIXCO - Real Estate Investment",
+    "ar": "AIXCO - Real Estate Investment"
   },
   "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.": {
     "de": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.",
@@ -290,14 +283,14 @@ export const textTranslations = {
     "tr": "50.000 €'dan giriş",
     "ar": "الدخول من 50,000 يورو"
   },
-  "Bank financing available from 60% of the property value": {
+  "Bank financing minimum 60%": {
     "de": "Bankfinanzierung ab 60% des Immobilienwerts verfügbar",
     "ru": "Банковское финансирование доступно от 60% стоимости недвижимости",
     "ka": "საბანკო დაფინანსება ხელმისაწვდომია ქონების ღირებულების 60%-დან",
     "tr": "Mülk değerinin %60'ından başlayan banka finansmanı mevcuttur",
     "ar": "تمويل مصرفي متاح من 60٪ من قيمة العقار"
   },
-  "Approx. 8% net rental yields": {
+  "Approx. 10-12% net rental yields": {
     "de": "Ca. 8% Nettomietrenditen",
     "ru": "Около 8% чистой арендной доходности",
     "ka": "დაახლოებით 8% სუფთა საიჯარო შემოსავალი",
@@ -346,12 +339,12 @@ export const textTranslations = {
     "tr": "Müşteri/Ortak Kazancı",
     "ar": "أرباح العملاء/الشركاء"
   },
-  "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.": {
-    "de": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
-    "ru": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
-    "ka": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
-    "tr": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
-    "ar": "Buy a Batumi apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase."
+  "Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.": {
+    "de": "Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
+    "ru": "Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
+    "ka": "Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
+    "tr": "Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.",
+    "ar": "Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase."
   },
   "Administer Your Property": {
     "de": "Verwalten Sie Ihre Immobilie",
@@ -654,12 +647,12 @@ export const textTranslations = {
     "tr": "Öne çıkan vurgu",
     "ar": "أبرز عنصر"
   },
-  "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.": {
-    "de": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
-    "ru": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
-    "ka": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
-    "tr": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
-    "ar": "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments."
+  "A premier real estate company focused on identifying, acquiring, and managing high-potential residential and commercial developments.": {
+    "de": "A premier real estate company focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+    "ru": "A premier real estate company focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+    "ka": "A premier real estate company focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+    "tr": "A premier real estate company focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+    "ar": "A premier real estate company focused on identifying, acquiring, and managing high-potential residential and commercial developments."
   },
   "The business is positioned around value creation through strategic asset selection, operational excellence, redevelopment, and property management.": {
     "de": "Das Unternehmen ist auf Wertschöpfung durch strategische Asset-Auswahl, operative Exzellenz, Neuentwicklung und Immobilienmanagement ausgerichtet.",
@@ -899,7 +892,7 @@ export const textTranslations = {
     "tr": "Evet. Müşteriler doğrudan satın alma, yapılandırılmış katılım veya her ikisini de tercih edebilir.",
     "ar": "نعم. يمكن للعملاء اختيار الشراء المباشر أو المشاركة المنظمة أو كليهما."
   },
-  "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, project delivery, and external factors.": {
+  "No. Approx. 10-12% net rental yields are scenario-based and depend on occupancy, market conditions, property management, project delivery, and external factors.": {
     "de": "Nein. Ca. 8% Nettomietrenditen sind szenariobasiert und hängen von Belegung, Marktbedingungen, Verwaltung, Projektlieferung und externen Faktoren ab.",
     "ru": "Нет. Около 8% чистой арендной доходности является сценарным показателем и зависит от заполняемости, рынка, управления, реализации проекта и внешних факторов.",
     "ka": "არა. დაახლოებით 8% სუფთა საიჯარო შემოსავალი არის სცენარზე დაფუძნებული და დამოკიდებულია დატვირთულობაზე, ბაზარზე, ქონების მართვაზე, პროექტის მიწოდებასა და გარე ფაქტორებზე.",
@@ -1883,26 +1876,26 @@ export const textTranslations = {
     "tr": "2009",
     "ar": "2009"
   },
-  "Otium": {
-    "de": "Otium",
-    "ru": "Otium",
-    "ka": "Otium",
-    "tr": "Otium",
-    "ar": "Otium"
-  }
 } as const;
 
 export const attributeTranslations = {
   "title": {
-    "AIXCO.Global | Quality Real Estate — Buy · Broker · Manage": {
-      "de": "AIXCO.Global | Qualitäts-Immobilien — Kaufen · Makeln · Verwalten",
-      "ru": "AIXCO.Global | Качественная недвижимость — Покупка · Брокеридж · Управление",
-      "ka": "AIXCO.Global | ხარისხიანი უძრავი ქონება — ყიდვა · ბროკერინგი · მართვა",
-      "tr": "AIXCO.Global | Kaliteli Gayrimenkul — Satın Alma · Aracılık · Yönetim",
-      "ar": "AIXCO.Global | عقارات عالية الجودة — شراء · وساطة · إدارة"
+    "AIXCO.Global | Real Estate Investment": {
+      "de": "AIXCO.Global | Immobilieninvestment",
+      "ru": "AIXCO.Global | Real Estate Investment",
+      "ka": "AIXCO.Global | Real Estate Investment",
+      "tr": "AIXCO.Global | Real Estate Investment",
+      "ar": "AIXCO.Global | Real Estate Investment"
     }
   },
   "content": {
+    "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.": {
+      "de": "Ausgewaehlte Immobilienchancen mit transparenter Euro-Preisgestaltung ab 50.000 EUR, Vermittlung und Immobilienverwaltung durch AIXCO erkunden.",
+      "ru": "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.",
+      "ka": "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.",
+      "tr": "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.",
+      "ar": "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO."
+    },
     "Buy selected Batumi apartments with transparent euro pricing from €50,000. Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.": {
       "de": "Ausgewählte Batumi-Wohnungen ab 50.000 € mit transparenter Euro-Preisgestaltung. Kauf, Verkauf und Makler in der Schweiz, Dubai-Legacy und Georgien.",
       "ru": "Покупка квартир в Батуми от €50 000 с прозрачными ценами. Покупка, продажа и брокеридж — Швейцария, legacy Дубая, Грузия.",

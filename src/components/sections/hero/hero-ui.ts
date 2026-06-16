@@ -3,11 +3,16 @@ import type { Variants } from "@/lib/framer-motion";
 export const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 export const heroIntroText =
-  "Buy, sell, and broker real estate with AIXCO—from apartment purchases to end-to-end property administration.";
+  "";
 
-export const heroOpportunityText = "Enter Uprising real estate with AIXCO";
+export const heroOpportunityText = "Emerging market opportunities with AIXCO";
 export const heroOpportunityFootnote =
-  "Buy a flat, review selected apartments, and explore an opportunity-driven emerging market with the AIXCO team.";
+  "";
+
+export const heroStoryStatementLines = [
+  "Emerging market",
+  "opportunities with AIXCO",
+] as const;
 
 export const headlineVariants: Variants = {
   hidden: {},

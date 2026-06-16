@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+﻿import type { LucideIcon } from "lucide-react";
 import { Building2, FileText, Home, Percent, ShieldCheck, TrendingUp } from "lucide-react";
 import type { SiteContent } from "@/lib/backend/site-content";
 import {
@@ -14,25 +14,25 @@ export type BatumiBenefits = SiteContent["batumiBenefits"];
 export type Translate = (copy: string) => string;
 
 export const batumiImageMap: Record<string, string> = {
-  "batumi-otium": aixcoLiveImages.batumiOtium,
+  "batumi-current-project": aixcoLiveImages.batumiCurrentProject,
 };
 
 export const batumiVideoMap: Record<string, { src: string; previewSrc: string }> = {
-  otium: { src: aixcoLiveVideos.otium, previewSrc: aixcoLiveVideoPreviews.otium },
+  currentProject: { src: aixcoLiveVideos.currentProject, previewSrc: aixcoLiveVideoPreviews.currentProject },
 };
 
 export const batumiDocumentMap: Record<string, string> = {
-  otium: aixcoLiveDocuments.otium,
+  currentProject: aixcoLiveDocuments.currentProject,
 };
 
 export const batumiDetailAssetMap: Record<string, string> = {
-  otium: aixcoLiveAssetDetails.otiumCatalog,
+  currentProject: aixcoLiveAssetDetails.currentProjectCatalog,
 };
 
 export const batumiMarketMetrics = [
   { label: "Entry", value: "EUR 50k", subtext: "from", subtextPosition: "before", highlight: true },
-  { label: "Bank financing", value: "60%", subtext: "property value", subtextPosition: "after" },
-  { label: "Net rental yields", value: "8%", subtext: "approx.", subtextPosition: "before" },
+  { label: "Bank financing", value: "60%+", subtext: "minimum", subtextPosition: "after" },
+  { label: "Net rental yields", value: "10-12%", subtext: "approx.", subtextPosition: "before" },
 ] as const;
 
 export const batumiMarketDetailIcons: LucideIcon[] = [Home, Percent, TrendingUp, ShieldCheck];

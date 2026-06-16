@@ -69,7 +69,7 @@ describe("lead capture service", () => {
         {
           name: " Audit User ",
           email: "AUDIT@EXAMPLE.COM",
-          interest: " Batumi apartments ",
+          interest: " Emerging market opportunities ",
           message: "I want more details about availability.",
         },
         {
@@ -92,7 +92,7 @@ describe("lead capture service", () => {
         source: "contact_form",
         name: "Audit User",
         email: "audit@example.com",
-        interest: "Batumi apartments",
+        interest: "Emerging market opportunities",
         locale: "en",
         page_path: "/#contact",
         user_agent: "Vitest",
@@ -137,7 +137,7 @@ describe("lead capture service", () => {
           reason: "auto_sync",
           messages: [
             { role: "aixco", text: "Welcome" },
-            { role: "visitor", text: "I want to discuss Batumi apartments." },
+            { role: "visitor", text: "I want to discuss apartment opportunities." },
           ],
         },
         { page_path: "/#contact" },
@@ -151,7 +151,7 @@ describe("lead capture service", () => {
       table: "chat_transcripts",
       payload: {
         session_id: "chat-session-123",
-        interest: "Batumi apartments",
+        interest: "Emerging market opportunities",
         message_count: 2,
       },
     });

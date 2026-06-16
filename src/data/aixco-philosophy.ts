@@ -42,11 +42,11 @@ export const philosophySections = [
     ],
   },
   {
-    eyebrow: "Platform",
-    title: "International expansion through selected opportunities",
+    eyebrow: "Global opportunities",
+    title: "Expanding through carefully selected opportunities",
     paragraphs: [
       "Built upon decades of market experience and responsible ownership, AIXCO continues to expand internationally through selected opportunities in Dubai and Georgia.",
-      "Today, AIXCO manages projects representing more than $400 million in gross development value, supported by an international team of over 90 professionals and a global network of clients, brokers, developers, and partners.",
+      "Today, AIXCO manages projects representing more than $400 million in gross development value, supported by an international team of over 90 professional and highly skilled employees and a global network of clients, brokers, developers, and partners.",
       "AIXCO has completed more than 2,000 real estate transactions and transacted over $4.2 billion in property value across international markets.",
     ],
   },
@@ -55,7 +55,7 @@ export const philosophySections = [
     title: "Integrity, stability, discipline, and responsible risk assessment",
     paragraphs: [
       "Integrity, stability, discipline, and responsible risk assessment remain central to every aspect of our real estate practice.",
-      "As AIXCO continues to grow internationally, its vision remains unchanged: to build a resilient real estate services platform - buy, broker, and manage property - rooted in Swiss heritage, disciplined execution, and enduring long-term value.",
+      "As AIXCO continues to grow internationally, its vision remains unchanged: to build resilient real estate services - buy, broker, and manage property - rooted in Swiss heritage, disciplined execution, and enduring long-term value.",
     ],
   },
 ] as const;

@@ -82,10 +82,10 @@ export function Contact() {
         <div className="scroll-reveal md:col-span-1 lg:col-span-5">
           <p className="eyebrow">{tx("Contact")}</p>
           <h2 className="heading-section mt-4 max-w-full [overflow-wrap:anywhere]">
-            <span className="text-gold">{tx("Start")}</span> {tx("your Batumi real estate journey")}
+            <span className="text-gold">{tx("Start")}</span> {tx("your emerging-market real estate journey")}
           </h2>
           <p className="mt-4 max-w-md leading-relaxed text-foreground/80">
-            {tx("Register with us now to buy Batumi apartments, partner as a broker, or discuss property administration with the AIXCO team.")}
+            {tx("Register with us now to buy an apartment with AIXCO, partner as a broker, or discuss property administration with the AIXCO team.")}
           </p>
           <div className="mt-6 space-y-4">
             <a href={`mailto:${company.email}`} className="group flex items-start gap-4">

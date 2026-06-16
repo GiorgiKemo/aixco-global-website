@@ -1,7 +1,7 @@
 // Canonical copy from https://www.aixco.global/op2/index.html#page1.
 export const company = {
   name: "AIXCO.Global",
-  tagline: "Quality Real Estate — Buy · Broker · Manage",
+  tagline: "Real Estate Investment",
   email: "info@aixco.global",
   address: "Grüngasse 16, 1050 Wien, Austria",
   founded: 2009,
@@ -67,13 +67,13 @@ export const dubaiFunds = [
   },
 ];
 
-export const batumiBenefits = [
+const rawBatumiBenefits = [
   "Selected projects and apartments available exclusively through AIXCO",
   "100% foreign ownership",
   "No residency permit required",
   "Entry from €50,000",
-  "Bank financing available from 60% of the property value",
-  "Approx. 8% net rental yields",
+  "Bank financing minimum 60%",
+  "Approx. 10-12% net rental yields",
   "Full commission payable from only a 10% down payment",
   "0% capital gains tax after 2 years of ownership",
   "1% tax on rental income",
@@ -81,14 +81,16 @@ export const batumiBenefits = [
   "Prime apartments from our own stock at the best available prices",
 ];
 
+export const batumiBenefits = rawBatumiBenefits.map((benefit) => benefit.replace(/\u00e2\u201a\u00ac/g, "€"));
+
 export const batumiProperties = [
   {
-    id: "otium",
-    name: "Otium",
-    url: "otium",
-    image: "batumi-otium",
-    video: "otium",
-    summary: "Reverance by Otium is a premium residential complex at 59 Adlia Street, planned with 17 floors per building, 408 apartments, and completion targeted for June 2028.",
+    id: "current-project",
+    name: "Current project",
+    url: "current-project",
+    image: "batumi-current-project",
+    video: "currentProject",
+    summary: "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for June 2028.",
     metrics: [
       { label: "Floors", value: "17", subtext: "per building" },
       { label: "Apartments", value: "408", subtext: "total units" },
@@ -96,7 +98,7 @@ export const batumiProperties = [
     ],
     highlights: [
       { label: "Scale", value: "25,000 sqm of comfort and community infrastructure across a 45,000 sqm planned site." },
-      { label: "Location", value: "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away." },
+      { label: "Access", value: "AIXCO-managed buyer guidance, project information, and supporting materials available through the client route." },
       { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck." },
     ],
   },
@@ -105,10 +107,10 @@ export const batumiProperties = [
 export const participationRoutes = [
   {
     id: "apartment",
-    title: "Buy an Apartment in Batumi",
+    title: "Buy an Apartment with AIXCO",
     video: "batumiBuy",
     body:
-      "Customers sign up, review selected Batumi apartments, book a private tour, and move through reservation and purchase with the AIXCO team.",
+      "Customers sign up, review selected apartments, book a private tour, and move through reservation and purchase with the AIXCO team.",
     cta: "Register",
   },
   {
@@ -122,7 +124,7 @@ export const participationRoutes = [
   {
     id: "management",
     title: "Administer Your Property",
-    video: "otium",
+    video: "currentProject",
     body:
       "Property owners can work with AIXCO on documentation, buyer handover, reporting, rental coordination, and ongoing administration after purchase.",
     cta: "Register",
@@ -133,8 +135,8 @@ export const journeys = [
   {
     tag: "Journey 01",
     role: "Customer Real Estate Buyer",
-    summary: "For clients buying apartments or reserving units in Batumi through a guided digital process.",
-    intro: "A guided process for clients purchasing or reserving selected Batumi apartments.",
+    summary: "For clients buying apartments or reserving units in selected emerging markets through a guided digital process.",
+    intro: "A guided process for clients purchasing or reserving selected emerging-market apartments through AIXCO's current focus.",
     steps: [
       { title: "Create your account", text: "Register and access your secure client portal." },
       { title: "Complete Profile", text: "Fill out the registration form to create your profile and access dashboard" },
@@ -236,11 +238,11 @@ export const partners = [
     logo: "globalPartners",
     summary: "Real estate development and asset management platform.",
     featuredDetail: [
-      "A premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+      "A premier real estate company focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
       "The business is positioned around value creation through strategic asset selection, operational excellence, redevelopment, and property management.",
     ],
     detail: [
-      "Global Partners is presented by AIXCO as a premier real estate platform focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
+      "Global Partners is presented by AIXCO as a premier real estate company focused on identifying, acquiring, and managing high-potential residential and commercial developments.",
       "The positioning emphasizes value creation through strategic asset selection, operational excellence, development, redevelopment, and property management.",
     ],
     leaders: [
@@ -337,40 +339,57 @@ export const partners = [
 
 export const faqGroups = [
   {
-    group: "Customer",
-    description: "Buying property, reserving apartments, or working with AIXCO on real estate services.",
+    group: "Real Estate Investment",
+    description: "Questions and answers for clients reviewing AIXCO real estate opportunities in Batumi.",
     items: [
       {
-        q: "What is the minimum amount to reserve or buy?",
-        a: "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
+        q: "How do I get started?",
+        a: "To get started, please register on our website. Once your account is created, you will receive all further information via email.",
       },
-      { q: "Can I buy property directly?", a: "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration." },
-      { q: "Is rental income guaranteed?", a: "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, project delivery, and external factors." },
-      { q: "Will I receive reporting?", a: "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified system." },
-      { q: "Can foreigners buy property in Batumi?", a: "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy." },
       {
-        q: "Can I ask about AIXCO company financing?",
-        a: "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page.",
+        q: "What is the minimum investment amount?",
+        a: "The minimum investment amount is €5,000.",
       },
-    ],
-  },
-  {
-    group: "Broker",
-    description: "For intermediaries managing clients, tours, and deal flow.",
-    items: [
-      { q: "What are the benefits for brokers?", a: "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination." },
-      { q: "Can I book a tour for my customer?", a: "Yes. The platform supports tour coordination and a smoother customer journey." },
-      { q: "Do login and registration do different things?", a: "Yes. Login opens the relevant portal. Register starts the onboarding process for access approval." },
-      { q: "What support is available after sign-up?", a: "AIXCO provides follow-up support, coordination, and a more guided service model rather than simple self-service." },
-    ],
-  },
-  {
-    group: "Developer",
-    description: "For developers listing projects and using AIXCO as a sales channel.",
-    items: [
-      { q: "What do developers gain by registering?", a: "Developers gain stronger project exposure, better inquiry handling, coordinated tours, and a more premium end-to-end sales flow." },
-      { q: "Can AIXCO help distribute projects?", a: "Yes. AIXCO can function as a structured distribution and presentation channel for selected listings." },
-      { q: "Does AIXCO support the sales process?", a: "Yes. Support can include project visibility, lead handling, tours, and documentation flow." },
+      {
+        q: "Why is Batumi an attractive location for real estate investment?",
+        a: "Batumi is one of the fastest-growing coastal cities in Eastern Europe, offering tourism growth, modern infrastructure, and investor-friendly policies.",
+      },
+      {
+        q: "Can foreigners buy property in Batumi, Georgia?",
+        a: "Yes, foreigners can freely purchase and own real estate with minimal restrictions.",
+      },
+      {
+        q: "What is the process of buying property in Batumi?",
+        a: "The process is simple: sign agreement and register ownership, often within days.",
+      },
+      {
+        q: "Are there additional costs when buying property?",
+        a: "There are very low costs and no property purchase tax.",
+      },
+      {
+        q: "How secure is a real estate investment in Batumi?",
+        a: "Georgia offers strong legal protection and transparent ownership systems.",
+      },
+      {
+        q: "Can I invest through a company or only as an individual?",
+        a: "You can invest either as an individual or through a company, depending on your personal, tax, or investment objectives.",
+      },
+      {
+        q: "What value increase can I calculate for my apartment?",
+        a: "Independent market research from Colliers Georgia indicates that residential property prices in Batumi have historically increased by approximately 8-15% annually, depending on location and property type.",
+      },
+      {
+        q: "What kind of reporting do I get?",
+        a: "You will receive quarterly reports covering your property's performance and the general market.",
+      },
+      {
+        q: "Is a credit check required for bank financing?",
+        a: "For 60% financing a traditional credit check is not required. Higher financing amounts may require standard bank credit approval and income verification.",
+      },
+      {
+        q: "How much equity do I need to have to purchase an apartment?",
+        a: "Typically, buyers contribute 40% equity, with financing available for up to 60% of the property value. Depending on your financial profile and financing structure, the required equity contribution may be lower.",
+      },
     ],
   },
 ];

@@ -69,7 +69,7 @@ function getLoginRoles(portals: SiteContent["company"]["portals"]) {
     cta: "Continue as broker",
     url: portals.brokerLogin,
     description:
-      "Brokers can log in to use the portal operationally, manage customer journeys, coordinate tours, and work more efficiently with curated Batumi opportunities.",
+      "Brokers can log in to use the portal operationally, manage customer journeys, coordinate tours, and work more efficiently with curated emerging-market opportunities.",
     points: [
       "Coordinate customer tours and service requests",
       "Use portal tools and listing support more efficiently",
@@ -100,7 +100,7 @@ function getRegisterRoles(portals: SiteContent["company"]["portals"]) {
     cta: "Start customer registration",
     url: portals.customerSignup,
     description:
-      "Register as a customer if you want to buy property, explore selected opportunities, or receive a more guided route into Batumi through one organized onboarding form.",
+      "Register as a customer if you want to buy property, explore selected opportunities, or receive a more guided route into selected emerging-market real estate through one organized onboarding form.",
     points: [
       "Submit your interest and onboarding details digitally",
       "Access support for buying property or property services",

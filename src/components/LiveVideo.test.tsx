@@ -53,6 +53,7 @@ describe("LiveVideo", () => {
     vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
     vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined);
     vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => undefined);
+    vi.spyOn(HTMLMediaElement.prototype, "load").mockImplementation(() => undefined);
   });
 
   afterEach(() => {
@@ -189,13 +190,14 @@ describe("LiveVideo", () => {
       "src",
       expect.stringContaining("%2Fposter.jpg"),
     );
-    expect(inlineVideo).toHaveAttribute("src", "/sample-video.mp4");
+    expect(inlineVideo).not.toHaveAttribute("src");
     expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
 
     act(() => {
       MockIntersectionObserver.instances[1].trigger({ isIntersecting: true, intersectionRatio: 0.7 });
     });
 
+    expect(inlineVideo).toHaveAttribute("src", "/sample-video.mp4");
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
 
     act(() => {
@@ -206,7 +208,7 @@ describe("LiveVideo", () => {
   });
 
   it("keeps the poster visible until the preview video has a rendered frame", () => {
-    const { container } = render(<LiveVideo src="/sample-video.mp4" title="Otium" poster="/poster.jpg" />);
+    const { container } = render(<LiveVideo src="/sample-video.mp4" title="Current project" poster="/poster.jpg" />);
 
     act(() => {
       MockIntersectionObserver.instances[0].trigger({ isIntersecting: true, intersectionRatio: 1 });
@@ -214,7 +216,7 @@ describe("LiveVideo", () => {
     });
 
     const poster = container.querySelector("img[role='presentation']");
-    const inlineVideo = screen.getByLabelText("Otium");
+    const inlineVideo = screen.getByLabelText("Current project");
 
     expect(poster?.className).toContain("opacity-100");
 

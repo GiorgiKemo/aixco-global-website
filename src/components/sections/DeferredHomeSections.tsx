@@ -18,7 +18,7 @@ const DeferredHomeSectionsContent = dynamic(
 
 const deferredSectionPlaceholders = [
   { id: "dubai", label: "Dubai legacy portfolio", surface: true, height: "h-[min(74svh,42rem)]" },
-  { id: "batumi", label: "Batumi opportunities", surface: true, height: "h-[min(74svh,42rem)]" },
+  { id: "batumi", label: "Emerging market opportunities", surface: true, height: "h-[min(74svh,42rem)]" },
   { id: "materials", label: "Materials and downloads", surface: false, height: "h-[min(56svh,34rem)]" },
   { id: "participate", label: "How to work with AIXCO", surface: true, height: "h-[min(64svh,38rem)]" },
   { id: "how", label: "How AIXCO works", surface: false, height: "h-[min(56svh,34rem)]" },

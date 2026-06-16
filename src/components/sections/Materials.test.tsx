@@ -22,9 +22,22 @@ describe("Materials", () => {
     expect(section).toHaveAttribute("id", "materials");
     expect(screen.getByText("Client materials")).toBeInTheDocument();
     expect(screen.getByText(/Download brochures, catalog sheets/i)).toBeInTheDocument();
-    expect(downloads).toHaveLength(4);
+    expect(downloads).toHaveLength(5);
+    expect(screen.getByRole("link", { name: "Download AIXCO client brochure" })).toHaveAttribute(
+      "href",
+      "/aixco-global-op2/documents/aixco-client-brochure.pdf",
+    );
+    expect(screen.getByRole("link", { name: "Download Current project brochure" })).toHaveAttribute(
+      "href",
+      "/aixco-global-op2/documents/current-project.pdf",
+    );
+    expect(screen.getByRole("link", { name: "Download Current project catalog sheet" })).toHaveAttribute(
+      "href",
+      "/aixco-global-op2/documents/current-project-catalog.jpeg",
+    );
     expect(screen.queryByRole("link", { name: new RegExp(`Download ${retiredProjectName}`, "i") })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Download Otium brochure" })).toHaveAttribute("download", "aixco-otium-brochure.pdf");
+    expect(screen.queryByText(/On request/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/available on request/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/investor/i)).not.toBeInTheDocument();
   });
 });

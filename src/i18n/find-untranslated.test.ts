@@ -43,7 +43,7 @@ describe("find untranslated German keys", () => {
         }
         if (de === key || de.trim() === key.trim()) {
           // Filter out proper nouns or single words that might be the same in German
-          if (/[a-zA-Z]{3,}/.test(key) && key.includes(" ") && !key.includes("AIXCO") && !key.includes("Otium") && !key.includes("Batumi") && !key.includes("Dubai") && !key.includes("Eden House") && !key.includes("Healthcare City") && !key.includes("ISP Group") && !key.includes("Clean Elements") && !key.includes("Groupe GTI") && !key.includes("Bluerock")) {
+          if (/[a-zA-Z]{3,}/.test(key) && key.includes(" ") && !key.includes("AIXCO") && !key.includes("Current project") && !key.includes("Batumi") && !key.includes("Dubai") && !key.includes("Eden House") && !key.includes("Healthcare City") && !key.includes("ISP Group") && !key.includes("Clean Elements") && !key.includes("Groupe GTI") && !key.includes("Bluerock")) {
             console.log(`[de == key] "${key}"`);
           }
         }
@@ -56,7 +56,7 @@ describe("find untranslated German keys", () => {
 
     console.log(`\n=== Checking clientBriefPassthroughCopy ===`);
     for (const key of passthroughKeys) {
-      if (/[a-zA-Z]{3,}/.test(key) && key.includes(" ") && !key.includes("AIXCO") && !key.includes("Otium") && !key.includes("Batumi") && !key.includes("Dubai") && !key.includes("Eden House") && !key.includes("Healthcare City") && !key.includes("ISP Group") && !key.includes("Clean Elements") && !key.includes("Groupe GTI") && !key.includes("Bluerock")) {
+      if (/[a-zA-Z]{3,}/.test(key) && key.includes(" ") && !key.includes("AIXCO") && !key.includes("Current project") && !key.includes("Batumi") && !key.includes("Dubai") && !key.includes("Eden House") && !key.includes("Healthcare City") && !key.includes("ISP Group") && !key.includes("Clean Elements") && !key.includes("Groupe GTI") && !key.includes("Bluerock")) {
         // Check if there is a translation in translations.ts or site-content-translations.ts first
         const tVal = (textTranslations as TranslationSource)[key]?.de;
         const sVal = (siteContentTranslations as TranslationSource)[key]?.de;

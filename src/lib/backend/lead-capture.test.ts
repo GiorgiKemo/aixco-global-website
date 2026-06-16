@@ -7,7 +7,7 @@ describe("lead capture backend helpers", () => {
       submitContactSubmission({
         name: "Audit User",
         email: "audit@example.com",
-        interest: "Batumi apartments",
+        interest: "Emerging market opportunities",
         message: "I want more details about availability.",
       }),
     ).resolves.toMatchObject({ ok: false, skipped: true });

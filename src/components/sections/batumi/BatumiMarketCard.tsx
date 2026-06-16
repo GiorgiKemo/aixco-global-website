@@ -34,7 +34,7 @@ export function BatumiMarketCard({ benefits, tx }: BatumiMarketCardProps) {
         aria-label="Batumi overview media"
         data-media-frame="dubai-style-split-media"
         data-batumi-card-media
-        className="batumi-match-otium-video-height relative order-2 overflow-hidden bg-foreground md:order-2 md:col-span-5 md:min-h-0 lg:order-2 lg:col-span-5 lg:min-h-0"
+        className="batumi-match-current-project-video-height relative order-2 overflow-hidden bg-foreground md:order-2 md:col-span-5 md:min-h-0 lg:order-2 lg:col-span-5 lg:min-h-0"
       >
         <LiveVideo
           src={aixcoLiveVideos.batumiBuy}

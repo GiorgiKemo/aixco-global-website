@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider } from "@/components/ui-state";
@@ -16,75 +16,59 @@ function renderFAQs() {
 }
 
 describe("FAQs", () => {
-  it("matches the FAQ copy from the original AIXCO op2 site", () => {
+  it("matches the FAQ copy from the latest AIXCO Batumi FAQ document", () => {
     expect(faqGroups).toEqual([
       {
-        group: "Customer",
-        description: "Buying property, reserving apartments, or working with AIXCO on real estate services.",
+        group: "Real Estate Investment",
+        description: "Questions and answers for clients reviewing AIXCO real estate opportunities in Batumi.",
         items: [
           {
-            q: "What is the minimum amount to reserve or buy?",
-            a: "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
+            q: "How do I get started?",
+            a: "To get started, please register on our website. Once your account is created, you will receive all further information via email.",
           },
           {
-            q: "Can I buy property directly?",
-            a: "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.",
+            q: "What is the minimum investment amount?",
+            a: "The minimum investment amount is €5,000.",
           },
           {
-            q: "Is rental income guaranteed?",
-            a: "No. Approx. 8% net rental yields are scenario-based and depend on occupancy, market conditions, property management, project delivery, and external factors.",
+            q: "Why is Batumi an attractive location for real estate investment?",
+            a: "Batumi is one of the fastest-growing coastal cities in Eastern Europe, offering tourism growth, modern infrastructure, and investor-friendly policies.",
           },
           {
-            q: "Will I receive reporting?",
-            a: "Yes. Reporting, documents, project updates, and transparent workflow are available through the portal and ISO-certified system.",
+            q: "Can foreigners buy property in Batumi, Georgia?",
+            a: "Yes, foreigners can freely purchase and own real estate with minimal restrictions.",
           },
           {
-            q: "Can foreigners buy property in Batumi?",
-            a: "Yes. Selected Batumi apartments allow 100% foreign ownership, and no residency permit is required to buy.",
+            q: "What is the process of buying property in Batumi?",
+            a: "The process is simple: sign agreement and register ownership, often within days.",
           },
           {
-            q: "Can I ask about AIXCO company financing?",
-            a: "Yes. AIXCO.Global is presented first as a real estate platform for buying, brokering, and administering property. Separate company-financing information may be available on request from the AIXCO team; it is not a primary website journey and no bond terms are promoted on this page.",
-          },
-        ],
-      },
-      {
-        group: "Broker",
-        description: "For intermediaries managing clients, tours, and deal flow.",
-        items: [
-          {
-            q: "What are the benefits for brokers?",
-            a: "Brokers gain structured client management, curated listings, stronger presentation tools, and better coordination.",
+            q: "Are there additional costs when buying property?",
+            a: "There are very low costs and no property purchase tax.",
           },
           {
-            q: "Can I book a tour for my customer?",
-            a: "Yes. The platform supports tour coordination and a smoother customer journey.",
+            q: "How secure is a real estate investment in Batumi?",
+            a: "Georgia offers strong legal protection and transparent ownership systems.",
           },
           {
-            q: "Do login and registration do different things?",
-            a: "Yes. Login opens the relevant portal. Register starts the onboarding process for access approval.",
+            q: "Can I invest through a company or only as an individual?",
+            a: "You can invest either as an individual or through a company, depending on your personal, tax, or investment objectives.",
           },
           {
-            q: "What support is available after sign-up?",
-            a: "AIXCO provides follow-up support, coordination, and a more guided service model rather than simple self-service.",
-          },
-        ],
-      },
-      {
-        group: "Developer",
-        description: "For developers listing projects and using AIXCO as a sales channel.",
-        items: [
-          {
-            q: "What do developers gain by registering?",
-            a: "Developers gain stronger project exposure, better inquiry handling, coordinated tours, and a more premium end-to-end sales flow.",
+            q: "What value increase can I calculate for my apartment?",
+            a: "Independent market research from Colliers Georgia indicates that residential property prices in Batumi have historically increased by approximately 8-15% annually, depending on location and property type.",
           },
           {
-            q: "Can AIXCO help distribute projects?",
-            a: "Yes. AIXCO can function as a structured distribution and presentation channel for selected listings.",
+            q: "What kind of reporting do I get?",
+            a: "You will receive quarterly reports covering your property's performance and the general market.",
           },
           {
-            q: "Does AIXCO support the sales process?",
-            a: "Yes. Support can include project visibility, lead handling, tours, and documentation flow.",
+            q: "Is a credit check required for bank financing?",
+            a: "For 60% financing a traditional credit check is not required. Higher financing amounts may require standard bank credit approval and income verification.",
+          },
+          {
+            q: "How much equity do I need to have to purchase an apartment?",
+            a: "Typically, buyers contribute 40% equity, with financing available for up to 60% of the property value. Depending on your financial profile and financing structure, the required equity contribution may be lower.",
           },
         ],
       },
@@ -94,15 +78,40 @@ describe("FAQs", () => {
   it("uses targeted, snappy accordion transitions", () => {
     renderFAQs();
 
-    const trigger = screen.getByRole("button", { name: "What is the minimum amount to reserve or buy?" });
+    const trigger = screen.getByRole("button", { name: "How do I get started?" });
     const icon = trigger.querySelector("svg");
     const panel = trigger.nextElementSibling as HTMLElement;
 
     expect(icon?.getAttribute("class")).toContain("transition-transform");
     expect(icon?.getAttribute("class")).toContain("duration-200");
+    expect(icon?.getAttribute("class")).not.toContain("rotate-180");
     expect(panel.className).toContain("transition-[grid-template-rows,opacity,padding-bottom]");
     expect(panel.className).toContain("duration-300");
     expect(panel.className).not.toContain("transition-all");
     expect(panel.className).not.toContain("duration-500");
+
+    fireEvent.click(trigger);
+
+    expect(icon?.getAttribute("class")).toContain("rotate-180");
+  });
+
+  it("opens answers only after clicking a question", () => {
+    renderFAQs();
+
+    const trigger = screen.getByRole("button", { name: "What is the minimum investment amount?" });
+    const row = trigger.parentElement as HTMLElement;
+    const panel = trigger.nextElementSibling as HTMLElement;
+
+    expect(panel.className).toContain("grid-rows-[0fr]");
+
+    fireEvent.mouseEnter(row);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(panel.className).toContain("grid-rows-[0fr]");
+
+    fireEvent.click(trigger);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    expect(panel.className).toContain("grid-rows-[1fr]");
   });
 });

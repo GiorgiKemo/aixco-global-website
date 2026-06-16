@@ -206,11 +206,11 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
           <div className="absolute bottom-6 left-6 right-6 grid gap-3 text-white">
             <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-black/24 px-4 py-2 text-sm font-semibold backdrop-blur-md">
               <MapPin className="h-4 w-4" aria-hidden />
-              59 Adlia Street
+              <Tx>Selected AIXCO access</Tx>
             </div>
             <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-black/24 px-4 py-2 text-sm font-semibold backdrop-blur-md">
               <Building2 className="h-4 w-4" aria-hidden />
-              <Tx>Premium residential complex</Tx>
+              <Tx>Current project</Tx>
             </div>
           </div>
         </aside>

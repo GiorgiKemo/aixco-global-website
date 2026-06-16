@@ -90,7 +90,7 @@ export function Materials() {
                         <h3 className="font-display text-xl font-semibold leading-tight text-foreground sm:text-2xl">{tx(material.title)}</h3>
                         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-foreground/72">{tx(material.description)}</p>
                         <p className="mt-3 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/55 sm:hidden">
-                          {material.format} · {tx(material.audience)}
+                          {material.format} / {tx(material.audience)}
                         </p>
                       </div>
 

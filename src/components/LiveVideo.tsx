@@ -32,7 +32,7 @@ export function LiveVideo({
   videoStyle,
   fit = "cover",
   eager = false,
-  rootMargin = "350px 0px",
+  rootMargin = "220px 0px",
   autoplayPreview = true,
   smoothPreview = false,
 }: LiveVideoProps) {
@@ -45,7 +45,7 @@ export function LiveVideo({
   const [isInFocus, setIsInFocus] = useState(eager);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasPreviewFrame, setHasPreviewFrame] = useState(false);
-  const shouldAttachVideo = shouldLoad && autoplayPreview;
+  const shouldAttachVideo = shouldLoad && autoplayPreview && (isInFocus || isExpanded);
   const inlineSrc = smoothPreview ? src : previewSrc ?? src;
   const previewPreload = shouldAttachVideo && isInFocus && smoothPreview ? "auto" : shouldAttachVideo ? "metadata" : "none";
 
@@ -120,6 +120,12 @@ export function LiveVideo({
   useEffect(() => {
     if (!shouldAttachVideo) {
       setHasPreviewFrame(false);
+      const video = videoRef.current;
+      if (video) {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+      }
     }
   }, [shouldAttachVideo]);
 

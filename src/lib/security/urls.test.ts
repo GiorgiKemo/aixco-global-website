@@ -32,12 +32,12 @@ describe("safe URL helpers", () => {
       "https://www.aixco.global/op2/index.html#page1",
     );
     expect(getSafeAixcoNewsUrl("https://www.aixco.global/admin", "#")).toBe("#");
-    expect(getSafePublicAssetHref("/aixco-global-op2/docs/otium.pdf", "#")).toBe("/aixco-global-op2/docs/otium.pdf");
-    expect(getSafePublicAssetHref("https://evil.example/aixco-global-op2/docs/otium.pdf", "#")).toBe("#");
+    expect(getSafePublicAssetHref("/aixco-global-op2/docs/current-project.pdf", "#")).toBe("/aixco-global-op2/docs/current-project.pdf");
+    expect(getSafePublicAssetHref("https://evil.example/aixco-global-op2/docs/current-project.pdf", "#")).toBe("#");
   });
 
   it("rejects scriptable asset keys and email header injection", () => {
-    expect(getSafeAssetKey("otium", "fallback")).toBe("otium");
+    expect(getSafeAssetKey("currentProject", "fallback")).toBe("currentProject");
     expect(getSafeAssetKey("javascript:alert(1)", "fallback")).toBe("fallback");
     expect(getSafeEmail("INFO@AIXCO.GLOBAL", "fallback@example.com")).toBe("info@aixco.global");
     expect(getSafeEmail("info@aixco.global\r\nbcc:attacker@example.com", "fallback@example.com")).toBe(

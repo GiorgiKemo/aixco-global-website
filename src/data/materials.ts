@@ -1,4 +1,4 @@
-import { aixcoLiveAssetDetails, aixcoLiveDocuments } from "@/lib/aixco-live-assets";
+import { aixcoLiveAssetDetails } from "@/lib/aixco-live-assets";
 
 export type MaterialDownload = {
   id: string;
@@ -13,24 +13,34 @@ export type MaterialDownload = {
 
 export const materialDownloads: MaterialDownload[] = [
   {
-    id: "otium-brochure",
-    title: "Otium brochure",
-    category: "Batumi project brochure",
-    description: "Full Otium project PDF for clients comparing Batumi apartment options.",
+    id: "client-brochure",
+    title: "AIXCO client brochure",
+    category: "Client brochure",
+    description: "Download the AIXCO client brochure with the real estate investment overview and opportunity details.",
     audience: "Clients and brokers",
     format: "PDF",
-    href: aixcoLiveDocuments.otium,
-    fileName: "aixco-otium-brochure.pdf",
+    href: aixcoLiveAssetDetails.clientBrochurePdf,
+    fileName: "aixco-client-brochure.pdf",
   },
   {
-    id: "otium-catalog-sheet",
-    title: "Otium catalog sheet",
+    id: "current-project-brochure",
+    title: "Current project brochure",
+    category: "Batumi project brochure",
+    description: "Current AIXCO project PDF for clients comparing selected apartment options.",
+    audience: "Clients and brokers",
+    format: "PDF",
+    href: aixcoLiveAssetDetails.currentProjectPdf,
+    fileName: "aixco-current-project-brochure.pdf",
+  },
+  {
+    id: "current-project-catalog-sheet",
+    title: "Current project catalog sheet",
     category: "Catalog sheet",
-    description: "High-resolution Otium catalog image for quick sharing and offline review.",
+    description: "High-resolution current project catalog image for quick sharing and offline review.",
     audience: "Clients and sales partners",
     format: "JPEG",
-    href: aixcoLiveAssetDetails.otiumCatalog,
-    fileName: "aixco-otium-catalog.jpeg",
+    href: aixcoLiveAssetDetails.currentProjectCatalog,
+    fileName: "aixco-current-project-catalog.jpeg",
   },
   {
     id: "eden-house-reference",

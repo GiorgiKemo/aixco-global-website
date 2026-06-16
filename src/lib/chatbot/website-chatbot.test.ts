@@ -17,22 +17,21 @@ describe("website chatbot", () => {
   });
 
   it("answers Batumi ownership and property questions from the website content", () => {
-    const ownershipAnswer = ask("Can foreigners buy Batumi apartments?");
+    const ownershipAnswer = ask("Can foreigners buy property in AIXCO's current emerging-market focus?");
     const benefitsAnswer = ask("What are the Batumi property benefits, yields, and financing?");
 
     expect(ownershipAnswer.confidence).toBe("high");
-    expect(ownershipAnswer.answer).toContain("100% foreign ownership");
-    expect(ownershipAnswer.answer).toContain("no residency permit is required");
+    expect(ownershipAnswer.answer).toContain("freely purchase and own real estate");
+    expect(ownershipAnswer.answer).toContain("minimal restrictions");
     expect(benefitsAnswer.confidence).toBe("high");
-    expect(benefitsAnswer.answer).toContain("Approx. 8% net rental yields");
-    expect(benefitsAnswer.answer).toContain("Bank financing available from 60% of the property value");
+    expect(benefitsAnswer.answer).toContain("Approx. 10-12% net rental yields");
+    expect(benefitsAnswer.answer).toContain("Bank financing minimum 60%");
   });
 
   it("answers minimum investment questions from the FAQ", () => {
-    const answer = ask("What is the minimum amount to reserve or buy?");
+    const answer = ask("What is the minimum investment amount?");
 
-    expect(answer.answer).toContain("Entry starts from \u20ac50,000");
-    expect(answer.answer).toContain("10% down payment");
+    expect(answer.answer).toContain("The minimum investment amount is \u20ac5,000.");
     expect(answer.answer).not.toContain("\u00e2");
   });
 
@@ -55,7 +54,7 @@ describe("website chatbot", () => {
     expect(answer.matchedTopics).toContain("Materials & downloads");
     expect(answer.answer).toContain("#materials");
     expect(answer.answer).not.toContain(retiredProjectName);
-    expect(answer.answer).toContain("Otium brochure");
+    expect(answer.answer).toContain("Current project brochure");
   });
 
   it("does not invent answers outside website content", () => {

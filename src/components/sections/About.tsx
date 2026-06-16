@@ -39,7 +39,7 @@ export function About() {
             </span>
           </h2>
           <p className="mt-6 max-w-[38rem] text-base leading-[1.62] text-foreground/80 md:text-lg lg:text-[1.05rem]">
-            {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.")}
+            {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on selected emerging-market opportunities, with a legacy track record in Switzerland and Dubai.")}
           </p>
           <div className="mac-card mt-7 overflow-hidden lg:mt-6">
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40">

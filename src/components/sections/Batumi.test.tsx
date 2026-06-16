@@ -52,7 +52,7 @@ describe("Batumi", () => {
     expect(marketCard?.className).toContain("md:flex-1");
     expect(marketCard?.className).toContain("md:grid-cols-12");
     expect(media?.className).toContain("md:col-span-5");
-    expect(media?.className).toContain("batumi-match-otium-video-height");
+    expect(media?.className).toContain("batumi-match-current-project-video-height");
     expect(media?.className).toContain("md:min-h-0");
     expect(copy?.className).toContain("md:col-span-7");
     expect(metricGrid?.className).toContain("md:grid-cols-3");
@@ -80,50 +80,49 @@ describe("Batumi", () => {
     expect(container.querySelector('section[id="batumi"]')).not.toBeInTheDocument();
   });
 
-  it("renders Otium as the Batumi project profile card and excludes the retired Batumi project", () => {
+  it("renders the current Batumi project profile card and excludes the retired Batumi project", () => {
     const { container } = renderBatumi();
     const retiredProjectId = ["g", "uru"].join("");
     const retiredProjectName = ["Gu", "ru"].join("");
 
     const profileGrid = container.querySelector("[data-layout='batumi-project-profile-cards']");
-    const otiumCard = container.querySelector("[data-batumi-property-card='otium']");
-    const otiumMedia = otiumCard?.querySelector("[data-batumi-property-media]");
-    const otiumMetrics = otiumCard?.querySelector("[data-batumi-property-highlight-grid='otium']");
-    const otiumDetails = otiumCard?.querySelector("[data-batumi-property-detail-notes='otium']");
-    const otiumTitle = otiumCard?.querySelector("[data-batumi-property-title]");
-    const otiumAssetLink = within(otiumCard as HTMLElement).getByRole("link", { name: /View Asset Details: Otium/ });
+    const currentProjectCard = container.querySelector("[data-batumi-property-card='current-project']");
+    const currentProjectMedia = currentProjectCard?.querySelector("[data-batumi-property-media]");
+    const currentProjectMetrics = currentProjectCard?.querySelector("[data-batumi-property-highlight-grid='current-project']");
+    const currentProjectDetails = currentProjectCard?.querySelector("[data-batumi-property-detail-notes='current-project']");
+    const currentProjectTitle = currentProjectCard?.querySelector("[data-batumi-property-title]");
 
     expect(profileGrid).toBeInTheDocument();
     expect(container.querySelector(`[data-batumi-property-card='${retiredProjectId}']`)).not.toBeInTheDocument();
     expect(screen.queryByText(retiredProjectName)).not.toBeInTheDocument();
-    expect(otiumCard).toHaveAttribute("data-design-source", "dubai-card-reference");
-    expect(otiumCard).toHaveAttribute("data-image-position", "left");
-    expect(otiumCard).toHaveAttribute("data-density", "standard");
-    expect(otiumCard?.className).toContain("transition-[transform,box-shadow,border-color]");
-    expect(otiumCard?.className).not.toContain("transition-all");
-    expect(otiumCard?.className).toContain("md:grid-cols-12");
-    expect(otiumMedia?.className).toContain("md:col-span-5");
-    expect(otiumMedia?.className).toContain("min-h-[22rem]");
-    expect(otiumMedia?.className).not.toContain("batumi-match-otium-video-height");
-    expect(within(otiumCard as HTMLElement).getByRole("heading", { name: "Otium" })).toBeInTheDocument();
-    expect(otiumTitle?.querySelector("p")).not.toBeInTheDocument();
-    expect(otiumCard).toHaveTextContent("59 Adlia Street");
-    expect(otiumCard).toHaveTextContent("408");
-    expect(otiumCard).toHaveTextContent("total units");
-    expect(otiumCard).toHaveTextContent("Jun 2028");
-    expect(otiumMetrics).toHaveTextContent("17");
-    expect(otiumMetrics).toHaveTextContent("408");
-    expect(otiumMetrics).toHaveTextContent("Jun 2028");
-    expect(otiumDetails).toHaveTextContent("25,000 sqm");
-    expect(otiumDetails).toHaveTextContent("45,000 sqm");
-    expect(otiumDetails).toHaveTextContent("$80/night");
-    expect(otiumCard).not.toHaveTextContent("Otium PDF");
-    expect(within(otiumCard as HTMLElement).getByRole("button", { name: /Play video: Otium/ })).toBeInTheDocument();
-    expect(otiumAssetLink).toHaveAttribute("href", expect.stringContaining("otium-catalog.jpeg"));
-    expect(otiumAssetLink).toHaveClass("asset-detail-cta");
-    expect(within(otiumCard as HTMLElement).queryByRole("link", { name: /Open Otium profile/ })).not.toBeInTheDocument();
+    expect(currentProjectCard).toHaveAttribute("data-design-source", "dubai-card-reference");
+    expect(currentProjectCard).toHaveAttribute("data-image-position", "left");
+    expect(currentProjectCard).toHaveAttribute("data-density", "standard");
+    expect(currentProjectCard?.className).toContain("transition-[transform,box-shadow,border-color]");
+    expect(currentProjectCard?.className).not.toContain("transition-all");
+    expect(currentProjectCard?.className).toContain("md:grid-cols-12");
+    expect(currentProjectMedia?.className).toContain("md:col-span-5");
+    expect(currentProjectMedia?.className).toContain("min-h-[22rem]");
+    expect(currentProjectMedia?.className).not.toContain("batumi-match-current-project-video-height");
+    expect(within(currentProjectCard as HTMLElement).getByRole("heading", { name: "Current project" })).toBeInTheDocument();
+    expect(currentProjectTitle?.querySelector("p")).not.toBeInTheDocument();
+    expect(currentProjectCard).not.toHaveTextContent("59 Adlia Street");
+    expect(currentProjectCard).toHaveTextContent("AIXCO-managed buyer guidance");
+    expect(currentProjectCard).toHaveTextContent("408");
+    expect(currentProjectCard).toHaveTextContent("total units");
+    expect(currentProjectCard).toHaveTextContent("Jun 2028");
+    expect(currentProjectMetrics).toHaveTextContent("17");
+    expect(currentProjectMetrics).toHaveTextContent("408");
+    expect(currentProjectMetrics).toHaveTextContent("Jun 2028");
+    expect(currentProjectDetails).toHaveTextContent("25,000 sqm");
+    expect(currentProjectDetails).toHaveTextContent("45,000 sqm");
+    expect(currentProjectDetails).toHaveTextContent("$80/night");
+    expect(currentProjectCard).not.toHaveTextContent("Current project PDF");
+    expect(within(currentProjectCard as HTMLElement).getByRole("button", { name: /Play video: Current project/ })).toBeInTheDocument();
+    expect(within(currentProjectCard as HTMLElement).queryByRole("link", { name: /View Asset Details: Current project/ })).not.toBeInTheDocument();
+    expect(within(currentProjectCard as HTMLElement).queryByRole("link", { name: /Open current project profile/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: retiredProjectName })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Otium" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Current project" })).not.toBeInTheDocument();
   });
 
   it("keeps the Batumi gallery and removes the old Queens and Serenade content", () => {
@@ -171,9 +170,6 @@ describe("Batumi", () => {
       </I18nProvider>,
     );
 
-    expect(screen.getByRole("link", { name: /View Asset Details: Otium/ })).toHaveAttribute(
-      "href",
-      expect.stringContaining("otium-catalog.jpeg"),
-    );
+    expect(screen.queryByRole("link", { name: /View Asset Details: Current project/ })).not.toBeInTheDocument();
   });
 });
