@@ -950,6 +950,13 @@ export const curatedVisibleTranslations = {
     tr: "Dürüstlük, istikrar, disiplin ve sorumlu risk değerlendirmesi gayrimenkul pratiğimizin her alanında merkezi önemdedir.",
     ar: "تبقى النزاهة والاستقرار والانضباط وتقييم المخاطر بمسؤولية في صميم كل جانب من ممارستنا العقارية.",
   },
+  "As AIXCO continues to grow internationally, its vision remains unchanged: to build resilient real estate services - buy, broker, and manage property - rooted in Swiss heritage, disciplined execution, and enduring long-term value.": {
+    de: "Während AIXCO international weiter wächst, bleibt die Vision unverändert: widerstandsfähige Immobiliendienstleistungen aufzubauen - Kaufen, Vermitteln und Verwalten - verwurzelt in Schweizer Herkunft, disziplinierter Umsetzung und dauerhaftem langfristigem Wert.",
+    ru: "По мере международного роста AIXCO ее видение остается неизменным: создавать устойчивые услуги в сфере недвижимости - покупать, посредничать и управлять недвижимостью - опираясь на швейцарское наследие, дисциплинированное исполнение и долгосрочную ценность.",
+    ka: "AIXCO-ის საერთაშორისო ზრდასთან ერთად მისი ხედვა უცვლელი რჩება: ააშენოს მდგრადი უძრავი ქონების სერვისები - ყიდვა, საბროკერო საქმიანობა და ქონების მართვა - შვეიცარიულ მემკვიდრეობაზე, დისციპლინირებულ შესრულებასა და გრძელვადიან ღირებულებაზე დაფუძნებით.",
+    tr: "AIXCO uluslararası alanda büyümeye devam ederken vizyonu değişmiyor: İsviçre mirasına, disiplinli uygulamaya ve kalıcı uzun vadeli değere dayanan dayanıklı gayrimenkul hizmetleri - satın alma, aracılık ve mülk yönetimi - oluşturmak.",
+    ar: "مع استمرار AIXCO في النمو دوليا، تبقى رؤيتها ثابتة: بناء خدمات عقارية مرنة - الشراء والوساطة وإدارة العقارات - متجذرة في الإرث السويسري والتنفيذ المنضبط والقيمة طويلة الأجل.",
+  },
   "Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.": {
     de: "Legacy-Markt - wir eroeffnen keine neuen Immobilienangebote in Dubai. Unten sehen Sie einen Ueberblick ueber realisiertes und laufendes Immobilienvolumen.",
     ru: "Исторический рынок: мы не открываем новые предложения недвижимости в Дубае. Ниже представлен обзор реализованного и текущего объема недвижимости.",

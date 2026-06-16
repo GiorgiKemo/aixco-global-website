@@ -14,6 +14,8 @@ describe("aixcoLiveImages", () => {
     expect(aixcoLiveImages.aboutArchitecture).toContain("batumip.webp");
     expect(aixcoLiveImages.batumiBuyPoster).toContain("batumi1-poster.webp");
     expect(aixcoLiveImages.batumiCurrentProject).toContain("current-project-reverance.webp");
+    expect(aixcoLiveImages.batumiMosaicDuskAerialCentral).toContain("batumi-dusk-aerial-central.webp");
+    expect(aixcoLiveImages.batumiMosaicEveningWaterfront).toContain("batumi-evening-waterfront.webp");
   });
 
   it("publishes the clickable asset-detail catalogs and source images", () => {

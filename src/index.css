@@ -648,6 +648,8 @@
 
   .story-letter-reveal__text {
     display: inline;
+    line-height: inherit;
+    overflow: visible;
   }
 
   .story-text-reveal__mobile-plain {
@@ -678,6 +680,8 @@
     overflow-wrap: normal;
     word-break: normal;
     hyphens: manual;
+    line-height: inherit;
+    overflow: visible;
     vertical-align: baseline;
   }
 
@@ -698,6 +702,8 @@
     transform: translate3d(-0.34em, 0, 0);
     filter: none;
     text-shadow: none;
+    line-height: inherit;
+    overflow: visible;
     will-change: opacity, transform;
   }
 
@@ -962,11 +968,12 @@
 
   .story-hero-wordmark__mark,
   [data-story-hero-title-mark='true'] {
-    height: 0.9em;
-    width: 0.9em;
+    height: 0.74em !important;
+    width: 0.74em !important;
     flex-shrink: 0;
     object-fit: contain;
     filter: drop-shadow(0 12px 24px rgb(0 0 0 / 0.24));
+    transform: translateY(0.01em);
   }
 
   .story-hero-wordmark__text {
@@ -1249,6 +1256,8 @@
     font-weight: 600;
     line-height: 1;
     color: hsl(var(--primary));
+    direction: ltr;
+    unicode-bidi: isolate;
   }
 
   .story-metric-label {
@@ -1937,6 +1946,17 @@
     z-index: 1;
   }
 
+  .story-batumi-gallery__preload {
+    position: absolute;
+    inset: auto 0 0 auto;
+    z-index: -1;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .story-batumi-gallery__hero {
     position: relative;
     z-index: 2;
@@ -2005,6 +2025,11 @@
     gap: var(--batumi-carousel-gap);
     animation: story-batumi-gallery-loop 34s linear infinite;
     will-change: transform;
+  }
+
+  .story-batumi-gallery__carousel:hover .story-batumi-gallery__track,
+  .story-batumi-gallery__carousel:focus-within .story-batumi-gallery__track {
+    animation-play-state: paused;
   }
 
   .story-batumi-gallery__thumb {
@@ -3253,18 +3278,18 @@
     }
 
     [data-story-section='philosophyPlatform'] {
-      --story-h2-min: 2.15rem;
-      --story-h2-pref: 3.35vw;
-      --story-h2-max: 3.7rem;
-      --story-h2-lh: 0.96;
-      --story-body-min: 0.94rem;
-      --story-body-pref: 0.94vw;
-      --story-body-max: 1.02rem;
-      --story-body-lh: 1.48;
-      --story-card-title-min: 1rem;
-      --story-card-title-pref: 1.12vw;
-      --story-card-title-max: 1.2rem;
-      --story-copy-gap: clamp(0.58rem, 0.95svh, 0.82rem);
+      --story-h2-min: 2.65rem;
+      --story-h2-pref: 3.75vw;
+      --story-h2-max: 4.35rem;
+      --story-h2-lh: 1.08;
+      --story-body-min: 1.03rem;
+      --story-body-pref: 1.06vw;
+      --story-body-max: 1.18rem;
+      --story-body-lh: 1.58;
+      --story-card-title-min: 1.16rem;
+      --story-card-title-pref: 1.28vw;
+      --story-card-title-max: 1.5rem;
+      --story-copy-gap: clamp(0.86rem, 1.45svh, 1.25rem);
     }
 
     [data-story-section='philosophyOrigins'] [data-story-scene-column],
@@ -3284,7 +3309,7 @@
     [data-story-section='philosophyPlatform']
       [data-layout='story-philosophy-platform-panels'] {
       max-width: 100%;
-      gap: clamp(0.85rem, 1.35svh, 1.15rem);
+      gap: clamp(0.95rem, 1.55svh, 1.3rem);
     }
 
     [data-story-section='philosophyOrigins'] .story-philosophy-detail-title {
@@ -3381,12 +3406,21 @@
     html[lang='ru'] [data-story-section='philosophyPlatform'],
     html[lang='ka'] [data-story-section='philosophyPlatform'],
     html[lang='ar'] [data-story-section='philosophyPlatform'] {
-      --story-h2-min: 2rem;
-      --story-h2-pref: 2.82vw;
-      --story-h2-max: 3.05rem;
-      --story-h2-lh: 1.04;
-      --story-body-max: 0.98rem;
-      --story-card-title-max: 1.12rem;
+      --story-h2-min: 2.35rem;
+      --story-h2-pref: 3.08vw;
+      --story-h2-max: 3.85rem;
+      --story-h2-lh: 1.12;
+      --story-body-max: 1.1rem;
+      --story-card-title-max: 1.34rem;
+    }
+
+    html[lang='de'] [data-story-section='philosophyPlatform'],
+    html[lang='tr'] [data-story-section='philosophyPlatform'] {
+      --story-h2-min: 2.42rem;
+      --story-h2-pref: 3.28vw;
+      --story-h2-max: 4rem;
+      --story-h2-lh: 1.1;
+      --story-card-title-max: 1.42rem;
     }
 
     [data-story-section='philosophyPlatform']
@@ -3396,6 +3430,8 @@
 
     [data-story-section='philosophyPlatform'] .story-philosophy-platform-title {
       max-width: 100%;
+      padding-bottom: 0.08em;
+      margin-bottom: -0.04em;
       text-wrap: balance;
     }
 
@@ -3413,20 +3449,20 @@
 
     [data-story-section='philosophyPlatform']
       [data-layout='story-philosophy-platform-stats'] {
-      gap: clamp(0.55rem, 0.85svh, 0.75rem);
+      gap: clamp(0.7rem, 1.05svh, 0.95rem);
     }
 
     [data-story-section='philosophyPlatform'] .story-philosophy-stat {
-      min-height: 5.35rem;
-      padding: clamp(0.62rem, 0.9svh, 0.76rem) clamp(0.7rem, 0.9vw, 0.86rem);
+      min-height: clamp(5.95rem, 10.2svh, 6.85rem);
+      padding: clamp(0.78rem, 1.08svh, 0.96rem) clamp(0.82rem, 1.08vw, 1rem);
     }
 
     [data-story-section='philosophyPlatform']
       .story-philosophy-stat
       .story-metric-label {
-      font-size: clamp(0.56rem, 0.62vw, 0.66rem);
-      letter-spacing: 0.1em;
-      line-height: 1.2;
+      font-size: clamp(0.62rem, 0.67vw, 0.72rem);
+      letter-spacing: 0.085em;
+      line-height: 1.28;
       overflow-wrap: anywhere;
       word-break: normal;
       hyphens: auto;
@@ -3436,23 +3472,24 @@
     [data-story-section='philosophyPlatform']
       .story-philosophy-stat
       .story-metric-value {
-      font-size: clamp(1.4rem, 1.9vw, 1.85rem);
+      font-size: clamp(1.7rem, 2.25vw, 2.35rem);
     }
 
     [data-story-section='philosophyPlatform'] .story-philosophy-panel {
-      gap: 0.25rem;
-      padding: clamp(0.58rem, 0.82svh, 0.74rem) clamp(0.76rem, 1vw, 0.92rem);
+      min-height: clamp(13rem, 26svh, 16rem);
+      gap: clamp(0.45rem, 0.78svh, 0.7rem);
+      padding: clamp(1rem, 1.65svh, 1.25rem) clamp(1.05rem, 1.45vw, 1.35rem);
     }
 
     [data-story-section='philosophyPlatform'] .story-philosophy-panel .mt-2 {
-      margin-top: 0.38rem;
-      gap: 0.38rem;
+      padding-top: clamp(0.5rem, 0.8svh, 0.7rem);
+      gap: clamp(0.5rem, 0.82svh, 0.72rem);
     }
 
     [data-story-section='philosophyPlatform']
       .story-philosophy-panel
       .story-card-title {
-      line-height: 1.1;
+      line-height: 1.12;
       text-wrap: balance;
     }
 
@@ -3460,8 +3497,9 @@
       .story-philosophy-panel
       .story-body {
       color: hsl(var(--foreground) / 0.82);
-      font-size: clamp(0.76rem, 0.78vw, 0.86rem);
-      line-height: 1.34;
+      font-size: clamp(0.95rem, 0.98vw, 1.06rem);
+      line-height: 1.5;
+      text-wrap: pretty;
     }
 
     .story-philosophy-detail-title {
@@ -3765,10 +3803,13 @@
       }
 
       [data-story-section='philosophyPlatform'] {
-        --story-h2-max: 3rem;
-        --story-h2-min: 2rem;
-        --story-h2-pref: 3vw;
-        --story-copy-gap: clamp(0.5rem, 0.78svh, 0.68rem);
+        --story-h2-max: 3.55rem;
+        --story-h2-min: 2.28rem;
+        --story-h2-pref: 3.28vw;
+        --story-h2-lh: 1.1;
+        --story-body-min: 0.98rem;
+        --story-body-max: 1.1rem;
+        --story-copy-gap: clamp(0.72rem, 1.05svh, 0.92rem);
       }
 
       [data-story-section='philosophyOrigins'] [data-story-scene-column],
@@ -3777,14 +3818,15 @@
       }
 
       [data-story-section='philosophyPlatform'] .story-philosophy-panel {
-        padding-block: 0.7rem;
+        min-height: clamp(11.75rem, 23svh, 14.25rem);
+        padding-block: clamp(0.82rem, 1.25svh, 1rem);
       }
 
       [data-story-section='philosophyPlatform']
         .story-philosophy-panel
         .story-body {
-        font-size: 0.94rem;
-        line-height: 1.48;
+        font-size: clamp(0.94rem, 0.96vw, 1.02rem);
+        line-height: 1.5;
       }
 
       [data-story-section='philosophyOrigins'] .story-philosophy-detail-stage {
@@ -3828,13 +3870,14 @@
       }
 
       [data-story-section='philosophyPlatform'] .story-philosophy-stat {
-        padding: 0.55rem 0.6rem;
+        min-height: 5.35rem;
+        padding: 0.68rem 0.72rem;
       }
 
       [data-story-section='philosophyPlatform']
         .story-philosophy-stat
         .story-metric-value {
-        font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+        font-size: clamp(1.45rem, 1.75vw, 1.85rem);
       }
     }
   }

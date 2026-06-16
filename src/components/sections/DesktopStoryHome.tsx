@@ -2,6 +2,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
+import { flushSync } from "react-dom";
 import {
   ArrowRight,
   BadgeEuro,
@@ -22,7 +23,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { startTransition, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from "react";
+import { startTransition, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
 import { LiveVideo } from "@/components/LiveVideo";
 import { ExpandableImage } from "@/components/ExpandableImage";
 import { FooterLegalBar } from "@/components/Footer";
@@ -177,29 +178,96 @@ const participationVideoMap = {
   },
 } as const;
 
-const dubaiVideoMap = {
-  fundOne: {
-    src: aixcoLiveVideos.fundOne,
-    previewSrc: aixcoLiveVideoPreviews.fundOne,
-    poster: aixcoLiveImages.dubaiEdenHouse,
-  },
-  fundTwo: {
-    src: aixcoLiveVideos.fundTwo,
-    previewSrc: aixcoLiveVideoPreviews.fundTwo,
-    poster: aixcoLiveImages.dubaiHealthcare,
-  },
-  fundThree: {
-    src: aixcoLiveVideos.fundThree,
-    previewSrc: aixcoLiveVideoPreviews.fundThree,
-    poster: aixcoLiveImages.dubaiHealthcare,
-  },
-} as const;
-
 const teamImageMap = {
   "team-benjamin": aixcoLiveImages.teamBenjamin,
   "team-owais": aixcoLiveImages.teamOwais,
   "team-walter": aixcoLiveImages.teamWalter,
 } as const;
+
+const batumiVisualMosaicImages = [
+  {
+    key: "dusk-central",
+    src: aixcoLiveImages.batumiMosaicDuskAerialCentral,
+    alt: "Batumi dusk aerial skyline and waterfront",
+    width: 3840,
+    height: 2160,
+    objectPosition: "50% 50%",
+  },
+  {
+    key: "dusk-coastline",
+    src: aixcoLiveImages.batumiMosaicDuskAerialCoastline,
+    alt: "Batumi illuminated coastline at dusk from above",
+    width: 3840,
+    height: 2160,
+    objectPosition: "50% 50%",
+  },
+  {
+    key: "sunset-panorama",
+    src: aixcoLiveImages.batumiMosaicSunsetPanorama,
+    alt: "Batumi sunset panorama over the Black Sea",
+    width: 3840,
+    height: 2160,
+    objectPosition: "50% 50%",
+  },
+  {
+    key: "golden-hour",
+    src: aixcoLiveImages.batumiMosaicGoldenHourCoastline,
+    alt: "Batumi golden hour coastline and city lights",
+    width: 3840,
+    height: 2160,
+    objectPosition: "50% 50%",
+  },
+  {
+    key: "evening-waterfront",
+    src: aixcoLiveImages.batumiMosaicEveningWaterfront,
+    alt: "Batumi evening waterfront and mountain skyline",
+    width: 3840,
+    height: 1946,
+    objectPosition: "50% 50%",
+  },
+  {
+    key: "day",
+    src: aixcoLiveImages.batumiMosaicDayAerial,
+    alt: "Batumi daytime aerial skyline and Black Sea",
+    width: 7360,
+    height: 4912,
+    objectPosition: "50% 48%",
+  },
+  {
+    key: "sunset",
+    src: aixcoLiveImages.batumiMosaicSunsetCoastline,
+    alt: "Batumi sunset city and coastline view",
+    width: 6000,
+    height: 4000,
+    objectPosition: "50% 52%",
+  },
+  {
+    key: "night",
+    src: aixcoLiveImages.batumiMosaicNightSkyline,
+    alt: "Batumi night skyline from the Black Sea",
+    width: 7360,
+    height: 4912,
+    objectPosition: "50% 50%",
+  },
+  {
+    key: "nature",
+    src: aixcoLiveImages.batumiMosaicNatureAerial,
+    alt: "Batumi coastal nature and Black Sea view",
+    width: 3981,
+    height: 5971,
+    objectPosition: "50% 50%",
+  },
+  {
+    key: "tower",
+    src: aixcoLiveImages.batumiMosaicBlueTower,
+    alt: "Batumi tower and daytime city view",
+    width: 3903,
+    height: 5854,
+    objectPosition: "58% 50%",
+  },
+] as const;
+
+type BatumiVisualMosaicImageKey = (typeof batumiVisualMosaicImages)[number]["key"];
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -1069,62 +1137,43 @@ function StoryDubaiFundRow({ fund, tx }: { fund: DubaiFund; tx: (copy: string) =
 }
 
 function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
-  const galleryImages = [
-    {
-      key: "day",
-      src: aixcoLiveImages.batumiMosaicDayAerial,
-      alt: tx("Batumi daytime aerial skyline and Black Sea"),
-      width: 7360,
-      height: 4912,
-      objectPosition: "50% 48%",
-    },
-    {
-      key: "sunset",
-      src: aixcoLiveImages.batumiMosaicSunsetCoastline,
-      alt: tx("Batumi sunset city and coastline view"),
-      width: 6000,
-      height: 4000,
-      objectPosition: "50% 52%",
-    },
-    {
-      key: "night",
-      src: aixcoLiveImages.batumiMosaicNightSkyline,
-      alt: tx("Batumi night skyline from the Black Sea"),
-      width: 7360,
-      height: 4912,
-      objectPosition: "50% 50%",
-    },
-    {
-      key: "nature",
-      src: aixcoLiveImages.batumiMosaicNatureAerial,
-      alt: tx("Batumi coastal nature and Black Sea view"),
-      width: 3981,
-      height: 5971,
-      objectPosition: "50% 50%",
-    },
-    {
-      key: "tower",
-      src: aixcoLiveImages.batumiMosaicBlueTower,
-      alt: tx("Batumi tower and daytime city view"),
-      width: 3903,
-      height: 5854,
-      objectPosition: "58% 50%",
-    },
-  ] satisfies Array<{
-    key: string;
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-    objectPosition: string;
-  }>;
-  const [selectedImageKey, setSelectedImageKey] = useState(galleryImages[0].key);
+  const galleryImages = useMemo(
+    () => batumiVisualMosaicImages.map((image) => ({ ...image, alt: tx(image.alt) })),
+    [tx],
+  );
+  const [selectedImageKey, setSelectedImageKey] = useState<BatumiVisualMosaicImageKey>(batumiVisualMosaicImages[0].key);
   const selectedImage = galleryImages.find((image) => image.key === selectedImageKey) ?? galleryImages[0];
   const carouselImages = [...galleryImages, ...galleryImages];
+  const selectImage = useCallback((imageKey: BatumiVisualMosaicImageKey) => {
+    if (imageKey === selectedImageKey) return;
+
+    flushSync(() => {
+      setSelectedImageKey(imageKey);
+    });
+  }, [selectedImageKey]);
+  const handleThumbnailPointerDown = useCallback((event: PointerEvent<HTMLButtonElement>, imageKey: BatumiVisualMosaicImageKey) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    selectImage(imageKey);
+  }, [selectImage]);
 
   return (
     <div className="story-batumi-gallery" aria-label={tx("Batumi project image gallery")}>
       <div className="story-batumi-gallery__wash" aria-hidden />
+      <div className="story-batumi-gallery__preload" aria-hidden>
+        {galleryImages.map((image) => (
+          <Image
+            key={`preload-${image.key}`}
+            src={image.src}
+            alt=""
+            width={image.width}
+            height={image.height}
+            sizes="(min-width: 1280px) 52vw, 100vw"
+            quality={95}
+            loading="eager"
+          />
+        ))}
+      </div>
       <ExpandableImage
         src={selectedImage.src}
         title={selectedImage.alt}
@@ -1136,6 +1185,8 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
           fill
           sizes="(min-width: 1280px) 52vw, 100vw"
           quality={95}
+          loading="eager"
+          data-batumi-hero-image={selectedImage.key}
           className="story-batumi-gallery__hero-image"
           style={{ objectPosition: selectedImage.objectPosition }}
         />
@@ -1153,7 +1204,8 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
               "story-batumi-gallery__thumb",
               image.key === selectedImage.key && "story-batumi-gallery__thumb--active",
             )}
-            onClick={() => setSelectedImageKey(image.key)}
+            onPointerDown={(event) => handleThumbnailPointerDown(event, image.key)}
+            onClick={() => selectImage(image.key)}
           >
             <Image
               src={image.src}
@@ -1371,9 +1423,9 @@ function PhilosophyPlatformScene({
       fitContent={false}
       media={{
         kind: "image",
-        src: aixcoLiveImages.batumiMosaicNightSkyline,
-        alt: tx("Batumi night skyline from the Black Sea"),
-        position: "center 38%",
+        src: aixcoLiveImages.batumiMosaicEveningWaterfront,
+        alt: tx("Batumi evening waterfront and mountain skyline"),
+        position: "56% 50%",
       }}
       mediaOverlay="none"
     >
@@ -1657,7 +1709,6 @@ function DubaiScene({
   const { dubaiFunds } = useSiteContent();
   const shouldReduceMotion = useHydratedReducedMotion();
   const [landingFund, secondFund] = dubaiFunds;
-  const media = dubaiVideoMap[landingFund.video as keyof typeof dubaiVideoMap];
   const galleryGroups = hasAssetGallery(landingFund.id) ? fundAssetGalleries[landingFund.id].groups : [];
 
   return (
@@ -1666,12 +1717,11 @@ function DubaiScene({
       isRevealed={isRevealed}
       tone="light"
       media={{
-        kind: "video",
-        src: media.src,
-        previewSrc: media.previewSrc,
-        poster: media.poster,
-        title: tx(landingFund.name),
-        position: "center 38%",
+        kind: "image",
+        src: aixcoLiveImages.dubaiEdenHouseRendering,
+        alt: tx("Eden House The Canal aerial overview"),
+        position: "center 52%",
+        sizes: "(min-width: 1280px) 42vw, 100vw",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Dubai - Legacy portfolio")}</p>
@@ -1776,9 +1826,9 @@ function MaterialsScene({
       fitContent={false}
       media={{
         kind: "image",
-        src: aixcoLiveImages.batumiOverviewPoster,
-        alt: tx("Batumi skyline at night"),
-        position: "50% center",
+        src: aixcoLiveImages.batumiMosaicDuskAerialCoastline,
+        alt: tx("Batumi dusk aerial coastline and city lights"),
+        position: "62% 50%",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Client materials")}</p>
@@ -1901,9 +1951,9 @@ function HowScene({
       fitContent={false}
       media={{
         kind: "image",
-        src: aixcoLiveImages.batumiFogPoster,
-        alt: tx("Batumi skyline above coastal fog"),
-        position: "center 44%",
+        src: aixcoLiveImages.batumiMosaicGoldenHourCoastline,
+        alt: tx("Batumi golden hour skyline and coastline"),
+        position: "60% 50%",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Journeys")}</p>
