@@ -1717,11 +1717,11 @@ function DubaiScene({
       isRevealed={isRevealed}
       tone="light"
       media={{
-        kind: "image",
-        src: aixcoLiveImages.dubaiEdenHouseRendering,
-        alt: tx("Eden House The Canal aerial overview"),
+        kind: "video",
+        src: "/aixco-global-op2/videos/aixco-group-dubai-hero.mp4",
+        poster: aixcoLiveImages.dubaiHealthcare,
+        title: tx("Dubai legacy portfolio video"),
         position: "center 52%",
-        sizes: "(min-width: 1280px) 42vw, 100vw",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Dubai - Legacy portfolio")}</p>
