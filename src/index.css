@@ -968,12 +968,12 @@
 
   .story-hero-wordmark__mark,
   [data-story-hero-title-mark='true'] {
-    height: 0.74em !important;
-    width: 0.74em !important;
+    height: 0.82em !important;
+    width: 0.82em !important;
     flex-shrink: 0;
     object-fit: contain;
     filter: drop-shadow(0 12px 24px rgb(0 0 0 / 0.24));
-    transform: translateY(0.01em);
+    transform: translateY(0.065em);
   }
 
   .story-hero-wordmark__text {
