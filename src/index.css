@@ -968,8 +968,8 @@
 
   .story-hero-wordmark__mark,
   [data-story-hero-title-mark='true'] {
-    height: 0.82em !important;
-    width: 0.82em !important;
+    height: 0.79em !important;
+    width: 0.79em !important;
     flex-shrink: 0;
     object-fit: contain;
     filter: drop-shadow(0 12px 24px rgb(0 0 0 / 0.24));
