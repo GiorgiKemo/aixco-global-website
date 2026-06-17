@@ -23,7 +23,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { startTransition, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
 import { LiveVideo } from "@/components/LiveVideo";
 import { ExpandableImage } from "@/components/ExpandableImage";
 import { FooterLegalBar } from "@/components/Footer";
@@ -126,7 +126,7 @@ const storyChapters: StoryChapter[] = [
   { key: "legacy", id: "legacy", label: "Legacy" },
   { key: "dubai", id: "dubai", label: "Dubai" },
   { key: "batumi", id: "batumi", label: "Batumi" },
-  { key: "materials", id: "materials", label: "Materials" },
+  { key: "materials", id: "materials", label: "Download Materials" },
   { key: "participate", id: "participate", label: "How to work" },
   { key: "how", id: "how", label: "Journeys" },
   { key: "team", id: "team", label: "Team" },
@@ -149,7 +149,7 @@ type StorySectionMetric = {
 
 const storyTeamSwitchIntervalMs = 2400;
 const storyTeamResumeDelayMs = 3200;
-const maxAnimatedStoryLetters = 64;
+const maxAnimatedStoryLetters = 96;
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
 const philosophyPlatformStats = [
@@ -279,21 +279,51 @@ function formatChapterNumber(index: number) {
 
 function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
   const [isInView, setIsInView] = useState(false);
+  const visibilityFrameRef = useRef<number | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root || typeof IntersectionObserver === "undefined") {
       setIsInView(true);
       return undefined;
     }
 
+    const commitVisibility = (nextIsInView: boolean) => {
+      setIsInView((current) => current === nextIsInView ? current : nextIsInView);
+    };
+
+    const syncCurrentVisibility = () => {
+      visibilityFrameRef.current = null;
+      const rect = root.getBoundingClientRect();
+      const viewportHeight = Math.max(1, window.innerHeight);
+      commitVisibility(rect.top < viewportHeight * 0.98 && rect.bottom > viewportHeight * 0.02);
+    };
+
+    const requestVisibilitySync = () => {
+      if (visibilityFrameRef.current !== null) return;
+      visibilityFrameRef.current = window.requestAnimationFrame(syncCurrentVisibility);
+    };
+
+    syncCurrentVisibility();
+
     const observer = new IntersectionObserver(
-      ([entry]) => setIsInView(entry.isIntersecting),
+      ([entry]) => commitVisibility(entry.isIntersecting),
       { rootMargin: "0px 0px -8% 0px", threshold: 0.01 },
     );
 
     observer.observe(root);
-    return () => observer.disconnect();
+    window.addEventListener("scroll", requestVisibilitySync, { passive: true });
+    window.addEventListener("resize", requestVisibilitySync);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", requestVisibilitySync);
+      window.removeEventListener("resize", requestVisibilitySync);
+      if (visibilityFrameRef.current !== null) {
+        window.cancelAnimationFrame(visibilityFrameRef.current);
+        visibilityFrameRef.current = null;
+      }
+    };
   }, [rootRef]);
 
   return isInView;
@@ -317,18 +347,18 @@ function StoryTextReveal({
   const [animationState, setAnimationState] = useState<"idle" | "animating" | "played">("idle");
   const [animationRun, setAnimationRun] = useState(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setAnimationState("idle");
     setAnimationRun(0);
   }, [label]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isInView || animationState !== "idle") return;
     setAnimationRun((current) => current + 1);
     setAnimationState("animating");
   }, [animationState, isInView]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isInView || animationState === "idle") return;
     setAnimationState("idle");
   }, [animationState, isInView]);
@@ -1831,12 +1861,9 @@ function MaterialsScene({
         position: "62% 50%",
       }}
     >
-      <p className="eyebrow story-eyebrow">{tx("Client materials")}</p>
-      <h2 className="story-h2">
-        <StoryTextReveal label={tx("Materials & downloads")} />
-      </h2>
+      <p className="eyebrow story-eyebrow">{tx("Download Materials")}</p>
       <p className="story-body text-foreground/74">
-        {tx("Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.")}
+        {tx("Access brochures, catalogs, property presentations, and supporting documentation.")}
       </p>
       <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
         {materialDownloads.map((material) => {
@@ -1901,10 +1928,10 @@ function ParticipateScene({
     >
       <p className="eyebrow story-eyebrow">{tx("How to work with AIXCO")}</p>
       <h2 className="story-h2">
-        <StoryTextReveal label={tx("How it works")} />
+        <StoryTextReveal label={tx("ACQUIRE.PARTNER.CREATE VALUE.")} />
       </h2>
       <p className="story-body text-foreground/76">
-        {tx("Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
+        {tx("From property ownership and strategic partnership to professional asset management, AIXCO is with you at every stage of the journey.")}
       </p>
       <div className="w-full divide-y divide-foreground/30" data-layout="story-participation-routes">
         {[primaryRoute, ...remainingRoutes].map((route, index) => (
@@ -2473,7 +2500,7 @@ export function DesktopStoryHome() {
 
     if (activeIndexRef.current !== nextActiveIndex) {
       activeIndexRef.current = nextActiveIndex;
-      startTransition(() => setActiveIndex(nextActiveIndex));
+      setActiveIndex(nextActiveIndex);
     }
 
     const currentPresence = sectionPresenceRef.current;
@@ -2483,7 +2510,7 @@ export function DesktopStoryHome() {
 
     if (hasPresenceChanged) {
       sectionPresenceRef.current = nextSectionPresence;
-      startTransition(() => setSectionPresence(nextSectionPresence));
+      setSectionPresence(nextSectionPresence);
     }
   }, [refreshSectionMetrics]);
 

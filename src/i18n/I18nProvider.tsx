@@ -15,7 +15,7 @@ const keyedText: Record<string, string> = {
   "nav.legacy": "Our journey",
   "nav.dubai": "Dubai",
   "nav.batumi": "Batumi",
-  "nav.materials": "Materials",
+  "nav.materials": "Download Materials",
   "nav.participate": "How to work with AIXCO",
   "nav.how": "How AIXCO Works",
   "nav.team": "Our Team",
@@ -67,6 +67,13 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ka: "კეთილი იყოს თქვენი მობრძანება AIXCO-ს ასისტენტში. იკითხეთ განვითარებადი ბაზრების შესაძლებლობებზე, კლიენტის მასალებსა და ჩამოტვირთვებზე, დუბაის ლეგასი პროექტებზე, ქონების ადმინისტრირებაზე, ბროკერებთან პარტნიორობაზე, დეველოპერებთან პარტნიორობაზე, პარტნიორებზე, გუნდზე ან FAQ-ზე.",
     tr: "AIXCO asistanına hoş geldiniz. Gelişen pazar fırsatları, müşteri materyalleri ve indirmeler, Dubai geçmiş projeleri, mülk yönetimi, broker ortaklığı, geliştirici ortaklığı, partnerler, ekip veya SSS hakkında sorabilirsiniz.",
     ar: "مرحبًا بك في مساعد AIXCO. اسأل عن فرص الأسواق الناشئة، ومواد العملاء والتنزيلات، ومشاريع دبي السابقة، وإدارة العقارات، وشراكات الوسطاء، وشراكات المطورين، والشركاء، والفريق، أو الأسئلة الشائعة.",
+  },
+  "Welcome to the AIXCO assistant. Ask about emerging market opportunities, download materials, Dubai legacy projects, property administration, broker partnership, developer partnership, partners, team, or FAQs.": {
+    de: "Willkommen beim AIXCO-Assistenten. Fragen Sie nach Chancen in aufstrebenden Maerkten, Download-Materialien, Dubai-Legacy-Projekten, Immobilienverwaltung, Maklerpartnerschaft, Entwicklerpartnerschaft, Partnern, Team oder FAQs.",
+    ru: "Добро пожаловать в помощник AIXCO. Спрашивайте о возможностях развивающихся рынков, материалах для скачивания, проектах наследия в Дубае, управлении недвижимостью, брокерском партнерстве, партнерстве с застройщиками, партнерах, команде или FAQ.",
+    ka: "კეთილი იყოს თქვენი მობრძანება AIXCO-ს ასისტენტში. იკითხეთ განვითარებადი ბაზრების შესაძლებლობებზე, ჩამოსატვირთ მასალებზე, დუბაის ლეგასი პროექტებზე, ქონების ადმინისტრირებაზე, ბროკერებთან პარტნიორობაზე, დეველოპერებთან პარტნიორობაზე, პარტნიორებზე, გუნდზე ან FAQ-ზე.",
+    tr: "AIXCO asistanina hos geldiniz. Gelisen pazar firsatlari, indirilebilir materyaller, Dubai gecmis projeleri, mulk yonetimi, broker ortakligi, gelistirici ortakligi, partnerler, ekip veya SSS hakkinda sorabilirsiniz.",
+    ar: "مرحبًا بك في مساعد AIXCO. اسأل عن فرص الأسواق الناشئة ومواد التنزيل ومشاريع دبي السابقة وإدارة العقارات وشراكات الوسطاء وشراكات المطورين والشركاء والفريق أو الأسئلة الشائعة.",
   },
   "your emerging-market real estate journey": {
     de: "Ihre Immobilienreise in aufstrebenden Maerkten",

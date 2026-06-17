@@ -21,7 +21,7 @@ const SESSION_STORAGE_KEY = "aixco-live-chat-session";
 
 const quickReplies = [
   "Emerging market opportunities",
-  "Client materials",
+  "Download Materials",
   "Property administration",
   "Broker partnership",
   "Developer partnership",
@@ -63,7 +63,7 @@ function initialMessages(): ChatMessage[] {
   return [
     createMessage(
       "aixco",
-      "Welcome to the AIXCO assistant. Ask about emerging market opportunities, client materials and downloads, Dubai legacy projects, property administration, broker partnership, developer partnership, partners, team, or FAQs.",
+      "Welcome to the AIXCO assistant. Ask about emerging market opportunities, download materials, Dubai legacy projects, property administration, broker partnership, developer partnership, partners, team, or FAQs.",
     ),
   ];
 }

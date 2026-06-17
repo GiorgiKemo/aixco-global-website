@@ -509,6 +509,13 @@ export const curatedVisibleTranslations = {
     tr: "Nasıl çalışır",
     ar: "كيف يعمل",
   },
+  "ACQUIRE.PARTNER.CREATE VALUE.": {
+    de: "ERWERBEN.PARTNERN.WERT SCHAFFEN.",
+    ru: "ПРИОБРЕСТИ.ПАРТНЕРСТВО.СОЗДАТЬ ЦЕННОСТЬ.",
+    ka: "შეიძინე.პარტნიორობა.შექმენი ღირებულება.",
+    tr: "EDIN.ORTAK OL.DEGER YARAT.",
+    ar: "اقتناء.شراكة.خلق قيمة.",
+  },
   "Choose the journey that fits your role. The process is structured, transparent, and digitally managed.": {
     de: "Waehlen Sie den Weg, der zu Ihrer Rolle passt. Der Prozess ist strukturiert, transparent und digital gesteuert.",
     ru: "Выберите путь, который соответствует вашей роли. Процесс структурирован, прозрачен и управляется цифровым образом.",
@@ -565,6 +572,13 @@ export const curatedVisibleTranslations = {
     tr: "Müşteri materyalleri",
     ar: "مواد العملاء",
   },
+  "Download Materials": {
+    de: "Materialien herunterladen",
+    ru: "Скачать материалы",
+    ka: "მასალების ჩამოტვირთვა",
+    tr: "Materyalleri indir",
+    ar: "تنزيل المواد",
+  },
   "Materials & downloads": {
     de: "Materialien & Downloads",
     ru: "Материалы и загрузки",
@@ -578,6 +592,13 @@ export const curatedVisibleTranslations = {
     ka: "ჩამოტვირთეთ ბროშურები, კატალოგის ფურცლები და ქონების საინფორმაციო ფაილები ამ გვერდზე ნაჩვენები გზებისთვის.",
     tr: "Bu sayfada gösterilen gayrimenkul yolları için broşürleri, katalog sayfalarını ve mülk referans dosyalarını indirin.",
     ar: "نزّل الكتيبات وصفحات الكتالوج وملفات مرجعية للعقارات المعروضة في هذه الصفحة.",
+  },
+  "Access brochures, catalogs, property presentations, and supporting documentation.": {
+    de: "Greifen Sie auf Broschueren, Kataloge, Immobilienpraesentationen und unterstuetzende Unterlagen zu.",
+    ru: "Получите доступ к брошюрам, каталогам, презентациям объектов и сопроводительной документации.",
+    ka: "მიიღეთ წვდომა ბროშურებზე, კატალოგებზე, ქონების პრეზენტაციებსა და დამხმარე დოკუმენტაციაზე.",
+    tr: "Brosurlere, kataloglara, gayrimenkul sunumlarina ve destekleyici belgelere erisin.",
+    ar: "يمكنك الوصول إلى الكتيبات والكتالوجات وعروض العقارات والوثائق الداعمة.",
   },
   "Available files": {
     de: "Verfuegbare Dateien",
@@ -1040,6 +1061,13 @@ export const curatedVisibleTranslations = {
     ka: "შეიძინეთ ბინა როგორც ძირითადი გზა, მოიყვანეთ კვალიფიციური მყიდველები ან ითანამშრომლეთ AIXCO-სთან შეძენის შემდგომ ადმინისტრირებაზე.",
     tr: "Ana yol olarak daire satın alın, nitelikli alıcılar yönlendirin veya satın alma sonrası mülk yönetimi için AIXCO ile çalışın.",
     ar: "اشتر شقة كمسار رئيسي، أو قدم مشترين مؤهلين، أو اعمل مع AIXCO على إدارة العقار بعد الشراء.",
+  },
+  "From property ownership and strategic partnership to professional asset management, AIXCO is with you at every stage of the journey.": {
+    de: "Von Immobilieneigentum und strategischer Partnerschaft bis zum professionellen Asset Management begleitet AIXCO Sie in jeder Phase der Reise.",
+    ru: "От владения недвижимостью и стратегического партнерства до профессионального управления активами AIXCO сопровождает вас на каждом этапе пути.",
+    ka: "ქონების ფლობიდან და სტრატეგიული პარტნიორობიდან პროფესიულ აქტივების მართვამდე, AIXCO თქვენთანაა გზის ყოველ ეტაპზე.",
+    tr: "Gayrimenkul sahipligi ve stratejik ortakliktan profesyonel varlik yonetimine kadar AIXCO yolculugun her asamasinda sizinledir.",
+    ar: "من تملك العقار والشراكة الاستراتيجية إلى الإدارة المهنية للأصول، ترافقك AIXCO في كل مرحلة من الرحلة.",
   },
   "Customers sign up, review selected apartments, book a private tour, and move through reservation and purchase with the AIXCO team.": {
     de: "Kunden registrieren sich, pruefen ausgewaehlte Apartments, buchen eine private Besichtigung und durchlaufen Reservierung und Kauf mit dem AIXCO-Team.",
