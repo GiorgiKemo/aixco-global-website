@@ -45,10 +45,6 @@ export function PartnerMarquee({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (variant === "story") {
-      return undefined;
-    }
-
     const marquee = marqueeRef.current;
     if (!marquee || typeof IntersectionObserver === "undefined") {
       setIsVisible(true);

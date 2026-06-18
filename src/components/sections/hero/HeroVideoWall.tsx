@@ -71,13 +71,15 @@ export const HeroVideoWall = forwardRef<HTMLDivElement, HeroVideoWallProps>(func
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="auto"
                 aria-hidden="true"
                 tabIndex={-1}
                 onLoadedData={(event) => {
+                  event.currentTarget.playbackRate = 0.82;
                   onHeroVideoReady(video.src, event);
                 }}
                 onCanPlay={(event) => {
+                  event.currentTarget.playbackRate = 0.82;
                   onHeroVideoReady(video.src, event);
                   if (isHeroInFocus) {
                     void event.currentTarget.play().catch(() => undefined);

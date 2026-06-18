@@ -219,10 +219,10 @@ export function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[
     entry({
       id: "client-materials",
       section: "materials",
-      title: "Materials & downloads",
+      title: "Download Materials",
       priority: 12,
       keywords: ["materials", "downloads", "download section", "assets", "files", "brochures", "catalog", "documents"],
-      answer: `The website has a Materials & downloads section at #materials. It includes ${materialDownloads
+      answer: `The website has a Download Materials section at #materials. It includes ${materialDownloads
         .filter((material) => material.format === "PDF")
         .map((material) => material.title)
         .join(" and ")} plus catalog sheets and Dubai legacy reference images. Clients, buyers, brokers, and partners can click Download on each card to save the files.`,

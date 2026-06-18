@@ -18,7 +18,7 @@ const videoMap: Record<string, { src: string; previewSrc: string; poster: string
 
 const apartmentMetrics = [
   {
-    value: "€50K",
+    value: "€45K",
     label: "Entry pricing",
   },
   {
@@ -158,10 +158,10 @@ export function Participate() {
           <div className="scroll-reveal mb-4 max-w-6xl shrink-0 md:mb-4">
           <p className="eyebrow">{tx("How to work with AIXCO")}</p>
           <h2 className="heading-section mt-4 max-w-full text-[clamp(2.25rem,10vw,3.5rem)] leading-[1.02] [overflow-wrap:anywhere] sm:text-[clamp(2.65rem,4.1vw,3.5rem)]">
-            {tx("How it works")}
+            {tx("ACQUIRE.PARTNER.CREATE VALUE.")}
           </h2>
           <p className="mt-4 max-w-5xl text-[clamp(1.08rem,1.05vw,1.18rem)] leading-[1.52] text-foreground/80">
-            {tx("Buy an apartment as the primary route, broker qualified buyers, or work with AIXCO on property administration after purchase.")}
+            {tx("From property ownership and strategic partnership to professional asset management, AIXCO is with you at every stage of the journey.")}
           </p>
         </div>
 

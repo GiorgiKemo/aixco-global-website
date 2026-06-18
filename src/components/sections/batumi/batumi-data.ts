@@ -30,7 +30,7 @@ export const batumiDetailAssetMap: Record<string, string> = {
 };
 
 export const batumiMarketMetrics = [
-  { label: "Entry", value: "EUR 50k", subtext: "from", subtextPosition: "before", highlight: true },
+  { label: "Entry", value: "EUR 45k", subtext: "from", subtextPosition: "before", highlight: true },
   { label: "Bank financing", value: "60%+", subtext: "minimum", subtextPosition: "after" },
   { label: "Net rental yields", value: "10-12%", subtext: "approx.", subtextPosition: "before" },
 ] as const;

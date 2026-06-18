@@ -51,7 +51,7 @@ describe("website chatbot", () => {
     const retiredProjectName = ["Gu", "ru"].join("");
 
     expect(answer.confidence).toBe("high");
-    expect(answer.matchedTopics).toContain("Materials & downloads");
+    expect(answer.matchedTopics).toContain("Download Materials");
     expect(answer.answer).toContain("#materials");
     expect(answer.answer).not.toContain(retiredProjectName);
     expect(answer.answer).toContain("Current project brochure");

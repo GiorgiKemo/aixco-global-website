@@ -276,12 +276,12 @@ export const textTranslations = {
     "tr": "Oturum izni gerekli değildir",
     "ar": "لا يلزم تصريح إقامة"
   },
-  "Entry from €50,000": {
-    "de": "Einstieg ab 50.000 €",
-    "ru": "Вход от 50 000 €",
-    "ka": "შესვლა €50,000-დან",
-    "tr": "50.000 €'dan giriş",
-    "ar": "الدخول من 50,000 يورو"
+  "Entry from €45,000": {
+    "de": "Einstieg ab 45.000 €",
+    "ru": "Вход от 45 000 €",
+    "ka": "შესვლა €45,000-დან",
+    "tr": "45.000 €'dan giriş",
+    "ar": "الدخول من 45,000 يورو"
   },
   "Bank financing minimum 60%": {
     "de": "Bankfinanzierung ab 60% des Immobilienwerts verfügbar",
@@ -850,12 +850,12 @@ export const textTranslations = {
     "tr": "Minimum yatırım tutarı nedir?",
     "ar": "ما هو الحد الأدنى للاستثمار؟"
   },
-  "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
-    "de": "Einstieg ab 50.000 € für ausgewählte Batumi-Projekte und Apartments, die exklusiv über AIXCO verfügbar sind. Die volle Provision kann bereits ab 10% Anzahlung zahlbar sein; finale Bedingungen hängen von Projekt und Vereinbarung ab.",
-    "ru": "Вход от 50 000 € для избранных проектов и апартаментов в Батуми, доступных эксклюзивно через AIXCO. Полная комиссия может выплачиваться уже с 10% первоначального взноса; финальные условия зависят от проекта и договора.",
-    "ka": "შესვლა €50,000-დან შერჩეულ ბათუმის პროექტებსა და ბინებზე, რომლებიც ექსკლუზიურად ხელმისაწვდომია AIXCO-ს მეშვეობით. სრული საკომისიო შეიძლება გადახდადი იყოს მხოლოდ 10%-იანი პირველადი შენატანიდან; საბოლოო პირობები დამოკიდებულია პროექტსა და შეთანხმებაზე.",
-    "tr": "AIXCO üzerinden özel olarak sunulan seçili Batum projeleri ve daireleri için giriş 50.000 €'dan başlar. Tam komisyon yalnızca %10 peşinatla ödenebilir; nihai şartlar proje ve sözleşmeye bağlıdır.",
-    "ar": "يبدأ الدخول من 50,000 يورو للمشاريع والشقق المختارة في باتومي والمتاحة حصريًا عبر AIXCO. يمكن دفع العمولة الكاملة من دفعة أولى بنسبة 10٪ فقط، مع اعتماد الشروط النهائية على المشروع والاتفاق."
+  "Entry starts from €45,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
+    "de": "Einstieg ab 45.000 € für ausgewählte Batumi-Projekte und Apartments, die exklusiv über AIXCO verfügbar sind. Die volle Provision kann bereits ab 10% Anzahlung zahlbar sein; finale Bedingungen hängen von Projekt und Vereinbarung ab.",
+    "ru": "Вход от 45 000 € для избранных проектов и апартаментов в Батуми, доступных эксклюзивно через AIXCO. Полная комиссия может выплачиваться уже с 10% первоначального взноса; финальные условия зависят от проекта и договора.",
+    "ka": "შესვლა €45,000-დან შერჩეულ ბათუმის პროექტებსა და ბინებზე, რომლებიც ექსკლუზიურად ხელმისაწვდომია AIXCO-ს მეშვეობით. სრული საკომისიო შეიძლება გადახდადი იყოს მხოლოდ 10%-იანი პირველადი შენატანიდან; საბოლოო პირობები დამოკიდებულია პროექტსა და შეთანხმებაზე.",
+    "tr": "AIXCO üzerinden özel olarak sunulan seçili Batum projeleri ve daireleri için giriş 45.000 €'dan başlar. Tam komisyon yalnızca %10 peşinatla ödenebilir; nihai şartlar proje ve sözleşmeye bağlıdır.",
+    "ar": "يبدأ الدخول من 45,000 يورو للمشاريع والشقق المختارة في باتومي والمتاحة حصريًا عبر AIXCO. يمكن دفع العمولة الكاملة من دفعة أولى بنسبة 10٪ فقط، مع اعتماد الشروط النهائية على المشروع والاتفاق."
   },
   "Can I buy property directly?": {
     "de": "Kann ich Immobilien direkt kaufen?",
@@ -1280,7 +1280,7 @@ export const textTranslations = {
   "Our journey": { de: "Unsere Reise", ru: "Наш путь", ka: "ჩვენი გზა", tr: "Yolculuğumuz", ar: "رحلتنا" },
   "From Switzerland to Dubai to Batumi": { de: "Von der Schweiz über Dubai nach Batumi", ru: "От Швейцарии через Дубай к Батуми", ka: "შვეიცარიიდან დუბაიმდე და ბათუმამდე", tr: "İsviçre'den Dubai'ye ve Batum'a", ar: "من سويسرا إلى دبي إلى باتومي" },
   "nav.legacy": { de: "Unsere Reise", ru: "Наш путь", ka: "ჩვენი გზა", tr: "Yolculuğumuz", ar: "رحلتنا" },
-  "10% reservation may apply on selected €50,000 apartments — see FAQs": { de: "10 % Reservierung bei ausgewählten Wohnungen ab 50.000 € möglich — siehe FAQ", ru: "10% резерв на выбранных квартирах от €50 000 — см. FAQ", ka: "10% რეზერვაცია შერჩეულ €50,000 ბინებზე — იხ. FAQ", tr: "Seçili €50.000 dairelerde %10 rezervasyon — SSS", ar: "حجز 10% على شقق مختارة من 50,000 يورو — راجع الأسئلة" },
+  "10% reservation may apply on selected €45,000 apartments — see FAQs": { de: "10 % Reservierung bei ausgewählten Wohnungen ab 45.000 € möglich — siehe FAQ", ru: "10% резерв на выбранных квартирах от €45 000 — см. FAQ", ka: "10% რეზერვაცია შერჩეულ €45,000 ბინებზე — იხ. FAQ", tr: "Seçili €45.000 dairelerde %10 rezervasyon — SSS", ar: "حجز 10% على شقق مختارة من 45,000 يورو — راجع الأسئلة" },
   "Dubai · Legacy portfolio": { de: "Dubai · Legacy-Portfolio", ru: "Дубай · Наследие", ka: "დუბაი · მემკვიდრეობა", tr: "Dubai · Miras portföy", ar: "دبي · محفظة إرث" },
   "Our history in Dubai": { de: "Unsere Geschichte in Dubai", ru: "Наша история в Дубае", ka: "ჩვენი ისტორია დუბაიში", tr: "Dubai'deki geçmişimiz", ar: "تاريخنا في دبي" },
   "Batumi · Current opportunity": { de: "Batumi · Aktuelle Chance", ru: "Батуми · Текущая возможность", ka: "ბათუმი · მიმდინარე შესაძლებლობა", tr: "Batum · Güncel fırsat", ar: "باتومي · الفرصة الحالية" },
@@ -1435,12 +1435,12 @@ export const textTranslations = {
     "tr": "İsviçre",
     "ar": "سويسري"
   },
-  "Buy apartments from €50,000": {
-    "de": "Wohnungen ab 50.000 €",
-    "ru": "Квартиры от €50 000",
-    "ka": "ბინები €50,000-დან",
-    "tr": "50.000 €'dan daireler",
-    "ar": "شقق من 50,000 يورو"
+  "Buy apartments from €45,000": {
+    "de": "Wohnungen ab 45.000 €",
+    "ru": "Квартиры от €45 000",
+    "ka": "ბინები €45,000-დან",
+    "tr": "45.000 €'dan daireler",
+    "ar": "شقق من 45,000 يورو"
   },
   "CHF 1.1B": {
     "de": "CHF 1,1 Mrd.",
@@ -1463,12 +1463,12 @@ export const textTranslations = {
     "tr": "462 milyon USD",
     "ar": "462 مليون دولار"
   },
-  "€50K+": {
-    "de": "50K+ €",
-    "ru": "€50K+",
-    "ka": "€50K+",
-    "tr": "€50K+",
-    "ar": "€50K+"
+  "€45K+": {
+    "de": "45K+ €",
+    "ru": "€45K+",
+    "ka": "€45K+",
+    "tr": "€45K+",
+    "ar": "€45K+"
   },
   "8%+": {
     "de": "8 %+",
@@ -1540,12 +1540,12 @@ export const textTranslations = {
     "tr": "Gürcistan'da fırsat odağı",
     "ar": "تركيز الفرص في جورجيا"
   },
-  "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.": {
-    "de": "Ausgewählte Batumi-Projekte und Apartments über AIXCO, mit Einstieg ab 50.000 €, 100% ausländischem Eigentum, Bankfinanzierung und transparentem ISO-zertifiziertem Prozess.",
-    "ru": "Избранные проекты и апартаменты в Батуми через AIXCO: вход от 50 000 €, 100% иностранная собственность, банковское финансирование и прозрачный ISO-сертифицированный процесс.",
-    "ka": "შერჩეული ბათუმის პროექტები და ბინები AIXCO-ს მეშვეობით, €50,000-დან შესვლით, 100% უცხოური საკუთრებით, საბანკო დაფინანსებით და გამჭვირვალე ISO-სერტიფიცირებული პროცესით.",
-    "tr": "AIXCO üzerinden seçili Batum projeleri ve daireleri: 50.000 €'dan giriş, %100 yabancı mülkiyeti, banka finansmanı ve şeffaf ISO sertifikalı süreç.",
-    "ar": "مشاريع وشقق مختارة في باتومي عبر AIXCO، مع دخول من 50,000 يورو وملكية أجنبية 100٪ وخيارات تمويل مصرفي وعملية شفافة معتمدة من ISO."
+  "Selected Batumi projects and apartments through AIXCO, with entry from €45,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.": {
+    "de": "Ausgewählte Batumi-Projekte und Apartments über AIXCO, mit Einstieg ab 45.000 €, 100% ausländischem Eigentum, Bankfinanzierung und transparentem ISO-zertifiziertem Prozess.",
+    "ru": "Избранные проекты и апартаменты в Батуми через AIXCO: вход от 45 000 €, 100% иностранная собственность, банковское финансирование и прозрачный ISO-сертифицированный процесс.",
+    "ka": "შერჩეული ბათუმის პროექტები და ბინები AIXCO-ს მეშვეობით, €45,000-დან შესვლით, 100% უცხოური საკუთრებით, საბანკო დაფინანსებით და გამჭვირვალე ISO-სერტიფიცირებული პროცესით.",
+    "tr": "AIXCO üzerinden seçili Batum projeleri ve daireleri: 45.000 €'dan giriş, %100 yabancı mülkiyeti, banka finansmanı ve şeffaf ISO sertifikalı süreç.",
+    "ar": "مشاريع وشقق مختارة في باتومي عبر AIXCO، مع دخول من 45,000 يورو وملكية أجنبية 100٪ وخيارات تمويل مصرفي وعملية شفافة معتمدة من ISO."
   },
   "Entry": {
     "de": "Einstieg",
@@ -1596,12 +1596,12 @@ export const textTranslations = {
     "tr": "Vergi ve şeffaflık",
     "ar": "الضرائب والشفافية"
   },
-  "Selected apartments from €50,000": {
-    "de": "Ausgewählte Apartments ab 50.000 €",
-    "ru": "Избранные апартаменты от 50 000 €",
-    "ka": "შერჩეული ბინები €50,000-დან",
-    "tr": "50.000 €'dan seçili daireler",
-    "ar": "شقق مختارة من 50,000 يورو"
+  "Selected apartments from €45,000": {
+    "de": "Ausgewählte Apartments ab 45.000 €",
+    "ru": "Избранные апартаменты от 45 000 €",
+    "ka": "შერჩეული ბინები €45,000-დან",
+    "tr": "45.000 €'dan seçili daireler",
+    "ar": "شقق مختارة من 45,000 يورو"
   },
   "Today, AIXCO is focused on selected Batumi projects and apartments available exclusively through AIXCO, with 100% foreign ownership, no residency permit requirement, bank financing from 60% of property value, and an ISO-certified transparency process.": {
     "de": "Heute konzentriert sich AIXCO auf ausgewählte Batumi-Projekte und Apartments, die exklusiv über AIXCO verfügbar sind, mit 100% ausländischem Eigentum, keiner Aufenthaltsgenehmigung, Bankfinanzierung ab 60% des Immobilienwerts und einem ISO-zertifizierten Transparenzprozess.",
@@ -1652,9 +1652,9 @@ export const textTranslations = {
     "tr": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio?we are not opening new Dubai real estate offers at this time.",
     "ar": "In Dubai, AIXCO executed large-scale residential and mixed-use projects including Eden House and Dubai Healthcare City. This chapter is part of our legacy portfolio?we are not opening new Dubai real estate offers at this time."
   },
-  "Today, AIXCO is focused on Batumi—helping buyers purchase apartments, supporting brokers, and administering property with transparent euro pricing. Entry typically starts from €10,000, with 10% reservation options on selected units from €50,000.": {
-    "de": "Heute Fokus Batumi—Kauf, Makler und Verwaltung mit transparenter Euro-Preisgestaltung. Einstieg ab 10.000 €, 10 % Reservierung auf ausgewählte Einheiten ab 50.000 €.",
-    "ru": "Сегодня фокус на Батуми—покупка, брокеридж и администрирование. Вход от €10 000, 10% резерв на выбранные квартиры от €50 000.",
+  "Today, AIXCO is focused on Batumi—helping buyers purchase apartments, supporting brokers, and administering property with transparent euro pricing. Entry typically starts from €10,000, with 10% reservation options on selected units from €45,000.": {
+    "de": "Heute Fokus Batumi—Kauf, Makler und Verwaltung mit transparenter Euro-Preisgestaltung. Einstieg ab 10.000 €, 10 % Reservierung auf ausgewählte Einheiten ab 45.000 €.",
+    "ru": "Сегодня фокус на Батуми—покупка, брокеридж и администрирование. Вход от €10 000, 10% резерв на выбранные квартиры от €45 000.",
     "ka": "დღეს ფოკუსი ბათუმზეა—ყიდვა, ბროკერობა და ადმინისტრირება. შესვლა €10,000-დან.",
     "tr": "Bugün Batum odağı—satın alma, broker ve yönetim. Giriş 10.000 €'dan.",
     "ar": "اليوم التركيز على باتومي—شراء ووساطة وإدارة. الدخول من 10,000 يورو."
@@ -1889,19 +1889,19 @@ export const attributeTranslations = {
     }
   },
   "content": {
-    "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.": {
-      "de": "Ausgewaehlte Immobilienchancen mit transparenter Euro-Preisgestaltung ab 50.000 EUR, Vermittlung und Immobilienverwaltung durch AIXCO erkunden.",
-      "ru": "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.",
-      "ka": "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.",
-      "tr": "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.",
-      "ar": "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO."
+    "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.": {
+      "de": "Ausgewaehlte Immobilienchancen mit transparenter Euro-Preisgestaltung ab 45.000 EUR, Vermittlung und Immobilienverwaltung durch AIXCO erkunden.",
+      "ru": "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.",
+      "ka": "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.",
+      "tr": "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.",
+      "ar": "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO."
     },
-    "Buy selected Batumi apartments with transparent euro pricing from €50,000. Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.": {
-      "de": "Ausgewählte Batumi-Wohnungen ab 50.000 € mit transparenter Euro-Preisgestaltung. Kauf, Verkauf und Makler in der Schweiz, Dubai-Legacy und Georgien.",
-      "ru": "Покупка квартир в Батуми от €50 000 с прозрачными ценами. Покупка, продажа и брокеридж — Швейцария, legacy Дубая, Грузия.",
-      "ka": "ბათუმის ბინები €50,000-დან გამჭვირვალე ფასებით. ყიდვა-გაყიდვა-ბროკერობა შვეიცარიაში, დუბაის მემკვიდრეობასა და საქართველოში.",
-      "tr": "Batum'da 50.000 €'dan şeffaf euro fiyatlarla daireler. İsviçre, Dubai mirası ve Gürcistan'da alım-satım-aracılık.",
-      "ar": "شراء شقق باتومي من 50,000 يورو بأسعار شفافة. شراء وبيع ووساطة في سويسرا وإرث دبي وجورجيا."
+    "Buy selected Batumi apartments with transparent euro pricing from €45,000. Real estate buy-sell-brokerage across Switzerland, Dubai legacy, and Georgia.": {
+      "de": "Ausgewählte Batumi-Wohnungen ab 45.000 € mit transparenter Euro-Preisgestaltung. Kauf, Verkauf und Makler in der Schweiz, Dubai-Legacy und Georgien.",
+      "ru": "Покупка квартир в Батуми от €45 000 с прозрачными ценами. Покупка, продажа и брокеридж — Швейцария, legacy Дубая, Грузия.",
+      "ka": "ბათუმის ბინები €45,000-დან გამჭვირვალე ფასებით. ყიდვა-გაყიდვა-ბროკერობა შვეიცარიაში, დუბაის მემკვიდრეობასა და საქართველოში.",
+      "tr": "Batum'da 45.000 €'dan şeffaf euro fiyatlarla daireler. İsviçre, Dubai mirası ve Gürcistan'da alım-satım-aracılık.",
+      "ar": "شراء شقق باتومي من 45,000 يورو بأسعار شفافة. شراء وبيع ووساطة في سويسرا وإرث دبي وجورجيا."
     }
   },
   "placeholder": {

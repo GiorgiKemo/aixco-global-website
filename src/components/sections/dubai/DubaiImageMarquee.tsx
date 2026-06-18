@@ -101,6 +101,8 @@ export function DubaiImageMarquee({
 
     const handleWheel = (event: WheelEvent) => {
       if (!event.cancelable || event.ctrlKey || event.metaKey || event.altKey) return;
+      const hasHorizontalIntent = event.shiftKey || Math.abs(event.deltaX) > Math.abs(event.deltaY);
+      if (!hasHorizontalIntent) return;
 
       const delta = getGalleryWheelDelta(event);
       if (Math.abs(delta) < 1) return;
@@ -270,7 +272,6 @@ export function DubaiImageMarquee({
       data-scroll-direction={reverse ? "reverse" : "forward"}
       data-scroll-speed={speed}
       data-visual-scroll="framer-transform"
-      data-glide-scroll-native="true"
       data-scroll-easing="true"
       data-scroll-mode="framer-motion-glide-loop"
       data-scroll-physics="auto-wheel-pointer-drag-glide"

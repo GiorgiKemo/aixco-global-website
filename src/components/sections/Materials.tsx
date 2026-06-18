@@ -30,10 +30,9 @@ export function Materials() {
       <div className="container-x">
         <div className="scroll-reveal flex flex-col gap-7 border-b border-foreground/10 pb-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="eyebrow">{tx("Client materials")}</p>
-            <h2 className="heading-section mt-5 max-w-2xl">{tx("Materials & downloads")}</h2>
+            <p className="eyebrow">{tx("Download Materials")}</p>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/75 md:text-lg">
-              {tx("Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.")}
+              {tx("Access brochures, catalogs, property presentations, and supporting documentation.")}
             </p>
           </div>
           <div className="grid w-full max-w-md grid-cols-3 gap-px overflow-hidden border border-foreground/10 bg-foreground/10 text-center lg:shrink-0">

@@ -31,8 +31,50 @@ const keyedText: Record<string, string> = {
 };
 const pageTitle = "AIXCO.Global | Real Estate Investment";
 const pageDescription =
-  "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.";
+  "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
 const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
+  "Global Real Estate": {
+    de: "Globale Immobilien",
+    ru: "Глобальная недвижимость",
+    ka: "გლობალური უძრავი ქონება",
+    tr: "Global gayrimenkul",
+    ar: "العقارات العالمية",
+  },
+  "Emerging Market Opportunities with AIXCO": {
+    de: "Chancen in aufstrebenden Maerkten mit AIXCO",
+    ru: "Возможности на развивающихся рынках с AIXCO",
+    ka: "განვითარებადი ბაზრების შესაძლებლობები AIXCO-სთან ერთად",
+    tr: "AIXCO ile gelisen pazar firsatlari",
+    ar: "فرص الأسواق الناشئة مع AIXCO",
+  },
+  "Emerging Market Opportunities": {
+    de: "Chancen in aufstrebenden Maerkten",
+    ru: "Возможности на развивающихся рынках",
+    ka: "განვითარებადი ბაზრების შესაძლებლობები",
+    tr: "Gelisen pazar firsatlari",
+    ar: "فرص الأسواق الناشئة",
+  },
+  "with AIXCO": {
+    de: "mit AIXCO",
+    ru: "с AIXCO",
+    ka: "AIXCO-სთან ერთად",
+    tr: "AIXCO ile",
+    ar: "مع AIXCO",
+  },
+  "Own property in some of the world's fastest-growing destinations.": {
+    de: "Erwerben Sie Eigentum in einigen der am schnellsten wachsenden Destinationen der Welt.",
+    ru: "Владейте недвижимостью в одних из самых быстрорастущих направлений мира.",
+    ka: "ფლობდეთ ქონებას მსოფლიოს ყველაზე სწრაფად მზარდ მიმართულებებში.",
+    tr: "Dunyanin en hizli buyuyen destinasyonlarindan bazilarinda mulk sahibi olun.",
+    ar: "امتلك عقارا في بعض اسرع الوجهات نموا في العالم.",
+  },
+  "Book consultation": {
+    de: "Beratung buchen",
+    ru: "Записаться на консультацию",
+    ka: "კონსულტაციის დაჯავშნა",
+    tr: "Danismanlik randevusu",
+    ar: "حجز استشارة",
+  },
   "Emerging market opportunities with AIXCO": {
     de: "Chancen in aufstrebenden Maerkten mit AIXCO",
     ru: "Возможности на развивающихся рынках с AIXCO",
@@ -89,12 +131,12 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "AIXCO ile bir daire satın almak, broker ortağı olmak veya AIXCO ekibiyle mülk yönetimini görüşmek için şimdi kaydolun.",
     ar: "سجّل معنا الآن لشراء شقة مع AIXCO، أو للشراكة كوسيط، أو لمناقشة إدارة العقارات مع فريق AIXCO.",
   },
-  "New guide: buying an apartment with AIXCO from EUR 50,000": {
-    de: "Neuer Leitfaden: Apartmentkauf mit AIXCO ab 50.000 EUR",
-    ru: "Новый гид: покупка апартамента с AIXCO от 50 000 евро",
-    ka: "ახალი გზამკვლევი: ბინის შეძენა AIXCO-სთან ერთად 50,000 ევროდან",
-    tr: "Yeni rehber: AIXCO ile 50.000 EUR'dan daire satın alma",
-    ar: "دليل جديد: شراء شقة مع AIXCO ابتداءً من 50,000 يورو",
+  "New guide: buying an apartment with AIXCO from EUR 45,000": {
+    de: "Neuer Leitfaden: Apartmentkauf mit AIXCO ab 45.000 EUR",
+    ru: "Новый гид: покупка апартамента с AIXCO от 45 000 евро",
+    ka: "ახალი გზამკვლევი: ბინის შეძენა AIXCO-სთან ერთად 45,000 ევროდან",
+    tr: "Yeni rehber: AIXCO ile 45.000 EUR'dan daire satın alma",
+    ar: "دليل جديد: شراء شقة مع AIXCO ابتداءً من 45,000 يورو",
   },
   "Emerging market opportunity": {
     de: "Chance in einem aufstrebenden Markt",
@@ -138,12 +180,12 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "2009'dan beri AIXCO Avrupa ve Körfez'de gayrimenkul alım, satım ve aracılık süreçleri yürütüyor; bugün odak, İsviçre ve Dubai geçmişiyle seçilmiş gelişen pazar fırsatlarıdır.",
     ar: "منذ عام 2009، اشترت AIXCO وباعت ووسّطت العقارات في أوروبا والخليج؛ واليوم تركّز على فرص مختارة في الأسواق الناشئة مع سجل سابق في سويسرا ودبي.",
   },
-  "Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €50,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.": {
-    de: "Ausgewaehlte Projekte und Apartments in aufstrebenden Maerkten ueber AIXCO, mit Batumi als aktuellem Fokus, Einstieg ab 50.000 EUR, 100% auslaendischem Eigentum, Bankfinanzierung mindestens 60% und einem transparenten ISO-zertifizierten Prozess.",
-    ru: "Выбранные проекты и апартаменты на развивающихся рынках через AIXCO, с текущим фокусом на Батуми, входом от 50 000 евро, 100% иностранной собственностью, банковским финансированием минимум 60% и прозрачным ISO-сертифицированным процессом.",
-    ka: "AIXCO-ს მეშვეობით შერჩეული პროექტები და ბინები განვითარებად ბაზრებზე, ბათუმით როგორც მიმდინარე ფოკუსით, შესვლა 50,000 ევროდან, 100% უცხოური საკუთრება, საბანკო დაფინანსება მინიმუმ 60% და გამჭვირვალე ISO-სერტიფიცირებული პროცესი.",
-    tr: "AIXCO aracılığıyla seçilmiş gelişen pazar projeleri ve daireleri; mevcut odak Batum, giriş 50.000 EUR'dan, %100 yabancı mülkiyeti, minimum %60 banka finansmanı ve şeffaf ISO sertifikalı süreç.",
-    ar: "مشاريع وشقق مختارة في الأسواق الناشئة عبر AIXCO، مع باتومي كتركيز حالي، ودخول من 50,000 يورو، وملكية أجنبية 100%، وتمويل مصرفي بحد أدنى 60%، وعملية شفافة معتمدة وفق ISO.",
+  "Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.": {
+    de: "Ausgewaehlte Projekte und Apartments in aufstrebenden Maerkten ueber AIXCO, mit Batumi als aktuellem Fokus, Einstieg ab 45.000 EUR, 100% auslaendischem Eigentum, Bankfinanzierung mindestens 60% und einem transparenten ISO-zertifizierten Prozess.",
+    ru: "Выбранные проекты и апартаменты на развивающихся рынках через AIXCO, с текущим фокусом на Батуми, входом от 45 000 евро, 100% иностранной собственностью, банковским финансированием минимум 60% и прозрачным ISO-сертифицированным процессом.",
+    ka: "AIXCO-ს მეშვეობით შერჩეული პროექტები და ბინები განვითარებად ბაზრებზე, ბათუმით როგორც მიმდინარე ფოკუსით, შესვლა 45,000 ევროდან, 100% უცხოური საკუთრება, საბანკო დაფინანსება მინიმუმ 60% და გამჭვირვალე ISO-სერტიფიცირებული პროცესი.",
+    tr: "AIXCO aracılığıyla seçilmiş gelişen pazar projeleri ve daireleri; mevcut odak Batum, giriş 45.000 EUR'dan, %100 yabancı mülkiyeti, minimum %60 banka finansmanı ve şeffaf ISO sertifikalı süreç.",
+    ar: "مشاريع وشقق مختارة في الأسواق الناشئة عبر AIXCO، مع باتومي كتركيز حالي، ودخول من 45,000 يورو، وملكية أجنبية 100%، وتمويل مصرفي بحد أدنى 60%، وعملية شفافة معتمدة وفق ISO.",
   },
   "Today, Batumi is AIXCO's current selected emerging-market focus, with exclusive project access, 100% foreign ownership, no residency permit requirement, bank financing minimum 60% of property value, and an ISO-certified transparency process.": {
     de: "Heute ist Batumi der aktuelle ausgewaehlte Fokus von AIXCO in einem aufstrebenden Markt, mit exklusivem Projektzugang, 100% auslaendischem Eigentum, keiner Aufenthaltserlaubnis fuer den Kauf, Bankfinanzierung von mindestens 60% des Immobilienwerts und einem ISO-zertifizierten Transparenzprozess.",
@@ -166,12 +208,12 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "Seçilmiş gelişen pazarlarda daire satın alan veya birimleri rehberli dijital süreçle rezerve eden müşteriler için.",
     ar: "للعملاء الذين يشترون شققًا أو يحجزون وحدات في أسواق ناشئة مختارة من خلال عملية رقمية موجهة.",
   },
-  "Entry starts from €50,000 for selected emerging-market projects and apartments available exclusively through AIXCO, with Batumi as the current focus. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
-    de: "Der Einstieg beginnt bei 50.000 EUR fuer ausgewaehlte Projekte und Apartments in aufstrebenden Maerkten, exklusiv ueber AIXCO, mit Batumi als aktuellem Fokus. Die volle Provision kann bereits ab nur 10% Anzahlung zahlbar sein; die endgueltigen Bedingungen haengen von Projekt und Vereinbarung ab.",
-    ru: "Вход начинается от 50 000 евро для выбранных проектов и апартаментов на развивающихся рынках, доступных эксклюзивно через AIXCO, с текущим фокусом на Батуми. Полная комиссия может выплачиваться уже с 10% первоначального взноса; окончательные условия зависят от проекта и соглашения.",
-    ka: "შესვლა იწყება 50,000 ევროდან შერჩეული განვითარებადი ბაზრის პროექტებისა და ბინებისთვის, ექსკლუზიურად AIXCO-ს მეშვეობით, ბათუმით როგორც მიმდინარე ფოკუსით. სრული საკომისიო შეიძლება გადახდილი იყოს მხოლოდ 10% წინასწარი შენატანიდან; საბოლოო პირობები დამოკიდებულია პროექტსა და შეთანხმებაზე.",
-    tr: "AIXCO aracılığıyla özel olarak sunulan seçilmiş gelişen pazar projeleri ve daireleri için giriş 50.000 EUR'dan başlar; mevcut odak Batum'dur. Tam komisyon yalnızca %10 peşinatla ödenebilir; nihai koşullar proje ve anlaşmaya bağlıdır.",
-    ar: "يبدأ الدخول من 50,000 يورو للمشاريع والشقق المختارة في الأسواق الناشئة والمتاحة حصريًا عبر AIXCO، مع باتومي كتركيز حالي. يمكن أن تكون العمولة الكاملة مستحقة من دفعة أولى قدرها 10% فقط، وتخضع الشروط النهائية للمشروع والاتفاق.",
+  "Entry starts from €45,000 for selected emerging-market projects and apartments available exclusively through AIXCO, with Batumi as the current focus. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
+    de: "Der Einstieg beginnt bei 45.000 EUR fuer ausgewaehlte Projekte und Apartments in aufstrebenden Maerkten, exklusiv ueber AIXCO, mit Batumi als aktuellem Fokus. Die volle Provision kann bereits ab nur 10% Anzahlung zahlbar sein; die endgueltigen Bedingungen haengen von Projekt und Vereinbarung ab.",
+    ru: "Вход начинается от 45 000 евро для выбранных проектов и апартаментов на развивающихся рынках, доступных эксклюзивно через AIXCO, с текущим фокусом на Батуми. Полная комиссия может выплачиваться уже с 10% первоначального взноса; окончательные условия зависят от проекта и соглашения.",
+    ka: "შესვლა იწყება 45,000 ევროდან შერჩეული განვითარებადი ბაზრის პროექტებისა და ბინებისთვის, ექსკლუზიურად AIXCO-ს მეშვეობით, ბათუმით როგორც მიმდინარე ფოკუსით. სრული საკომისიო შეიძლება გადახდილი იყოს მხოლოდ 10% წინასწარი შენატანიდან; საბოლოო პირობები დამოკიდებულია პროექტსა და შეთანხმებაზე.",
+    tr: "AIXCO aracılığıyla özel olarak sunulan seçilmiş gelişen pazar projeleri ve daireleri için giriş 45.000 EUR'dan başlar; mevcut odak Batum'dur. Tam komisyon yalnızca %10 peşinatla ödenebilir; nihai koşullar proje ve anlaşmaya bağlıdır.",
+    ar: "يبدأ الدخول من 45,000 يورو للمشاريع والشقق المختارة في الأسواق الناشئة والمتاحة حصريًا عبر AIXCO، مع باتومي كتركيز حالي. يمكن أن تكون العمولة الكاملة مستحقة من دفعة أولى قدرها 10% فقط، وتخضع الشروط النهائية للمشروع والاتفاق.",
   },
   "Can foreigners buy property in AIXCO's current emerging-market focus?": {
     de: "Koennen Auslaender Immobilien im aktuellen aufstrebenden Fokusmarkt von AIXCO kaufen?",
@@ -467,12 +509,12 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "Real estate interest",
     ar: "Real estate interest",
   },
-  "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
-    de: "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
-    ru: "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
-    ka: "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
-    tr: "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
-    ar: "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
+  "Entry starts from €45,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
+    de: "Entry starts from €45,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
+    ru: "Entry starts from €45,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
+    ka: "Entry starts from €45,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
+    tr: "Entry starts from €45,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
+    ar: "Entry starts from €45,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.",
   },
   "Can I ask about AIXCO company financing?": {
     de: "Can I ask about AIXCO company financing?",
@@ -746,12 +788,12 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "Altyapi ortaklari icin stratejik ortak guncellemesi yayimlandi",
     ar: "Strategic partner update published for infrastructure partners",
   },
-  "New guide: buying Batumi apartments from EUR 50,000": {
-    de: "Neuer Leitfaden: Batumi-Wohnungen ab 50.000 EUR kaufen",
-    ru: "Новое руководство: покупка квартир в Батуми от 50 000 EUR",
-    ka: "ახალი გზამკვლევი: ბათუმის ბინების ყიდვა 50,000 ევროდან",
-    tr: "Yeni rehber: 50.000 EUR'dan Batum daireleri satın alma",
-    ar: "دليل جديد: شراء شقق باتومي من 50,000 يورو",
+  "New guide: buying Batumi apartments from EUR 45,000": {
+    de: "Neuer Leitfaden: Batumi-Wohnungen ab 45.000 EUR kaufen",
+    ru: "Новое руководство: покупка квартир в Батуми от 45 000 EUR",
+    ka: "ახალი გზამკვლევი: ბათუმის ბინების ყიდვა 45,000 ევროდან",
+    tr: "Yeni rehber: 45.000 EUR'dan Batum daireleri satın alma",
+    ar: "دليل جديد: شراء شقق باتومي من 45,000 يورو",
   },
   "All Rights Reserved.": { de: "Alle Rechte vorbehalten.", ru: "Все права защищены.", ka: "ყველა უფლება დაცულია.", tr: "Tüm hakları saklıdır.", ar: "جميع الحقوق محفوظة." },
   "ISO 27001-2022 Certified Systems.": {
@@ -1124,8 +1166,8 @@ const germanQualityTranslations: TranslationSource = {
   },
   "100% foreign ownership": { de: "100% ausländisches Eigentum" },
   "No residency permit required": { de: "Keine Aufenthaltsgenehmigung erforderlich" },
-  "Entry from €50,000": { de: "Einstieg ab 50.000 EUR" },
-  "Entry from â‚¬50,000": { de: "Einstieg ab 50.000 EUR" },
+  "Entry from €45,000": { de: "Einstieg ab 45.000 EUR" },
+  "Entry from â‚¬45,000": { de: "Einstieg ab 45.000 EUR" },
   "Bank financing minimum 60%": { de: "Bankfinanzierung mindestens 60%" },
   "Approx. 10-12% net rental yields": { de: "Ca. 10-12% Nettomietrendite" },
   "Bank financing minimum": { de: "Bankfinanzierung mindestens" },
@@ -1144,8 +1186,8 @@ const germanQualityTranslations: TranslationSource = {
   "Prime apartments from our own stock at the best available prices": {
     de: "Prime-Apartments aus eigenem Bestand zu den besten verfügbaren Preisen",
   },
-  "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.": {
-    de: "Ausgewählte Batumi-Projekte und Apartments über AIXCO, mit Einstieg ab 50.000 EUR, 100% ausländischem Eigentum, Bankfinanzierungsoptionen und transparentem ISO-zertifiziertem Prozess.",
+  "Selected Batumi projects and apartments through AIXCO, with entry from €45,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.": {
+    de: "Ausgewählte Batumi-Projekte und Apartments über AIXCO, mit Einstieg ab 45.000 EUR, 100% ausländischem Eigentum, Bankfinanzierungsoptionen und transparentem ISO-zertifiziertem Prozess.",
   },
   "Selected Batumi property opportunity": { de: "Ausgewählte Immobilienchance in Batumi" },
   "Client materials": { de: "Kundenmaterialien" },
@@ -1250,8 +1292,8 @@ const germanQualityTranslations: TranslationSource = {
     de: "Immobilien kaufen, Apartments reservieren oder mit AIXCO an Immobiliendienstleistungen arbeiten.",
   },
   "What is the minimum amount to reserve or buy?": { de: "Welcher Mindestbetrag gilt für Reservierung oder Kauf?" },
-  "Entry starts from €50,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
-    de: "Der Einstieg beginnt ab 50.000 EUR für ausgewählte Batumi-Projekte und Apartments, die exklusiv über AIXCO verfügbar sind. Die volle Provision kann bereits ab 10% Anzahlung zahlbar sein; die endgültigen Bedingungen hängen von Projekt und Vereinbarung ab.",
+  "Entry starts from €45,000 for selected Batumi projects and apartments available exclusively through AIXCO. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
+    de: "Der Einstieg beginnt ab 45.000 EUR für ausgewählte Batumi-Projekte und Apartments, die exklusiv über AIXCO verfügbar sind. Die volle Provision kann bereits ab 10% Anzahlung zahlbar sein; die endgültigen Bedingungen hängen von Projekt und Vereinbarung ab.",
   },
   "Can I buy property directly?": { de: "Kann ich direkt eine Immobilie kaufen?" },
   "Yes. Customers may pursue direct apartment purchase, brokerage support, or property administration.": {
@@ -1308,11 +1350,11 @@ const germanQualityTranslations: TranslationSource = {
   "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck.": {
     de: "600 USD durchschnittliche Langzeitmiete pro Monat, 80 USD durchschnittliche Kurzzeitmiete pro Nacht und 90% potenzielle Auslastung laut Projektunterlagen.",
   },
-  "Selected projects and apartments available exclusively through AIXCO Entry from €50,000 Prime apartments from our own stock at the best available prices": {
-    de: "Ausgewählte Projekte und Apartments exklusiv über AIXCO verfügbar. Einstieg ab 50.000 EUR. Prime-Apartments aus eigenem Bestand zu den besten verfügbaren Preisen.",
+  "Selected projects and apartments available exclusively through AIXCO Entry from €45,000 Prime apartments from our own stock at the best available prices": {
+    de: "Ausgewählte Projekte und Apartments exklusiv über AIXCO verfügbar. Einstieg ab 45.000 EUR. Prime-Apartments aus eigenem Bestand zu den besten verfügbaren Preisen.",
   },
-  "Selected projects and apartments available exclusively through AIXCO Entry from â‚¬50,000 Prime apartments from our own stock at the best available prices": {
-    de: "Ausgewählte Projekte und Apartments exklusiv über AIXCO verfügbar. Einstieg ab 50.000 EUR. Prime-Apartments aus eigenem Bestand zu den besten verfügbaren Preisen.",
+  "Selected projects and apartments available exclusively through AIXCO Entry from â‚¬45,000 Prime apartments from our own stock at the best available prices": {
+    de: "Ausgewählte Projekte und Apartments exklusiv über AIXCO verfügbar. Einstieg ab 45.000 EUR. Prime-Apartments aus eigenem Bestand zu den besten verfügbaren Preisen.",
   },
   "100% foreign ownership No residency permit required": {
     de: "100% ausländisches Eigentum. Keine Aufenthaltsgenehmigung erforderlich.",

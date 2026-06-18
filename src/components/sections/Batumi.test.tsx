@@ -33,7 +33,7 @@ describe("Batumi", () => {
     const media = marketCard?.querySelector("[data-batumi-card-media]");
     const copy = marketCard?.querySelector("[data-batumi-card-copy]");
     const metricGrid = marketCard?.querySelector("[data-batumi-metric-grid]");
-    const entryTile = within(metricGrid as HTMLElement).getByText("EUR 50k").closest("[data-batumi-metric-tile]");
+    const entryTile = within(metricGrid as HTMLElement).getByText("EUR 45k").closest("[data-batumi-metric-tile]");
     const entryAccent = entryTile?.lastElementChild as HTMLElement | null;
     const details = marketCard?.querySelector("[data-batumi-detail-notes]");
 

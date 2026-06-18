@@ -224,12 +224,13 @@ describe("Dubai", () => {
     Object.defineProperty(parkRail, "scrollWidth", { configurable: true, value: 2080 });
     parkRail.scrollLeft = 0;
 
-    fireEvent.wheel(parkRail, { deltaX: 0, deltaY: 180 });
+    const verticalWheelPassedThrough = fireEvent.wheel(parkRail, { deltaX: 0, deltaY: 180 });
 
     expect(parkRail.closest("section")?.className).toContain("min-w-0");
     expect(parkRail).toHaveAttribute("data-motion-engine", "framer-motion");
     expect(parkRail).toHaveAttribute("data-visual-scroll", "framer-transform");
-    expect(parkRail).toHaveAttribute("data-glide-scroll-native", "true");
+    expect(verticalWheelPassedThrough).toBe(true);
+    expect(parkRail).not.toHaveAttribute("data-glide-scroll-native");
     expect(parkRail).not.toHaveAttribute("data-native-scroll");
     expect(parkRail).toHaveAttribute("data-scroll-mode", "framer-motion-glide-loop");
     expect(parkRail).toHaveAttribute("data-scroll-easing", "true");
@@ -269,7 +270,7 @@ describe("Dubai", () => {
     parkRail.scrollLeft = 0;
 
     frames.runQueuedFrames(1000);
-    fireEvent.wheel(parkRail, { deltaX: 0, deltaY: -180 });
+    fireEvent.wheel(parkRail, { deltaX: -180, deltaY: 0 });
     frames.runQueuedFrames(1016);
 
     expect(parkRail).toHaveAttribute("data-scroll-mode", "framer-motion-glide-loop");

@@ -111,10 +111,10 @@ describe("Participate", () => {
   it("keeps the participation headline wrapped safely on narrow phones", () => {
     const { container } = renderParticipate();
 
-    const heading = screen.getByRole("heading", { name: "How it works" });
+    const heading = screen.getByRole("heading", { name: "ACQUIRE.PARTNER.CREATE VALUE." });
 
     expect(heading).toHaveClass("[overflow-wrap:anywhere]");
-    expect(heading).toHaveTextContent("How it works");
+    expect(heading).toHaveTextContent("ACQUIRE.PARTNER.CREATE VALUE.");
     expect(container.querySelector("section#participate")).toHaveClass("overflow-x-hidden");
     expect(container.querySelector("section#participate")).toHaveClass("md:pb-20");
     expect(container.querySelector("[data-layout='alternating-participation-cards']")).toHaveClass("md:pb-8");

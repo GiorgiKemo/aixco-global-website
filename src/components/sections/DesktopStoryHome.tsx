@@ -43,6 +43,7 @@ import type { SiteContent } from "@/lib/backend/site-content";
 import { LANGS, useI18n } from "@/i18n/I18nProvider";
 import type { Lang } from "@/i18n/languages";
 import {
+  aixcoDubaiHeroVideo,
   aixcoHeroBackgroundVideo,
   aixcoLiveImages,
   aixcoLiveLogos,
@@ -51,7 +52,7 @@ import {
 } from "@/lib/aixco-live-assets";
 import { replaceLocationHash } from "@/lib/section-hash";
 import { getSafePublicAssetHref } from "@/lib/security/urls";
-import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
+import { glideScrollFrameEvent, scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 import { cn } from "@/lib/utils";
 import { StoryMediaReveal, StorySceneReveal } from "@/components/StoryReveal";
 import { PartnerMarquee } from "@/components/partners/PartnerMarquee";
@@ -278,46 +279,61 @@ function formatChapterNumber(index: number) {
 }
 
 function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
-  const [isInView, setIsInView] = useState(false);
+  const [hasEnteredView, setHasEnteredView] = useState(false);
+  const hasEnteredViewRef = useRef(false);
   const visibilityFrameRef = useRef<number | null>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root || typeof IntersectionObserver === "undefined") {
-      setIsInView(true);
+      hasEnteredViewRef.current = true;
+      setHasEnteredView(true);
       return undefined;
     }
 
-    const commitVisibility = (nextIsInView: boolean) => {
-      setIsInView((current) => current === nextIsInView ? current : nextIsInView);
+    const commitEnteredView = () => {
+      if (hasEnteredViewRef.current) return;
+      hasEnteredViewRef.current = true;
+      setHasEnteredView(true);
     };
 
     const syncCurrentVisibility = () => {
       visibilityFrameRef.current = null;
+      if (hasEnteredViewRef.current) return;
+
       const rect = root.getBoundingClientRect();
       const viewportHeight = Math.max(1, window.innerHeight);
-      commitVisibility(rect.top < viewportHeight * 0.98 && rect.bottom > viewportHeight * 0.02);
+      const isNearViewport = rect.top < viewportHeight * 1.45 && rect.bottom > viewportHeight * -0.2;
+
+      if (isNearViewport) {
+        commitEnteredView();
+      }
     };
 
     const requestVisibilitySync = () => {
-      if (visibilityFrameRef.current !== null) return;
+      if (visibilityFrameRef.current !== null || hasEnteredViewRef.current) return;
       visibilityFrameRef.current = window.requestAnimationFrame(syncCurrentVisibility);
     };
 
-    syncCurrentVisibility();
-
     const observer = new IntersectionObserver(
-      ([entry]) => commitVisibility(entry.isIntersecting),
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.01 },
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          commitEnteredView();
+        }
+      },
+      { rootMargin: "20% 0px 45% 0px", threshold: 0.01 },
     );
 
+    syncCurrentVisibility();
     observer.observe(root);
     window.addEventListener("scroll", requestVisibilitySync, { passive: true });
+    window.addEventListener(glideScrollFrameEvent, requestVisibilitySync);
     window.addEventListener("resize", requestVisibilitySync);
 
     return () => {
       observer.disconnect();
       window.removeEventListener("scroll", requestVisibilitySync);
+      window.removeEventListener(glideScrollFrameEvent, requestVisibilitySync);
       window.removeEventListener("resize", requestVisibilitySync);
       if (visibilityFrameRef.current !== null) {
         window.cancelAnimationFrame(visibilityFrameRef.current);
@@ -326,7 +342,7 @@ function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
     };
   }, [rootRef]);
 
-  return isInView;
+  return hasEnteredView;
 }
 
 function StoryTextReveal({
@@ -356,11 +372,6 @@ function StoryTextReveal({
     if (!isInView || animationState !== "idle") return;
     setAnimationRun((current) => current + 1);
     setAnimationState("animating");
-  }, [animationState, isInView]);
-
-  useLayoutEffect(() => {
-    if (isInView || animationState === "idle") return;
-    setAnimationState("idle");
   }, [animationState, isInView]);
 
   useEffect(() => {
@@ -847,7 +858,7 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           className="h-full w-full object-cover brightness-[1.08] saturate-[1.08]"
         />
       )}
@@ -1052,8 +1063,34 @@ function SceneShell({
   );
 }
 
+function StoryHeroIntroLoader() {
+  return (
+    <div className="story-hero-intro-loader" aria-hidden="true">
+      <div className="story-hero-intro-loader__lockup">
+        <div className="story-hero-intro-loader__mark-shell">
+          <img
+            src={aixcoLiveLogos.aixcoMark}
+            alt=""
+            className="story-hero-intro-loader__official-mark"
+            decoding="sync"
+            fetchPriority="high"
+          />
+        </div>
+        <div className="story-hero-intro-loader__wordmark">AIXCO.GLOBAL</div>
+      </div>
+    </div>
+  );
+}
+
 function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy: string) => string; onRegister: () => void }) {
   const statementLabel = heroStoryStatementLines.map((line) => tx(line)).join(" ");
+  const [introComplete, setIntroComplete] = useState(false);
+  const shouldDelayHeroContent = isActive && !introComplete;
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIntroComplete(true), 13200);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
     <div className="relative h-full min-h-0 overflow-hidden text-white">
@@ -1064,10 +1101,10 @@ function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy:
             className="story-hero-lockup hero-reference-font"
             initial={{ opacity: 0, y: 28 }}
             animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0.94, y: 6 }}
-            transition={revealTransition}
+            transition={{ ...revealTransition, delay: shouldDelayHeroContent ? 12.05 : 0 }}
           >
             <header className="story-hero-brand">
-              <p className="story-hero-kicker">{tx("Real Estate Investment")}</p>
+              <p className="story-hero-kicker">{tx("Global Real Estate")}</p>
               <h1 aria-label="AIXCO.GLOBAL" data-brand-lockup="story-hero" className="story-hero-wordmark hero-title-shadow">
                 <img
                   src={aixcoLiveLogos.aixcoMark}
@@ -1105,7 +1142,7 @@ function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy:
 
             <div className="story-hero-actions">
               <button type="button" onClick={onRegister} className="btn-gold">
-                {tx("Register")}
+                {tx("Book consultation")}
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </button>
               <a
@@ -1190,20 +1227,6 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
   return (
     <div className="story-batumi-gallery" aria-label={tx("Batumi project image gallery")}>
       <div className="story-batumi-gallery__wash" aria-hidden />
-      <div className="story-batumi-gallery__preload" aria-hidden>
-        {galleryImages.map((image) => (
-          <Image
-            key={`preload-${image.key}`}
-            src={image.src}
-            alt=""
-            width={image.width}
-            height={image.height}
-            sizes="(min-width: 1280px) 52vw, 100vw"
-            quality={95}
-            loading="eager"
-          />
-        ))}
-      </div>
       <ExpandableImage
         src={selectedImage.src}
         title={selectedImage.alt}
@@ -1214,8 +1237,8 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
           alt={selectedImage.alt}
           fill
           sizes="(min-width: 1280px) 52vw, 100vw"
-          quality={95}
-          loading="eager"
+          quality={90}
+          loading="lazy"
           data-batumi-hero-image={selectedImage.key}
           className="story-batumi-gallery__hero-image"
           style={{ objectPosition: selectedImage.objectPosition }}
@@ -1263,7 +1286,7 @@ function BatumiBenefitIconGrid({
   tx: (copy: string) => string;
 }) {
   const items = [
-    { icon: BadgeEuro, metric: "€50k", label: benefits[3] ?? "Entry from €50,000" },
+    { icon: BadgeEuro, metric: "€45k", label: benefits[3] ?? "Entry from €45,000" },
     { icon: KeyRound, metric: "100%", label: benefits[1] ?? "100% foreign ownership" },
     { icon: TrendingUp, metric: "60%+", label: benefits[4] ?? "Bank financing minimum 60%" },
     { icon: CirclePercent, metric: "10-12%", label: benefits[5] ?? "Approx. 10-12% net rental yields" },
@@ -1311,17 +1334,27 @@ function AboutScene({
         <div className="relative h-full min-h-0 overflow-hidden">
           <StoryMediaReveal isActive={isRevealed} className="story-about-cinematic-media absolute inset-0">
             <div className="story-about-cinematic-image relative h-full w-full">
-              <Image
-                src={aixcoLiveImages.batumi}
-                alt={tx("Batumi skyline at sunset")}
-                fill
-                loading="lazy"
-                decoding="async"
-                quality={95}
-                sizes="(min-width: 1280px) calc(100vw - 14rem), 100vw"
+              <video
                 className="h-full w-full object-cover"
-                style={{ objectPosition: "center 42%" }}
-              />
+                poster={aixcoDubaiHeroVideo.poster}
+                autoPlay={isRevealed}
+                muted
+                loop
+                playsInline
+                preload="auto"
+                aria-label={tx(aixcoDubaiHeroVideo.title)}
+                onLoadedData={(event) => {
+                  event.currentTarget.playbackRate = 0.82;
+                }}
+                onCanPlay={(event) => {
+                  event.currentTarget.playbackRate = 0.82;
+                  if (isRevealed) {
+                    void event.currentTarget.play().catch(() => undefined);
+                  }
+                }}
+              >
+                <source src={aixcoDubaiHeroVideo.src} type="video/mp4" />
+              </video>
             </div>
           </StoryMediaReveal>
           <div
@@ -1814,7 +1847,7 @@ function BatumiScene({
         <StoryTextReveal label={tx("Batumi")} />
       </h2>
       <p className="story-body text-foreground/78">
-        {tx("Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €50,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.")}
+        {tx("Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.")}
       </p>
       <BatumiBenefitIconGrid benefits={batumiBenefits} tx={tx} />
       <div data-layout="story-batumi-properties" className="w-full divide-y divide-foreground/30">
@@ -2467,8 +2500,9 @@ export function DesktopStoryHome() {
 
     nextActiveIndex = clamp(nextActiveIndex, 0, storyChapters.length - 1);
     const nextSectionPresence = sectionRects.map((rect, index) => {
-      if (!rect) return Math.abs(index - nextActiveIndex) <= 1;
-      return rect.top < viewportHeight * 1.05 && rect.bottom > -viewportHeight * 0.05;
+      const isNearActiveSection = Math.abs(index - nextActiveIndex) <= 2;
+      if (!rect) return isNearActiveSection;
+      return isNearActiveSection || (rect.top < viewportHeight * 1.2 && rect.bottom > -viewportHeight * 0.1);
     });
 
     for (let index = 0; index < sectionRects.length; index += 1) {
@@ -2495,7 +2529,9 @@ export function DesktopStoryHome() {
         section.style.setProperty("--story-about-access-zoom-progress", clamp(exitProgress * 2, 0, 1).toFixed(3));
       }
 
-      nextSectionPresence[index] = top < viewportHeight * 0.98 && bottom > viewportHeight * 0.02;
+      nextSectionPresence[index] =
+        Math.abs(index - nextActiveIndex) <= 2 ||
+        (top < viewportHeight * 1.15 && bottom > -viewportHeight * 0.1);
     }
 
     if (activeIndexRef.current !== nextActiveIndex) {
@@ -2530,12 +2566,14 @@ export function DesktopStoryHome() {
     const refreshTimers = [120, 620, 1400].map((delay) => window.setTimeout(refreshAndSync, delay));
 
     window.addEventListener("scroll", requestScrollSync, { passive: true });
+    window.addEventListener(glideScrollFrameEvent, requestScrollSync);
     window.addEventListener("resize", refreshAndSync);
     window.addEventListener("load", refreshAndSync);
 
     return () => {
       refreshTimers.forEach((timer) => window.clearTimeout(timer));
       window.removeEventListener("scroll", requestScrollSync);
+      window.removeEventListener(glideScrollFrameEvent, requestScrollSync);
       window.removeEventListener("resize", refreshAndSync);
       window.removeEventListener("load", refreshAndSync);
       if (scrollFrameRef.current !== null) {
@@ -2636,6 +2674,7 @@ export function DesktopStoryHome() {
 
   return (
     <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress": "0%" } as CSSProperties}>
+      <StoryHeroIntroLoader />
       <FixedHeroBackdrop visible={activeIndex === 0} />
       <StoryChrome
         activeIndex={activeIndex}

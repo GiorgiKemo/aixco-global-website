@@ -54,6 +54,7 @@ export const aixcoLiveVideos = {
   batumiOverview: `${batumiGalleryBase}/batumi2.mp4`,
   batumiBuy: `${batumiGalleryBase}/batumi1.mp4`,
   bonds: `${optimizedVideoBase}/bonds-optimized.mp4`,
+  dubaiHero: aixcoLivePath("videos/aixco-group-dubai-hero.mp4"),
   fundOne: `${optimizedVideoBase}/fund1-optimized.mp4`,
   fundTwo: `${optimizedVideoBase}/fund2-optimized.mp4`,
   fundThree: `${optimizedVideoBase}/fund3-optimized.mp4`,
@@ -75,6 +76,12 @@ export const aixcoHeroBackgroundVideo = {
   src: `${optimizedVideoBase}/batumi-hero-landscape-optimized.mp4`,
   poster: `${optimizedVideoBase}/batumi-hero-landscape-poster.jpg`,
   title: "Batumi hero landscape",
+} as const;
+
+export const aixcoDubaiHeroVideo = {
+  src: aixcoLiveVideos.dubaiHero,
+  poster: aixcoLivePath("videos/aixco-group-dubai-hero-poster.jpg"),
+  title: "Dubai Burj Khalifa aerial",
 } as const;
 
 export const aixcoBatumiGalleryVideos = [

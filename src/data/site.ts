@@ -71,7 +71,7 @@ const rawBatumiBenefits = [
   "Selected projects and apartments available exclusively through AIXCO",
   "100% foreign ownership",
   "No residency permit required",
-  "Entry from €50,000",
+  "Entry from €45,000",
   "Bank financing minimum 60%",
   "Approx. 10-12% net rental yields",
   "Full commission payable from only a 10% down payment",

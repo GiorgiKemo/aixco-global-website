@@ -44,7 +44,7 @@ export const newsTickerItems: NewsTickerItem[] = [
   },
   {
     id: "participation-model",
-    title: "New guide: buying an apartment with AIXCO from EUR 50,000",
+    title: "New guide: buying an apartment with AIXCO from EUR 45,000",
     source: "AIXCO",
     date: "Mar 2026",
     href: "/#how",

@@ -13,11 +13,11 @@ import { useCallback, useEffect, useRef } from 'react';
 const glideScrollOptions = {
   easing: 0.18,
   multiplier: 1,
-  storyEasing: 0.095,
-  storyMultiplier: 0.74,
-  storyMomentum: 0.11,
-  storyWheelCarry: 0.28,
-  storyWheelCarryWindowMs: 420,
+  storyEasing: 0.14,
+  storyMultiplier: 0.86,
+  storyMomentum: 0.04,
+  storyWheelCarry: 0.1,
+  storyWheelCarryWindowMs: 260,
 } as const;
 
 const glideScrollConfigSignature = [

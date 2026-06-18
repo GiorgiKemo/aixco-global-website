@@ -404,12 +404,12 @@ export const curatedVisibleTranslations = {
     tr: "Gürcistan'da fırsat odaklı yaklaşım: şeffaf euro fiyatlandırması, güçlü kira potansiyeli ve tam yabancı sahipliğiyle daire satın alın.",
     ar: "تركيز قائم على الفرص في جورجيا: اشتر شققا بتسعير شفاف باليورو، وإمكانات إيجار قوية، وملكية أجنبية كاملة.",
   },
-  "Selected Batumi projects and apartments through AIXCO, with entry from €50,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.": {
-    de: "Ausgewaehlte Batumi-Projekte und Apartments ueber AIXCO, mit Einstieg ab 50.000 €, 100% auslaendischem Eigentum, Bankfinanzierungsoptionen und transparentem ISO-zertifiziertem Prozess.",
-    ru: "Отобранные проекты и квартиры в Батуми через AIXCO: вход от 50 000 €, 100% иностранная собственность, банковское финансирование и прозрачный ISO-сертифицированный процесс.",
-    ka: "შერჩეული ბათუმის პროექტები და ბინები AIXCO-ს მეშვეობით: შესვლა 50,000 ევროდან, 100% უცხოური მფლობელობა, საბანკო დაფინანსების ვარიანტები და გამჭვირვალე ISO-სერტიფიცირებული პროცესი.",
-    tr: "AIXCO üzerinden seçilmiş Batum projeleri ve daireleri: 50.000 €'dan başlayan giriş, %100 yabancı mülkiyeti, banka finansmanı seçenekleri ve şeffaf ISO sertifikalı süreç.",
-    ar: "مشاريع وشقق مختارة في باتومي عبر AIXCO، بدخول يبدأ من 50,000 يورو، وملكية أجنبية 100%، وخيارات تمويل بنكي، وعملية شفافة معتمدة من ISO.",
+  "Selected Batumi projects and apartments through AIXCO, with entry from €45,000, 100% foreign ownership, bank financing options, and transparent ISO-certified process.": {
+    de: "Ausgewaehlte Batumi-Projekte und Apartments ueber AIXCO, mit Einstieg ab 45.000 €, 100% auslaendischem Eigentum, Bankfinanzierungsoptionen und transparentem ISO-zertifiziertem Prozess.",
+    ru: "Отобранные проекты и квартиры в Батуми через AIXCO: вход от 45 000 €, 100% иностранная собственность, банковское финансирование и прозрачный ISO-сертифицированный процесс.",
+    ka: "შერჩეული ბათუმის პროექტები და ბინები AIXCO-ს მეშვეობით: შესვლა 45,000 ევროდან, 100% უცხოური მფლობელობა, საბანკო დაფინანსების ვარიანტები და გამჭვირვალე ISO-სერტიფიცირებული პროცესი.",
+    tr: "AIXCO üzerinden seçilmiş Batum projeleri ve daireleri: 45.000 €'dan başlayan giriş, %100 yabancı mülkiyeti, banka finansmanı seçenekleri ve şeffaf ISO sertifikalı süreç.",
+    ar: "مشاريع وشقق مختارة في باتومي عبر AIXCO، بدخول يبدأ من 45,000 يورو، وملكية أجنبية 100%، وخيارات تمويل بنكي، وعملية شفافة معتمدة من ISO.",
   },
   "Selected projects and apartments available exclusively through AIXCO": {
     de: "Ausgewaehlte Projekte und Apartments exklusiv ueber AIXCO verfuegbar",
@@ -432,12 +432,12 @@ export const curatedVisibleTranslations = {
     tr: "Oturma izni gerekmez",
     ar: "لا يلزم تصريح إقامة",
   },
-  "Entry from €50,000": {
-    de: "Einstieg ab 50.000 €",
-    ru: "Вход от 50 000 €",
-    ka: "შესვლა 50,000 ევროდან",
-    tr: "50.000 €'dan başlayan giriş",
-    ar: "الدخول ابتداء من 50,000 يورو",
+  "Entry from €45,000": {
+    de: "Einstieg ab 45.000 €",
+    ru: "Вход от 45 000 €",
+    ka: "შესვლა 45,000 ევროდან",
+    tr: "45.000 €'dan başlayan giriş",
+    ar: "الدخول ابتداء من 45,000 يورو",
   },
   "Bank financing minimum 60%": {
     de: "Bankfinanzierung mindestens 60%",

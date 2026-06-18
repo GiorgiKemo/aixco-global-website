@@ -30,7 +30,7 @@ export function HeroComposition({
           data-hero-kicker="true"
           className="mb-2 min-w-0 max-w-full self-start break-words px-1 text-[clamp(0.68rem,2.6vw,1.125rem)] font-medium uppercase leading-snug tracking-normal text-white/90 [overflow-wrap:anywhere] [text-wrap:balance] drop-shadow-[0_4px_16px_rgb(0_0_0/0.55)] sm:ml-[clamp(0rem,20vw,18rem)] sm:px-0 sm:text-base md:ml-0 md:self-center md:text-base lg:ml-[clamp(0rem,20vw,18rem)] lg:self-start lg:text-lg"
         >
-          {tx("Real Estate Investment")}
+          {tx("Global Real Estate")}
         </p>
         <h1
           data-hero-title="true"

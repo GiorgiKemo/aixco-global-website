@@ -7,7 +7,7 @@ import { getSiteUrl } from "@/lib/site-url";
 
 const metadataTitle = "AIXCO.Global | Real Estate Investment";
 const metadataDescription =
-  "Explore selected real estate opportunities with transparent euro pricing from EUR 50,000, brokerage, and property administration through AIXCO.";
+  "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),

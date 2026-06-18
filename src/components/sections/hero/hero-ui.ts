@@ -5,13 +5,13 @@ export const heroEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 export const heroIntroText =
   "";
 
-export const heroOpportunityText = "Emerging market opportunities with AIXCO";
+export const heroOpportunityText = "Emerging Market Opportunities with AIXCO";
 export const heroOpportunityFootnote =
-  "";
+  "Own property in some of the world's fastest-growing destinations.";
 
 export const heroStoryStatementLines = [
-  "Emerging market",
-  "opportunities with AIXCO",
+  "Emerging Market Opportunities",
+  "with AIXCO",
 ] as const;
 
 export const headlineVariants: Variants = {

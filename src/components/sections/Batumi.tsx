@@ -25,7 +25,7 @@ export function Batumi() {
             <h2 className="heading-section mt-4 max-w-2xl [overflow-wrap:anywhere]">{tx("Batumi")}</h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75 md:text-base">
               {tx(
-                "Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €50,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.",
+                "Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.",
               )}
             </p>
           </div>

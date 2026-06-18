@@ -19,7 +19,7 @@ describe("LegacyTimeline", () => {
     expect(screen.getByText("Our journey")).toBeInTheDocument();
     expect(screen.getByText("CHF 1.1 billion")).toBeInTheDocument();
     expect(screen.getByText("USD 800m+ development volume")).toBeInTheDocument();
-    expect(screen.getByText("Selected apartments from €50,000")).toBeInTheDocument();
+    expect(screen.getByText("Selected apartments from €45,000")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /x-co-group.com/i })).toHaveAttribute("href", "https://x-co-group.com");
   });
 });

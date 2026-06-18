@@ -16,12 +16,13 @@ describe("Materials", () => {
     renderMaterials();
     const retiredProjectName = ["Gu", "ru"].join("");
 
-    const section = screen.getByRole("heading", { name: "Materials & downloads" }).closest("section");
+    const section = screen.getByText("Download Materials").closest("section");
     const downloads = screen.getAllByRole("link", { name: /^Download / });
 
     expect(section).toHaveAttribute("id", "materials");
-    expect(screen.getByText("Client materials")).toBeInTheDocument();
-    expect(screen.getByText(/Download brochures, catalog sheets/i)).toBeInTheDocument();
+    expect(screen.queryByText("Client materials")).not.toBeInTheDocument();
+    expect(screen.queryByText("Materials & downloads")).not.toBeInTheDocument();
+    expect(screen.getByText(/Access brochures, catalogs, property presentations/i)).toBeInTheDocument();
     expect(downloads).toHaveLength(5);
     expect(screen.getByRole("link", { name: "Download AIXCO client brochure" })).toHaveAttribute(
       "href",

@@ -43,11 +43,11 @@ export const legacyTimelineChapters: LegacyTimelineChapter[] = [
     id: "batumi",
     eyebrow: "Emerging market opportunity",
     title: "Current focus in Georgia",
-    highlight: "Selected apartments from €50,000",
+    highlight: "Selected apartments from €45,000",
     body:
       "Today, Batumi is AIXCO's current selected emerging-market focus, with exclusive project access, 100% foreign ownership, no residency permit requirement, bank financing minimum 60% of property value, and an ISO-certified transparency process.",
     stats: [
-      { value: "€50K+", label: "Entry from" },
+      { value: "€45K+", label: "Entry from" },
       { value: "60%", label: "Bank financing" },
       { value: "10-12%", label: "Approx. net rental yields" },
     ],
