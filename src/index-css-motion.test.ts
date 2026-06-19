@@ -135,14 +135,20 @@ describe("index.css motion rules", () => {
     );
   });
 
-  it("keeps the hero-to-about handoff media-backed instead of showing a black curtain", () => {
+  it("keeps the original cinematic hero-to-about transition blend", () => {
     const heroAfter = cssBlock("[data-story-section='hero']::after");
+    const aboutBefore = cssBlock("[data-story-section='about']::before");
 
     expect(desktopStoryHome).toContain("heroBackdropVisible");
     expect(desktopStoryHome).not.toContain("<FixedHeroBackdrop visible={activeIndex === 0}");
-    expect(css).not.toContain("[data-story-section='about']::before");
-    expect(heroAfter).not.toContain("rgb(17 16 14) 100%");
-    expect(heroAfter).toContain("rgb(17 16 14 / 0.48) 100%");
+    expect(css).toContain("[data-story-section='about']::before");
+    expect(heroAfter).toContain("height: clamp(7rem, 24svh, 18rem)");
+    expect(heroAfter).toContain("rgb(17 16 14 / 0.36) 56%");
+    expect(heroAfter).toContain("rgb(17 16 14) 100%");
+    expect(aboutBefore).toContain("z-index: 4");
+    expect(aboutBefore).toContain("height: clamp(6rem, 18svh, 13rem)");
+    expect(aboutBefore).toContain("rgb(17 16 14) 0%");
+    expect(aboutBefore).toContain("rgb(17 16 14 / 0.54) 42%");
   });
 
   it("keeps phone hero and about sections compact enough for a demo viewport", () => {

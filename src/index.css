@@ -668,13 +668,29 @@
     inset-inline: 0;
     bottom: -1px;
     z-index: 6;
-    height: clamp(4rem, 14svh, 9rem);
+    height: clamp(7rem, 24svh, 18rem);
     pointer-events: none;
     background: linear-gradient(
       180deg,
       rgb(17 16 14 / 0) 0%,
-      rgb(17 16 14 / 0.22) 68%,
-      rgb(17 16 14 / 0.48) 100%
+      rgb(17 16 14 / 0.36) 56%,
+      rgb(17 16 14) 100%
+    );
+  }
+
+  [data-story-section='about']::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: -1px;
+    z-index: 4;
+    height: clamp(6rem, 18svh, 13rem);
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgb(17 16 14) 0%,
+      rgb(17 16 14 / 0.54) 42%,
+      rgb(17 16 14 / 0) 100%
     );
   }
 
