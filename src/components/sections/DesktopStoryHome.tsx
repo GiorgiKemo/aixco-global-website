@@ -2299,6 +2299,7 @@ function TeamScene({
   tx: (copy: string) => string;
 }) {
   const { team } = useSiteContent();
+  const { openTeam } = useUI();
   const { activeIndex, selectMember, previewMember, resumeRotation } = useTeamMemberRotation({
     memberCount: team.length,
     isActive,
@@ -2342,7 +2343,10 @@ function TeamScene({
               type="button"
               aria-pressed={isSelected}
               data-active={isSelected ? "true" : "false"}
-              onClick={() => selectMember(index)}
+              onClick={() => {
+                selectMember(index);
+                openTeam(member);
+              }}
               onMouseEnter={() => previewMember(index)}
               onFocus={() => previewMember(index)}
               onBlur={resumeRotation}
@@ -2643,6 +2647,8 @@ export function DesktopStoryHome() {
   const [langOpen, setLangOpen] = useState(false);
   const [sectionPresence, setSectionPresence] = useState<boolean[]>(() => storyChapters.map((_, index) => index === 0));
   const activeIndexRef = useRef(0);
+  const [heroBackdropVisible, setHeroBackdropVisible] = useState(true);
+  const heroBackdropVisibleRef = useRef(true);
   const sectionPresenceRef = useRef(sectionPresence);
   const { openJourney, openLogin, openPartner, openRegister } = useUI();
   const { lang, setLang, tx } = useI18n();
@@ -2732,6 +2738,7 @@ export function DesktopStoryHome() {
     });
     let nextActiveIndex = 0;
     let closestDistance = Number.POSITIVE_INFINITY;
+    const nextHeroBackdropVisible = (sectionRects[0]?.bottom ?? viewportHeight) > 0;
 
     sectionRects.forEach((rect, index) => {
       if (!rect) return;
@@ -2786,6 +2793,11 @@ export function DesktopStoryHome() {
     if (activeIndexRef.current !== nextActiveIndex) {
       activeIndexRef.current = nextActiveIndex;
       setActiveIndex(nextActiveIndex);
+    }
+
+    if (heroBackdropVisibleRef.current !== nextHeroBackdropVisible) {
+      heroBackdropVisibleRef.current = nextHeroBackdropVisible;
+      setHeroBackdropVisible(nextHeroBackdropVisible);
     }
 
     const currentPresence = sectionPresenceRef.current;
@@ -2924,7 +2936,7 @@ export function DesktopStoryHome() {
   return (
     <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress": "0%" } as CSSProperties}>
       <StoryHeroIntroLoader assetsReady={introGate.assetsReady} logoReady={introGate.logoReady} phase={introGate.phase} />
-      <FixedHeroBackdrop visible={activeIndex === 0} />
+      <FixedHeroBackdrop visible={heroBackdropVisible} />
       <StoryChrome
         activeIndex={activeIndex}
         lang={lang}

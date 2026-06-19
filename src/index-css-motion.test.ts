@@ -131,4 +131,45 @@ describe("index.css motion rules", () => {
       /<img\s+src=\{aixcoLiveLogos\.aixcoMark\}\s+alt=""\s+width=\{783\}\s+height=\{705\}\s+className="story-hero-intro-loader__official-mark"/,
     );
   });
+
+  it("keeps the hero-to-about handoff media-backed instead of showing a black curtain", () => {
+    const heroAfter = cssBlock("[data-story-section='hero']::after");
+
+    expect(desktopStoryHome).toContain("heroBackdropVisible");
+    expect(desktopStoryHome).not.toContain("<FixedHeroBackdrop visible={activeIndex === 0}");
+    expect(css).not.toContain("[data-story-section='about']::before");
+    expect(heroAfter).not.toContain("rgb(17 16 14) 100%");
+    expect(heroAfter).toContain("rgb(17 16 14 / 0.48) 100%");
+  });
+
+  it("keeps phone hero and about sections compact enough for a demo viewport", () => {
+    expect(css).toContain("@media (max-width: 559px)");
+    expect(css).toContain("font-size: clamp(2.18rem, 11.2vw, 2.95rem) !important");
+    expect(css).toContain("font-size: clamp(2.35rem, 12.4vw, 3.35rem)");
+    expect(css).toContain("grid-template-columns: repeat(2, minmax(0, 1fr));");
+    expect(css).toContain("width: min(100%, 21.5rem)");
+    expect(css).toContain("font-size: clamp(0.72rem, 2.9vw, 0.86rem)");
+    expect(css).toContain("justify-content: center");
+    expect(css).toContain("[data-story-section='about'] .story-about-cinematic-copy");
+    expect(css).toContain("padding: clamp(5.25rem, 9svh, 5.9rem) clamp(1.15rem, 5vw, 1.45rem)");
+    expect(css).toContain("[data-story-section='about'] .story-about-cinematic-copy::before");
+    expect(css).toContain("linear-gradient(180deg, rgb(17 16 14 / 0), rgb(17 16 14 / 0.72))");
+    expect(css).toContain("[data-story-section='about'] dl");
+    expect(css).toContain("gap: 0.65rem 0.7rem");
+    expect(css).toContain("[data-story-section='dubai']\n      [data-story-scene-copy]\n      [data-layout='story-dubai-marquee']");
+    expect(css).toContain("[data-story-section='dubai']\n      [data-story-scene-copy]\n      [data-layout='story-dubai-marquee']\n      .dubai-gallery-tile");
+    expect(css).toContain("flex-basis: clamp(10.8rem, 47vw, 12.5rem)");
+  });
+
+  it("keeps dense story sections readable on short phone demo viewports", () => {
+    expect(css).toContain("@media (max-width: 559px) and (max-height: 740px)");
+    expect(css).toContain("[data-story-section='participate'] [data-layout='story-participation-routes'] button");
+    expect(css).toContain("grid-template-columns: 2.1rem minmax(0, 1fr) auto");
+    expect(css).toContain("[data-story-section='how'] [data-layout='story-journeys']");
+    expect(css).toContain("[data-story-section='team'] [data-layout='story-team-list'] > button");
+    expect(css).toContain("[data-story-section='contact'] .story-contact-card");
+    expect(css).toContain("@media (min-width: 768px) and (max-width: 1023px)");
+    expect(css).toContain("[data-story-section='philosophyPlatform'] .story-philosophy-panel");
+    expect(css).toContain("min-height: auto");
+  });
 });

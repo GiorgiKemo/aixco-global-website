@@ -667,29 +667,13 @@
     inset-inline: 0;
     bottom: -1px;
     z-index: 6;
-    height: clamp(7rem, 24svh, 18rem);
+    height: clamp(4rem, 14svh, 9rem);
     pointer-events: none;
     background: linear-gradient(
       180deg,
       rgb(17 16 14 / 0) 0%,
-      rgb(17 16 14 / 0.36) 56%,
-      rgb(17 16 14) 100%
-    );
-  }
-
-  [data-story-section='about']::before {
-    content: "";
-    position: absolute;
-    inset-inline: 0;
-    top: -1px;
-    z-index: 4;
-    height: clamp(6rem, 18svh, 13rem);
-    pointer-events: none;
-    background: linear-gradient(
-      180deg,
-      rgb(17 16 14) 0%,
-      rgb(17 16 14 / 0.54) 42%,
-      rgb(17 16 14 / 0) 100%
+      rgb(17 16 14 / 0.22) 68%,
+      rgb(17 16 14 / 0.48) 100%
     );
   }
 
@@ -4404,6 +4388,412 @@
     }
   }
 
+  @media (max-width: 559px) {
+    [data-story-section='hero'] {
+      height: 100svh;
+      min-height: 100svh;
+      max-height: 100svh;
+      overflow: hidden;
+    }
+
+    [data-story-section='hero'] .story-hero-copy {
+      justify-content: center;
+      padding: clamp(5.15rem, 10svh, 6rem) clamp(1.15rem, 5vw, 1.45rem)
+        max(1.15rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    [data-story-section='hero'] .story-hero-lockup {
+      width: min(100%, 21.75rem);
+    }
+
+    [data-story-section='hero'] .story-hero-brand {
+      gap: 0.45rem;
+      margin-bottom: 0;
+    }
+
+    [data-story-section='hero'] .story-hero-kicker {
+      max-width: 100%;
+      font-size: clamp(0.68rem, 3vw, 0.8rem);
+      letter-spacing: 0.16em;
+      line-height: 1.18;
+    }
+
+    [data-story-section='hero'] [data-brand-lockup='story-hero'],
+    [data-story-section='hero'] .story-hero-wordmark {
+      gap: 0.035em;
+      font-size: clamp(2.18rem, 11.2vw, 2.95rem) !important;
+      line-height: 0.94;
+      letter-spacing: -0.03em !important;
+    }
+
+    [data-story-section='hero'] [data-story-hero-title-mark='true'],
+    [data-story-section='hero'] .story-hero-wordmark__mark {
+      height: 0.78em !important;
+      width: 0.78em !important;
+      transform: translateY(0.06em);
+    }
+
+    [data-story-section='hero'] .story-hero-intro {
+      max-width: 21.5rem;
+      margin-bottom: clamp(0.65rem, 1.8svh, 0.9rem);
+      font-size: clamp(0.86rem, 3.55vw, 0.98rem);
+      line-height: 1.42;
+    }
+
+    [data-story-section='hero'] .story-hero-statement {
+      width: min(100%, 21.5rem);
+      margin: clamp(0.55rem, 1.8svh, 0.85rem) 0 clamp(0.75rem, 2.2svh, 1rem);
+    }
+
+    [data-story-section='hero'] .story-hero-statement__line {
+      max-width: 10.25ch;
+      font-size: clamp(2.35rem, 12.4vw, 3.35rem);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+    }
+
+    [data-story-section='hero']
+      .story-hero-statement__line
+      + .story-hero-statement__line {
+      margin-left: clamp(1rem, 10vw, 2.4rem);
+      max-width: 10.7ch;
+    }
+
+    [data-story-section='hero'] .story-hero-statement__note {
+      max-width: 20.5rem;
+      margin-top: 0.58rem;
+      font-size: clamp(0.82rem, 3.35vw, 0.94rem);
+      line-height: 1.42;
+    }
+
+    [data-story-section='hero'] .story-hero-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: min(100%, 21.5rem);
+      gap: 0.5rem;
+      margin-top: clamp(0.9rem, 3.3svh, 1.35rem);
+    }
+
+    [data-story-section='hero'] .story-hero-actions .btn-gold,
+    [data-story-section='hero'] .story-hero-actions .btn-ghost-gold {
+      min-width: 0;
+      width: 100%;
+      min-height: 2.95rem;
+      justify-content: center;
+      padding-inline: 0.45rem;
+      font-size: clamp(0.72rem, 2.9vw, 0.86rem);
+      line-height: 1.12;
+      text-align: center;
+      white-space: normal;
+    }
+
+    [data-story-section='hero'] .story-hero-actions svg {
+      width: 0.95rem;
+      height: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    [data-story-section='hero'] .story-hero-actions__ghost {
+      border-color: hsl(0 0% 100% / 0.5);
+      background: hsl(0 0% 100% / 0.16);
+      color: hsl(0 0% 100% / 0.96);
+    }
+
+    [data-story-section='about'].story-about-scroll-section,
+    [data-story-section='about'] .story-about-cinematic-stage {
+      height: 100svh;
+      min-height: 100svh;
+      max-height: 100svh;
+      overflow: hidden;
+    }
+
+    [data-story-section='about'] .story-about-cinematic-copy {
+      isolation: isolate;
+      min-height: 100svh;
+      justify-content: center;
+      padding: clamp(5.25rem, 9svh, 5.9rem) clamp(1.15rem, 5vw, 1.45rem)
+        max(1.2rem, env(safe-area-inset-bottom, 0px));
+      text-shadow: 0 2px 16px rgb(0 0 0 / 0.58);
+    }
+
+    [data-story-section='about'] .story-about-cinematic-copy::before {
+      content: "";
+      position: absolute;
+      inset: 26% 0 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgb(17 16 14 / 0), rgb(17 16 14 / 0.72)),
+        radial-gradient(circle at 50% 72%, rgb(17 16 14 / 0.64), transparent 58%);
+    }
+
+    [data-story-section='about'] [data-layout='story-about-cinematic'] {
+      max-width: min(100%, 21.75rem);
+    }
+
+    [data-story-section='about'] [data-brand-lockup='story-about'] > span {
+      gap: clamp(0.35rem, 1.8vw, 0.55rem);
+    }
+
+    [data-story-section='about'] [data-brand-lockup='story-about'] img {
+      width: clamp(2.35rem, 11.8vw, 3rem) !important;
+      height: clamp(2.35rem, 11.8vw, 3rem) !important;
+    }
+
+    [data-story-section='about'] [data-brand-lockup='story-about'] span span {
+      font-size: clamp(1.62rem, 8.4vw, 2.28rem) !important;
+      letter-spacing: -0.035em;
+    }
+
+    [data-story-section='about'] [data-layout='story-about-cinematic'] p:last-child {
+      margin-top: clamp(0.8rem, 2svh, 1rem);
+      max-width: 21.5rem;
+      font-size: clamp(0.9rem, 3.55vw, 1rem);
+      line-height: 1.48;
+    }
+
+    [data-story-section='about'] dl {
+      max-width: min(100%, 21.5rem);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem 0.7rem;
+      margin-top: clamp(1rem, 2.8svh, 1.35rem);
+    }
+
+    [data-story-section='about'] dl > div {
+      padding-left: 0.72rem;
+    }
+
+    [data-story-section='about'] dt {
+      font-size: clamp(1.22rem, 6.1vw, 1.62rem) !important;
+      letter-spacing: 0.04em !important;
+      line-height: 1 !important;
+    }
+
+    [data-story-section='about'] dd {
+      margin-top: 0.38rem !important;
+      font-size: 0.54rem !important;
+      line-height: 1.25 !important;
+      letter-spacing: 0.055em !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    [data-story-section='dubai']
+      [data-story-scene-copy]
+      [data-layout='story-dubai-marquee'] {
+      gap: clamp(0.55rem, 1.4svh, 0.8rem);
+      margin-top: clamp(0.65rem, 1.6svh, 0.9rem);
+    }
+
+    [data-story-section='dubai']
+      [data-story-scene-copy]
+      [data-layout='story-dubai-marquee']
+      .story-dubai-gallery-title {
+      margin-bottom: 0.38rem;
+      font-size: clamp(0.92rem, 4vw, 1rem);
+      line-height: 1.1;
+    }
+
+    [data-story-section='dubai']
+      [data-story-scene-copy]
+      [data-layout='story-dubai-marquee']
+      .dubai-image-marquee {
+      --dubai-image-marquee-gap: 0.45rem;
+    }
+
+    [data-story-section='dubai']
+      [data-story-scene-copy]
+      [data-layout='story-dubai-marquee']
+      .dubai-gallery-tile {
+      flex-basis: clamp(10.8rem, 47vw, 12.5rem);
+      height: clamp(6.6rem, 15svh, 7.75rem);
+    }
+  }
+
+  @media (max-width: 559px) and (max-height: 740px) {
+    [data-story-section='philosophy'],
+    [data-story-section='philosophyPlatform'],
+    [data-story-section='participate'],
+    [data-story-section='how'],
+    [data-story-section='team'],
+    [data-story-section='contact'] {
+      --story-h2-min: 2rem;
+      --story-h2-pref: 9.4vw;
+      --story-h2-max: 2.55rem;
+      --story-body-min: 0.82rem;
+      --story-body-pref: 3.1vw;
+      --story-body-max: 0.92rem;
+      --story-card-title-min: 0.98rem;
+      --story-card-title-pref: 4vw;
+      --story-card-title-max: 1.13rem;
+      --story-copy-gap: clamp(0.55rem, 1.2svh, 0.8rem);
+      --story-section-gap: clamp(0.58rem, 1.3svh, 0.85rem);
+      --story-grid-row-gap: clamp(0.55rem, 1.3svh, 0.85rem);
+      --story-item-gap: clamp(0.38rem, 0.9svh, 0.62rem);
+    }
+
+    [data-story-section='philosophy'] [data-story-scene-column],
+    [data-story-section='philosophyPlatform'] [data-story-scene-column],
+    [data-story-section='participate'] [data-story-scene-column],
+    [data-story-section='how'] [data-story-scene-column],
+    [data-story-section='team'] [data-story-scene-column],
+    [data-story-section='contact'] [data-story-scene-column] {
+      padding-top: clamp(3.45rem, 7.5svh, 4.25rem);
+      padding-bottom: clamp(2.4rem, 5.5svh, 3rem);
+    }
+
+    [data-story-section='philosophy'] [data-layout='story-philosophy-stats'] > * {
+      padding: 0.55rem 0.6rem;
+    }
+
+    [data-story-section='philosophy'] [data-layout='story-philosophy-stats'] dd {
+      font-size: clamp(1.25rem, 5.4vw, 1.48rem);
+    }
+
+    [data-story-section='philosophy'] [data-layout='story-philosophy-principles'] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    [data-story-section='philosophy'] [data-layout='story-philosophy-principles'] > * {
+      min-height: auto;
+      padding: 0.55rem 0.6rem;
+      font-size: 0.78rem;
+      line-height: 1.22;
+    }
+
+    [data-story-section='philosophyPlatform'] .story-philosophy-stat {
+      min-height: 4.15rem;
+      padding: 0.48rem 0.55rem;
+    }
+
+    [data-story-section='philosophyPlatform'] .story-philosophy-stat .story-metric-label {
+      font-size: 0.52rem;
+      line-height: 1.16;
+      letter-spacing: 0.055em;
+    }
+
+    [data-story-section='philosophyPlatform'] .story-philosophy-stat .story-metric-value {
+      font-size: clamp(1.18rem, 5.2vw, 1.38rem);
+    }
+
+    [data-story-section='philosophyPlatform'] .story-philosophy-panel {
+      min-height: auto;
+      gap: 0.32rem;
+      padding: 0.65rem 0.72rem;
+    }
+
+    [data-story-section='philosophyPlatform'] .story-philosophy-panel .story-body {
+      font-size: 0.8rem;
+      line-height: 1.32;
+    }
+
+    [data-story-section='participate'] [data-layout='story-participation-routes'] button {
+      grid-template-columns: 2.1rem minmax(0, 1fr) auto;
+      gap: 0.55rem;
+      padding: 0.64rem 0.2rem !important;
+    }
+
+    [data-story-section='participate'] [data-layout='story-participation-routes'] .story-metric-value {
+      font-size: 1.35rem;
+    }
+
+    [data-story-section='participate'] [data-layout='story-participation-routes'] .story-card-title,
+    [data-story-section='how'] [data-layout='story-journeys'] .story-card-title {
+      font-size: clamp(0.98rem, 4vw, 1.08rem);
+      line-height: 1.15;
+    }
+
+    [data-story-section='participate'] [data-layout='story-participation-routes'] .story-body,
+    [data-story-section='how'] [data-layout='story-journeys'] .story-body {
+      font-size: 0.82rem;
+      line-height: 1.32;
+    }
+
+    [data-story-section='how'] [data-layout='story-journeys'] {
+      gap: 0.5rem;
+    }
+
+    [data-story-section='how'] [data-layout='story-journeys'] > button {
+      border-top: 1px solid hsl(var(--foreground) / 0.12);
+      padding-block: 0.55rem;
+    }
+
+    [data-story-section='how'] [data-layout='story-journeys'] > button:first-child {
+      border-top: 0;
+    }
+
+    [data-story-section='how'] [data-layout='story-journeys'] .story-metric-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+    }
+
+    [data-story-section='team'] [data-layout='story-team-list'] > button {
+      grid-template-columns: 2.6rem minmax(0, 1fr);
+      gap: 0.65rem;
+      padding: 0.45rem 0.5rem;
+    }
+
+    [data-story-section='team'] [data-layout='story-team-list'] .story-body {
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+
+    [data-story-section='contact'] .container-x {
+      padding-top: 0.8rem !important;
+      padding-bottom: 0.8rem !important;
+    }
+
+    [data-story-section='contact'] [data-layout='story-contact-layout'],
+    [data-story-section='contact'] .story-contact-intro,
+    [data-story-section='contact'] [data-layout='story-contact-panel'] {
+      gap: 0.75rem;
+    }
+
+    [data-story-section='contact'] [data-layout='story-contact-actions'] {
+      gap: 0.6rem;
+    }
+
+    [data-story-section='contact'] [data-layout='story-contact-actions'] .btn-gold,
+    [data-story-section='contact'] [data-layout='story-contact-actions'] .btn-ghost-gold {
+      flex: 1 1 8rem;
+      min-height: 2.55rem;
+      justify-content: center;
+      padding-block: 0.58rem !important;
+    }
+
+    [data-story-section='contact'] .story-contact-card {
+      padding: 0.75rem 0.8rem;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    [data-story-section='philosophyPlatform'] {
+      --story-h2-max: 3.45rem;
+      --story-body-max: 1.02rem;
+      --story-copy-gap: clamp(0.72rem, 1.15svh, 1rem);
+      --story-grid-row-gap: clamp(0.8rem, 1.25svh, 1.05rem);
+    }
+
+    [data-story-section='philosophyPlatform'] [data-story-scene-column] {
+      padding-top: clamp(4.6rem, 6svh, 5.4rem);
+      padding-bottom: clamp(3rem, 5svh, 4.2rem);
+    }
+
+    [data-story-section='philosophyPlatform'] .story-philosophy-stat {
+      min-height: 4.85rem;
+      padding: 0.62rem 0.75rem;
+    }
+
+    [data-story-section='philosophyPlatform'] .story-philosophy-panel {
+      min-height: auto;
+      padding: 0.82rem 0.9rem;
+    }
+
+    [data-story-section='philosophyPlatform'] .story-philosophy-panel .story-body {
+      font-size: 0.9rem;
+      line-height: 1.38;
+    }
+  }
   @media (max-width: 360px) {
     .story-metric-label {
       font-size: 0.58rem;

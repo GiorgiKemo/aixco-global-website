@@ -74,4 +74,22 @@ describe("home page performance structure", () => {
     expect(notFoundSource).toContain("bg-[#11100e]");
     expect(notFoundSource).toContain("btn-gold");
   });
+
+  it("keeps the story boot surface fully black before the intro loader mounts", () => {
+    const homeExperienceSource = readSource("src/components/sections/HomeExperience.tsx");
+
+    expect(homeExperienceSource).toContain("function StoryBootSurface");
+    expect(homeExperienceSource).toContain('className="fixed inset-0 min-h-[100svh] bg-black"');
+    expect(homeExperienceSource).not.toContain("bg-white");
+    expect(homeExperienceSource).not.toContain("fixed inset-y-0 left-0");
+  });
+
+  it("keeps story team rows wired to the team detail modal", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const modalSource = readSource("src/components/Modals.tsx");
+
+    expect(desktopStorySource).toContain("const { openTeam } = useUI();");
+    expect(desktopStorySource).toContain("openTeam(member);");
+    expect(modalSource).toContain('{modal === "team" && <TeamDetail');
+  });
 });
