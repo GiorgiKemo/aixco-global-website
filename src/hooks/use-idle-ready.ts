@@ -22,14 +22,6 @@ export function scheduleIdleWork(callback: () => void, timeout = 1800): CancelId
   return () => window.clearTimeout(handle);
 }
 
-export function useIdleReady(timeout = 1800) {
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => scheduleIdleWork(() => setIsReady(true), timeout), [timeout]);
-
-  return isReady;
-}
-
 export function useDelayedIdleReady(startupDelay: number, idleTimeout = 1800) {
   const [isReady, setIsReady] = useState(false);
 

@@ -21,7 +21,7 @@ let activeScrollCancelCleanup: (() => void) | null = null;
 let activeLenis: ActiveLenis | null = null;
 let activeLenisFrame: number | null = null;
 
-export const HASH_SCROLL_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
+const HASH_SCROLL_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
 export const glideScrollFrameEvent = "aixco:glide-scroll";
 
 const nativeScrollSelector = [

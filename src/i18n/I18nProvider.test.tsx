@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { heroIntroText, heroOpportunityFootnote, heroOpportunityText } from "@/components/sections/hero/hero-ui";
+import { heroIntroText, heroOpportunityFootnote, heroStoryStatementLines } from "@/components/sections/hero/hero-ui";
 import { I18nProvider, hasTextTranslation, useI18n } from "./I18nProvider";
 import { languageOptions, type Lang } from "./languages";
 
@@ -95,7 +95,9 @@ describe("I18nProvider", () => {
       if (heroIntroText) {
         await expect(hasTextTranslation(heroIntroText, locale)).resolves.toBe(true);
       }
-      await expect(hasTextTranslation(heroOpportunityText, locale)).resolves.toBe(true);
+      for (const line of heroStoryStatementLines) {
+        await expect(hasTextTranslation(line, locale)).resolves.toBe(true);
+      }
       if (heroOpportunityFootnote) {
         await expect(hasTextTranslation(heroOpportunityFootnote, locale)).resolves.toBe(true);
       }

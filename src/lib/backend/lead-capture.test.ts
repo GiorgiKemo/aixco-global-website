@@ -1,18 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { recordChatTranscript, recordPortalEvent, submitContactSubmission } from "./lead-capture";
+import { recordChatTranscript, recordPortalEvent } from "./lead-capture";
 
 describe("lead capture backend helpers", () => {
-  it("skips network writes during tests", async () => {
-    await expect(
-      submitContactSubmission({
-        name: "Audit User",
-        email: "audit@example.com",
-        interest: "Emerging market opportunities",
-        message: "I want more details about availability.",
-      }),
-    ).resolves.toMatchObject({ ok: false, skipped: true });
-  });
-
   it("keeps chat and portal event capture callable without browser secrets in test mode", async () => {
     await expect(
       recordChatTranscript([

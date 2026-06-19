@@ -1,17 +1,9 @@
-import type { LucideIcon } from "lucide-react";
-import { Building2, HandCoins, TrendingUp } from "lucide-react";
 import type { SiteContent } from "@/lib/backend/site-content";
 import {
   aixcoDubaiEdenHouseCanalGallery,
   aixcoDubaiEdenHouseParkGallery,
   aixcoDubaiHealthcareGallery,
-  aixcoLiveImages,
 } from "@/lib/aixco-live-assets";
-
-export const dubaiImageMap: Record<string, string> = {
-  "dubai-eden": aixcoLiveImages.dubaiEdenHouse,
-  "dubai-healthcare": aixcoLiveImages.dubaiHealthcare,
-};
 
 export const fundAssetGalleries = {
   "fund-1": {
@@ -33,8 +25,6 @@ export type DubaiFund = SiteContent["dubaiFunds"][number];
 export type Translate = (copy: string) => string;
 export type DubaiFundGalleryId = keyof typeof fundAssetGalleries;
 export type DubaiFundGalleryGroup = (typeof fundAssetGalleries)[DubaiFundGalleryId]["groups"][number];
-
-export const dubaiDetailIcons: LucideIcon[] = [TrendingUp, HandCoins, Building2];
 
 export function parseFundDetail(detail: string) {
   const separatorIndex = detail.indexOf(":");

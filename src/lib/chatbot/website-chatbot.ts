@@ -174,7 +174,7 @@ function listSteps(steps: Array<{ title: string; text: string }>) {
   return steps.map((step) => `${step.title}: ${step.text}`).join(" ");
 }
 
-export function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[] {
+function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[] {
   const entries: KnowledgeEntry[] = [
     entry({
       id: "company-profile",

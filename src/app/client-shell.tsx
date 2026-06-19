@@ -3,7 +3,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
 import { SiteContentProvider } from "@/data/SiteContentProvider";
@@ -80,12 +79,10 @@ export function ClientShell({
       <SiteContentProvider initialContent={initialSiteContent} initialSource={initialSiteContentSource}>
         <UIProvider>
           <QueryClientProvider client={queryClient}>
-            <TooltipProvider>
-              <DevRuntimeRefresh />
-              {!isAdminRoute && <ScrollManager />}
-              {children}
-              <DeferredShellUi isAdminRoute={isAdminRoute} />
-            </TooltipProvider>
+            <DevRuntimeRefresh />
+            {!isAdminRoute && <ScrollManager />}
+            {children}
+            <DeferredShellUi isAdminRoute={isAdminRoute} />
           </QueryClientProvider>
         </UIProvider>
       </SiteContentProvider>

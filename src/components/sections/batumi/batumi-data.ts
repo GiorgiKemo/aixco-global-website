@@ -1,5 +1,3 @@
-﻿import type { LucideIcon } from "lucide-react";
-import { Building2, FileText, Home, Percent, ShieldCheck, TrendingUp } from "lucide-react";
 import type { SiteContent } from "@/lib/backend/site-content";
 import {
   aixcoLiveAssetDetails,
@@ -28,15 +26,6 @@ export const batumiDocumentMap: Record<string, string> = {
 export const batumiDetailAssetMap: Record<string, string> = {
   currentProject: aixcoLiveAssetDetails.currentProjectCatalog,
 };
-
-export const batumiMarketMetrics = [
-  { label: "Entry", value: "EUR 45k", subtext: "from", subtextPosition: "before", highlight: true },
-  { label: "Bank financing", value: "60%+", subtext: "minimum", subtextPosition: "after" },
-  { label: "Net rental yields", value: "10-12%", subtext: "approx.", subtextPosition: "before" },
-] as const;
-
-export const batumiMarketDetailIcons: LucideIcon[] = [Home, Percent, TrendingUp, ShieldCheck];
-export const batumiProjectDetailIcons: LucideIcon[] = [Building2, FileText, TrendingUp];
 
 export function getBatumiMarketDetails(benefits: BatumiBenefits) {
   return [

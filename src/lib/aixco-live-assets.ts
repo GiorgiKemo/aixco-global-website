@@ -4,7 +4,7 @@ const withBaseUrl = (path: string) => {
   return `${baseUrl}/${normalizedPath}`;
 };
 
-export const aixcoLivePath = (path: string) => withBaseUrl(`aixco-global-op2/${path}`);
+const aixcoLivePath = (path: string) => withBaseUrl(`aixco-global-op2/${path}`);
 
 const liveImageBase = aixcoLivePath("images");
 const optimizedImageBase = aixcoLivePath("images/optimized");
@@ -84,15 +84,6 @@ export const aixcoDubaiHeroVideo = {
   title: "Dubai Burj Khalifa aerial",
 } as const;
 
-export const aixcoBatumiGalleryVideos = [
-  { src: `${batumiGalleryBase}/batumi-short.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi-short-preview.mp4`, poster: `${batumiGalleryBase}/batumi-short-poster.webp`, title: "Batumi gallery 1" },
-  { src: `${batumiGalleryBase}/batumi2.mp4`, previewSrc: aixcoLiveVideoPreviews.batumiOverview, poster: `${batumiGalleryBase}/batumi2-poster.webp`, title: "Batumi gallery 2" },
-  { src: `${batumiGalleryBase}/batumi3.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi3-preview.mp4`, poster: `${batumiGalleryBase}/batumi3-poster.webp`, title: "Batumi gallery 3" },
-  { src: `${batumiGalleryBase}/batumi4.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi4-preview.mp4`, poster: `${batumiGalleryBase}/batumi4-poster.webp`, title: "Batumi gallery 4" },
-  { src: `${batumiGalleryBase}/batumi5.mp4`, previewSrc: `${batumiGalleryPreviewBase}/batumi5-preview.mp4`, poster: `${batumiGalleryBase}/batumi5-poster.webp`, title: "Batumi gallery 5" },
-  { src: `${batumiGalleryBase}/herovideo.mp4`, previewSrc: `${batumiGalleryPreviewBase}/herovideo-preview.mp4`, poster: `${batumiGalleryBase}/herovideo-poster.webp`, title: "Batumi gallery 6" },
-] as const;
-
 export const aixcoLiveDocuments = {
   clientBrochure: `${documentBase}/aixco-client-brochure.pdf`,
   currentProject: `${documentBase}/current-project.pdf`,
@@ -162,8 +153,3 @@ export const aixcoLivePartnerPeople = {
   bader: `${liveImageBase}/bader.png`,
   warren: `${liveImageBase}/warren.png`,
 } as const;
-
-export const aixcoFundGallery = [
-  `${liveImageBase}/fund1.png`,
-  ...Array.from({ length: 22 }, (_, index) => `${liveImageBase}/fund/fund${index + 1}.jpeg`),
-] as const;

@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const css = readFileSync(resolve(process.cwd(), "src/index.css"), "utf8");
+const desktopStoryHome = readFileSync(resolve(process.cwd(), "src/components/sections/DesktopStoryHome.tsx"), "utf8");
 
 function cssBlock(selector: string) {
   const start = css.indexOf(`  ${selector} {`);
@@ -57,7 +58,7 @@ describe("index.css motion rules", () => {
   });
 
   it("keeps hero safe-area support without tablet placement overrides", () => {
-    expect(css).toContain("[data-hero-shell=\"true\"]");
+    expect(css).toMatch(/\[data-hero-shell=['"]true['"]\]/);
     expect(css).toContain("min-height: 100svh");
     expect(css).toContain("env(safe-area-inset-top, 0px)");
     expect(css).toContain("env(safe-area-inset-bottom, 0px)");
@@ -104,5 +105,18 @@ describe("index.css motion rules", () => {
     expect(assetDetailCta).toContain("min-height: 2.75rem");
     expect(assetDetailCta).toContain("padding-block: 0.75rem");
     expect(cssBlock(".asset-detail-cta__label")).toContain("overflow-wrap: anywhere");
+  });
+  it("keeps the intro logo from flashing as a square on tablet first paint", () => {
+    const markShell = cssBlock(".story-hero-intro-loader__mark-shell");
+    const officialMark = cssBlock(".story-hero-intro-loader__official-mark");
+
+    expect(markShell).toContain("aspect-ratio: 783 / 705");
+    expect(officialMark).toContain("display: block");
+    expect(officialMark).toContain("height: auto");
+    expect(officialMark).toContain("max-height: 100%");
+    expect(officialMark).toContain("background: transparent");
+    expect(desktopStoryHome).toMatch(
+      /<img\s+src=\{aixcoLiveLogos\.aixcoMark\}\s+alt=""\s+width=\{783\}\s+height=\{705\}\s+className="story-hero-intro-loader__official-mark"/,
+    );
   });
 });

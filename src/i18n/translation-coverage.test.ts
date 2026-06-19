@@ -4,7 +4,6 @@ import ts from "typescript";
 import { describe, expect, it } from "vitest";
 import { siteContentDefaults } from "@/lib/backend/site-content";
 import {
-  aixcoBatumiGalleryVideos,
   aixcoDubaiEdenHouseCanalGallery,
   aixcoDubaiEdenHouseParkGallery,
   aixcoDubaiHealthcareGallery,
@@ -192,7 +191,6 @@ function collectRenderedAssetStrings() {
   ].forEach(add);
 
   [
-    ...aixcoBatumiGalleryVideos,
     ...aixcoDubaiEdenHouseCanalGallery,
     ...aixcoDubaiEdenHouseParkGallery,
     ...aixcoDubaiHealthcareGallery,

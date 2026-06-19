@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ClientShell } from "./client-shell";
 
-const idleState = vi.hoisted(() => ({ idleReady: false, delayedReady: false }));
+const idleState = vi.hoisted(() => ({ delayedReady: false }));
 
 vi.mock("framer-motion", async () => {
   const actual = await vi.importActual<typeof import("framer-motion")>("framer-motion");
@@ -25,7 +25,6 @@ vi.mock("framer-motion", async () => {
 });
 
 vi.mock("@/hooks/use-idle-ready", () => ({
-  useIdleReady: () => idleState.idleReady,
   useDelayedIdleReady: () => idleState.delayedReady,
   scheduleIdleWork: (callback: () => void) => {
     const handle = window.setTimeout(callback, 0);
@@ -42,7 +41,6 @@ vi.mock("@/components/ui/sonner", () => ({ Toaster: () => <div data-testid="sonn
 
 describe("ClientShell", () => {
   beforeEach(() => {
-    idleState.idleReady = false;
     idleState.delayedReady = false;
   });
 

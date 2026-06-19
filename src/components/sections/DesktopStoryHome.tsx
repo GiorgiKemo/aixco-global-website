@@ -6,11 +6,9 @@ import { flushSync } from "react-dom";
 import {
   ArrowRight,
   BadgeEuro,
-  Building2,
   ChevronDown,
   CirclePercent,
   Download,
-  ExternalLink,
   FileText,
   Globe,
   Image as ImageIcon,
@@ -20,7 +18,6 @@ import {
   MapPin,
   ShieldCheck,
   TrendingUp,
-  Users,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
@@ -115,6 +112,149 @@ type StoryMedia =
   };
 
 type StoryMediaOverlay = "light" | "dark" | "contact" | "none";
+
+type StoryHeroIntroPhase = "loading" | "exiting" | "done";
+
+const storyHeroIntroMinimumMs = 6500;
+const storyHeroIntroMaxWaitMs = 15000;
+const storyHeroIntroFadeMs = 2200;
+const criticalHeroAssetTimeoutMs = 12000;
+
+function waitForDelay(ms: number) {
+  return new Promise<void>((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+function withAssetTimeout(assetPromise: Promise<void>, ms: number) {
+  return new Promise<void>((resolve) => {
+    let settled = false;
+    const timeout = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    }, ms);
+
+    assetPromise
+      .catch(() => undefined)
+      .finally(() => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        resolve();
+      });
+  });
+}
+
+function waitForImageAsset(src: string) {
+  return withAssetTimeout(
+    new Promise<void>((resolve) => {
+      const image = new window.Image();
+      image.decoding = "async";
+
+      const finish = () => resolve();
+      image.addEventListener("load", finish, { once: true });
+      image.addEventListener("error", finish, { once: true });
+      image.src = src;
+
+      if (image.complete) {
+        finish();
+        return;
+      }
+
+      void image.decode?.().then(finish).catch(() => undefined);
+    }),
+    criticalHeroAssetTimeoutMs,
+  );
+}
+
+function waitForVideoAsset(src: string, poster?: string) {
+  return withAssetTimeout(
+    new Promise<void>((resolve) => {
+      const video = document.createElement("video");
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = "auto";
+      if (poster) video.poster = poster;
+
+      const finish = () => {
+        video.removeAttribute("src");
+        video.load();
+        resolve();
+      };
+
+      video.addEventListener("loadeddata", finish, { once: true });
+      video.addEventListener("canplay", finish, { once: true });
+      video.addEventListener("error", finish, { once: true });
+      video.src = src;
+      video.load();
+    }),
+    criticalHeroAssetTimeoutMs,
+  );
+}
+
+function waitForWindowLoad() {
+  if (document.readyState === "complete") return Promise.resolve();
+
+  return withAssetTimeout(
+    new Promise<void>((resolve) => {
+      window.addEventListener("load", () => resolve(), { once: true });
+    }),
+    criticalHeroAssetTimeoutMs,
+  );
+}
+
+function waitForFontsReady() {
+  return withAssetTimeout(
+    document.fonts?.ready.then(() => undefined).catch(() => undefined) ?? Promise.resolve(),
+    criticalHeroAssetTimeoutMs,
+  );
+}
+
+function useStoryHeroIntroGate() {
+  const [phase, setPhase] = useState<StoryHeroIntroPhase>("loading");
+  const [assetsReady, setAssetsReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    let exitTimer: number | null = null;
+
+    const criticalAssetsReady = Promise.allSettled([
+      waitForImageAsset(aixcoLiveLogos.aixcoMark),
+      waitForImageAsset(aixcoHeroBackgroundVideo.poster),
+      waitForVideoAsset(aixcoHeroBackgroundVideo.src, aixcoHeroBackgroundVideo.poster),
+      waitForFontsReady(),
+      waitForWindowLoad(),
+    ]).then(() => {
+      if (!cancelled) setAssetsReady(true);
+    });
+
+    const releaseIntro = async () => {
+      await Promise.all([
+        waitForDelay(storyHeroIntroMinimumMs),
+        Promise.race([criticalAssetsReady, waitForDelay(storyHeroIntroMaxWaitMs)]),
+      ]);
+
+      if (cancelled) return;
+
+      setPhase("exiting");
+      exitTimer = window.setTimeout(() => {
+        if (!cancelled) setPhase("done");
+      }, storyHeroIntroFadeMs);
+    };
+
+    void releaseIntro();
+
+    return () => {
+      cancelled = true;
+      if (exitTimer !== null) {
+        window.clearTimeout(exitTimer);
+      }
+    };
+  }, []);
+
+  return { assetsReady, phase };
+}
 
 const storyChapters: StoryChapter[] = [
   { key: "hero", label: "AIXCO" },
@@ -303,7 +443,7 @@ function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
 
       const rect = root.getBoundingClientRect();
       const viewportHeight = Math.max(1, window.innerHeight);
-      const isNearViewport = rect.top < viewportHeight * 1.45 && rect.bottom > viewportHeight * -0.2;
+      const isNearViewport = rect.top < viewportHeight * 0.9 && rect.bottom > viewportHeight * 0.08;
 
       if (isNearViewport) {
         commitEnteredView();
@@ -321,7 +461,7 @@ function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
           commitEnteredView();
         }
       },
-      { rootMargin: "20% 0px 45% 0px", threshold: 0.01 },
+      { rootMargin: "0px 0px -18% 0px", threshold: 0.01 },
     );
 
     syncCurrentVisibility();
@@ -353,6 +493,7 @@ function StoryTextReveal({
 }) {
   const rootRef = useRef<HTMLSpanElement>(null);
   const isInView = useStoryTextInView(rootRef);
+  const shouldReduceMotion = useHydratedReducedMotion();
   const tokens = useMemo(() => label.split(/(\s+)/u), [label]);
   const letterCount = useMemo(() => Array.from(label).filter((character) => !/\s/u.test(character)).length, [label]);
   const useCompactReveal = letterCount > maxAnimatedStoryLetters;
@@ -382,8 +523,8 @@ function StoryTextReveal({
   }, [animationDurationMs, animationState]);
 
   let revealIndex = 0;
-  const isAnimating = animationState === "animating";
-  const hasPlayed = animationState === "played";
+  const isAnimating = !shouldReduceMotion && animationState === "animating";
+  const hasPlayed = shouldReduceMotion || animationState === "played";
 
   return (
     <span
@@ -583,6 +724,14 @@ function StoryChrome({
   const activeChapterKey = storyChapters[activeIndex]?.key ?? "hero";
   const useLightMobileLogo = ["hero", "about", "aboutAccess"].includes(activeChapterKey);
 
+  useEffect(() => {
+    document.body.classList.toggle("story-mobile-menu-open", menuOpen);
+
+    return () => {
+      document.body.classList.remove("story-mobile-menu-open");
+    };
+  }, [menuOpen]);
+
   const handleChapterLink = (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => {
     setLangOpen(false);
     setMenuOpen(false);
@@ -591,7 +740,7 @@ function StoryChrome({
 
   return (
     <>
-      <div className="fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-2 border-b border-transparent bg-transparent px-3 py-3 text-white sm:px-4 xl:hidden">
+      <div className="fixed inset-x-0 top-0 z-[60] flex items-center justify-between gap-2 border-b border-transparent bg-transparent px-3 py-3 text-white sm:px-4 xl:hidden">
         <a
           href="/"
           aria-label="AIXCO.GLOBAL home"
@@ -605,6 +754,8 @@ function StoryChrome({
             src={aixcoLiveLogos.aixcoMark}
             alt=""
             aria-hidden="true"
+            width={783}
+            height={705}
             className={cn(
               "h-auto w-10 shrink-0 object-contain sm:w-11",
               !useLightMobileLogo && "[filter:brightness(0)_saturate(100%)]",
@@ -615,7 +766,10 @@ function StoryChrome({
         <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
-            onClick={() => setLangOpen((value) => !value)}
+            onClick={() => {
+              setMenuOpen(false);
+              setLangOpen((value) => !value);
+            }}
             aria-haspopup="listbox"
             aria-expanded={langOpen}
             aria-label={`${currentLangName} Change language`}
@@ -627,7 +781,10 @@ function StoryChrome({
           </button>
           <button
             type="button"
-            onClick={() => setMenuOpen((value) => !value)}
+            onClick={() => {
+              setLangOpen(false);
+              setMenuOpen((value) => !value);
+            }}
             aria-expanded={menuOpen}
             aria-controls="story-mobile-menu"
             aria-label={menuOpen ? tx("Close menu") : tx("Open menu")}
@@ -672,7 +829,7 @@ function StoryChrome({
       <aside
         id="story-mobile-menu"
         className={cn(
-          "fixed bottom-0 right-0 top-0 z-50 w-[min(21rem,88vw)] border-l border-foreground/10 bg-white px-5 pb-6 pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] transition-transform duration-300 ease-[var(--ease-apple)] xl:hidden",
+          "fixed bottom-0 right-0 top-0 z-50 max-h-[100svh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-l border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] transition-transform duration-300 [scrollbar-gutter:stable] [transition-timing-function:var(--ease-apple)] xl:hidden",
           menuOpen ? "translate-x-0" : "translate-x-full",
         )}
         aria-hidden={!menuOpen}
@@ -696,7 +853,7 @@ function StoryChrome({
               >
                 <span
                   className={cn(
-                    "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 ease-[var(--ease-apple)]",
+                    "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
                     isActive && "story-chapter-link__line--active w-full bg-primary",
                   )}
                   aria-hidden="true"
@@ -724,6 +881,8 @@ function StoryChrome({
                 src={aixcoLiveLogos.aixcoMark}
                 alt=""
                 aria-hidden="true"
+                width={783}
+                height={705}
                 className="h-auto w-16 object-contain [filter:brightness(0)_saturate(100%)]"
               />
               <span className="whitespace-nowrap text-[0.84rem] font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
@@ -790,7 +949,7 @@ function StoryChrome({
                   >
                     <span
                       className={cn(
-                        "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 ease-[var(--ease-apple)]",
+                        "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
                         "group-hover/story-chapter:w-full group-hover/story-chapter:bg-primary-glow group-focus-visible/story-chapter:w-full group-focus-visible/story-chapter:bg-primary-glow",
                         isActive && "story-chapter-link__line--active w-full bg-primary",
                       )}
@@ -844,7 +1003,7 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none fixed bottom-0 right-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 ease-[var(--ease-apple)] ${
+      className={`pointer-events-none fixed bottom-0 right-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 [transition-timing-function:var(--ease-apple)] ${
         visible ? "opacity-100" : "opacity-0"
       }`}
       style={{ left: "var(--story-fixed-backdrop-left, 0px)" }}
@@ -1063,14 +1222,29 @@ function SceneShell({
   );
 }
 
-function StoryHeroIntroLoader() {
+function StoryHeroIntroLoader({
+  assetsReady,
+  phase,
+}: {
+  assetsReady: boolean;
+  phase: StoryHeroIntroPhase;
+}) {
+  if (phase === "done") return null;
+
   return (
-    <div className="story-hero-intro-loader" aria-hidden="true">
+    <div
+      className="story-hero-intro-loader"
+      data-assets-ready={assetsReady ? "true" : "false"}
+      data-intro-phase={phase}
+      aria-hidden="true"
+    >
       <div className="story-hero-intro-loader__lockup">
         <div className="story-hero-intro-loader__mark-shell">
           <img
             src={aixcoLiveLogos.aixcoMark}
             alt=""
+            width={783}
+            height={705}
             className="story-hero-intro-loader__official-mark"
             decoding="sync"
             fetchPriority="high"
@@ -1082,15 +1256,19 @@ function StoryHeroIntroLoader() {
   );
 }
 
-function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy: string) => string; onRegister: () => void }) {
+function HeroScene({
+  introPhase,
+  isActive,
+  onRegister,
+  tx,
+}: {
+  introPhase: StoryHeroIntroPhase;
+  isActive: boolean;
+  onRegister: () => void;
+  tx: (copy: string) => string;
+}) {
   const statementLabel = heroStoryStatementLines.map((line) => tx(line)).join(" ");
-  const [introComplete, setIntroComplete] = useState(false);
-  const shouldDelayHeroContent = isActive && !introComplete;
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setIntroComplete(true), 13200);
-    return () => window.clearTimeout(timer);
-  }, []);
+  const canRevealHeroContent = introPhase !== "loading";
 
   return (
     <div className="relative h-full min-h-0 overflow-hidden text-white">
@@ -1100,8 +1278,14 @@ function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy:
           <motion.div
             className="story-hero-lockup hero-reference-font"
             initial={{ opacity: 0, y: 28 }}
-            animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0.94, y: 6 }}
-            transition={{ ...revealTransition, delay: shouldDelayHeroContent ? 12.05 : 0 }}
+            animate={
+              isActive && !canRevealHeroContent
+                ? { opacity: 0, y: 28 }
+                : isActive
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0.94, y: 6 }
+            }
+            transition={revealTransition}
           >
             <header className="story-hero-brand">
               <p className="story-hero-kicker">{tx("Global Real Estate")}</p>
@@ -1110,6 +1294,8 @@ function HeroScene({ isActive, tx, onRegister }: { isActive: boolean; tx: (copy:
                   src={aixcoLiveLogos.aixcoMark}
                   alt=""
                   aria-hidden="true"
+                  width={783}
+                  height={705}
                   data-story-hero-title-mark="true"
                   className="story-hero-wordmark__mark"
                 />
@@ -1317,12 +1503,49 @@ function AboutScene({
   isRevealed: boolean;
   tx: (copy: string) => string;
 }) {
+  const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
     { value: "500+", label: "Total transactions" },
     { value: "2009", label: "In business since" },
   ];
+
+  useEffect(() => {
+    const video = dubaiVideoRef.current;
+    if (!video) return undefined;
+
+    video.playbackRate = 0.82;
+
+    if (!isActive) {
+      video.pause();
+      return undefined;
+    }
+
+    let cancelled = false;
+    const playVideo = () => {
+      if (cancelled) return;
+      video.playbackRate = 0.82;
+      void video.play().catch(() => undefined);
+    };
+
+    if (video.readyState >= 2) {
+      playVideo();
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    video.addEventListener("loadeddata", playVideo);
+    video.addEventListener("canplay", playVideo);
+    video.load();
+
+    return () => {
+      cancelled = true;
+      video.removeEventListener("loadeddata", playVideo);
+      video.removeEventListener("canplay", playVideo);
+    };
+  }, [isActive]);
 
   return (
     <div className="story-about-cinematic-stage relative h-full min-h-0 bg-[#11100e] text-white">
@@ -1335,9 +1558,10 @@ function AboutScene({
           <StoryMediaReveal isActive={isRevealed} className="story-about-cinematic-media absolute inset-0">
             <div className="story-about-cinematic-image relative h-full w-full">
               <video
+                ref={dubaiVideoRef}
                 className="h-full w-full object-cover"
                 poster={aixcoDubaiHeroVideo.poster}
-                autoPlay={isRevealed}
+                autoPlay={isActive}
                 muted
                 loop
                 playsInline
@@ -1348,7 +1572,7 @@ function AboutScene({
                 }}
                 onCanPlay={(event) => {
                   event.currentTarget.playbackRate = 0.82;
-                  if (isRevealed) {
+                  if (isActive) {
                     void event.currentTarget.play().catch(() => undefined);
                   }
                 }}
@@ -1380,8 +1604,8 @@ function AboutScene({
                     src={aixcoLiveLogos.aixcoMark}
                     alt=""
                     aria-hidden="true"
-                    width={780}
-                    height={704}
+                    width={783}
+                    height={705}
                     sizes="(min-width: 1280px) 10vw, 28vw"
                     className="h-[clamp(4.4rem,8vw,8.8rem)] w-[clamp(4.4rem,8vw,8.8rem)] shrink-0 object-contain [filter:brightness(0)_invert(1)]"
                   />
@@ -2104,7 +2328,7 @@ function TeamScene({
             >
               <span
                 className={cn(
-                  "absolute bottom-0 left-0 top-0 w-[0.2rem] bg-foreground/15 transition-[background-color] duration-300 ease-[var(--ease-apple)]",
+                  "absolute bottom-0 left-0 top-0 w-[0.2rem] bg-foreground/15 transition-[background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
                   "group-hover/story-team-member:bg-primary-glow group-focus-visible/story-team-member:bg-primary-glow",
                   isSelected && "bg-primary",
                 )}
@@ -2157,7 +2381,6 @@ function StoryPartnerRow({
         openPartner={onPartnerClick}
         tx={tx}
         reverse={reverse}
-        variant="story"
         ariaLabel={tx(label)}
       />
     </div>
@@ -2398,6 +2621,7 @@ export function DesktopStoryHome() {
   const sectionPresenceRef = useRef(sectionPresence);
   const { openJourney, openLogin, openPartner, openRegister } = useUI();
   const { lang, setLang, tx } = useI18n();
+  const introGate = useStoryHeroIntroGate();
 
   useLayoutEffect(() => {
     const hiddenHeaders = new Map<HTMLElement, string>();
@@ -2634,7 +2858,7 @@ export function DesktopStoryHome() {
       const isRevealed = (index: number) => Boolean(sectionPresence[index] ?? index === 0);
 
       return [
-      <HeroScene key="hero" isActive={activeIndex === 0} tx={tx} onRegister={openRegister} />,
+      <HeroScene key="hero" introPhase={introGate.phase} isActive={activeIndex === 0} tx={tx} onRegister={openRegister} />,
       <AboutScene key="about" isActive={activeIndex === 1} isRevealed={isRevealed(1)} tx={tx} />,
       <PhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
       <PhilosophyDetailScene
@@ -2669,12 +2893,12 @@ export function DesktopStoryHome() {
       <ContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
-    [activeIndex, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
+    [activeIndex, introGate.phase, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
   );
 
   return (
     <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress": "0%" } as CSSProperties}>
-      <StoryHeroIntroLoader />
+      <StoryHeroIntroLoader assetsReady={introGate.assetsReady} phase={introGate.phase} />
       <FixedHeroBackdrop visible={activeIndex === 0} />
       <StoryChrome
         activeIndex={activeIndex}
@@ -2717,3 +2941,4 @@ export function DesktopStoryHome() {
     </div>
   );
 }
+

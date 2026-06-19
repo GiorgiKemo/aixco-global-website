@@ -5,44 +5,7 @@ import { motion, type Variants } from "@/lib/framer-motion";
 import { imageSettleTransition, premiumEase, reducedMotionTransition, revealTransition } from "@/lib/motion";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 
-export const scrollRevealViewport = {
-  once: true,
-  amount: 0.2 as const,
-};
-
-export const fadeUp: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 28,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: revealTransition,
-  },
-};
-
-export const fadeIn: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: revealTransition,
-  },
-};
-
-export const staggerContainer: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.06,
-    },
-  },
-};
-
-export const storySceneContainer: Variants = {
+const storySceneContainer: Variants = {
   hidden: {
     opacity: 0,
     transition: {
@@ -74,90 +37,13 @@ const storySceneItem: Variants = {
   },
 };
 
-export const staggerItem: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 24,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: revealTransition,
-  },
-};
-
-type MotionRevealProps = {
-  children: ReactNode;
-  className?: string;
-  variant?: "fadeUp" | "fadeIn";
-  delay?: number;
-};
-
-export function MotionReveal({
-  children,
-  className,
-  variant = "fadeUp",
-  delay = 0,
-}: MotionRevealProps) {
-  const shouldReduceMotion = useHydratedReducedMotion();
-  const variants = variant === "fadeIn" ? fadeIn : fadeUp;
-
-  return (
-    <motion.div
-      className={className}
-      variants={variants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={scrollRevealViewport}
-      transition={shouldReduceMotion ? reducedMotionTransition : { ...revealTransition, delay }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-type MotionRevealStaggerProps = {
-  children: ReactNode;
-  className?: string;
-};
-
-export function MotionRevealStagger({ children, className }: MotionRevealStaggerProps) {
-  const shouldReduceMotion = useHydratedReducedMotion();
-
-  return (
-    <motion.div
-      className={className}
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={scrollRevealViewport}
-      transition={shouldReduceMotion ? reducedMotionTransition : undefined}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-type MotionRevealItemProps = {
-  children: ReactNode;
-  className?: string;
-};
-
-export function MotionRevealItem({ children, className }: MotionRevealItemProps) {
-  return (
-    <motion.div className={className} variants={staggerItem}>
-      {children}
-    </motion.div>
-  );
-}
-
 type StorySceneRevealProps = {
   children: ReactNode;
   isActive: boolean;
   className?: string;
 };
 
-export const storyMediaReveal: Variants = {
+const storyMediaReveal: Variants = {
   hidden: {
     opacity: 0,
     x: 56,
@@ -175,7 +61,7 @@ export const storyMediaReveal: Variants = {
   },
 };
 
-export const storyMediaRevealReverse: Variants = {
+const storyMediaRevealReverse: Variants = {
   hidden: {
     opacity: 0,
     x: -56,
@@ -206,7 +92,7 @@ export function StoryMediaReveal({ children, isActive, reverse = false, classNam
 
   return (
     <motion.div
-      className={className}
+      className={["story-media-reveal", className].filter(Boolean).join(" ")}
       data-story-media-reveal-active={isActive ? "true" : "false"}
       variants={variants}
       initial="hidden"
@@ -242,7 +128,7 @@ export function StorySceneReveal({ children, isActive, className }: StorySceneRe
 
   return (
     <motion.div
-      className={className}
+      className={["story-scene-reveal", className].filter(Boolean).join(" ")}
       data-story-scene-reveal-active={isActive ? "true" : "false"}
       variants={storySceneContainer}
       initial="hidden"

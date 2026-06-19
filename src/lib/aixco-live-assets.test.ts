@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  aixcoBatumiGalleryVideos,
   aixcoDubaiEdenHouseCanalGallery,
   aixcoDubaiEdenHouseParkGallery,
   aixcoDubaiHealthcareGallery,
@@ -46,12 +45,5 @@ describe("aixcoLiveImages", () => {
     expect(aixcoLiveVideoPreviews.bonds).toContain("/aixco-global-op2/media/previews/bonds-preview.mp4");
     expect(aixcoLiveVideoPreviews.batumiBuy).toContain("/aixco-global-op2/media/batumi-gallery/previews/batumi1-preview.mp4");
     expect(aixcoLiveVideoPreviews.currentProject).toContain("/aixco-global-op2/media/previews/current-project-preview.mp4");
-    expect(aixcoBatumiGalleryVideos.every(({ previewSrc }) => previewSrc.includes("/media/batumi-gallery/previews/"))).toBe(true);
-    expect(aixcoBatumiGalleryVideos.every(({ src, previewSrc }) => src !== previewSrc)).toBe(true);
-    expect(aixcoBatumiGalleryVideos[0]).toMatchObject({
-      src: expect.stringContaining("/media/batumi-gallery/batumi-short.mp4"),
-      previewSrc: expect.stringContaining("/media/batumi-gallery/previews/batumi-short-preview.mp4"),
-      poster: expect.stringContaining("/media/batumi-gallery/batumi-short-poster.webp"),
-    });
   });
 });

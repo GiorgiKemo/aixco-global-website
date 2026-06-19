@@ -1,18 +1,8 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { MotionReveal, StoryMediaReveal, StorySceneReveal } from "./StoryReveal";
+import { StoryMediaReveal, StorySceneReveal } from "./StoryReveal";
 
 describe("StoryReveal", () => {
-  it("renders motion reveal wrappers for native scroll", () => {
-    const { getByText } = render(
-      <MotionReveal>
-        <p>Editorial copy</p>
-      </MotionReveal>,
-    );
-
-    expect(getByText("Editorial copy")).toBeInTheDocument();
-  });
-
   it("renders staggered story scene children", () => {
     const { container, getByText, rerender } = render(
       <StorySceneReveal isActive className="flex flex-col gap-4">

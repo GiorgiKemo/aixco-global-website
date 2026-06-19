@@ -1,64 +1,8 @@
 "use client";
 
-import { Mail, MapPin, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import Image from "next/image";
-import { Logo } from "./Logo";
-import { SocialLinks } from "./SocialLinks";
-import { useSiteContent } from "@/data/site-content-context";
-import { useUI } from "./ui-state";
-import { useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
-
-type FooterProps = {
-  variant?: "default" | "story";
-};
-
-export function Footer({ variant = "default" }: FooterProps = {}) {
-  const { openTerms, openPrivacy } = useUI();
-  const { tx } = useI18n();
-  const { company } = useSiteContent();
-  const isStory = variant === "story";
-
-  return (
-    <footer
-      data-story-footer={isStory ? "true" : undefined}
-      className={`site-footer relative isolate z-20 overflow-hidden border-t border-border/80 bg-background text-foreground ${isStory ? "story-footer" : ""}`}
-    >
-      <div className={`container-x relative flex flex-col ${isStory ? "py-8 md:py-9" : "py-10 md:py-12"}`}>
-        <div className={`grid gap-8 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-start md:gap-x-10 lg:gap-x-14 ${isStory ? "" : "lg:flex-1"}`}>
-          <Logo />
-
-          <section aria-labelledby="footer-contact-heading" className="min-w-0">
-            <h2 id="footer-contact-heading" className="sr-only">
-              {tx("Contact")}
-            </h2>
-            <div className="space-y-3">
-              <a
-                href={`mailto:${company.email}`}
-                className="group flex min-h-11 items-start gap-3 text-sm leading-6 text-foreground/72 transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              >
-                <span className="icon-button-glass flex h-10 w-10 shrink-0">
-                  <Mail className="h-4 w-4 text-primary" aria-hidden="true" />
-                </span>
-                <span className="min-w-0 pt-2 [overflow-wrap:anywhere]">{company.email}</span>
-              </a>
-              <div className="flex min-h-11 items-start gap-3 text-sm leading-6 text-foreground/72">
-                <span className="icon-button-glass flex h-10 w-10 shrink-0">
-                  <MapPin className="h-4 w-4 text-primary" aria-hidden="true" />
-                </span>
-                <span className="min-w-0 pt-2">{company.address}</span>
-              </div>
-            </div>
-          </section>
-
-          <SocialLinks socials={company.socials} theme="light" aria-label={tx("AIXCO social media links")} />
-        </div>
-
-        <FooterLegalBar tx={tx} openTerms={openTerms} openPrivacy={openPrivacy} />
-      </div>
-    </footer>
-  );
-}
 
 export function FooterLegalBar({
   tx,

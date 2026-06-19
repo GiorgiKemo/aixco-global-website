@@ -1,11 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { motion } from "@/lib/framer-motion";
-import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import { premiumPress } from "@/lib/motion";
 
 export type Partner = SiteContent["partners"][number];
@@ -27,7 +26,6 @@ export function PartnerMarquee({
   openPartner,
   tx,
   reverse = false,
-  variant = "native",
   ariaLabel,
   className = "",
 }: {
@@ -36,52 +34,24 @@ export function PartnerMarquee({
   openPartner: (partner: Partner) => void;
   tx: (text: string) => string;
   reverse?: boolean;
-  variant?: "native" | "story";
   ariaLabel?: string;
   className?: string;
 }) {
-  const marqueeRef = useRef<HTMLDivElement>(null);
-  const shouldReduceMotion = useHydratedReducedMotion();
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const marquee = marqueeRef.current;
-    if (!marquee || typeof IntersectionObserver === "undefined") {
-      setIsVisible(true);
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { rootMargin: "220px 0px", threshold: 0.01 },
-    );
-
-    observer.observe(marquee);
-    return () => observer.disconnect();
-  }, [variant]);
-
   if (items.length === 0) return null;
 
   const marqueeLabel = ariaLabel ?? (title ? tx(title) : undefined);
-  const shouldPauseMarquee =
-    variant === "story"
-      ? false
-      : shouldReduceMotion || !isVisible;
 
   return (
-    <div className={`${variant === "story" ? "mb-0" : "mb-12 min-w-0 overflow-hidden last:mb-0"} ${className}`.trim()}>
+    <div className={`mb-0 ${className}`.trim()}>
       {title ? (
-        <h3 className={`${variant === "story" ? "sr-only" : "scroll-reveal mb-5 min-w-0 font-display text-2xl [overflow-wrap:anywhere]"}`}>
-          {tx(title)}
-        </h3>
+        <h3 className="sr-only">{tx(title)}</h3>
       ) : null}
       <div
-        ref={marqueeRef}
-        className={`partner-marquee ${variant === "story" ? "partner-marquee--story" : ""} ${variant === "native" ? "scroll-reveal" : ""}`}
+        className="partner-marquee partner-marquee--story"
         aria-label={marqueeLabel}
-        data-marquee-paused={shouldPauseMarquee ? "true" : "false"}
+        data-marquee-paused="false"
       >
-        <div className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""} ${shouldPauseMarquee ? "partner-marquee-track-paused" : ""}`}>
+        <div className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""}`}>
           {[0, 1].map((setIndex) => (
             <div key={setIndex} className="partner-marquee-set" aria-hidden={setIndex === 1 ? "true" : undefined}>
               {items.map((partner) => (
@@ -91,7 +61,6 @@ export function PartnerMarquee({
                   openPartner={openPartner}
                   tx={tx}
                   isClone={setIndex === 1}
-                  variant={variant}
                 />
               ))}
             </div>
@@ -107,17 +76,14 @@ function PartnerMarqueeItem({
   openPartner,
   tx,
   isClone,
-  variant,
 }: {
   partner: Partner;
   openPartner: (partner: Partner) => void;
   tx: (text: string) => string;
   isClone: boolean;
-  variant: "native" | "story";
 }) {
   const logoSrc = partner.logo ? logoMap[partner.logo] : null;
   const translatedName = tx(partner.name);
-  const eagerLoad = variant === "story";
   const [logoState, setLogoState] = useState<"pending" | "loaded" | "error">(logoSrc ? "pending" : "error");
 
   return (
@@ -138,9 +104,9 @@ function PartnerMarqueeItem({
             src={logoSrc}
             alt=""
             aria-hidden
-            loading={eagerLoad ? "eager" : "lazy"}
-            fetchPriority={eagerLoad ? "high" : "auto"}
-            decoding={eagerLoad ? "sync" : "async"}
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
             width={240}
             height={120}
             sizes="(min-width: 768px) 11.25rem, 9.5rem"

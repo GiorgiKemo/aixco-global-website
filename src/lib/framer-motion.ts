@@ -1,8 +1,6 @@
 export {
   AnimatePresence,
   motion,
-  stagger,
-  useAnimate,
   useAnimationFrame,
   useMotionValue,
   useMotionValueEvent,

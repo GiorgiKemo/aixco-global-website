@@ -18,7 +18,7 @@ type GalleryTileLoading = {
   imageIndex: number;
 };
 
-export function getGalleryTileLoading({ isGalleryInView, setIndex, imageIndex }: GalleryTileLoading) {
+function getGalleryTileLoading({ isGalleryInView, setIndex, imageIndex }: GalleryTileLoading) {
   const shouldEagerLoad = isGalleryInView && setIndex === 0 && imageIndex < eagerGalleryTileCount;
 
   return {

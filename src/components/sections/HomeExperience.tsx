@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useLayoutEffect, type ReactNode } from "react";
+import { useLayoutEffect } from "react";
 
 const DesktopStoryHome = dynamic(
   () => import("@/components/sections/DesktopStoryHome").then((module) => module.DesktopStoryHome),
@@ -16,7 +16,7 @@ function StoryBootSurface() {
   );
 }
 
-export function HomeExperience({ children: _children = null }: { children?: ReactNode }) {
+export function HomeExperience() {
   useLayoutEffect(() => {
     if (typeof document === "undefined") return undefined;
 

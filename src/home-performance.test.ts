@@ -25,7 +25,6 @@ describe("home page performance structure", () => {
   it("keeps philosophy content inside the home experience instead of a separate page", () => {
     const homeSource = readSource("src/views/HomePage.tsx");
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
-    const navSource = readSource("src/components/nav/nav-data.ts");
     const sitemapSource = readSource("src/app/sitemap.ts");
 
     expect(homeSource).toContain("<HomeExperience />");
@@ -34,7 +33,7 @@ describe("home page performance structure", () => {
     expect(desktopStorySource).toContain('{ key: "philosophyPlatform", id: "philosophy-platform", label: "Principles" }');
     expect(desktopStorySource).toContain("<PhilosophyScene");
     expect(desktopStorySource).toContain("<PhilosophyDetailScene");
-    expect(navSource).toContain('hash: "#philosophy"');
+    expect(desktopStorySource).toContain('id: "philosophy"');
     expect(sitemapSource).not.toContain("/aixco-philosophy");
   });
 

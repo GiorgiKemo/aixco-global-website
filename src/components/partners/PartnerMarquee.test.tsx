@@ -20,7 +20,6 @@ describe("PartnerMarquee", () => {
         partners={partners}
         openPartner={vi.fn()}
         tx={(copy) => copy}
-        variant="story"
       />,
     );
 
@@ -49,7 +48,6 @@ describe("PartnerMarquee", () => {
         partners={partners}
         openPartner={vi.fn()}
         tx={(copy) => copy}
-        variant="story"
       />,
     );
 
@@ -57,21 +55,4 @@ describe("PartnerMarquee", () => {
     expect(container.querySelector('[data-marquee-paused="false"]')).toBeInTheDocument();
   });
 
-  it("keeps non-story logos lazy-loaded", () => {
-    const { container } = render(
-      <PartnerMarquee
-        partners={partners}
-        openPartner={vi.fn()}
-        tx={(copy) => copy}
-      />,
-    );
-
-    const logos = container.querySelectorAll(".partner-marquee-item__logo");
-    expect(logos).toHaveLength(2);
-    logos.forEach((logo) => {
-      expect(logo).toHaveAttribute("loading", "lazy");
-      expect(logo).toHaveAttribute("fetchpriority", "auto");
-      expect(logo).toHaveAttribute("decoding", "async");
-    });
-  });
 });
