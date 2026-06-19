@@ -151,18 +151,35 @@ function waitForImageAsset(src: string) {
     new Promise<void>((resolve) => {
       const image = new window.Image();
       image.decoding = "async";
+      let settled = false;
 
-      const finish = () => resolve();
-      image.addEventListener("load", finish, { once: true });
-      image.addEventListener("error", finish, { once: true });
+      const finish = async () => {
+        if (settled) return;
+        settled = true;
+
+        try {
+          await image.decode?.();
+        } catch {
+          // iOS Safari may reject decode() for cached images; load completion is still enough to avoid placeholders.
+        }
+
+        resolve();
+      };
+
+      const finishOnError = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+
+      image.addEventListener("load", () => void finish(), { once: true });
+      image.addEventListener("error", finishOnError, { once: true });
       image.src = src;
 
-      if (image.complete) {
-        finish();
+      if (image.complete && image.naturalWidth > 0) {
+        void finish();
         return;
       }
-
-      void image.decode?.().then(finish).catch(() => undefined);
     }),
     criticalHeroAssetTimeoutMs,
   );
@@ -213,14 +230,19 @@ function waitForFontsReady() {
 
 function useStoryHeroIntroGate() {
   const [phase, setPhase] = useState<StoryHeroIntroPhase>("loading");
+  const [logoReady, setLogoReady] = useState(false);
   const [assetsReady, setAssetsReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     let exitTimer: number | null = null;
 
+    const introLogoReady = waitForImageAsset(aixcoLiveLogos.aixcoMark).then(() => {
+      if (!cancelled) setLogoReady(true);
+    });
+
     const criticalAssetsReady = Promise.allSettled([
-      waitForImageAsset(aixcoLiveLogos.aixcoMark),
+      introLogoReady,
       waitForImageAsset(aixcoHeroBackgroundVideo.poster),
       waitForVideoAsset(aixcoHeroBackgroundVideo.src, aixcoHeroBackgroundVideo.poster),
       waitForFontsReady(),
@@ -253,7 +275,7 @@ function useStoryHeroIntroGate() {
     };
   }, []);
 
-  return { assetsReady, phase };
+  return { assetsReady, logoReady, phase };
 }
 
 const storyChapters: StoryChapter[] = [
@@ -1224,9 +1246,11 @@ function SceneShell({
 
 function StoryHeroIntroLoader({
   assetsReady,
+  logoReady,
   phase,
 }: {
   assetsReady: boolean;
+  logoReady: boolean;
   phase: StoryHeroIntroPhase;
 }) {
   if (phase === "done") return null;
@@ -1236,6 +1260,7 @@ function StoryHeroIntroLoader({
       className="story-hero-intro-loader"
       data-assets-ready={assetsReady ? "true" : "false"}
       data-intro-phase={phase}
+      data-logo-ready={logoReady ? "true" : "false"}
       aria-hidden="true"
     >
       <div className="story-hero-intro-loader__lockup">
@@ -2898,7 +2923,7 @@ export function DesktopStoryHome() {
 
   return (
     <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress": "0%" } as CSSProperties}>
-      <StoryHeroIntroLoader assetsReady={introGate.assetsReady} phase={introGate.phase} />
+      <StoryHeroIntroLoader assetsReady={introGate.assetsReady} logoReady={introGate.logoReady} phase={introGate.phase} />
       <FixedHeroBackdrop visible={activeIndex === 0} />
       <StoryChrome
         activeIndex={activeIndex}

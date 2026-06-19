@@ -1062,10 +1062,16 @@
     max-height: 100%;
     object-fit: contain;
     background: transparent;
+    visibility: hidden;
     opacity: 0;
     user-select: none;
     -webkit-user-drag: none;
     transform-origin: center;
+    will-change: opacity, transform, filter;
+  }
+
+  .story-hero-intro-loader[data-logo-ready='true'] .story-hero-intro-loader__official-mark {
+    visibility: visible;
     animation:
       story-hero-official-mark-in 2400ms cubic-bezier(0.16, 1, 0.3, 1) 720ms forwards,
       story-hero-official-mark-hold 2600ms ease-in-out 3.35s alternate infinite;
@@ -1073,6 +1079,7 @@
 
   .story-hero-intro-loader__wordmark {
     max-width: 100%;
+    visibility: hidden;
     opacity: 0;
     color: white;
     font-size: clamp(1.28rem, 2.5vw, 2.35rem);
@@ -1081,6 +1088,10 @@
     letter-spacing: 0.12em;
     text-align: center;
     text-shadow: 0 18px 52px rgb(255 255 255 / 0.1);
+  }
+
+  .story-hero-intro-loader[data-logo-ready='true'] .story-hero-intro-loader__wordmark {
+    visibility: visible;
     animation: story-hero-wordmark-under-in 1450ms var(--ease-apple) 4.25s forwards;
   }
 

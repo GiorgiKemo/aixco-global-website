@@ -109,12 +109,24 @@ describe("index.css motion rules", () => {
   it("keeps the intro logo from flashing as a square on tablet first paint", () => {
     const markShell = cssBlock(".story-hero-intro-loader__mark-shell");
     const officialMark = cssBlock(".story-hero-intro-loader__official-mark");
+    const officialMarkReady = cssBlock(
+      ".story-hero-intro-loader[data-logo-ready='true'] .story-hero-intro-loader__official-mark",
+    );
+    const wordmarkReady = cssBlock(
+      ".story-hero-intro-loader[data-logo-ready='true'] .story-hero-intro-loader__wordmark",
+    );
 
     expect(markShell).toContain("aspect-ratio: 783 / 705");
     expect(officialMark).toContain("display: block");
     expect(officialMark).toContain("height: auto");
     expect(officialMark).toContain("max-height: 100%");
     expect(officialMark).toContain("background: transparent");
+    expect(officialMark).toContain("visibility: hidden");
+    expect(officialMark).not.toContain("animation:");
+    expect(officialMarkReady).toContain("visibility: visible");
+    expect(officialMarkReady).toContain("story-hero-official-mark-in");
+    expect(wordmarkReady).toContain("story-hero-wordmark-under-in");
+    expect(desktopStoryHome).toContain('data-logo-ready={logoReady ? "true" : "false"}');
     expect(desktopStoryHome).toMatch(
       /<img\s+src=\{aixcoLiveLogos\.aixcoMark\}\s+alt=""\s+width=\{783\}\s+height=\{705\}\s+className="story-hero-intro-loader__official-mark"/,
     );
