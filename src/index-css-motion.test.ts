@@ -97,6 +97,9 @@ describe("index.css motion rules", () => {
     expect(css).toContain("bottom: max(0.5rem, env(safe-area-inset-bottom, 0px)) !important");
     expect(css).toContain("height: 2.75rem !important");
     expect(css).toContain("height: 2.55rem !important");
+    expect(css).toContain("padding-bottom: max(4.85rem, env(safe-area-inset-bottom, 0px))");
+    expect(css).toContain("font-size: clamp(2.08rem, 10.8vw, 2.75rem)");
+    expect(css).toContain("min-height: 2.72rem");
   });
 
   it("keeps asset detail CTAs large enough for mobile touch targets", () => {
