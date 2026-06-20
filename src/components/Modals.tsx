@@ -330,7 +330,7 @@ export function Modals() {
         aria-label={dialogLabel}
         className="modal-panel relative max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-lg border border-border/70 bg-surface-elevated shadow-elegant [overflow-wrap:anywhere]"
       >
-        <button aria-label="Close" onClick={close} className="icon-button-glass absolute right-3 top-3 z-10 h-10 w-10">
+        <button aria-label={tx("Close")} onClick={close} className="icon-button-glass absolute right-3 top-3 z-10 h-10 w-10">
           <X className="h-4 w-4" />
         </button>
         <div className="p-7 md:p-10">

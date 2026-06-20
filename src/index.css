@@ -872,9 +872,9 @@
     max-width: 100%;
     min-width: 0;
     overflow: visible;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
     word-break: normal;
-    hyphens: auto;
+    hyphens: manual;
     color: inherit;
     --story-char-step: 22ms;
     --story-char-duration: 760ms;
@@ -888,9 +888,9 @@
 
   .story-text-reveal__mobile-plain {
     display: none;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
     word-break: normal;
-    hyphens: auto;
+    hyphens: manual;
   }
 
   .story-letter-reveal:not(.story-letter-reveal--active):not(
@@ -911,25 +911,26 @@
   }
 
   .story-letter-reveal__word {
-    display: inline;
+    display: inline-block;
     max-width: 100%;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: normal;
-    hyphens: auto;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: keep-all;
+    hyphens: manual;
     line-height: inherit;
     overflow: visible;
     vertical-align: baseline;
   }
 
   .story-letter-reveal__word--long {
-    white-space: normal;
-    overflow-wrap: anywhere;
-    hyphens: auto;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: keep-all;
+    hyphens: manual;
   }
 
   .story-letter-reveal__space {
-    white-space: normal;
+    white-space: pre-wrap;
   }
 
   .story-letter-reveal__char {
@@ -1092,8 +1093,11 @@
 
   @media (max-width: 767px) {
     .story-letter-reveal__word {
-      display: inline;
-      white-space: normal;
+      display: inline-block;
+      white-space: nowrap;
+      overflow-wrap: normal;
+      word-break: keep-all;
+      hyphens: manual;
     }
 
     .story-letter-reveal__char {
@@ -1595,7 +1599,7 @@
   }
 
   .story-metric-label {
-    font-size: clamp(0.62rem, 0.66vw, 0.72rem);
+    font-size: clamp(0.72rem, 0.74vw, 0.8rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.16em;
@@ -3405,8 +3409,10 @@
       [data-layout='story-dubai-funds']
       .story-metric-label {
       max-width: 100%;
-      font-size: clamp(0.68rem, 0.85vw, 0.78rem);
-      overflow-wrap: normal;
+      font-size: clamp(0.72rem, 0.85vw, 0.8rem);
+      display: block;
+      min-width: 0;
+      overflow-wrap: anywhere;
       word-break: normal;
       hyphens: auto;
       letter-spacing: clamp(0.04em, 0.08vw, 0.075em);
@@ -3514,8 +3520,11 @@
       [data-story-section='philosophy']
       .story-philosophy-title
       .story-letter-reveal__word {
-      display: inline;
-      white-space: normal;
+      display: inline-block;
+      white-space: nowrap;
+      overflow-wrap: normal;
+      word-break: keep-all;
+      hyphens: manual;
     }
 
     html[lang='ru'] .story-eyebrow,
@@ -3760,7 +3769,7 @@
     [data-story-section='philosophyPlatform']
       .story-philosophy-stat
       .story-metric-label {
-      font-size: clamp(0.62rem, 0.67vw, 0.72rem);
+      font-size: clamp(0.72rem, 0.74vw, 0.8rem);
       letter-spacing: 0.085em;
       line-height: 1.28;
       overflow-wrap: anywhere;
@@ -3892,6 +3901,18 @@
         scale(calc(1.035 + (var(--story-section-exit-progress, 0) * 0.065)));
       transform-origin: center center;
       will-change: transform;
+    }
+
+    [data-story-section='about'] .story-about-cinematic-poster {
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 900ms var(--ease-apple);
+      will-change: opacity;
+    }
+
+    [data-story-section='about']
+      .story-about-cinematic-poster[data-video-started='true'] {
+      opacity: 0;
     }
 
     [data-story-section='about'] .story-about-cinematic-copy {
@@ -4529,16 +4550,19 @@
 
     .story-letter-reveal--active .story-letter-reveal__word,
     .story-letter-reveal--played .story-letter-reveal__word {
-      white-space: normal;
-      overflow-wrap: anywhere;
-      hyphens: auto;
+      display: inline-block;
+      white-space: nowrap;
+      overflow-wrap: normal;
+      word-break: keep-all;
+      hyphens: manual;
     }
 
     .story-letter-reveal--active .story-letter-reveal__word--long,
     .story-letter-reveal--played .story-letter-reveal__word--long {
-      white-space: normal;
-      overflow-wrap: anywhere;
-      hyphens: auto;
+      white-space: nowrap;
+      overflow-wrap: normal;
+      word-break: keep-all;
+      hyphens: manual;
     }
   }
 
@@ -4725,8 +4749,8 @@
 
     [data-story-section='about'] dd {
       margin-top: 0.38rem !important;
-      font-size: 0.54rem !important;
-      line-height: 1.25 !important;
+      font-size: 0.7rem !important;
+      line-height: 1.28 !important;
       letter-spacing: 0.055em !important;
       overflow-wrap: anywhere !important;
     }
@@ -4862,14 +4886,14 @@
     }
 
     [data-story-section='philosophyPlatform'] .story-philosophy-stat {
-      min-height: 4.15rem;
-      padding: 0.48rem 0.55rem;
+      min-height: 4.45rem;
+      padding: 0.5rem 0.58rem;
     }
 
     [data-story-section='philosophyPlatform'] .story-philosophy-stat .story-metric-label {
-      font-size: 0.52rem;
-      line-height: 1.16;
-      letter-spacing: 0.055em;
+      font-size: 0.7rem;
+      line-height: 1.18;
+      letter-spacing: 0.04em;
     }
 
     [data-story-section='philosophyPlatform'] .story-philosophy-stat .story-metric-value {
@@ -4923,7 +4947,7 @@
     }
 
     [data-story-section='how'] [data-layout='story-journeys'] .story-metric-label {
-      font-size: 0.55rem;
+      font-size: 0.72rem;
       letter-spacing: 0.1em;
     }
 
@@ -4996,14 +5020,14 @@
   }
   @media (max-width: 360px) {
     .story-metric-label {
-      font-size: 0.58rem;
+      font-size: 0.7rem;
       letter-spacing: 0.09em;
     }
 
     [data-story-scene-copy]
       [data-layout='story-dubai-funds']
       .story-metric-label {
-      overflow-wrap: normal;
+      overflow-wrap: anywhere;
       text-wrap: balance;
     }
 

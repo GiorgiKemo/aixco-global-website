@@ -82,7 +82,7 @@ function loadStoredMessages() {
 }
 
 export function ChatWidget() {
-  const { tx } = useI18n();
+  const { dir, tx } = useI18n();
   const { openRegister } = useUI();
   const { company } = useSiteContent();
   const [hasMounted, setHasMounted] = useState(false);
@@ -199,7 +199,7 @@ export function ChatWidget() {
           <motion.section
             role="dialog"
             aria-label={tx("AIXCO Live Chat")}
-            dir="ltr"
+            dir={dir}
             initial={{ opacity: 0, y: 22, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}

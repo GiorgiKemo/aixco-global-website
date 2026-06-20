@@ -382,6 +382,7 @@ const batumiVisualMosaicImages = [
   {
     key: "dusk-central",
     src: aixcoLiveImages.batumiMosaicDuskAerialCentral,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbDuskAerialCentral,
     alt: "Batumi dusk aerial skyline and waterfront",
     width: 3840,
     height: 2160,
@@ -390,6 +391,7 @@ const batumiVisualMosaicImages = [
   {
     key: "dusk-coastline",
     src: aixcoLiveImages.batumiMosaicDuskAerialCoastline,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbDuskAerialCoastline,
     alt: "Batumi illuminated coastline at dusk from above",
     width: 3840,
     height: 2160,
@@ -398,6 +400,7 @@ const batumiVisualMosaicImages = [
   {
     key: "sunset-panorama",
     src: aixcoLiveImages.batumiMosaicSunsetPanorama,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbSunsetPanorama,
     alt: "Batumi sunset panorama over the Black Sea",
     width: 3840,
     height: 2160,
@@ -406,6 +409,7 @@ const batumiVisualMosaicImages = [
   {
     key: "golden-hour",
     src: aixcoLiveImages.batumiMosaicGoldenHourCoastline,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbGoldenHourCoastline,
     alt: "Batumi golden hour coastline and city lights",
     width: 3840,
     height: 2160,
@@ -414,6 +418,7 @@ const batumiVisualMosaicImages = [
   {
     key: "evening-waterfront",
     src: aixcoLiveImages.batumiMosaicEveningWaterfront,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbEveningWaterfront,
     alt: "Batumi evening waterfront and mountain skyline",
     width: 3840,
     height: 1946,
@@ -422,6 +427,7 @@ const batumiVisualMosaicImages = [
   {
     key: "day",
     src: aixcoLiveImages.batumiMosaicDayAerial,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbDayAerial,
     alt: "Batumi daytime aerial skyline and Black Sea",
     width: 7360,
     height: 4912,
@@ -430,6 +436,7 @@ const batumiVisualMosaicImages = [
   {
     key: "sunset",
     src: aixcoLiveImages.batumiMosaicSunsetCoastline,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbSunsetCoastline,
     alt: "Batumi sunset city and coastline view",
     width: 6000,
     height: 4000,
@@ -438,6 +445,7 @@ const batumiVisualMosaicImages = [
   {
     key: "night",
     src: aixcoLiveImages.batumiMosaicNightSkyline,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbNightSkyline,
     alt: "Batumi night skyline from the Black Sea",
     width: 7360,
     height: 4912,
@@ -446,6 +454,7 @@ const batumiVisualMosaicImages = [
   {
     key: "nature",
     src: aixcoLiveImages.batumiMosaicNatureAerial,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbNatureAerial,
     alt: "Batumi coastal nature and Black Sea view",
     width: 3981,
     height: 5971,
@@ -454,6 +463,7 @@ const batumiVisualMosaicImages = [
   {
     key: "tower",
     src: aixcoLiveImages.batumiMosaicBlueTower,
+    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbBlueTower,
     alt: "Batumi tower and daytime city view",
     width: 3903,
     height: 5854,
@@ -643,12 +653,12 @@ function StoryCrossfadeMediaPanel({
   media,
   mediaKey,
   isActive,
-  priority = false,
+  preloadMedia = false,
 }: {
   media: StoryMedia;
   mediaKey: string;
   isActive: boolean;
-  priority?: boolean;
+  preloadMedia?: boolean;
 }) {
   const shouldReduceMotion = useHydratedReducedMotion();
 
@@ -662,7 +672,7 @@ function StoryCrossfadeMediaPanel({
         exit={{ opacity: 0 }}
         transition={shouldReduceMotion ? reducedMotionTransition : storyMediaSwitchTransition}
       >
-        <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
+        <StoryMediaPanel media={media} isActive={isActive} preloadMedia={preloadMedia} />
       </motion.div>
     </AnimatePresence>
   );
@@ -671,11 +681,11 @@ function StoryCrossfadeMediaPanel({
 function StoryMediaPanel({
   isActive,
   media,
-  priority = false,
+  preloadMedia = false,
 }: {
   isActive: boolean;
   media: StoryMedia;
-  priority?: boolean;
+  preloadMedia?: boolean;
 }) {
   const objectPosition = media.position ?? "center";
 
@@ -687,7 +697,7 @@ function StoryMediaPanel({
         poster={media.poster}
         title={media.title}
         fit={media.fit ?? "cover"}
-        eager={priority || isActive}
+        eager={preloadMedia || isActive}
         autoplayPreview={isActive}
         smoothPreview={false}
         rootMargin="0px"
@@ -703,9 +713,9 @@ function StoryMediaPanel({
       src={media.src}
       alt={media.alt}
       fill
-      preload={priority}
-      fetchPriority={priority ? "high" : "auto"}
-      loading={priority ? "eager" : "lazy"}
+      preload={preloadMedia}
+      fetchPriority={preloadMedia ? "high" : "auto"}
+      loading={preloadMedia ? "eager" : "lazy"}
       decoding="async"
       quality={95}
       sizes={media.sizes ?? "(min-width: 1280px) 56vw, 100vw"}
@@ -1015,7 +1025,7 @@ function StoryChrome({
             </nav>
           </div>
           <div className="space-y-3">
-            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
               {formatChapterNumber(activeIndex + 1)} / {formatChapterNumber(storyChapters.length)}
             </p>
             <div className="h-px w-full bg-foreground/12">
@@ -1179,7 +1189,7 @@ function SceneShell({
   mediaContent,
   mediaCrossfadeKey,
   mediaOverlay = "light",
-  priority,
+  preloadMedia,
   reverse = false,
   tone = "light",
   density = "default",
@@ -1194,7 +1204,7 @@ function SceneShell({
   mediaContent?: React.ReactNode;
   mediaCrossfadeKey?: string;
   mediaOverlay?: StoryMediaOverlay;
-  priority?: boolean;
+  preloadMedia?: boolean;
   reverse?: boolean;
   tone?: "light" | "dark" | "surface";
   density?: "default" | "compact" | "dense";
@@ -1257,10 +1267,10 @@ function SceneShell({
                         media={media}
                         mediaKey={mediaCrossfadeKey}
                         isActive={isActive}
-                        priority={priority}
+                        preloadMedia={preloadMedia}
                       />
                     ) : (
-                      <StoryMediaPanel media={media} isActive={isActive} priority={priority} />
+                      <StoryMediaPanel media={media} isActive={isActive} preloadMedia={preloadMedia} />
                     )}
                     <StoryMediaGradient overlay={resolvedOverlay} reverse={reverse} />
                   </div>
@@ -1479,7 +1489,7 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
           src={selectedImage.src}
           alt={selectedImage.alt}
           fill
-          sizes="(min-width: 1280px) 52vw, 100vw"
+          sizes="(min-width: 1280px) 100vw, 100vw"
           quality={90}
           loading="lazy"
           data-batumi-hero-image={selectedImage.key}
@@ -1504,12 +1514,14 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
             onClick={() => selectImage(image.key)}
           >
             <Image
-              src={image.src}
+              src={image.thumbnailSrc}
               alt=""
-              width={image.width}
-              height={image.height}
-              sizes="(min-width: 1280px) 9vw, 24vw"
+              width={480}
+              height={320}
+              sizes="(min-width: 1280px) 9rem, 34vw"
               quality={75}
+              loading="eager"
+              fetchPriority="low"
               className="story-batumi-gallery__thumb-image"
               style={{ objectPosition: image.objectPosition }}
             />
@@ -1561,6 +1573,7 @@ function AboutScene({
   tx: (copy: string) => string;
 }) {
   const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
+  const [videoStarted, setVideoStarted] = useState(false);
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
@@ -1574,7 +1587,8 @@ function AboutScene({
 
     video.playbackRate = 0.82;
 
-    if (!isActive) {
+    if (!isRevealed) {
+      setVideoStarted(false);
       video.pause();
       video.removeAttribute("src");
       video.load();
@@ -1604,7 +1618,11 @@ function AboutScene({
       video.removeEventListener("loadeddata", playVideo);
       video.removeEventListener("canplay", playVideo);
     };
-  }, [isActive]);
+  }, [isRevealed]);
+
+  const markVideoStarted = () => {
+    setVideoStarted(true);
+  };
 
   return (
     <div className="story-about-cinematic-stage relative h-full min-h-0 bg-[#11100e] text-white">
@@ -1618,24 +1636,39 @@ function AboutScene({
             <div className="story-about-cinematic-image relative h-full w-full">
               <video
                 ref={dubaiVideoRef}
-                src={isActive ? aixcoDubaiHeroVideo.src : undefined}
+                src={isRevealed ? aixcoDubaiHeroVideo.src : undefined}
                 className="h-full w-full object-cover"
                 poster={aixcoDubaiHeroVideo.poster}
-                autoPlay={isActive}
+                autoPlay={isRevealed}
                 muted
                 loop
                 playsInline
-                preload={isActive ? "auto" : "none"}
+                preload={isRevealed ? "auto" : "none"}
                 aria-label={tx(aixcoDubaiHeroVideo.title)}
                 onLoadedData={(event) => {
                   event.currentTarget.playbackRate = 0.82;
                 }}
                 onCanPlay={(event) => {
                   event.currentTarget.playbackRate = 0.82;
-                  if (isActive) {
+                  if (isRevealed) {
                     void event.currentTarget.play().catch(() => undefined);
                   }
                 }}
+                onPlaying={markVideoStarted}
+                onTimeUpdate={(event) => {
+                  if (event.currentTarget.currentTime > 0.04) {
+                    markVideoStarted();
+                  }
+                }}
+              />
+              <img
+                src={aixcoDubaiHeroVideo.poster}
+                alt=""
+                aria-hidden="true"
+                data-about-video-poster=""
+                data-video-started={videoStarted ? "true" : "false"}
+                className="story-about-cinematic-poster absolute inset-0 h-full w-full object-cover"
+                decoding="async"
               />
             </div>
           </StoryMediaReveal>
@@ -1682,7 +1715,7 @@ function AboutScene({
                   <dt className="text-[clamp(1.55rem,2.45vw,2.7rem)] font-light leading-none text-primary-glow">
                     {metric.value}
                   </dt>
-                  <dd className="mt-2 text-[0.64rem] font-semibold uppercase leading-relaxed tracking-[0.04em] text-white/70 [overflow-wrap:anywhere]">
+                  <dd className="mt-2 text-[clamp(0.7rem,2.45vw,0.82rem)] font-semibold uppercase leading-relaxed tracking-[0.04em] text-white/70 [overflow-wrap:anywhere]">
                     {tx(metric.label)}
                   </dd>
                 </div>
@@ -1771,6 +1804,7 @@ function PhilosophyPlatformScene({
         src: aixcoLiveImages.batumiMosaicEveningWaterfront,
         alt: tx("Batumi evening waterfront and mountain skyline"),
         position: "56% 50%",
+        sizes: "(min-width: 1280px) 140vw, 100vw",
       }}
       mediaOverlay="none"
     >
@@ -1957,9 +1991,20 @@ function AboutAccessScene({
                 loading="lazy"
                 decoding="async"
                 quality={95}
-                sizes="(min-width: 1280px) calc(100vw - 14rem), 100vw"
-                className="h-full w-full object-cover"
+                sizes="(max-width: 1279px) 140vw, 1px"
+                className="h-full w-full object-cover xl:hidden"
                 style={{ objectPosition: "center 45%" }}
+              />
+              <Image
+                src={aixcoLiveImages.batumiMosaicSunsetPanorama}
+                alt={tx("Selected emerging market property opportunity")}
+                fill
+                loading="lazy"
+                decoding="async"
+                quality={95}
+                sizes="(min-width: 1280px) 120vw, 1px"
+                className="hidden h-full w-full object-cover xl:block"
+                style={{ objectPosition: "center 50%" }}
               />
             </div>
           </StoryMediaReveal>
@@ -2062,11 +2107,11 @@ function DubaiScene({
       isRevealed={isRevealed}
       tone="light"
       media={{
-        kind: "video",
-        src: "/aixco-global-op2/videos/aixco-group-dubai-hero.mp4",
-        poster: aixcoLiveImages.dubaiHealthcare,
-        title: tx("Dubai legacy portfolio video"),
-        position: "center 52%",
+        kind: "image",
+        src: aixcoLiveImages.dubaiBurjKhalifaSunset,
+        alt: tx("Burj Khalifa and Dubai skyline at sunset"),
+        position: "center 48%",
+        sizes: "(min-width: 1280px) 82vw, 100vw",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Dubai - Legacy portfolio")}</p>
@@ -2174,6 +2219,7 @@ function MaterialsScene({
         src: aixcoLiveImages.batumiMosaicDuskAerialCoastline,
         alt: tx("Batumi dusk aerial coastline and city lights"),
         position: "62% 50%",
+        sizes: "(min-width: 1280px) 140vw, 100vw",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Download Materials")}</p>
@@ -2296,6 +2342,7 @@ function HowScene({
         src: aixcoLiveImages.batumiMosaicGoldenHourCoastline,
         alt: tx("Batumi golden hour skyline and coastline"),
         position: "60% 50%",
+        sizes: "(min-width: 1280px) 140vw, 100vw",
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Journeys")}</p>
@@ -2945,7 +2992,7 @@ export function DesktopStoryHome() {
           src: aixcoLiveImages.aboutArchitecture,
           alt: tx("AIXCO real estate architecture"),
           position: "center 64%",
-          sizes: "(min-width: 1280px) 40vw, 100vw",
+          sizes: "(max-width: 767px) 170vw, 100vw",
         }}
       />,
       <PhilosophyPlatformScene key="philosophy-platform" isActive={activeIndex === 4} isRevealed={isRevealed(4)} tx={tx} />,

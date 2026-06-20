@@ -19,17 +19,18 @@ const versionHealthcareImage = (src: string) => `${src}?v=${healthcareGalleryVer
 
 export const aixcoLiveImages = {
   batumi: `${optimizedImageBase}/batumi.webp`,
-  aboutArchitecture: `${optimizedImageBase}/batumip.webp`,
+  aboutArchitecture: `${optimizedImageBase}/batumip-upscaled.webp`,
   contact: `${batumiGalleryBase}/herovideo-poster.webp`,
   dubaiEdenHouse: `${liveImageBase}/fund/fund1.jpeg`,
-  dubaiEdenHouseRendering: `${liveImageBase}/fund1.png`,
-  dubaiHealthcare: `${optimizedImageBase}/fund2.webp`,
+  dubaiEdenHouseRendering: `${optimizedImageBase}/fund1-upscaled.webp`,
+  dubaiBurjKhalifaSunset: `${liveImageBase}/dubai-burj-khalifa-sunset-unsplash-original.webp`,
+  dubaiHealthcare: `${optimizedImageBase}/fund2-upscaled.webp`,
   dubaiHealthcareMap: `${optimizedImageBase}/dubai-map-fund-2.webp`,
   transactionBackdrop: `${optimizedImageBase}/trans.webp`,
   batumiPortPoster: `${batumiGalleryBase}/batumi-short-poster.webp`,
   batumiOverviewPoster: `${batumiGalleryBase}/batumi2-poster.webp`,
   batumiBuyPoster: `${batumiGalleryBase}/batumi1-poster.webp`,
-  batumiSeafrontPoster: `${batumiGalleryBase}/batumi3-poster.webp`,
+  batumiSeafrontPoster: `${batumiGalleryBase}/batumi3-poster-upscaled.webp`,
   batumiUrbanPoster: `${batumiGalleryBase}/batumi4-poster.webp`,
   batumiFogPoster: `${batumiGalleryBase}/batumi5-poster.webp`,
   batumiNightRoadPoster: `${batumiGalleryBase}/herovideo-poster.webp`,
@@ -44,6 +45,16 @@ export const aixcoLiveImages = {
   batumiMosaicSunsetPanorama: `${liveImageBase}/batumi-mosaic-hd/batumi-sunset-panorama.webp`,
   batumiMosaicGoldenHourCoastline: `${liveImageBase}/batumi-mosaic-hd/batumi-golden-hour-coastline.webp`,
   batumiMosaicEveningWaterfront: `${liveImageBase}/batumi-mosaic-hd/batumi-evening-waterfront.webp`,
+  batumiMosaicThumbDuskAerialCentral: `${liveImageBase}/batumi-mosaic-thumbs/batumi-dusk-aerial-central.webp`,
+  batumiMosaicThumbDuskAerialCoastline: `${liveImageBase}/batumi-mosaic-thumbs/batumi-dusk-aerial-coastline.webp`,
+  batumiMosaicThumbSunsetPanorama: `${liveImageBase}/batumi-mosaic-thumbs/batumi-sunset-panorama.webp`,
+  batumiMosaicThumbGoldenHourCoastline: `${liveImageBase}/batumi-mosaic-thumbs/batumi-golden-hour-coastline.webp`,
+  batumiMosaicThumbEveningWaterfront: `${liveImageBase}/batumi-mosaic-thumbs/batumi-evening-waterfront.webp`,
+  batumiMosaicThumbDayAerial: `${liveImageBase}/batumi-mosaic-thumbs/batumi-day-aerial.webp`,
+  batumiMosaicThumbSunsetCoastline: `${liveImageBase}/batumi-mosaic-thumbs/batumi-sunset-coastline.webp`,
+  batumiMosaicThumbNightSkyline: `${liveImageBase}/batumi-mosaic-thumbs/batumi-night-skyline.webp`,
+  batumiMosaicThumbNatureAerial: `${liveImageBase}/batumi-mosaic-thumbs/batumi-nature-aerial.webp`,
+  batumiMosaicThumbBlueTower: `${liveImageBase}/batumi-mosaic-thumbs/batumi-blue-tower.webp`,
   batumiCurrentProject: `${optimizedImageBase}/current-project-reverance.webp`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
   teamOwais: `${optimizedImageBase}/owais.webp`,
@@ -75,13 +86,13 @@ export const aixcoLiveVideoPreviews = {
 export const aixcoHeroBackgroundVideo = {
   src: `${optimizedVideoBase}/batumi-hero-landscape-optimized.mp4`,
   mobileSrc: `${optimizedVideoBase}/batumi-hero-landscape-mobile.mp4`,
-  poster: `${optimizedVideoBase}/batumi-hero-landscape-poster.webp`,
+  poster: `${optimizedVideoBase}/batumi-hero-landscape-poster-upscaled.webp`,
   title: "Batumi hero landscape",
 } as const;
 
 export const aixcoDubaiHeroVideo = {
   src: aixcoLiveVideos.dubaiHero,
-  poster: aixcoLivePath("videos/aixco-group-dubai-hero-poster.webp"),
+  poster: aixcoLivePath("videos/aixco-group-dubai-hero-poster-ultra.webp"),
   title: "Dubai Burj Khalifa aerial",
 } as const;
 
@@ -99,8 +110,8 @@ export const aixcoLiveAssetDetails = {
 } as const;
 
 export const aixcoDubaiEdenHouseCanalGallery = [
-  { src: `${liveImageBase}/fund1.png`, title: "Eden House The Canal aerial overview" },
-  { src: `${liveImageBase}/fund/fund8.jpeg`, title: "Eden House The Canal entrance wall" },
+  { src: `${optimizedImageBase}/fund1-upscaled.webp`, title: "Eden House The Canal aerial overview" },
+  { src: `${optimizedImageBase}/fund8-upscaled.webp`, title: "Eden House The Canal entrance wall" },
   { src: `${liveImageBase}/fund/fund9.jpeg`, title: "Eden House The Canal completed facade" },
   { src: `${liveImageBase}/fund/fund13.jpeg`, title: "Eden House The Canal residence facade" },
   { src: `${liveImageBase}/fund/fund14.jpeg`, title: "Eden House The Canal waterfront frontage" },
@@ -109,7 +120,7 @@ export const aixcoDubaiEdenHouseCanalGallery = [
   { src: `${liveImageBase}/fund/fund17.jpeg`, title: "Eden House The Canal waterfront elevation" },
   { src: `${liveImageBase}/fund/fund18.jpeg`, title: "Eden House The Canal villa detail" },
   { src: `${liveImageBase}/fund/fund19.jpeg`, title: "Eden House The Canal waterside block" },
-  { src: `${liveImageBase}/fund/fund20.jpeg`, title: "Eden House The Canal signage" },
+  { src: `${optimizedImageBase}/fund20-upscaled.webp`, title: "Eden House The Canal signage" },
 ] as const;
 
 export const aixcoDubaiEdenHouseParkGallery = [
@@ -126,10 +137,10 @@ export const aixcoDubaiEdenHouseParkGallery = [
 ] as const;
 
 export const aixcoDubaiHealthcareGallery = [
-  { src: versionHealthcareImage(`${liveImageBase}/fund2.png`), title: "Dubai Healthcare City asset image" },
-  { src: versionHealthcareImage(`${liveImageBase}/fund/fund32.png`), title: "Dubai Healthcare City source site image" },
-  { src: versionHealthcareImage(`${liveImageBase}/fund/fund33.png`), title: "Dubai Healthcare City skyline site context" },
-  { src: versionHealthcareImage(`${liveImageBase}/fund/fund31.png`), title: "Dubai Healthcare City original site location map" },
+  { src: versionHealthcareImage(`${optimizedImageBase}/fund2-upscaled.webp`), title: "Dubai Healthcare City asset image" },
+  { src: versionHealthcareImage(`${optimizedImageBase}/fund32-upscaled.webp`), title: "Dubai Healthcare City source site image" },
+  { src: versionHealthcareImage(`${optimizedImageBase}/fund33-upscaled.webp`), title: "Dubai Healthcare City skyline site context" },
+  { src: versionHealthcareImage(`${optimizedImageBase}/fund31-upscaled.webp`), title: "Dubai Healthcare City original site location map" },
   { src: versionHealthcareImage(`${optimizedImageBase}/dubai-map-fund-2.webp`), title: "Dubai Healthcare City legacy location map" },
 ] as const;
 

@@ -200,7 +200,16 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
           {video ? (
             <video src={video.src} poster={image} autoPlay muted loop playsInline preload="metadata" className="absolute inset-0 h-full w-full object-cover" />
           ) : (
-            <Image src={image} alt={property.name} fill sizes="(min-width: 1280px) 38vw, 100vw" className="object-cover" priority />
+            <Image
+              src={image}
+              alt={property.name}
+              fill
+              sizes="(min-width: 1280px) 38vw, 100vw"
+              className="object-cover"
+              preload
+              fetchPriority="high"
+              loading="eager"
+            />
           )}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,16,14,0.05),rgba(17,16,14,0.32)),linear-gradient(90deg,rgba(17,16,14,0.24),transparent_42%)]" />
           <div className="absolute bottom-6 left-6 right-6 grid gap-3 text-white">

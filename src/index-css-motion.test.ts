@@ -59,17 +59,50 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain(".story-letter-reveal--active .story-letter-reveal__text,\n    .story-letter-reveal--compact .story-letter-reveal__text");
   });
 
-  it("keeps offscreen story videos from downloading before their section is active", () => {
-    expect(desktopStoryHome).toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(desktopStoryHome).toContain('preload={isActive ? "auto" : "none"}');
+  it("starts the next-section About video while revealed so it is already moving on scroll entry", () => {
+    expect(desktopStoryHome).toContain("src={isRevealed ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain('preload={isRevealed ? "auto" : "none"}');
+    expect(desktopStoryHome).toContain("autoPlay={isRevealed}");
+    expect(desktopStoryHome).toContain("if (!isRevealed) {");
+    expect(desktopStoryHome).toContain("setVideoStarted(false);");
+    expect(desktopStoryHome).not.toContain("if (!isActive) {\n      video.pause();\n      video.load();");
+    expect(desktopStoryHome).toContain("if (isRevealed) {\n                    void event.currentTarget.play().catch(() => undefined);");
+    expect(desktopStoryHome).toContain("onPlaying={markVideoStarted}");
+    expect(desktopStoryHome).toContain('data-about-video-poster=""');
+    expect(desktopStoryHome).toContain('data-video-started={videoStarted ? "true" : "false"}');
+    expect(css).toContain("[data-story-section='about'] .story-about-cinematic-poster");
+    expect(css).toContain(".story-about-cinematic-poster[data-video-started='true']");
+    expect(css).toContain("transition: opacity 900ms var(--ease-apple)");
     expect(desktopStoryHome).toContain('video.removeAttribute("src");');
     expect(desktopStoryHome).toContain("getHeroIntroVideoSrc()");
     expect(desktopStoryHome).toContain("function useHeroBackdropVideoSrc()");
     expect(desktopStoryHome).toContain("mediaQuery.matches ? aixcoHeroBackgroundVideo.mobileSrc : aixcoHeroBackgroundVideo.src");
     expect(desktopStoryHome).toContain("src={videoSrc}");
     expect(liveAssets).toContain("batumi-hero-landscape-mobile.mp4");
-    expect(liveAssets).toContain("batumi-hero-landscape-poster.webp");
-    expect(liveAssets).toContain("aixco-group-dubai-hero-poster.webp");
+    expect(liveAssets).toContain("batumi-hero-landscape-poster-upscaled.webp");
+    expect(liveAssets).toContain("aixco-group-dubai-hero-poster-ultra.webp");
+  });
+
+  it("uses a static Dubai image on the legacy Dubai page while keeping the hero video for About", () => {
+    expect(liveAssets).toContain("dubaiBurjKhalifaSunset");
+    expect(liveAssets).toContain("dubai-burj-khalifa-sunset-unsplash-original.webp");
+    expect(desktopStoryHome).toContain("src: aixcoLiveImages.dubaiBurjKhalifaSunset");
+    expect(desktopStoryHome).toContain('alt: tx("Burj Khalifa and Dubai skyline at sunset")');
+    expect(desktopStoryHome).toContain('sizes: "(min-width: 1280px) 82vw, 100vw"');
+    expect(desktopStoryHome).not.toContain('title: tx("Dubai legacy portfolio video")');
+    expect(desktopStoryHome).toContain("src={isRevealed ? aixcoDubaiHeroVideo.src : undefined}");
+  });
+
+  it("requests high-density images for tall cropped story panels", () => {
+    expect(desktopStoryHome).toContain('sizes: "(min-width: 1280px) 140vw, 100vw"');
+    expect(desktopStoryHome).toContain('sizes: "(max-width: 767px) 170vw, 100vw"');
+    expect(desktopStoryHome).toContain("src={aixcoLiveImages.batumiMosaicSunsetPanorama}");
+    expect(desktopStoryHome).toContain("src={aixcoLiveImages.batumiSeafrontPoster}");
+    expect(desktopStoryHome).toContain('sizes="(max-width: 1279px) 140vw, 1px"');
+    expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 120vw, 1px"');
+    expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 100vw, 100vw"');
+    expect(desktopStoryHome).toContain("src={image.thumbnailSrc}");
+    expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 9rem, 34vw"');
   });
 
   it("keeps partner modal logo panels opaque", () => {

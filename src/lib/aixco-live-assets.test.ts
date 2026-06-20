@@ -10,11 +10,13 @@ import {
 
 describe("aixcoLiveImages", () => {
   it("uses compressed web images for large rendered surfaces", () => {
-    expect(aixcoLiveImages.aboutArchitecture).toContain("batumip.webp");
+    expect(aixcoLiveImages.aboutArchitecture).toContain("batumip-upscaled.webp");
     expect(aixcoLiveImages.batumiBuyPoster).toContain("batumi1-poster.webp");
     expect(aixcoLiveImages.batumiCurrentProject).toContain("current-project-reverance.webp");
     expect(aixcoLiveImages.batumiMosaicDuskAerialCentral).toContain("batumi-dusk-aerial-central.webp");
     expect(aixcoLiveImages.batumiMosaicEveningWaterfront).toContain("batumi-evening-waterfront.webp");
+    expect(aixcoLiveImages.batumiMosaicThumbNightSkyline).toContain("/batumi-mosaic-thumbs/batumi-night-skyline.webp");
+    expect(aixcoLiveImages.batumiMosaicThumbBlueTower).toContain("/batumi-mosaic-thumbs/batumi-blue-tower.webp");
   });
 
   it("publishes the clickable asset-detail catalogs and source images", () => {
@@ -26,17 +28,22 @@ describe("aixcoLiveImages", () => {
 
   it("publishes grouped Dubai asset galleries from the OP2 source files", () => {
     expect(aixcoDubaiEdenHouseCanalGallery[0]).toMatchObject({
-      src: expect.stringContaining("/aixco-global-op2/images/fund1.png"),
+      src: expect.stringContaining("/aixco-global-op2/images/optimized/fund1-upscaled.webp"),
       title: "Eden House The Canal aerial overview",
     });
+    expect(aixcoDubaiEdenHouseCanalGallery[1].src).toContain("/aixco-global-op2/images/optimized/fund8-upscaled.webp");
+    expect(aixcoDubaiEdenHouseCanalGallery.at(-1)?.src).toContain("/aixco-global-op2/images/optimized/fund20-upscaled.webp");
     expect(aixcoDubaiEdenHouseParkGallery[0]).toMatchObject({
       src: expect.stringContaining("/aixco-global-op2/images/fund/fund1.jpeg"),
       title: "Eden House The Park construction progress",
     });
     expect(aixcoDubaiHealthcareGallery[0]).toMatchObject({
-      src: expect.stringContaining("/aixco-global-op2/images/fund2.png"),
+      src: expect.stringContaining("/aixco-global-op2/images/optimized/fund2-upscaled.webp"),
       title: "Dubai Healthcare City asset image",
     });
+    expect(aixcoDubaiHealthcareGallery[1].src).toContain("/aixco-global-op2/images/optimized/fund32-upscaled.webp");
+    expect(aixcoDubaiHealthcareGallery[2].src).toContain("/aixco-global-op2/images/optimized/fund33-upscaled.webp");
+    expect(aixcoDubaiHealthcareGallery[3].src).toContain("/aixco-global-op2/images/optimized/fund31-upscaled.webp");
     expect(aixcoDubaiHealthcareGallery.every(({ src }) => src.endsWith("?v=healthcare-gallery-20260506"))).toBe(true);
   });
 
