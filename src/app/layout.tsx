@@ -74,6 +74,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          rel="preload"
+          as="image"
+          href="/aixco-global-op2/images/AIXW.webp"
+          type="image/webp"
+          fetchPriority="high"
+        />
+      </head>
       <body suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: homeStoryBootScript }} />
         <ClientShell

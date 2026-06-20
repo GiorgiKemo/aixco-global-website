@@ -694,6 +694,160 @@
     );
   }
 
+  [data-story-section] {
+    --story-tone-dark: rgb(17 16 14);
+    --story-tone-surface: hsl(var(--surface));
+    --story-tone-background: hsl(var(--background));
+    --story-section-bg: var(--story-tone-background);
+    --story-section-blend-from: var(--story-section-bg);
+    --story-section-blend-to: var(--story-section-bg);
+    --story-section-blend-entry: clamp(4.6rem, 10svh, 7.25rem);
+    --story-section-blend-exit: clamp(5rem, 11svh, 8.75rem);
+  }
+
+  [data-story-section='philosophy'],
+  [data-story-section='philosophyOrigins'],
+  [data-story-section='aboutObjectives'],
+  [data-story-section='legacy'],
+  [data-story-section='batumi'],
+  [data-story-section='participate'],
+  [data-story-section='team'],
+  [data-story-section='faqs'] {
+    --story-section-bg: var(--story-tone-surface);
+  }
+
+  [data-story-section='aboutAccess'] {
+    --story-section-bg: var(--story-tone-dark);
+  }
+
+  [data-story-section='philosophy'] {
+    --story-section-blend-from: var(--story-tone-dark);
+    --story-section-blend-to: var(--story-tone-surface);
+    --story-section-blend-entry: clamp(5rem, 10svh, 7.75rem);
+  }
+
+  [data-story-section='philosophyOrigins'] {
+    --story-section-blend-from: var(--story-tone-surface);
+    --story-section-blend-to: var(--story-tone-background);
+  }
+
+  [data-story-section='philosophyPlatform'] {
+    --story-section-blend-from: var(--story-tone-surface);
+    --story-section-blend-to: var(--story-tone-surface);
+  }
+
+  [data-story-section='aboutObjectives'] {
+    --story-section-blend-from: var(--story-tone-background);
+    --story-section-blend-to: var(--story-tone-dark);
+  }
+
+  [data-story-section='aboutAccess'] {
+    --story-section-blend-from: var(--story-tone-surface);
+    --story-section-blend-to: var(--story-tone-surface);
+  }
+
+  [data-story-section='legacy'] {
+    --story-section-blend-from: var(--story-tone-dark);
+    --story-section-blend-to: var(--story-tone-background);
+  }
+
+  [data-story-section='dubai'] {
+    --story-section-blend-from: var(--story-tone-surface);
+    --story-section-blend-to: var(--story-tone-surface);
+  }
+
+  [data-story-section='batumi'] {
+    --story-section-blend-from: var(--story-tone-background);
+    --story-section-blend-to: var(--story-tone-background);
+  }
+
+  [data-story-section='materials'] {
+    --story-section-blend-from: var(--story-tone-surface);
+    --story-section-blend-to: var(--story-tone-surface);
+  }
+
+  [data-story-section='participate'] {
+    --story-section-blend-from: var(--story-tone-background);
+    --story-section-blend-to: var(--story-tone-background);
+  }
+
+  [data-story-section='how'] {
+    --story-section-blend-from: var(--story-tone-surface);
+    --story-section-blend-to: var(--story-tone-surface);
+  }
+
+  [data-story-section='team'] {
+    --story-section-blend-from: var(--story-tone-background);
+    --story-section-blend-to: var(--story-tone-background);
+  }
+
+  [data-story-section='partners'] {
+    --story-section-blend-from: var(--story-tone-surface);
+    --story-section-blend-to: var(--story-tone-surface);
+  }
+
+  [data-story-section='faqs'] {
+    --story-section-blend-from: var(--story-tone-background);
+    --story-section-blend-to: var(--story-tone-background);
+  }
+
+  [data-story-section='contact'] {
+    --story-section-blend-from: var(--story-tone-surface);
+  }
+
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about']) > div {
+    background: linear-gradient(
+      180deg,
+      var(--story-section-blend-from) 0%,
+      color-mix(in srgb, var(--story-section-bg) 82%, var(--story-section-blend-from) 18%) 2.5rem,
+      var(--story-section-bg) var(--story-section-blend-entry),
+      var(--story-section-bg) calc(100% - var(--story-section-blend-exit)),
+      color-mix(in srgb, var(--story-section-bg) 82%, var(--story-section-blend-to) 18%) calc(100% - 2.5rem),
+      var(--story-section-blend-to) 100%
+    );
+  }
+
+  @supports not (background: color-mix(in srgb, white 50%, black 50%)) {
+    [data-story-section]:not([data-story-section='hero']):not([data-story-section='about']) > div {
+      background: linear-gradient(
+        180deg,
+        var(--story-section-blend-from) 0%,
+        var(--story-section-bg) var(--story-section-blend-entry),
+        var(--story-section-bg) calc(100% - var(--story-section-blend-exit)),
+        var(--story-section-blend-to) 100%
+      );
+    }
+  }
+
+  [data-story-section='about']::after {
+    z-index: 5;
+    height: clamp(5.5rem, 15svh, 11rem);
+    background: linear-gradient(
+      180deg,
+      rgb(17 16 14 / 0) 0%,
+      rgb(17 16 14 / 0.34) 44%,
+      rgb(17 16 14 / 0.82) 78%,
+      rgb(17 16 14) 100%
+    );
+  }
+
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about']) [data-story-scene-media] {
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgb(0 0 0 / 0.64) 2.4rem,
+      black clamp(4.8rem, 10svh, 7.5rem)
+    );
+    mask-image: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgb(0 0 0 / 0.64) 2.4rem,
+      black clamp(4.8rem, 10svh, 7.5rem)
+    );
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
   html[dir='rtl'] [data-story-scene-copy],
   html[dir='rtl'] .story-hero-lockup,
   html[dir='rtl'] .story-about-cinematic-copy,
@@ -2791,21 +2945,6 @@
       -webkit-mask-image: none;
     }
 
-    .story-letter-reveal__char::before {
-      content: none !important;
-      opacity: 0 !important;
-    }
-
-    .story-letter-reveal--active .story-letter-reveal__text,
-    .story-letter-reveal--compact .story-letter-reveal__text {
-      opacity: 1 !important;
-      clip-path: none !important;
-      transform: none !important;
-      filter: none !important;
-      animation: none !important;
-      will-change: auto !important;
-    }
-
     .partner-marquee:not(.partner-marquee--story) .partner-marquee-track {
       animation-play-state: paused !important;
       will-change: auto !important;
@@ -2814,12 +2953,6 @@
     .partner-marquee--story .partner-marquee-track {
       animation-play-state: running !important;
       animation-duration: 52s !important;
-    }
-
-    .story-letter-reveal--active .story-letter-reveal__char {
-      opacity: 1 !important;
-      transform: none !important;
-      animation: none !important;
     }
 
     .news-ticker-track {
@@ -3242,6 +3375,10 @@
     [data-story-section='contact'] [data-story-scene-column] {
       padding-top: clamp(4rem, 8svh, 6rem);
       padding-bottom: clamp(4rem, 9svh, 6.5rem);
+    }
+
+    [data-story-section='philosophy'] [data-story-scene-column] {
+      padding-top: clamp(1.5rem, 3.5svh, 2.6rem);
     }
 
     [data-story-section='faqs'] [data-story-scene-column] {

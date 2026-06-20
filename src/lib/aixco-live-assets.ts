@@ -74,13 +74,14 @@ export const aixcoLiveVideoPreviews = {
 
 export const aixcoHeroBackgroundVideo = {
   src: `${optimizedVideoBase}/batumi-hero-landscape-optimized.mp4`,
-  poster: `${optimizedVideoBase}/batumi-hero-landscape-poster.jpg`,
+  mobileSrc: `${optimizedVideoBase}/batumi-hero-landscape-mobile.mp4`,
+  poster: `${optimizedVideoBase}/batumi-hero-landscape-poster.webp`,
   title: "Batumi hero landscape",
 } as const;
 
 export const aixcoDubaiHeroVideo = {
   src: aixcoLiveVideos.dubaiHero,
-  poster: aixcoLivePath("videos/aixco-group-dubai-hero-poster.jpg"),
+  poster: aixcoLivePath("videos/aixco-group-dubai-hero-poster.webp"),
   title: "Dubai Burj Khalifa aerial",
 } as const;
 
@@ -134,7 +135,7 @@ export const aixcoDubaiHealthcareGallery = [
 
 export const aixcoLiveLogos = {
   aixcoGlobal: `${liveImageBase}/AIXCOGlobalWlong.png`,
-  aixcoMark: `${liveImageBase}/AIXW.png`,
+  aixcoMark: `${liveImageBase}/AIXW.webp`,
   globalPartners: `${liveImageBase}/Globalpartners.png`,
   globalPartnersMarquee: `${liveImageBase}/Globalpartners-marquee.png`,
   isp: `${liveImageBase}/isp.svg`,

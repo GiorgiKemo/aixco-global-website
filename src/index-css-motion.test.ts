@@ -3,7 +3,9 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const css = readFileSync(resolve(process.cwd(), "src/index.css"), "utf8");
+const appLayout = readFileSync(resolve(process.cwd(), "src/app/layout.tsx"), "utf8");
 const desktopStoryHome = readFileSync(resolve(process.cwd(), "src/components/sections/DesktopStoryHome.tsx"), "utf8");
+const liveAssets = readFileSync(resolve(process.cwd(), "src/lib/aixco-live-assets.ts"), "utf8");
 
 function cssBlock(selector: string) {
   const start = css.indexOf(`  ${selector} {`);
@@ -46,6 +48,28 @@ describe("index.css motion rules", () => {
   it("keeps partner marquee scrolling even when reduced motion is preferred", () => {
     expect(css).not.toMatch(/\.partner-marquee-track\s*\{[^}]*animation:\s*none/);
     expect(css).toContain("animation-duration: 52s !important");
+  });
+
+  it("keeps story letter reveals active even when the browser prefers reduced motion", () => {
+    expect(desktopStoryHome).toContain('const isAnimating = animationState === "animating";');
+    expect(desktopStoryHome).toContain('const hasPlayed = animationState === "played";');
+    expect(desktopStoryHome).toContain('<span className="sr-only">{label}</span>');
+    expect(desktopStoryHome).not.toContain("aria-label={label}");
+    expect(css).not.toContain(".story-letter-reveal--active .story-letter-reveal__char {\n      opacity: 1 !important");
+    expect(css).not.toContain(".story-letter-reveal--active .story-letter-reveal__text,\n    .story-letter-reveal--compact .story-letter-reveal__text");
+  });
+
+  it("keeps offscreen story videos from downloading before their section is active", () => {
+    expect(desktopStoryHome).toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain('preload={isActive ? "auto" : "none"}');
+    expect(desktopStoryHome).toContain('video.removeAttribute("src");');
+    expect(desktopStoryHome).toContain("getHeroIntroVideoSrc()");
+    expect(desktopStoryHome).toContain("function useHeroBackdropVideoSrc()");
+    expect(desktopStoryHome).toContain("mediaQuery.matches ? aixcoHeroBackgroundVideo.mobileSrc : aixcoHeroBackgroundVideo.src");
+    expect(desktopStoryHome).toContain("src={videoSrc}");
+    expect(liveAssets).toContain("batumi-hero-landscape-mobile.mp4");
+    expect(liveAssets).toContain("batumi-hero-landscape-poster.webp");
+    expect(liveAssets).toContain("aixco-group-dubai-hero-poster.webp");
   });
 
   it("keeps partner modal logo panels opaque", () => {
@@ -129,6 +153,9 @@ describe("index.css motion rules", () => {
     expect(officialMarkReady).toContain("visibility: visible");
     expect(officialMarkReady).toContain("story-hero-official-mark-in");
     expect(wordmarkReady).toContain("story-hero-wordmark-under-in");
+    expect(liveAssets).toContain("AIXW.webp");
+    expect(appLayout).toContain('href="/aixco-global-op2/images/AIXW.webp"');
+    expect(appLayout).toContain('fetchPriority="high"');
     expect(desktopStoryHome).toContain('data-logo-ready={logoReady ? "true" : "false"}');
     expect(desktopStoryHome).toMatch(
       /<img\s+src=\{aixcoLiveLogos\.aixcoMark\}\s+alt=""\s+width=\{783\}\s+height=\{705\}\s+className="story-hero-intro-loader__official-mark"/,
@@ -149,6 +176,55 @@ describe("index.css motion rules", () => {
     expect(aboutBefore).toContain("height: clamp(6rem, 18svh, 13rem)");
     expect(aboutBefore).toContain("rgb(17 16 14) 0%");
     expect(aboutBefore).toContain("rgb(17 16 14 / 0.54) 42%");
+  });
+
+  it("keeps smooth transition blends below later story content", () => {
+    const blendedSections = [
+      "philosophy",
+      "philosophyOrigins",
+      "philosophyPlatform",
+      "aboutObjectives",
+      "aboutAccess",
+      "legacy",
+      "dubai",
+      "batumi",
+      "materials",
+      "participate",
+      "how",
+      "team",
+      "partners",
+      "faqs",
+    ];
+
+    for (const section of blendedSections) {
+      expect(css).toContain(`[data-story-section='${section}']`);
+    }
+
+    expect(css).toContain("[data-story-section]:not([data-story-section='hero']):not([data-story-section='about']) > div");
+    expect(css).toContain("--story-section-blend-from: var(--story-section-bg)");
+    expect(css).toContain("--story-section-blend-to: var(--story-section-bg)");
+    expect(css).toContain("--story-section-blend-entry: clamp(4.6rem, 10svh, 7.25rem)");
+    expect(css).toContain("color-mix(in srgb, var(--story-section-bg) 82%, var(--story-section-blend-from) 18%) 2.5rem");
+    expect(css).toContain("color-mix(in srgb, var(--story-section-bg) 82%, var(--story-section-blend-to) 18%) calc(100% - 2.5rem)");
+    expect(css).toContain("[data-story-section]:not([data-story-section='hero']):not([data-story-section='about']) [data-story-scene-media]");
+    expect(css).toContain("mask-image: linear-gradient(\n      180deg,\n      transparent 0%,\n      rgb(0 0 0 / 0.64) 2.4rem");
+    expect(css).not.toContain("[data-story-section='batumi']::before");
+    expect(css).not.toContain("[data-story-section='batumi']::after");
+    expect(css).not.toContain("[data-story-section='dubai']::after");
+  });
+
+  it("keeps the about-to-philosophy handoff dark and compact", () => {
+    const aboutExit = cssBlock("[data-story-section='about']::after");
+    const philosophyBlend = cssBlock("[data-story-section='philosophy']");
+
+    expect(aboutExit).toContain("height: clamp(5.5rem, 15svh, 11rem)");
+    expect(aboutExit).toContain("rgb(17 16 14 / 0.82) 78%");
+    expect(aboutExit).toContain("rgb(17 16 14) 100%");
+    expect(aboutExit).not.toContain("hsl(var(--surface)");
+    expect(philosophyBlend).toContain("--story-section-blend-from: var(--story-tone-dark)");
+    expect(philosophyBlend).toContain("--story-section-blend-to: var(--story-tone-surface)");
+    expect(css).not.toContain("[data-story-section='philosophy']::before");
+    expect(css).toContain("[data-story-section='philosophy'] [data-story-scene-column] {\n      padding-top: clamp(1.5rem, 3.5svh, 2.6rem);");
   });
 
   it("keeps phone hero and about sections compact enough for a demo viewport", () => {

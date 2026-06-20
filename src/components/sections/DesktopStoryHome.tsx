@@ -119,6 +119,7 @@ const storyHeroIntroMinimumMs = 6500;
 const storyHeroIntroMaxWaitMs = 15000;
 const storyHeroIntroFadeMs = 2200;
 const criticalHeroAssetTimeoutMs = 12000;
+const heroMobileVideoQuery = "(max-width: 767px)";
 
 function waitForDelay(ms: number) {
   return new Promise<void>((resolve) => {
@@ -228,6 +229,35 @@ function waitForFontsReady() {
   );
 }
 
+function getHeroIntroVideoSrc() {
+  if (typeof window.matchMedia !== "function") return aixcoHeroBackgroundVideo.src;
+  return window.matchMedia(heroMobileVideoQuery).matches
+    ? aixcoHeroBackgroundVideo.mobileSrc
+    : aixcoHeroBackgroundVideo.src;
+}
+
+function useHeroBackdropVideoSrc() {
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") {
+      setVideoSrc(aixcoHeroBackgroundVideo.src);
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia(heroMobileVideoQuery);
+    const syncVideoSrc = () => {
+      setVideoSrc(mediaQuery.matches ? aixcoHeroBackgroundVideo.mobileSrc : aixcoHeroBackgroundVideo.src);
+    };
+
+    syncVideoSrc();
+    mediaQuery.addEventListener("change", syncVideoSrc);
+    return () => mediaQuery.removeEventListener("change", syncVideoSrc);
+  }, []);
+
+  return videoSrc;
+}
+
 function useStoryHeroIntroGate() {
   const [phase, setPhase] = useState<StoryHeroIntroPhase>("loading");
   const [logoReady, setLogoReady] = useState(false);
@@ -240,11 +270,12 @@ function useStoryHeroIntroGate() {
     const introLogoReady = waitForImageAsset(aixcoLiveLogos.aixcoMark).then(() => {
       if (!cancelled) setLogoReady(true);
     });
+    const heroIntroVideoSrc = getHeroIntroVideoSrc();
 
     const criticalAssetsReady = Promise.allSettled([
       introLogoReady,
       waitForImageAsset(aixcoHeroBackgroundVideo.poster),
-      waitForVideoAsset(aixcoHeroBackgroundVideo.src, aixcoHeroBackgroundVideo.poster),
+      waitForVideoAsset(heroIntroVideoSrc, aixcoHeroBackgroundVideo.poster),
       waitForFontsReady(),
       waitForWindowLoad(),
     ]).then(() => {
@@ -515,7 +546,6 @@ function StoryTextReveal({
 }) {
   const rootRef = useRef<HTMLSpanElement>(null);
   const isInView = useStoryTextInView(rootRef);
-  const shouldReduceMotion = useHydratedReducedMotion();
   const tokens = useMemo(() => label.split(/(\s+)/u), [label]);
   const letterCount = useMemo(() => Array.from(label).filter((character) => !/\s/u.test(character)).length, [label]);
   const useCompactReveal = letterCount > maxAnimatedStoryLetters;
@@ -545,8 +575,8 @@ function StoryTextReveal({
   }, [animationDurationMs, animationState]);
 
   let revealIndex = 0;
-  const isAnimating = !shouldReduceMotion && animationState === "animating";
-  const hasPlayed = shouldReduceMotion || animationState === "played";
+  const isAnimating = animationState === "animating";
+  const hasPlayed = animationState === "played";
 
   return (
     <span
@@ -557,12 +587,13 @@ function StoryTextReveal({
         isAnimating && "story-letter-reveal--active",
         hasPlayed && "story-letter-reveal--played",
       )}
-      aria-label={label}
       data-text-reveal-active={isAnimating ? "true" : "false"}
+      data-text-reveal-label={label}
       data-text-reveal-state={animationState}
       style={{ "--story-letter-count": letterCount } as CSSProperties}
     >
-      <span className="story-text-reveal__mobile-plain">{label}</span>
+      <span className="sr-only">{label}</span>
+      <span className="story-text-reveal__mobile-plain" aria-hidden="true">{label}</span>
       <span key={animationRun} className="story-letter-reveal__text" aria-hidden="true">
         {useCompactReveal ? (
           <span className="story-letter-reveal__chunk">{label}</span>
@@ -1003,6 +1034,7 @@ function StoryChrome({
 
 function FixedHeroBackdrop({ visible }: { visible: boolean }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoSrc = useHeroBackdropVideoSrc();
   const [shouldRenderVideo, setShouldRenderVideo] = useState(visible);
 
   useEffect(() => {
@@ -1020,7 +1052,7 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
     }, 760);
 
     return () => window.clearTimeout(cleanupTimer);
-  }, [visible]);
+  }, [videoSrc, visible]);
 
   return (
     <div
@@ -1030,10 +1062,10 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
       }`}
       style={{ left: "var(--story-fixed-backdrop-left, 0px)" }}
     >
-      {shouldRenderVideo && (
+      {shouldRenderVideo && videoSrc ? (
         <video
           ref={videoRef}
-          src={aixcoHeroBackgroundVideo.src}
+          src={videoSrc}
           poster={aixcoHeroBackgroundVideo.poster}
           autoPlay={visible}
           muted
@@ -1042,7 +1074,7 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
           preload="auto"
           className="h-full w-full object-cover brightness-[1.08] saturate-[1.08]"
         />
-      )}
+      ) : null}
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.20)_44%,rgba(17,16,14,0.54)),linear-gradient(180deg,rgba(17,16,14,0.16),rgba(17,16,14,0.58))]" />
     </div>
   );
@@ -1544,6 +1576,8 @@ function AboutScene({
 
     if (!isActive) {
       video.pause();
+      video.removeAttribute("src");
+      video.load();
       return undefined;
     }
 
@@ -1584,13 +1618,14 @@ function AboutScene({
             <div className="story-about-cinematic-image relative h-full w-full">
               <video
                 ref={dubaiVideoRef}
+                src={isActive ? aixcoDubaiHeroVideo.src : undefined}
                 className="h-full w-full object-cover"
                 poster={aixcoDubaiHeroVideo.poster}
                 autoPlay={isActive}
                 muted
                 loop
                 playsInline
-                preload="auto"
+                preload={isActive ? "auto" : "none"}
                 aria-label={tx(aixcoDubaiHeroVideo.title)}
                 onLoadedData={(event) => {
                   event.currentTarget.playbackRate = 0.82;
@@ -1601,9 +1636,7 @@ function AboutScene({
                     void event.currentTarget.play().catch(() => undefined);
                   }
                 }}
-              >
-                <source src={aixcoDubaiHeroVideo.src} type="video/mp4" />
-              </video>
+              />
             </div>
           </StoryMediaReveal>
           <div
