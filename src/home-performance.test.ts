@@ -75,12 +75,16 @@ describe("home page performance structure", () => {
     expect(notFoundSource).toContain("btn-gold");
   });
 
-  it("keeps the story boot surface fully black before the intro loader mounts", () => {
+  it("keeps the story boot surface on the normal page background", () => {
     const homeExperienceSource = readSource("src/components/sections/HomeExperience.tsx");
+    const appLayoutSource = readSource("src/app/layout.tsx");
 
     expect(homeExperienceSource).toContain("function StoryBootSurface");
-    expect(homeExperienceSource).toContain('className="fixed inset-0 min-h-[100svh] bg-black"');
+    expect(homeExperienceSource).toContain('className="fixed inset-0 min-h-[100svh] bg-background"');
     expect(homeExperienceSource).not.toContain("bg-white");
+    expect(homeExperienceSource).not.toContain("bg-black");
+    expect(appLayoutSource).not.toContain("homeStoryBootScript");
+    expect(appLayoutSource).not.toContain("home-desktop-story-boot");
     expect(homeExperienceSource).not.toContain("fixed inset-y-0 left-0");
   });
 

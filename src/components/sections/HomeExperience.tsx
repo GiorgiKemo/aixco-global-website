@@ -9,7 +9,7 @@ const DesktopStoryHome = dynamic(
 );
 
 function StoryBootSurface() {
-  return <div aria-hidden="true" className="fixed inset-0 min-h-[100svh] bg-black" />;
+  return <div aria-hidden="true" className="fixed inset-0 min-h-[100svh] bg-background" />;
 }
 
 export function HomeExperience() {

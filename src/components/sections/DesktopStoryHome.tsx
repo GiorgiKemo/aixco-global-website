@@ -113,128 +113,7 @@ type StoryMedia =
 
 type StoryMediaOverlay = "light" | "dark" | "contact" | "none";
 
-type StoryHeroIntroPhase = "loading" | "exiting" | "done";
-
-const storyHeroIntroMinimumMs = 6500;
-const storyHeroIntroMaxWaitMs = 15000;
-const storyHeroIntroFadeMs = 2200;
-const criticalHeroAssetTimeoutMs = 12000;
 const heroMobileVideoQuery = "(max-width: 767px)";
-
-function waitForDelay(ms: number) {
-  return new Promise<void>((resolve) => {
-    window.setTimeout(resolve, ms);
-  });
-}
-
-function withAssetTimeout(assetPromise: Promise<void>, ms: number) {
-  return new Promise<void>((resolve) => {
-    let settled = false;
-    const timeout = window.setTimeout(() => {
-      if (settled) return;
-      settled = true;
-      resolve();
-    }, ms);
-
-    assetPromise
-      .catch(() => undefined)
-      .finally(() => {
-        if (settled) return;
-        settled = true;
-        window.clearTimeout(timeout);
-        resolve();
-      });
-  });
-}
-
-function waitForImageAsset(src: string) {
-  return withAssetTimeout(
-    new Promise<void>((resolve) => {
-      const image = new window.Image();
-      image.decoding = "async";
-      let settled = false;
-
-      const finish = async () => {
-        if (settled) return;
-        settled = true;
-
-        try {
-          await image.decode?.();
-        } catch {
-          // iOS Safari may reject decode() for cached images; load completion is still enough to avoid placeholders.
-        }
-
-        resolve();
-      };
-
-      const finishOnError = () => {
-        if (settled) return;
-        settled = true;
-        resolve();
-      };
-
-      image.addEventListener("load", () => void finish(), { once: true });
-      image.addEventListener("error", finishOnError, { once: true });
-      image.src = src;
-
-      if (image.complete && image.naturalWidth > 0) {
-        void finish();
-        return;
-      }
-    }),
-    criticalHeroAssetTimeoutMs,
-  );
-}
-
-function waitForVideoAsset(src: string, poster?: string) {
-  return withAssetTimeout(
-    new Promise<void>((resolve) => {
-      const video = document.createElement("video");
-      video.muted = true;
-      video.playsInline = true;
-      video.preload = "auto";
-      if (poster) video.poster = poster;
-
-      const finish = () => {
-        video.removeAttribute("src");
-        video.load();
-        resolve();
-      };
-
-      video.addEventListener("loadeddata", finish, { once: true });
-      video.addEventListener("canplay", finish, { once: true });
-      video.addEventListener("error", finish, { once: true });
-      video.src = src;
-      video.load();
-    }),
-    criticalHeroAssetTimeoutMs,
-  );
-}
-
-function waitForWindowLoad() {
-  if (document.readyState === "complete") return Promise.resolve();
-
-  return withAssetTimeout(
-    new Promise<void>((resolve) => {
-      window.addEventListener("load", () => resolve(), { once: true });
-    }),
-    criticalHeroAssetTimeoutMs,
-  );
-}
-
-function waitForFontsReady() {
-  return withAssetTimeout(
-    document.fonts?.ready.then(() => undefined).catch(() => undefined) ?? Promise.resolve(),
-    criticalHeroAssetTimeoutMs,
-  );
-}
-
-function getHeroIntroVideoSrc() {
-  if (typeof window.matchMedia !== "function") return aixcoHeroBackgroundVideo.src;
-  return window.matchMedia(heroMobileVideoQuery).matches
-    ? aixcoHeroBackgroundVideo.mobileSrc
-    : aixcoHeroBackgroundVideo.src;
-}
 
 function useHeroBackdropVideoSrc() {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
@@ -256,57 +135,6 @@ function useHeroBackdropVideoSrc() {
   }, []);
 
   return videoSrc;
-}
-
-function useStoryHeroIntroGate() {
-  const [phase, setPhase] = useState<StoryHeroIntroPhase>("loading");
-  const [logoReady, setLogoReady] = useState(false);
-  const [assetsReady, setAssetsReady] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    let exitTimer: number | null = null;
-
-    const introLogoReady = waitForImageAsset(aixcoLiveLogos.aixcoMark).then(() => {
-      if (!cancelled) setLogoReady(true);
-    });
-    const heroIntroVideoSrc = getHeroIntroVideoSrc();
-
-    const criticalAssetsReady = Promise.allSettled([
-      introLogoReady,
-      waitForImageAsset(aixcoHeroBackgroundVideo.poster),
-      waitForVideoAsset(heroIntroVideoSrc, aixcoHeroBackgroundVideo.poster),
-      waitForFontsReady(),
-      waitForWindowLoad(),
-    ]).then(() => {
-      if (!cancelled) setAssetsReady(true);
-    });
-
-    const releaseIntro = async () => {
-      await Promise.all([
-        waitForDelay(storyHeroIntroMinimumMs),
-        Promise.race([criticalAssetsReady, waitForDelay(storyHeroIntroMaxWaitMs)]),
-      ]);
-
-      if (cancelled) return;
-
-      setPhase("exiting");
-      exitTimer = window.setTimeout(() => {
-        if (!cancelled) setPhase("done");
-      }, storyHeroIntroFadeMs);
-    };
-
-    void releaseIntro();
-
-    return () => {
-      cancelled = true;
-      if (exitTimer !== null) {
-        window.clearTimeout(exitTimer);
-      }
-    };
-  }, []);
-
-  return { assetsReady, logoReady, phase };
 }
 
 const storyChapters: StoryChapter[] = [
@@ -1286,56 +1114,16 @@ function SceneShell({
   );
 }
 
-function StoryHeroIntroLoader({
-  assetsReady,
-  logoReady,
-  phase,
-}: {
-  assetsReady: boolean;
-  logoReady: boolean;
-  phase: StoryHeroIntroPhase;
-}) {
-  if (phase === "done") return null;
-
-  return (
-    <div
-      className="story-hero-intro-loader"
-      data-assets-ready={assetsReady ? "true" : "false"}
-      data-intro-phase={phase}
-      data-logo-ready={logoReady ? "true" : "false"}
-      aria-hidden="true"
-    >
-      <div className="story-hero-intro-loader__lockup">
-        <div className="story-hero-intro-loader__mark-shell">
-          <img
-            src={aixcoLiveLogos.aixcoMark}
-            alt=""
-            width={783}
-            height={705}
-            className="story-hero-intro-loader__official-mark"
-            decoding="sync"
-            fetchPriority="high"
-          />
-        </div>
-        <div className="story-hero-intro-loader__wordmark">AIXCO.GLOBAL</div>
-      </div>
-    </div>
-  );
-}
-
 function HeroScene({
-  introPhase,
   isActive,
   onRegister,
   tx,
 }: {
-  introPhase: StoryHeroIntroPhase;
   isActive: boolean;
   onRegister: () => void;
   tx: (copy: string) => string;
 }) {
   const statementLabel = heroStoryStatementLines.map((line) => tx(line)).join(" ");
-  const canRevealHeroContent = introPhase !== "loading";
 
   return (
     <div className="relative h-full min-h-0 overflow-hidden text-white">
@@ -1346,11 +1134,9 @@ function HeroScene({
             className="story-hero-lockup hero-reference-font"
             initial={{ opacity: 0, y: 28 }}
             animate={
-              isActive && !canRevealHeroContent
-                ? { opacity: 0, y: 28 }
-                : isActive
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0.94, y: 6 }
+              isActive
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0.94, y: 6 }
             }
             transition={revealTransition}
           >
@@ -2732,7 +2518,6 @@ export function DesktopStoryHome() {
   const sectionPresenceRef = useRef(sectionPresence);
   const { openJourney, openLogin, openPartner, openRegister } = useUI();
   const { lang, setLang, tx } = useI18n();
-  const introGate = useStoryHeroIntroGate();
 
   useLayoutEffect(() => {
     const hiddenHeaders = new Map<HTMLElement, string>();
@@ -2975,7 +2760,7 @@ export function DesktopStoryHome() {
       const isRevealed = (index: number) => Boolean(sectionPresence[index] ?? index === 0);
 
       return [
-      <HeroScene key="hero" introPhase={introGate.phase} isActive={activeIndex === 0} tx={tx} onRegister={openRegister} />,
+      <HeroScene key="hero" isActive={activeIndex === 0} tx={tx} onRegister={openRegister} />,
       <AboutScene key="about" isActive={activeIndex === 1} isRevealed={isRevealed(1)} tx={tx} />,
       <PhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
       <PhilosophyDetailScene
@@ -3010,12 +2795,11 @@ export function DesktopStoryHome() {
       <ContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
-    [activeIndex, introGate.phase, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
+    [activeIndex, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
   );
 
   return (
     <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress": "0%" } as CSSProperties}>
-      <StoryHeroIntroLoader assetsReady={introGate.assetsReady} logoReady={introGate.logoReady} phase={introGate.phase} />
       <FixedHeroBackdrop visible={heroBackdropVisible} />
       <StoryChrome
         activeIndex={activeIndex}

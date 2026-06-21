@@ -50,25 +50,6 @@ export const viewport: Viewport = {
 
 export const revalidate = 300;
 
-const homeStoryBootScript = `
-(function () {
-  try {
-    var isHome = window.location.pathname === "/";
-    if (isHome) {
-      document.body.classList.add("home-desktop-story-boot");
-      document.body.classList.add("home-story-nav-hidden");
-      window.setTimeout(function () {
-        var storyMounted = document.querySelector('[data-home-experience-mode="story"]');
-        if (!storyMounted && document.body.classList.contains("home-desktop-story-boot")) {
-          document.body.classList.remove("home-desktop-story-boot");
-          document.body.classList.remove("home-story-nav-hidden");
-        }
-      }, 1800);
-    }
-  } catch (error) {}
-})();
-`;
-
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const initialSiteContent = await fetchSiteContentForServer();
 
@@ -84,7 +65,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body suppressHydrationWarning>
-        <script dangerouslySetInnerHTML={{ __html: homeStoryBootScript }} />
         <ClientShell
           initialSiteContent={initialSiteContent.content}
           initialSiteContentSource={initialSiteContent.source}

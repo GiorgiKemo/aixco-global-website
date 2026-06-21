@@ -74,7 +74,6 @@ describe("index.css motion rules", () => {
     expect(css).toContain(".story-about-cinematic-poster[data-video-started='true']");
     expect(css).toContain("transition: opacity 900ms var(--ease-apple)");
     expect(desktopStoryHome).toContain('video.removeAttribute("src");');
-    expect(desktopStoryHome).toContain("getHeroIntroVideoSrc()");
     expect(desktopStoryHome).toContain("function useHeroBackdropVideoSrc()");
     expect(desktopStoryHome).toContain("mediaQuery.matches ? aixcoHeroBackgroundVideo.mobileSrc : aixcoHeroBackgroundVideo.src");
     expect(desktopStoryHome).toContain("src={videoSrc}");
@@ -166,33 +165,17 @@ describe("index.css motion rules", () => {
     expect(assetDetailCta).toContain("padding-block: 0.75rem");
     expect(cssBlock(".asset-detail-cta__label")).toContain("overflow-wrap: anywhere");
   });
-  it("keeps the intro logo from flashing as a square on tablet first paint", () => {
-    const markShell = cssBlock(".story-hero-intro-loader__mark-shell");
-    const officialMark = cssBlock(".story-hero-intro-loader__official-mark");
-    const officialMarkReady = cssBlock(
-      ".story-hero-intro-loader[data-logo-ready='true'] .story-hero-intro-loader__official-mark",
-    );
-    const wordmarkReady = cssBlock(
-      ".story-hero-intro-loader[data-logo-ready='true'] .story-hero-intro-loader__wordmark",
-    );
-
-    expect(markShell).toContain("aspect-ratio: 783 / 705");
-    expect(officialMark).toContain("display: block");
-    expect(officialMark).toContain("height: auto");
-    expect(officialMark).toContain("max-height: 100%");
-    expect(officialMark).toContain("background: transparent");
-    expect(officialMark).toContain("visibility: hidden");
-    expect(officialMark).not.toContain("animation:");
-    expect(officialMarkReady).toContain("visibility: visible");
-    expect(officialMarkReady).toContain("story-hero-official-mark-in");
-    expect(wordmarkReady).toContain("story-hero-wordmark-under-in");
+  it("loads the hero directly without the temporary black intro logo overlay", () => {
+    expect(css).not.toContain(".story-hero-intro-loader");
+    expect(css).not.toContain("story-hero-official-mark-in");
+    expect(css).not.toContain("story-hero-wordmark-under-in");
     expect(liveAssets).toContain("AIXW.webp");
     expect(appLayout).toContain('href="/aixco-global-op2/images/AIXW.webp"');
     expect(appLayout).toContain('fetchPriority="high"');
-    expect(desktopStoryHome).toContain('data-logo-ready={logoReady ? "true" : "false"}');
-    expect(desktopStoryHome).toMatch(
-      /<img\s+src=\{aixcoLiveLogos\.aixcoMark\}\s+alt=""\s+width=\{783\}\s+height=\{705\}\s+className="story-hero-intro-loader__official-mark"/,
-    );
+    expect(appLayout).not.toContain("homeStoryBootScript");
+    expect(desktopStoryHome).not.toContain("StoryHeroIntroLoader");
+    expect(desktopStoryHome).not.toContain("useStoryHeroIntroGate");
+    expect(desktopStoryHome).not.toContain("data-logo-ready");
   });
 
   it("keeps the original cinematic hero-to-about transition blend", () => {
