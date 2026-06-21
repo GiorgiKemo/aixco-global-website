@@ -2,10 +2,14 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
-const css = readFileSync(resolve(process.cwd(), "src/index.css"), "utf8");
-const appLayout = readFileSync(resolve(process.cwd(), "src/app/layout.tsx"), "utf8");
-const desktopStoryHome = readFileSync(resolve(process.cwd(), "src/components/sections/DesktopStoryHome.tsx"), "utf8");
-const liveAssets = readFileSync(resolve(process.cwd(), "src/lib/aixco-live-assets.ts"), "utf8");
+function readSource(path: string) {
+  return readFileSync(resolve(process.cwd(), path), "utf8").replace(/\r\n/g, "\n");
+}
+
+const css = readSource("src/index.css");
+const appLayout = readSource("src/app/layout.tsx");
+const desktopStoryHome = readSource("src/components/sections/DesktopStoryHome.tsx");
+const liveAssets = readSource("src/lib/aixco-live-assets.ts");
 
 function cssBlock(selector: string) {
   const start = css.indexOf(`  ${selector} {`);

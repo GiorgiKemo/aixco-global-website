@@ -896,7 +896,7 @@
     text-shadow: none;
     line-height: inherit;
     overflow: visible;
-    will-change: opacity, transform;
+    will-change: auto;
     backface-visibility: hidden;
   }
 
@@ -963,7 +963,7 @@
     overflow-wrap: anywhere;
     word-break: normal;
     hyphens: auto;
-    will-change: opacity, clip-path, transform;
+    will-change: auto;
   }
 
   .story-letter-reveal--compact .story-letter-reveal__chunk {
@@ -978,6 +978,7 @@
     visibility: visible;
     animation: story-text-left-wipe-soft 1300ms cubic-bezier(0.19, 1, 0.22, 1)
       both;
+    will-change: opacity, clip-path, transform;
   }
 
   .story-letter-reveal--played.story-letter-reveal--compact

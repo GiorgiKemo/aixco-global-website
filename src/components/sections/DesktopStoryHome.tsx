@@ -49,7 +49,7 @@ import {
 } from "@/lib/aixco-live-assets";
 import { replaceLocationHash } from "@/lib/section-hash";
 import { getSafePublicAssetHref } from "@/lib/security/urls";
-import { glideScrollFrameEvent, scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
+import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 import { cn } from "@/lib/utils";
 import { StoryMediaReveal, StorySceneReveal } from "@/components/StoryReveal";
 import { PartnerMarquee } from "@/components/partners/PartnerMarquee";
@@ -157,7 +157,6 @@ const storyChapters: StoryChapter[] = [
   { key: "contact", id: "contact", label: "Contact" },
 ];
 
-const chapterHashDelays = [0, 90, 220, 480] as const;
 const storySidebarWidth = "clamp(13.5rem,15vw,16rem)";
 const storyMediaSwitchTransition = {
   duration: 0.48,
@@ -310,70 +309,37 @@ function formatChapterNumber(index: number) {
 }
 
 function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
-  const [hasEnteredView, setHasEnteredView] = useState(false);
-  const hasEnteredViewRef = useRef(false);
-  const visibilityFrameRef = useRef<number | null>(null);
+  const [isInView, setIsInView] = useState(false);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root || typeof IntersectionObserver === "undefined") {
-      hasEnteredViewRef.current = true;
-      setHasEnteredView(true);
+      setIsInView(true);
       return undefined;
     }
 
-    const commitEnteredView = () => {
-      if (hasEnteredViewRef.current) return;
-      hasEnteredViewRef.current = true;
-      setHasEnteredView(true);
-    };
-
     const syncCurrentVisibility = () => {
-      visibilityFrameRef.current = null;
-      if (hasEnteredViewRef.current) return;
-
       const rect = root.getBoundingClientRect();
       const viewportHeight = Math.max(1, window.innerHeight);
-      const isNearViewport = rect.top < viewportHeight * 0.9 && rect.bottom > viewportHeight * 0.08;
-
-      if (isNearViewport) {
-        commitEnteredView();
-      }
-    };
-
-    const requestVisibilitySync = () => {
-      if (visibilityFrameRef.current !== null || hasEnteredViewRef.current) return;
-      visibilityFrameRef.current = window.requestAnimationFrame(syncCurrentVisibility);
+      setIsInView(rect.top < viewportHeight * 0.9 && rect.bottom > viewportHeight * 0.02);
     };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          commitEnteredView();
-        }
+        setIsInView(entry.isIntersecting);
       },
       { rootMargin: "0px 0px -18% 0px", threshold: 0.01 },
     );
 
     syncCurrentVisibility();
     observer.observe(root);
-    window.addEventListener("scroll", requestVisibilitySync, { passive: true });
-    window.addEventListener(glideScrollFrameEvent, requestVisibilitySync);
-    window.addEventListener("resize", requestVisibilitySync);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener("scroll", requestVisibilitySync);
-      window.removeEventListener(glideScrollFrameEvent, requestVisibilitySync);
-      window.removeEventListener("resize", requestVisibilitySync);
-      if (visibilityFrameRef.current !== null) {
-        window.cancelAnimationFrame(visibilityFrameRef.current);
-        visibilityFrameRef.current = null;
-      }
     };
   }, [rootRef]);
 
-  return hasEnteredView;
+  return isInView;
 }
 
 function StoryTextReveal({
@@ -403,6 +369,11 @@ function StoryTextReveal({
     if (!isInView || animationState !== "idle") return;
     setAnimationRun((current) => current + 1);
     setAnimationState("animating");
+  }, [animationState, isInView]);
+
+  useLayoutEffect(() => {
+    if (isInView || animationState === "idle") return;
+    setAnimationState("idle");
   }, [animationState, isInView]);
 
   useEffect(() => {
@@ -857,14 +828,20 @@ function StoryChrome({
               {formatChapterNumber(activeIndex + 1)} / {formatChapterNumber(storyChapters.length)}
             </p>
             <div className="h-px w-full bg-foreground/12">
-              <div className="h-px bg-primary transition-[width] duration-150" style={{ width: "var(--story-page-progress, 0%)" }} />
+              <div
+                className="h-px origin-left bg-primary transition-transform duration-150"
+                style={{ transform: "scaleX(var(--story-page-progress-scale, 0))" }}
+              />
             </div>
           </div>
         </div>
       </aside>
 
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-px bg-foreground/10">
-        <div className="h-px bg-primary transition-[width] duration-150" style={{ width: "var(--story-page-progress, 0%)" }} />
+        <div
+          className="h-px origin-left bg-primary transition-transform duration-150"
+          style={{ transform: "scaleX(var(--story-page-progress-scale, 0))" }}
+        />
       </div>
     </>
   );
@@ -2507,6 +2484,7 @@ export function DesktopStoryHome() {
   const storyRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<Array<HTMLElement | null>>([]);
   const sectionMetricsRef = useRef<Array<StorySectionMetric | null>>([]);
+  const sectionProgressValuesRef = useRef<Record<string, string>>({});
   const scrollFrameRef = useRef<number | null>(null);
   const pageProgressRef = useRef(-1);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -2533,7 +2511,9 @@ export function DesktopStoryHome() {
         });
     };
 
-    document.documentElement.dataset.homeExperience = "story";
+    if (previousHomeExperience !== "story") {
+      document.documentElement.dataset.homeExperience = "story";
+    }
     document.body.classList.add("home-story-nav-hidden");
     document.body.classList.remove("home-desktop-story-boot");
     hideGlobalHeaders();
@@ -2582,7 +2562,7 @@ export function DesktopStoryHome() {
       nextProgress === 1
     ) {
       pageProgressRef.current = nextProgress;
-      storyRef.current?.style.setProperty("--story-page-progress", `${(nextProgress * 100).toFixed(2)}%`);
+      storyRef.current?.style.setProperty("--story-page-progress-scale", nextProgress.toFixed(4));
     }
 
     const viewportCenter = viewportHeight * 0.5;
@@ -2643,11 +2623,26 @@ export function DesktopStoryHome() {
           : viewportHeight;
       const exitProgress = clamp(-top / Math.max(1, exitRange), 0, 1);
       if (isAboutSection) {
-        section.style.setProperty("--story-section-exit-progress", exitProgress.toFixed(3));
+        const nextExitProgress = exitProgress.toFixed(3);
+        const progressKey = `${index}:exit`;
+        if (sectionProgressValuesRef.current[progressKey] !== nextExitProgress) {
+          sectionProgressValuesRef.current[progressKey] = nextExitProgress;
+          section.style.setProperty("--story-section-exit-progress", nextExitProgress);
+        }
       }
       if (isAboutAccessSection) {
-        section.style.setProperty("--story-section-exit-progress", exitProgress.toFixed(3));
-        section.style.setProperty("--story-about-access-zoom-progress", clamp(exitProgress * 2, 0, 1).toFixed(3));
+        const nextExitProgress = exitProgress.toFixed(3);
+        const nextZoomProgress = clamp(exitProgress * 2, 0, 1).toFixed(3);
+        const exitProgressKey = `${index}:exit`;
+        const zoomProgressKey = `${index}:zoom`;
+        if (sectionProgressValuesRef.current[exitProgressKey] !== nextExitProgress) {
+          sectionProgressValuesRef.current[exitProgressKey] = nextExitProgress;
+          section.style.setProperty("--story-section-exit-progress", nextExitProgress);
+        }
+        if (sectionProgressValuesRef.current[zoomProgressKey] !== nextZoomProgress) {
+          sectionProgressValuesRef.current[zoomProgressKey] = nextZoomProgress;
+          section.style.setProperty("--story-about-access-zoom-progress", nextZoomProgress);
+        }
       }
 
       nextSectionPresence[index] =
@@ -2690,16 +2685,22 @@ export function DesktopStoryHome() {
       requestScrollSync();
     };
     const refreshTimers = [120, 620, 1400].map((delay) => window.setTimeout(refreshAndSync, delay));
+    const resizeObserver =
+      typeof ResizeObserver === "undefined" ? null : new ResizeObserver(refreshAndSync);
+
+    resizeObserver?.observe(document.documentElement);
+    sectionRefs.current.forEach((section) => {
+      if (section) resizeObserver?.observe(section);
+    });
 
     window.addEventListener("scroll", requestScrollSync, { passive: true });
-    window.addEventListener(glideScrollFrameEvent, requestScrollSync);
     window.addEventListener("resize", refreshAndSync);
     window.addEventListener("load", refreshAndSync);
 
     return () => {
       refreshTimers.forEach((timer) => window.clearTimeout(timer));
+      resizeObserver?.disconnect();
       window.removeEventListener("scroll", requestScrollSync);
-      window.removeEventListener(glideScrollFrameEvent, requestScrollSync);
       window.removeEventListener("resize", refreshAndSync);
       window.removeEventListener("load", refreshAndSync);
       if (scrollFrameRef.current !== null) {
@@ -2716,19 +2717,6 @@ export function DesktopStoryHome() {
 
     return () => window.clearTimeout(timer);
   }, [lang, refreshSectionMetrics, requestScrollSync]);
-
-  useEffect(() => {
-    if (!window.location.hash) return undefined;
-
-    const timers = chapterHashDelays.map((delay) =>
-      window.setTimeout(() => {
-        scrollToHash(window.location.hash, "auto");
-        requestScrollSync();
-      }, delay),
-    );
-
-    return () => timers.forEach((timer) => window.clearTimeout(timer));
-  }, [requestScrollSync]);
 
   const handleChapterClick = useCallback(
     (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => {
@@ -2799,7 +2787,7 @@ export function DesktopStoryHome() {
   );
 
   return (
-    <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress": "0%" } as CSSProperties}>
+    <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress-scale": 0 } as CSSProperties}>
       <FixedHeroBackdrop visible={heroBackdropVisible} />
       <StoryChrome
         activeIndex={activeIndex}

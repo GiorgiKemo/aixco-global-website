@@ -88,6 +88,45 @@ describe("home page performance structure", () => {
     expect(homeExperienceSource).not.toContain("fixed inset-y-0 left-0");
   });
 
+  it("marks the story scroll mode before the lazy story component hydrates", () => {
+    const homeExperienceSource = readSource("src/components/sections/HomeExperience.tsx");
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+
+    expect(homeExperienceSource).toContain('document.documentElement.dataset.homeExperience = "story"');
+    expect(homeExperienceSource).toContain("previousHomeExperience");
+    expect(desktopStorySource).not.toContain("const chapterHashDelays =");
+  });
+
+  it("keeps story text reveal observation out of the scroll hot path", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const revealHookStart = desktopStorySource.indexOf("function useStoryTextInView");
+    const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
+    const revealHookSource = desktopStorySource.slice(revealHookStart, revealComponentStart);
+
+    expect(revealHookStart).toBeGreaterThanOrEqual(0);
+    expect(revealComponentStart).toBeGreaterThan(revealHookStart);
+    expect(revealHookSource).toContain("IntersectionObserver");
+    expect(revealHookSource).not.toContain('window.addEventListener("scroll"');
+    expect(revealHookSource).not.toContain("glideScrollFrameEvent");
+    expect(revealHookSource).not.toContain('window.addEventListener("resize"');
+  });
+
+  it("keeps scroll progress on compositor-friendly transforms", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+
+    expect(desktopStorySource).toContain("--story-page-progress-scale");
+    expect(desktopStorySource).toContain("scaleX(var(--story-page-progress-scale, 0))");
+    expect(desktopStorySource).not.toContain('style={{ width: "var(--story-page-progress, 0%)" }}');
+  });
+
+  it("does not dispatch duplicate custom frame events during scroll", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const smoothScrollSource = readSource("src/lib/smooth-scroll.ts");
+
+    expect(desktopStorySource).not.toContain("glideScrollFrameEvent");
+    expect(smoothScrollSource).not.toContain("window.dispatchEvent(new CustomEvent");
+  });
+
   it("keeps story team rows wired to the team detail modal", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const modalSource = readSource("src/components/Modals.tsx");

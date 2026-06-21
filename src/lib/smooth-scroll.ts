@@ -22,7 +22,6 @@ let activeLenis: ActiveLenis | null = null;
 let activeLenisFrame: number | null = null;
 
 const HASH_SCROLL_STABILIZE_DELAYS = [120, 320, 700, 1100] as const;
-export const glideScrollFrameEvent = "aixco:glide-scroll";
 
 const nativeScrollSelector = [
   "[contenteditable='true']",
@@ -178,7 +177,6 @@ export function installGlideScroll({
   const activeWheelCarryWindowMs = isStoryExperience ? resolvedStoryWheelCarryWindowMs : resolvedWheelCarryWindowMs;
   let previousWheelTime = 0;
   let previousWheelDeltaY = 0;
-  let previousScrollY = window.scrollY;
 
   activeLenis = new Lenis({
     autoRaf: false,
@@ -226,11 +224,6 @@ export function installGlideScroll({
 
   const raf = (time: number) => {
     activeLenis?.raf(time);
-    const nextScrollY = window.scrollY;
-    if (Math.abs(nextScrollY - previousScrollY) >= 0.1) {
-      previousScrollY = nextScrollY;
-      window.dispatchEvent(new CustomEvent(glideScrollFrameEvent, { detail: { scrollY: nextScrollY } }));
-    }
     activeLenisFrame = window.requestAnimationFrame(raf);
   };
 

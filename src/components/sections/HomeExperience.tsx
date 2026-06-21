@@ -16,10 +16,19 @@ export function HomeExperience() {
   useLayoutEffect(() => {
     if (typeof document === "undefined") return undefined;
 
+    const previousHomeExperience = document.documentElement.dataset.homeExperience;
+    if (previousHomeExperience !== "story") {
+      document.documentElement.dataset.homeExperience = "story";
+    }
     document.body.classList.add("home-story-nav-hidden");
     document.body.classList.remove("home-desktop-story-boot");
 
     return () => {
+      if (previousHomeExperience === undefined) {
+        delete document.documentElement.dataset.homeExperience;
+      } else {
+        document.documentElement.dataset.homeExperience = previousHomeExperience;
+      }
       document.body.classList.remove("home-desktop-story-boot");
       document.body.classList.remove("home-story-nav-hidden");
     };

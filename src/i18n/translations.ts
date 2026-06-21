@@ -136,6 +136,13 @@ export const textTranslations = {
     "tr": "AIXCO - Real Estate Investment",
     "ar": "AIXCO - Real Estate Investment"
   },
+  "Burj Khalifa and Dubai skyline at sunset": {
+    "de": "Burj Khalifa and Dubai skyline at sunset",
+    "ru": "Burj Khalifa and Dubai skyline at sunset",
+    "ka": "Burj Khalifa and Dubai skyline at sunset",
+    "tr": "Burj Khalifa and Dubai skyline at sunset",
+    "ar": "Burj Khalifa and Dubai skyline at sunset"
+  },
   "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.": {
     "de": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.",
     "ru": "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on Batumi, with a legacy track record in Switzerland and Dubai.",
