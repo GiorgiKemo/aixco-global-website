@@ -9,6 +9,7 @@ function readSource(path: string) {
 const css = readSource("src/index.css");
 const appLayout = readSource("src/app/layout.tsx");
 const desktopStoryHome = readSource("src/components/sections/DesktopStoryHome.tsx");
+const socialLinks = readSource("src/components/SocialLinks.tsx");
 const liveAssets = readSource("src/lib/aixco-live-assets.ts");
 
 function cssBlock(selector: string) {
@@ -61,6 +62,54 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).not.toContain("aria-label={label}");
     expect(css).not.toContain(".story-letter-reveal--active .story-letter-reveal__char {\n      opacity: 1 !important");
     expect(css).not.toContain(".story-letter-reveal--active .story-letter-reveal__text,\n    .story-letter-reveal--compact .story-letter-reveal__text");
+  });
+
+  it("uses the split-letter layer on phones so wrapped lines reveal in reading order", () => {
+    expect(desktopStoryHome).toContain("mobileLabel?: string");
+    expect(desktopStoryHome).toContain('mobileLabel={tx("ACQUIRE.PARTNER.CREATE VALUE.").replace(/\\./g, ".\\u200B")}');
+    expect(desktopStoryHome).toContain("visualLabel.split(/(\\s+|\\u200B)/u)");
+    expect(desktopStoryHome).toContain("!/[\\s\\u200B]/u.test(character)");
+    expect(desktopStoryHome).toContain("Math.max(1900, letterCount * 30 + 980)");
+    expect(desktopStoryHome).toContain('"--story-mobile-title-duration": `${animationDurationMs}ms`');
+    expect(css).toContain("@media (max-width: 767px)");
+    expect(css).toContain(".story-text-reveal__mobile-plain");
+    expect(css).toContain("--story-char-step: 30ms;");
+    expect(css).toContain(".story-text-reveal__mobile-plain {\n      display: none !important;");
+    expect(css).toContain(".story-letter-reveal__text {\n      display: inline-block !important;");
+    expect(css).toContain("animation-delay: calc(var(--story-char-index) * var(--story-char-step));");
+    expect(css).not.toContain("animation: story-mobile-title-reveal");
+    expect(css).not.toContain("@keyframes story-mobile-title-reveal");
+  });
+
+  it("keeps phone story sections compact enough for smooth reveal entry", () => {
+    expect(css).toContain("[data-story-scene-copy] {\n      padding-top: clamp(4.85rem, 9svh, 5.55rem);");
+    expect(css).toContain("font-size: clamp(2rem, 8.9vw, 2.48rem);");
+    expect(css).toContain("[data-story-section='philosophy'] .story-philosophy-title {\n      max-width: 13.5ch;");
+  });
+
+  it("blocks scrolled content behind the fixed mobile story header", () => {
+    expect(desktopStoryHome).toContain("story-mobile-header fixed inset-x-0 top-0");
+    expect(desktopStoryHome).toContain("story-mobile-header--light");
+    expect(desktopStoryHome).toContain("story-mobile-header--dark");
+    expect(css).toContain(".story-mobile-header::before");
+    expect(css).toContain("height: calc(100% + clamp(1.5rem, 4svh, 2.8rem))");
+    expect(css).toContain("backdrop-filter: blur(14px) saturate(128%)");
+  });
+
+  it("prevents automatic mobile hyphenation in story copy", () => {
+    expect(css).toContain(".story-body,\n    .story-card-title,\n    .story-metric-label,\n    .story-batumi-benefit__label");
+    expect(css).toContain("overflow-wrap: break-word");
+    expect(css).toContain("hyphens: none");
+  });
+
+  it("registers the supplied AIXCO SVG icons for contact/social slots", () => {
+    expect(liveAssets).toContain("AIXCO_icons-01.svg");
+    expect(liveAssets).toContain("AIXCO_icons-02.svg");
+    expect(liveAssets).toContain("AIXCO_icons-03.svg");
+    expect(liveAssets).toContain("AIXCO_icons-04.svg");
+    expect(socialLinks).toContain("aixcoLiveIcons.linkedin");
+    expect(desktopStoryHome).toContain("aixcoLiveIcons.email");
+    expect(css).toContain(".story-contact-card__svg-icon");
   });
 
   it("starts the next-section About video while revealed so it is already moving on scroll entry", () => {
@@ -223,26 +272,42 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-story-section]:not([data-story-section='hero']):not([data-story-section='about']) > div");
     expect(css).toContain("--story-section-blend-from: var(--story-section-bg)");
     expect(css).toContain("--story-section-blend-to: var(--story-section-bg)");
-    expect(css).toContain("--story-section-blend-entry: clamp(4.6rem, 10svh, 7.25rem)");
-    expect(css).toContain("color-mix(in srgb, var(--story-section-bg) 82%, var(--story-section-blend-from) 18%) 2.5rem");
-    expect(css).toContain("color-mix(in srgb, var(--story-section-bg) 82%, var(--story-section-blend-to) 18%) calc(100% - 2.5rem)");
+    expect(css).toContain("--story-section-blend-entry: clamp(8rem, 17svh, 12.5rem)");
+    expect(css).toContain("--story-section-blend-soft: clamp(4.25rem, 8.8svh, 6.5rem)");
+    expect(css).toContain("color-mix(in oklab, var(--story-section-blend-from) 88%, var(--story-section-bg) 12%) var(--story-section-blend-edge)");
+    expect(css).toContain("color-mix(in oklab, var(--story-section-blend-from) 42%, var(--story-section-bg) 58%) var(--story-section-blend-soft)");
+    expect(css).toContain("color-mix(in oklab, var(--story-section-blend-to) 42%, var(--story-section-bg) 58%) calc(100% - var(--story-section-blend-soft))");
+    expect(css).not.toContain("color-mix(in srgb, var(--story-section-bg) 82%, var(--story-section-blend-from) 18%) 2.5rem");
     expect(css).toContain("[data-story-section]:not([data-story-section='hero']):not([data-story-section='about']) [data-story-scene-media]");
-    expect(css).toContain("mask-image: linear-gradient(\n      180deg,\n      transparent 0%,\n      rgb(0 0 0 / 0.64) 2.4rem");
+    expect(css).toContain("mask-image: linear-gradient(\n      180deg,\n      transparent 0%,\n      rgb(0 0 0 / 0.34) var(--story-section-blend-edge)");
+    expect(css).toContain("rgb(0 0 0 / 0.76) var(--story-section-blend-soft)");
+    expect(css).toContain("black var(--story-section-blend-entry)");
     expect(css).not.toContain("[data-story-section='batumi']::before");
     expect(css).not.toContain("[data-story-section='batumi']::after");
     expect(css).not.toContain("[data-story-section='dubai']::after");
   });
 
-  it("keeps the about-to-philosophy handoff dark and compact", () => {
-    const aboutExit = cssBlock("[data-story-section='about']::after");
+  it("blends the about-to-philosophy handoff through the outgoing video instead of a dark stripe", () => {
+    const aboutExit = cssBlock("[data-story-section='about'] .story-about-cinematic-stage::after");
     const philosophyBlend = cssBlock("[data-story-section='philosophy']");
+    const philosophyCover = cssBlock("[data-story-section='philosophy'] > div::before");
 
-    expect(aboutExit).toContain("height: clamp(5.5rem, 15svh, 11rem)");
-    expect(aboutExit).toContain("rgb(17 16 14 / 0.82) 78%");
-    expect(aboutExit).toContain("rgb(17 16 14) 100%");
-    expect(aboutExit).not.toContain("hsl(var(--surface)");
-    expect(philosophyBlend).toContain("--story-section-blend-from: var(--story-tone-dark)");
+    expect(aboutExit).toContain("content: \"\"");
+    expect(aboutExit).toContain("bottom: -1px");
+    expect(aboutExit).toContain("height: calc(clamp(10rem, 24svh, 18rem) + 2px)");
+    expect(aboutExit).toContain("hsl(var(--surface) / 0.16) 22%");
+    expect(aboutExit).toContain("hsl(var(--surface) / 0.56) 58%");
+    expect(aboutExit).toContain("hsl(var(--surface) / 0.86) 82%");
+    expect(aboutExit).toContain("hsl(var(--surface)) 100%");
+    expect(philosophyBlend).toContain("--story-section-blend-from: var(--story-tone-surface)");
     expect(philosophyBlend).toContain("--story-section-blend-to: var(--story-tone-surface)");
+    expect(philosophyBlend).toContain("--story-section-cover-overlap: clamp(9rem, 20svh, 15rem)");
+    expect(philosophyBlend).toContain("--story-section-blend-entry: clamp(2.5rem, 5.5svh, 4rem)");
+    expect(philosophyCover).toContain("top: calc((var(--story-section-cover-overlap) * -1) - 1px)");
+    expect(philosophyCover).toContain("height: calc(var(--story-section-cover-overlap) + 2px)");
+    expect(philosophyCover).toContain("hsl(var(--surface) / 0.18) 20%");
+    expect(philosophyCover).toContain("hsl(var(--surface) / 0.64) 62%");
+    expect(philosophyCover).toContain("pointer-events: none");
     expect(css).not.toContain("[data-story-section='philosophy']::before");
     expect(css).toContain("[data-story-section='philosophy'] [data-story-scene-column] {\n      padding-top: clamp(1.5rem, 3.5svh, 2.6rem);");
   });

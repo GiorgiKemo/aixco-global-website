@@ -1,6 +1,7 @@
 "use client";
 
-import { Globe2, Linkedin, type LucideIcon } from "lucide-react";
+import { Globe2, type LucideIcon } from "lucide-react";
+import { aixcoLiveIcons } from "@/lib/aixco-live-assets";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { getSafeHttpsUrl } from "@/lib/security/urls";
 import { cn } from "@/lib/utils";
@@ -13,7 +14,8 @@ type SocialLink = {
   fallback: string;
   allowedHosts: string[];
   allowedPath: string;
-  Icon: LucideIcon;
+  Icon?: LucideIcon;
+  iconSrc?: string;
 };
 
 type SocialLinksProps = {
@@ -39,7 +41,7 @@ const socialLinks: SocialLink[] = [
     fallback: "https://www.linkedin.com/company/aixco",
     allowedHosts: ["linkedin.com", "www.linkedin.com"],
     allowedPath: "/company/aixco",
-    Icon: Linkedin,
+    iconSrc: aixcoLiveIcons.linkedin,
   },
 ];
 
@@ -60,7 +62,7 @@ export function SocialLinks({
 
   return (
     <div aria-label={ariaLabel} className={cn("flex items-center gap-2", className)}>
-      {socialLinks.map(({ key, label, fallback, allowedHosts, allowedPath, Icon }) => {
+      {socialLinks.map(({ key, label, fallback, allowedHosts, allowedPath, Icon, iconSrc }) => {
         const safeHref = getSafeHttpsUrl(socials[key], fallback, allowedHosts);
         const href = new URL(safeHref).pathname.replace(/\/$/, "") === allowedPath.replace(/\/$/, "") ? safeHref : fallback;
 
@@ -80,7 +82,11 @@ export function SocialLinks({
               )}
               aria-hidden
             />
-            <Icon className="relative h-5 w-5" aria-hidden="true" />
+            {iconSrc ? (
+              <img src={iconSrc} alt="" aria-hidden="true" className="relative h-5 w-5 object-contain" />
+            ) : Icon ? (
+              <Icon className="relative h-5 w-5" aria-hidden="true" />
+            ) : null}
           </a>
         );
       })}

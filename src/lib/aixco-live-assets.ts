@@ -11,6 +11,7 @@ const optimizedImageBase = aixcoLivePath("images/optimized");
 const optimizedVideoBase = aixcoLivePath("media");
 const previewVideoBase = aixcoLivePath("media/previews");
 const documentBase = aixcoLivePath("documents");
+const iconBase = aixcoLivePath("icons");
 const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
 const batumiGalleryPreviewBase = `${batumiGalleryBase}/previews`;
 const healthcareGalleryVersion = "healthcare-gallery-20260506";
@@ -99,6 +100,13 @@ export const aixcoDubaiHeroVideo = {
 export const aixcoLiveDocuments = {
   clientBrochure: `${documentBase}/aixco-client-brochure.pdf`,
   currentProject: `${documentBase}/current-project.pdf`,
+} as const;
+
+export const aixcoLiveIcons = {
+  linkedin: `${iconBase}/AIXCO_icons-01.svg`,
+  facebook: `${iconBase}/AIXCO_icons-02.svg`,
+  instagram: `${iconBase}/AIXCO_icons-03.svg`,
+  email: `${iconBase}/AIXCO_icons-04.svg`,
 } as const;
 
 export const aixcoLiveAssetDetails = {

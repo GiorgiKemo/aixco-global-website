@@ -3,14 +3,16 @@ import {
   type CaptureResult,
   type ChatMessageInput,
   type ChatTranscriptInput,
+  type ContactSubmissionInput,
   type PortalEventInput,
 } from "@/lib/backend/lead-capture-contracts";
 import { isSafePortalUrl } from "@/lib/security/urls";
 
-type CaptureEndpoint = "chat" | "portal-event";
+type CaptureEndpoint = "contact" | "chat" | "portal-event";
 type ChatTranscriptOptions = Pick<ChatTranscriptInput, "reason" | "sessionId">;
 
 const CAPTURE_ENDPOINTS: Record<CaptureEndpoint, string> = {
+  contact: "/api/lead-capture/contact",
   chat: "/api/lead-capture/chat",
   "portal-event": "/api/lead-capture/portal-event",
 };
@@ -93,6 +95,10 @@ export async function recordChatTranscript(
   }));
 
   return postCapture("chat", { ...options, messages: normalizedMessages });
+}
+
+export async function recordContactSubmission(input: ContactSubmissionInput): Promise<CaptureResult> {
+  return postCapture("contact", input);
 }
 
 export async function recordPortalEvent(input: PortalEventInput): Promise<CaptureResult> {

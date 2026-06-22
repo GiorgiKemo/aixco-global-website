@@ -13,7 +13,6 @@ import {
   Globe,
   Image as ImageIcon,
   KeyRound,
-  Mail,
   Menu,
   MapPin,
   ShieldCheck,
@@ -42,6 +41,7 @@ import type { Lang } from "@/i18n/languages";
 import {
   aixcoDubaiHeroVideo,
   aixcoHeroBackgroundVideo,
+  aixcoLiveIcons,
   aixcoLiveImages,
   aixcoLiveLogos,
   aixcoLiveVideoPreviews,
@@ -91,6 +91,12 @@ type StoryChapter = {
   key: StoryChapterKey;
   id?: string;
   label: string;
+};
+
+type DesktopStoryNavGroup = {
+  key: string;
+  label: string;
+  chapters: StoryChapter[];
 };
 
 type StoryMedia =
@@ -157,7 +163,46 @@ const storyChapters: StoryChapter[] = [
   { key: "contact", id: "contact", label: "Contact" },
 ];
 
-const storySidebarWidth = "clamp(13.5rem,15vw,16rem)";
+function getStoryChapterByKey(key: StoryChapterKey) {
+  const chapter = storyChapters.find((item) => item.key === key);
+
+  if (!chapter) {
+    throw new Error(`Missing story chapter: ${key}`);
+  }
+
+  return chapter;
+}
+
+const desktopStoryNavGroups: DesktopStoryNavGroup[] = [
+  {
+    key: "about-aixco",
+    label: "About AIXCO",
+    chapters: ([
+      "about",
+      "philosophy",
+      "philosophyOrigins",
+      "philosophyPlatform",
+      "aboutObjectives",
+      "aboutAccess",
+    ] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
+  },
+  {
+    key: "legacy-markets",
+    label: "Legacy",
+    chapters: (["legacy", "dubai"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
+  },
+  {
+    key: "opportunities",
+    label: "Opportunities",
+    chapters: (["batumi", "materials", "participate", "how"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
+  },
+  {
+    key: "company",
+    label: "Company",
+    chapters: (["team", "partners", "faqs", "contact"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
+  },
+];
+
 const storyMediaSwitchTransition = {
   duration: 0.48,
   ease: premiumEase,
@@ -318,17 +363,24 @@ function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
       return undefined;
     }
 
+    const isPhoneViewport = window.matchMedia("(max-width: 767px)").matches;
+    const textRevealRootMargin = isPhoneViewport ? "0px" : "0px 0px 8% 0px";
+
     const syncCurrentVisibility = () => {
       const rect = root.getBoundingClientRect();
       const viewportHeight = Math.max(1, window.innerHeight);
-      setIsInView(rect.top < viewportHeight * 0.9 && rect.bottom > viewportHeight * 0.02);
+      setIsInView(
+        isPhoneViewport
+          ? rect.top < viewportHeight && rect.bottom > 0
+          : rect.top < viewportHeight * 1.08 && rect.bottom > -viewportHeight * 0.04,
+      );
     };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { rootMargin: "0px 0px -18% 0px", threshold: 0.01 },
+      { rootMargin: textRevealRootMargin, threshold: 0 },
     );
 
     syncCurrentVisibility();
@@ -344,17 +396,24 @@ function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
 
 function StoryTextReveal({
   label,
+  mobileLabel,
 }: {
   children?: React.ReactNode;
   label: string;
+  mobileLabel?: string;
 }) {
   const rootRef = useRef<HTMLSpanElement>(null);
   const isInView = useStoryTextInView(rootRef);
-  const tokens = useMemo(() => label.split(/(\s+)/u), [label]);
-  const letterCount = useMemo(() => Array.from(label).filter((character) => !/\s/u.test(character)).length, [label]);
+  const visualLabel = mobileLabel ?? label;
+  const tokens = useMemo(() => visualLabel.split(/(\s+|\u200B)/u), [visualLabel]);
+  const letterCount = useMemo(
+    () => Array.from(visualLabel).filter((character) => !/[\s\u200B]/u.test(character)).length,
+    [visualLabel],
+  );
+  const stableMobileLabel = mobileLabel ?? label;
   const useCompactReveal = letterCount > maxAnimatedStoryLetters;
   const animationDurationMs = useMemo(
-    () => useCompactReveal ? 1450 : Math.min(3200, letterCount * 30 + 850),
+    () => useCompactReveal ? 1700 : Math.min(4200, Math.max(1900, letterCount * 30 + 980)),
     [letterCount, useCompactReveal],
   );
   const [animationState, setAnimationState] = useState<"idle" | "animating" | "played">("idle");
@@ -363,7 +422,7 @@ function StoryTextReveal({
   useLayoutEffect(() => {
     setAnimationState("idle");
     setAnimationRun(0);
-  }, [label]);
+  }, [label, mobileLabel]);
 
   useLayoutEffect(() => {
     if (!isInView || animationState !== "idle") return;
@@ -399,16 +458,21 @@ function StoryTextReveal({
       data-text-reveal-active={isAnimating ? "true" : "false"}
       data-text-reveal-label={label}
       data-text-reveal-state={animationState}
-      style={{ "--story-letter-count": letterCount } as CSSProperties}
+      style={{
+        "--story-letter-count": letterCount,
+        "--story-mobile-title-duration": `${animationDurationMs}ms`,
+      } as CSSProperties}
     >
       <span className="sr-only">{label}</span>
-      <span className="story-text-reveal__mobile-plain" aria-hidden="true">{label}</span>
+      <span className="story-text-reveal__mobile-plain" aria-hidden="true">{stableMobileLabel}</span>
       <span key={animationRun} className="story-letter-reveal__text" aria-hidden="true">
         {useCompactReveal ? (
           <span className="story-letter-reveal__chunk">{label}</span>
         ) : (
           tokens.map((token, tokenIndex) => (
-            token.trim() ? (
+            token === "\u200B" ? (
+              <wbr key={`break-${tokenIndex}`} />
+            ) : token.trim() ? (
               <span
                 key={`${token}-${tokenIndex}`}
                 className={cn(
@@ -583,8 +647,11 @@ function StoryChrome({
 }) {
   const currentLangName = LANGS.find((item) => item.code === lang)?.native ?? lang.toUpperCase();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [desktopGroupOpen, setDesktopGroupOpen] = useState<string | null>(null);
+  const [hasScrolledFromTop, setHasScrolledFromTop] = useState(false);
   const activeChapterKey = storyChapters[activeIndex]?.key ?? "hero";
   const useLightMobileLogo = ["hero", "about", "aboutAccess"].includes(activeChapterKey);
+  const isDesktopHeaderTransparent = activeChapterKey === "hero" && !hasScrolledFromTop;
 
   useEffect(() => {
     document.body.classList.toggle("story-mobile-menu-open", menuOpen);
@@ -594,15 +661,42 @@ function StoryChrome({
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const syncScrolledState = () => {
+      setHasScrolledFromTop(window.scrollY > 10);
+    };
+
+    syncScrolledState();
+    window.addEventListener("scroll", syncScrolledState, { passive: true });
+    return () => window.removeEventListener("scroll", syncScrolledState);
+  }, []);
+
+  useEffect(() => {
+    const closeDesktopMenu = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDesktopGroupOpen(null);
+      }
+    };
+
+    window.addEventListener("keydown", closeDesktopMenu);
+    return () => window.removeEventListener("keydown", closeDesktopMenu);
+  }, []);
+
   const handleChapterLink = (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => {
     setLangOpen(false);
     setMenuOpen(false);
+    setDesktopGroupOpen(null);
     onChapterClick(event, chapter);
   };
 
   return (
     <>
-      <div className="fixed inset-x-0 top-0 z-[60] flex items-center justify-between gap-2 border-b border-transparent bg-transparent px-3 py-3 text-white sm:px-4 xl:hidden">
+      <div
+        className={cn(
+          "story-mobile-header fixed inset-x-0 top-0 z-[60] flex items-center justify-between gap-2 border-b border-transparent bg-transparent px-3 py-3 sm:px-4 xl:hidden",
+          useLightMobileLogo ? "story-mobile-header--dark text-white" : "story-mobile-header--light text-foreground",
+        )}
+      >
         <a
           href="/"
           aria-label="AIXCO.GLOBAL home"
@@ -727,115 +821,163 @@ function StoryChrome({
         </nav>
       </aside>
 
-      <aside
-        className="fixed bottom-0 left-0 top-0 z-50 hidden border-r border-foreground/10 bg-white px-5 pb-6 pt-6 text-foreground shadow-[18px_0_60px_-46px_rgba(0,0,0,0.42)] 2xl:px-6 xl:block"
-        style={{ width: storySidebarWidth }}
+      <header
+        className={cn(
+          "story-desktop-header fixed inset-x-0 top-0 z-[60] hidden items-center gap-4 border-b px-6 py-3 xl:flex 2xl:px-8",
+          useLightMobileLogo ? "story-desktop-header--dark text-white" : "story-desktop-header--light text-foreground",
+          isDesktopHeaderTransparent && "story-desktop-header--transparent",
+        )}
       >
-        <div className="flex h-full flex-col justify-between">
-          <div>
-            <a
-              href="/"
-              aria-label="AIXCO.GLOBAL home"
-              onClick={(event) => handleChapterLink(event, storyChapters[0])}
-              className="mb-5 inline-flex min-h-16 items-center gap-2 text-foreground transition-colors hover:text-primary"
-            >
-              <img
-                src={aixcoLiveLogos.aixcoMark}
-                alt=""
-                aria-hidden="true"
-                width={783}
-                height={705}
-                className="h-auto w-16 object-contain [filter:brightness(0)_saturate(100%)]"
-              />
-              <span className="whitespace-nowrap text-[0.84rem] font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
-            </a>
-            <div className="relative mb-5">
-              <button
-                type="button"
-                onClick={() => setLangOpen((value) => !value)}
-                aria-haspopup="listbox"
-                aria-expanded={langOpen}
-                aria-label={`${currentLangName} Change language`}
-                className="inline-flex min-h-10 w-full items-center justify-between gap-2 rounded-lg border border-foreground/10 bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-foreground transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-              >
-                <span className="inline-flex items-center gap-2">
-                  <Globe className="h-3.5 w-3.5" aria-hidden />
-                  {currentLangName}
-                </span>
-                <ChevronDown className="h-3 w-3 opacity-70" aria-hidden />
-              </button>
-              {langOpen && (
-                <ul
-                  role="listbox"
-                  className="absolute left-0 right-0 z-[70] mt-2 rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
-                >
-                  {LANGS.map((option) => (
-                    <li key={option.code}>
-                      <button
-                        role="option"
-                        data-lang={option.code}
-                        aria-selected={option.code === lang}
-                        onClick={() => {
-                          setLang(option.code);
-                          setLangOpen(false);
-                        }}
-                        className={cn(
-                          "flex min-h-10 w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
-                          option.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70",
-                        )}
-                      >
-                        <span>{option.label}</span>
-                        <span className="text-[12px] uppercase tracking-widest opacity-70">{option.native}</span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <nav aria-label={tx("Story navigation")} className="grid gap-1">
-              {storyChapters.map((chapter, index) => {
-                const isActive = activeIndex === index;
-                const href = chapter.id ? `#${chapter.id}` : "/";
+        <a
+          href="/"
+          aria-label="AIXCO.GLOBAL home"
+          onClick={(event) => handleChapterLink(event, storyChapters[0])}
+          className={cn(
+            "story-desktop-header__brand inline-flex min-w-max items-center gap-2 transition-colors hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+            useLightMobileLogo ? "text-white" : "text-foreground",
+          )}
+        >
+          <img
+            src={aixcoLiveLogos.aixcoMark}
+            alt=""
+            aria-hidden="true"
+            width={783}
+            height={705}
+            className={cn(
+              "h-auto w-12 shrink-0 object-contain",
+              !useLightMobileLogo && "[filter:brightness(0)_saturate(100%)]",
+            )}
+          />
+          <span className="whitespace-nowrap text-[0.86rem] font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
+        </a>
 
-                return (
-                  <a
-                    key={chapter.key}
-                    href={href}
-                    aria-current={isActive ? "true" : undefined}
+        <nav aria-label={tx("Story navigation")} className="story-desktop-nav min-w-0 flex-1">
+          <div className="story-desktop-nav__scroller">
+            {(() => {
+              const chapter = storyChapters[0];
+              const isActive = activeChapterKey === chapter.key;
+
+              return (
+                <a
+                  key={chapter.key}
+                  href="/"
+                  aria-current={isActive ? "true" : undefined}
+                  data-active={isActive ? "true" : "false"}
+                  onClick={(event) => handleChapterLink(event, chapter)}
+                  className="story-desktop-nav-link"
+                >
+                  <span>{tx(chapter.label)}</span>
+                </a>
+              );
+            })()}
+            {desktopStoryNavGroups.map((group) => {
+              const isOpen = desktopGroupOpen === group.key;
+              const isActive = group.chapters.some((chapter) => chapter.key === activeChapterKey);
+              const menuId = `story-desktop-nav-${group.key}`;
+
+              return (
+                <div
+                  key={group.key}
+                  className="story-desktop-nav-group"
+                  onMouseEnter={() => {
+                    setLangOpen(false);
+                    setDesktopGroupOpen(group.key);
+                  }}
+                  onMouseLeave={() => {
+                    setDesktopGroupOpen((value) => value === group.key ? null : value);
+                  }}
+                >
+                  <button
+                    type="button"
+                    aria-haspopup="menu"
+                    aria-expanded={isOpen}
+                    aria-controls={menuId}
                     data-active={isActive ? "true" : "false"}
-                    onClick={(event) => handleChapterLink(event, chapter)}
+                    className="story-desktop-nav-trigger"
+                    onClick={() => {
+                      setLangOpen(false);
+                      setDesktopGroupOpen((value) => value === group.key ? null : group.key);
+                    }}
+                  >
+                    <span>{tx(group.label)}</span>
+                    <ChevronDown className="story-desktop-nav-trigger__icon" aria-hidden />
+                  </button>
+                  {isOpen && (
+                    <div id={menuId} role="menu" className="story-desktop-nav-menu">
+                      {group.chapters.map((chapter) => {
+                        const isChapterActive = activeChapterKey === chapter.key;
+                        const href = chapter.id ? `#${chapter.id}` : "/";
+
+                        return (
+                          <a
+                            key={chapter.key}
+                            href={href}
+                            role="menuitem"
+                            aria-current={isChapterActive ? "true" : undefined}
+                            data-active={isChapterActive ? "true" : "false"}
+                            onClick={(event) => handleChapterLink(event, chapter)}
+                            className="story-desktop-nav-menu-link"
+                          >
+                            {tx(chapter.label)}
+                          </a>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </nav>
+
+        <div className="story-desktop-header__tools relative flex min-w-max items-center gap-3">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] opacity-70">
+            {formatChapterNumber(activeIndex + 1)} / {formatChapterNumber(storyChapters.length)}
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setDesktopGroupOpen(null);
+              setLangOpen((value) => !value);
+            }}
+            aria-haspopup="listbox"
+            aria-expanded={langOpen}
+            aria-label={`${currentLangName} Change language`}
+            className="story-desktop-lang-button"
+          >
+            <Globe className="h-3.5 w-3.5" aria-hidden />
+            {currentLangName}
+            <ChevronDown className="h-3 w-3 opacity-70" aria-hidden />
+          </button>
+          {langOpen && (
+            <ul
+              role="listbox"
+              className="absolute right-0 top-[calc(100%+0.65rem)] z-[70] w-72 rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
+            >
+              {LANGS.map((option) => (
+                <li key={option.code}>
+                  <button
+                    role="option"
+                    data-lang={option.code}
+                    aria-selected={option.code === lang}
+                    onClick={() => {
+                      setLang(option.code);
+                      setLangOpen(false);
+                    }}
                     className={cn(
-                      "group/story-chapter story-chapter-link text-foreground/78 hover:text-primary focus-visible:text-primary",
-                      isActive && "story-chapter-link--active text-primary font-semibold",
+                      "flex min-h-10 w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
+                      option.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70",
                     )}
                   >
-                    <span
-                      className={cn(
-                        "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
-                        "group-hover/story-chapter:w-full group-hover/story-chapter:bg-primary-glow group-focus-visible/story-chapter:w-full group-focus-visible/story-chapter:bg-primary-glow",
-                        isActive && "story-chapter-link__line--active w-full bg-primary",
-                      )}
-                      aria-hidden="true"
-                    />
-                    <span className="min-w-0 [overflow-wrap:anywhere]">{tx(chapter.label)}</span>
-                  </a>
-                );
-              })}
-            </nav>
-          </div>
-          <div className="space-y-3">
-            <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-              {formatChapterNumber(activeIndex + 1)} / {formatChapterNumber(storyChapters.length)}
-            </p>
-            <div className="h-px w-full bg-foreground/12">
-              <div
-                className="h-px origin-left bg-primary transition-transform duration-150"
-                style={{ transform: "scaleX(var(--story-page-progress-scale, 0))" }}
-              />
-            </div>
-          </div>
+                    <span>{option.label}</span>
+                    <span className="text-[12px] uppercase tracking-widest opacity-70">{option.native}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      </aside>
+      </header>
 
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-px bg-foreground/10">
         <div
@@ -1037,7 +1179,7 @@ function SceneShell({
         className="grid min-h-[100svh]"
         style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}
       >
-        <div aria-hidden className="hidden xl:block" />
+        <div aria-hidden className="hidden" />
         <div className="grid min-h-[100svh] grid-cols-1 xl:grid-cols-12">
           <div
             data-story-scene-column
@@ -1093,10 +1235,12 @@ function SceneShell({
 
 function HeroScene({
   isActive,
+  onContact,
   onRegister,
   tx,
 }: {
   isActive: boolean;
+  onContact: () => void;
   onRegister: () => void;
   tx: (copy: string) => string;
 }) {
@@ -1105,7 +1249,7 @@ function HeroScene({
   return (
     <div className="relative h-full min-h-0 overflow-hidden text-white">
       <div className="relative z-10 grid h-full min-h-0" style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}>
-        <div aria-hidden className="hidden xl:block" />
+        <div aria-hidden className="hidden" />
         <div className="story-hero-copy">
           <motion.div
             className="story-hero-lockup hero-reference-font"
@@ -1157,10 +1301,6 @@ function HeroScene({
             </div>
 
             <div className="story-hero-actions">
-              <button type="button" onClick={onRegister} className="btn-gold">
-                {tx("Book consultation")}
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </button>
               <a
                 href="#batumi"
                 onClick={(event) => {
@@ -1170,8 +1310,15 @@ function HeroScene({
                 }}
                 className="btn-ghost-gold story-hero-actions__ghost"
               >
-                {tx("Explore opportunities")}
+                {tx("EXPLORE OPPORTUNITIES")}
               </a>
+              <button type="button" onClick={onRegister} className="btn-gold">
+                {tx("REGISTER")}
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </button>
+              <button type="button" onClick={onContact} className="btn-ghost-gold story-hero-actions__ghost">
+                {tx("CONTACT ME")}
+              </button>
             </div>
           </motion.div>
         </div>
@@ -1390,10 +1537,9 @@ function AboutScene({
   return (
     <div className="story-about-cinematic-stage relative h-full min-h-0 bg-[#11100e] text-white">
       <div
-        className="grid h-full min-h-0 grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
-        style={{ "--story-custom-sidebar": storySidebarWidth } as CSSProperties}
+        className="grid h-full min-h-0 grid-cols-1"
       >
-        <div aria-hidden className="hidden xl:block" />
+        <div aria-hidden className="hidden" />
         <div className="relative h-full min-h-0 overflow-hidden">
           <StoryMediaReveal isActive={isRevealed} className="story-about-cinematic-media absolute inset-0">
             <div className="story-about-cinematic-image relative h-full w-full">
@@ -1437,7 +1583,7 @@ function AboutScene({
           </StoryMediaReveal>
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.32),transparent_34%),linear-gradient(90deg,rgba(17,16,14,0.48),rgba(17,16,14,0.10)_46%,rgba(17,16,14,0.70)),linear-gradient(180deg,rgba(17,16,14,0.04),rgba(17,16,14,0.78))]"
+            className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.32),transparent_34%),linear-gradient(90deg,rgba(17,16,14,0.48),rgba(17,16,14,0.10)_46%,rgba(17,16,14,0.58)),linear-gradient(180deg,rgba(17,16,14,0.04),rgba(17,16,14,0.48))]"
           />
           <StorySceneReveal
             isActive={isRevealed}
@@ -1638,7 +1784,7 @@ function PhilosophyDetailScene({
         className="relative z-10 grid min-h-[100svh]"
         style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}
       >
-        <div aria-hidden className="hidden xl:block" />
+        <div aria-hidden className="hidden" />
         <div
           data-story-scene-column
           data-story-media-active={isActive ? "true" : "false"}
@@ -1687,10 +1833,9 @@ function AboutObjectivesScene({
   return (
     <div className="relative min-h-[100svh] bg-surface text-foreground">
       <div
-        className="grid min-h-[100svh] grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
-        style={{ "--story-custom-sidebar": storySidebarWidth } as CSSProperties}
+        className="grid min-h-[100svh] grid-cols-1"
       >
-        <div aria-hidden className="hidden xl:block" />
+        <div aria-hidden className="hidden" />
         <div className="story-objectives-stage relative flex min-h-[100svh] items-center overflow-hidden px-[clamp(1.5rem,5vw,6rem)] py-[clamp(3rem,8svh,6rem)]">
           <div aria-hidden className="story-objectives-media absolute inset-0 overflow-hidden">
             <Image
@@ -1740,10 +1885,9 @@ function AboutAccessScene({
   return (
     <div className="relative min-h-[100svh] bg-[#11100e] text-white">
       <div
-        className="grid min-h-[100svh] grid-cols-1 xl:grid-cols-[var(--story-custom-sidebar)_minmax(0,1fr)]"
-        style={{ "--story-custom-sidebar": storySidebarWidth } as CSSProperties}
+        className="grid min-h-[100svh] grid-cols-1"
       >
-        <div aria-hidden className="hidden xl:block" />
+        <div aria-hidden className="hidden" />
         <div className="relative min-h-[100svh] overflow-hidden">
           <StoryMediaReveal isActive={isRevealed} className="story-about-access-media absolute inset-0">
             <div className="story-about-access-image relative h-full w-full">
@@ -2052,7 +2196,10 @@ function ParticipateScene({
     >
       <p className="eyebrow story-eyebrow">{tx("How to work with AIXCO")}</p>
       <h2 className="story-h2">
-        <StoryTextReveal label={tx("ACQUIRE.PARTNER.CREATE VALUE.")} />
+        <StoryTextReveal
+          label={tx("ACQUIRE.PARTNER.CREATE VALUE.")}
+          mobileLabel={tx("ACQUIRE.PARTNER.CREATE VALUE.").replace(/\./g, ".\u200B")}
+        />
       </h2>
       <p className="story-body text-foreground/76">
         {tx("From property ownership and strategic partnership to professional asset management, AIXCO is with you at every stage of the journey.")}
@@ -2437,7 +2584,7 @@ function ContactScene({
                   <a href={`mailto:${company.email}`} className="story-contact-card group min-w-0">
                     <span className="story-metric-label text-primary/75">{tx("Email")}</span>
                     <span className="story-contact-card__row">
-                      <Mail className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                      <img src={aixcoLiveIcons.email} alt="" aria-hidden="true" className="story-contact-card__svg-icon" />
                       <span className="story-card-title min-w-0 text-[clamp(0.95rem,1vw,1.05rem)] font-medium leading-snug [overflow-wrap:anywhere]">
                         {company.email}
                       </span>
@@ -2494,7 +2641,7 @@ export function DesktopStoryHome() {
   const [heroBackdropVisible, setHeroBackdropVisible] = useState(true);
   const heroBackdropVisibleRef = useRef(true);
   const sectionPresenceRef = useRef(sectionPresence);
-  const { openJourney, openLogin, openPartner, openRegister } = useUI();
+  const { openContact, openJourney, openLogin, openPartner, openRegister } = useUI();
   const { lang, setLang, tx } = useI18n();
 
   useLayoutEffect(() => {
@@ -2748,7 +2895,7 @@ export function DesktopStoryHome() {
       const isRevealed = (index: number) => Boolean(sectionPresence[index] ?? index === 0);
 
       return [
-      <HeroScene key="hero" isActive={activeIndex === 0} tx={tx} onRegister={openRegister} />,
+      <HeroScene key="hero" isActive={activeIndex === 0} tx={tx} onContact={openContact} onRegister={openRegister} />,
       <AboutScene key="about" isActive={activeIndex === 1} isRevealed={isRevealed(1)} tx={tx} />,
       <PhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
       <PhilosophyDetailScene
@@ -2783,7 +2930,7 @@ export function DesktopStoryHome() {
       <ContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
-    [activeIndex, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
+    [activeIndex, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
   );
 
   return (

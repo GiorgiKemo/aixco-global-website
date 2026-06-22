@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { SiteContentContext } from "@/data/site-content-context";
@@ -22,6 +22,16 @@ function LoginTrigger() {
   return (
     <button type="button" onClick={openLogin}>
       Open login
+    </button>
+  );
+}
+
+function ContactTrigger() {
+  const { openContact } = useUI();
+
+  return (
+    <button type="button" onClick={openContact}>
+      Open contact
     </button>
   );
 }
@@ -158,5 +168,67 @@ describe("Modals", () => {
       "href",
       "https://workw.com/realestate/broker/login",
     );
+  });
+
+  it("opens the contact request modal with call and email choices", () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <ContactTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open contact/i }));
+
+    expect(screen.getByRole("dialog", { name: "Contact AIXCO" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Schedule a Call" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Send an Email" })).toBeInTheDocument();
+    expect(screen.queryByLabelText("Message")).not.toBeInTheDocument();
+  });
+
+  it("submits the schedule-call request and shows confirmation", async () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <ContactTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open contact/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Schedule a Call" }));
+    fireEvent.change(screen.getByLabelText("Name & Surname"), { target: { value: "Jane Client" } });
+    fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "+995 555 010101" } });
+    fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "jane@example.com" } });
+    fireEvent.submit(screen.getByRole("button", { name: "Submit" }).closest("form") as HTMLFormElement);
+
+    await waitFor(() => {
+      expect(screen.getByText("Thank you. We will contact you shortly.")).toBeInTheDocument();
+    });
+  });
+
+  it("submits the email request and shows confirmation", async () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <ContactTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open contact/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Send an Email" }));
+    fireEvent.change(screen.getByLabelText("Name & Surname"), { target: { value: "Alex Client" } });
+    fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "alex@example.com" } });
+    fireEvent.change(screen.getByLabelText("Message"), { target: { value: "Please send me more information." } });
+    fireEvent.submit(screen.getByRole("button", { name: "Submit" }).closest("form") as HTMLFormElement);
+
+    await waitFor(() => {
+      expect(screen.getByText("Thank you. We will contact you shortly.")).toBeInTheDocument();
+    });
   });
 });

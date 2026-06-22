@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
-type Modal = null | "login" | "register" | "terms" | "privacy" | "journey" | "team" | "partner";
+type Modal = null | "login" | "register" | "contact" | "terms" | "privacy" | "journey" | "team" | "partner";
 type ModalData = unknown;
 
 type UIState = {
@@ -8,6 +8,7 @@ type UIState = {
   modalData: ModalData;
   openLogin: () => void;
   openRegister: () => void;
+  openContact: () => void;
   openTerms: () => void;
   openPrivacy: () => void;
   openJourney: (data: ModalData) => void;
@@ -38,6 +39,7 @@ export function UIProvider({ children }: { children: ReactNode }) {
       modalData,
       openLogin: () => open("login"),
       openRegister: () => open("register"),
+      openContact: () => open("contact"),
       openTerms: () => open("terms"),
       openPrivacy: () => open("privacy"),
       openJourney: (data) => open("journey", data),

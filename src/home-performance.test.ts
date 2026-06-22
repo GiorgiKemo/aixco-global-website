@@ -55,6 +55,19 @@ describe("home page performance structure", () => {
     expect(philosophySource).toContain("fitContent={false}");
   });
 
+  it("keeps the about-to-philosophy media handoff from becoming a flat black block", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const aboutSceneStart = desktopStorySource.indexOf("function AboutScene");
+    const philosophySceneStart = desktopStorySource.indexOf("function PhilosophyScene");
+    const aboutSceneSource = desktopStorySource.slice(aboutSceneStart, philosophySceneStart);
+
+    expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
+    expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
+    expect(aboutSceneSource).toContain("rgba(17,16,14,0.48))]");
+    expect(aboutSceneSource).toContain("rgba(17,16,14,0.58))");
+    expect(aboutSceneSource).not.toContain("rgba(17,16,14,0.78)");
+  });
+
   it("keeps legacy insight articles unpublished until the copy is rewritten", () => {
     const articleSource = readSource("src/app/aixco-global-op2/[slug]/page.tsx");
 
@@ -109,6 +122,20 @@ describe("home page performance structure", () => {
     expect(revealHookSource).not.toContain('window.addEventListener("scroll"');
     expect(revealHookSource).not.toContain("glideScrollFrameEvent");
     expect(revealHookSource).not.toContain('window.addEventListener("resize"');
+  });
+
+  it("pre-arms story text reveals at the viewport edge instead of halfway into view", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const revealHookStart = desktopStorySource.indexOf("function useStoryTextInView");
+    const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
+    const revealHookSource = desktopStorySource.slice(revealHookStart, revealComponentStart);
+
+    expect(revealHookSource).toContain('"(max-width: 767px)"');
+    expect(revealHookSource).toContain('textRevealRootMargin = isPhoneViewport ? "0px" : "0px 0px 8% 0px"');
+    expect(revealHookSource).toContain("rootMargin: textRevealRootMargin");
+    expect(revealHookSource).toContain("threshold: 0");
+    expect(revealHookSource).not.toContain("-18%");
+    expect(revealHookSource).not.toContain("viewportHeight * 0.9");
   });
 
   it("keeps scroll progress on compositor-friendly transforms", () => {

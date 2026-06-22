@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { useUI } from "./ui-state";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveImages, aixcoLiveLogos, aixcoLivePartnerPeople } from "@/lib/aixco-live-assets";
-import { recordPortalEvent } from "@/lib/backend/lead-capture";
+import { recordContactSubmission, recordPortalEvent } from "@/lib/backend/lead-capture";
 import { getSafePortalUrl } from "@/lib/security/urls";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -292,6 +292,7 @@ const legalCopy: Record<LegalTitle, LegalSection[]> = {
 function getModalAccessibleName(modal: NonNullable<ReturnType<typeof useUI>["modal"]>, modalData: unknown) {
   if (modal === "login") return "Login to your AIXCO portal";
   if (modal === "register") return "Register with AIXCO";
+  if (modal === "contact") return "Contact AIXCO";
   if (modal === "terms") return "Terms & Conditions";
   if (modal === "privacy") return "Privacy Policy";
   if (modal === "journey") return (modalData as JourneyDetailData).role;
@@ -336,6 +337,7 @@ export function Modals() {
         <div className="p-7 md:p-10">
           {modal === "login" && <AccessModal mode="login" tx={tx} />}
           {modal === "register" && <AccessModal mode="register" tx={tx} />}
+          {modal === "contact" && <ContactRequestModal tx={tx} />}
           {modal === "terms" && <Legal title="Terms & Conditions" tx={tx} />}
           {modal === "privacy" && <Legal title="Privacy Policy" tx={tx} />}
           {modal === "journey" && <JourneyDetail data={modalData as JourneyDetailData} tx={tx} />}
@@ -343,6 +345,139 @@ export function Modals() {
           {modal === "partner" && <PartnerDetail data={modalData as PartnerDetailData} tx={tx} />}
         </div>
       </div>
+    </div>
+  );
+}
+
+type ContactMode = "call" | "email";
+
+function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
+  const [mode, setMode] = useState<ContactMode | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") ?? "").trim();
+    const email = String(form.get("email") ?? "").trim();
+    const phone = String(form.get("phone") ?? "").trim();
+    const message = String(form.get("message") ?? "").trim();
+
+    if (!mode || isSubmitting) return;
+
+    setIsSubmitting(true);
+    const payload =
+      mode === "call"
+        ? {
+            name,
+            email,
+            interest: "Schedule a Call",
+            message: `Schedule a call request. Phone number: ${phone}`,
+          }
+        : {
+            name,
+            email,
+            interest: "Send an Email",
+            message,
+          };
+
+    await recordContactSubmission(payload);
+    setIsSubmitting(false);
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <div className="contact-request-modal max-w-2xl">
+        <p className="eyebrow mb-3">{tx("Contact AIXCO")}</p>
+        <h3 className="heading-section">{tx("Thank you. We will contact you shortly.")}</h3>
+      </div>
+    );
+  }
+
+  return (
+    <div className="contact-request-modal max-w-3xl">
+      <p className="eyebrow mb-3">{tx("Contact AIXCO")}</p>
+      <h3 className="heading-section">{tx("How would you like us to contact you?")}</h3>
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <button
+          type="button"
+          onClick={() => setMode("call")}
+          aria-pressed={mode === "call"}
+          className="contact-request-option"
+        >
+          <span>{tx("Schedule a Call")}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMode("email")}
+          aria-pressed={mode === "email"}
+          className="contact-request-option"
+        >
+          <span>{tx("Send an Email")}</span>
+        </button>
+      </div>
+
+      {mode ? (
+        <form onSubmit={handleSubmit} className="contact-request-form mt-6 grid gap-4">
+          <label className="grid gap-2">
+            <span className="story-metric-label text-foreground/60">{tx("Name & Surname")}</span>
+            <input
+              name="name"
+              required
+              minLength={2}
+              maxLength={100}
+              autoComplete="name"
+              className="contact-request-input"
+            />
+          </label>
+
+          {mode === "call" ? (
+            <label className="grid gap-2">
+              <span className="story-metric-label text-foreground/60">{tx("Phone Number")}</span>
+              <input
+                name="phone"
+                required
+                minLength={5}
+                maxLength={40}
+                autoComplete="tel"
+                className="contact-request-input"
+              />
+            </label>
+          ) : null}
+
+          <label className="grid gap-2">
+            <span className="story-metric-label text-foreground/60">{tx("Email Address")}</span>
+            <input
+              name="email"
+              type="email"
+              required
+              maxLength={255}
+              autoComplete="email"
+              className="contact-request-input"
+            />
+          </label>
+
+          {mode === "email" ? (
+            <label className="grid gap-2">
+              <span className="story-metric-label text-foreground/60">{tx("Message")}</span>
+              <textarea
+                name="message"
+                required
+                minLength={10}
+                maxLength={1500}
+                rows={5}
+                className="contact-request-input resize-y"
+              />
+            </label>
+          ) : null}
+
+          <button type="submit" disabled={isSubmitting} className="btn-gold w-fit">
+            {tx(isSubmitting ? "Sending..." : "Submit")}
+          </button>
+        </form>
+      ) : null}
     </div>
   );
 }

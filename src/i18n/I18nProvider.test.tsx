@@ -21,7 +21,8 @@ function TranslationProbe() {
 const visibleStoryProbeTexts = [
   "Global Real Estate",
   "Emerging Market Opportunities with AIXCO",
-  "Explore opportunities",
+  "EXPLORE OPPORTUNITIES",
+  "CONTACT ME",
   "Every client starts with a different objective",
   "Rather than offering a one-size-fits-all solution, we begin by understanding what matters most to you.",
   "A real estate foundation built through ownership",
@@ -102,8 +103,11 @@ describe("I18nProvider", () => {
         await expect(hasTextTranslation(heroOpportunityFootnote, locale)).resolves.toBe(true);
       }
       await expect(hasTextTranslation("Global Real Estate", locale)).resolves.toBe(true);
-      await expect(hasTextTranslation("Book consultation", locale)).resolves.toBe(true);
-      await expect(hasTextTranslation("Explore opportunities", locale)).resolves.toBe(true);
+      await expect(hasTextTranslation("EXPLORE OPPORTUNITIES", locale)).resolves.toBe(true);
+      await expect(hasTextTranslation("REGISTER", locale)).resolves.toBe(true);
+      await expect(hasTextTranslation("CONTACT ME", locale)).resolves.toBe(true);
+      await expect(hasTextTranslation("Schedule a Call", locale)).resolves.toBe(true);
+      await expect(hasTextTranslation("Send an Email", locale)).resolves.toBe(true);
       await expect(hasTextTranslation("Explore Batumi real estate", locale)).resolves.toBe(true);
     }
   });
