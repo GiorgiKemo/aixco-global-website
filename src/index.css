@@ -723,11 +723,14 @@
   [data-story-section='aboutAccess'] {
     --story-section-blend-from: var(--story-tone-surface);
     --story-section-blend-to: var(--story-tone-surface);
+    --story-about-access-start-scale: 1.07;
+    --story-about-access-scale-range: 0.07;
+    --story-about-access-lift: 0.5svh;
   }
 
   [data-story-section='legacy'] {
-    --story-section-blend-from: var(--story-tone-dark);
-    --story-section-blend-to: var(--story-tone-background);
+    --story-section-blend-from: var(--story-tone-surface);
+    --story-section-blend-to: var(--story-tone-surface);
   }
 
   [data-story-section='dubai'] {
@@ -837,6 +840,21 @@
     );
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
+  }
+
+  [data-story-section='legacy']:not([data-story-section='hero']):not(
+      [data-story-section='about']
+    )
+    > div {
+    background: var(--story-section-bg);
+  }
+
+  [data-story-section='legacy']:not([data-story-section='hero']):not(
+      [data-story-section='about']
+    )
+    [data-story-scene-media] {
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   html[dir='rtl'] [data-story-scene-copy],
@@ -2802,19 +2820,25 @@
   .story-contact-card__row > svg,
   .story-contact-card__svg-icon {
     box-sizing: border-box;
-    width: 2rem;
-    height: 2rem;
-    padding: 0.42rem;
-    border: 1px solid hsl(var(--primary) / 0.36);
-    border-radius: 0.28rem;
+    width: 3rem;
+    height: 3rem;
+    padding: 0.3rem;
+    border: 1px solid hsl(var(--primary) / 0.46);
+    border-radius: 0.42rem;
     background:
       linear-gradient(180deg, hsl(42 56% 96%), hsl(38 42% 91%));
     color: hsl(var(--primary));
     box-shadow:
       0 1px 0 hsl(0 0% 100% / 0.78) inset,
       0 10px 28px -24px hsl(var(--primary) / 0.55);
-    stroke-width: 1.65;
+    stroke-width: 1.85;
     object-fit: contain;
+  }
+
+  .story-contact-card__svg-icon,
+  .social-link__icon {
+    filter: saturate(1.25) contrast(1.28) brightness(0.9);
+    image-rendering: auto;
   }
 
   .story-philosophy-stat {
@@ -4219,12 +4243,34 @@
     [data-story-section='aboutAccess'] .story-about-access-image {
       transform: translate3d(
           0,
-          calc(var(--story-about-access-zoom-progress, 0) * -2svh),
+          calc(var(--story-about-access-zoom-progress, 0) * var(--story-about-access-lift) * -1),
           0
         )
-        scale(calc(1.18 - (var(--story-about-access-zoom-progress, 0) * 0.18)));
+        scale(
+          calc(
+            var(--story-about-access-start-scale) -
+              (var(--story-about-access-zoom-progress, 0) * var(--story-about-access-scale-range))
+          )
+        );
       transform-origin: center center;
       will-change: transform;
+    }
+
+    [data-story-section='aboutAccess'] .story-about-access-stage::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      bottom: -1px;
+      z-index: 5;
+      height: clamp(7rem, 18svh, 12rem);
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        hsl(var(--surface) / 0) 0%,
+        hsl(var(--surface) / 0.14) 34%,
+        hsl(var(--surface) / 0.58) 72%,
+        hsl(var(--surface)) 100%
+      );
     }
 
     [data-story-scene-copy] [data-layout='story-batumi-benefits'] > * {
@@ -4855,6 +4901,15 @@
   @media (max-width: 767px) {
     [data-story-scene-copy] {
       padding-top: clamp(4.85rem, 9svh, 5.55rem);
+    }
+
+    [data-story-section='legacy'] [data-story-scene-copy] {
+      justify-content: flex-start;
+      padding-top: clamp(3.6rem, 7svh, 4.4rem);
+    }
+
+    [data-story-section='legacy'] .story-scene-reveal {
+      justify-content: flex-start;
     }
 
     .story-h2 {

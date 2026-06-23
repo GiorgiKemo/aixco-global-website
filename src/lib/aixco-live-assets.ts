@@ -103,6 +103,7 @@ export const aixcoLiveDocuments = {
 } as const;
 
 export const aixcoLiveIcons = {
+  website: `${iconBase}/AIXCO_icons-05.svg`,
   linkedin: `${iconBase}/AIXCO_icons-01.svg`,
   facebook: `${iconBase}/AIXCO_icons-02.svg`,
   instagram: `${iconBase}/AIXCO_icons-03.svg`,

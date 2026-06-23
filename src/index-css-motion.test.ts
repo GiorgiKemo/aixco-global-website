@@ -107,7 +107,10 @@ describe("index.css motion rules", () => {
     expect(liveAssets).toContain("AIXCO_icons-02.svg");
     expect(liveAssets).toContain("AIXCO_icons-03.svg");
     expect(liveAssets).toContain("AIXCO_icons-04.svg");
+    expect(liveAssets).toContain("AIXCO_icons-05.svg");
+    expect(socialLinks).toContain("aixcoLiveIcons.website");
     expect(socialLinks).toContain("aixcoLiveIcons.linkedin");
+    expect(socialLinks).toContain("aixcoLiveIcons.facebook");
     expect(desktopStoryHome).toContain("aixcoLiveIcons.email");
     expect(css).toContain(".story-contact-card__svg-icon");
   });

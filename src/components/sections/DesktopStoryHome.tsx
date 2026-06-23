@@ -1888,7 +1888,7 @@ function AboutAccessScene({
         className="grid min-h-[100svh] grid-cols-1"
       >
         <div aria-hidden className="hidden" />
-        <div className="relative min-h-[100svh] overflow-hidden">
+        <div className="story-about-access-stage relative min-h-[100svh] overflow-hidden">
           <StoryMediaReveal isActive={isRevealed} className="story-about-access-media absolute inset-0">
             <div className="story-about-access-image relative h-full w-full">
               <Image
@@ -1917,7 +1917,7 @@ function AboutAccessScene({
           </StoryMediaReveal>
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(circle_at_68%_36%,rgba(255,255,255,0.26),transparent_28%),linear-gradient(90deg,rgba(17,16,14,0.68),rgba(17,16,14,0.18)_48%,rgba(17,16,14,0.30)),linear-gradient(180deg,rgba(17,16,14,0.08),rgba(17,16,14,0.76))]"
+            className="absolute inset-0 bg-[radial-gradient(circle_at_68%_36%,rgba(255,255,255,0.24),transparent_28%),linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.16)_48%,rgba(17,16,14,0.26)),linear-gradient(180deg,rgba(17,16,14,0.06),rgba(17,16,14,0.56))]"
           />
           <StorySceneReveal
             isActive={isRevealed}
@@ -2779,7 +2779,7 @@ export function DesktopStoryHome() {
       }
       if (isAboutAccessSection) {
         const nextExitProgress = exitProgress.toFixed(3);
-        const nextZoomProgress = clamp(exitProgress * 2, 0, 1).toFixed(3);
+        const nextZoomProgress = clamp(exitProgress, 0, 1).toFixed(3);
         const exitProgressKey = `${index}:exit`;
         const zoomProgressKey = `${index}:zoom`;
         if (sectionProgressValuesRef.current[exitProgressKey] !== nextExitProgress) {

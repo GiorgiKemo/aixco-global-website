@@ -28,6 +28,7 @@ describe("site content backend", () => {
           socials: {
             ...siteContentDefaults.company.socials,
             website: "https://evil.example/",
+            facebook: "https://evil.example/profile.php?id=61589341472475",
             instagram: "javascript:alert(1)",
           },
           portals: {
@@ -60,6 +61,7 @@ describe("site content backend", () => {
 
     expect(content.company.email).toBe(siteContentDefaults.company.email);
     expect(content.company.socials.website).toBe(siteContentDefaults.company.socials.website);
+    expect(content.company.socials.facebook).toBe(siteContentDefaults.company.socials.facebook);
     expect(content.company.socials.instagram).toBe(siteContentDefaults.company.socials.instagram);
     expect(content.company.portals.customerLogin).toBe(siteContentDefaults.company.portals.customerLogin);
     expect(content.newsTickerItems[0].href).toBe(siteContentDefaults.newsTickerItems[0].href);

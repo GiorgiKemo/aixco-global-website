@@ -1,6 +1,5 @@
 "use client";
 
-import { Globe2, type LucideIcon } from "lucide-react";
 import { aixcoLiveIcons } from "@/lib/aixco-live-assets";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { getSafeHttpsUrl } from "@/lib/security/urls";
@@ -14,8 +13,7 @@ type SocialLink = {
   fallback: string;
   allowedHosts: string[];
   allowedPath: string;
-  Icon?: LucideIcon;
-  iconSrc?: string;
+  iconSrc: string;
 };
 
 type SocialLinksProps = {
@@ -33,23 +31,31 @@ const socialLinks: SocialLink[] = [
     fallback: "https://aixco.group/",
     allowedHosts: ["aixco.group", "www.aixco.group"],
     allowedPath: "/",
-    Icon: Globe2,
+    iconSrc: aixcoLiveIcons.website,
   },
   {
     key: "linkedin",
     label: "LinkedIn",
-    fallback: "https://www.linkedin.com/company/aixco",
+    fallback: "https://www.linkedin.com/company/109396491/admin/dashboard/",
     allowedHosts: ["linkedin.com", "www.linkedin.com"],
-    allowedPath: "/company/aixco",
+    allowedPath: "/company/109396491/admin/dashboard",
     iconSrc: aixcoLiveIcons.linkedin,
+  },
+  {
+    key: "facebook",
+    label: "Facebook",
+    fallback: "https://www.facebook.com/profile.php?id=61589341472475",
+    allowedHosts: ["facebook.com", "www.facebook.com"],
+    allowedPath: "/profile.php",
+    iconSrc: aixcoLiveIcons.facebook,
   },
 ];
 
 const darkLinkClassName =
-  "group relative inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/[0.06] text-white/82 shadow-[0_18px_46px_-28px_rgba(212,167,68,0.78)] transition duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:bg-primary/15 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-foreground";
+  "group relative inline-flex h-[3.35rem] w-[3.35rem] items-center justify-center overflow-hidden rounded-lg border border-white/12 bg-white/[0.08] text-white/90 shadow-[0_18px_46px_-28px_rgba(212,167,68,0.78)] transition duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:bg-primary/15 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-foreground";
 
 const lightLinkClassName =
-  "group relative inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-lg border border-foreground/10 bg-white text-foreground/72 shadow-[0_14px_36px_-28px_hsl(220_28%_18%/0.16)] transition duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:bg-primary/8 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+  "group relative inline-flex h-[3.35rem] w-[3.35rem] items-center justify-center overflow-hidden rounded-lg border border-primary/20 bg-white text-primary shadow-[0_14px_36px_-28px_hsl(220_28%_18%/0.16)] transition duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 export function SocialLinks({
   socials,
@@ -62,7 +68,7 @@ export function SocialLinks({
 
   return (
     <div aria-label={ariaLabel} className={cn("flex items-center gap-2", className)}>
-      {socialLinks.map(({ key, label, fallback, allowedHosts, allowedPath, Icon, iconSrc }) => {
+      {socialLinks.map(({ key, label, fallback, allowedHosts, allowedPath, iconSrc }) => {
         const safeHref = getSafeHttpsUrl(socials[key], fallback, allowedHosts);
         const href = new URL(safeHref).pathname.replace(/\/$/, "") === allowedPath.replace(/\/$/, "") ? safeHref : fallback;
 
@@ -82,11 +88,7 @@ export function SocialLinks({
               )}
               aria-hidden
             />
-            {iconSrc ? (
-              <img src={iconSrc} alt="" aria-hidden="true" className="relative h-5 w-5 object-contain" />
-            ) : Icon ? (
-              <Icon className="relative h-5 w-5" aria-hidden="true" />
-            ) : null}
+            <img src={iconSrc} alt="" aria-hidden="true" className="social-link__icon relative h-[2.1rem] w-[2.1rem] object-contain" />
           </a>
         );
       })}

@@ -1,10 +1,16 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { SiteContentContext } from "@/data/site-content-context";
 import { siteContentDefaults } from "@/lib/backend/site-content";
+import { recordContactSubmission } from "@/lib/backend/lead-capture";
 import { Modals } from "./Modals";
 import { UIProvider, useUI } from "./ui-state";
+
+vi.mock("@/lib/backend/lead-capture", () => ({
+  recordContactSubmission: vi.fn(),
+  recordPortalEvent: vi.fn(() => Promise.resolve({ ok: true })),
+}));
 
 function PrivacyTrigger() {
   const { openPrivacy } = useUI();
@@ -37,8 +43,13 @@ function ContactTrigger() {
 }
 
 describe("Modals", () => {
+  beforeEach(() => {
+    vi.mocked(recordContactSubmission).mockResolvedValue({ ok: true });
+  });
+
   afterEach(() => {
     document.body.style.overflow = "";
+    vi.clearAllMocks();
   });
 
   it("gives legal dialogs an accessible name", () => {
@@ -230,5 +241,33 @@ describe("Modals", () => {
     await waitFor(() => {
       expect(screen.getByText("Thank you. We will contact you shortly.")).toBeInTheDocument();
     });
+  });
+
+  it("does not show a false confirmation when contact capture fails", async () => {
+    vi.mocked(recordContactSubmission).mockResolvedValueOnce({
+      ok: false,
+      reason: "Supabase admin configuration is not available.",
+    });
+
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <ContactTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open contact/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Schedule a Call" }));
+    fireEvent.change(screen.getByLabelText("Name & Surname"), { target: { value: "Jane Client" } });
+    fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "+995 555 010101" } });
+    fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "jane@example.com" } });
+    fireEvent.submit(screen.getByRole("button", { name: "Submit" }).closest("form") as HTMLFormElement);
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent("We could not send your request.");
+    });
+    expect(screen.queryByText("Thank you. We will contact you shortly.")).not.toBeInTheDocument();
   });
 });

@@ -42,6 +42,10 @@ function sanitizeCompanyProfile(profile: SiteContent["company"]): SiteContent["c
       ...profile.socials,
       website: rawSiteContentDefaults.company.socials.website,
       linkedin: rawSiteContentDefaults.company.socials.linkedin,
+      facebook: getSafeHttpsUrl(profile.socials?.facebook, rawSiteContentDefaults.company.socials.facebook, [
+        "facebook.com",
+        "www.facebook.com",
+      ]),
       instagram: getSafeHttpsUrl(profile.socials?.instagram, rawSiteContentDefaults.company.socials.instagram, [
         "instagram.com",
         "www.instagram.com",

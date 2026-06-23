@@ -355,6 +355,7 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
   const [mode, setMode] = useState<ContactMode | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -367,6 +368,7 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
     if (!mode || isSubmitting) return;
 
     setIsSubmitting(true);
+    setSubmitError(null);
     const payload =
       mode === "call"
         ? {
@@ -382,9 +384,15 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
             message,
           };
 
-    await recordContactSubmission(payload);
+    const result = await recordContactSubmission(payload);
     setIsSubmitting(false);
-    setSubmitted(true);
+
+    if (result.ok) {
+      setSubmitted(true);
+      return;
+    }
+
+    setSubmitError(tx("We could not send your request. Please try again or email info@aixco.global."));
   };
 
   if (submitted) {
@@ -403,7 +411,10 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <button
           type="button"
-          onClick={() => setMode("call")}
+          onClick={() => {
+            setSubmitError(null);
+            setMode("call");
+          }}
           aria-pressed={mode === "call"}
           className="contact-request-option"
         >
@@ -411,7 +422,10 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
         </button>
         <button
           type="button"
-          onClick={() => setMode("email")}
+          onClick={() => {
+            setSubmitError(null);
+            setMode("email");
+          }}
           aria-pressed={mode === "email"}
           className="contact-request-option"
         >
@@ -471,6 +485,12 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
                 className="contact-request-input resize-y"
               />
             </label>
+          ) : null}
+
+          {submitError ? (
+            <p role="alert" className="text-sm font-medium text-destructive">
+              {submitError}
+            </p>
           ) : null}
 
           <button type="submit" disabled={isSubmitting} className="btn-gold w-fit">

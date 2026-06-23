@@ -145,6 +145,13 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "Tesekkurler. Sizinle kisa sure icinde iletisime gececegiz.",
     ar: "شكراً لك. سنتواصل معك قريباً.",
   },
+  "We could not send your request. Please try again or email info@aixco.global.": {
+    de: "Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie an info@aixco.global.",
+    ru: "Не удалось отправить запрос. Пожалуйста, попробуйте еще раз или напишите на info@aixco.global.",
+    ka: "თქვენი მოთხოვნის გაგზავნა ვერ მოხერხდა. სცადეთ ხელახლა ან მოგვწერეთ info@aixco.global-ზე.",
+    tr: "Talebiniz gonderilemedi. Lutfen tekrar deneyin veya info@aixco.global adresine e-posta gonderin.",
+    ar: "تعذر إرسال طلبك. يرجى المحاولة مرة أخرى أو مراسلة info@aixco.global.",
+  },
   "Emerging market opportunities with AIXCO": {
     de: "Chancen in aufstrebenden Maerkten mit AIXCO",
     ru: "Возможности на развивающихся рынках с AIXCO",
