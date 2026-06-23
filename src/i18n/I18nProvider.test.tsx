@@ -26,10 +26,12 @@ const visibleStoryProbeTexts = [
   "Every client starts with a different objective",
   "Rather than offering a one-size-fits-all solution, we begin by understanding what matters most to you.",
   "A real estate foundation built through ownership",
+  "Swiss Real Estate Expertise and Knowledge Conquering Emerging Markets",
   "Expanding through carefully selected opportunities",
   "Selected projects and apartments available exclusively through AIXCO",
   "Bank financing minimum 60%",
-  "Approx. 10-12% net rental yields",
+  "Secure your position from €5,000",
+  "Approx. 12% net rental yields",
   "ACQUIRE.PARTNER.CREATE VALUE.",
   "Buy an Apartment with AIXCO",
   "Download Materials",
@@ -107,6 +109,7 @@ describe("I18nProvider", () => {
       await expect(hasTextTranslation("REGISTER", locale)).resolves.toBe(true);
       await expect(hasTextTranslation("CONTACT ME", locale)).resolves.toBe(true);
       await expect(hasTextTranslation("Schedule a Call", locale)).resolves.toBe(true);
+      await expect(hasTextTranslation("Preferred Time for a Call", locale)).resolves.toBe(true);
       await expect(hasTextTranslation("Send an Email", locale)).resolves.toBe(true);
       await expect(hasTextTranslation("Explore Batumi real estate", locale)).resolves.toBe(true);
     }

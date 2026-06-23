@@ -363,6 +363,7 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
     const phone = String(form.get("phone") ?? "").trim();
+    const preferredTime = String(form.get("preferredTime") ?? "").trim();
     const message = String(form.get("message") ?? "").trim();
 
     if (!mode || isSubmitting) return;
@@ -375,7 +376,7 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
             name,
             email,
             interest: "Schedule a Call",
-            message: `Schedule a call request. Phone number: ${phone}`,
+            message: `Schedule a call request. Phone number: ${phone}. Preferred time for a call: ${preferredTime}`,
           }
         : {
             name,
@@ -448,17 +449,30 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
           </label>
 
           {mode === "call" ? (
-            <label className="grid gap-2">
-              <span className="story-metric-label text-foreground/60">{tx("Phone Number")}</span>
-              <input
-                name="phone"
-                required
-                minLength={5}
-                maxLength={40}
-                autoComplete="tel"
-                className="contact-request-input"
-              />
-            </label>
+            <>
+              <label className="grid gap-2">
+                <span className="story-metric-label text-foreground/60">{tx("Phone Number")}</span>
+                <input
+                  name="phone"
+                  required
+                  minLength={5}
+                  maxLength={40}
+                  autoComplete="tel"
+                  className="contact-request-input"
+                />
+              </label>
+              <label className="grid gap-2">
+                <span className="story-metric-label text-foreground/60">{tx("Preferred Time for a Call")}</span>
+                <input
+                  name="preferredTime"
+                  required
+                  minLength={2}
+                  maxLength={120}
+                  autoComplete="off"
+                  className="contact-request-input"
+                />
+              </label>
+            </>
           ) : null}
 
           <label className="grid gap-2">

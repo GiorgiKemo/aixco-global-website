@@ -1,6 +1,6 @@
 export const philosophyHero = {
   eyebrow: "AIXCO Philosophy",
-  title: "Disciplined ownership of real assets, shaped by Swiss real estate heritage.",
+  title: "Swiss Real Estate Expertise and Knowledge Conquering Emerging Markets",
   summary:
     "AIXCO Global was built on disciplined real estate ownership, practical execution, and long-term property services.",
 } as const;

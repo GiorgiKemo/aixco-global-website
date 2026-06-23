@@ -721,11 +721,13 @@
   }
 
   [data-story-section='aboutAccess'] {
-    --story-section-blend-from: var(--story-tone-surface);
+    --story-section-blend-from: var(--story-tone-dark);
     --story-section-blend-to: var(--story-tone-surface);
-    --story-about-access-start-scale: 1.07;
-    --story-about-access-scale-range: 0.07;
-    --story-about-access-lift: 0.5svh;
+    --story-section-blend-entry: clamp(5rem, 11svh, 8rem);
+    --story-section-blend-exit: clamp(10rem, 22svh, 16rem);
+    --story-about-access-start-scale: 1.055;
+    --story-about-access-scale-range: 0.055;
+    --story-about-access-lift: 0.35svh;
   }
 
   [data-story-section='legacy'] {
@@ -1602,6 +1604,20 @@
     text-shadow: 0 18px 46px rgb(0 0 0 / 0.38);
   }
 
+  @media (min-width: 1280px) {
+    .story-hero-statement__line {
+      max-width: none;
+      white-space: nowrap;
+      font-size: clamp(2.95rem, min(3.6vw, 8.8svh), 5.15rem);
+      line-height: 0.96;
+      letter-spacing: -0.052em;
+    }
+
+    .story-hero-statement__note {
+      margin-top: clamp(1.35rem, 2.8svh, 2rem);
+    }
+  }
+
   .story-hero-statement__line:first-child {
     font-weight: 300;
     color: hsl(0 0% 100% / 0.96);
@@ -1613,7 +1629,7 @@
   }
 
   .story-hero-statement__note {
-    margin: clamp(0.65rem, 1.2svh, 0.85rem) 0 0;
+    margin: clamp(1.35rem, 2.8svh, 2rem) 0 0;
     max-width: 28rem;
     font-size: clamp(0.92rem, 1vw, 1rem);
     font-weight: 400;
@@ -4226,6 +4242,7 @@
 
     [data-story-section='about'] .story-about-cinematic-copy {
       opacity: 1;
+      justify-content: center;
       transform: translate3d(
         0,
         calc(var(--story-section-exit-progress, 0) * -10svh),
@@ -4267,8 +4284,38 @@
       background: linear-gradient(
         180deg,
         hsl(var(--surface) / 0) 0%,
-        hsl(var(--surface) / 0.14) 34%,
-        hsl(var(--surface) / 0.58) 72%,
+        hsl(var(--surface) / 0.16) 30%,
+        hsl(var(--surface) / 0.52) 68%,
+        hsl(var(--surface)) 100%
+      );
+    }
+
+    [data-story-section='philosophyPlatform'] [data-story-scene-media]::after,
+    [data-story-section='legacy'] [data-story-scene-media]::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    [data-story-section='philosophyPlatform'] [data-story-scene-media]::after {
+      background: linear-gradient(
+        90deg,
+        hsl(var(--surface)) 0%,
+        hsl(var(--surface) / 0.74) 7%,
+        hsl(var(--surface) / 0.24) 18%,
+        hsl(var(--surface) / 0) 34%
+      );
+    }
+
+    [data-story-section='legacy'] [data-story-scene-media]::after {
+      background: linear-gradient(
+        90deg,
+        hsl(var(--surface) / 0) 0%,
+        hsl(var(--surface) / 0) 66%,
+        hsl(var(--surface) / 0.34) 82%,
+        hsl(var(--surface) / 0.82) 94%,
         hsl(var(--surface)) 100%
       );
     }

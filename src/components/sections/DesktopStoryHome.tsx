@@ -189,12 +189,12 @@ const desktopStoryNavGroups: DesktopStoryNavGroup[] = [
   {
     key: "legacy-markets",
     label: "Legacy",
-    chapters: (["legacy", "dubai"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
+    chapters: (["legacy"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
   },
   {
     key: "opportunities",
     label: "Opportunities",
-    chapters: (["batumi", "materials", "participate", "how"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
+    chapters: (["batumi", "dubai", "materials", "participate", "how"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
   },
   {
     key: "company",
@@ -1451,10 +1451,10 @@ function BatumiBenefitIconGrid({
   tx: (copy: string) => string;
 }) {
   const items = [
-    { icon: BadgeEuro, metric: "€45k", label: benefits[3] ?? "Entry from €45,000" },
-    { icon: KeyRound, metric: "100%", label: benefits[1] ?? "100% foreign ownership" },
+    { icon: BadgeEuro, metric: "€5k", label: "Secure your position from €5,000" },
+    { icon: KeyRound, metric: "€45k", label: "Entry from €45,000" },
     { icon: TrendingUp, metric: "60%+", label: benefits[4] ?? "Bank financing minimum 60%" },
-    { icon: CirclePercent, metric: "10-12%", label: benefits[5] ?? "Approx. 10-12% net rental yields" },
+    { icon: CirclePercent, metric: "12%", label: "Approx. 12% net rental yields" },
   ];
 
   return (
@@ -1583,7 +1583,7 @@ function AboutScene({
           </StoryMediaReveal>
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.32),transparent_34%),linear-gradient(90deg,rgba(17,16,14,0.48),rgba(17,16,14,0.10)_46%,rgba(17,16,14,0.58)),linear-gradient(180deg,rgba(17,16,14,0.04),rgba(17,16,14,0.48))]"
+            className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.22),transparent_34%),linear-gradient(90deg,rgba(17,16,14,0.62),rgba(17,16,14,0.26)_46%,rgba(17,16,14,0.70)),linear-gradient(180deg,rgba(17,16,14,0.14),rgba(17,16,14,0.62))]"
           />
           <StorySceneReveal
             isActive={isRevealed}
@@ -1858,10 +1858,10 @@ function AboutObjectivesScene({
                 <StoryTextReveal label={tx("Every client starts with a different objective")} />
               </h2>
               <div className="story-objectives-text grid gap-4">
-                <p className="story-objectives-lead text-foreground/74">
+                <p className="story-objectives-lead text-foreground/90">
                   {tx("Some are looking to build long-term wealth through real estate ownership. Others want recurring income, international diversification, or simply a way to participate in a market they believe has strong future potential.")}
                 </p>
-                <p className="story-objectives-support text-foreground/66">
+                <p className="story-objectives-support text-foreground/82">
                   {tx("Rather than offering a one-size-fits-all solution, we begin by understanding what matters most to you.")}
                 </p>
               </div>

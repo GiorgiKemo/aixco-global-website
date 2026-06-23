@@ -49,7 +49,7 @@ export const legacyTimelineChapters: LegacyTimelineChapter[] = [
     stats: [
       { value: "€45K+", label: "Entry from" },
       { value: "60%", label: "Bank financing" },
-      { value: "10-12%", label: "Approx. net rental yields" },
+      { value: "12%", label: "Approx. net rental yields" },
     ],
     status: "current",
   },

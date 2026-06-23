@@ -47,6 +47,13 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     tr: "AIXCO ile gelisen pazar firsatlari",
     ar: "فرص الأسواق الناشئة مع AIXCO",
   },
+  "Swiss Real Estate Expertise and Knowledge Conquering Emerging Markets": {
+    de: "Schweizer Immobilienexpertise und Wissen erobern aufstrebende Maerkte",
+    ru: "Швейцарская экспертиза и знания в недвижимости осваивают развивающиеся рынки",
+    ka: "შვეიცარიული უძრავი ქონების ექსპერტიზა და ცოდნა განვითარებად ბაზრებს იპყრობს",
+    tr: "Isvicre gayrimenkul uzmanligi ve bilgisi gelisen pazarlari fethediyor",
+    ar: "خبرة ومعرفة سويسرية في العقارات تفتح الأسواق الناشئة",
+  },
   "Emerging Market Opportunities": {
     de: "Chancen in aufstrebenden Maerkten",
     ru: "Возможности на развивающихся рынках",
@@ -116,6 +123,13 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ka: "ტელეფონის ნომერი",
     tr: "Telefon numarasi",
     ar: "رقم الهاتف",
+  },
+  "Preferred Time for a Call": {
+    de: "Bevorzugte Uhrzeit fuer den Anruf",
+    ru: "Предпочтительное время для звонка",
+    ka: "სასურველი დრო ზარისთვის",
+    tr: "Arama icin tercih edilen saat",
+    ar: "الوقت المفضل للمكالمة",
   },
   "Email Address": {
     de: "E-Mail-Adresse",
@@ -521,6 +535,20 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ka: "Approx. 10-12% net rental yields",
     tr: "Approx. 10-12% net rental yields",
     ar: "Approx. 10-12% net rental yields",
+  },
+  "Secure your position from €5,000": {
+    de: "Sichern Sie Ihre Position ab 5.000 EUR",
+    ru: "Зафиксируйте позицию от 5 000 евро",
+    ka: "დაიკავეთ პოზიცია 5,000 ევროდან",
+    tr: "Pozisyonunuzu 5.000 EUR'dan guvenceye alin",
+    ar: "احجز موقعك ابتداء من 5,000 يورو",
+  },
+  "Approx. 12% net rental yields": {
+    de: "Ca. 12% Nettomietrendite",
+    ru: "Около 12% чистой арендной доходности",
+    ka: "დაახლოებით 12% წმინდა საიჯარო შემოსავალი",
+    tr: "Yaklasik %12 net kira getirisi",
+    ar: "حوالي 12% عائد إيجار صاف",
   },
   "Current project": {
     de: "Aktuelles Projekt",

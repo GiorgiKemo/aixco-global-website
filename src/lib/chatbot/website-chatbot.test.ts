@@ -24,7 +24,7 @@ describe("website chatbot", () => {
     expect(ownershipAnswer.answer).toContain("freely purchase and own real estate");
     expect(ownershipAnswer.answer).toContain("minimal restrictions");
     expect(benefitsAnswer.confidence).toBe("high");
-    expect(benefitsAnswer.answer).toContain("Approx. 10-12% net rental yields");
+    expect(benefitsAnswer.answer).toContain("Approx. 12% net rental yields");
     expect(benefitsAnswer.answer).toContain("Bank financing minimum 60%");
   });
 
