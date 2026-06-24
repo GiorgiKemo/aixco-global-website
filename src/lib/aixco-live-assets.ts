@@ -58,7 +58,7 @@ export const aixcoLiveImages = {
   batumiMosaicThumbBlueTower: `${liveImageBase}/batumi-mosaic-thumbs/batumi-blue-tower.webp`,
   batumiCurrentProject: `${optimizedImageBase}/current-project-reverance.webp`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
-  teamOwais: `${optimizedImageBase}/owais.webp`,
+  teamOwais: `${optimizedImageBase}/owais-20260624-crop.webp`,
   teamWalter: `${optimizedImageBase}/walter.webp`,
 } as const;
 
@@ -85,10 +85,10 @@ export const aixcoLiveVideoPreviews = {
 } as const;
 
 export const aixcoHeroBackgroundVideo = {
-  src: `${optimizedVideoBase}/batumi-hero-landscape-optimized.mp4`,
-  mobileSrc: `${optimizedVideoBase}/batumi-hero-landscape-mobile.mp4`,
-  poster: `${optimizedVideoBase}/batumi-hero-landscape-poster-upscaled.webp`,
-  title: "Batumi hero landscape",
+  src: `${optimizedVideoBase}/hero-02-desktop.mp4`,
+  mobileSrc: `${optimizedVideoBase}/hero-02-mobile.mp4`,
+  poster: `${optimizedVideoBase}/hero-02-poster.webp`,
+  title: "AIXCO hero background",
 } as const;
 
 export const aixcoDubaiHeroVideo = {

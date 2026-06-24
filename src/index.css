@@ -2800,7 +2800,8 @@
   .story-contact-card {
     display: grid;
     min-width: 0;
-    gap: 0.45rem;
+    align-content: center;
+    gap: clamp(0.55rem, 1svh, 0.75rem);
     border: 1px solid hsl(var(--foreground) / 0.1);
     border-radius: 1rem;
     background:
@@ -2811,10 +2812,19 @@
       0 18px 44px -32px hsl(220 28% 18% / 0.18);
     padding: clamp(0.85rem, 1.35svh, 1.05rem) clamp(0.95rem, 1.5vw, 1.15rem);
     color: hsl(var(--foreground));
+    min-height: clamp(7.2rem, 14svh, 8.4rem);
     transition:
       transform 260ms var(--ease-apple),
       border-color 260ms var(--ease-apple),
       box-shadow 260ms var(--ease-apple);
+  }
+
+  .story-contact-card--email {
+    grid-template-rows: auto auto;
+  }
+
+  .story-contact-card--email .story-card-title {
+    white-space: nowrap;
   }
 
   .story-contact-card:hover,
@@ -2829,15 +2839,16 @@
   .story-contact-card__row {
     display: flex;
     min-width: 0;
-    align-items: flex-start;
-    gap: 0.65rem;
+    align-items: center;
+    gap: clamp(0.72rem, 1vw, 0.95rem);
   }
 
   .story-contact-card__row > svg,
   .story-contact-card__svg-icon {
     box-sizing: border-box;
-    width: 3rem;
-    height: 3rem;
+    flex: 0 0 auto;
+    width: 2.75rem;
+    height: 2.75rem;
     padding: 0.3rem;
     border: 1px solid hsl(var(--primary) / 0.46);
     border-radius: 0.42rem;
@@ -2855,6 +2866,11 @@
   .social-link__icon {
     filter: saturate(1.25) contrast(1.28) brightness(0.9);
     image-rendering: auto;
+  }
+
+  [data-layout='story-contact-socials'].story-contact-card {
+    align-content: start;
+    min-height: auto;
   }
 
   .story-philosophy-stat {
@@ -3831,13 +3847,13 @@
     }
 
     html[lang='de'] [data-story-section='philosophy'] .story-philosophy-title {
-      max-width: min(100%, 15ch);
+      max-width: min(100%, 17ch);
     }
 
     html[lang='de'] [data-story-section='philosophy'] {
-      --story-h2-min: 2.9rem;
-      --story-h2-pref: 3.72vw;
-      --story-h2-max: 3.75rem;
+      --story-h2-min: 2.6rem;
+      --story-h2-pref: 3.2vw;
+      --story-h2-max: 3.25rem;
       --story-h2-lh: 0.98;
     }
 
@@ -4604,8 +4620,29 @@
     }
 
     .story-hero-statement__line {
-      font-size: clamp(4.25rem, min(7.35vw, 11.2svh), 7.9rem);
-      line-height: 0.91;
+      font-size: clamp(3rem, min(5.05vw, 8svh), 6.2rem);
+      line-height: 0.94;
+    }
+
+    html:not([lang='en']) .story-hero-statement__line {
+      max-width: min(100%, 18ch);
+      white-space: normal;
+      text-wrap: balance;
+    }
+
+    html[lang='de'] .story-hero-statement__line {
+      font-size: clamp(2.85rem, min(4.3vw, 7svh), 5rem);
+      max-width: min(100%, 19ch);
+    }
+
+    html[lang='ru'] .story-hero-statement__line {
+      font-size: clamp(2.75rem, min(4.1vw, 6.8svh), 4.85rem);
+      max-width: min(100%, 20ch);
+    }
+
+    html[lang='ka'] .story-hero-statement__line {
+      font-size: clamp(2.45rem, min(3.4vw, 6.2svh), 4.2rem);
+      max-width: min(100%, 22ch);
     }
   }
 
@@ -4969,6 +5006,17 @@
       max-width: 13.5ch;
     }
 
+    html[lang='de'] [data-story-section='philosophy'] .story-philosophy-title {
+      max-width: min(100%, 16ch);
+    }
+
+    html[lang='ka']
+      [data-story-section='philosophyPlatform']
+      .story-philosophy-platform-title {
+      font-size: clamp(1.85rem, 8.2vw, 2.35rem);
+      line-height: 1.15;
+    }
+
     .story-text-reveal {
       display: block;
       --story-char-step: 30ms;
@@ -5144,17 +5192,22 @@
     }
 
     [data-story-section='hero'] .story-hero-statement__line {
-      max-width: 10.25ch;
-      font-size: clamp(2.35rem, 12.4vw, 3.35rem);
-      line-height: 0.92;
-      letter-spacing: -0.04em;
+      max-width: min(100%, 21.5rem);
+      font-size: clamp(2.05rem, 10.5vw, 3.05rem);
+      line-height: 0.96;
+      letter-spacing: -0.035em;
+      text-wrap: balance;
     }
 
     [data-story-section='hero']
       .story-hero-statement__line
       + .story-hero-statement__line {
       margin-left: clamp(1rem, 10vw, 2.4rem);
-      max-width: 10.7ch;
+      max-width: min(100%, 21.5rem);
+    }
+
+    html[lang='ka'] [data-story-section='hero'] .story-hero-statement__line {
+      font-size: clamp(1.92rem, 9.6vw, 2.85rem);
     }
 
     [data-story-section='hero'] .story-hero-statement__note {

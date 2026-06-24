@@ -2581,7 +2581,7 @@ function ContactScene({
 
               <div data-layout="story-contact-panel" className="flex min-w-0 flex-col gap-3">
                 <div data-layout="story-contact-details" className="grid w-full gap-3 sm:grid-cols-2">
-                  <a href={`mailto:${company.email}`} className="story-contact-card group min-w-0">
+                  <a href={`mailto:${company.email}`} className="story-contact-card story-contact-card--email group min-w-0">
                     <span className="story-metric-label text-primary/75">{tx("Email")}</span>
                     <span className="story-contact-card__row">
                       <img src={aixcoLiveIcons.email} alt="" aria-hidden="true" className="story-contact-card__svg-icon" />
