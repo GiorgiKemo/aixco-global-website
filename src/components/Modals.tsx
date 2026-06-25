@@ -329,12 +329,12 @@ export function Modals() {
         role="dialog"
         aria-modal="true"
         aria-label={dialogLabel}
-        className="modal-panel relative max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-lg border border-border/70 bg-surface-elevated shadow-elegant [overflow-wrap:anywhere]"
+        className="modal-panel relative max-h-[calc(100svh-2rem)] w-full max-w-5xl overflow-y-auto rounded-lg border border-border/70 bg-surface-elevated shadow-elegant [overflow-wrap:anywhere] md:max-h-[88vh]"
       >
         <button aria-label={tx("Close")} onClick={close} className="icon-button-glass absolute right-3 top-3 z-10 h-10 w-10">
           <X className="h-4 w-4" />
         </button>
-        <div className="p-7 md:p-10">
+        <div className="p-5 sm:p-7 md:p-10">
           {modal === "login" && <AccessModal mode="login" tx={tx} />}
           {modal === "register" && <AccessModal mode="register" tx={tx} />}
           {modal === "contact" && <ContactRequestModal tx={tx} />}
@@ -351,11 +351,47 @@ export function Modals() {
 
 type ContactMode = "call" | "email";
 
+function toDateTimeLocalValue(date: Date) {
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
+  return localDate.toISOString().slice(0, 16);
+}
+
+function getMinimumCallTimeValue() {
+  const nextAvailable = new Date();
+  nextAvailable.setMinutes(nextAvailable.getMinutes() + 15, 0, 0);
+  const minutesPastStep = nextAvailable.getMinutes() % 15;
+
+  if (minutesPastStep) {
+    nextAvailable.setMinutes(nextAvailable.getMinutes() + (15 - minutesPastStep));
+  }
+
+  return toDateTimeLocalValue(nextAvailable);
+}
+
+function formatPreferredCallTime(value: string) {
+  if (!value) return "";
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value.replace("T", " ");
+
+  return new Intl.DateTimeFormat("en", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(parsed);
+}
+
 function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
   const [mode, setMode] = useState<ContactMode | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [minimumCallTime, setMinimumCallTime] = useState("");
+
+  useEffect(() => {
+    if (mode === "call") {
+      setMinimumCallTime(getMinimumCallTimeValue());
+    }
+  }, [mode]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -376,7 +412,7 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
             name,
             email,
             interest: "Schedule a Call",
-            message: `Schedule a call request. Phone number: ${phone}. Preferred time for a call: ${preferredTime}`,
+            message: `Schedule a call request. Phone number: ${phone}. Preferred time for a call: ${formatPreferredCallTime(preferredTime)}`,
           }
         : {
             name,
@@ -465,9 +501,10 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
                 <span className="story-metric-label text-foreground/60">{tx("Preferred Time for a Call")}</span>
                 <input
                   name="preferredTime"
+                  type="datetime-local"
                   required
-                  minLength={2}
-                  maxLength={120}
+                  min={minimumCallTime}
+                  step={900}
                   autoComplete="off"
                   className="contact-request-input"
                 />

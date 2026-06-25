@@ -211,9 +211,13 @@ describe("Modals", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /open contact/i }));
     fireEvent.click(screen.getByRole("button", { name: "Schedule a Call" }));
+    const preferredTimeField = screen.getByLabelText("Preferred Time for a Call");
+    expect(preferredTimeField).toHaveAttribute("type", "datetime-local");
+    expect(preferredTimeField).toHaveAttribute("step", "900");
+    expect(preferredTimeField.getAttribute("min")).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/);
     fireEvent.change(screen.getByLabelText("Name & Surname"), { target: { value: "Jane Client" } });
     fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "+995 555 010101" } });
-    fireEvent.change(screen.getByLabelText("Preferred Time for a Call"), { target: { value: "Tomorrow afternoon" } });
+    fireEvent.change(preferredTimeField, { target: { value: "2099-06-25T10:30" } });
     fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "jane@example.com" } });
     fireEvent.submit(screen.getByRole("button", { name: "Submit" }).closest("form") as HTMLFormElement);
 

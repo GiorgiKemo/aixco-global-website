@@ -1851,6 +1851,30 @@ function AboutObjectivesScene({
             />
             <div className="story-objectives-media__wash absolute inset-0" />
           </div>
+          <div aria-hidden className="story-objectives-access-preview absolute inset-x-0 bottom-0 overflow-hidden">
+            <Image
+              src={aixcoLiveImages.batumiSeafrontPoster}
+              alt=""
+              fill
+              loading="lazy"
+              decoding="async"
+              quality={90}
+              sizes="(max-width: 1279px) 140vw, 1px"
+              className="h-full w-full object-cover xl:hidden"
+              style={{ objectPosition: "center 56%" }}
+            />
+            <Image
+              src={aixcoLiveImages.batumiMosaicSunsetPanorama}
+              alt=""
+              fill
+              loading="lazy"
+              decoding="async"
+              quality={90}
+              sizes="(min-width: 1280px) 120vw, 1px"
+              className="hidden h-full w-full object-cover xl:block"
+              style={{ objectPosition: "center 58%" }}
+            />
+          </div>
           <StorySceneReveal isActive={isRevealed} className="story-objectives-copy relative z-10 w-full">
             <p className="eyebrow story-eyebrow text-primary/80">{tx("Client objectives")}</p>
             <div data-layout="story-about-objectives" className="story-objectives-grid mt-[clamp(1.4rem,3svh,2.4rem)] grid w-full gap-[clamp(1.4rem,4vw,4.5rem)]">
@@ -1889,7 +1913,7 @@ function AboutAccessScene({
       >
         <div aria-hidden className="hidden" />
         <div className="story-about-access-stage relative min-h-[100svh] overflow-hidden">
-          <StoryMediaReveal isActive={isRevealed} className="story-about-access-media absolute inset-0">
+          <StoryMediaReveal isActive className="story-about-access-media absolute inset-0">
             <div className="story-about-access-image relative h-full w-full">
               <Image
                 src={aixcoLiveImages.batumiSeafrontPoster}
@@ -1900,7 +1924,7 @@ function AboutAccessScene({
                 quality={95}
                 sizes="(max-width: 1279px) 140vw, 1px"
                 className="h-full w-full object-cover xl:hidden"
-                style={{ objectPosition: "center 45%" }}
+                style={{ objectPosition: "center 56%" }}
               />
               <Image
                 src={aixcoLiveImages.batumiMosaicSunsetPanorama}
@@ -1911,7 +1935,7 @@ function AboutAccessScene({
                 quality={95}
                 sizes="(min-width: 1280px) 120vw, 1px"
                 className="hidden h-full w-full object-cover xl:block"
-                style={{ objectPosition: "center 50%" }}
+                style={{ objectPosition: "center 58%" }}
               />
             </div>
           </StoryMediaReveal>
@@ -1919,6 +1943,19 @@ function AboutAccessScene({
             aria-hidden
             className="absolute inset-0 bg-[radial-gradient(circle_at_68%_36%,rgba(255,255,255,0.24),transparent_28%),linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.16)_48%,rgba(17,16,14,0.26)),linear-gradient(180deg,rgba(17,16,14,0.06),rgba(17,16,14,0.56))]"
           />
+          <div aria-hidden className="story-about-access-legacy-preview absolute inset-x-0 bottom-0 overflow-hidden">
+            <Image
+              src={aixcoLiveImages.dubaiEdenHouseRendering}
+              alt=""
+              fill
+              loading="lazy"
+              decoding="async"
+              quality={90}
+              sizes="100vw"
+              className="h-full w-full object-cover"
+              style={{ objectPosition: "58% 56%" }}
+            />
+          </div>
           <StorySceneReveal
             isActive={isRevealed}
             className="relative z-10 flex min-h-[100svh] flex-col justify-end px-[clamp(2rem,5.4vw,6rem)] pb-[clamp(3rem,7.2svh,5.5rem)] pt-[clamp(4rem,8svh,6rem)]"
@@ -1973,8 +2010,10 @@ function LegacyScene({
         kind: "image",
         src: aixcoLiveImages.dubaiEdenHouseRendering,
         alt: tx("Dubai waterfront residential real estate development"),
-        position: "center 56%",
+        position: "58% 56%",
+        sizes: "(min-width: 1280px) 58vw, 100vw",
       }}
+      mediaWeight="wide"
       reverse
     >
       <p className="eyebrow story-eyebrow">{tx("Our journey")}</p>
@@ -2762,7 +2801,6 @@ export function DesktopStoryHome() {
       const bottom = rect.bottom;
       const sectionHeight = Math.max(1, rect.height);
       const isAboutSection = storyChapters[index]?.key === "about";
-      const isAboutAccessSection = storyChapters[index]?.key === "aboutAccess";
       const exitRange = isAboutSection
         ? viewportHeight
         : sectionHeight > viewportHeight
@@ -2775,20 +2813,6 @@ export function DesktopStoryHome() {
         if (sectionProgressValuesRef.current[progressKey] !== nextExitProgress) {
           sectionProgressValuesRef.current[progressKey] = nextExitProgress;
           section.style.setProperty("--story-section-exit-progress", nextExitProgress);
-        }
-      }
-      if (isAboutAccessSection) {
-        const nextExitProgress = exitProgress.toFixed(3);
-        const nextZoomProgress = clamp(exitProgress, 0, 1).toFixed(3);
-        const exitProgressKey = `${index}:exit`;
-        const zoomProgressKey = `${index}:zoom`;
-        if (sectionProgressValuesRef.current[exitProgressKey] !== nextExitProgress) {
-          sectionProgressValuesRef.current[exitProgressKey] = nextExitProgress;
-          section.style.setProperty("--story-section-exit-progress", nextExitProgress);
-        }
-        if (sectionProgressValuesRef.current[zoomProgressKey] !== nextZoomProgress) {
-          sectionProgressValuesRef.current[zoomProgressKey] = nextZoomProgress;
-          section.style.setProperty("--story-about-access-zoom-progress", nextZoomProgress);
         }
       }
 
@@ -2970,6 +2994,9 @@ export function DesktopStoryHome() {
               )}
             >
               {scene}
+              {chapter.key !== "contact" ? (
+                <div aria-hidden="true" className="story-section-boundary" />
+              ) : null}
             </section>
           );
         })}
