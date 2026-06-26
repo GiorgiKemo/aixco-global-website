@@ -59,7 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link
           rel="preload"
           as="image"
-          href="/aixco-global-op2/images/AIXW.webp"
+          href="/aixco-global-op2/images/AIXW-transparent.webp"
           type="image/webp"
           fetchPriority="high"
         />

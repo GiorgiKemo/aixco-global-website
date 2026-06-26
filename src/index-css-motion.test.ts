@@ -84,7 +84,7 @@ describe("index.css motion rules", () => {
   it("keeps phone story sections compact enough for smooth reveal entry", () => {
     expect(css).toContain("[data-story-scene-copy] {\n      padding-top: clamp(4.85rem, 9svh, 5.55rem);");
     expect(css).toContain("font-size: clamp(2rem, 8.9vw, 2.48rem);");
-    expect(css).toContain("[data-story-section='philosophy'] .story-philosophy-title {\n      max-width: 13.5ch;");
+    expect(css).toContain("[data-story-section='philosophy'] .story-philosophy-title {\n      max-width: min(100%, 13ch);");
   });
 
   it("blocks scrolled content behind the fixed mobile story header", () => {
@@ -133,8 +133,8 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("function useHeroBackdropVideoSrc()");
     expect(desktopStoryHome).toContain("mediaQuery.matches ? aixcoHeroBackgroundVideo.mobileSrc : aixcoHeroBackgroundVideo.src");
     expect(desktopStoryHome).toContain("src={videoSrc}");
-    expect(liveAssets).toContain("batumi-hero-landscape-mobile.mp4");
-    expect(liveAssets).toContain("batumi-hero-landscape-poster-upscaled.webp");
+    expect(liveAssets).toContain("hero-02-mobile.mp4");
+    expect(liveAssets).toContain("hero-02-poster.webp");
     expect(liveAssets).toContain("aixco-group-dubai-hero-poster-ultra.webp");
   });
 
@@ -225,8 +225,8 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain(".story-hero-intro-loader");
     expect(css).not.toContain("story-hero-official-mark-in");
     expect(css).not.toContain("story-hero-wordmark-under-in");
-    expect(liveAssets).toContain("AIXW.webp");
-    expect(appLayout).toContain('href="/aixco-global-op2/images/AIXW.webp"');
+    expect(liveAssets).toContain("AIXW-transparent.webp");
+    expect(appLayout).toContain('href="/aixco-global-op2/images/AIXW-transparent.webp"');
     expect(appLayout).toContain('fetchPriority="high"');
     expect(appLayout).not.toContain("homeStoryBootScript");
     expect(desktopStoryHome).not.toContain("StoryHeroIntroLoader");
@@ -241,13 +241,13 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("heroBackdropVisible");
     expect(desktopStoryHome).not.toContain("<FixedHeroBackdrop visible={activeIndex === 0}");
     expect(css).toContain("[data-story-section='about']::before");
-    expect(heroAfter).toContain("height: clamp(7rem, 24svh, 18rem)");
-    expect(heroAfter).toContain("rgb(17 16 14 / 0.36) 56%");
-    expect(heroAfter).toContain("rgb(17 16 14) 100%");
+    expect(heroAfter).toContain("height: clamp(8rem, 20svh, 15rem)");
+    expect(heroAfter).toContain("rgb(17 16 14 / 0.38) 72%");
+    expect(heroAfter).toContain("rgb(17 16 14 / 0.16) 100%");
     expect(aboutBefore).toContain("z-index: 4");
-    expect(aboutBefore).toContain("height: clamp(6rem, 18svh, 13rem)");
-    expect(aboutBefore).toContain("rgb(17 16 14) 0%");
-    expect(aboutBefore).toContain("rgb(17 16 14 / 0.54) 42%");
+    expect(aboutBefore).toContain("height: clamp(7rem, 16svh, 12rem)");
+    expect(aboutBefore).toContain("rgb(17 16 14 / 0.58) 0%");
+    expect(aboutBefore).toContain("rgb(17 16 14 / 0.28) 42%");
   });
 
   it("keeps smooth transition blends below later story content", () => {
@@ -282,9 +282,10 @@ describe("index.css motion rules", () => {
     expect(css).toContain("color-mix(in oklab, var(--story-section-blend-to) 42%, var(--story-section-bg) 58%) calc(100% - var(--story-section-blend-soft))");
     expect(css).not.toContain("color-mix(in srgb, var(--story-section-bg) 82%, var(--story-section-blend-from) 18%) 2.5rem");
     expect(css).toContain("[data-story-section]:not([data-story-section='hero']):not([data-story-section='about']) [data-story-scene-media]");
-    expect(css).toContain("mask-image: linear-gradient(\n      180deg,\n      transparent 0%,\n      rgb(0 0 0 / 0.34) var(--story-section-blend-edge)");
-    expect(css).toContain("rgb(0 0 0 / 0.76) var(--story-section-blend-soft)");
-    expect(css).toContain("black var(--story-section-blend-entry)");
+    expect(css).toContain("-webkit-mask-image: none;");
+    expect(css).toContain("mask-image: none;");
+    expect(css).not.toContain("rgb(0 0 0 / 0.76) var(--story-section-blend-soft)");
+    expect(css).not.toContain("black var(--story-section-blend-entry)");
     expect(css).not.toContain("[data-story-section='batumi']::before");
     expect(css).not.toContain("[data-story-section='batumi']::after");
     expect(css).not.toContain("[data-story-section='dubai']::after");
@@ -297,19 +298,19 @@ describe("index.css motion rules", () => {
 
     expect(aboutExit).toContain("content: \"\"");
     expect(aboutExit).toContain("bottom: -1px");
-    expect(aboutExit).toContain("height: calc(clamp(10rem, 24svh, 18rem) + 2px)");
-    expect(aboutExit).toContain("hsl(var(--surface) / 0.16) 22%");
-    expect(aboutExit).toContain("hsl(var(--surface) / 0.56) 58%");
-    expect(aboutExit).toContain("hsl(var(--surface) / 0.86) 82%");
-    expect(aboutExit).toContain("hsl(var(--surface)) 100%");
+    expect(aboutExit).toContain("height: calc(clamp(1.75rem, 4svh, 3rem) + 2px)");
+    expect(aboutExit).toContain("hsl(var(--surface) / 0) 0%");
+    expect(aboutExit).toContain("hsl(var(--surface) / 0.34) 68%");
+    expect(aboutExit).toContain("hsl(var(--surface) / 0.82) 100%");
     expect(philosophyBlend).toContain("--story-section-blend-from: var(--story-tone-surface)");
     expect(philosophyBlend).toContain("--story-section-blend-to: var(--story-tone-surface)");
-    expect(philosophyBlend).toContain("--story-section-cover-overlap: clamp(9rem, 20svh, 15rem)");
+    expect(philosophyBlend).toContain("--story-section-cover-overlap: 0rem");
     expect(philosophyBlend).toContain("--story-section-blend-entry: clamp(2.5rem, 5.5svh, 4rem)");
+    expect(philosophyCover).toContain("display: none");
     expect(philosophyCover).toContain("top: calc((var(--story-section-cover-overlap) * -1) - 1px)");
     expect(philosophyCover).toContain("height: calc(var(--story-section-cover-overlap) + 2px)");
-    expect(philosophyCover).toContain("hsl(var(--surface) / 0.18) 20%");
-    expect(philosophyCover).toContain("hsl(var(--surface) / 0.64) 62%");
+    expect(philosophyCover).toContain("hsl(var(--surface) / 0.36) 46%");
+    expect(philosophyCover).toContain("hsl(var(--surface) / 0.78) 78%");
     expect(philosophyCover).toContain("pointer-events: none");
     expect(css).not.toContain("[data-story-section='philosophy']::before");
     expect(css).toContain("[data-story-section='philosophy'] [data-story-scene-column] {\n      padding-top: clamp(1.5rem, 3.5svh, 2.6rem);");
@@ -318,7 +319,7 @@ describe("index.css motion rules", () => {
   it("keeps phone hero and about sections compact enough for a demo viewport", () => {
     expect(css).toContain("@media (max-width: 559px)");
     expect(css).toContain("font-size: clamp(2.18rem, 11.2vw, 2.95rem) !important");
-    expect(css).toContain("font-size: clamp(2.35rem, 12.4vw, 3.35rem)");
+    expect(css).toContain("font-size: clamp(2.05rem, 10.5vw, 3.05rem)");
     expect(css).toContain("grid-template-columns: repeat(2, minmax(0, 1fr));");
     expect(css).toContain("width: min(100%, 21.5rem)");
     expect(css).toContain("font-size: clamp(0.72rem, 2.9vw, 0.86rem)");

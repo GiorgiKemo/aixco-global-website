@@ -12,7 +12,7 @@ export const philosophyStats = [
   },
   {
     value: "$400M+",
-    label: "Gross development value",
+    label: "Current gross development value",
   },
   {
     value: "2,000+",
@@ -27,10 +27,10 @@ export const philosophyStats = [
 export const philosophySections = [
   {
     eyebrow: "Origins",
-    title: "A real estate foundation built through ownership",
+    title: "A real estate foundation built on wise selection",
     paragraphs: [
-      "Since its first acquisition in 2009, the company has steadily expanded within the Swiss residential real estate market, developing a portfolio defined by resilience, stability, and recurring income generation.",
-      "Over the decades, AIXCO has evolved into a diversified international group combining Swiss real estate heritage with modern asset-backed acquisitions.",
+      "Since its first acquisition in 2009, the company has grown through carefully selected real estate decisions, building a portfolio defined by resilience, stability, and recurring income generation.",
+      "Over the decades, AIXCO has evolved into a diversified international group combining Swiss real estate heritage with disciplined asset selection in emerging markets.",
     ],
   },
   {

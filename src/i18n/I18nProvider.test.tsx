@@ -25,7 +25,7 @@ const visibleStoryProbeTexts = [
   "CONTACT ME",
   "Every client starts with a different objective",
   "Rather than offering a one-size-fits-all solution, we begin by understanding what matters most to you.",
-  "A real estate foundation built through ownership",
+  "A real estate foundation built on wise selection",
   "Swiss Real Estate Expertise and Knowledge Conquering Emerging Markets",
   "Expanding through carefully selected opportunities",
   "Selected projects and apartments available exclusively through AIXCO",

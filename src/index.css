@@ -1678,12 +1678,12 @@
 
   .story-hero-wordmark__mark,
   [data-story-hero-title-mark='true'] {
-    height: 0.79em !important;
-    width: 0.79em !important;
+    height: 0.76em !important;
+    width: 0.76em !important;
     flex-shrink: 0;
     object-fit: contain;
     filter: drop-shadow(0 12px 24px rgb(0 0 0 / 0.24));
-    transform: translateY(0.065em);
+    transform: translateY(0.005em);
   }
 
   .story-hero-wordmark__text {
@@ -5514,9 +5514,9 @@
 
     [data-story-section='hero'] [data-story-hero-title-mark='true'],
     [data-story-section='hero'] .story-hero-wordmark__mark {
-      height: 0.78em !important;
-      width: 0.78em !important;
-      transform: translateY(0.06em);
+      height: 0.76em !important;
+      width: 0.76em !important;
+      transform: translateY(0.005em);
     }
 
     [data-story-section='hero'] .story-hero-intro {
@@ -6047,6 +6047,218 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: clamp(1.35rem, 3vw, 2.2rem);
     }
+  }
+}
+
+/* Responsive QA hardening for sticky navigation, floating chat, and long translations. */
+html[data-home-experience='story'] {
+  scroll-padding-top: calc(4.85rem + env(safe-area-inset-top, 0px));
+}
+
+[data-story-section] {
+  scroll-margin-top: calc(4.85rem + env(safe-area-inset-top, 0px));
+}
+
+[data-story-section='hero'] {
+  scroll-margin-top: 0;
+}
+
+@media (max-width: 1279px) {
+  html[data-home-experience='story'] {
+    scroll-padding-top: calc(5.35rem + env(safe-area-inset-top, 0px));
+  }
+
+  [data-story-section] {
+    scroll-margin-top: calc(5.35rem + env(safe-area-inset-top, 0px));
+  }
+
+  [data-chat-floating-container='true'] {
+    bottom: max(0.72rem, env(safe-area-inset-bottom, 0px)) !important;
+    right: max(0.72rem, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  [data-story-section]:not([data-story-section='hero']) [data-story-scene-column],
+  [data-story-section='aboutObjectives'] .story-objectives-stage {
+    padding-bottom: max(5.85rem, calc(4.75rem + env(safe-area-inset-bottom, 0px))) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-chat-floating-container='true'] > button {
+    width: 2.55rem !important;
+    height: 2.55rem !important;
+    border-radius: 0.55rem !important;
+  }
+
+  [data-chat-floating-container='true'] [data-chat-launcher-icon='message-circle-more'] {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+
+  [data-chat-floating-container='true'] [data-chat-online-indicator='true'] {
+    width: 0.62rem !important;
+    height: 0.62rem !important;
+    border-width: 1.5px !important;
+  }
+
+  [data-story-section='philosophy'] [data-layout='story-philosophy-principles'] > * {
+    min-width: 0;
+    align-items: flex-start;
+    line-height: 1.24;
+  }
+
+  [data-story-section='philosophy'] [data-layout='story-philosophy-principles'] > * > span {
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+}
+
+@media (min-width: 1280px) {
+  [data-story-section='faqs'] [data-layout='story-faq-list'],
+  [data-story-section='contact'] [data-layout='story-contact-layout'] {
+    padding-right: clamp(5.5rem, 7vw, 7rem);
+  }
+
+  [data-story-section='participate'] [data-layout='story-participation-routes'] button {
+    padding-right: clamp(6.5rem, 7vw, 8rem);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  [data-story-section='philosophyPlatform'] [data-story-scene-column],
+  [data-story-section='aboutAccess'] [data-story-scene-column],
+  [data-story-section='participate'] [data-story-scene-column],
+  [data-story-section='faqs'] [data-story-scene-column],
+  [data-story-section='contact'] [data-story-scene-column] {
+    padding-right: max(6rem, calc(4.75rem + env(safe-area-inset-right, 0px))) !important;
+  }
+
+  [data-story-section='aboutAccess'] [data-layout='story-about-access'] > div:last-child {
+    padding-right: max(2.75rem, calc(2.25rem + env(safe-area-inset-right, 0px)));
+  }
+
+  [data-story-section='participate'] [data-layout='story-participation-routes'] button {
+    padding-right: max(7.5rem, calc(6rem + env(safe-area-inset-right, 0px))) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-story-section='aboutObjectives'] .story-objectives-stage,
+  [data-story-section='aboutAccess'] [data-story-scene-column],
+  [data-story-section='dubai'] [data-story-scene-column],
+  [data-story-section='batumi'] [data-story-scene-column],
+  [data-story-section='participate'] [data-story-scene-column],
+  [data-story-section='how'] [data-story-scene-column],
+  [data-story-section='team'] [data-story-scene-column],
+  [data-story-section='faqs'] [data-story-scene-column] {
+    padding-right: max(3.95rem, calc(3.35rem + env(safe-area-inset-right, 0px))) !important;
+  }
+
+  [data-story-section='aboutAccess'] [data-layout='story-about-access'] > div:last-child > p {
+    max-width: calc(100% - max(3.9rem, env(safe-area-inset-right, 0px)));
+  }
+}
+
+@media (max-width: 479px) {
+  [data-story-section='philosophyOrigins'],
+  [data-story-section='philosophyOrigins'] > div:not(.story-section-boundary),
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-stage,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-copy,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-intro,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-grid,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-column {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  [data-story-section='philosophyOrigins'] {
+    overflow-x: clip;
+  }
+
+  [data-story-section='philosophyOrigins'] [data-story-scene-column] {
+    width: 100%;
+    max-width: 100vw;
+    padding-inline: clamp(1rem, 4.6vw, 1.35rem) !important;
+  }
+
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-stage {
+    width: 100%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-copy {
+    width: 100%;
+    margin-inline: 0;
+    gap: clamp(0.9rem, 2.2svh, 1.3rem);
+  }
+
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-copy > *,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-intro > *,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-title,
+  [data-story-section='philosophyOrigins'] .story-letter-reveal,
+  [data-story-section='philosophyOrigins'] .story-letter-reveal__text {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: clamp(0.9rem, 2.3svh, 1.35rem);
+  }
+
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-column {
+    padding-left: clamp(0.75rem, 3vw, 1rem);
+  }
+
+  [data-story-section='philosophyOrigins'] .story-eyebrow {
+    max-width: 100%;
+    font-size: clamp(0.58rem, 2.7vw, 0.66rem) !important;
+    letter-spacing: 0.11em;
+    line-height: 1.25;
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  html[lang='de'] [data-story-section='philosophyOrigins'] .story-eyebrow,
+  html[lang='ru'] [data-story-section='philosophyOrigins'] .story-eyebrow,
+  html[lang='ka'] [data-story-section='philosophyOrigins'] .story-eyebrow,
+  html[lang='tr'] [data-story-section='philosophyOrigins'] .story-eyebrow,
+  html[lang='ar'] [data-story-section='philosophyOrigins'] .story-eyebrow {
+    font-size: clamp(0.54rem, 2.45vw, 0.62rem) !important;
+    letter-spacing: 0.075em;
+  }
+
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-summary,
+  [data-story-section='philosophyOrigins'] .story-body,
+  [data-story-section='philosophyOrigins'] .story-card-title,
+  [data-story-section='philosophyOrigins'] .story-metric-label {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+  }
+
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-summary {
+    font-size: clamp(0.92rem, 4vw, 1.02rem);
+    line-height: 1.48;
+  }
+
+  [data-story-section='philosophyPlatform'],
+  [data-story-section='philosophyPlatform'] > div:not(.story-section-boundary),
+  [data-story-section='philosophyPlatform'] [data-story-scene-column] {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+    box-sizing: border-box;
+  }
+
+  [data-story-section='philosophyPlatform'] [data-story-scene-column] > *,
+  [data-story-section='philosophyPlatform'] .story-body {
+    max-width: 100%;
+    min-width: 0;
   }
 }
 

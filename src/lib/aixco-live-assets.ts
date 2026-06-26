@@ -15,7 +15,7 @@ const iconBase = aixcoLivePath("icons");
 const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
 const batumiGalleryPreviewBase = `${batumiGalleryBase}/previews`;
 const healthcareGalleryVersion = "healthcare-gallery-20260506";
-const heroVideoVersion = "hero-02-trimmed-20260624";
+const heroVideoVersion = "hero-batumi-web-20260625";
 
 const versionHealthcareImage = (src: string) => `${src}?v=${healthcareGalleryVersion}`;
 
@@ -156,7 +156,7 @@ export const aixcoDubaiHealthcareGallery = [
 
 export const aixcoLiveLogos = {
   aixcoGlobal: `${liveImageBase}/AIXCOGlobalWlong.png`,
-  aixcoMark: `${liveImageBase}/AIXW.webp`,
+  aixcoMark: `${liveImageBase}/AIXW-transparent.webp`,
   globalPartners: `${liveImageBase}/Globalpartners.png`,
   globalPartnersMarquee: `${liveImageBase}/Globalpartners-marquee.png`,
   isp: `${liveImageBase}/isp.svg`,

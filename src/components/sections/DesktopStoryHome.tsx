@@ -220,7 +220,7 @@ const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
 const philosophyPlatformStats = [
   { ...philosophyStats[0], shortLabel: "First acquisition" },
-  { ...philosophyStats[1], shortLabel: "GDV" },
+  { ...philosophyStats[1], shortLabel: "Current GDV" },
   { value: "90+", label: "Professional and highly skilled employees", shortLabel: "Skilled employees" },
   { ...philosophyStats[2], shortLabel: "Transactions" },
   { ...philosophyStats[3], shortLabel: "Value transacted" },
@@ -1683,7 +1683,7 @@ function PhilosophyScene({
         {philosophyPrinciples.map((principle) => (
           <div key={principle} className="flex min-h-12 items-center gap-3 border border-foreground/10 bg-white px-4 py-3 text-sm font-semibold text-foreground/84">
             <ShieldCheck className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-            {tx(principle)}
+            <span className="min-w-0 break-words">{tx(principle)}</span>
           </div>
         ))}
       </div>
@@ -2928,8 +2928,8 @@ export function DesktopStoryHome() {
         isRevealed={isRevealed(3)}
         tx={tx}
         eyebrow="Swiss discipline in practice"
-        title="A real estate foundation built through ownership"
-        summary="AIXCO's philosophy starts with ownership: durable assets, conservative risk assessment, and recurring income generation."
+        title="A real estate foundation built on wise selection"
+        summary="AIXCO's philosophy starts with wise selection: durable assets, disciplined risk assessment, and recurring income generation."
         sections={philosophyOwnershipSections}
         media={{
           kind: "image",
