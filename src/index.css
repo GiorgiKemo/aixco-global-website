@@ -868,6 +868,62 @@
     );
   }
 
+  @media (min-width: 1280px) {
+    [data-story-section='legacy'] > div:not(.story-section-boundary) {
+      background: hsl(var(--surface));
+    }
+
+    [data-story-section='legacy'] [data-story-scene-media] {
+      overflow: hidden;
+      background: hsl(var(--surface));
+    }
+
+    [data-story-section='legacy'] [data-story-scene-media] .story-media-panel__stage {
+      -webkit-mask-image: linear-gradient(
+        90deg,
+        #000 0%,
+        #000 52%,
+        rgb(0 0 0 / 0.82) 64%,
+        rgb(0 0 0 / 0.42) 78%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        90deg,
+        #000 0%,
+        #000 52%,
+        rgb(0 0 0 / 0.82) 64%,
+        rgb(0 0 0 / 0.42) 78%,
+        transparent 100%
+      );
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    [data-story-section='legacy'] [data-story-scene-media]::after {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-end: -1px;
+      z-index: 6;
+      width: clamp(18rem, 26vw, 28rem);
+      pointer-events: none;
+      background: linear-gradient(
+        90deg,
+        hsl(var(--surface) / 0) 0%,
+        hsl(var(--surface) / 0.28) 24%,
+        hsl(var(--surface) / 0.66) 54%,
+        hsl(var(--surface) / 0.94) 80%,
+        hsl(var(--surface)) 100%
+      );
+    }
+
+    [data-story-section='legacy'] [data-story-scene-column] {
+      position: relative;
+      z-index: 2;
+      background: hsl(var(--surface));
+    }
+  }
+
   [data-story-section='dubai'] {
     --story-section-blend-from: var(--story-tone-surface);
     --story-section-blend-to: var(--story-tone-surface);
@@ -3750,9 +3806,8 @@
     }
 
     [data-story-section='dubai'] {
-      --story-dubai-section-height: clamp(68rem, 152svh, 78rem);
-      height: var(--story-dubai-section-height) !important;
-      min-height: var(--story-dubai-section-height) !important;
+      min-height: 100svh;
+      height: auto !important;
       max-height: none;
       overflow-x: clip;
       overflow-y: visible;
@@ -3760,12 +3815,8 @@
 
     [data-story-section='dubai'] > div,
     [data-story-section='dubai'] [data-story-scene-column],
-    [data-story-section='dubai'] [data-story-scene-media],
-    [data-story-section='dubai'] [data-story-scene-copy],
-    [data-story-section='dubai'] [data-story-scene-copy] > * {
-      height: 100%;
+    [data-story-section='dubai'] [data-story-scene-media] {
       min-height: 100svh;
-      overflow: visible;
     }
 
     [data-story-section='contact'] .story-footer {
@@ -4077,9 +4128,131 @@
       padding-bottom: clamp(14rem, 24svh, 18rem);
     }
 
-    @media (max-width: 639px) {
+    @media (min-width: 1280px) {
       [data-story-section='dubai'] {
-        --story-dubai-section-height: clamp(84rem, 182svh, 96rem);
+        height: 100svh !important;
+        min-height: 100svh !important;
+        max-height: 100svh;
+        overflow: hidden;
+        --story-h2-min: 3.2rem;
+        --story-h2-pref: 4.45vw;
+        --story-h2-max: 5rem;
+        --story-body-min: 0.95rem;
+        --story-body-pref: 1vw;
+        --story-body-max: 1.08rem;
+        --story-card-title-min: 1.08rem;
+        --story-card-title-pref: 1.25vw;
+        --story-card-title-max: 1.32rem;
+        --story-metric-min: 1.2rem;
+        --story-metric-pref: 1.65vw;
+        --story-metric-max: 1.65rem;
+        --story-copy-gap: clamp(0.48rem, 1svh, 0.72rem);
+        --story-section-gap: clamp(0.52rem, 1.05svh, 0.78rem);
+        --story-grid-row-gap: clamp(0.52rem, 1svh, 0.78rem);
+        --story-item-gap: clamp(0.44rem, 0.85svh, 0.62rem);
+        --story-metric-gap: clamp(0.35rem, 0.72svh, 0.52rem);
+        --story-col-py: clamp(0.72rem, 1.65svh, 1.08rem);
+      }
+
+      [data-story-section='dubai'] > div,
+      [data-story-section='dubai'] > div > div,
+      [data-story-section='dubai'] [data-story-scene-column],
+      [data-story-section='dubai'] [data-story-scene-media] {
+        height: 100%;
+        min-height: 0;
+        max-height: 100%;
+        overflow: hidden;
+      }
+
+      [data-story-section='dubai'] [data-story-scene-copy],
+      [data-story-section='dubai'] [data-story-scene-copy] > * {
+        height: auto;
+        min-height: 0;
+        max-height: none;
+        overflow: visible;
+      }
+
+      [data-story-section='dubai']
+        [data-story-scene-copy]
+        [data-layout='story-dubai-funds']
+        .story-fund-row {
+        padding-block: clamp(0.42rem, 0.82svh, 0.62rem) !important;
+      }
+
+      [data-story-section='dubai']
+        [data-story-scene-copy]
+        [data-layout='story-dubai-marquee'] {
+        gap: clamp(0.44rem, 0.82svh, 0.62rem);
+        margin-top: clamp(0.46rem, 0.86svh, 0.64rem);
+      }
+
+      [data-story-section='dubai']
+        [data-story-scene-copy]
+        [data-layout='story-dubai-marquee']
+        .story-dubai-gallery-title {
+        margin-bottom: clamp(0.24rem, 0.45svh, 0.34rem);
+        font-size: clamp(0.9rem, 1.2vw, 1.06rem);
+      }
+
+      [data-story-section='dubai']
+        [data-story-scene-copy]
+        [data-layout='story-dubai-marquee']
+        .dubai-gallery-tile {
+        flex-basis: clamp(12rem, 22vw, 18rem);
+        height: clamp(5.2rem, 10.2svh, 6.9rem);
+      }
+    }
+
+    @media (min-width: 1280px) and (max-height: 700px) {
+      [data-story-section='dubai'] {
+        --story-h2-min: 2.8rem;
+        --story-h2-pref: 3.8vw;
+        --story-h2-max: 3.85rem;
+        --story-body-min: 0.86rem;
+        --story-body-pref: 0.9vw;
+        --story-body-max: 0.96rem;
+        --story-card-title-min: 0.96rem;
+        --story-card-title-pref: 1.05vw;
+        --story-card-title-max: 1.12rem;
+        --story-metric-min: 1.05rem;
+        --story-metric-pref: 1.35vw;
+        --story-metric-max: 1.35rem;
+        --story-copy-gap: clamp(0.34rem, 0.72svh, 0.5rem);
+        --story-section-gap: clamp(0.36rem, 0.72svh, 0.54rem);
+        --story-grid-row-gap: clamp(0.36rem, 0.7svh, 0.52rem);
+        --story-item-gap: clamp(0.28rem, 0.58svh, 0.42rem);
+        --story-metric-gap: clamp(0.24rem, 0.5svh, 0.36rem);
+        --story-col-py: clamp(0.52rem, 1.15svh, 0.75rem);
+      }
+
+      [data-story-section='dubai']
+        [data-story-scene-copy]
+        [data-layout='story-dubai-funds']
+        .story-fund-row {
+        padding-block: clamp(0.28rem, 0.58svh, 0.4rem) !important;
+      }
+
+      [data-story-section='dubai']
+        [data-story-scene-copy]
+        [data-layout='story-dubai-marquee'] {
+        gap: clamp(0.28rem, 0.58svh, 0.42rem);
+        margin-top: clamp(0.3rem, 0.6svh, 0.44rem);
+      }
+
+      [data-story-section='dubai']
+        [data-story-scene-copy]
+        [data-layout='story-dubai-marquee']
+        .story-dubai-gallery-title {
+        margin-bottom: clamp(0.16rem, 0.32svh, 0.24rem);
+        font-size: clamp(0.78rem, 0.95vw, 0.9rem);
+      }
+
+      [data-story-section='dubai']
+        [data-story-scene-copy]
+        [data-layout='story-dubai-marquee']
+        .dubai-gallery-tile {
+        flex-basis: clamp(10rem, 18vw, 14rem);
+        height: clamp(3.6rem, 8.8svh, 4.75rem);
       }
     }
 
@@ -5004,6 +5177,30 @@
       height: auto;
       min-height: 100svh;
       max-height: none;
+    }
+
+    [data-story-section='dubai'] {
+      container-type: inline-size;
+      height: auto !important;
+      min-height: 100svh;
+      max-height: none;
+      overflow: visible;
+    }
+
+    [data-story-section='dubai'] > div:not(.story-section-boundary),
+    [data-story-section='dubai'] > div:not(.story-section-boundary) > div,
+    [data-story-section='dubai'] [data-story-scene-column],
+    [data-story-section='dubai'] [data-story-scene-copy],
+    [data-story-section='dubai'] [data-story-scene-copy] > * {
+      height: auto;
+      min-height: 0;
+      max-height: none;
+      overflow: visible;
+    }
+
+    [data-story-section='dubai'] [data-story-scene-column] {
+      padding-top: clamp(6.25rem, 13svh, 7.5rem);
+      padding-bottom: clamp(3rem, 7svh, 4.25rem);
     }
 
     [data-story-section='philosophyOrigins'] {

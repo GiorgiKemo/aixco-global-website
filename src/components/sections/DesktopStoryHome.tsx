@@ -1601,13 +1601,14 @@ function AboutScene({
               >
                 <span className="flex min-w-0 items-center gap-[clamp(0.9rem,1.6vw,1.35rem)]">
                   <Image
-                    src={aixcoLiveLogos.aixcoMark}
+                    src={aixcoLiveLogos.aixcoMarkPng}
                     alt=""
                     aria-hidden="true"
                     width={783}
                     height={705}
+                    unoptimized
                     sizes="(min-width: 1280px) 10vw, 28vw"
-                    className="story-about-brand-mark h-[clamp(4.4rem,8vw,8.8rem)] w-[clamp(4.4rem,8vw,8.8rem)] shrink-0 object-contain [filter:brightness(0)_invert(1)]"
+                    className="story-about-brand-mark h-[clamp(4.4rem,8vw,8.8rem)] w-[clamp(4.4rem,8vw,8.8rem)] shrink-0 object-contain"
                   />
                   <span className="text-[clamp(2.3rem,5.2vw,5.85rem)] uppercase tracking-[-0.04em]">
                     <StoryTextReveal label="AIXCO.GLOBAL" />
@@ -2010,7 +2011,7 @@ function LegacyScene({
         kind: "image",
         src: aixcoLiveImages.dubaiEdenHouseRendering,
         alt: tx("Dubai waterfront residential real estate development"),
-        position: "58% 56%",
+        position: "54% 56%",
         sizes: "(min-width: 1280px) 58vw, 100vw",
       }}
       mediaWeight="wide"

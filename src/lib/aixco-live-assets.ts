@@ -157,6 +157,7 @@ export const aixcoDubaiHealthcareGallery = [
 export const aixcoLiveLogos = {
   aixcoGlobal: `${liveImageBase}/AIXCOGlobalWlong.png`,
   aixcoMark: `${liveImageBase}/AIXW-transparent.webp`,
+  aixcoMarkPng: `${liveImageBase}/AIXW.png`,
   globalPartners: `${liveImageBase}/Globalpartners.png`,
   globalPartnersMarquee: `${liveImageBase}/Globalpartners-marquee.png`,
   isp: `${liveImageBase}/isp.svg`,
