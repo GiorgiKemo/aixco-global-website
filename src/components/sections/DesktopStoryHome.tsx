@@ -1607,7 +1607,7 @@ function AboutScene({
                     width={783}
                     height={705}
                     sizes="(min-width: 1280px) 10vw, 28vw"
-                    className="h-[clamp(4.4rem,8vw,8.8rem)] w-[clamp(4.4rem,8vw,8.8rem)] shrink-0 object-contain [filter:brightness(0)_invert(1)]"
+                    className="story-about-brand-mark h-[clamp(4.4rem,8vw,8.8rem)] w-[clamp(4.4rem,8vw,8.8rem)] shrink-0 object-contain [filter:brightness(0)_invert(1)]"
                   />
                   <span className="text-[clamp(2.3rem,5.2vw,5.85rem)] uppercase tracking-[-0.04em]">
                     <StoryTextReveal label="AIXCO.GLOBAL" />

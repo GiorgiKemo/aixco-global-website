@@ -5025,9 +5025,13 @@
       max-width: min(100%, 38rem);
     }
 
-    [data-story-section='about'] [data-brand-lockup='story-about'] {
-      max-width: 100%;
-    }
+  [data-story-section='about'] [data-brand-lockup='story-about'] {
+    max-width: 100%;
+  }
+
+  [data-story-section='about'] .story-about-brand-mark {
+    opacity: 0.64;
+  }
 
     [data-story-section='about'] [data-brand-lockup='story-about'] > span {
       gap: clamp(0.45rem, 2.4vw, 0.8rem);
@@ -5036,6 +5040,10 @@
     [data-story-section='about'] [data-brand-lockup='story-about'] img {
       width: clamp(3rem, 16vw, 4.25rem) !important;
       height: clamp(3rem, 16vw, 4.25rem) !important;
+    }
+
+    [data-story-section='about'] .story-about-brand-mark {
+      opacity: 0.56;
     }
 
     [data-story-section='about'] [data-brand-lockup='story-about'] span span {
