@@ -132,6 +132,8 @@
   }
 
   html {
+    max-width: 100%;
+    overflow-x: hidden;
     scroll-behavior: smooth;
     scroll-padding-top: 5.5rem;
   }
@@ -142,12 +144,21 @@
 
   body {
     @apply bg-background text-foreground antialiased;
+    max-width: 100%;
+    overflow-x: hidden;
     font-family:
       -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
       system-ui, sans-serif;
     font-feature-settings: 'kern';
     font-size: 16.5px;
     line-height: 1.6;
+  }
+
+  @supports (overflow: clip) {
+    html,
+    body {
+      overflow-x: clip;
+    }
   }
 
   h1,
@@ -808,15 +819,16 @@
     --story-section-blend-to: var(--story-tone-surface);
     --story-section-blend-entry: clamp(2.5rem, 5.5svh, 4rem);
     --story-section-blend-exit: clamp(3rem, 6svh, 4.5rem);
-    --story-boundary-height: clamp(7rem, 13svh, 9.75rem);
-    --story-boundary-overlap: clamp(3.5rem, 6.5svh, 4.75rem);
-    --story-boundary-blur: 0;
+    --story-boundary-height: clamp(8.25rem, 15svh, 11.5rem);
+    --story-boundary-overlap: clamp(4.8rem, 8.2svh, 6.4rem);
+    --story-boundary-blur: 8px;
     --story-boundary-gradient: linear-gradient(
       180deg,
       rgb(17 16 14 / 0) 0%,
-      rgb(17 16 14 / 0.28) 26%,
-      rgb(123 106 82 / 0.22) 54%,
-      hsl(var(--surface) / 0.62) 82%,
+      rgb(17 16 14 / 0.18) 18%,
+      rgb(17 16 14 / 0.42) 44%,
+      rgb(74 62 48 / 0.28) 70%,
+      rgb(74 62 48 / 0.08) 88%,
       hsl(var(--surface) / 0) 100%
     );
   }
@@ -841,13 +853,14 @@
     }
 
     [data-story-section='aboutAccess'] {
-      --story-boundary-height: clamp(5.25rem, 11svh, 7rem);
-      --story-boundary-overlap: clamp(2.6rem, 5.5svh, 3.5rem);
+      --story-boundary-height: clamp(6.2rem, 12svh, 7.8rem);
+      --story-boundary-overlap: clamp(3.1rem, 6.2svh, 4.15rem);
       --story-boundary-gradient: linear-gradient(
         180deg,
         rgb(17 16 14 / 0) 0%,
-        rgb(17 16 14 / 0.28) 30%,
-        hsl(var(--surface) / 0.58) 78%,
+        rgb(17 16 14 / 0.18) 24%,
+        rgb(17 16 14 / 0.42) 62%,
+        rgb(17 16 14 / 0.08) 86%,
         hsl(var(--surface) / 0) 100%
       );
     }
@@ -1032,6 +1045,21 @@
     [data-story-scene-media] {
     -webkit-mask-image: none;
     mask-image: none;
+  }
+
+  @media (min-width: 1280px) {
+    [data-story-section='legacy']:not([data-story-section='hero']):not(
+        [data-story-section='about']
+      )
+      > div:not(.story-section-boundary) {
+      background: linear-gradient(
+        180deg,
+        rgb(17 16 14) 0%,
+        rgb(50 44 38) clamp(1.45rem, 3.1svh, 2.15rem),
+        hsl(var(--surface)) clamp(5.1rem, 9.4svh, 6.6rem),
+        hsl(var(--surface)) 100%
+      );
+    }
   }
 
   html[dir='rtl'] [data-story-scene-copy],
@@ -1956,6 +1984,25 @@
     z-index: 1;
   }
 
+  [data-story-section='aboutAccess']::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: clamp(-5.25rem, -8.4svh, -3.65rem);
+    z-index: 8;
+    height: clamp(10.5rem, 18svh, 13rem);
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgb(17 16 14 / 0) 0%,
+      rgb(17 16 14 / 0.22) 20%,
+      rgb(17 16 14 / 0.98) 44%,
+      rgb(17 16 14 / 0.96) 66%,
+      rgb(17 16 14 / 0.42) 84%,
+      rgb(17 16 14 / 0) 100%
+    );
+  }
+
   [data-story-section='aboutAccess'] > div:not(.story-section-boundary) {
     -webkit-mask-image: linear-gradient(
       180deg,
@@ -2130,18 +2177,45 @@
     );
   }
 
+  [data-story-section='aboutAccess'] .story-about-access-stage {
+    overflow: visible;
+  }
+
+  [data-story-section='aboutAccess'] .story-about-access-media,
+  [data-story-section='aboutAccess'] .story-about-access-image {
+    overflow: hidden;
+  }
+
   .story-about-access-stage::after {
     content: "";
     position: absolute;
     inset-inline: 0;
-    bottom: -1px;
+    bottom: clamp(-2.75rem, -5svh, -1.75rem);
     z-index: 5;
-    height: clamp(1rem, 2.4svh, 1.75rem);
+    height: clamp(7.5rem, 13svh, 9.5rem);
     pointer-events: none;
     background: linear-gradient(
       180deg,
       hsl(var(--surface) / 0) 0%,
-      hsl(var(--surface) / 0.22) 100%
+      rgb(17 16 14 / 0.2) 32%,
+      rgb(17 16 14 / 0.62) 62%,
+      rgb(17 16 14 / 0.04) 100%
+    );
+  }
+
+  [data-story-section='legacy'] > div:not(.story-section-boundary)::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    z-index: 24;
+    height: clamp(2.75rem, 6svh, 4.5rem);
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgb(17 16 14 / 0.82) 0%,
+      rgb(17 16 14 / 0.42) 42%,
+      rgb(17 16 14 / 0) 100%
     );
   }
 
@@ -2175,7 +2249,7 @@
       180deg,
       rgb(17 16 14 / 0.72) 0%,
       rgb(17 16 14 / 0.32) 46%,
-      hsl(var(--surface) / 0.48) 100%
+      rgb(17 16 14 / 0.28) 100%
     );
   }
 
@@ -4130,10 +4204,10 @@
 
     @media (min-width: 1280px) {
       [data-story-section='dubai'] {
-        height: 100svh !important;
         min-height: 100svh !important;
-        max-height: 100svh;
-        overflow: hidden;
+        height: auto !important;
+        max-height: none;
+        overflow: visible;
         --story-h2-min: 3.2rem;
         --story-h2-pref: 4.45vw;
         --story-h2-max: 5rem;
@@ -4158,9 +4232,18 @@
       [data-story-section='dubai'] > div > div,
       [data-story-section='dubai'] [data-story-scene-column],
       [data-story-section='dubai'] [data-story-scene-media] {
-        height: 100%;
+        height: auto;
         min-height: 0;
-        max-height: 100%;
+        max-height: none;
+        overflow: visible;
+      }
+
+      [data-story-section='dubai'] [data-story-scene-column],
+      [data-story-section='dubai'] [data-story-scene-media] {
+        min-height: 100svh;
+      }
+
+      [data-story-section='dubai'] [data-story-scene-media] {
         overflow: hidden;
       }
 
@@ -4182,28 +4265,28 @@
       [data-story-section='dubai']
         [data-story-scene-copy]
         [data-layout='story-dubai-marquee'] {
-        gap: clamp(0.44rem, 0.82svh, 0.62rem);
-        margin-top: clamp(0.46rem, 0.86svh, 0.64rem);
+        gap: clamp(0.9rem, 1.8svh, 1.25rem);
+        margin-top: clamp(0.55rem, 1.2svh, 0.85rem);
       }
 
       [data-story-section='dubai']
         [data-story-scene-copy]
         [data-layout='story-dubai-marquee']
         .story-dubai-gallery-title {
-        margin-bottom: clamp(0.24rem, 0.45svh, 0.34rem);
-        font-size: clamp(0.9rem, 1.2vw, 1.06rem);
+        margin-bottom: clamp(0.45rem, 0.9svh, 0.65rem);
+        font-size: clamp(1rem, 1.45vw, 1.22rem);
       }
 
       [data-story-section='dubai']
         [data-story-scene-copy]
         [data-layout='story-dubai-marquee']
         .dubai-gallery-tile {
-        flex-basis: clamp(12rem, 22vw, 18rem);
-        height: clamp(5.2rem, 10.2svh, 6.9rem);
+        flex-basis: clamp(16.5rem, 24vw, 21rem);
+        height: clamp(10.25rem, 18.5svh, 12.35rem);
       }
     }
 
-    @media (min-width: 1280px) and (max-height: 700px) {
+    @media (min-width: 1280px) and (max-height: 740px) {
       [data-story-section='dubai'] {
         --story-h2-min: 2.8rem;
         --story-h2-pref: 3.8vw;
@@ -4235,24 +4318,24 @@
       [data-story-section='dubai']
         [data-story-scene-copy]
         [data-layout='story-dubai-marquee'] {
-        gap: clamp(0.28rem, 0.58svh, 0.42rem);
-        margin-top: clamp(0.3rem, 0.6svh, 0.44rem);
+        gap: clamp(0.72rem, 1.45svh, 0.95rem);
+        margin-top: clamp(0.44rem, 0.95svh, 0.68rem);
       }
 
       [data-story-section='dubai']
         [data-story-scene-copy]
         [data-layout='story-dubai-marquee']
         .story-dubai-gallery-title {
-        margin-bottom: clamp(0.16rem, 0.32svh, 0.24rem);
-        font-size: clamp(0.78rem, 0.95vw, 0.9rem);
+        margin-bottom: clamp(0.34rem, 0.72svh, 0.52rem);
+        font-size: clamp(0.9rem, 1.15vw, 1.05rem);
       }
 
       [data-story-section='dubai']
         [data-story-scene-copy]
         [data-layout='story-dubai-marquee']
         .dubai-gallery-tile {
-        flex-basis: clamp(10rem, 18vw, 14rem);
-        height: clamp(3.6rem, 8.8svh, 4.75rem);
+        flex-basis: clamp(15.5rem, 23vw, 19rem);
+        height: clamp(9.6rem, 17svh, 11rem);
       }
     }
 
@@ -4819,15 +4902,16 @@
       content: "";
       position: absolute;
       inset-inline: 0;
-      bottom: -1px;
+      bottom: clamp(-2.5rem, -4.6svh, -1.65rem);
       z-index: 5;
-      height: clamp(1.25rem, 2.8svh, 2.1rem);
+      height: clamp(7rem, 12svh, 8.75rem);
       pointer-events: none;
       background: linear-gradient(
         180deg,
-        hsl(var(--surface) / 0) 0%,
-        hsl(var(--surface) / 0.18) 62%,
-        hsl(var(--surface) / 0.56) 100%
+        rgb(17 16 14 / 0) 0%,
+        rgb(17 16 14 / 0.18) 30%,
+        rgb(17 16 14 / 0.66) 58%,
+        rgb(17 16 14 / 0) 100%
       );
     }
 
@@ -5685,6 +5769,19 @@
       overflow-wrap: break-word;
       word-break: normal;
       hyphens: none;
+    }
+
+    html:not([lang='en']) .story-metric-label {
+      letter-spacing: 0.07em;
+      line-height: 1.22;
+    }
+
+    [data-story-section='philosophy']
+      [data-layout='story-philosophy-stats']
+      .story-metric-label {
+      letter-spacing: 0.08em;
+      line-height: 1.18;
+      overflow-wrap: break-word;
     }
 
     [data-story-section='participate'] .story-h2 {

@@ -9,6 +9,17 @@ function isLang(value: string | null): value is Lang {
   return LANGS.some((option) => option.code === value);
 }
 
+function readStoredLang(): Lang {
+  if (typeof window === "undefined") return DEFAULT_LANG;
+
+  try {
+    const storedLang = window.localStorage.getItem("aixco-lang");
+    return isLang(storedLang) ? storedLang : DEFAULT_LANG;
+  } catch {
+    return DEFAULT_LANG;
+  }
+}
+
 const keyedText: Record<string, string> = {
   "nav.home": "Home",
   "nav.about": "About AIXCO",
@@ -1644,9 +1655,9 @@ type Ctx = {
 const I18nCtx = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(DEFAULT_LANG);
+  const [lang, setLang] = useState<Lang>(() => readStoredLang());
   const [translationCatalogs, setTranslationCatalogs] = useState<LoadedTranslationCatalogs | null>(null);
-  const hasLoadedStoredLangRef = useRef(false);
+  const hasLoadedStoredLangRef = useRef(typeof window !== "undefined");
   const dir = lang === "ar" ? "rtl" : "ltr";
   const activeCatalogSources = translationCatalogs?.sources ?? baseCatalogSources;
   const activeAttributeTranslations = translationCatalogs?.attributes ?? emptyAttributeTranslations;
@@ -1660,7 +1671,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     try {
       const storedLang = localStorage.getItem("aixco-lang");
       if (isLang(storedLang)) {
-        setLang(storedLang);
+        setLang((currentLang) => (currentLang === storedLang ? currentLang : storedLang));
       }
     } catch {
       // Language persistence is optional when browser storage is unavailable.

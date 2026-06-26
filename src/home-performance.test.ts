@@ -63,8 +63,9 @@ describe("home page performance structure", () => {
 
     expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
     expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
-    expect(aboutSceneSource).toContain("rgba(17,16,14,0.48))]");
-    expect(aboutSceneSource).toContain("rgba(17,16,14,0.58))");
+    expect(aboutSceneSource).toContain("rgba(17,16,14,0.26)_46%");
+    expect(aboutSceneSource).toContain("rgba(17,16,14,0.70))");
+    expect(aboutSceneSource).toContain("rgba(17,16,14,0.14),rgba(17,16,14,0.62))");
     expect(aboutSceneSource).not.toContain("rgba(17,16,14,0.78)");
   });
 

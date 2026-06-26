@@ -782,44 +782,42 @@ function StoryChrome({
         <div className="fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm xl:hidden" onClick={() => setMenuOpen(false)} aria-hidden="true" />
       )}
 
-      <aside
-        id="story-mobile-menu"
-        className={cn(
-          "fixed bottom-0 right-0 top-0 z-50 max-h-[100svh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-l border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] transition-transform duration-300 [scrollbar-gutter:stable] [transition-timing-function:var(--ease-apple)] xl:hidden",
-          menuOpen ? "translate-x-0" : "translate-x-full",
-        )}
-        aria-hidden={!menuOpen}
-      >
-        <nav aria-label={tx("Story navigation")} className="grid gap-1">
-          {storyChapters.map((chapter, index) => {
-            const isActive = activeIndex === index;
-            const href = chapter.id ? `#${chapter.id}` : "/";
+      {menuOpen && (
+        <aside
+          id="story-mobile-menu"
+          className="fixed bottom-0 right-0 top-0 z-50 max-h-[100svh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-l border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] [scrollbar-gutter:stable] xl:hidden"
+        >
+          <nav aria-label={tx("Story navigation")} className="grid gap-1">
+            {storyChapters.map((chapter, index) => {
+              const isActive = activeIndex === index;
+              const href = chapter.id ? `#${chapter.id}` : "/";
 
-            return (
-              <a
-                key={chapter.key}
-                href={href}
-                aria-current={isActive ? "true" : undefined}
-                data-active={isActive ? "true" : "false"}
-                onClick={(event) => handleChapterLink(event, chapter)}
-                className={cn(
-                  "group/story-chapter story-chapter-link text-foreground/78 hover:text-primary focus-visible:text-primary",
-                  isActive && "story-chapter-link--active text-primary font-semibold",
-                )}
-              >
-                <span
+              return (
+                <a
+                  key={chapter.key}
+                  href={href}
+                  aria-current={isActive ? "true" : undefined}
+                  data-active={isActive ? "true" : "false"}
+                  onClick={(event) => handleChapterLink(event, chapter)}
                   className={cn(
-                    "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
-                    isActive && "story-chapter-link__line--active w-full bg-primary",
+                    "group/story-chapter story-chapter-link text-foreground/78 hover:text-primary focus-visible:text-primary",
+                    isActive && "story-chapter-link--active text-primary font-semibold",
                   )}
-                  aria-hidden="true"
-                />
-                <span className="min-w-0 [overflow-wrap:anywhere]">{tx(chapter.label)}</span>
-              </a>
-            );
-          })}
-        </nav>
-      </aside>
+                >
+                  <span
+                    className={cn(
+                      "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
+                      isActive && "story-chapter-link__line--active w-full bg-primary",
+                    )}
+                    aria-hidden="true"
+                  />
+                  <span className="min-w-0 [overflow-wrap:anywhere]">{tx(chapter.label)}</span>
+                </a>
+              );
+            })}
+          </nav>
+        </aside>
+      )}
 
       <header
         className={cn(
@@ -1672,12 +1670,24 @@ function PhilosophyScene({
       <p className="story-body text-foreground/76">{tx(philosophyHero.summary)}</p>
 
       <dl data-layout="story-philosophy-stats" className="grid w-full grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
-        {philosophyStats.map((stat) => (
-          <div key={stat.label} className="bg-white px-4 py-4">
-            <dt className="story-metric-label text-foreground/58">{tx(stat.label)}</dt>
-            <dd className="mt-2 font-display text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary">{stat.value}</dd>
-          </div>
-        ))}
+        {philosophyStats.map((stat) => {
+          const mobileLabel =
+            stat.label === "Current gross development value"
+              ? "Current GDV"
+              : stat.label === "Real estate transacted across markets"
+                ? "Value transacted"
+                : stat.label;
+
+          return (
+            <div key={stat.label} className="bg-white px-4 py-4">
+              <dt className="story-metric-label text-foreground/58">
+                <span className="hidden sm:inline">{tx(stat.label)}</span>
+                <span className="sm:hidden">{tx(mobileLabel)}</span>
+              </dt>
+              <dd className="mt-2 font-display text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary">{stat.value}</dd>
+            </div>
+          );
+        })}
       </dl>
 
       <div data-layout="story-philosophy-principles" className="grid w-full gap-2 sm:grid-cols-2">
