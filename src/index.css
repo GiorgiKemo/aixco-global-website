@@ -1664,6 +1664,8 @@
 
   .story-hero-wordmark,
   [data-brand-lockup='story-hero'] {
+    --story-hero-mark-size: 0.78em;
+    --story-hero-mark-y: 0.055em;
     display: inline-flex;
     align-items: center;
     gap: 0.04em;
@@ -1681,12 +1683,12 @@
 
   .story-hero-wordmark__mark,
   [data-story-hero-title-mark='true'] {
-    height: 0.76em !important;
-    width: 0.76em !important;
+    height: var(--story-hero-mark-size) !important;
+    width: var(--story-hero-mark-size) !important;
     flex-shrink: 0;
     object-fit: contain;
     filter: drop-shadow(0 12px 24px rgb(0 0 0 / 0.24));
-    transform: translateY(0.005em);
+    transform: translateY(var(--story-hero-mark-y)) !important;
   }
 
   .story-hero-wordmark__text {
@@ -5535,9 +5537,9 @@
 
     [data-story-section='hero'] [data-story-hero-title-mark='true'],
     [data-story-section='hero'] .story-hero-wordmark__mark {
-      height: 0.76em !important;
-      width: 0.76em !important;
-      transform: translateY(0.005em);
+      height: var(--story-hero-mark-size) !important;
+      width: var(--story-hero-mark-size) !important;
+      transform: translateY(var(--story-hero-mark-y)) !important;
     }
 
     [data-story-section='hero'] .story-hero-intro {

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 const devRuntimeEndpoint = "/api/dev-runtime-version";
-const pollIntervalMs = 6000;
+const pollIntervalMs = 1200;
 const reloadCooldownMs = 5000;
 const runtimeStorageKey = "aixco-dev-runtime-version";
 const runtimeReloadTokenKey = "aixco-dev-runtime-reload-token";
@@ -54,7 +54,7 @@ export function DevRuntimeRefresh() {
     };
 
     const checkVersion = async () => {
-      if (checkInFlight || document.visibilityState === "hidden") return;
+      if (checkInFlight) return;
 
       checkInFlight = true;
       try {
@@ -65,39 +65,6 @@ export function DevRuntimeRefresh() {
 
         const payload = (await response.json()) as DevRuntimeVersionResponse;
         if (!payload.version) return;
-
-        let storedVersion: string | null = null;
-        try {
-          storedVersion = window.sessionStorage.getItem(runtimeStorageKey);
-        } catch {
-          storedVersion = null;
-        }
-
-        if (storedVersion && storedVersion !== payload.version) {
-          const currentUrl = new URL(window.location.href);
-          const runtimeReloadToken = currentUrl.searchParams.get(runtimeReloadParam);
-          let storedReloadToken: string | null = null;
-          try {
-            storedReloadToken = window.sessionStorage.getItem(runtimeReloadTokenKey);
-          } catch {
-            storedReloadToken = null;
-          }
-
-          if (runtimeReloadToken && runtimeReloadToken === storedReloadToken) {
-            currentVersion = payload.version;
-            try {
-              window.sessionStorage.setItem(runtimeStorageKey, payload.version);
-              window.sessionStorage.removeItem(runtimeReloadTokenKey);
-            } catch {
-              // Development-only persistence is optional.
-            }
-            cleanRuntimeReloadParam();
-            return;
-          }
-
-          forceCacheBustedNavigation(payload.version);
-          return;
-        }
 
         if (currentVersion === null) {
           currentVersion = payload.version;
