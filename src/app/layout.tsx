@@ -1,9 +1,17 @@
 import type { Metadata, Viewport } from "next";
+import { Hanken_Grotesk } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "@/index.css";
 import { ClientShell } from "./client-shell";
 import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
 import { getSiteUrl } from "@/lib/site-url";
+
+const hankenGrotesk = Hanken_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-hanken-grotesk",
+  weight: ["300", "400", "500", "600", "700", "800"],
+});
 
 const metadataTitle = "AIXCO.Global | Real Estate Investment";
 const metadataDescription =
@@ -54,7 +62,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const initialSiteContent = await fetchSiteContentForServer();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={hankenGrotesk.variable} suppressHydrationWarning>
       <head>
         <link
           rel="preload"
