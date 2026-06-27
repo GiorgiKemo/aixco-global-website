@@ -1262,17 +1262,8 @@ function HeroScene({
             <header className="story-hero-brand">
               <p className="story-hero-kicker">{tx("Global Real Estate")}</p>
               <h1 aria-label="AIXCO.GLOBAL" data-brand-lockup="story-hero" className="story-hero-wordmark hero-title-shadow">
-                <img
-                  src={aixcoLiveLogos.aixcoMark}
-                  alt=""
-                  aria-hidden="true"
-                  width={783}
-                  height={705}
-                  data-story-hero-title-mark="true"
-                  className="story-hero-wordmark__mark"
-                />
                 <span className="story-hero-wordmark__text">
-                  IXCO<span className="hero-title-dot text-primary-glow">.</span>GLOBAL
+                  AIXCO<span className="hero-title-dot text-primary-glow">.</span>GLOBAL
                 </span>
               </h1>
             </header>
