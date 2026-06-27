@@ -1485,7 +1485,7 @@ function AboutScene({
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
-    { value: "500+", label: "Total transactions" },
+    { value: "2000+", label: "Total transactions" },
     { value: "2009", label: "In business since" },
   ];
 

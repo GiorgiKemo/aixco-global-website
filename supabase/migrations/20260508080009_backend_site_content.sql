@@ -81,7 +81,7 @@ values
   $$[
     { "value": "5,000+", "label": "Trusted Clients" },
     { "value": "$400M", "label": "Gross Development Value (GDV)" },
-    { "value": "500+", "label": "Total Transactions" },
+    { "value": "2000+", "label": "Total Transactions" },
     { "value": "2009", "label": "In Business Since" },
     { "value": "85+", "label": "Employees" },
     { "value": "$4.2B", "label": "Real Estate Transacted" },
