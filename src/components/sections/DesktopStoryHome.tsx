@@ -1183,7 +1183,7 @@ function SceneShell({
         style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}
       >
         <div aria-hidden className="hidden" />
-        <div className="grid min-h-[100svh] grid-cols-1 xl:grid-cols-12">
+        <div data-story-scene-grid className="grid min-h-[100svh] grid-cols-1 xl:grid-cols-12">
           <div
             data-story-scene-column
             className={`relative z-10 flex min-h-[100svh] w-full min-w-0 flex-1 flex-col items-stretch justify-center overflow-visible ${

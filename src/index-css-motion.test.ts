@@ -296,6 +296,16 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain("[data-story-section='dubai']::after");
   });
 
+  it("keeps shared story media visible below the desktop breakpoint", () => {
+    expect(desktopStoryHome).toContain("data-story-scene-grid");
+    expect(css).not.toContain("[data-story-scene-media] {\n      display: none;");
+    expect(css).toContain("[data-story-scene-media] {\n      display: block;");
+    expect(css).toContain("min-height: clamp(16rem, 42svh, 24rem)");
+    expect(css).toContain("height: clamp(16rem, 42svh, 24rem)");
+    expect(css).toContain("[data-story-scene-grid] {\n        grid-template-columns: minmax(0, 0.96fr) minmax(18rem, 0.74fr);");
+    expect(css).toContain("[data-story-scene-media] {\n        min-height: 100svh;");
+  });
+
   it("softens the objectives-to-access handoff with overlap, alpha masks, and a blurred veil", () => {
     const accessMask = cssBlock("[data-story-section='aboutAccess'] > div:not(.story-section-boundary)");
     const objectivesPreview = cssBlock(".story-objectives-access-preview");
