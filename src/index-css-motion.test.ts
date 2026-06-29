@@ -306,6 +306,18 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-story-scene-media] {\n        min-height: 100svh;");
   });
 
+  it("keeps the desktop legacy image edge filled under its side blend", () => {
+    const legacyMedia = cssBlock("[data-story-section='legacy'] [data-story-scene-media]");
+
+    expect(legacyMedia).toContain("overflow: hidden");
+    expect(css).toContain("[data-story-section='legacy'] [data-story-scene-media] .story-media-panel__stage {\n    width: calc(100% + var(--story-legacy-side-overlap));\n    max-width: none;");
+    expect(css).toContain("inset-block: -1px;\n    inset-inline-start: auto;\n    inset-inline-end: 0;");
+    expect(css).toContain("width: var(--story-legacy-side-blend)");
+    expect(css).toContain("filter: blur(2px)");
+    expect(css).not.toContain("inset-inline-end: calc(var(--story-legacy-side-overlap) * -1)");
+    expect(css).not.toContain("rgb(220 232 234 / 0.06)");
+  });
+
   it("softens the objectives-to-access handoff with overlap, alpha masks, and a blurred veil", () => {
     const accessMask = cssBlock("[data-story-section='aboutAccess'] > div:not(.story-section-boundary)");
     const objectivesPreview = cssBlock(".story-objectives-access-preview");

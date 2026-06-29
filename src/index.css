@@ -955,7 +955,7 @@
     }
 
     [data-story-section='legacy'] [data-story-scene-media] {
-      overflow: visible;
+      overflow: hidden;
       background: hsl(var(--surface));
     }
 
@@ -6825,28 +6825,30 @@ html[data-home-experience='story'] {
   }
 
   [data-story-section='legacy'] [data-story-scene-media] .story-media-panel__stage {
+    width: calc(100% + var(--story-legacy-side-overlap));
+    max-width: none;
     -webkit-mask-image: none;
     mask-image: none;
   }
 
   [data-story-section='legacy'] [data-story-scene-media]::after {
-    inset-block: 0;
+    inset-block: -1px;
     inset-inline-start: auto;
-    inset-inline-end: calc(var(--story-legacy-side-overlap) * -1);
+    inset-inline-end: 0;
     z-index: 9;
-    width: calc(var(--story-legacy-side-blend) + var(--story-legacy-side-overlap));
+    width: var(--story-legacy-side-blend);
     height: auto;
     background:
       linear-gradient(
         90deg,
         hsl(var(--surface) / 0) 0%,
-        rgb(220 232 234 / 0.06) 38%,
-        hsl(var(--surface) / 0.28) 62%,
-        hsl(var(--surface) / 0.82) 76%,
-        hsl(var(--surface)) 84%,
+        hsl(var(--surface) / 0.06) 34%,
+        hsl(var(--surface) / 0.32) 62%,
+        hsl(var(--surface) / 0.78) 82%,
+        hsl(var(--surface) / 0.96) 94%,
         hsl(var(--surface)) 100%
       );
-    filter: blur(5px);
+    filter: blur(2px);
     transform: translateX(0);
   }
 
@@ -6854,7 +6856,7 @@ html[data-home-experience='story'] {
     content: "";
     display: block;
     position: absolute;
-    inset-block: 0;
+    inset-block: -1px;
     inset-inline-start: calc(var(--story-legacy-side-blend) * -1);
     z-index: 0;
     width: calc(var(--story-legacy-side-blend) + var(--story-legacy-side-overlap));
@@ -6863,13 +6865,13 @@ html[data-home-experience='story'] {
       linear-gradient(
         90deg,
         hsl(var(--surface) / 0) 0%,
-        rgb(220 232 234 / 0.06) 38%,
-        hsl(var(--surface) / 0.28) 62%,
-        hsl(var(--surface) / 0.82) 76%,
-        hsl(var(--surface)) 84%,
+        hsl(var(--surface) / 0.06) 34%,
+        hsl(var(--surface) / 0.32) 62%,
+        hsl(var(--surface) / 0.78) 82%,
+        hsl(var(--surface) / 0.96) 94%,
         hsl(var(--surface)) 100%
       );
-    filter: blur(5px);
+    filter: blur(2px);
   }
 
   [data-story-section='legacy'] [data-story-scene-copy] {
