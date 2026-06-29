@@ -71,6 +71,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           type="image/webp"
           fetchPriority="high"
         />
+        <link
+          rel="preload"
+          as="video"
+          href="/aixco-global-op2/videos/aixco-group-dubai-hero.mp4"
+          type="video/mp4"
+        />
       </head>
       <body suppressHydrationWarning>
         <ClientShell
