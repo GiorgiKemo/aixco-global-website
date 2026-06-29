@@ -296,6 +296,25 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain("[data-story-section='dubai']::after");
   });
 
+  it("softens the objectives-to-access handoff with overlap, alpha masks, and a blurred veil", () => {
+    const accessMask = cssBlock("[data-story-section='aboutAccess'] > div:not(.story-section-boundary)");
+    const objectivesPreview = cssBlock(".story-objectives-access-preview");
+    const accessVeil = cssBlock(".story-about-access-stage::before");
+
+    expect(css).toContain("margin-top: calc(clamp(11rem, 24svh, 16rem) * -1)");
+    expect(accessMask).toContain("rgb(0 0 0 / 0.08) clamp(2rem, 4.4svh, 3.2rem)");
+    expect(accessMask).toContain("rgb(0 0 0 / 0.32) clamp(5.2rem, 10svh, 7.25rem)");
+    expect(accessMask).toContain("#000 clamp(11.5rem, 21svh, 15rem)");
+    expect(objectivesPreview).toContain("height: clamp(16rem, 34svh, 25rem)");
+    expect(objectivesPreview).toContain("rgb(0 0 0 / 0.38) 38%");
+    expect(objectivesPreview).toContain("rgb(0 0 0 / 0.76) 68%");
+    expect(accessVeil).toContain("display: block");
+    expect(accessVeil).toContain("height: clamp(17rem, 36svh, 25rem)");
+    expect(accessVeil).toContain("backdrop-filter: blur(12px) saturate(0.9)");
+    expect(accessVeil).toContain("filter: blur(6px)");
+    expect(accessVeil).not.toContain("display: none");
+  });
+
   it("blends the about-to-philosophy handoff through the outgoing video instead of a dark stripe", () => {
     const aboutExit = cssBlock("[data-story-section='about'] .story-about-cinematic-stage::after");
     const philosophyBlend = cssBlock("[data-story-section='philosophy']");
