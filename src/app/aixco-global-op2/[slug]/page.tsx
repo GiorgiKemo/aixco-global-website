@@ -22,7 +22,15 @@ type PropertyPageProps = {
 };
 
 function normalizeSlug(slug: string) {
-  return decodeURIComponent(slug).replace(/\/+$/, "").replace(/\.html$/i, "").toLowerCase();
+  let decodedSlug = slug;
+
+  try {
+    decodedSlug = decodeURIComponent(slug);
+  } catch {
+    decodedSlug = "";
+  }
+
+  return decodedSlug.replace(/\/+$/, "").replace(/\.html$/i, "").toLowerCase();
 }
 
 function getPropertyBySlug(slug: string) {

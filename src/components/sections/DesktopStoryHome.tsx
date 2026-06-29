@@ -104,6 +104,7 @@ type StoryMedia =
       kind: "image";
       src: string | StaticImageData;
       alt: string;
+      fit?: "cover" | "contain";
       position?: string;
       sizes?: string;
     }
@@ -582,7 +583,10 @@ function StoryMediaPanel({
       decoding="async"
       quality={95}
       sizes={media.sizes ?? "(min-width: 1280px) 56vw, 100vw"}
-      className="story-media-panel__image h-full w-full object-cover"
+      className={cn(
+        "story-media-panel__image h-full w-full",
+        media.fit === "contain" ? "object-contain" : "object-cover",
+      )}
       style={{ objectPosition }}
     />
   );
@@ -1170,6 +1174,7 @@ function SceneShell({
     mediaOverlay === "light" && tone === "dark" ? "contact" : mediaOverlay;
   const copyColumnSpan = fullWidth ? "xl:col-span-12" : mediaWeight === "gallery" ? "xl:col-span-5" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-7";
   const mediaColumnSpan = mediaWeight === "gallery" ? "xl:col-span-7" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-5";
+  const shouldRenderMedia = Boolean(isRevealed || isActive || preloadMedia);
 
   return (
     <div className={`relative min-h-[100svh] ${toneClass}`}>
@@ -1198,13 +1203,13 @@ function SceneShell({
                 reverse ? `xl:order-1 ${mediaColumnSpan}` : `xl:order-2 ${mediaColumnSpan}`
               }`}
             >
-              {mediaContent ? (
+              {shouldRenderMedia && mediaContent ? (
                 <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
                   <div className="story-media-panel__stage story-media-panel__stage--custom relative h-full w-full overflow-hidden">
                     {mediaContent}
                   </div>
                 </StoryMediaReveal>
-              ) : media ? (
+              ) : shouldRenderMedia && media ? (
                 <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
                   <div className="story-media-panel__stage relative h-full w-full overflow-hidden">
                     {mediaCrossfadeKey ? (
@@ -1419,8 +1424,9 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
               height={320}
               sizes="(min-width: 1280px) 9rem, 34vw"
               quality={75}
-              loading="eager"
+              loading="lazy"
               fetchPriority="low"
+              decoding="async"
               className="story-batumi-gallery__thumb-image"
               style={{ objectPosition: image.objectPosition }}
             />
@@ -1486,7 +1492,7 @@ function AboutScene({
 
     video.playbackRate = 0.82;
 
-    if (!isRevealed) {
+    if (!isActive) {
       setVideoStarted(false);
       video.pause();
       video.removeAttribute("src");
@@ -1517,7 +1523,7 @@ function AboutScene({
       video.removeEventListener("loadeddata", playVideo);
       video.removeEventListener("canplay", playVideo);
     };
-  }, [isRevealed]);
+  }, [isActive]);
 
   const markVideoStarted = () => {
     setVideoStarted(true);
@@ -1534,21 +1540,21 @@ function AboutScene({
             <div className="story-about-cinematic-image relative h-full w-full">
               <video
                 ref={dubaiVideoRef}
-                src={isRevealed ? aixcoDubaiHeroVideo.src : undefined}
+                src={isActive ? aixcoDubaiHeroVideo.src : undefined}
                 className="h-full w-full object-cover"
                 poster={aixcoDubaiHeroVideo.poster}
-                autoPlay={isRevealed}
+                autoPlay={isActive}
                 muted
                 loop
                 playsInline
-                preload={isRevealed ? "auto" : "none"}
+                preload={isActive ? "auto" : "none"}
                 aria-label={tx(aixcoDubaiHeroVideo.title)}
                 onLoadedData={(event) => {
                   event.currentTarget.playbackRate = 0.82;
                 }}
                 onCanPlay={(event) => {
                   event.currentTarget.playbackRate = 0.82;
-                  if (isRevealed) {
+                  if (isActive) {
                     void event.currentTarget.play().catch(() => undefined);
                   }
                 }}
@@ -1566,6 +1572,8 @@ function AboutScene({
                 data-about-video-poster=""
                 data-video-started={videoStarted ? "true" : "false"}
                 className="story-about-cinematic-poster absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+                fetchPriority="low"
                 decoding="async"
               />
             </div>
@@ -1776,7 +1784,7 @@ function PhilosophyDetailScene({
 }) {
   return (
     <div className="relative min-h-[100svh] overflow-visible bg-surface text-foreground">
-      {media ? (
+      {media && isRevealed ? (
         <div aria-hidden className="story-philosophy-detail-media absolute inset-0">
           <StoryMediaPanel media={media} isActive={isActive} />
           <div className="story-philosophy-detail-media__wash absolute inset-0" />
@@ -2012,7 +2020,8 @@ function LegacyScene({
         kind: "image",
         src: aixcoLiveImages.dubaiEdenHouseRendering,
         alt: tx("Dubai waterfront residential real estate development"),
-        position: "54% 56%",
+        fit: "contain",
+        position: "left center",
         sizes: "(min-width: 1280px) 58vw, 100vw",
       }}
       mediaWeight="wide"
@@ -2058,7 +2067,7 @@ function DubaiScene({
         kind: "image",
         src: aixcoLiveImages.dubaiBurjKhalifaSunset,
         alt: tx("Burj Khalifa and Dubai skyline at sunset"),
-        position: "center 48%",
+        position: "center top",
         sizes: "(min-width: 1280px) 82vw, 100vw",
       }}
     >

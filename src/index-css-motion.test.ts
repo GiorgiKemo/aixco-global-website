@@ -115,17 +115,17 @@ describe("index.css motion rules", () => {
     expect(css).toContain(".story-contact-card__svg-icon");
   });
 
-  it("starts the next-section About video while revealed so it is already moving on scroll entry", () => {
-    expect(desktopStoryHome).toContain("src={isRevealed ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(desktopStoryHome).toContain('preload={isRevealed ? "auto" : "none"}');
-    expect(desktopStoryHome).toContain("autoPlay={isRevealed}");
-    expect(desktopStoryHome).toContain("if (!isRevealed) {");
+  it("keeps the next-section About video deferred until it is active", () => {
+    expect(desktopStoryHome).toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain('preload={isActive ? "auto" : "none"}');
+    expect(desktopStoryHome).toContain("autoPlay={isActive}");
+    expect(desktopStoryHome).toContain("if (!isActive) {");
     expect(desktopStoryHome).toContain("setVideoStarted(false);");
-    expect(desktopStoryHome).not.toContain("if (!isActive) {\n      video.pause();\n      video.load();");
-    expect(desktopStoryHome).toContain("if (isRevealed) {\n                    void event.currentTarget.play().catch(() => undefined);");
+    expect(desktopStoryHome).toContain("if (isActive) {\n                    void event.currentTarget.play().catch(() => undefined);");
     expect(desktopStoryHome).toContain("onPlaying={markVideoStarted}");
     expect(desktopStoryHome).toContain('data-about-video-poster=""');
     expect(desktopStoryHome).toContain('data-video-started={videoStarted ? "true" : "false"}');
+    expect(desktopStoryHome).toContain('fetchPriority="low"');
     expect(css).toContain("[data-story-section='about'] .story-about-cinematic-poster");
     expect(css).toContain(".story-about-cinematic-poster[data-video-started='true']");
     expect(css).toContain("transition: opacity 900ms var(--ease-apple)");
@@ -145,7 +145,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('alt: tx("Burj Khalifa and Dubai skyline at sunset")');
     expect(desktopStoryHome).toContain('sizes: "(min-width: 1280px) 82vw, 100vw"');
     expect(desktopStoryHome).not.toContain('title: tx("Dubai legacy portfolio video")');
-    expect(desktopStoryHome).toContain("src={isRevealed ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
   });
 
   it("requests high-density images for tall cropped story panels", () => {

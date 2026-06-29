@@ -16,7 +16,9 @@ function redirectTo(request: Request, path: string) {
 async function readStatusUpdatePayload(request: Request, wantsJson: boolean) {
   if (wantsJson) return request.json().catch(() => ({}));
 
-  const formData = await request.formData();
+  const formData = await request.formData().catch(() => null);
+  if (!formData) return {};
+
   return {
     resource: formData.get("resource"),
     id: formData.get("id"),

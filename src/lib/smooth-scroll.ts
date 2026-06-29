@@ -300,7 +300,14 @@ export function scrollToPageTop(behavior?: ScrollBehavior) {
 export function scrollToHash(hash: string, behavior?: ScrollBehavior) {
   if (typeof document === "undefined") return false;
 
-  const id = decodeURIComponent(hash.replace(/^#/, ""));
+  let id = "";
+
+  try {
+    id = decodeURIComponent(hash.replace(/^#/, ""));
+  } catch {
+    return false;
+  }
+
   if (!id) {
     scrollToPageTop(behavior);
     return true;

@@ -73,11 +73,14 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "أساس عقاري بني على الاختيار الحكيم",
   },
   "AIXCO's philosophy starts with wise selection: durable assets, disciplined risk assessment, and recurring income generation.": {
-    de: "Die Philosophie von AIXCO beginnt mit kluger Auswahl: langlebige Sachwerte, disziplinierte Risikopruefung und wiederkehrende Ertraege.",
+    de: "Die Philosophie von AIXCO beginnt mit kluger Auswahl: langlebige Sachwerte, umsichtige Risikoprüfung und wiederkehrende Erträge.",
     ru: "Философия AIXCO начинается с разумного выбора: надежные активы, дисциплинированная оценка рисков и регулярный доход.",
     ka: "AIXCO-ს ფილოსოფია იწყება გონივრული შერჩევით: გამძლე აქტივები, დისციპლინირებული რისკის შეფასება და განმეორებადი შემოსავალი.",
     tr: "AIXCO'nun felsefesi akilli secimle baslar: dayanikli varliklar, disiplinli risk degerlendirmesi ve duzenli gelir uretimi.",
     ar: "تبدأ فلسفة AIXCO بالاختيار الحكيم: أصول متينة، وتقييم منضبط للمخاطر، وتوليد دخل متكرر.",
+  },
+  "Access support for buying property or property services": {
+    de: "Unterstützung beim Immobilienkauf oder bei Immobiliendienstleistungen erhalten",
   },
   "Since its first acquisition in 2009, the company has grown through carefully selected real estate decisions, building a portfolio defined by resilience, stability, and recurring income generation.": {
     de: "Seit dem ersten Erwerb im Jahr 2009 ist das Unternehmen durch sorgfaeltig ausgewaehlte Immobilienentscheidungen gewachsen und hat ein Portfolio aufgebaut, das von Widerstandsfaehigkeit, Stabilitaet und wiederkehrenden Ertraegen gepraegt ist.",
@@ -360,7 +363,7 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "يبدأ الدخول من 45,000 يورو للمشاريع والشقق المختارة في الأسواق الناشئة والمتاحة حصريًا عبر AIXCO، مع باتومي كتركيز حالي. يمكن أن تكون العمولة الكاملة مستحقة من دفعة أولى قدرها 10% فقط، وتخضع الشروط النهائية للمشروع والاتفاق.",
   },
   "Can foreigners buy property in AIXCO's current emerging-market focus?": {
-    de: "Koennen Auslaender Immobilien im aktuellen aufstrebenden Fokusmarkt von AIXCO kaufen?",
+    de: "Können Ausländer Immobilien im aktuellen aufstrebenden Fokusmarkt von AIXCO kaufen?",
     ru: "Могут ли иностранцы покупать недвижимость в текущем фокусе AIXCO на развивающемся рынке?",
     ka: "შეუძლიათ თუ არა უცხოელებს ქონების შეძენა AIXCO-ს მიმდინარე განვითარებად ბაზრის ფოკუსში?",
     tr: "Yabancılar AIXCO'nun mevcut gelişen pazar odağında mülk satın alabilir mi?",
@@ -1241,16 +1244,16 @@ const germanQualityTranslations: TranslationSource = {
     de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und der Golfregion - heute mit Fokus auf Batumi und einer nachgewiesenen Historie in der Schweiz und Dubai.",
   },
   "Disciplined ownership of real assets, shaped by Swiss real estate heritage.": {
-    de: "Diszipliniertes Eigentum an Sachwerten, geprägt durch Schweizer Praxis.",
+    de: "Verantwortungsvolles Eigentum an Sachwerten, geprägt durch Schweizer Praxis.",
   },
   "AIXCO Global was built on disciplined real estate ownership, practical execution, and long-term property services.": {
-    de: "AIXCO Global basiert auf diszipliniertem Immobilieneigentum, praktischer Umsetzung und langfristigen Immobiliendienstleistungen.",
+    de: "AIXCO Global basiert auf verantwortungsvoll bewirtschaftetem Immobilieneigentum, praktischer Umsetzung und langfristigen Immobiliendienstleistungen.",
   },
   "First acquisition": { de: "Erster Erwerb" },
   "Gross development value": { de: "Brutto-Entwicklungswert" },
   "Transactions completed": { de: "Abgeschlossene Transaktionen" },
   "Real estate transacted across markets": { de: "Immobilienwert über Märkte hinweg" },
-  "Disciplined ownership": { de: "Diszipliniertes Eigentum" },
+  "Disciplined ownership": { de: "Verantwortungsvolles Eigentum" },
   "Property administration": { de: "Immobilienverwaltung" },
   "Responsible risk assessment": { de: "Verantwortungsvolle Risikoprüfung" },
   "Long-term value creation": { de: "Langfristige Wertschaffung" },
@@ -1261,7 +1264,7 @@ const germanQualityTranslations: TranslationSource = {
   "Swiss discipline in practice": { de: "Schweizer Disziplin in der Praxis" },
   "A real estate foundation built through ownership": { de: "Ein Immobilienfundament, aufgebaut durch Eigentum" },
   "AIXCO's philosophy starts with ownership: durable assets, conservative risk assessment, and recurring income generation.": {
-    de: "Die Philosophie von AIXCO beginnt mit Eigentum: langlebige Sachwerte, konservative Risikoprüfung und wiederkehrende Erträge.",
+    de: "Die Philosophie von AIXCO beginnt mit Eigentum: langlebige Sachwerte, umsichtige Risikoprüfung und wiederkehrende Erträge.",
   },
   "Since its first acquisition in 2009, the company has steadily expanded within the Swiss residential real estate market, developing a portfolio defined by resilience, stability, and recurring income generation.": {
     de: "Seit dem ersten Erwerb 2009 hat sich das Unternehmen im Schweizer Wohnimmobilienmarkt stetig ausgebaut - mit einem Portfolio aus Widerstandsfähigkeit, Stabilität und wiederkehrenden Erträgen.",
@@ -1433,10 +1436,10 @@ const germanQualityTranslations: TranslationSource = {
     de: "Immobilieneigentümer können nach dem Kauf mit AIXCO bei Dokumentation, Käuferübergabe, Reporting, Mietkoordination und laufender Verwaltung zusammenarbeiten.",
   },
   "Choose the journey that fits your role. The process is structured, transparent, and digitally managed.": {
-    de: "Wählen Sie den Ablauf, der zu Ihrer Rolle passt. Der Prozess ist strukturiert, transparent und digital gesteuert.",
+    de: "Wählen Sie den Ablauf, der optimal auf Ihre Rolle zugeschnitten ist. Der Prozess ist strukturiert, transparent und digital gesteuert.",
   },
   "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.": {
-    de: "Wählen Sie den Ablauf, der zu Ihrer Rolle passt. Ob Sie Immobilien kaufen, Kunden vermitteln, eine Einheit verwalten oder Projekte in den Markt bringen - der Prozess ist strukturiert, transparent und digital gesteuert.",
+    de: "Wählen Sie den Ablauf, der optimal auf Ihre Rolle zugeschnitten ist. Ob Sie Immobilien kaufen, Kunden vermitteln, eine Einheit verwalten oder Projekte in den Markt bringen - der Prozess ist strukturiert, transparent und digital gesteuert.",
   },
   "Journey 01": { de: "Ablauf 01" },
   "Journey 02": { de: "Ablauf 02" },
@@ -1456,7 +1459,7 @@ const germanQualityTranslations: TranslationSource = {
   },
   Developer: { de: "Entwickler" },
   "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.": {
-    de: "Für Entwickler, die Projektpräsenz, Käuferzugang, Besichtigungskoordination und einen stärkeren Immobilienvertriebskanal suchen.",
+    de: "Für Entwickler, die Projektpräsenz, Käuferzugang, Terminmanagement und einen stärkeren Immobilienvertriebskanal suchen.",
   },
   "AIXCO leadership": { de: "AIXCO-Führung" },
   leadership: { de: "Führung" },

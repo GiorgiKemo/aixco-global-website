@@ -36,7 +36,13 @@ export async function POST(request: Request) {
     return redirectTo(request, "/admin/login?error=rate-limited");
   }
 
-  const formData = await request.formData();
+  let formData: FormData;
+  try {
+    formData = await request.formData();
+  } catch {
+    return redirectTo(request, "/admin/login?error=invalid");
+  }
+
   const password = String(formData.get("password") ?? "");
 
   if (!verifyAdminPassword(password, config.password, config.sessionSecret)) {

@@ -202,7 +202,7 @@ export const curatedVisibleTranslations = {
     ar: "أساس عقاري بُني عبر الملكية",
   },
   "AIXCO's philosophy starts with ownership: durable assets, conservative risk assessment, and recurring income generation.": {
-    de: "Die Philosophie von AIXCO beginnt mit Eigentum: langlebige Werte, konservative Risikopruefung und wiederkehrende Einnahmen.",
+    de: "Die Philosophie von AIXCO beginnt mit Eigentum: langlebige Werte, umsichtige Risikoprüfung und wiederkehrende Einnahmen.",
     ru: "Философия AIXCO начинается с владения: надежные активы, консервативная оценка рисков и регулярный доход.",
     ka: "AIXCO-ს ფილოსოფია იწყება მფლობელობით: მდგრადი აქტივები, კონსერვატიული რისკის შეფასება და განმეორებადი შემოსავალი.",
     tr: "AIXCO'nun felsefesi sahiplikle başlar: kalıcı varlıklar, ihtiyatlı risk değerlendirmesi ve düzenli gelir üretimi.",
@@ -251,7 +251,7 @@ export const curatedVisibleTranslations = {
     ar: "في جوهر AIXCO توجد فلسفة سويسرية واضحة لإدارة المخاطر. تتعامل AIXCO مع قرارات العقار بانضباط وتحفظ ومنظور طويل الأجل، مع التركيز على العقارات المتينة والأسس التشغيلية العملية.",
   },
   "Through carefully selected real estate purchases, sales, brokerage mandates, and property administration, AIXCO focuses on durable assets, practical risk assessment, and sustainable long-term growth.": {
-    de: "Durch sorgfaeltig ausgewaehlte Immobilienkaeufe, Verkaeufe, Vermittlungsmandate und Immobilienverwaltung konzentriert sich AIXCO auf langlebige Werte, praktische Risikopruefung und nachhaltiges langfristiges Wachstum.",
+    de: "Durch sorgfältig ausgewählte Immobilienkäufe, Verkäufe, Vermittlungsmandate und Immobilienverwaltung konzentriert sich AIXCO auf langlebige Werte, praktische Risikoprüfung und nachhaltiges langfristiges Wachstum.",
     ru: "Через тщательно отобранные покупки, продажи, брокерские мандаты и администрирование недвижимости AIXCO фокусируется на надежных активах, практической оценке рисков и устойчивом долгосрочном росте.",
     ka: "ფრთხილად შერჩეული შესყიდვების, გაყიდვების, ბროკერული მანდატებისა და ქონების ადმინისტრირების გზით AIXCO ყურადღებას ამახვილებს მდგრად აქტივებზე, პრაქტიკულ რისკის შეფასებასა და გრძელვადიან ზრდაზე.",
     tr: "AIXCO, özenle seçilmiş gayrimenkul alımları, satışları, aracılık yetkileri ve mülk yönetimiyle kalıcı varlıklara, pratik risk değerlendirmesine ve sürdürülebilir uzun vadeli büyümeye odaklanır.",
@@ -279,7 +279,7 @@ export const curatedVisibleTranslations = {
     ar: "التوسع عبر فرص مختارة بعناية",
   },
   "Integrity, stability, discipline, and responsible risk assessment": {
-    de: "Integritaet, Stabilitaet, Disziplin und verantwortungsvolle Risikopruefung",
+    de: "Integrität, Stabilität, Disziplin und verantwortungsvolle Risikoprüfung",
     ru: "Честность, стабильность, дисциплина и ответственная оценка рисков",
     ka: "პატიოსნება, სტაბილურობა, დისციპლინა და პასუხისმგებლიანი რისკის შეფასება",
     tr: "Dürüstlük, istikrar, disiplin ve sorumlu risk değerlendirmesi",
@@ -363,7 +363,7 @@ export const curatedVisibleTranslations = {
     ar: "عقارات تم تداولها عبر أسواق متعددة",
   },
   "Disciplined ownership": {
-    de: "Diszipliniertes Eigentum",
+    de: "Verantwortungsvolles Eigentum",
     ru: "Дисциплинированное владение",
     ka: "დისციპლინირებული მფლობელობა",
     tr: "Disiplinli sahiplik",
@@ -377,7 +377,7 @@ export const curatedVisibleTranslations = {
     ar: "إدارة الممتلكات",
   },
   "Responsible risk assessment": {
-    de: "Verantwortungsvolle Risikopruefung",
+    de: "Verantwortungsvolle Risikoprüfung",
     ru: "Ответственная оценка рисков",
     ka: "პასუხისმგებლიანი რისკის შეფასება",
     tr: "Sorumlu risk değerlendirmesi",
@@ -510,14 +510,14 @@ export const curatedVisibleTranslations = {
     ar: "كيف يعمل",
   },
   "ACQUIRE.PARTNER.CREATE VALUE.": {
-    de: "ERWERBEN.PARTNERN.WERT SCHAFFEN.",
+    de: "ERWERBEN. VERNETZEN. WERTE SCHAFFEN.",
     ru: "ПРИОБРЕСТИ.ПАРТНЕРСТВО.СОЗДАТЬ ЦЕННОСТЬ.",
     ka: "შეიძინე.პარტნიორობა.შექმენი ღირებულება.",
     tr: "EDIN.ORTAK OL.DEGER YARAT.",
     ar: "اقتناء.شراكة.خلق قيمة.",
   },
   "Choose the journey that fits your role. The process is structured, transparent, and digitally managed.": {
-    de: "Waehlen Sie den Weg, der zu Ihrer Rolle passt. Der Prozess ist strukturiert, transparent und digital gesteuert.",
+    de: "Wählen Sie den Weg, der optimal auf Ihre Rolle zugeschnitten ist. Der Prozess ist strukturiert, transparent und digital gesteuert.",
     ru: "Выберите путь, который соответствует вашей роли. Процесс структурирован, прозрачен и управляется цифровым образом.",
     ka: "აირჩიეთ გზა, რომელიც თქვენს როლს შეესაბამება. პროცესი არის სტრუქტურირებული, გამჭვირვალე და ციფრულად მართული.",
     tr: "Rolünüze uygun yolu seçin. Süreç yapılandırılmış, şeffaf ve dijital olarak yönetilir.",
@@ -559,7 +559,7 @@ export const curatedVisibleTranslations = {
     ar: "أدر عقارك",
   },
   "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.": {
-    de: "Fuer Entwickler, die Projektpraesenz, Kaeuferzugang, Tourkoordination und einen staerkeren Immobilienvertriebskanal suchen.",
+    de: "Für Entwickler, die Projektpräsenz, Käuferzugang, Terminmanagement und einen stärkeren Immobilienvertriebskanal suchen.",
     ru: "Для девелоперов, которым нужны видимость проекта, доступ к покупателям, координация туров и более сильный канал продаж недвижимости.",
     ka: "დეველოპერებისთვის, რომლებსაც სჭირდებათ პროექტის ხილვადობა, მყიდველებთან წვდომა, ტურების კოორდინაცია და ძლიერი გაყიდვების არხი.",
     tr: "Proje görünürlüğü, alıcı erişimi, tur koordinasyonu ve daha güçlü gayrimenkul satış kanalı arayan geliştiriciler için.",
@@ -937,14 +937,14 @@ export const curatedVisibleTranslations = {
     ar: "منذ عام 2009، اشترت AIXCO وباعت وتوسطت في العقارات عبر أوروبا والخليج؛ وتركز اليوم على باتومي مع سجل خبرة في سويسرا ودبي.",
   },
   "Disciplined ownership of real assets, shaped by Swiss real estate heritage.": {
-    de: "Diszipliniertes Eigentum an realen Werten, gepraegt durch Schweizer Immobilienerfahrung.",
+    de: "Verantwortungsvolles Eigentum an realen Werten, geprägt durch Schweizer Immobilienerfahrung.",
     ru: "Дисциплинированное владение реальными активами, сформированное швейцарским наследием в недвижимости.",
     ka: "რეალურ აქტივებზე დისციპლინირებული მფლობელობა, შვეიცარიული უძრავი ქონების გამოცდილებით ჩამოყალიბებული.",
     tr: "İsviçre gayrimenkul mirasıyla şekillenen gerçek varlıklarda disiplinli sahiplik.",
     ar: "ملكية منضبطة لأصول حقيقية، شكلها إرث العقارات السويسرية.",
   },
   "AIXCO Global was built on disciplined real estate ownership, practical execution, and long-term property services.": {
-    de: "AIXCO Global wurde auf diszipliniertem Immobilieneigentum, praktischer Umsetzung und langfristigen Immobiliendienstleistungen aufgebaut.",
+    de: "AIXCO Global wurde auf verantwortungsvoll bewirtschaftetem Immobilieneigentum, praktischer Umsetzung und langfristigen Immobiliendienstleistungen aufgebaut.",
     ru: "AIXCO Global построена на дисциплинированном владении недвижимостью, практической реализации и долгосрочных услугах по недвижимости.",
     ka: "AIXCO Global აგებულია დისციპლინირებულ უძრავი ქონების მფლობელობაზე, პრაქტიკულ შესრულებასა და გრძელვადიან სერვისებზე.",
     tr: "AIXCO Global, disiplinli gayrimenkul sahipliği, pratik uygulama ve uzun vadeli mülk hizmetleri üzerine kurulmuştur.",
@@ -965,7 +965,7 @@ export const curatedVisibleTranslations = {
     ar: "أكملت AIXCO أكثر من 2,000 صفقة عقارية وتعاملت مع قيمة عقارية تتجاوز 4.2 مليار دولار عبر الأسواق الدولية.",
   },
   "Integrity, stability, discipline, and responsible risk assessment remain central to every aspect of our real estate practice.": {
-    de: "Integritaet, Stabilitaet, Disziplin und verantwortungsvolle Risikopruefung bleiben zentral fuer jeden Aspekt unserer Immobilienpraxis.",
+    de: "Integrität, Stabilität, Disziplin und verantwortungsvolle Risikoprüfung bleiben zentral für jeden Aspekt unserer Immobilienpraxis.",
     ru: "Честность, стабильность, дисциплина и ответственная оценка рисков остаются центральными для каждого аспекта нашей работы с недвижимостью.",
     ka: "პატიოსნება, სტაბილურობა, დისციპლინა და პასუხისმგებლიანი რისკის შეფასება ჩვენი უძრავი ქონების პრაქტიკის ყველა ნაწილში მთავარ როლს ინარჩუნებს.",
     tr: "Dürüstlük, istikrar, disiplin ve sorumlu risk değerlendirmesi gayrimenkul pratiğimizin her alanında merkezi önemdedir.",

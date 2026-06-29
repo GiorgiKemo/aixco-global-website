@@ -501,7 +501,7 @@ export const textTranslations = {
     "ar": "المسارات"
   },
   "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.": {
-    "de": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.",
+    "de": "Wählen Sie den Ablauf, der optimal auf Ihre Rolle zugeschnitten ist. Ob Sie Immobilien kaufen, Kunden vermitteln, eine Einheit verwalten oder Projekte in den Markt bringen - der Prozess ist strukturiert, transparent und digital gesteuert.",
     "ru": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.",
     "ka": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.",
     "tr": "Choose the journey that fits your role. Whether you are buying property, brokering clients, administering a unit, or bringing projects to market, the process is structured, transparent, and digitally managed.",
@@ -550,7 +550,7 @@ export const textTranslations = {
     "ar": "مطور"
   },
   "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.": {
-    "de": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
+    "de": "Für Entwickler, die Projektpräsenz, Käuferzugang, Terminmanagement und einen stärkeren Immobilienvertriebskanal suchen.",
     "ru": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
     "ka": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
     "tr": "For developers seeking project visibility, buyer access, tour coordination, and a stronger real estate sales channel.",
@@ -1180,11 +1180,18 @@ export const textTranslations = {
     "ar": "أرسل اهتمامك وبيانات الإعداد رقميًا"
   },
   "Access support for buying property or joining opportunities": {
-    "de": "Erhalten Sie Unterstützung beim Immobilienkauf oder bei Beteiligungen",
+    "de": "Unterstützung beim Immobilienkauf oder bei Beteiligungen erhalten",
     "ru": "Получите поддержку при покупке недвижимости или присоединении к возможностям",
     "ka": "მიიღეთ მხარდაჭერა ქონების შეძენის ან შესაძლებლობებში ჩართვისთვის",
     "tr": "Mülk satın alma veya fırsatlara katılım için destek alın",
     "ar": "احصل على دعم لشراء عقار أو الانضمام إلى الفرص"
+  },
+  "Access support for buying property or property services": {
+    "de": "Unterstützung beim Immobilienkauf oder bei Immobiliendienstleistungen erhalten",
+    "ru": "Получите поддержку при покупке недвижимости или услугах по недвижимости",
+    "ka": "მიიღეთ მხარდაჭერა ქონების შეძენაში ან ქონებასთან დაკავშირებულ მომსახურებაში",
+    "tr": "Mülk satın alma veya gayrimenkul hizmetleri için destek alın",
+    "ar": "الحصول على الدعم لشراء العقار أو الخدمات العقارية"
   },
   "Move into a guided 360° customer journey": {
     "de": "Wechseln Sie in eine geführte 360°-Kundenreise",
@@ -1257,7 +1264,7 @@ export const textTranslations = {
     "ar": "سجل كشريك مطور للإعلان عن القوائم عبر AIXCO مع ضمان أن العملاء النهائيين ما زالوا يحصلون على خدمة كاملة بزاوية 360° من أول استفسار."
   },
   "Advertise listings within a stronger branded environment": {
-    "de": "Bewerben Sie Angebote in einem stärkeren Markenauftritt",
+    "de": "Präsentieren Sie Ihre Angebote mit einem stärkeren Markenauftritt.",
     "ru": "Продвигайте объекты в более сильной брендированной среде",
     "ka": "რეკლამა გაუწიეთ ჩამონათვალებს უფრო ძლიერი ბრენდირებული გარემოს ფარგლებში",
     "tr": "İlanları daha güçlü markalı bir ortamda tanıtın",

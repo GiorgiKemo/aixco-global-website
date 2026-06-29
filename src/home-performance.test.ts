@@ -69,6 +69,30 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).not.toContain("rgba(17,16,14,0.78)");
   });
 
+  it("keeps the offscreen about video from downloading before the scene is active", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const aboutSceneStart = desktopStorySource.indexOf("function AboutScene");
+    const philosophySceneStart = desktopStorySource.indexOf("function PhilosophyScene");
+    const aboutSceneSource = desktopStorySource.slice(aboutSceneStart, philosophySceneStart);
+
+    expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
+    expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
+    expect(aboutSceneSource).toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(aboutSceneSource).toContain("autoPlay={isActive}");
+    expect(aboutSceneSource).toContain('preload={isActive ? "auto" : "none"}');
+    expect(aboutSceneSource).not.toContain("src={isRevealed ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(aboutSceneSource).not.toContain('preload={isRevealed ? "auto" : "none"}');
+  });
+
+  it("does not mount heavy story media before its section is revealed", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+
+    expect(desktopStorySource).toContain("const shouldRenderMedia = Boolean(isRevealed || isActive || preloadMedia);");
+    expect(desktopStorySource).toContain("shouldRenderMedia && mediaContent");
+    expect(desktopStorySource).toContain("shouldRenderMedia && media");
+    expect(desktopStorySource).toContain("media && isRevealed");
+  });
+
   it("keeps legacy insight articles unpublished until the copy is rewritten", () => {
     const articleSource = readSource("src/app/aixco-global-op2/[slug]/page.tsx");
 

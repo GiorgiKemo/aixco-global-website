@@ -405,4 +405,12 @@ describe("scrollToHash", () => {
 
     cleanup();
   });
+
+  it("ignores malformed encoded hash values instead of throwing", () => {
+    mockMatchMedia(() => false);
+    mockViewport();
+
+    expect(() => scrollToHash("#%E0%A4%A", "auto")).not.toThrow();
+    expect(scrollToHash("#%E0%A4%A", "auto")).toBe(false);
+  });
 });

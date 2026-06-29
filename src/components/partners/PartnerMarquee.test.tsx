@@ -14,7 +14,7 @@ const partners = [
 ];
 
 describe("PartnerMarquee", () => {
-  it("eager-loads story logos and keeps fallback text inside every card", async () => {
+  it("lazy-loads story logos and keeps fallback text inside every card", async () => {
     const { container } = render(
       <PartnerMarquee
         partners={partners}
@@ -26,9 +26,9 @@ describe("PartnerMarquee", () => {
     const logos = container.querySelectorAll(".partner-marquee-item__logo");
     expect(logos).toHaveLength(2);
     logos.forEach((logo) => {
-      expect(logo).toHaveAttribute("loading", "eager");
-      expect(logo).toHaveAttribute("fetchpriority", "high");
-      expect(logo).toHaveAttribute("decoding", "sync");
+      expect(logo).toHaveAttribute("loading", "lazy");
+      expect(logo).toHaveAttribute("fetchpriority", "auto");
+      expect(logo).toHaveAttribute("decoding", "async");
     });
 
     expect(container.querySelectorAll(".partner-marquee-item__fallback")).toHaveLength(2);

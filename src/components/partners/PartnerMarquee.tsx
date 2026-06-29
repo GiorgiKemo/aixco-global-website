@@ -104,9 +104,9 @@ function PartnerMarqueeItem({
             src={logoSrc}
             alt=""
             aria-hidden
-            loading="eager"
-            fetchPriority="high"
-            decoding="sync"
+            loading="lazy"
+            fetchPriority="auto"
+            decoding="async"
             width={240}
             height={120}
             sizes="(min-width: 768px) 11.25rem, 9.5rem"
