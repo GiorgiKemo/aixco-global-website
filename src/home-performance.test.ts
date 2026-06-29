@@ -69,7 +69,7 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).not.toContain("rgba(17,16,14,0.78)");
   });
 
-  it("primes the about video once the nearby scene is revealed", () => {
+  it("primes the about video from the initial nearby scene render", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const aboutSceneStart = desktopStorySource.indexOf("function AboutScene");
     const philosophySceneStart = desktopStorySource.indexOf("function PhilosophyScene");
@@ -81,6 +81,7 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
     expect(aboutSceneSource).toContain("autoPlay={shouldPrimeVideo}");
     expect(aboutSceneSource).toContain('preload={shouldPrimeVideo ? "auto" : "none"}');
+    expect(desktopStorySource).toContain("storyChapters.map((_, index) => index <= 1)");
     expect(aboutSceneSource).not.toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
     expect(aboutSceneSource).not.toContain('preload={isActive ? "auto" : "none"}');
   });

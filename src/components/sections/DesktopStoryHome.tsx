@@ -2687,7 +2687,7 @@ export function DesktopStoryHome() {
   const pageProgressRef = useRef(-1);
   const [activeIndex, setActiveIndex] = useState(0);
   const [langOpen, setLangOpen] = useState(false);
-  const [sectionPresence, setSectionPresence] = useState<boolean[]>(() => storyChapters.map((_, index) => index === 0));
+  const [sectionPresence, setSectionPresence] = useState<boolean[]>(() => storyChapters.map((_, index) => index <= 1));
   const activeIndexRef = useRef(0);
   const [heroBackdropVisible, setHeroBackdropVisible] = useState(true);
   const heroBackdropVisibleRef = useRef(true);

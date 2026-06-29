@@ -120,6 +120,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
     expect(desktopStoryHome).toContain('preload={shouldPrimeVideo ? "auto" : "none"}');
     expect(desktopStoryHome).toContain("autoPlay={shouldPrimeVideo}");
+    expect(desktopStoryHome).toContain("storyChapters.map((_, index) => index <= 1)");
     expect(desktopStoryHome).toContain("if (!shouldPrimeVideo) {");
     expect(desktopStoryHome).toContain("setVideoStarted(false);");
     expect(desktopStoryHome).toContain("if (shouldPrimeVideo) {\n                    void event.currentTarget.play().catch(() => undefined);");
