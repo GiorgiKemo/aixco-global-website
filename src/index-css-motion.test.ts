@@ -318,6 +318,17 @@ describe("index.css motion rules", () => {
     expect(eyebrowLine).toContain("box-shadow: 0 1px 8px");
   });
 
+  it("keeps the legacy journey eyebrow readable over the surface blend", () => {
+    const eyebrow = cssBlock(".story-legacy-eyebrow");
+    const eyebrowLine = cssBlock(".story-legacy-eyebrow::before");
+
+    expect(desktopStoryHome).toContain("story-legacy-eyebrow");
+    expect(desktopStoryHome).not.toContain('className="eyebrow story-eyebrow">{tx("Our journey")}');
+    expect(eyebrow).toContain("color: hsl(var(--foreground) / 0.94)");
+    expect(eyebrow).toContain("text-shadow: 0 1px 0");
+    expect(eyebrowLine).toContain("background: hsl(var(--foreground) / 0.62)");
+  });
+
   it("keeps the desktop legacy image edge filled under its side blend", () => {
     const legacyMedia = cssBlock("[data-story-section='legacy'] [data-story-scene-media]");
 

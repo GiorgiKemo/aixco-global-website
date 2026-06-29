@@ -2028,7 +2028,7 @@ function LegacyScene({
       mediaWeight="wide"
       reverse
     >
-      <p className="eyebrow story-eyebrow">{tx("Our journey")}</p>
+      <p className="eyebrow story-eyebrow story-legacy-eyebrow">{tx("Our journey")}</p>
       <h2 className="story-h2">
         <StoryTextReveal label={tx("From Switzerland to Dubai to Batumi")} />
       </h2>
