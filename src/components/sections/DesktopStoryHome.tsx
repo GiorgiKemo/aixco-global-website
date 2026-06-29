@@ -1971,7 +1971,7 @@ function AboutAccessScene({
             isActive={isRevealed}
             className="relative z-10 flex min-h-[100svh] flex-col justify-end px-[clamp(2rem,5.4vw,6rem)] pb-[clamp(3rem,7.2svh,5.5rem)] pt-[clamp(4rem,8svh,6rem)]"
           >
-            <p className="eyebrow story-eyebrow text-white/78">{tx("Client approach")}</p>
+            <p className="eyebrow story-eyebrow story-about-access-eyebrow">{tx("Client approach")}</p>
             <div data-layout="story-about-access" className="grid max-w-[72rem] gap-[clamp(1rem,2.6svh,2rem)] lg:grid-cols-[minmax(0,0.92fr)_minmax(26rem,0.75fr)] lg:items-end">
               <div>
                 <p className="text-[clamp(4.6rem,10vw,11rem)] font-light leading-none tracking-normal text-white drop-shadow-[0_18px_44px_rgba(0,0,0,0.42)]">

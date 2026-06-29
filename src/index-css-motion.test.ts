@@ -306,6 +306,18 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-story-scene-media] {\n        min-height: 100svh;");
   });
 
+  it("keeps the client approach eyebrow readable over the access image", () => {
+    const eyebrow = cssBlock(".story-about-access-eyebrow");
+    const eyebrowLine = cssBlock(".story-about-access-eyebrow::before");
+
+    expect(desktopStoryHome).toContain("story-about-access-eyebrow");
+    expect(desktopStoryHome).not.toContain('story-eyebrow text-white/78">{tx("Client approach")}');
+    expect(eyebrow).toContain("color: rgb(255 255 255 / 0.94)");
+    expect(eyebrow).toContain("text-shadow:");
+    expect(eyebrowLine).toContain("background: rgb(255 255 255 / 0.76)");
+    expect(eyebrowLine).toContain("box-shadow: 0 1px 8px");
+  });
+
   it("keeps the desktop legacy image edge filled under its side blend", () => {
     const legacyMedia = cssBlock("[data-story-section='legacy'] [data-story-scene-media]");
 
