@@ -1952,7 +1952,7 @@ function AboutAccessScene({
           </StoryMediaReveal>
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(circle_at_68%_36%,rgba(255,255,255,0.24),transparent_28%),linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.16)_48%,rgba(17,16,14,0.26)),linear-gradient(180deg,rgba(17,16,14,0.06),rgba(17,16,14,0.56))]"
+            className="story-about-access-atmosphere absolute inset-0 bg-[radial-gradient(circle_at_68%_36%,rgba(255,255,255,0.24),transparent_28%),linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.16)_48%,rgba(17,16,14,0.26)),linear-gradient(180deg,rgba(17,16,14,0.06),rgba(17,16,14,0.56))]"
           />
           <div aria-hidden className="story-about-access-legacy-preview absolute inset-x-0 bottom-0 overflow-hidden">
             <Image

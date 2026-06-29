@@ -315,6 +315,28 @@ describe("index.css motion rules", () => {
     expect(accessVeil).not.toContain("display: none");
   });
 
+  it("blends the access-to-legacy handoff with a real overlap and surface wash", () => {
+    const accessExit = cssBlock(".story-about-access-stage::after");
+    const legacyTopVeil = cssBlock("[data-story-section='legacy']::before");
+
+    expect(css).toContain("margin-top: calc(clamp(6rem, 12svh, 8.5rem) * -1)");
+    expect(css).toContain("--story-section-blend-exit: clamp(9rem, 18svh, 12.5rem)");
+    expect(css).toContain("--story-boundary-height: clamp(11rem, 22svh, 15.5rem)");
+    expect(css).toContain("--story-boundary-overlap: clamp(5.6rem, 11svh, 8.25rem)");
+    expect(css).toContain("[data-story-section='aboutAccess'] .story-section-boundary {\n    display: block;");
+    expect(css).toContain("background: var(--story-boundary-gradient)");
+    expect(desktopStoryHome).toContain("story-about-access-atmosphere");
+    expect(css).toContain("[data-story-section='aboutAccess'] .story-about-access-atmosphere");
+    expect(css).toContain("rgb(0 0 0 / 0.82) calc(100% - clamp(7rem, 13svh, 9rem))");
+    expect(accessExit).toContain("height: clamp(11rem, 22svh, 15rem)");
+    expect(accessExit).toContain("hsl(var(--surface) / 0.68) 76%");
+    expect(accessExit).toContain("hsl(var(--surface) / 0.88) 100%");
+    expect(accessExit).toContain("filter: blur(9px)");
+    expect(legacyTopVeil).toContain("height: clamp(11rem, 22svh, 15rem)");
+    expect(legacyTopVeil).toContain("hsl(var(--surface)) 0%");
+    expect(legacyTopVeil).toContain("filter: blur(8px)");
+  });
+
   it("blends the about-to-philosophy handoff through the outgoing video instead of a dark stripe", () => {
     const aboutExit = cssBlock("[data-story-section='about'] .story-about-cinematic-stage::after");
     const philosophyBlend = cssBlock("[data-story-section='philosophy']");

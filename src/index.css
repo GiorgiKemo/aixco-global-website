@@ -818,24 +818,26 @@
     --story-section-blend-from: var(--story-tone-dark);
     --story-section-blend-to: var(--story-tone-surface);
     --story-section-blend-entry: clamp(2.5rem, 5.5svh, 4rem);
-    --story-section-blend-exit: clamp(3rem, 6svh, 4.5rem);
-    --story-boundary-height: clamp(3rem, 5.6svh, 4.15rem);
-    --story-boundary-overlap: clamp(1rem, 1.9svh, 1.45rem);
-    --story-boundary-blur: 12px;
+    --story-section-blend-exit: clamp(9rem, 18svh, 12.5rem);
+    --story-boundary-height: clamp(11rem, 22svh, 15.5rem);
+    --story-boundary-overlap: clamp(5.6rem, 11svh, 8.25rem);
+    --story-boundary-blur: 14px;
     --story-boundary-gradient:
       radial-gradient(
-        76% 84% at 50% 72%,
-        hsl(var(--surface) / 0.38) 0%,
-        hsl(var(--surface) / 0.2) 34%,
-        rgb(17 16 14 / 0.16) 68%,
+        88% 104% at 52% 58%,
+        hsl(var(--surface) / 0.46) 0%,
+        hsl(var(--surface) / 0.3) 36%,
+        rgb(17 16 14 / 0.08) 68%,
         hsl(var(--surface) / 0) 100%
       ),
       linear-gradient(
         180deg,
         rgb(17 16 14 / 0) 0%,
-        rgb(17 16 14 / 0.28) 34%,
-        hsl(var(--surface) / 0.2) 72%,
-        hsl(var(--surface) / 0) 100%
+        rgb(17 16 14 / 0.12) 18%,
+        hsl(var(--surface) / 0.3) 42%,
+        hsl(var(--surface) / 0.76) 68%,
+        hsl(var(--surface) / 0.48) 88%,
+        hsl(var(--surface) / 0.08) 100%
       );
   }
 
@@ -846,18 +848,10 @@
   }
 
   [data-story-section='aboutAccess'] .story-section-boundary {
-    display: none;
-    bottom: calc((var(--story-boundary-overlap) * -1) - clamp(0.25rem, 0.9svh, 0.65rem));
+    display: block;
+    bottom: calc((var(--story-boundary-overlap) * -1) - clamp(0.45rem, 1.15svh, 0.85rem));
     opacity: 0.96;
-    background:
-      linear-gradient(
-        180deg,
-        rgb(17 16 14 / 0) 0%,
-        rgb(17 16 14 / 0.32) 22%,
-        rgb(17 16 14 / 0.44) 48%,
-        rgb(17 16 14 / 0.22) 76%,
-        rgb(17 16 14 / 0) 100%
-      );
+    background: var(--story-boundary-gradient);
   }
 
   [data-story-section='legacy']::after {
@@ -882,28 +876,30 @@
     }
 
     [data-story-section='aboutAccess'] {
-      --story-boundary-height: clamp(3.5rem, 7svh, 4.8rem);
-      --story-boundary-overlap: clamp(1.55rem, 3svh, 2.2rem);
-      --story-boundary-blur: 9px;
+      --story-boundary-height: clamp(9rem, 18svh, 12rem);
+      --story-boundary-overlap: clamp(4.5rem, 9svh, 6.5rem);
+      --story-boundary-blur: 12px;
       --story-boundary-gradient:
         radial-gradient(
-          90% 86% at 50% 74%,
-          hsl(var(--surface) / 0.28) 0%,
-          rgb(17 16 14 / 0.14) 58%,
+          96% 96% at 50% 62%,
+          hsl(var(--surface) / 0.42) 0%,
+          hsl(var(--surface) / 0.24) 46%,
+          rgb(17 16 14 / 0.06) 70%,
           hsl(var(--surface) / 0) 100%
         ),
         linear-gradient(
           180deg,
           rgb(17 16 14 / 0) 0%,
-          rgb(17 16 14 / 0.24) 42%,
-          hsl(var(--surface) / 0.14) 76%,
-          hsl(var(--surface) / 0) 100%
+          rgb(17 16 14 / 0.1) 20%,
+          hsl(var(--surface) / 0.28) 48%,
+          hsl(var(--surface) / 0.72) 76%,
+          hsl(var(--surface) / 0.12) 100%
         );
     }
   }
 
   [data-story-section='legacy'] {
-    margin-top: calc(clamp(2.25rem, 4.8svh, 3.75rem) * -1);
+    margin-top: calc(clamp(6rem, 12svh, 8.5rem) * -1);
     --story-section-blend-from: var(--story-tone-surface);
     --story-section-blend-to: var(--story-tone-surface);
     --story-boundary-height: clamp(7rem, 14svh, 10rem);
@@ -923,18 +919,18 @@
     inset-inline: 0;
     top: -1px;
     z-index: 24;
-    height: clamp(6.5rem, 12.5svh, 8.8rem);
+    height: clamp(11rem, 22svh, 15rem);
     pointer-events: none;
     background:
       linear-gradient(
         180deg,
-        rgb(17 16 14 / 0.72) 0%,
-        rgb(17 16 14 / 0.54) 30%,
-        rgb(17 16 14 / 0.26) 58%,
+        hsl(var(--surface)) 0%,
+        hsl(var(--surface) / 0.92) 26%,
+        hsl(var(--surface) / 0.58) 56%,
         hsl(var(--surface) / 0.16) 82%,
         hsl(var(--surface) / 0) 100%
       );
-    filter: blur(4px);
+    filter: blur(8px);
   }
 
   [data-story-section='legacy'] > div:not(.story-section-boundary) {
@@ -2271,6 +2267,7 @@
 
   [data-story-section='aboutAccess'] .story-about-access-stage {
     overflow: hidden;
+    background: hsl(var(--surface));
   }
 
   [data-story-section='aboutAccess'] .story-scene-reveal {
@@ -2282,6 +2279,26 @@
     overflow: hidden;
   }
 
+  [data-story-section='aboutAccess'] .story-about-access-media,
+  [data-story-section='aboutAccess'] .story-about-access-atmosphere {
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 calc(100% - clamp(10rem, 19svh, 13rem)),
+      rgb(0 0 0 / 0.82) calc(100% - clamp(7rem, 13svh, 9rem)),
+      rgb(0 0 0 / 0.32) calc(100% - clamp(3rem, 6svh, 4.25rem)),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 calc(100% - clamp(10rem, 19svh, 13rem)),
+      rgb(0 0 0 / 0.82) calc(100% - clamp(7rem, 13svh, 9rem)),
+      rgb(0 0 0 / 0.32) calc(100% - clamp(3rem, 6svh, 4.25rem)),
+      transparent 100%
+    );
+  }
+
   .story-about-access-stage::after {
     content: "";
     display: block;
@@ -2289,15 +2306,20 @@
     inset-inline: 0;
     bottom: -1px;
     z-index: 7;
-    height: clamp(1.4rem, 2.7svh, 2rem);
+    height: clamp(11rem, 22svh, 15rem);
     pointer-events: none;
-    background: linear-gradient(
-      180deg,
-      rgb(17 16 14 / 0) 0%,
-      rgb(17 16 14 / 0.3) 54%,
-      hsl(var(--surface) / 0.28) 100%
-    );
-    filter: blur(3px);
+    background:
+      linear-gradient(
+        180deg,
+        rgb(17 16 14 / 0) 0%,
+        rgb(17 16 14 / 0.12) 18%,
+        hsl(var(--surface) / 0.22) 44%,
+        hsl(var(--surface) / 0.68) 76%,
+        hsl(var(--surface) / 0.88) 100%
+      ),
+      radial-gradient(82% 88% at 68% 100%, rgb(218 173 128 / 0.22), hsl(var(--surface) / 0) 72%);
+    filter: blur(9px);
+    transform: translate3d(0, 0.35rem, 0) scaleY(1.04);
   }
 
   [data-story-section='legacy'] > div:not(.story-section-boundary)::before {
