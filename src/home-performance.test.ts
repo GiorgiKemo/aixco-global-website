@@ -69,7 +69,7 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).not.toContain("rgba(17,16,14,0.78)");
   });
 
-  it("keeps the offscreen about video from downloading before the scene is active", () => {
+  it("primes the about video once the nearby scene is revealed", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const aboutSceneStart = desktopStorySource.indexOf("function AboutScene");
     const philosophySceneStart = desktopStorySource.indexOf("function PhilosophyScene");
@@ -77,11 +77,12 @@ describe("home page performance structure", () => {
 
     expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
     expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
-    expect(aboutSceneSource).toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(aboutSceneSource).toContain("autoPlay={isActive}");
-    expect(aboutSceneSource).toContain('preload={isActive ? "auto" : "none"}');
-    expect(aboutSceneSource).not.toContain("src={isRevealed ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(aboutSceneSource).not.toContain('preload={isRevealed ? "auto" : "none"}');
+    expect(aboutSceneSource).toContain("const shouldPrimeVideo = isRevealed || isActive;");
+    expect(aboutSceneSource).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(aboutSceneSource).toContain("autoPlay={shouldPrimeVideo}");
+    expect(aboutSceneSource).toContain('preload={shouldPrimeVideo ? "auto" : "none"}');
+    expect(aboutSceneSource).not.toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(aboutSceneSource).not.toContain('preload={isActive ? "auto" : "none"}');
   });
 
   it("does not mount heavy story media before its section is revealed", () => {

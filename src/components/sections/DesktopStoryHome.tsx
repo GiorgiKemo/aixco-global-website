@@ -1479,6 +1479,7 @@ function AboutScene({
 }) {
   const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
   const [videoStarted, setVideoStarted] = useState(false);
+  const shouldPrimeVideo = isRevealed || isActive;
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
@@ -1492,7 +1493,7 @@ function AboutScene({
 
     video.playbackRate = 0.82;
 
-    if (!isActive) {
+    if (!shouldPrimeVideo) {
       setVideoStarted(false);
       video.pause();
       video.removeAttribute("src");
@@ -1523,7 +1524,7 @@ function AboutScene({
       video.removeEventListener("loadeddata", playVideo);
       video.removeEventListener("canplay", playVideo);
     };
-  }, [isActive]);
+  }, [shouldPrimeVideo]);
 
   const markVideoStarted = () => {
     setVideoStarted(true);
@@ -1540,21 +1541,21 @@ function AboutScene({
             <div className="story-about-cinematic-image relative h-full w-full">
               <video
                 ref={dubaiVideoRef}
-                src={isActive ? aixcoDubaiHeroVideo.src : undefined}
+                src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}
                 className="h-full w-full object-cover"
                 poster={aixcoDubaiHeroVideo.poster}
-                autoPlay={isActive}
+                autoPlay={shouldPrimeVideo}
                 muted
                 loop
                 playsInline
-                preload={isActive ? "auto" : "none"}
+                preload={shouldPrimeVideo ? "auto" : "none"}
                 aria-label={tx(aixcoDubaiHeroVideo.title)}
                 onLoadedData={(event) => {
                   event.currentTarget.playbackRate = 0.82;
                 }}
                 onCanPlay={(event) => {
                   event.currentTarget.playbackRate = 0.82;
-                  if (isActive) {
+                  if (shouldPrimeVideo) {
                     void event.currentTarget.play().catch(() => undefined);
                   }
                 }}

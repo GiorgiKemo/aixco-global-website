@@ -115,13 +115,14 @@ describe("index.css motion rules", () => {
     expect(css).toContain(".story-contact-card__svg-icon");
   });
 
-  it("keeps the next-section About video deferred until it is active", () => {
-    expect(desktopStoryHome).toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(desktopStoryHome).toContain('preload={isActive ? "auto" : "none"}');
-    expect(desktopStoryHome).toContain("autoPlay={isActive}");
-    expect(desktopStoryHome).toContain("if (!isActive) {");
+  it("primes the next-section About video before the scroll handoff", () => {
+    expect(desktopStoryHome).toContain("const shouldPrimeVideo = isRevealed || isActive;");
+    expect(desktopStoryHome).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain('preload={shouldPrimeVideo ? "auto" : "none"}');
+    expect(desktopStoryHome).toContain("autoPlay={shouldPrimeVideo}");
+    expect(desktopStoryHome).toContain("if (!shouldPrimeVideo) {");
     expect(desktopStoryHome).toContain("setVideoStarted(false);");
-    expect(desktopStoryHome).toContain("if (isActive) {\n                    void event.currentTarget.play().catch(() => undefined);");
+    expect(desktopStoryHome).toContain("if (shouldPrimeVideo) {\n                    void event.currentTarget.play().catch(() => undefined);");
     expect(desktopStoryHome).toContain("onPlaying={markVideoStarted}");
     expect(desktopStoryHome).toContain('data-about-video-poster=""');
     expect(desktopStoryHome).toContain('data-video-started={videoStarted ? "true" : "false"}');
@@ -145,7 +146,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('alt: tx("Burj Khalifa and Dubai skyline at sunset")');
     expect(desktopStoryHome).toContain('sizes: "(min-width: 1280px) 82vw, 100vw"');
     expect(desktopStoryHome).not.toContain('title: tx("Dubai legacy portfolio video")');
-    expect(desktopStoryHome).toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
   });
 
   it("requests high-density images for tall cropped story panels", () => {
