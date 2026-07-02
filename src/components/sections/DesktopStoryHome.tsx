@@ -2341,7 +2341,7 @@ function TeamScene({
 }) {
   const { team } = useSiteContent();
   const { openTeam } = useUI();
-  const { activeIndex, selectMember, previewMember, resumeRotation } = useTeamMemberRotation({
+  const { activeIndex, selectMember } = useTeamMemberRotation({
     memberCount: team.length,
     isActive,
     intervalMs: storyTeamSwitchIntervalMs,
@@ -2373,7 +2373,6 @@ function TeamScene({
       <div
         data-layout="story-team-list"
         className="w-full divide-y divide-foreground/30"
-        onMouseLeave={resumeRotation}
       >
         {team.map((member, index) => {
           const isSelected = activeIndex === index;
@@ -2388,9 +2387,6 @@ function TeamScene({
                 selectMember(index);
                 openTeam(member);
               }}
-              onMouseEnter={() => previewMember(index)}
-              onFocus={() => previewMember(index)}
-              onBlur={resumeRotation}
               className={cn(
                 "group/story-team-member relative grid w-full cursor-pointer grid-cols-[3.75rem_minmax(0,1fr)] gap-3 px-3 text-left transition-colors duration-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2",
                 isSelected && "bg-foreground/[0.04] text-primary",
