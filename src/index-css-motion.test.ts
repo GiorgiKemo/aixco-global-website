@@ -52,7 +52,8 @@ describe("index.css motion rules", () => {
 
   it("keeps partner marquee scrolling even when reduced motion is preferred", () => {
     expect(css).not.toMatch(/\.partner-marquee-track\s*\{[^}]*animation:\s*none/);
-    expect(css).toContain("animation-duration: 52s !important");
+    expect(css).toContain("--partner-marquee-duration: 58s;");
+    expect(css).toContain("animation-duration: 72s !important");
   });
 
   it("keeps story letter reveals active even when the browser prefers reduced motion", () => {

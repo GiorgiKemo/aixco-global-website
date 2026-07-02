@@ -2783,7 +2783,7 @@
 
   .partner-marquee {
     --partner-marquee-gap: 1.75rem;
-    --partner-marquee-duration: 32s;
+    --partner-marquee-duration: 44s;
     --partner-item-width: 12rem;
     --partner-logo-stage-height: 7.5rem;
     position: relative;
@@ -2810,7 +2810,7 @@
 
   .partner-marquee--story {
     --partner-marquee-gap: 1.35rem;
-    --partner-marquee-duration: 26s;
+    --partner-marquee-duration: 58s;
     --partner-item-width: clamp(10rem, 12.5vw, 12rem);
     --partner-logo-stage-height: clamp(6.5rem, 10.5svh, 7.5rem);
     padding-block: 0.35rem 0.75rem;
@@ -3896,7 +3896,7 @@
     }
 
     .partner-marquee-track {
-      animation-duration: 52s !important;
+      animation-duration: 72s !important;
     }
 
     .partner-marquee {
@@ -3911,7 +3911,7 @@
 
     .partner-marquee--story .partner-marquee-track {
       animation-play-state: running !important;
-      animation-duration: 52s !important;
+      animation-duration: 72s !important;
     }
 
     .news-ticker-track {
