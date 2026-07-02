@@ -18,6 +18,17 @@ function TranslationProbe() {
   );
 }
 
+function MarketAccessProbe() {
+  const { tx } = useI18n();
+
+  return (
+    <div>
+      <p data-testid="market-access-hero">{tx("Emerging Market Opportunities")}</p>
+      <p data-testid="market-access-title">{tx("Emerging Market Opportunities with AIXCO")}</p>
+    </div>
+  );
+}
+
 const visibleStoryProbeTexts = [
   "Global Real Estate",
   "Emerging Market Opportunities with AIXCO",
@@ -88,6 +99,23 @@ describe("I18nProvider", () => {
 
     await waitFor(() => {
       expect(document.title).toBe("AIXCO.Global | Immobilieninvestment");
+    });
+  });
+
+  it("uses the approved German market access headline", async () => {
+    localStorage.setItem("aixco-lang", "de");
+
+    render(
+      <I18nProvider>
+        <MarketAccessProbe />
+      </I18nProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("market-access-hero")).toHaveTextContent("Zugang zu aufstrebenden Märkten");
+      expect(screen.getByTestId("market-access-title")).toHaveTextContent(
+        "Zugang zu aufstrebenden Märkten mit AIXCO",
+      );
     });
   });
 
