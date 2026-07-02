@@ -4851,6 +4851,12 @@
       grid-column: span 9 / span 9;
     }
 
+    @media (min-width: 1280px) {
+      [data-story-section='philosophyPlatform'] [data-story-scene-column] {
+        padding-left: clamp(4rem, 6vw, 5.5rem);
+      }
+    }
+
     [data-story-section='philosophyPlatform'] [data-story-scene-media] {
       grid-column: span 3 / span 3;
     }
