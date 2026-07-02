@@ -189,4 +189,14 @@ describe("home page performance structure", () => {
     expect(desktopStorySource).toContain("openTeam(member);");
     expect(modalSource).toContain('{modal === "team" && <TeamDetail');
   });
+
+  it("keeps leadership portrait rotation calm instead of snap-fast", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+
+    expect(desktopStorySource).toContain("duration: 1.35");
+    expect(desktopStorySource).toContain("const storyTeamSwitchIntervalMs = 6800;");
+    expect(desktopStorySource).toContain("const storyTeamResumeDelayMs = 9000;");
+    expect(desktopStorySource).toContain("storyMediaSwitchReducedMotionTransition");
+    expect(desktopStorySource).not.toContain("const storyTeamSwitchIntervalMs = 2400;");
+  });
 });

@@ -56,7 +56,7 @@ import { PartnerMarquee } from "@/components/partners/PartnerMarquee";
 import { useTeamMemberRotation } from "@/hooks/use-team-member-rotation";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import { AnimatePresence, motion } from "@/lib/framer-motion";
-import { premiumEase, reducedMotionTransition, revealTransition } from "@/lib/motion";
+import { premiumEase, revealTransition } from "@/lib/motion";
 import {
   formatMetricValue,
   fundAssetGalleries,
@@ -205,7 +205,12 @@ const desktopStoryNavGroups: DesktopStoryNavGroup[] = [
 ];
 
 const storyMediaSwitchTransition = {
-  duration: 0.48,
+  duration: 1.35,
+  ease: premiumEase,
+};
+
+const storyMediaSwitchReducedMotionTransition = {
+  duration: 1.05,
   ease: premiumEase,
 };
 
@@ -214,8 +219,8 @@ type StorySectionMetric = {
   top: number;
 };
 
-const storyTeamSwitchIntervalMs = 2400;
-const storyTeamResumeDelayMs = 3200;
+const storyTeamSwitchIntervalMs = 6800;
+const storyTeamResumeDelayMs = 9000;
 const maxAnimatedStoryLetters = 96;
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
@@ -531,10 +536,11 @@ function StoryCrossfadeMediaPanel({
       <motion.div
         key={mediaKey}
         className="absolute inset-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={shouldReduceMotion ? reducedMotionTransition : storyMediaSwitchTransition}
+        initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 1.012, filter: "blur(2px)" }}
+        animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, filter: "blur(0px)" }}
+        exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.998, filter: "blur(1.5px)" }}
+        transition={shouldReduceMotion ? storyMediaSwitchReducedMotionTransition : storyMediaSwitchTransition}
+        style={{ willChange: shouldReduceMotion ? "opacity" : "opacity, transform, filter" }}
       >
         <StoryMediaPanel media={media} isActive={isActive} preloadMedia={preloadMedia} />
       </motion.div>
