@@ -153,7 +153,7 @@ export const curatedVisibleTranslations = {
     ar: "ملكية أو مشاركة مرنة",
   },
   "For many clients, this leads to direct ownership of carefully selected properties in emerging, profitable, sustainable markets.": {
-    de: "Fuer viele Kunden fuehrt dies zum direkten Eigentum an sorgfaeltig ausgewaehlten Immobilien in aufstrebenden, profitablen und nachhaltigen Maerkten.",
+    de: "Fuer viele Kunden fuehrt dies zum direkten Eigentum an sorgfaeltig ausgewaehlten Immobilien in aufstrebenden, profitablen und nachhaltigen Märkten.",
     ru: "Для многих клиентов это означает прямое владение тщательно отобранной недвижимостью на развивающихся, прибыльных и устойчивых рынках.",
     ka: "ბევრი კლიენტისთვის ეს ნიშნავს პირდაპირ მფლობელობას ფრთხილად შერჩეულ უძრავ ქონებაზე აღმავალ, მომგებიან და მდგრად ბაზრებზე.",
     tr: "Birçok müşteri için bu, gelişen, karlı ve sürdürülebilir pazarlarda özenle seçilmiş mülklerin doğrudan sahipliğine dönüşür.",
@@ -174,7 +174,7 @@ export const curatedVisibleTranslations = {
     ar: "يبقى التزامنا كما هو: إرشاد شفاف، دعم طويل الأجل، ووصول إلى فرص تتوافق مع أهدافك الشخصية.",
   },
   "Investing is not only about markets and properties. It is about people, priorities, and building a future with confidence.": {
-    de: "Investieren bedeutet nicht nur Maerkte und Immobilien. Es geht um Menschen, Prioritaeten und den Aufbau einer Zukunft mit Vertrauen.",
+    de: "Investieren bedeutet nicht nur Märkte und Immobilien. Es geht um Menschen, Prioritaeten und den Aufbau einer Zukunft mit Vertrauen.",
     ru: "Инвестирование - это не только рынки и недвижимость. Это люди, приоритеты и уверенное построение будущего.",
     ka: "ინვესტირება მხოლოდ ბაზრებსა და ქონებას არ ეხება. ეს არის ადამიანები, პრიორიტეტები და მომავლის თავდაჯერებულად აშენება.",
     tr: "Yatırım yalnızca pazarlar ve mülklerle ilgili değildir. İnsanlar, öncelikler ve geleceği güvenle inşa etmekle ilgilidir.",
@@ -356,7 +356,7 @@ export const curatedVisibleTranslations = {
     ar: "موظفون محترفون وذوو كفاءة عالية",
   },
   "Real estate transacted across markets": {
-    de: "Immobilienwert ueber mehrere Maerkte abgewickelt",
+    de: "Immobilienwert ueber mehrere Märkte abgewickelt",
     ru: "Недвижимость, проведенная через разные рынки",
     ka: "უძრავი ქონების გარიგებები მრავალ ბაზარზე",
     tr: "Farklı pazarlarda işlem gören gayrimenkul",
@@ -958,7 +958,7 @@ export const curatedVisibleTranslations = {
     ar: "تجمع AIXCO بين خبرة السوق المحلية والخبرة الدولية لتوفير الوصول إلى فرص مهيأة للنمو طويل الأجل وارتفاع قيمة رأس المال.",
   },
   "AIXCO has completed more than 2,000 real estate transactions and transacted over $4.2 billion in property value across international markets.": {
-    de: "AIXCO hat mehr als 2.000 Immobilientransaktionen abgeschlossen und ueber internationale Maerkte hinweg Immobilienwerte von mehr als 4,2 Milliarden US-Dollar abgewickelt.",
+    de: "AIXCO hat mehr als 2.000 Immobilientransaktionen abgeschlossen und ueber internationale Märkte hinweg Immobilienwerte von mehr als 4,2 Milliarden US-Dollar abgewickelt.",
     ru: "AIXCO завершила более 2 000 сделок с недвижимостью и провела сделки на сумму свыше 4,2 млрд долларов США на международных рынках.",
     ka: "AIXCO-მ დაასრულა 2,000-ზე მეტი უძრავი ქონების გარიგება და საერთაშორისო ბაზრებზე 4.2 მილიარდ აშშ დოლარზე მეტი ღირებულების ქონება განახორციელა.",
     tr: "AIXCO, uluslararası pazarlarda 2.000'den fazla gayrimenkul işlemi tamamlamış ve 4,2 milyar doların üzerinde mülk değeriyle işlem yapmıştır.",
