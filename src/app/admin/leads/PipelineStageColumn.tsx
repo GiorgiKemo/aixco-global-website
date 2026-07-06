@@ -23,6 +23,7 @@ export function PipelineStageColumn({
   onPointerUp,
   onPointerCancel,
   onMouseDown,
+  onStatusChange,
 }: {
   stage: PipelineStage;
   leads: DashboardLead[];
@@ -34,27 +35,28 @@ export function PipelineStageColumn({
   onPointerUp: (event: PointerEvent<HTMLElement>) => void;
   onPointerCancel: (event: PointerEvent<HTMLElement>) => void;
   onMouseDown: (event: ReactMouseEvent<HTMLElement>, lead: DashboardLead) => void;
+  onStatusChange: (lead: DashboardLead, status: LeadStatus) => void;
 }) {
   return (
-    <section aria-label={`${stage.label} leads`} className="flex min-h-[18rem] min-w-0 flex-col">
-      <div className={`flex items-center justify-between rounded-lg border px-3 py-2 ${stage.headerClass}`}>
+    <section aria-label={`${stage.label} leads`} className="flex min-h-[20rem] min-w-0 flex-col">
+      <div className={`flex items-center justify-between rounded-lg border px-3.5 py-3 ${stage.headerClass}`}>
         <div className="flex min-w-0 items-center gap-2">
           <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${stage.dotClass}`} aria-hidden="true" />
-          <h3 className="truncate text-sm font-semibold">{stage.label}</h3>
+          <h3 className="truncate text-sm font-semibold tracking-[-0.01em]">{stage.label}</h3>
         </div>
-        <span className="rounded-full bg-white/70 px-2 py-0.5 text-xs font-semibold">{leads.length}</span>
+        <span className="rounded-full border border-current/10 bg-white/70 px-2.5 py-1 text-xs font-semibold leading-none">{leads.length}</span>
       </div>
 
       <div
         data-testid={`pipeline-stage-${stage.value}`}
         data-pipeline-stage-status={stage.value}
-        className={`scrollbar-seamless mt-2 flex min-h-[14rem] flex-1 flex-col gap-2 overflow-y-auto rounded-lg border bg-background/60 p-2 transition-colors md:max-h-[30rem] ${
-          isDropTarget ? "border-primary/60 bg-primary/5 ring-2 ring-primary/15" : "border-border/60"
+        className={`scrollbar-seamless mt-2 flex min-h-[16rem] flex-1 flex-col gap-2 overflow-y-auto rounded-lg border bg-[#f6f4ef] p-2.5 transition-colors md:max-h-[34rem] ${
+          isDropTarget ? "border-[#e6c767] bg-[#e6c767]/10 ring-2 ring-[#e6c767]/25" : "border-[#161616]/10"
         }`}
       >
         {leads.length === 0 ? (
-          <div className="flex min-h-24 items-center justify-center rounded-md border border-dashed border-border bg-white/70 px-3 py-6 text-center text-xs text-muted-foreground">
-            Empty
+          <div className="flex min-h-28 items-center justify-center rounded-md border border-dashed border-[#161616]/10 bg-white/70 px-3 py-6 text-center text-xs font-medium text-[#9e9d9d]">
+            No leads
           </div>
         ) : (
           leads.map((lead) => (
@@ -68,6 +70,7 @@ export function PipelineStageColumn({
               onPointerUp={onPointerUp}
               onPointerCancel={onPointerCancel}
               onMouseDown={onMouseDown}
+              onStatusChange={onStatusChange}
             />
           ))
         )}

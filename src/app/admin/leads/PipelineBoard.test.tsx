@@ -42,9 +42,9 @@ describe("PipelineBoard", () => {
   it("uses responsive grid columns instead of a fixed-width horizontal board", () => {
     const { container } = render(<PipelineBoard leads={leads} />);
 
-    const boardGrid = container.querySelector(".mt-5.grid.min-w-0");
+    const boardGrid = container.querySelector(".mt-4.grid.min-w-0");
 
-    expect(boardGrid).toHaveClass("grid-cols-1", "md:grid-cols-2", "lg:grid-cols-4");
+    expect(boardGrid).toHaveClass("grid-cols-1", "md:grid-cols-2", "xl:grid-cols-4");
     expect(boardGrid).not.toHaveClass("min-w-[980px]", "overflow-x-auto");
   });
 

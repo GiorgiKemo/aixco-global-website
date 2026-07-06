@@ -37,6 +37,8 @@ export function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
     return grouped;
   }, [items]);
 
+  const openLeadCount = groupedLeads.get("new")?.length ?? 0;
+
   useEffect(() => {
     if (!feedback) return;
 
@@ -184,16 +186,16 @@ export function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
   }
 
   return (
-    <section className="relative rounded-xl border border-border/70 bg-surface-elevated p-4 shadow-elegant md:p-5">
+    <section className="relative">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">Pipeline</p>
-          <h2 className="mt-2 font-display text-2xl font-semibold leading-tight text-foreground">Lead pipeline</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Move contact forms and live chat transcripts through the same qualification flow.
-          </p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8b6a18]">Pipeline</p>
+          <h2 className="mt-2 font-display text-2xl font-semibold leading-tight tracking-[-0.02em] text-[#161616] md:text-3xl">Lead flow</h2>
         </div>
-        <p className="text-sm font-medium text-muted-foreground">{items.length} total lead records</p>
+        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#6f6e6a]">
+          <span className="rounded-full border border-[#e6c767]/60 bg-[#e6c767]/15 px-3 py-1.5 text-[#161616]">{openLeadCount} new</span>
+          <span className="rounded-full border border-[#161616]/10 bg-white px-3 py-1.5">{items.length} total</span>
+        </div>
       </div>
 
       {feedback && (
@@ -207,7 +209,7 @@ export function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
         </p>
       )}
 
-      <div className="mt-5 grid min-w-0 grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-4 grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         {pipelineStages.map((stage) => {
           const stageLeads = groupedLeads.get(stage.value) ?? [];
 
@@ -224,6 +226,7 @@ export function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
               onPointerUp={handlePointerUp}
               onPointerCancel={handlePointerCancel}
               onMouseDown={handleMouseDown}
+              onStatusChange={(lead, status) => void moveLeadToStatus(lead, status)}
             />
           );
         })}

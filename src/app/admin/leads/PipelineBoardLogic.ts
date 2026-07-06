@@ -6,26 +6,26 @@ export const pipelineStages: PipelineStage[] = [
   {
     label: "New",
     value: "new",
-    headerClass: "border-amber-200 bg-amber-50 text-amber-900",
-    dotClass: "bg-amber-500",
+    headerClass: "border-[#e6c767]/60 bg-[#e6c767]/15 text-[#161616]",
+    dotClass: "bg-[#e6c767]",
   },
   {
     label: "Contacted",
     value: "contacted",
-    headerClass: "border-blue-200 bg-blue-50 text-blue-900",
-    dotClass: "bg-blue-500",
+    headerClass: "border-[#161616]/10 bg-white text-[#161616]",
+    dotClass: "bg-[#161616]",
   },
   {
     label: "Qualified",
     value: "qualified",
-    headerClass: "border-emerald-200 bg-emerald-50 text-emerald-900",
-    dotClass: "bg-emerald-500",
+    headerClass: "border-[#161616] bg-[#161616] text-white",
+    dotClass: "bg-[#e6c767]",
   },
   {
     label: "Archived",
     value: "archived",
-    headerClass: "border-slate-200 bg-slate-100 text-slate-700",
-    dotClass: "bg-slate-400",
+    headerClass: "border-[#9e9d9d]/35 bg-[#f0efeb] text-[#6b6a67]",
+    dotClass: "bg-[#9e9d9d]",
   },
 ];
 
