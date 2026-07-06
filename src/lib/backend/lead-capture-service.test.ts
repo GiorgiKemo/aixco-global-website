@@ -100,6 +100,68 @@ describe("lead capture service", () => {
     });
   });
 
+  it("emails a notification after a contact submission is stored", async () => {
+    const { client, inserts } = createCaptureClient();
+    const notifications: Record<string, unknown>[] = [];
+
+    await expect(
+      captureContactSubmission(
+        {
+          name: "Email User",
+          email: "EMAIL@EXAMPLE.COM",
+          interest: "Schedule a Call",
+          message: "Schedule a call request. Phone number: +995555555555. Preferred time for a call: Jul 8, 2026, 3:00 PM",
+        },
+        { page_path: "/#contact" },
+        {
+          client,
+          headers,
+          contactEmailNotifier: async (notification) => {
+            notifications.push(notification);
+            return { ok: true };
+          },
+        },
+      ),
+    ).resolves.toEqual({ ok: true });
+
+    expect(inserts).toHaveLength(1);
+    expect(notifications).toHaveLength(1);
+    expect(notifications[0]).toMatchObject({
+      name: "Email User",
+      email: "email@example.com",
+      interest: "Schedule a Call",
+      pagePath: "/#contact",
+      userAgent: "Vitest",
+    });
+  });
+
+  it("does not email a notification when contact storage fails", async () => {
+    const { client } = createCaptureClient({ message: "database unavailable" });
+    let notificationCount = 0;
+
+    await expect(
+      captureContactSubmission(
+        {
+          name: "Fail User",
+          email: "fail@example.com",
+          interest: "Send an Email",
+          message: "Please send more information about AIXCO.",
+        },
+        {},
+        {
+          client,
+          headers,
+          contactEmailNotifier: async () => {
+            notificationCount += 1;
+            return { ok: true };
+          },
+        },
+      ),
+    ).resolves.toEqual({ ok: false, reason: "database unavailable" });
+
+    expect(notificationCount).toBe(0);
+  });
+
   it("derives a chat interest and stores the normalized transcript", async () => {
     const { client, inserts } = createCaptureClient();
 

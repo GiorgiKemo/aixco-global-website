@@ -12,6 +12,10 @@ import {
 import { isSafePortalUrl } from "@/lib/security/urls";
 import { getSupabaseAdminClient, getSupabaseAdminConfig } from "@/lib/supabase/admin";
 import type { Database, Json } from "@/lib/supabase/database.types";
+import {
+  sendContactLeadNotificationEmail,
+  type ContactLeadNotification,
+} from "./lead-notification-email";
 
 type ContactInsert = Database["public"]["Tables"]["contact_submissions"]["Insert"];
 type ChatInsert = Database["public"]["Tables"]["chat_transcripts"]["Insert"];
@@ -29,6 +33,7 @@ type LeadCaptureClient = { from: (table: CaptureTable) => unknown };
 
 type LeadCaptureOptions = {
   client?: LeadCaptureClient;
+  contactEmailNotifier?: (notification: ContactLeadNotification) => Promise<CaptureResult>;
   headers?: Headers;
   hasServerConfig?: boolean;
 };
@@ -198,7 +203,26 @@ export async function captureContactSubmission(
     ...serverContext,
   };
 
-  return insertRow("contact_submissions", payload, options);
+  const insertResult = await insertRow("contact_submissions", payload, options);
+  if (!insertResult.ok) return insertResult;
+
+  const notification: ContactLeadNotification = {
+    name: payload.name,
+    email: payload.email,
+    interest: payload.interest ?? null,
+    message: payload.message,
+    locale: payload.locale ?? null,
+    pagePath: payload.page_path ?? null,
+    userAgent: payload.user_agent ?? null,
+    metadata: payload.metadata ?? {},
+  };
+  const emailResult = await (options.contactEmailNotifier ?? sendContactLeadNotificationEmail)(notification);
+
+  if (!emailResult.ok && !emailResult.skipped) {
+    console.error(`Lead notification email failed: ${emailResult.reason}`);
+  }
+
+  return insertResult;
 }
 
 export async function captureChatTranscript(
