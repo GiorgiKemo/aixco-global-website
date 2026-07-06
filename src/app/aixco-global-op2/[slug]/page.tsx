@@ -135,13 +135,13 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
   return (
     <main className="min-h-screen bg-background text-foreground xl:pl-60">
       <PropertyChrome />
-      <section className="grid min-h-screen grid-cols-1 pt-[4.75rem] xl:grid-cols-12 xl:pt-0">
-        <div className="order-2 grid content-center gap-8 px-5 py-10 sm:px-8 lg:px-12 xl:order-1 xl:col-span-7 xl:px-14">
+      <section className="property-hero-section grid min-h-screen grid-cols-1 pt-[4.75rem] xl:grid-cols-12 xl:pt-0">
+        <div className="property-hero-copy order-2 grid content-center gap-8 px-5 py-10 sm:px-8 lg:px-12 xl:order-1 xl:col-span-7 xl:px-14">
           <div>
             <p className="eyebrow text-primary">
               <Tx>Batumi property profile</Tx>
             </p>
-            <h1 className="mt-5 max-w-4xl font-display text-[clamp(3rem,7vw,6.5rem)] font-semibold leading-[0.92] tracking-[-0.04em] text-foreground">
+            <h1 className="mt-5 max-w-4xl font-display text-[clamp(3rem,7vw,6.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground">
               {property.name}
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-foreground/74 md:text-xl">
@@ -204,7 +204,7 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
           </div>
         </div>
 
-        <aside className="relative order-1 min-h-[38rem] overflow-hidden bg-foreground xl:order-2 xl:col-span-5 xl:min-h-screen">
+        <aside className="property-hero-media relative order-1 min-h-[38rem] overflow-hidden bg-foreground xl:order-2 xl:col-span-5 xl:min-h-screen">
           {video ? (
             <video src={video.src} poster={image} autoPlay muted loop playsInline preload="metadata" className="absolute inset-0 h-full w-full object-cover" />
           ) : (

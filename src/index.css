@@ -114,7 +114,7 @@
     --story-h2-min: 3.25rem;
     --story-h2-pref: 5.2vw;
     --story-h2-max: 6.25rem;
-    --story-h2-lh: 0.92;
+    --story-h2-lh: 1.04;
     --story-h2-tracking: -0.035em;
 
     --story-body-min: 1.125rem;
@@ -618,6 +618,7 @@
     line-height: var(--story-h2-lh);
     letter-spacing: var(--story-h2-tracking);
     min-width: 0;
+    padding-block: 0.06em 0.1em;
     overflow-wrap: normal;
     word-break: normal;
     hyphens: manual;
@@ -816,7 +817,7 @@
   }
 
   [data-story-section='aboutAccess'] {
-    margin-top: calc(clamp(11rem, 24svh, 16rem) * -1);
+    margin-top: 0;
     --story-section-blend-from: var(--story-tone-dark);
     --story-section-blend-to: var(--story-tone-surface);
     --story-section-blend-entry: clamp(2.5rem, 5.5svh, 4rem);
@@ -2118,24 +2119,8 @@
   }
 
   [data-story-section='aboutAccess'] > div:not(.story-section-boundary) {
-    -webkit-mask-image: linear-gradient(
-      180deg,
-      transparent 0%,
-      rgb(0 0 0 / 0.08) clamp(2rem, 4.4svh, 3.2rem),
-      rgb(0 0 0 / 0.32) clamp(5.2rem, 10svh, 7.25rem),
-      rgb(0 0 0 / 0.72) clamp(8.5rem, 16svh, 11.5rem),
-      #000 clamp(11.5rem, 21svh, 15rem),
-      #000 100%
-    );
-    mask-image: linear-gradient(
-      180deg,
-      transparent 0%,
-      rgb(0 0 0 / 0.08) clamp(2rem, 4.4svh, 3.2rem),
-      rgb(0 0 0 / 0.32) clamp(5.2rem, 10svh, 7.25rem),
-      rgb(0 0 0 / 0.72) clamp(8.5rem, 16svh, 11.5rem),
-      #000 clamp(11.5rem, 21svh, 15rem),
-      #000 100%
-    );
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   [data-story-section='legacy'] {
@@ -2236,7 +2221,7 @@
   .story-objectives-title {
     max-width: 11ch;
     font-size: clamp(3.6rem, 6.15vw, 7.2rem);
-    line-height: 0.94;
+    line-height: 1.04;
     text-wrap: balance;
   }
 
@@ -2452,7 +2437,7 @@
     font-family: var(--font-brand-display);
     font-size: clamp(4.25rem, 6.25vw, 7.55rem);
     font-weight: 500;
-    line-height: 0.92;
+    line-height: 1.04;
     letter-spacing: 0;
     text-wrap: balance;
     overflow-wrap: anywhere;
@@ -3368,7 +3353,7 @@
     text-wrap: balance;
     overflow-wrap: anywhere;
     font-size: 4.15rem;
-    line-height: 0.98;
+    line-height: 1.04;
   }
 
   html[lang='de'] .story-partners-title {
@@ -3380,14 +3365,14 @@
     --story-h2-max: 4.4rem;
     --story-h2-min: 3.4rem;
     --story-h2-pref: 4.6vw;
-    --story-h2-lh: 0.98;
+    --story-h2-lh: 1.04;
   }
 
   html[lang='de'] [data-story-section='partners'] {
     --story-h2-max: 3.8rem;
     --story-h2-min: 3rem;
     --story-h2-pref: 4vw;
-    --story-h2-lh: 1.02;
+    --story-h2-lh: 1.04;
   }
 
   .story-partner-row {
@@ -4569,7 +4554,7 @@
       --story-h2-min: 3.1rem;
       --story-h2-pref: 4.25vw;
       --story-h2-max: 4.85rem;
-      --story-h2-lh: 0.96;
+      --story-h2-lh: 1.04;
       --story-body-min: 1.08rem;
       --story-body-pref: 1.12vw;
       --story-body-max: 1.28rem;
@@ -4612,7 +4597,7 @@
       --story-h2-min: 2.6rem;
       --story-h2-pref: 3.2vw;
       --story-h2-max: 3.25rem;
-      --story-h2-lh: 0.98;
+      --story-h2-lh: 1.04;
     }
 
     html[lang='de']
@@ -4674,7 +4659,7 @@
       --story-h2-min: 3.8rem;
       --story-h2-pref: 5.8vw;
       --story-h2-max: 7rem;
-      --story-h2-lh: 0.94;
+      --story-h2-lh: 1.04;
       --story-body-min: 1.08rem;
       --story-body-pref: 1.12vw;
       --story-body-max: 1.25rem;
@@ -4778,7 +4763,7 @@
       --story-h2-max: 5.35rem;
       --story-h2-min: 3rem;
       --story-h2-pref: 4.45vw;
-      --story-h2-lh: 1.02;
+      --story-h2-lh: 1.04;
       --story-body-max: 1.14rem;
       --story-card-title-max: 1.58rem;
     }
@@ -5211,7 +5196,7 @@
       [data-story-section='philosophyOrigins'] .story-philosophy-detail-title {
         max-width: min(100%, 22ch);
         font-size: clamp(3.05rem, 4.7vw, 5.1rem);
-        line-height: 0.94;
+        line-height: 1.04;
       }
 
       [data-story-section='philosophyOrigins']
@@ -5341,7 +5326,7 @@
 
       [data-story-section='philosophyOrigins'] .story-philosophy-detail-title {
         font-size: clamp(3.75rem, 5.55vw, 6.25rem);
-        line-height: 0.92;
+        line-height: 1.04;
       }
 
       [data-story-section='philosophyOrigins']
@@ -5662,7 +5647,7 @@
     [data-story-section='aboutObjectives'] .story-objectives-title {
       max-width: 10.6ch;
       font-size: clamp(3.25rem, 13.8vw, 4.35rem);
-      line-height: 0.96;
+      line-height: 1.04;
     }
 
     [data-story-section='aboutObjectives'] .story-objectives-text {
@@ -5726,7 +5711,7 @@
     [data-story-section='philosophyOrigins'] .story-philosophy-detail-title {
       max-width: 10.6ch;
       font-size: clamp(3.25rem, 13vw, 4.55rem);
-      line-height: 0.96;
+      line-height: 1.04;
     }
 
     [data-story-section='philosophyOrigins'] .story-philosophy-detail-summary {
@@ -6571,7 +6556,7 @@
     [data-story-section='philosophyOrigins'] .story-philosophy-detail-title {
       max-width: 12ch;
       font-size: clamp(4.65rem, 8.5vw, 6.2rem);
-      line-height: 0.93;
+      line-height: 1.04;
     }
 
     [data-story-section='philosophyOrigins'] .story-philosophy-detail-summary {
@@ -6904,6 +6889,117 @@ html[data-home-experience='story'] {
   [data-story-section='legacy'] [data-story-scene-copy] {
     position: relative;
     z-index: 1;
+  }
+}
+
+@media (min-width: 640px) and (max-height: 560px) {
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about']) {
+    --story-h2-min: 2.15rem;
+    --story-h2-pref: 4vw;
+    --story-h2-max: 3.05rem;
+    --story-h2-lh: 1.08;
+    --story-body-min: 0.9rem;
+    --story-body-pref: 1.05vw;
+    --story-body-max: 1rem;
+    --story-card-title-min: 1rem;
+    --story-card-title-pref: 1.16vw;
+    --story-card-title-max: 1.18rem;
+    --story-copy-gap: clamp(0.5rem, 1.1svh, 0.75rem);
+    --story-section-gap: clamp(0.52rem, 1.15svh, 0.82rem);
+    --story-grid-row-gap: clamp(0.52rem, 1.15svh, 0.82rem);
+    --story-item-gap: clamp(0.36rem, 0.82svh, 0.56rem);
+  }
+
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
+    [data-story-scene-column],
+  [data-story-section='aboutObjectives'] .story-objectives-stage,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-stage {
+    min-height: 100svh;
+    justify-content: flex-start !important;
+    padding-top: max(1.65rem, calc(env(safe-area-inset-top, 0px) + 1.35rem)) !important;
+    padding-bottom: max(1.2rem, calc(env(safe-area-inset-bottom, 0px) + 0.9rem)) !important;
+  }
+
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
+    [data-story-scene-copy],
+  [data-story-section='aboutObjectives'] .story-objectives-copy,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-copy {
+    flex: 0 0 auto !important;
+    justify-content: flex-start !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
+    .story-scene-reveal {
+    flex: 0 0 auto !important;
+    justify-content: flex-start !important;
+  }
+
+  [data-story-section='about'] .story-about-cinematic-copy {
+    justify-content: flex-start !important;
+    padding-top: max(4rem, calc(env(safe-area-inset-top, 0px) + 3.6rem)) !important;
+    padding-bottom: max(1.2rem, calc(env(safe-area-inset-bottom, 0px) + 0.9rem)) !important;
+  }
+
+  [data-story-section='about'] [data-brand-lockup='story-about'] {
+    font-size: clamp(2.25rem, 6.2vw, 3.1rem) !important;
+    line-height: 1.04;
+  }
+
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
+    .story-h2 {
+    max-width: 100% !important;
+    font-size: clamp(1.42rem, 2.85vw, 1.72rem) !important;
+    line-height: 1.08 !important;
+    padding-block: 0.04em 0.08em !important;
+  }
+
+  [data-story-section='aboutObjectives'] .story-objectives-title,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-title {
+    max-width: 100% !important;
+    font-size: clamp(1.35rem, 2.8vw, 1.65rem) !important;
+    line-height: 1.08 !important;
+  }
+
+  [data-story-section='aboutObjectives'] .story-objectives-grid,
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-grid {
+    align-items: start;
+    gap: clamp(0.55rem, 1.15svh, 0.85rem);
+  }
+
+  [data-story-section='aboutAccess'] > div:not(.story-section-boundary) {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .property-hero-section {
+    min-height: 100svh;
+  }
+
+  .property-hero-copy {
+    order: 1 !important;
+    align-content: start !important;
+    gap: clamp(0.6rem, 1.2svh, 0.85rem) !important;
+    padding-top: max(1rem, env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .property-hero-copy h1 {
+    margin-top: 0.45rem !important;
+    font-size: clamp(2.25rem, 5.2vw, 3.25rem) !important;
+    line-height: 1.06 !important;
+  }
+
+  .property-hero-copy h1 + p {
+    margin-top: 0.65rem !important;
+    font-size: clamp(0.95rem, 1.7vw, 1.05rem) !important;
+    line-height: 1.5 !important;
+  }
+
+  .property-hero-media {
+    order: 2 !important;
+    min-height: clamp(11rem, 38svh, 15rem) !important;
   }
 }
 

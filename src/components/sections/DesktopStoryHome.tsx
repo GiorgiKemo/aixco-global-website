@@ -1601,7 +1601,7 @@ function AboutScene({
               <h2
                 aria-label="AIXCO.GLOBAL"
                 data-brand-lockup="story-about"
-                className="max-w-none font-semibold leading-[0.9] tracking-normal text-white drop-shadow-[0_18px_48px_rgba(0,0,0,0.36)]"
+                className="max-w-none font-semibold leading-[1.04] tracking-normal text-white drop-shadow-[0_18px_48px_rgba(0,0,0,0.36)]"
               >
                 <span className="flex min-w-0 items-center gap-[clamp(0.9rem,1.6vw,1.35rem)]">
                   <Image
@@ -1988,7 +1988,7 @@ function AboutAccessScene({
                 </p>
               </div>
               <div className="max-w-[34rem]">
-                <h2 className="text-[clamp(2.1rem,3.6vw,4.3rem)] font-semibold leading-[0.98] tracking-normal text-white">
+                <h2 className="text-[clamp(2.1rem,3.6vw,4.3rem)] font-semibold leading-[1.04] tracking-normal text-white">
                   <StoryTextReveal label={tx("Ownership or flexible participation")} />
                 </h2>
                 <p className="mt-5 text-[clamp(1rem,1.12vw,1.18rem)] leading-[1.65] text-white/80">

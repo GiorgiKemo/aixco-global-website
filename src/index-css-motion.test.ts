@@ -342,15 +342,15 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain("rgb(220 232 234 / 0.06)");
   });
 
-  it("softens the objectives-to-access handoff with overlap, alpha masks, and a blurred veil", () => {
+  it("softens the objectives-to-access handoff without letting prior text bleed through", () => {
     const accessMask = cssBlock("[data-story-section='aboutAccess'] > div:not(.story-section-boundary)");
     const objectivesPreview = cssBlock(".story-objectives-access-preview");
     const accessVeil = cssBlock(".story-about-access-stage::before");
 
-    expect(css).toContain("margin-top: calc(clamp(11rem, 24svh, 16rem) * -1)");
-    expect(accessMask).toContain("rgb(0 0 0 / 0.08) clamp(2rem, 4.4svh, 3.2rem)");
-    expect(accessMask).toContain("rgb(0 0 0 / 0.32) clamp(5.2rem, 10svh, 7.25rem)");
-    expect(accessMask).toContain("#000 clamp(11.5rem, 21svh, 15rem)");
+    expect(css).toContain("[data-story-section='aboutAccess'] {\n    margin-top: 0;");
+    expect(accessMask).toContain("-webkit-mask-image: none");
+    expect(accessMask).toContain("mask-image: none");
+    expect(accessMask).not.toContain("transparent 0%");
     expect(objectivesPreview).toContain("height: clamp(16rem, 34svh, 25rem)");
     expect(objectivesPreview).toContain("rgb(0 0 0 / 0.38) 38%");
     expect(objectivesPreview).toContain("rgb(0 0 0 / 0.76) 68%");
