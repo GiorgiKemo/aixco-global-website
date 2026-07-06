@@ -96,6 +96,15 @@
     --sidebar-ring: 36 58% 34%;
 
     /* Desktop story mode — editorial typography scale (overridden per section height) */
+    --font-brand-sans:
+      var(--font-gilroy, Gilroy), Gilroy, -apple-system, BlinkMacSystemFont,
+      'SF Pro Text', 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+    --font-brand-display:
+      var(--font-gilroy, Gilroy), Gilroy, -apple-system, BlinkMacSystemFont,
+      'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    --font-display: var(--font-brand-display);
+    --font-sans: var(--font-brand-sans);
+
     --story-h2-min: 3.25rem;
     --story-h2-pref: 5.2vw;
     --story-h2-max: 6.25rem;
@@ -146,9 +155,7 @@
     @apply bg-background text-foreground antialiased;
     max-width: 100%;
     overflow-x: hidden;
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
-      system-ui, sans-serif;
+    font-family: var(--font-brand-sans);
     font-feature-settings: 'kern';
     font-size: 16.5px;
     line-height: 1.6;
@@ -167,24 +174,20 @@
   h4,
   h5,
   h6 {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      system-ui, sans-serif;
+    font-family: var(--font-brand-display);
     font-weight: 600;
     letter-spacing: -0.02em;
     overflow-wrap: anywhere;
   }
 
   .font-serif-display {
-    font-family: 'Instrument Serif', 'Times New Roman', serif;
+    font-family: var(--font-brand-display);
     font-weight: 400;
     letter-spacing: -0.01em;
   }
 
   .hero-reference-font {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', Inter,
-      'Segoe UI', system-ui, sans-serif;
+    font-family: var(--font-brand-display);
     letter-spacing: 0;
   }
 
@@ -564,8 +567,7 @@
 
   /* RTL */
   [dir='rtl'] body {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Tahoma', sans-serif;
+    font-family: Tahoma, var(--font-brand-sans);
   }
 }
 
@@ -586,17 +588,13 @@
   }
 
   .heading-display {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      system-ui, sans-serif;
+    font-family: var(--font-brand-display);
     @apply text-4xl md:text-6xl lg:text-7xl leading-[1.05] font-semibold tracking-tight;
     letter-spacing: -0.035em;
   }
 
   .heading-section {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      system-ui, sans-serif;
+    font-family: var(--font-brand-display);
     @apply text-3xl md:text-5xl leading-[1.08] font-semibold tracking-tight;
     letter-spacing: -0.03em;
   }
@@ -604,9 +602,7 @@
   .story-h2 {
     width: 100%;
     max-width: none;
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      system-ui, sans-serif;
+    font-family: var(--font-brand-display);
     font-size: clamp(
       var(--story-h2-min),
       var(--story-h2-pref),
@@ -1857,9 +1853,7 @@
 
   .story-hero-kicker {
     margin: 0;
-    font-family:
-      var(--font-hanken-grotesk), -apple-system, BlinkMacSystemFont,
-      'SF Pro Text', system-ui, sans-serif;
+    font-family: var(--font-brand-sans);
     font-size: clamp(0.82rem, 0.95vw, 1.08rem);
     font-weight: 800;
     line-height: 1.2;
@@ -1925,9 +1919,7 @@
   .story-hero-statement__line {
     display: block;
     max-width: min(100%, 18ch);
-    font-family:
-      var(--font-hanken-grotesk), -apple-system, BlinkMacSystemFont,
-      'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+    font-family: var(--font-brand-display);
     font-size: clamp(3.5rem, min(7.35vw, 11.2svh), 7.9rem);
     font-weight: 700;
     line-height: 0.91;
@@ -1967,9 +1959,7 @@
   .story-hero-statement__note {
     margin: clamp(1.35rem, 2.8svh, 2rem) 0 0;
     max-width: min(100%, 74rem);
-    font-family:
-      var(--font-hanken-grotesk), -apple-system, BlinkMacSystemFont,
-      'SF Pro Text', system-ui, sans-serif;
+    font-family: var(--font-brand-sans);
     font-size: clamp(0.82rem, 0.95vw, 1.08rem);
     font-weight: 800;
     line-height: 1.2;
@@ -2018,7 +2008,7 @@
     border-radius: 0.5rem;
     background: hsl(var(--background) / 0.72);
     padding: 1.1rem;
-    font-family: var(--font-display);
+    font-family: var(--font-brand-display);
     font-size: clamp(1.05rem, 1.5vw, 1.25rem);
     font-weight: 600;
     color: hsl(var(--foreground));
@@ -2443,9 +2433,7 @@
 
   .story-philosophy-detail-title {
     max-width: min(100%, 21ch);
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      system-ui, sans-serif;
+    font-family: var(--font-brand-display);
     font-size: clamp(4.25rem, 6.25vw, 7.55rem);
     font-weight: 500;
     line-height: 0.92;
@@ -2496,9 +2484,7 @@
   }
 
   .story-card-title {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      system-ui, sans-serif;
+    font-family: var(--font-brand-display);
     font-size: clamp(
       var(--story-card-title-min),
       var(--story-card-title-pref),
@@ -2514,9 +2500,7 @@
   }
 
   .story-metric-value {
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      system-ui, sans-serif;
+    font-family: var(--font-brand-display);
     font-size: clamp(
       var(--story-metric-min),
       var(--story-metric-pref),
@@ -2904,7 +2888,7 @@
     align-items: center;
     justify-content: center;
     color: hsl(var(--foreground) / 0.46);
-    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-family: var(--font-brand-display);
     font-size: clamp(0.82rem, 0.82vw, 0.95rem);
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -2980,7 +2964,7 @@
     min-width: 0;
     margin-top: 0.05rem;
     color: hsl(var(--foreground) / 0.62);
-    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-family: var(--font-brand-display);
     font-size: clamp(0.9375rem, 0.95vw, 1rem);
     font-weight: 600;
     letter-spacing: 0.01em;
@@ -4193,7 +4177,7 @@
       display: block;
       margin-top: 0.32rem;
       color: hsl(var(--foreground));
-      font-family: var(--font-display), ui-serif, Georgia, serif;
+      font-family: var(--font-brand-display);
       font-size: clamp(0.98rem, 1.05vw, 1.18rem);
       font-weight: 650;
       line-height: 1.14;
@@ -4529,7 +4513,7 @@
       .story-dubai-gallery-title {
       margin-bottom: clamp(0.45rem, 0.8svh, 0.65rem);
       color: hsl(var(--primary));
-      font-family: var(--font-display);
+      font-family: var(--font-brand-display);
       font-size: clamp(1rem, 1.7vw, 1.35rem);
       font-weight: 650;
       letter-spacing: 0;

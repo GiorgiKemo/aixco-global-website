@@ -1,16 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Hanken_Grotesk } from "next/font/google";
+import localFont from "next/font/local";
 import "lenis/dist/lenis.css";
 import "@/index.css";
 import { ClientShell } from "./client-shell";
 import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
 import { getSiteUrl } from "@/lib/site-url";
 
-const hankenGrotesk = Hanken_Grotesk({
-  subsets: ["latin"],
+const gilroy = localFont({
+  src: [
+    { path: "../assets/fonts/gilroy/Gilroy-Thin.ttf", weight: "100", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-Medium.ttf", weight: "500", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-SemiBold.ttf", weight: "600", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-ExtraBold.ttf", weight: "800", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-Black.ttf", weight: "900", style: "normal" },
+  ],
   display: "swap",
-  variable: "--font-hanken-grotesk",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-gilroy",
 });
 
 const metadataTitle = "AIXCO.Global | Real Estate Investment";
@@ -62,7 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const initialSiteContent = await fetchSiteContentForServer();
 
   return (
-    <html lang="en" className={hankenGrotesk.variable} suppressHydrationWarning>
+    <html lang="en" className={gilroy.variable} suppressHydrationWarning>
       <head>
         <link
           rel="preload"

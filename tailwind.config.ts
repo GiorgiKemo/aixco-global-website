@@ -14,6 +14,8 @@ export default {
     extend: {
       fontFamily: {
         display: [
+          "var(--font-gilroy)",
+          "Gilroy",
           "-apple-system",
           "BlinkMacSystemFont",
           '"SF Pro Display"',
@@ -22,6 +24,8 @@ export default {
           "sans-serif",
         ],
         sans: [
+          "var(--font-gilroy)",
+          "Gilroy",
           "-apple-system",
           "BlinkMacSystemFont",
           '"SF Pro Text"',
