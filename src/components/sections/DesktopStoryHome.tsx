@@ -1426,12 +1426,11 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
             <Image
               src={image.thumbnailSrc}
               alt=""
-              width={480}
-              height={320}
-              sizes="(min-width: 1280px) 9rem, 34vw"
+              width={192}
+              height={128}
+              sizes="(min-width: 1280px) 144px, 34vw"
               quality={75}
-              loading="lazy"
-              fetchPriority="low"
+              loading="eager"
               decoding="async"
               className="story-batumi-gallery__thumb-image"
               style={{ objectPosition: image.objectPosition }}

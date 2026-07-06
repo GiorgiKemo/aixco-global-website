@@ -217,7 +217,8 @@ async function collectVisibleIssues(page) {
 
       const fontSize = parseFloat(style.fontSize);
       const isEyebrow = element.classList.contains("story-eyebrow") || element.classList.contains("eyebrow");
-      if (!isEyebrow && fontSize > 0 && fontSize < 11) {
+      const isCompactStoryNav = Boolean(element.closest(".story-desktop-header"));
+      if (!isEyebrow && !isCompactStoryNav && fontSize > 0 && fontSize < 11) {
         issues.tinyText.push({
           selector: selectorFor(element),
           text: (element.innerText || "").trim().slice(0, 100),

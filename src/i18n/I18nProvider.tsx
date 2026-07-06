@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { curatedVisibleTranslations } from "./curated-visible-translations";
 import { languageOptions, type Lang } from "./languages";
 
@@ -1658,9 +1658,9 @@ type Ctx = {
 const I18nCtx = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(() => readStoredLang());
+  const [lang, setLang] = useState<Lang>(DEFAULT_LANG);
+  const [hasLoadedStoredLang, setHasLoadedStoredLang] = useState(false);
   const [translationCatalogs, setTranslationCatalogs] = useState<LoadedTranslationCatalogs | null>(null);
-  const hasLoadedStoredLangRef = useRef(typeof window !== "undefined");
   const dir = lang === "ar" ? "rtl" : "ltr";
   const activeCatalogSources = translationCatalogs?.sources ?? baseCatalogSources;
   const activeAttributeTranslations = translationCatalogs?.attributes ?? emptyAttributeTranslations;
@@ -1671,16 +1671,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }), [activeCatalogSources, lang]);
 
   useEffect(() => {
-    try {
-      const storedLang = localStorage.getItem("aixco-lang");
-      if (isLang(storedLang)) {
-        setLang((currentLang) => (currentLang === storedLang ? currentLang : storedLang));
-      }
-    } catch {
-      // Language persistence is optional when browser storage is unavailable.
-    } finally {
-      hasLoadedStoredLangRef.current = true;
-    }
+    const storedLang = readStoredLang();
+    setLang((currentLang) => (currentLang === storedLang ? currentLang : storedLang));
+    setHasLoadedStoredLang(true);
   }, []);
 
   useEffect(() => {
@@ -1722,7 +1715,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         lang === "en" ? pageDescription : activeAttributeTranslations.content[pageDescription]?.[lang] ?? pageDescription,
       );
     }
-    if (hasLoadedStoredLangRef.current) {
+    if (hasLoadedStoredLang) {
       try {
         localStorage.setItem("aixco-lang", lang);
       } catch {
@@ -1734,7 +1727,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       window.clearTimeout(titleSync);
       titleObserver.disconnect();
     };
-  }, [lang, dir, activeAttributeTranslations]);
+  }, [lang, dir, activeAttributeTranslations, hasLoadedStoredLang]);
 
   const value = useMemo<Ctx>(() => ({
     lang,

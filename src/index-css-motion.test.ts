@@ -160,7 +160,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 120vw, 1px"');
     expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 100vw, 100vw"');
     expect(desktopStoryHome).toContain("src={image.thumbnailSrc}");
-    expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 9rem, 34vw"');
+    expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 144px, 34vw"');
   });
 
   it("keeps partner modal logo panels opaque", () => {
