@@ -346,18 +346,22 @@ describe("index.css motion rules", () => {
     const accessMask = cssBlock("[data-story-section='aboutAccess'] > div:not(.story-section-boundary)");
     const objectivesPreview = cssBlock(".story-objectives-access-preview");
     const accessVeil = cssBlock(".story-about-access-stage::before");
+    const objectivesBoundary = cssBlock("[data-story-section='aboutObjectives'] .story-section-boundary");
 
     expect(css).toContain("[data-story-section='aboutAccess'] {\n    margin-top: 0;");
     expect(accessMask).toContain("-webkit-mask-image: none");
     expect(accessMask).toContain("mask-image: none");
     expect(accessMask).not.toContain("transparent 0%");
+    expect(objectivesPreview).toContain("display: none");
     expect(objectivesPreview).toContain("height: clamp(16rem, 34svh, 25rem)");
-    expect(objectivesPreview).toContain("rgb(0 0 0 / 0.38) 38%");
-    expect(objectivesPreview).toContain("rgb(0 0 0 / 0.76) 68%");
+    expect(objectivesBoundary).toContain("display: block");
+    expect(objectivesBoundary).toContain("rgb(17 16 14 / 0.7) 76%");
+    expect(objectivesBoundary).toContain("filter: blur(14px)");
     expect(accessVeil).toContain("display: block");
-    expect(accessVeil).toContain("height: clamp(17rem, 36svh, 25rem)");
-    expect(accessVeil).toContain("backdrop-filter: blur(12px) saturate(0.9)");
-    expect(accessVeil).toContain("filter: blur(6px)");
+    expect(accessVeil).toContain("height: clamp(9.5rem, 23svh, 15.5rem)");
+    expect(accessVeil).toContain("rgb(17 16 14 / 0.72) 0%");
+    expect(accessVeil).toContain("backdrop-filter: none");
+    expect(accessVeil).toContain("filter: none");
     expect(accessVeil).not.toContain("display: none");
   });
 
