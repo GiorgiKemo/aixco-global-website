@@ -389,9 +389,13 @@ describe("index.css motion rules", () => {
     expect(accessExit).toContain("hsl(var(--surface) / 0.68) 76%");
     expect(accessExit).toContain("hsl(var(--surface) / 0.88) 100%");
     expect(accessExit).toContain("filter: blur(9px)");
-    expect(legacyTopVeil).toContain("height: clamp(11rem, 22svh, 15rem)");
-    expect(legacyTopVeil).toContain("hsl(var(--surface)) 0%");
-    expect(legacyTopVeil).toContain("filter: blur(8px)");
+    expect(legacyTopVeil).toContain("top: calc(clamp(5.5rem, 10svh, 7.5rem) * -1)");
+    expect(legacyTopVeil).toContain("height: clamp(16rem, 32svh, 22rem)");
+    expect(legacyTopVeil).toContain("rgb(17 16 14 / 0) 0%");
+    expect(legacyTopVeil).toContain("hsl(var(--surface) / 0.74) 58%");
+    expect(legacyTopVeil).toContain("filter: blur(12px)");
+    expect(css).toContain("rgb(0 0 0 / 0.7) clamp(5.8rem, 11svh, 7.7rem)");
+    expect(css).toContain("#000 clamp(8.5rem, 16svh, 11rem)");
   });
 
   it("blends the about-to-philosophy handoff through the outgoing video instead of a dark stripe", () => {
