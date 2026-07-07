@@ -322,10 +322,14 @@ describe("index.css motion rules", () => {
   it("keeps the legacy journey eyebrow readable over the surface blend", () => {
     const eyebrow = cssBlock(".story-legacy-eyebrow");
     const eyebrowLine = cssBlock(".story-legacy-eyebrow::before");
+    const legacyInner = cssBlock("[data-story-section='legacy'] > div:not(.story-section-boundary)");
 
     expect(desktopStoryHome).toContain("story-legacy-eyebrow");
     expect(desktopStoryHome).not.toContain('className="eyebrow story-eyebrow">{tx("Our journey")}');
+    expect(legacyInner).toContain("z-index: 25");
     expect(eyebrow).toContain("color: hsl(var(--foreground) / 0.94)");
+    expect(eyebrow).toContain("position: relative");
+    expect(eyebrow).toContain("z-index: 26");
     expect(eyebrow).toContain("text-shadow: 0 1px 0");
     expect(eyebrowLine).toContain("background: hsl(var(--foreground) / 0.62)");
   });
