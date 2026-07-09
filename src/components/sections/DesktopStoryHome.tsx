@@ -659,6 +659,7 @@ function StoryChrome({
   const [menuOpen, setMenuOpen] = useState(false);
   const [desktopGroupOpen, setDesktopGroupOpen] = useState<string | null>(null);
   const [hasScrolledFromTop, setHasScrolledFromTop] = useState(false);
+  const desktopNavRef = useRef<HTMLElement | null>(null);
   const activeChapterKey = storyChapters[activeIndex]?.key ?? "hero";
   const useLightMobileLogo = ["hero", "about", "aboutAccess"].includes(activeChapterKey);
   const isDesktopHeaderTransparent = activeChapterKey === "hero" && !hasScrolledFromTop;
@@ -688,8 +689,18 @@ function StoryChrome({
       }
     };
 
+    const closeDesktopMenuFromOutside = (event: Event) => {
+      const target = event.target;
+      if (!(target instanceof Node) || desktopNavRef.current?.contains(target)) return;
+      setDesktopGroupOpen(null);
+    };
+
     window.addEventListener("keydown", closeDesktopMenu);
-    return () => window.removeEventListener("keydown", closeDesktopMenu);
+    window.addEventListener("pointerdown", closeDesktopMenuFromOutside);
+    return () => {
+      window.removeEventListener("keydown", closeDesktopMenu);
+      window.removeEventListener("pointerdown", closeDesktopMenuFromOutside);
+    };
   }, []);
 
   const handleChapterLink = (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => {
@@ -859,7 +870,7 @@ function StoryChrome({
           <span className="whitespace-nowrap text-[0.86rem] font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
         </a>
 
-        <nav aria-label={tx("Story navigation")} className="story-desktop-nav min-w-0 flex-1">
+        <nav ref={desktopNavRef} aria-label={tx("Story navigation")} className="story-desktop-nav min-w-0 flex-1">
           <div className="story-desktop-nav__scroller">
             {(() => {
               const chapter = storyChapters[0];
@@ -884,17 +895,7 @@ function StoryChrome({
               const menuId = `story-desktop-nav-${group.key}`;
 
               return (
-                <div
-                  key={group.key}
-                  className="story-desktop-nav-group"
-                  onMouseEnter={() => {
-                    setLangOpen(false);
-                    setDesktopGroupOpen(group.key);
-                  }}
-                  onMouseLeave={() => {
-                    setDesktopGroupOpen((value) => value === group.key ? null : value);
-                  }}
-                >
+                <div key={group.key} className="story-desktop-nav-group">
                   <button
                     type="button"
                     aria-haspopup="menu"

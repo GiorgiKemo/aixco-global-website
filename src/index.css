@@ -1765,8 +1765,7 @@
     transition: transform 180ms var(--ease-apple);
   }
 
-  .story-desktop-nav-trigger[aria-expanded='true'] .story-desktop-nav-trigger__icon,
-  .story-desktop-nav-group:hover .story-desktop-nav-trigger__icon {
+  .story-desktop-nav-trigger[aria-expanded='true'] .story-desktop-nav-trigger__icon {
     transform: rotate(180deg);
   }
 
