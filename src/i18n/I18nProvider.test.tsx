@@ -120,7 +120,7 @@ describe("I18nProvider", () => {
   });
 
   it("has hero intro and tagline translations for every non-English locale", async () => {
-    const heroLocales = ["de", "ru", "ka", "tr", "ar"] as const;
+    const heroLocales = ["de", "ru", "ka", "tr", "ar", "pl"] as const;
 
     for (const locale of heroLocales) {
       if (heroIntroText) {
@@ -150,13 +150,14 @@ describe("I18nProvider", () => {
         expect.objectContaining({ code: "ka", label: "ქართული" }),
         expect.objectContaining({ code: "tr", label: "Türkçe" }),
         expect.objectContaining({ code: "ar", label: "العربية" }),
+        expect.objectContaining({ code: "pl", label: "Polski" }),
       ]),
     );
     expect(languageOptions.map((option) => option.label).join(" ")).not.toMatch(/Ã|Ð|Ñ|áƒ|Ø|Ù/);
   });
 
   it("does not pass visible story copy through as English for selected languages", async () => {
-    const locales = ["de", "ru", "ka", "tr", "ar"] as const satisfies readonly Lang[];
+    const locales = ["de", "ru", "ka", "tr", "ar", "pl"] as const satisfies readonly Lang[];
 
     for (const locale of locales) {
       localStorage.setItem("aixco-lang", locale);

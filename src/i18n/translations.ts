@@ -1,4 +1,4 @@
-export type Lang = "en" | "de" | "ru" | "ka" | "tr" | "ar";
+export type Lang = "en" | "de" | "ru" | "ka" | "tr" | "ar" | "pl";
 
 export const languageOptions: { code: Lang; label: string; native: string; flag: string }[] = [
   { code: "en", label: "English", native: "EN", flag: "GB" },
@@ -7,6 +7,7 @@ export const languageOptions: { code: Lang; label: string; native: string; flag:
   { code: "ka", label: "ქართული", native: "KA", flag: "GE" },
   { code: "tr", label: "Türkçe", native: "TR", flag: "TR" },
   { code: "ar", label: "العربية", native: "AR", flag: "SA" },
+  { code: "pl", label: "Polski", native: "PL", flag: "PL" },
 ];
 
 export const textTranslations = {
@@ -452,7 +453,7 @@ export const textTranslations = {
     "ar": "يقوم العملاء بالتسجيل وحجز جولة وزيارة الشقة شخصيًا. هذا المسار مخصص للمشترين الباحثين عن ملكية مباشرة والتعرض لقصة النمو طويلة الأجل في باتومي."
   },
   "Review selected projects, arrange a private visit, compare rental assumptions, and move through reservation with a guided AIXCO team.": {
-    "de": "Pruefen Sie ausgewaehlte Projekte, vereinbaren Sie eine private Besichtigung, vergleichen Sie Mietannahmen und gehen Sie mit einem gefuehrten AIXCO-Team zur Reservierung ueber.",
+    "de": "Prüfen Sie ausgewählte Projekte, vereinbaren Sie eine private Besichtigung, vergleichen Sie Mietannahmen und gehen Sie mit einem geführten AIXCO-Team zur Reservierung über.",
     "ru": "Izuchite vybrannye proekty, organizujte chastnyj vizit, sravnite arendnye dopushcheniya i perehodite k rezervirovaniyu s komandoj AIXCO.",
     "ka": "Gadaamotsmet shercheuli proeqtebi, dagegmet piradi viziti, shedaret gaqiravebis varaudebi da AIXCO-s gundis mkhardacherit gadadit rezervatsiaze.",
     "tr": "Secili projeleri inceleyin, ozel bir ziyaret planlayin, kira varsayimlarini karsilastirin ve AIXCO ekibinin rehberligiyle rezervasyona ilerleyin.",
@@ -1904,7 +1905,7 @@ export const attributeTranslations = {
   },
   "content": {
     "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.": {
-      "de": "Ausgewaehlte Immobilienchancen mit transparenter Euro-Preisgestaltung ab 45.000 EUR, Vermittlung und Immobilienverwaltung durch AIXCO erkunden.",
+      "de": "Ausgewählte Immobilienchancen mit transparenter Euro-Preisgestaltung ab 45.000 EUR, Vermittlung und Immobilienverwaltung durch AIXCO erkunden.",
       "ru": "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.",
       "ka": "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.",
       "tr": "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.",

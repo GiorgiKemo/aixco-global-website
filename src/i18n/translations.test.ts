@@ -10,6 +10,7 @@ describe("languageOptions", () => {
       { code: "ka", label: "ქართული", native: "KA", flag: "GE" },
       { code: "tr", label: "Türkçe", native: "TR", flag: "TR" },
       { code: "ar", label: "العربية", native: "AR", flag: "SA" },
+      { code: "pl", label: "Polski", native: "PL", flag: "PL" },
     ]);
 
     for (const option of languageOptions) {

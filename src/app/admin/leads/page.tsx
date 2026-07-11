@@ -8,6 +8,7 @@ import {
   Inbox,
   LogOut,
   Mail,
+  MailCheck,
   MessageCircle,
   MousePointerClick,
   UserCheck,
@@ -485,15 +486,24 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
               <h1 className="font-display text-lg font-bold leading-tight">Admin Panel</h1>
               <p className="mt-0.5 text-sm text-white/70">AIXCO lead center</p>
             </div>
-            <form action="/admin/logout" method="post">
-              <button
-                type="submit"
+            <div className="flex flex-wrap items-center gap-2">
+              <Link
+                href="/admin/email-test"
                 className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
               >
-                <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-                Sign out
-              </button>
-            </form>
+                <MailCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                Test email
+              </Link>
+              <form action="/admin/logout" method="post">
+                <button
+                  type="submit"
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
+                >
+                  <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
+                  Sign out
+                </button>
+              </form>
+            </div>
           </div>
         </section>
 

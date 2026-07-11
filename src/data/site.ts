@@ -10,7 +10,7 @@ export const company = {
     website: "https://aixco.group/",
     linkedin: "https://www.linkedin.com/company/109396491/admin/dashboard/",
     facebook: "https://www.facebook.com/profile.php?id=61589341472475",
-    instagram: "",
+    instagram: "https://www.instagram.com/aixco.global/",
     youtube: "",
     x: "",
   },

@@ -411,7 +411,22 @@ function StoryTextReveal({
   const rootRef = useRef<HTMLSpanElement>(null);
   const isInView = useStoryTextInView(rootRef);
   const visualLabel = mobileLabel ?? label;
-  const tokens = useMemo(() => visualLabel.split(/(\s+|\u200B)/u), [visualLabel]);
+  const tokens = useMemo(
+    () => visualLabel
+      .split(/(\s+|\u200B)/u)
+      .flatMap((token) => {
+        const characters = Array.from(token);
+        if (!token.trim() || characters.length <= 14) return [token];
+
+        const breakAt = Math.ceil(characters.length / 2);
+        return [
+          characters.slice(0, breakAt).join(""),
+          "\u200B",
+          characters.slice(breakAt).join(""),
+        ];
+      }),
+    [visualLabel],
+  );
   const letterCount = useMemo(
     () => Array.from(visualLabel).filter((character) => !/[\s\u200B]/u.test(character)).length,
     [visualLabel],
@@ -436,11 +451,6 @@ function StoryTextReveal({
     setAnimationState("animating");
   }, [animationState, isInView]);
 
-  useLayoutEffect(() => {
-    if (isInView || animationState === "idle") return;
-    setAnimationState("idle");
-  }, [animationState, isInView]);
-
   useEffect(() => {
     if (animationState !== "animating") return undefined;
 
@@ -453,8 +463,9 @@ function StoryTextReveal({
   const hasPlayed = animationState === "played";
 
   return (
-    <span
-      ref={rootRef}
+    <>
+      <span
+        ref={rootRef}
       className={cn(
         "story-text-reveal story-letter-reveal",
         useCompactReveal && "story-letter-reveal--compact",
@@ -510,7 +521,9 @@ function StoryTextReveal({
           ))
         )}
       </span>
-    </span>
+      </span>
+      <span className="story-text-reveal__tiny-plain">{stableMobileLabel}</span>
+    </>
   );
 }
 
@@ -1328,21 +1341,38 @@ function HeroScene({
   );
 }
 
-function StoryDubaiFundRow({ fund, tx }: { fund: DubaiFund; tx: (copy: string) => string }) {
+function StoryDubaiFundRow({
+  fund,
+  index,
+  tx,
+}: {
+  fund: DubaiFund;
+  index: number;
+  tx: (copy: string) => string;
+}) {
   const details = fund.details.map(parseFundDetail);
   const headlineMetrics = details.filter((detail) => isHeadlineMetric(detail.label)).slice(0, 3);
 
   return (
-    <div className="story-fund-row py-[clamp(0.95rem,1.55svh,1.35rem)] first:pt-0 last:pb-0">
-      <h3 className="story-card-title">{tx(fund.name)}</h3>
-      <div className="grid w-full grid-cols-2 gap-x-4 gap-y-[clamp(0.75rem,1.25svh,1rem)] sm:grid-cols-3 sm:gap-x-6">
-        {headlineMetrics.map((detail) => {
+    <article className="story-fund-row story-dubai-portfolio-card">
+      <header className="story-dubai-portfolio-card__header">
+        <span className="story-dubai-portfolio-card__index" aria-hidden="true">
+          {formatChapterNumber(index + 1)}
+        </span>
+        <h3 className="story-card-title">{tx(fund.name)}</h3>
+      </header>
+      <div className="story-dubai-portfolio-card__metrics">
+        {headlineMetrics.map((detail, metricIndex) => {
           const metric = formatMetricValue(detail.value);
           const translatedFullValue = tx(detail.value);
           const useTranslatedFullValue =
             translatedFullValue !== detail.value && (Boolean(metric.prefix) || Boolean(metric.subtext));
           return (
-            <div key={`${detail.label}:${detail.value}`}>
+            <div
+              key={`${detail.label}:${detail.value}`}
+              className="story-dubai-portfolio-card__metric"
+              data-metric-tone={(metricIndex % 3) + 1}
+            >
               <p className="story-metric-label">{tx(detail.label)}</p>
               <p className="story-metric-value">
                 {useTranslatedFullValue ? (
@@ -1363,10 +1393,9 @@ function StoryDubaiFundRow({ fund, tx }: { fund: DubaiFund; tx: (copy: string) =
           );
         })}
       </div>
-    </div>
+    </article>
   );
 }
-
 function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
   const galleryImages = useMemo(
     () => batumiVisualMosaicImages.map((image) => ({ ...image, alt: tx(image.alt) })),
@@ -1690,7 +1719,7 @@ function PhilosophyScene({
                 <span className="hidden sm:inline">{tx(stat.label)}</span>
                 <span className="sm:hidden">{tx(mobileLabel)}</span>
               </dt>
-              <dd className="mt-2 font-display text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary">{stat.value}</dd>
+              <dd className="font-display text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary">{stat.value}</dd>
             </div>
           );
         })}
@@ -1743,12 +1772,22 @@ function PhilosophyPlatformScene({
       </p>
 
       <dl data-layout="story-philosophy-platform-stats" className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
-        {philosophyPlatformStats.map((stat) => (
-          <div key={stat.label} className="story-philosophy-stat">
-            <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
-            <dd className="story-metric-value mt-1 leading-none text-primary">{stat.value}</dd>
-          </div>
-        ))}
+        {philosophyPlatformStats.map((stat) => {
+          const prefix = stat.value.startsWith("$") ? "$" : "";
+          const suffix = stat.value.endsWith("+") ? "+" : "";
+          const numericValue = stat.value.slice(prefix.length, suffix ? -1 : undefined);
+
+          return (
+            <div key={stat.label} className="story-philosophy-stat">
+              <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
+              <dd className="story-metric-value story-philosophy-stat__value text-primary" aria-label={stat.value}>
+                {prefix ? <span className="story-philosophy-stat__affix story-philosophy-stat__affix--prefix">{prefix}</span> : null}
+                <span className="story-philosophy-stat__number">{numericValue}</span>
+                {suffix ? <span className="story-philosophy-stat__affix story-philosophy-stat__affix--suffix">{suffix}</span> : null}
+              </dd>
+            </div>
+          );
+        })}
       </dl>
 
       <div data-layout="story-philosophy-platform-panels" className="grid w-full gap-3 lg:grid-cols-2">
@@ -2043,7 +2082,7 @@ function LegacyScene({
           <div key={chapter.id} className="border-l-2 border-primary/35 pl-5">
             <p className="story-metric-label text-primary/80">{formatChapterNumber(index + 1)}</p>
             <h3 className="story-card-title">{tx(chapter.title)}</h3>
-            <p className="story-body text-foreground/72">{tx(chapter.highlight)}</p>
+            <p className="story-body story-glyph-safe text-foreground/72">{tx(chapter.highlight)}</p>
           </div>
         ))}
       </div>
@@ -2086,8 +2125,8 @@ function DubaiScene({
         {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
       </p>
       <div data-layout="story-dubai-funds" className="w-full">
-        {[landingFund, secondFund].filter(Boolean).map((fund) => (
-          <StoryDubaiFundRow key={fund.id} fund={fund} tx={tx} />
+        {[landingFund, secondFund].filter(Boolean).map((fund, index) => (
+          <StoryDubaiFundRow key={fund.id} fund={fund} index={index} tx={tx} />
         ))}
       </div>
       {galleryGroups.length > 0 && (
@@ -2137,7 +2176,7 @@ function BatumiScene({
       <h2 className="story-h2">
         <StoryTextReveal label={tx("Batumi")} />
       </h2>
-      <p className="story-body text-foreground/78">
+      <p className="story-body story-glyph-safe text-foreground/78">
         {tx("Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.")}
       </p>
       <BatumiBenefitIconGrid benefits={batumiBenefits} tx={tx} />
@@ -2187,6 +2226,7 @@ function MaterialsScene({
       }}
     >
       <p className="eyebrow story-eyebrow">{tx("Download Materials")}</p>
+      <h2 className="story-mobile-materials-title hidden">{tx("Download Materials")}</h2>
       <p className="story-body text-foreground/74">
         {tx("Access brochures, catalogs, property presentations, and supporting documentation.")}
       </p>
@@ -2321,7 +2361,7 @@ function HowScene({
       </p>
       <div data-layout="story-journeys" className="grid w-full sm:grid-cols-2">
         {journeys.map((journey, index) => (
-          <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group text-left transition-colors hover:text-primary">
+          <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group flex min-w-0 flex-col items-stretch justify-start text-left transition-colors hover:text-primary">
             <p className="story-metric-label text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
             <h3 className="story-card-title">{tx(journey.role)}</h3>
             <p className="story-body text-foreground/65">{tx(journey.summary)}</p>
@@ -2483,7 +2523,9 @@ function PartnersScene({
       media={{ kind: "image", src: aixcoLiveImages.dubaiHealthcare, alt: tx("Dubai Healthcare City legacy reference"), position: "center" }}
     >
       <p className="eyebrow story-eyebrow">{tx("Partners")}</p>
-      <h2 className="story-h2 story-partners-title">{tx("Group companies and strategic partners")}</h2>
+      <h2 className="story-h2 story-partners-title">
+        <StoryTextReveal label={tx("Group companies and strategic partners")} />
+      </h2>
       <div data-layout="story-partners-marquee" className="story-partners-section">
         <StoryPartnerRow label="Group companies" partners={groupCompanies} tx={tx} onPartnerClick={onPartnerClick} />
         <StoryPartnerRow label="Strategic partners" partners={strategicPartners} tx={tx} onPartnerClick={onPartnerClick} reverse />
@@ -2638,7 +2680,7 @@ function ContactScene({
                     <span className="story-metric-label text-primary/75">{tx("Email")}</span>
                     <span className="story-contact-card__row">
                       <img src={aixcoLiveIcons.email} alt="" aria-hidden="true" className="story-contact-card__svg-icon" />
-                      <span className="story-card-title min-w-0 text-[clamp(0.95rem,1vw,1.05rem)] font-medium leading-snug [overflow-wrap:anywhere]">
+                      <span className="story-card-title story-glyph-safe min-w-0 text-[clamp(0.95rem,1vw,1.05rem)] font-medium leading-snug [overflow-wrap:anywhere]">
                         {company.email}
                       </span>
                     </span>
@@ -2652,7 +2694,7 @@ function ContactScene({
                     <span className="story-metric-label text-primary/75">{tx("Address")}</span>
                     <span className="story-contact-card__row">
                       <MapPin className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-                      <span className="story-body min-w-0 text-foreground/82 [overflow-wrap:anywhere]">{company.address}</span>
+                      <span className="story-body story-glyph-safe min-w-0 text-foreground/82 [overflow-wrap:anywhere]">{company.address}</span>
                     </span>
                   </a>
                 </div>

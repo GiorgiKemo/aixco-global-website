@@ -42,6 +42,14 @@ const socialLinks: SocialLink[] = [
     iconSrc: aixcoLiveIcons.linkedin,
   },
   {
+    key: "instagram",
+    label: "Instagram",
+    fallback: "https://www.instagram.com/aixco.global/",
+    allowedHosts: ["instagram.com", "www.instagram.com"],
+    allowedPath: "/aixco.global",
+    iconSrc: aixcoLiveIcons.instagram,
+  },
+  {
     key: "facebook",
     label: "Facebook",
     fallback: "https://www.facebook.com/profile.php?id=61589341472475",

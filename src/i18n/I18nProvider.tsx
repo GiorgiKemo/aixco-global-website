@@ -1,6 +1,14 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { curatedVisibleTranslations } from "./curated-visible-translations";
+import { germanTranslationFixes } from "./german-translation-fixes";
 import { languageOptions, type Lang } from "./languages";
+import { localePassthroughFixes } from "./locale-passthrough-fixes";
+import { localeTranslationFixes } from "./locale-translation-fixes";
+import { polishTranslations } from "./polish-translations";
+import { polishTranslationsExtra } from "./polish-translations-extra";
+import { polishTranslationsFinal } from "./polish-translations-final";
+import { polishContentTranslations } from "./polish-content-translations";
+import { polishRuntimeTranslations } from "./polish-runtime-translations";
 
 export const LANGS = languageOptions;
 const DEFAULT_LANG: Lang = "en";
@@ -43,6 +51,13 @@ const keyedText: Record<string, string> = {
 const pageTitle = "AIXCO.Global | Real Estate Investment";
 const pageDescription =
   "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
+const localizedPageMetadata: Partial<Record<Lang, { title: string; description: string }>> = {
+  pl: {
+    title: "AIXCO.Global | Inwestycje w nieruchomości",
+    description: "Poznaj wybrane możliwości inwestycyjne w nieruchomości z przejrzystymi cenami w euro od 45 000 EUR, pośrednictwem i zarządzaniem przez AIXCO.",
+  },
+};
+
 const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
   "Global Real Estate": {
     de: "Globale Immobilien",
@@ -83,7 +98,7 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     de: "Unterstützung beim Immobilienkauf oder bei Immobiliendienstleistungen erhalten",
   },
   "Since its first acquisition in 2009, the company has grown through carefully selected real estate decisions, building a portfolio defined by resilience, stability, and recurring income generation.": {
-    de: "Seit dem ersten Erwerb im Jahr 2009 ist das Unternehmen durch sorgfaeltig ausgewaehlte Immobilienentscheidungen gewachsen und hat ein Portfolio aufgebaut, das von Widerstandsfaehigkeit, Stabilitaet und wiederkehrenden Ertraegen gepraegt ist.",
+    de: "Seit dem ersten Erwerb im Jahr 2009 ist das Unternehmen durch sorgfältig ausgewählte Immobilienentscheidungen gewachsen und hat ein Portfolio aufgebaut, das von Widerstandsfähigkeit, Stabilität und wiederkehrenden Erträgen geprägt ist.",
     ru: "С момента первого приобретения в 2009 году компания развивалась за счет тщательно отобранных решений в сфере недвижимости, формируя портфель, основанный на устойчивости, стабильности и регулярном доходе.",
     ka: "2009 წელს პირველი შენაძენის შემდეგ კომპანია გაიზარდა ყურადღებით შერჩეული უძრავი ქონების გადაწყვეტილებებით და შექმნა პორტფელი, რომელიც გამძლეობით, სტაბილურობითა და განმეორებადი შემოსავლით გამოირჩევა.",
     tr: "2009'daki ilk satin alimdan bu yana sirket, ozenle secilmis gayrimenkul kararlariyla buyuyerek dayaniklilik, istikrar ve duzenli gelir uretimiyle tanimlanan bir portfoy olusturdu.",
@@ -181,7 +196,7 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "رقم الهاتف",
   },
   "Preferred Time for a Call": {
-    de: "Bevorzugte Uhrzeit fuer den Anruf",
+    de: "Bevorzugte Uhrzeit für den Anruf",
     ru: "Предпочтительное время для звонка",
     ka: "სასურველი დრო ზარისთვის",
     tr: "Arama icin tercih edilen saat",
@@ -209,7 +224,7 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "جار الإرسال...",
   },
   "Thank you. We will contact you shortly.": {
-    de: "Vielen Dank. Wir werden Sie in Kuerze kontaktieren.",
+    de: "Vielen Dank. Wir werden Sie in Kürze kontaktieren.",
     ru: "Спасибо. Мы скоро свяжемся с вами.",
     ka: "გმადლობთ. ჩვენ მალე დაგიკავშირდებით.",
     tr: "Tesekkurler. Sizinle kisa sure icinde iletisime gececegiz.",
@@ -307,56 +322,56 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "عرض فرص الأسواق الناشئة",
   },
   "Selected emerging market property opportunity": {
-    de: "Ausgewaehlte Immobilienchance in einem aufstrebenden Markt",
+    de: "Ausgewählte Immobilienchance in einem aufstrebenden Markt",
     ru: "Выбранная возможность недвижимости на развивающемся рынке",
     ka: "შერჩეული უძრავი ქონების შესაძლებლობა განვითარებად ბაზარზე",
     tr: "Seçilmiş gelişen pazar gayrimenkul fırsatı",
     ar: "فرصة عقارية مختارة في سوق ناشئ",
   },
   "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on selected emerging-market opportunities, with a legacy track record in Switzerland and Dubai.": {
-    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und am Golf - heute mit Fokus auf ausgewaehlte Chancen in aufstrebenden Märkten und einer Legacy-Bilanz in der Schweiz und Dubai.",
+    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und am Golf - heute mit Fokus auf ausgewählte Chancen in aufstrebenden Märkten und einer Legacy-Bilanz in der Schweiz und Dubai.",
     ru: "С 2009 года AIXCO покупает, продает и сопровождает сделки с недвижимостью в Европе и странах Залива; сегодня фокус на выбранных возможностях развивающихся рынков, опираясь на опыт в Швейцарии и Дубае.",
     ka: "2009 წლიდან AIXCO ყიდულობს, ყიდის და შუამავლობს უძრავი ქონების გარიგებებს ევროპასა და ყურის რეგიონში; დღეს ფოკუსია შერჩეულ შესაძლებლობებზე განვითარებად ბაზრებში, შვეიცარიისა და დუბაის გამოცდილებით.",
     tr: "2009'dan beri AIXCO Avrupa ve Körfez'de gayrimenkul alım, satım ve aracılık süreçleri yürütüyor; bugün odak, İsviçre ve Dubai geçmişiyle seçilmiş gelişen pazar fırsatlarıdır.",
     ar: "منذ عام 2009، اشترت AIXCO وباعت ووسّطت العقارات في أوروبا والخليج؛ واليوم تركّز على فرص مختارة في الأسواق الناشئة مع سجل سابق في سويسرا ودبي.",
   },
   "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on selected emerging-market opportunities, with a legacy track record in Switzerland and Dubai.": {
-    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und am Golf - heute mit Fokus auf ausgewaehlte Chancen in aufstrebenden Märkten und einer Legacy-Bilanz in der Schweiz und Dubai.",
+    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und am Golf - heute mit Fokus auf ausgewählte Chancen in aufstrebenden Märkten und einer Legacy-Bilanz in der Schweiz und Dubai.",
     ru: "С 2009 года AIXCO покупает, продает и сопровождает сделки с недвижимостью в Европе и странах Залива; сегодня фокус на выбранных возможностях развивающихся рынков, опираясь на опыт в Швейцарии и Дубае.",
     ka: "2009 წლიდან AIXCO ყიდულობს, ყიდის და შუამავლობს უძრავი ქონების გარიგებებს ევროპასა და ყურის რეგიონში; დღეს ფოკუსია შერჩეულ შესაძლებლობებზე განვითარებად ბაზრებში, შვეიცარიისა და დუბაის გამოცდილებით.",
     tr: "2009'dan beri AIXCO Avrupa ve Körfez'de gayrimenkul alım, satım ve aracılık süreçleri yürütüyor; bugün odak, İsviçre ve Dubai geçmişiyle seçilmiş gelişen pazar fırsatlarıdır.",
     ar: "منذ عام 2009، اشترت AIXCO وباعت ووسّطت العقارات في أوروبا والخليج؛ واليوم تركّز على فرص مختارة في الأسواق الناشئة مع سجل سابق في سويسرا ودبي.",
   },
   "Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.": {
-    de: "Ausgewaehlte Projekte und Apartments in aufstrebenden Märkten ueber AIXCO, mit Batumi als aktuellem Fokus, Einstieg ab 45.000 EUR, 100% auslaendischem Eigentum, Bankfinanzierung mindestens 60% und einem transparenten ISO-zertifizierten Prozess.",
+    de: "Ausgewählte Projekte und Apartments in aufstrebenden Märkten über AIXCO, mit Batumi als aktuellem Fokus, Einstieg ab 45.000 EUR, 100% ausländischem Eigentum, Bankfinanzierung mindestens 60% und einem transparenten ISO-zertifizierten Prozess.",
     ru: "Выбранные проекты и апартаменты на развивающихся рынках через AIXCO, с текущим фокусом на Батуми, входом от 45 000 евро, 100% иностранной собственностью, банковским финансированием минимум 60% и прозрачным ISO-сертифицированным процессом.",
     ka: "AIXCO-ს მეშვეობით შერჩეული პროექტები და ბინები განვითარებად ბაზრებზე, ბათუმით როგორც მიმდინარე ფოკუსით, შესვლა 45,000 ევროდან, 100% უცხოური საკუთრება, საბანკო დაფინანსება მინიმუმ 60% და გამჭვირვალე ISO-სერტიფიცირებული პროცესი.",
     tr: "AIXCO aracılığıyla seçilmiş gelişen pazar projeleri ve daireleri; mevcut odak Batum, giriş 45.000 EUR'dan, %100 yabancı mülkiyeti, minimum %60 banka finansmanı ve şeffaf ISO sertifikalı süreç.",
     ar: "مشاريع وشقق مختارة في الأسواق الناشئة عبر AIXCO، مع باتومي كتركيز حالي، ودخول من 45,000 يورو، وملكية أجنبية 100%، وتمويل مصرفي بحد أدنى 60%، وعملية شفافة معتمدة وفق ISO.",
   },
   "Today, Batumi is AIXCO's current selected emerging-market focus, with exclusive project access, 100% foreign ownership, no residency permit requirement, bank financing minimum 60% of property value, and an ISO-certified transparency process.": {
-    de: "Heute ist Batumi der aktuelle ausgewaehlte Fokus von AIXCO in einem aufstrebenden Markt, mit exklusivem Projektzugang, 100% auslaendischem Eigentum, keiner Aufenthaltserlaubnis fuer den Kauf, Bankfinanzierung von mindestens 60% des Immobilienwerts und einem ISO-zertifizierten Transparenzprozess.",
+    de: "Heute ist Batumi der aktuelle ausgewählte Fokus von AIXCO in einem aufstrebenden Markt, mit exklusivem Projektzugang, 100% ausländischem Eigentum, keiner Aufenthaltserlaubnis für den Kauf, Bankfinanzierung von mindestens 60% des Immobilienwerts und einem ISO-zertifizierten Transparenzprozess.",
     ru: "Сегодня Батуми является текущим выбранным фокусом AIXCO на развивающемся рынке: эксклюзивный доступ к проектам, 100% иностранная собственность, отсутствие требования ВНЖ, банковское финансирование минимум 60% стоимости объекта и ISO-сертифицированный прозрачный процесс.",
     ka: "დღეს ბათუმი არის AIXCO-ს მიმდინარე შერჩეული ფოკუსი განვითარებად ბაზარზე: ექსკლუზიური წვდომა პროექტებზე, 100% უცხოური საკუთრება, ბინადრობის ნებართვის მოთხოვნის გარეშე, საბანკო დაფინანსება ქონების ღირებულების მინიმუმ 60% და ISO-სერტიფიცირებული გამჭვირვალობის პროცესი.",
     tr: "Bugün Batum, AIXCO'nun gelişen pazarlardaki mevcut seçilmiş odağıdır: özel proje erişimi, %100 yabancı mülkiyeti, oturum izni şartı yok, mülk değerinin minimum %60'ı kadar banka finansmanı ve ISO sertifikalı şeffaflık süreci.",
     ar: "اليوم تُعد باتومي التركيز الحالي المختار لـ AIXCO في سوق ناشئ، مع وصول حصري إلى المشاريع، وملكية أجنبية 100%، وعدم الحاجة إلى تصريح إقامة، وتمويل مصرفي بحد أدنى 60% من قيمة العقار، وعملية شفافية معتمدة وفق ISO.",
   },
   "A guided process for clients purchasing or reserving selected emerging-market apartments through AIXCO's current focus.": {
-    de: "Ein gefuehrter Prozess fuer Kunden, die ausgewaehlte Apartments in AIXCOs aktuellem Fokusmarkt kaufen oder reservieren.",
+    de: "Ein geführter Prozess für Kunden, die ausgewählte Apartments in AIXCOs aktuellem Fokusmarkt kaufen oder reservieren.",
     ru: "Сопровождаемый процесс для клиентов, покупающих или резервирующих выбранные апартаменты в текущем фокусе AIXCO на развивающемся рынке.",
     ka: "მართული პროცესი კლიენტებისთვის, რომლებიც ყიდულობენ ან ჯავშნიან შერჩეულ ბინებს AIXCO-ს მიმდინარე განვითარებად ბაზრის ფოკუსში.",
     tr: "AIXCO'nun mevcut gelişen pazar odağında seçilmiş daireleri satın alan veya rezerve eden müşteriler için rehberli süreç.",
     ar: "عملية موجهة للعملاء الذين يشترون أو يحجزون شققًا مختارة ضمن التركيز الحالي لـ AIXCO في سوق ناشئ.",
   },
   "For clients buying apartments or reserving units in selected emerging markets through a guided digital process.": {
-    de: "Fuer Kunden, die Apartments in ausgewaehlten aufstrebenden Märkten ueber einen gefuehrten digitalen Prozess kaufen oder reservieren.",
+    de: "Für Kunden, die Apartments in ausgewählten aufstrebenden Märkten über einen geführten digitalen Prozess kaufen oder reservieren.",
     ru: "Для клиентов, покупающих апартаменты или резервирующих объекты на выбранных развивающихся рынках через сопровождаемый цифровой процесс.",
     ka: "კლიენტებისთვის, რომლებიც ყიდულობენ ბინებს ან ჯავშნიან ობიექტებს შერჩეულ განვითარებად ბაზრებზე მართული ციფრული პროცესით.",
     tr: "Seçilmiş gelişen pazarlarda daire satın alan veya birimleri rehberli dijital süreçle rezerve eden müşteriler için.",
     ar: "للعملاء الذين يشترون شققًا أو يحجزون وحدات في أسواق ناشئة مختارة من خلال عملية رقمية موجهة.",
   },
   "Entry starts from €45,000 for selected emerging-market projects and apartments available exclusively through AIXCO, with Batumi as the current focus. Full commission can be payable from only a 10% down payment, with final terms depending on project and agreement.": {
-    de: "Der Einstieg beginnt bei 45.000 EUR fuer ausgewaehlte Projekte und Apartments in aufstrebenden Märkten, exklusiv ueber AIXCO, mit Batumi als aktuellem Fokus. Die volle Provision kann bereits ab nur 10% Anzahlung zahlbar sein; die endgueltigen Bedingungen haengen von Projekt und Vereinbarung ab.",
+    de: "Der Einstieg beginnt bei 45.000 EUR für ausgewählte Projekte und Apartments in aufstrebenden Märkten, exklusiv über AIXCO, mit Batumi als aktuellem Fokus. Die volle Provision kann bereits ab nur 10% Anzahlung zahlbar sein; die endgültigen Bedingungen hängen von Projekt und Vereinbarung ab.",
     ru: "Вход начинается от 45 000 евро для выбранных проектов и апартаментов на развивающихся рынках, доступных эксклюзивно через AIXCO, с текущим фокусом на Батуми. Полная комиссия может выплачиваться уже с 10% первоначального взноса; окончательные условия зависят от проекта и соглашения.",
     ka: "შესვლა იწყება 45,000 ევროდან შერჩეული განვითარებადი ბაზრის პროექტებისა და ბინებისთვის, ექსკლუზიურად AIXCO-ს მეშვეობით, ბათუმით როგორც მიმდინარე ფოკუსით. სრული საკომისიო შეიძლება გადახდილი იყოს მხოლოდ 10% წინასწარი შენატანიდან; საბოლოო პირობები დამოკიდებულია პროექტსა და შეთანხმებაზე.",
     tr: "AIXCO aracılığıyla özel olarak sunulan seçilmiş gelişen pazar projeleri ve daireleri için giriş 45.000 EUR'dan başlar; mevcut odak Batum'dur. Tam komisyon yalnızca %10 peşinatla ödenebilir; nihai koşullar proje ve anlaşmaya bağlıdır.",
@@ -370,28 +385,28 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "هل يمكن للأجانب شراء عقار ضمن التركيز الحالي لـ AIXCO في سوق ناشئ؟",
   },
   "Yes. Selected apartments in AIXCO's current focus allow 100% foreign ownership, and no residency permit is required to buy.": {
-    de: "Ja. Ausgewaehlte Apartments im aktuellen Fokus von AIXCO erlauben 100% auslaendisches Eigentum, und fuer den Kauf ist keine Aufenthaltserlaubnis erforderlich.",
+    de: "Ja. Ausgewählte Apartments im aktuellen Fokus von AIXCO erlauben 100% ausländisches Eigentum, und für den Kauf ist keine Aufenthaltserlaubnis erforderlich.",
     ru: "Да. Выбранные апартаменты в текущем фокусе AIXCO допускают 100% иностранную собственность, и для покупки не требуется вид на жительство.",
     ka: "დიახ. AIXCO-ს მიმდინარე ფოკუსში შერჩეული ბინები იძლევა 100% უცხოურ საკუთრებას და შესაძენად ბინადრობის ნებართვა საჭირო არ არის.",
     tr: "Evet. AIXCO'nun mevcut odağındaki seçilmiş dairelerde %100 yabancı mülkiyeti mümkündür ve satın almak için oturum izni gerekmez.",
     ar: "نعم. تتيح الشقق المختارة ضمن التركيز الحالي لـ AIXCO ملكية أجنبية بنسبة 100%، ولا يلزم تصريح إقامة للشراء.",
   },
   "Brokers can log in to use the portal operationally, manage customer journeys, coordinate tours, and work more efficiently with curated emerging-market opportunities.": {
-    de: "Makler koennen sich anmelden, um das Portal operativ zu nutzen, Kundenreisen zu verwalten, Besichtigungen zu koordinieren und effizienter mit kuratierten Chancen in aufstrebenden Märkten zu arbeiten.",
+    de: "Makler können sich anmelden, um das Portal operativ zu nutzen, Kundenreisen zu verwalten, Besichtigungen zu koordinieren und effizienter mit kuratierten Chancen in aufstrebenden Märkten zu arbeiten.",
     ru: "Брокеры могут входить в портал для работы, управлять путями клиентов, координировать туры и эффективнее работать с отобранными возможностями развивающихся рынков.",
     ka: "ბროკერებს შეუძლიათ პორტალში შესვლა ოპერაციული გამოყენებისთვის, კლიენტების გზების მართვა, ტურების კოორდინაცია და შერჩეულ განვითარებად ბაზრის შესაძლებლობებთან უფრო ეფექტურად მუშაობა.",
     tr: "Brokerler portalı operasyonel olarak kullanmak, müşteri yolculuklarını yönetmek, turları koordine etmek ve seçilmiş gelişen pazar fırsatlarıyla daha verimli çalışmak için giriş yapabilir.",
     ar: "يمكن للوسطاء تسجيل الدخول لاستخدام البوابة تشغيليًا، وإدارة رحلات العملاء، وتنسيق الجولات، والعمل بكفاءة أكبر مع فرص منتقاة في الأسواق الناشئة.",
   },
   "Register as a customer if you want to buy property, explore selected opportunities, or receive a more guided route into selected emerging-market real estate through one organized onboarding form.": {
-    de: "Registrieren Sie sich als Kunde, wenn Sie Immobilien kaufen, ausgewaehlte Chancen erkunden oder ueber ein organisiertes Onboarding-Formular einen gefuehrten Weg in ausgewaehlte Immobilien aufstrebender Märkte erhalten moechten.",
+    de: "Registrieren Sie sich als Kunde, wenn Sie Immobilien kaufen, ausgewählte Chancen erkunden oder über ein organisiertes Onboarding-Formular einen geführten Weg in ausgewählte Immobilien aufstrebender Märkte erhalten möchten.",
     ru: "Зарегистрируйтесь как клиент, если хотите купить недвижимость, изучить выбранные возможности или получить более структурированный путь к выбранной недвижимости развивающихся рынков через одну форму онбординга.",
     ka: "დარეგისტრირდით კლიენტად, თუ გსურთ უძრავი ქონების შეძენა, შერჩეული შესაძლებლობების შესწავლა ან ერთ ორგანიზებულ ფორმაში მართული გზა შერჩეულ განვითარებად ბაზრის უძრავ ქონებაში.",
     tr: "Mülk satın almak, seçilmiş fırsatları keşfetmek veya tek bir düzenli kayıt formuyla seçilmiş gelişen pazar gayrimenkulüne daha rehberli bir yol almak istiyorsanız müşteri olarak kaydolun.",
     ar: "سجّل كعميل إذا كنت ترغب في شراء عقار، أو استكشاف فرص مختارة، أو الحصول على مسار أكثر توجيهًا نحو عقارات مختارة في الأسواق الناشئة من خلال نموذج إعداد واحد منظم.",
   },
   "Checking the AIXCO website content...": {
-    de: "AIXCO-Websiteinhalte werden geprueft...",
+    de: "AIXCO-Websiteinhalte werden geprüft...",
     ru: "Checking the AIXCO website content...",
     ka: "Checking the AIXCO website content...",
     tr: "AIXCO web sitesi icerigi kontrol ediliyor...",
@@ -417,11 +432,11 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
   Audience: { de: "Audience", ru: "Audience", ka: "Audience", tr: "Audience", ar: "Audience" },
   Download: { de: "Download", ru: "Download", ka: "Download", tr: "Download", ar: "Download" },
   "On request": { de: "Auf Anfrage", ru: "On request", ka: "On request", tr: "On request", ar: "On request" },
-  "available on request": { de: "auf Anfrage verfuegbar", ru: "available on request", ka: "available on request", tr: "available on request", ar: "available on request" },
-  "Client brochure": { de: "Kundenbroschuere", ru: "Брошюра для клиентов", ka: "კლიენტის ბროშურა", tr: "Müşteri broşürü", ar: "كتيب العملاء" },
-  "AIXCO client brochure": { de: "AIXCO-Kundenbroschuere", ru: "Брошюра AIXCO для клиентов", ka: "AIXCO-ს კლიენტის ბროშურა", tr: "AIXCO müşteri broşürü", ar: "كتيب عملاء AIXCO" },
+  "available on request": { de: "auf Anfrage verfügbar", ru: "available on request", ka: "available on request", tr: "available on request", ar: "available on request" },
+  "Client brochure": { de: "Kundenbroschüre", ru: "Брошюра для клиентов", ka: "კლიენტის ბროშურა", tr: "Müşteri broşürü", ar: "كتيب العملاء" },
+  "AIXCO client brochure": { de: "AIXCO-Kundenbroschüre", ru: "Брошюра AIXCO для клиентов", ka: "AIXCO-ს კლიენტის ბროშურა", tr: "AIXCO müşteri broşürü", ar: "كتيب عملاء AIXCO" },
   "Download the AIXCO client brochure with the real estate investment overview and opportunity details.": {
-    de: "Laden Sie die AIXCO-Kundenbroschuere mit dem Immobilieninvestment-Ueberblick und Details zu den Chancen herunter.",
+    de: "Laden Sie die AIXCO-Kundenbroschüre mit dem Immobilieninvestment-Überblick und Details zu den Chancen herunter.",
     ru: "Скачайте клиентскую брошюру AIXCO с обзором инвестиций в недвижимость и деталями возможностей.",
     ka: "ჩამოტვირთეთ AIXCO-ს კლიენტის ბროშურა უძრავი ქონების საინვესტიციო მიმოხილვით და შესაძლებლობების დეტალებით.",
     tr: "Gayrimenkul yatırım özeti ve fırsat detaylarını içeren AIXCO müşteri broşürünü indirin.",
@@ -466,16 +481,16 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
   "Clients and sales partners": { de: "Clients and sales partners", ru: "Clients and sales partners", ka: "Clients and sales partners", tr: "Clients and sales partners", ar: "Clients and sales partners" },
   "Clients and partners": { de: "Clients and partners", ru: "Clients and partners", ka: "Clients and partners", tr: "Clients and partners", ar: "Clients and partners" },
   Start: { de: "Starten Sie", ru: "Начните", ka: "დაიწყეთ", tr: "Başlatın", ar: "ابدأ" },
-  About: { de: "Ueber AIXCO", ru: "About", ka: "About", tr: "About", ar: "About" },
+  About: { de: "Über AIXCO", ru: "About", ka: "About", tr: "About", ar: "About" },
   Login: { de: "Anmelden", ru: "Войти", ka: "შესვლა", tr: "Giriş", ar: "تسجيل الدخول" },
   Register: { de: "Registrieren", ru: "Регистрация", ka: "რეგისტრაცია", tr: "Kayıt Ol", ar: "التسجيل" },
   "Open menu": { de: "Menü öffnen", ru: "Открыть меню", ka: "მენიუს გახსნა", tr: "Menüyü aç", ar: "افتح القائمة" },
   "Close menu": { de: "Menü schließen", ru: "Закрыть меню", ka: "მენიუს დახურვა", tr: "Menüyü kapat", ar: "أغلق القائمة" },
   "Social media": { de: "Social Media", ru: "Социальные сети", ka: "სოციალური მედია", tr: "Sosyal medya", ar: "وسائل التواصل الاجتماعي" },
-  "AIXCO footer introduction": { de: "AIXCO Footer-Einfuehrung", ru: "AIXCO footer introduction", ka: "AIXCO footer introduction", tr: "AIXCO footer introduction", ar: "AIXCO footer introduction" },
+  "AIXCO footer introduction": { de: "AIXCO Footer-Einführung", ru: "AIXCO footer introduction", ka: "AIXCO footer introduction", tr: "AIXCO footer introduction", ar: "AIXCO footer introduction" },
   "AIXCO social media links": { de: "AIXCO Social-Media-Links", ru: "AIXCO social media links", ka: "AIXCO social media links", tr: "AIXCO social media links", ar: "AIXCO social media links" },
   "Buy, broker, and manage selected real estate routes with AIXCO.": {
-    de: "Ausgewaehlte Immobilienwege mit AIXCO kaufen, vermitteln und verwalten.",
+    de: "Ausgewählte Immobilienwege mit AIXCO kaufen, vermitteln und verwalten.",
     ru: "Buy, broker, and manage selected real estate routes with AIXCO.",
     ka: "Buy, broker, and manage selected real estate routes with AIXCO.",
     tr: "Buy, broker, and manage selected real estate routes with AIXCO.",
@@ -489,7 +504,7 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "Buy, broker, and manage real estate with AIXCO.",
   },
   "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.": {
-    de: "Pruefen Sie Batumi-Apartments, Immobilienreferenzen, Kundenmaterialien und den passenden Onboarding-Weg an einem Ort.",
+    de: "Prüfen Sie Batumi-Apartments, Immobilienreferenzen, Kundenmaterialien und den passenden Onboarding-Weg an einem Ort.",
     ru: "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.",
     ka: "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.",
     tr: "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.",
@@ -1337,7 +1352,7 @@ const germanQualityTranslations: TranslationSource = {
     de: "Für andere bietet AIXCO ein alternatives Beteiligungsprogramm für Kunden, die Marktzugang wünschen, ohne die Verpflichtungen aus eigenem Immobilienbesitz und eigener Verwaltung zu übernehmen.",
   },
   "Our commitment remains the same: transparent guidance, long-term support, and access to opportunities that align with your personal goals.": {
-    de: "Unser Anspruch bleibt derselbe: transparente Beratung, langfristige Unterstuetzung und Zugang zu Chancen, die zu Ihren persoenlichen Zielen passen.",
+    de: "Unser Anspruch bleibt derselbe: transparente Beratung, langfristige Unterstützung und Zugang zu Chancen, die zu Ihren persönlichen Zielen passen.",
   },
   "Dubai - Legacy portfolio": { de: "Dubai - Historisches Portfolio" },
   "Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.": {
@@ -1384,13 +1399,13 @@ const germanQualityTranslations: TranslationSource = {
   "Download brochures, catalog sheets, and property reference files for the real estate routes shown on this page.": {
     de: "Laden Sie Broschüren, Katalogblätter und Immobilienreferenzen für die auf dieser Seite gezeigten Immobilienwege herunter.",
   },
-  "Available files": { de: "Verfuegbare Dateien" },
+  "Available files": { de: "Verfügbare Dateien" },
   Audience: { de: "Zielgruppe" },
   Download: { de: "Herunterladen" },
-  "Client brochure": { de: "Kundenbroschuere" },
-  "AIXCO client brochure": { de: "AIXCO-Kundenbroschuere" },
+  "Client brochure": { de: "Kundenbroschüre" },
+  "AIXCO client brochure": { de: "AIXCO-Kundenbroschüre" },
   "Download the AIXCO client brochure with the real estate investment overview and opportunity details.": {
-    de: "Laden Sie die AIXCO-Kundenbroschuere mit dem Immobilieninvestment-Ueberblick und Details zu den Chancen herunter.",
+    de: "Laden Sie die AIXCO-Kundenbroschüre mit dem Immobilieninvestment-Überblick und Details zu den Chancen herunter.",
   },
   "Batumi project brochure": { de: "Batumi-Projektbroschüre" },
   "Current project brochure": { de: "Broschüre zum aktuellen Projekt" },
@@ -1560,7 +1575,7 @@ const germanQualityTranslations: TranslationSource = {
   },
   "Return to Home": { de: "Zur Startseite" },
   "Register ownership details": { de: "Eigentumsdetails registrieren" },
-  "Confirm service scope": { de: "Serviceumfang bestaetigen" },
+  "Confirm service scope": { de: "Serviceumfang bestätigen" },
   "Upload documents": { de: "Dokumente hochladen" },
   "Coordinate handover": { de: "Übergabe koordinieren" },
   "Manage updates": { de: "Updates verwalten" },
@@ -1570,6 +1585,14 @@ const germanQualityTranslations: TranslationSource = {
 };
 
 const baseCatalogSources: TranslationSource[] = [
+  germanTranslationFixes,
+  localeTranslationFixes,
+  localePassthroughFixes,
+  polishTranslations,
+  polishTranslationsExtra,
+  polishTranslationsFinal,
+  polishRuntimeTranslations,
+  polishContentTranslations,
   curatedVisibleTranslations,
   germanQualityTranslations,
   supplementalTranslations,
@@ -1595,6 +1618,14 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
+        germanTranslationFixes,
+        localeTranslationFixes,
+        localePassthroughFixes,
+        polishTranslations,
+        polishTranslationsExtra,
+        polishTranslationsFinal,
+        polishRuntimeTranslations,
+        polishContentTranslations,
         curatedVisibleTranslations,
         germanQualityTranslations,
         supplementalTranslations,
@@ -1690,7 +1721,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [lang, translationCatalogs]);
 
   useEffect(() => {
-    const localizedTitle = lang === "en" ? pageTitle : activeAttributeTranslations.title[pageTitle]?.[lang] ?? pageTitle;
+    const localizedTitle = lang === "en"
+      ? pageTitle
+      : localizedPageMetadata[lang]?.title ?? activeAttributeTranslations.title[pageTitle]?.[lang] ?? pageTitle;
 
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
@@ -1712,7 +1745,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     if (description) {
       description.setAttribute(
         "content",
-        lang === "en" ? pageDescription : activeAttributeTranslations.content[pageDescription]?.[lang] ?? pageDescription,
+        lang === "en"
+          ? pageDescription
+          : localizedPageMetadata[lang]?.description ?? activeAttributeTranslations.content[pageDescription]?.[lang] ?? pageDescription,
       );
     }
     if (hasLoadedStoredLang) {

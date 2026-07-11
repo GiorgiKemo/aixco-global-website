@@ -59,6 +59,7 @@ describe("index.css motion rules", () => {
   it("keeps story letter reveals active even when the browser prefers reduced motion", () => {
     expect(desktopStoryHome).toContain('const isAnimating = animationState === "animating";');
     expect(desktopStoryHome).toContain('const hasPlayed = animationState === "played";');
+    expect(desktopStoryHome).not.toContain('if (isInView || animationState === "idle") return;');
     expect(desktopStoryHome).toContain('<span className="sr-only">{label}</span>');
     expect(desktopStoryHome).not.toContain("aria-label={label}");
     expect(css).not.toContain(".story-letter-reveal--active .story-letter-reveal__char {\n      opacity: 1 !important");
@@ -68,7 +69,9 @@ describe("index.css motion rules", () => {
   it("uses the split-letter layer on phones so wrapped lines reveal in reading order", () => {
     expect(desktopStoryHome).toContain("mobileLabel?: string");
     expect(desktopStoryHome).toContain('mobileLabel={tx("ACQUIRE.PARTNER.CREATE VALUE.").replace(/\\./g, ".\\u200B")}');
-    expect(desktopStoryHome).toContain("visualLabel.split(/(\\s+|\\u200B)/u)");
+    expect(desktopStoryHome).toContain(".split(/(\\s+|\\u200B)/u)");
+    expect(desktopStoryHome).toContain("characters.length <= 14");
+    expect(desktopStoryHome).toContain('"\\u200B"');
     expect(desktopStoryHome).toContain("!/[\\s\\u200B]/u.test(character)");
     expect(desktopStoryHome).toContain("Math.max(1900, letterCount * 30 + 980)");
     expect(desktopStoryHome).toContain('"--story-mobile-title-duration": `${animationDurationMs}ms`');
@@ -111,6 +114,7 @@ describe("index.css motion rules", () => {
     expect(liveAssets).toContain("AIXCO_icons-05.svg");
     expect(socialLinks).toContain("aixcoLiveIcons.website");
     expect(socialLinks).toContain("aixcoLiveIcons.linkedin");
+    expect(socialLinks).toContain("aixcoLiveIcons.instagram");
     expect(socialLinks).toContain("aixcoLiveIcons.facebook");
     expect(desktopStoryHome).toContain("aixcoLiveIcons.email");
     expect(css).toContain(".story-contact-card__svg-icon");
