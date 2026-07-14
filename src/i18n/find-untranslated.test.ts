@@ -26,6 +26,7 @@ const intentionalGermanPassthrough = new Set([
 ]);
 
 const englishLeakPattern = /\b(?:asset\s+management|opportunities|company|reporting|performance|brokern?|dashboard|updates|launch|listing|pipeline|onboarding|dealflow|legacy|buyer|developer|clients?|post-launch)\b/i;
+const asciiGermanUmlautPattern = /\b(?:sorgfaeltig\w*|ausgewaehl\w*|widerstandsfaeh\w*|stabilitaet\w*|ertraeg\w*|gepraeg\w*|maerkt\w*|ursprueng\w*|grundsaetz\w*|risikopruef\w*|persoenlich\w*|broschuer\w*|immobilienpraesent\w*|projektpraesenz\w*|unterstuetz\w*|verfuegbar\w*|haeufig\w*|loesch\w*|einheitsloes\w*|aender\w*|eroeffn\w*|moechten\w*|moeglich\w*|vermoeg\w*|koennen\w*|muessen\w*|wuensch\w*|zurueck\w*|schliess\w*|abschliess\w*|fuehr\w*|gruend\w*|kaeufer\w*|verkaeuf\w*|eigentuemer\w*|uebergab\w*|staerk\w*|fuer|ueber|waehrend)\b/i;
 
 describe("German translation completeness", () => {
   it("rejects English pass-through copy in the resolved catalog", () => {
@@ -47,8 +48,13 @@ describe("German translation completeness", () => {
       const resolved = sources.find((source) => source[key]?.de)?.[key]?.de;
       return resolved && englishLeakPattern.test(resolved) ? [`${key} => ${resolved}`] : [];
     });
+    const asciiUmlautSpellings = keys.flatMap((key) => {
+      const resolved = sources.find((source) => source[key]?.de)?.[key]?.de;
+      return resolved && asciiGermanUmlautPattern.test(resolved) ? [`${key} => ${resolved}`] : [];
+    });
 
     expect(untranslated).toEqual([]);
     expect(mixedEnglish).toEqual([]);
+    expect(asciiUmlautSpellings).toEqual([]);
   });
 });
