@@ -1993,8 +1993,10 @@
 
     .story-hero-statement__note {
       margin-top: clamp(1rem, 2svh, 1.35rem);
-      max-width: none;
-      white-space: nowrap;
+      width: 100%;
+      max-width: 100%;
+      white-space: normal;
+      text-wrap: balance;
     }
   }
 
@@ -3517,10 +3519,12 @@
     gap: clamp(0.72rem, 1vw, 0.95rem);
   }
 
-  .story-contact-card__row > svg,
-  .story-contact-card__svg-icon {
+  .story-contact-card__icon-tile {
     box-sizing: border-box;
+    display: inline-flex;
     flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
     width: 2.75rem;
     height: 2.75rem;
     padding: 0.3rem;
@@ -3532,6 +3536,13 @@
     box-shadow:
       0 1px 0 hsl(0 0% 100% / 0.78) inset,
       0 10px 28px -24px hsl(var(--primary) / 0.55);
+  }
+
+  .story-contact-card__icon-tile > svg,
+  .story-contact-card__svg-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
     stroke-width: 1.85;
     object-fit: contain;
   }
@@ -7187,6 +7198,11 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   gap: clamp(0.65rem, 1.2svh, 0.95rem);
 }
 
+.story-dubai-portfolio-block {
+  display: grid;
+  gap: clamp(0.75rem, 1.4svh, 1rem);
+}
+
 [data-layout='story-dubai-funds'] .story-dubai-portfolio-card {
   overflow: hidden;
   padding: 0 !important;
@@ -7334,9 +7350,16 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
 }
 /* Dubai is a long-form split scene: copy scrolls while the skyline stays pinned. */
 @media (min-width: 900px) {
+  [data-story-section='aboutAccess'] .story-scene-reveal {
+    justify-content: center !important;
+    padding-top: clamp(1.5rem, 3svh, 2.5rem) !important;
+    padding-bottom: calc(var(--story-top-nav-height, 4.75rem) + clamp(1.5rem, 3svh, 2.5rem)) !important;
+  }
+
   [data-story-section='dubai'] {
+    container-type: inline-size !important;
     height: auto !important;
-    min-height: max(100svh, 68rem) !important;
+    min-height: 100svh !important;
     max-height: none !important;
     overflow: visible !important;
     --story-dubai-sticky-top: var(--story-top-nav-height, 4.75rem);
@@ -7367,6 +7390,8 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
 
   [data-story-section='dubai'] [data-story-scene-copy],
   [data-story-section='dubai'] .story-scene-reveal {
+    flex: 0 0 auto !important;
+    align-self: stretch;
     height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
@@ -7384,8 +7409,13 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   }
 
   [data-layout='story-dubai-funds'] {
-    grid-auto-rows: 21rem !important;
-    gap: clamp(1rem, 1.5vw, 1.35rem);
+    grid-auto-rows: auto !important;
+    gap: clamp(1.5rem, 3svh, 2.25rem);
+  }
+
+  .story-dubai-portfolio-block {
+    grid-template-rows: auto auto;
+    gap: clamp(0.9rem, 1.8svh, 1.25rem);
   }
 
   [data-layout='story-dubai-funds'] .story-dubai-portfolio-card {
@@ -8508,8 +8538,7 @@ html[data-home-experience='story'] {
     min-height: 6.25rem;
   }
 
-  [data-story-section='contact'] .story-contact-card__row > svg,
-  [data-story-section='contact'] .story-contact-card__svg-icon {
+  [data-story-section='contact'] .story-contact-card__icon-tile {
     width: 2.6rem;
     height: 2.6rem;
     border-radius: 0.5rem;

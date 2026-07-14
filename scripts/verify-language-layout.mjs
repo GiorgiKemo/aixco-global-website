@@ -10,6 +10,7 @@ const viewports = [
   { name: "tablet-portrait", width: 768, height: 1024 },
   { name: "large-tablet", width: 820, height: 1180 },
   { name: "tablet-landscape", width: 1024, height: 768 },
+  { name: "compact-laptop", width: 1280, height: 720 },
   { name: "laptop", width: 1366, height: 768 },
   { name: "wide-desktop", width: 1920, height: 1080 },
 ];
@@ -110,6 +111,21 @@ try {
             }
           }
 
+          const heroNote = document.querySelector("[data-story-section='hero'] .story-hero-statement__note");
+          if (heroNote instanceof HTMLElement && rendered(heroNote)) {
+            const range = document.createRange();
+            range.selectNodeContents(heroNote);
+            const textRect = range.getBoundingClientRect();
+            const viewportClip = textRect.left < -3 || textRect.right > root.clientWidth + 3;
+            const ancestorClip = clippedByAncestor(heroNote, textRect);
+            if (viewportClip || ancestorClip) {
+              const reason = viewportClip
+                ? `viewport-x ${Math.ceil(Math.max(0, -textRect.left, textRect.right - root.clientWidth))}px`
+                : `${ancestorClip.axis} by ${ancestorClip.ancestor}`;
+              report(heroNote, `hero supporting line clipped: ${reason}`);
+            }
+          }
+
 
           const textSelector = "p, dt, dd, a, button, .story-card-title, .story-body, .story-metric-label, .story-metric-value, .story-faq-question, .story-faq-answer";
           for (const element of document.querySelectorAll(textSelector)) {
@@ -127,6 +143,9 @@ try {
             horizontalOverflow: root.scrollWidth - root.clientWidth,
             replacementGlyphs: (document.body.innerText.match(/�/g) ?? []).length,
             mojibake: /Ã.|â‚¬|â€”|â€“/.test(document.body.innerText),
+            germanAsciiUmlauts: document.documentElement.lang === "de"
+              ? [...new Set(document.body.innerText.match(/\b(?:sorgfaeltig\w*|ausgewaehl\w*|widerstandsfaeh\w*|stabilitaet\w*|ertraeg\w*|gepraeg\w*|maerkt\w*|ursprueng\w*|grundsaetz\w*|risikopruef\w*|persoenlich\w*|broschuer\w*|immobilienpraesent\w*|projektpraesenz\w*|unterstuetz\w*|verfuegbar\w*|haeufig\w*|loesch\w*|einheitsloes\w*|aender\w*|eroeffn\w*|moechten\w*|moeglich\w*|vermoeg\w*|koennen\w*|muessen\w*|wuensch\w*|zurueck\w*|schliess\w*|abschliess\w*|fuehr\w*|kaeufer\w*|verkaeuf\w*|eigentuemer\w*|uebergab\w*|staerk\w*|fuer|ueber|waehrend)\b/gi) ?? [])]
+              : [],
             bodyFont: getComputedStyle(document.body).fontFamily,
             headingFont: getComputedStyle(document.querySelector(".story-h2") ?? document.body).fontFamily,
           };
@@ -135,6 +154,7 @@ try {
         const label = `${viewport.name}/${locale}`;
         if (result.horizontalOverflow > 4) errors.push(`${label}: page overflow ${result.horizontalOverflow}px`);
         if (result.replacementGlyphs || result.mojibake) errors.push(`${label}: replacement glyph or mojibake detected`);
+        if (result.germanAsciiUmlauts.length) errors.push(`${label}: ASCII umlaut spellings ${result.germanAsciiUmlauts.join(", ")}`);
         if (result.defects.length) errors.push(`${label}: ${JSON.stringify(result.defects.slice(0, 6))}`);
       } catch (error) {
         errors.push(`${viewport.name}/${locale}: ${error.message}`);

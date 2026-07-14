@@ -733,7 +733,7 @@ function StoryChrome({
       >
         <a
           href="/"
-          aria-label="AIXCO.GLOBAL home"
+          aria-label={tx("AIXCO.GLOBAL home")}
           onClick={(event) => handleChapterLink(event, storyChapters[0])}
           className={cn(
             "inline-flex min-w-0 items-center gap-1.5 drop-shadow-[0_3px_14px_rgb(0_0_0/0.34)] sm:gap-2",
@@ -762,7 +762,7 @@ function StoryChrome({
             }}
             aria-haspopup="listbox"
             aria-expanded={langOpen}
-            aria-label={`${currentLangName} Change language`}
+            aria-label={`${currentLangName} ${tx("Change language")}`}
             className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-foreground/10 bg-white px-3 text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
           >
             <Globe className="h-3.5 w-3.5" aria-hidden />
@@ -862,7 +862,7 @@ function StoryChrome({
       >
         <a
           href="/"
-          aria-label="AIXCO.GLOBAL home"
+          aria-label={tx("AIXCO.GLOBAL home")}
           onClick={(event) => handleChapterLink(event, storyChapters[0])}
           className={cn(
             "story-desktop-header__brand inline-flex min-w-max items-center gap-2 transition-colors hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
@@ -964,7 +964,7 @@ function StoryChrome({
             }}
             aria-haspopup="listbox"
             aria-expanded={langOpen}
-            aria-label={`${currentLangName} Change language`}
+            aria-label={`${currentLangName} ${tx("Change language")}`}
             className="story-desktop-lang-button"
           >
             <Globe className="h-3.5 w-3.5" aria-hidden />
@@ -2125,26 +2125,28 @@ function DubaiScene({
         {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
       </p>
       <div data-layout="story-dubai-funds" className="w-full">
-        {[landingFund, secondFund].filter(Boolean).map((fund, index) => (
-          <StoryDubaiFundRow key={fund.id} fund={fund} index={index} tx={tx} />
-        ))}
-      </div>
-      {galleryGroups.length > 0 && (
-        <div data-layout="story-dubai-marquee" className="w-full">
-          {galleryGroups.slice(0, 2).map((group, index) => (
-            <div key={group.title} className="min-w-0">
-              <p className="story-dubai-gallery-title">{tx(group.title)}</p>
-              <DubaiImageMarquee
-                group={group}
-                reverse={index % 2 === 1}
-                shouldReduceMotion={shouldReduceMotion}
-                speed="slow"
-                tx={tx}
-              />
+        {[landingFund, secondFund].filter(Boolean).map((fund, index) => {
+          const galleryGroup = galleryGroups[index];
+
+          return (
+            <div key={fund.id} className="story-dubai-portfolio-block min-w-0">
+              <StoryDubaiFundRow fund={fund} index={index} tx={tx} />
+              {galleryGroup ? (
+                <div data-layout="story-dubai-marquee" className="w-full min-w-0">
+                  <p className="story-dubai-gallery-title">{tx(galleryGroup.title)}</p>
+                  <DubaiImageMarquee
+                    group={galleryGroup}
+                    reverse={index % 2 === 1}
+                    shouldReduceMotion={shouldReduceMotion}
+                    speed="slow"
+                    tx={tx}
+                  />
+                </div>
+              ) : null}
             </div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
     </SceneShell>
   );
 }
@@ -2646,7 +2648,7 @@ function ContactScene({
         <div className="min-h-0 flex-1">
           <StorySceneBody density="compact" fitContent={false} isRevealed={isRevealed}>
           <div className="flex w-full flex-col gap-4 md:gap-5">
-            <Logo />
+            <Logo ariaLabel={tx("AIXCO.GLOBAL home")} />
 
             <div
               data-layout="story-contact-layout"
@@ -2679,7 +2681,9 @@ function ContactScene({
                   <a href={`mailto:${company.email}`} className="story-contact-card story-contact-card--email group min-w-0">
                     <span className="story-metric-label text-primary/75">{tx("Email")}</span>
                     <span className="story-contact-card__row">
-                      <img src={aixcoLiveIcons.email} alt="" aria-hidden="true" className="story-contact-card__svg-icon" />
+                      <span className="story-contact-card__icon-tile" aria-hidden="true">
+                        <img src={aixcoLiveIcons.email} alt="" className="story-contact-card__svg-icon" />
+                      </span>
                       <span className="story-card-title story-glyph-safe min-w-0 text-[clamp(0.95rem,1vw,1.05rem)] font-medium leading-snug [overflow-wrap:anywhere]">
                         {company.email}
                       </span>
@@ -2693,8 +2697,10 @@ function ContactScene({
                   >
                     <span className="story-metric-label text-primary/75">{tx("Address")}</span>
                     <span className="story-contact-card__row">
-                      <MapPin className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-                      <span className="story-body story-glyph-safe min-w-0 text-foreground/82 [overflow-wrap:anywhere]">{company.address}</span>
+                      <span className="story-contact-card__icon-tile" aria-hidden="true">
+                        <MapPin />
+                      </span>
+                      <span className="story-body story-glyph-safe min-w-0 text-foreground/82 [overflow-wrap:anywhere]">{tx(company.address)}</span>
                     </span>
                   </a>
                 </div>

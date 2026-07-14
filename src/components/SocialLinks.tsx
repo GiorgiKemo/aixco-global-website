@@ -1,6 +1,7 @@
 "use client";
 
 import { aixcoLiveIcons } from "@/lib/aixco-live-assets";
+import { useI18n } from "@/i18n/I18nProvider";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { getSafeHttpsUrl } from "@/lib/security/urls";
 import { cn } from "@/lib/utils";
@@ -72,6 +73,7 @@ export function SocialLinks({
   theme = "dark",
   "aria-label": ariaLabel = "AIXCO social media links",
 }: SocialLinksProps) {
+  const { tx } = useI18n();
   const resolvedLinkClassName = linkClassName ?? (theme === "light" ? lightLinkClassName : darkLinkClassName);
 
   return (
@@ -83,7 +85,7 @@ export function SocialLinks({
         return (
           <a
             key={key}
-            aria-label={label}
+            aria-label={tx(label)}
             href={href}
             target="_blank"
             rel="noreferrer"

@@ -41,4 +41,18 @@ export const localeTranslationFixes = {
   "Review reporting": { ru: "Просмотреть отчеты", ka: "ანგარიშების განხილვა", tr: "Raporları incele", ar: "مراجعة التقارير" },
   "Prepare the listing": { ru: "Подготовить объявление", ka: "განცხადების მომზადება", tr: "İlanı hazırla", ar: "إعداد الإعلان" },
   "Ongoing coordination": { ru: "Текущая координация", ka: "მიმდინარე კოორდინაცია", tr: "Sürekli koordinasyon", ar: "التنسيق المستمر" },
+  "AIXCO.GLOBAL home": {
+    ru: "Главная AIXCO.GLOBAL",
+    ka: "AIXCO.GLOBAL მთავარი გვერდი",
+    tr: "AIXCO.GLOBAL ana sayfa",
+    ar: "الصفحة الرئيسية لـ AIXCO.GLOBAL",
+    pl: "Strona główna AIXCO.GLOBAL",
+  },
+  "Change language": {
+    ru: "Сменить язык",
+    ka: "ენის შეცვლა",
+    tr: "Dili değiştir",
+    ar: "تغيير اللغة",
+    pl: "Zmień język",
+  },
 } satisfies LocaleFixSource;

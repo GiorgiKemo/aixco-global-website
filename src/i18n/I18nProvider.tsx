@@ -329,14 +329,14 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
     ar: "فرصة عقارية مختارة في سوق ناشئ",
   },
   "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on selected emerging-market opportunities, with a legacy track record in Switzerland and Dubai.": {
-    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und am Golf - heute mit Fokus auf ausgewählte Chancen in aufstrebenden Märkten und einer Legacy-Bilanz in der Schweiz und Dubai.",
+    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und der Golfregion. Heute liegt der Fokus auf ausgewählten Chancen in aufstrebenden Märkten - mit einem gewachsenen Portfolio in der Schweiz und Dubai.",
     ru: "С 2009 года AIXCO покупает, продает и сопровождает сделки с недвижимостью в Европе и странах Залива; сегодня фокус на выбранных возможностях развивающихся рынков, опираясь на опыт в Швейцарии и Дубае.",
     ka: "2009 წლიდან AIXCO ყიდულობს, ყიდის და შუამავლობს უძრავი ქონების გარიგებებს ევროპასა და ყურის რეგიონში; დღეს ფოკუსია შერჩეულ შესაძლებლობებზე განვითარებად ბაზრებში, შვეიცარიისა და დუბაის გამოცდილებით.",
     tr: "2009'dan beri AIXCO Avrupa ve Körfez'de gayrimenkul alım, satım ve aracılık süreçleri yürütüyor; bugün odak, İsviçre ve Dubai geçmişiyle seçilmiş gelişen pazar fırsatlarıdır.",
     ar: "منذ عام 2009، اشترت AIXCO وباعت ووسّطت العقارات في أوروبا والخليج؛ واليوم تركّز على فرص مختارة في الأسواق الناشئة مع سجل سابق في سويسرا ودبي.",
   },
   "Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf—today focused on selected emerging-market opportunities, with a legacy track record in Switzerland and Dubai.": {
-    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und am Golf - heute mit Fokus auf ausgewählte Chancen in aufstrebenden Märkten und einer Legacy-Bilanz in der Schweiz und Dubai.",
+    de: "Seit 2009 kauft, verkauft und vermittelt AIXCO Immobilien in Europa und der Golfregion. Heute liegt der Fokus auf ausgewählten Chancen in aufstrebenden Märkten - mit einem gewachsenen Portfolio in der Schweiz und Dubai.",
     ru: "С 2009 года AIXCO покупает, продает и сопровождает сделки с недвижимостью в Европе и странах Залива; сегодня фокус на выбранных возможностях развивающихся рынков, опираясь на опыт в Швейцарии и Дубае.",
     ka: "2009 წლიდან AIXCO ყიდულობს, ყიდის და შუამავლობს უძრავი ქონების გარიგებებს ევროპასა და ყურის რეგიონში; დღეს ფოკუსია შერჩეულ შესაძლებლობებზე განვითარებად ბაზრებში, შვეიცარიისა და დუბაის გამოცდილებით.",
     tr: "2009'dan beri AIXCO Avrupa ve Körfez'de gayrimenkul alım, satım ve aracılık süreçleri yürütüyor; bugün odak, İsviçre ve Dubai geçmişiyle seçilmiş gelişen pazar fırsatlarıdır.",

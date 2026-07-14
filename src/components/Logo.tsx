@@ -13,6 +13,7 @@ type LogoProps = {
   textClassName?: string;
   onHomeClick?: () => void;
   preloadMark?: boolean;
+  ariaLabel?: string;
 };
 
 function normalizePath(path: string) {
@@ -25,6 +26,7 @@ export function Logo({
   textClassName = "",
   onHomeClick,
   preloadMark = false,
+  ariaLabel = "AIXCO.GLOBAL home",
 }: LogoProps) {
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button !== 0 || event.metaKey || event.altKey || event.ctrlKey || event.shiftKey) return;
@@ -43,7 +45,7 @@ export function Logo({
     <Link
       href="/"
       prefetch={false}
-      aria-label="AIXCO.GLOBAL home"
+      aria-label={ariaLabel}
       onClick={handleClick}
       className={`inline-flex min-h-11 shrink-0 items-center gap-2.5 text-foreground ${className}`}
     >
