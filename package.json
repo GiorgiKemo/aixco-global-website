@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "node scripts/start-dev-auto-port.mjs",
     "dev:fixed": "next dev -p 8081",
+    "prebuild": "npm run test:fonts",
     "build": "next build",
     "build:dev": "next build",
     "lint": "eslint .",
@@ -20,6 +21,7 @@
     "smoke:mobile-scope": "node scripts/verify-mobile-only-scope.mjs",
     "test": "vitest run",
     "test:i18n": "node scripts/verify-localizations.mjs",
+    "test:fonts": "node scripts/verify-font-glyphs.mjs",
     "test:watch": "vitest"
   },
   "dependencies": {
@@ -51,6 +53,7 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "fontkit": "^2.0.4",
     "globals": "^15.15.0",
     "jsdom": "^29.1.1",
     "playwright": "^1.52.0",

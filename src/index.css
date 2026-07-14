@@ -97,10 +97,10 @@
 
     /* Desktop story mode — editorial typography scale (overridden per section height) */
     --font-brand-sans:
-      var(--font-gilroy, Gilroy), Gilroy, -apple-system, BlinkMacSystemFont,
+      var(--font-gilroy, -apple-system), BlinkMacSystemFont,
       'SF Pro Text', 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
     --font-brand-display:
-      var(--font-gilroy, Gilroy), Gilroy, -apple-system, BlinkMacSystemFont,
+      var(--font-gilroy, -apple-system), BlinkMacSystemFont,
       'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
     --font-legacy-ui:
       -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
@@ -8578,6 +8578,11 @@ html[lang='ar'] {
     system-ui, sans-serif;
 }
 
+html:is([lang='ka'], [lang='ar']) [data-brand-lockup] {
+  font-family: var(--font-gilroy, -apple-system), BlinkMacSystemFont,
+    'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+}
+
 html:is([lang='ka'], [lang='ar']) .story-letter-reveal,
 html:is([lang='ka'], [lang='ar']) .story-letter-reveal__text,
 html:is([lang='ka'], [lang='ar']) .story-letter-reveal__word,
@@ -8608,6 +8613,11 @@ html[lang='ar'] [data-story-section] h3 {
   html:is([lang='ka'], [lang='ar']) .story-letter-reveal__word {
     padding-block: 0.035em 0.06em;
   }
+
+  html[lang='ka'] body [data-story-section='team'] h2.story-h2.story-h2 {
+    font-size: clamp(1.88rem, 8vw, 2.38rem) !important;
+    line-height: 1.12 !important;
+  }
 }
 .story-text-reveal__tiny-plain {
   display: none;
@@ -8627,6 +8637,15 @@ html[lang='ar'] [data-story-section] h3 {
     word-break: normal;
     hyphens: auto;
     animation: story-text-left-wipe-soft 1100ms cubic-bezier(0.19, 1, 0.22, 1) both;
+  }
+
+  html[lang='ru'] [data-story-section='partners'] .story-partner-row__label {
+    max-width: 100%;
+    white-space: normal;
+    font-size: 0.62rem;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    text-wrap: balance;
   }
 }
 

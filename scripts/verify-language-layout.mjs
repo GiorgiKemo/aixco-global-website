@@ -1,6 +1,10 @@
-import { chromium } from "playwright";
+import { chromium, webkit } from "playwright";
 
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
+const browserName = process.env.SMOKE_BROWSER ?? "chromium";
+const browserType = browserName === "webkit" ? webkit : chromium;
+const macSafariUserAgent =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15";
 const locales = ["en", "de", "ru", "ka", "tr", "ar", "pl"];
 const viewports = [
   { name: "small-phone", width: 320, height: 568 },
@@ -16,15 +20,20 @@ const viewports = [
 ];
 
 const errors = [];
-const browser = await chromium.launch({ headless: true });
+let testedCombinations = 0;
+const browser = await browserType.launch({ headless: true });
 
 try {
   for (const viewport of viewports) {
     if (process.env.SMOKE_VIEWPORT && viewport.name !== process.env.SMOKE_VIEWPORT) continue;
     for (const locale of locales) {
       if (process.env.SMOKE_LOCALE && locale !== process.env.SMOKE_LOCALE) continue;
+      testedCombinations += 1;
       const context = await browser.newContext({
         viewport,
+        ...(browserName === "webkit"
+          ? { deviceScaleFactor: 2, userAgent: macSafariUserAgent }
+          : {}),
         reducedMotion: "reduce",
         locale: locale === "ka" ? "ka-GE" : locale,
       });
@@ -49,6 +58,14 @@ try {
             visibility: visible !important;
             transform: none !important;
             clip-path: none !important;
+            animation: none !important;
+          }
+          .story-letter-reveal__chunk {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+            clip-path: none !important;
+            filter: none !important;
             animation: none !important;
           }
         ` });
@@ -226,4 +243,6 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Language layout audit passed: ${viewports.length} viewports x ${locales.length} languages.`);
+console.log(
+  `Language layout audit passed in ${browserName}: ${testedCombinations} viewport/language combinations.`,
+);
