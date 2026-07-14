@@ -2091,7 +2091,10 @@ function LegacyScene({
       </h2>
       <div data-layout="story-legacy-timeline" className="grid w-full">
         {legacyTimelineChapters.slice(0, 3).map((chapter, index) => (
-          <div key={chapter.id} className="border-l-2 border-primary/35 pl-5">
+          <div
+            key={chapter.id}
+            className="rounded-lg border border-primary/20 border-l-[3px] border-l-primary/50 bg-primary/[0.06] px-5 py-4 shadow-[0_14px_34px_-30px_hsl(var(--primary)/0.5)]"
+          >
             <p className="story-metric-label text-primary/80">{formatChapterNumber(index + 1)}</p>
             <h3 className="story-card-title">{tx(chapter.title)}</h3>
             <p className="story-body story-glyph-safe text-foreground/72">{tx(chapter.highlight)}</p>
@@ -2194,21 +2197,23 @@ function BatumiScene({
         {tx("Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.")}
       </p>
       <BatumiBenefitIconGrid benefits={batumiBenefits} tx={tx} />
-      <div data-layout="story-batumi-properties" className="w-full divide-y divide-foreground/30">
+      <div data-layout="story-batumi-properties" className="grid w-full gap-3">
         {[firstProperty, secondProperty].filter(Boolean).map((property) => (
           <Link
             key={property.id}
             href={`/aixco-global-op2/${property.url}`}
             prefetch={false}
-            className="group flex w-full items-center justify-between gap-4 py-4 transition-colors hover:text-primary"
+            className="flex w-full items-center justify-between gap-4 rounded-lg border border-primary/30 bg-primary/[0.07] px-5 py-4 shadow-[0_14px_36px_-28px_hsl(var(--primary)/0.55)] transition-[background-color,border-color,box-shadow] duration-200 hover:border-primary/50 hover:bg-primary/[0.11] hover:shadow-[0_18px_42px_-26px_hsl(var(--primary)/0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
           >
             <span className="min-w-0 flex-1">
-              <span className="story-card-title block">{tx(property.name)}</span>
-              <span className="story-body block text-foreground/62">
+              <span className="story-card-title block transition-none">{tx(property.name)}</span>
+              <span className="story-body block hyphens-none text-foreground/62 transition-none">
                 {tx(property.summary)}
               </span>
             </span>
-            <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-1" aria-hidden />
+            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-background/70 text-primary shadow-sm" aria-hidden>
+              <ArrowRight className="h-4 w-4" />
+            </span>
           </Link>
         ))}
       </div>

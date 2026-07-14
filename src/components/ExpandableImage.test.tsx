@@ -23,15 +23,25 @@ describe("ExpandableImage", () => {
     expect(modalShell?.className).not.toContain("animate-fade-in");
     expect(backdrop).toBeInTheDocument();
     expect(backdrop?.className).toContain("backdrop-blur-xl");
-    expect(backdrop?.className).toContain("bg-black/30");
+    expect(backdrop?.className).toContain("bg-black/40");
     expect(backdrop?.className).not.toContain("animate");
     expect(dialog.className).not.toContain("bg-black");
     expect(dialog.className).not.toContain("border");
+    expect(dialog.className).not.toContain("bg-white");
+    expect(dialog.className).not.toContain("backdrop-blur");
     expect(expandedImage).toHaveAttribute("src", "/asset.jpg");
     expect(expandedImage?.className).toContain("max-h-[min(70svh,42rem)]");
     expect(expandedImage?.className).toContain("rounded-md");
+    expect(expandedImage?.className).toContain("shadow-[0_0_48px_rgb(0_0_0/0.2)]");
     const closeControls = screen.getAllByRole("button", { name: "Close image: Dubai asset" });
-    expect(closeControls.some((control) => control.className.includes("absolute right-3 top-3"))).toBe(true);
+    expect(
+      closeControls.some(
+        (control) =>
+          control.className.includes("absolute right-1 top-1") &&
+          control.className.includes("md:right-0 md:top-0") &&
+          control.className.includes("md:-translate-y-1/2 md:translate-x-1/2"),
+      ),
+    ).toBe(true);
     expect(closeControls.every((control) => !control.className.includes("fixed right-4 top-4"))).toBe(true);
 
     fireEvent.keyDown(window, { key: "Escape" });

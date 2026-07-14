@@ -20,11 +20,11 @@ export const batumiVideoMap: Record<string, { src: string; previewSrc: string }>
 };
 
 export const batumiDocumentMap: Record<string, string> = {
-  currentProject: aixcoLiveDocuments.currentProject,
+  "current-project": aixcoLiveDocuments.currentProject,
 };
 
 export const batumiDetailAssetMap: Record<string, string> = {
-  currentProject: aixcoLiveAssetDetails.currentProjectCatalog,
+  "current-project": aixcoLiveAssetDetails.currentProjectCatalog,
 };
 
 export function getBatumiMarketDetails(benefits: BatumiBenefits) {

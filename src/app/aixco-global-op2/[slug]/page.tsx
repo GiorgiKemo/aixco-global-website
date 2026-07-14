@@ -1,7 +1,21 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Building2, Download, FileText, MapPin, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BadgeCheck,
+  BookOpen,
+  ChevronDown,
+  Diamond,
+  Download,
+  FileCheck2,
+  Globe,
+  Globe2,
+  KeyRound,
+  Landmark,
+  Percent,
+} from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import { siteContentDefaults } from "@/lib/backend/site-content";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
@@ -74,13 +88,13 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
 
 function DetailMetric({ label, value, subtext }: { label: string; value: string; subtext?: string }) {
   return (
-    <div className="border border-foreground/10 bg-white p-4 shadow-[0_24px_70px_-58px_rgba(0,0,0,0.45)]">
-      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+    <div className="min-w-0 border-l border-[#9E9D9D]/45 pl-5 first:border-l-0 first:pl-0">
+      <p className="text-[0.67rem] font-semibold uppercase tracking-[0.22em] text-[#161616]">
         <Tx>{label}</Tx>
       </p>
-      <p className="mt-3 font-display text-3xl font-semibold leading-none text-primary">{value}</p>
+      <p className="mt-2 text-[clamp(2rem,3vw,3.25rem)] font-medium leading-none tracking-[-0.025em] text-[#161616]">{value}</p>
       {subtext ? (
-        <p className="mt-2 text-sm leading-relaxed text-foreground/62">
+        <p className="mt-2 text-sm leading-relaxed text-[#9E9D9D]">
           <Tx>{subtext}</Tx>
         </p>
       ) : null}
@@ -89,148 +103,186 @@ function DetailMetric({ label, value, subtext }: { label: string; value: string;
 }
 
 function PropertyChrome() {
+  const navItems = [
+    { label: "AIXCO", href: "/" },
+    { label: "About AIXCO", href: "/#about", grouped: true },
+    { label: "Legacy", href: "/#legacy", grouped: true },
+    { label: "Opportunities", href: "/#batumi", grouped: true, active: true },
+    { label: "Company", href: "/#team", grouped: true },
+  ];
+
   return (
-    <>
-      <aside className="fixed bottom-0 left-0 top-0 z-40 hidden w-60 border-r border-foreground/10 bg-white px-6 py-7 text-foreground shadow-[18px_0_60px_-46px_rgba(0,0,0,0.42)] xl:flex xl:flex-col xl:justify-between">
-        <div>
-          <Link href="/" prefetch={false} className="inline-flex min-h-16 items-center gap-2 text-foreground transition-colors hover:text-primary">
-            <img src={aixcoLiveLogos.aixcoMark} alt="" aria-hidden="true" className="h-auto w-16 object-contain [filter:brightness(0)_saturate(100%)]" />
-            <span className="whitespace-nowrap text-[0.84rem] font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
-          </Link>
-          <nav aria-label="Property navigation" className="mt-12 grid gap-2 text-sm font-medium">
-            <Link href="/#batumi" prefetch={false} className="inline-flex items-center gap-2 rounded-md py-2 text-foreground/75 transition-colors hover:text-primary">
-              <ArrowLeft className="h-4 w-4" aria-hidden />
-              <Tx>Back to Batumi</Tx>
+    <header className="sticky inset-x-0 top-0 z-40 border-b border-[#161616]/10 bg-white/90 text-[#161616] shadow-[0_18px_46px_-42px_rgba(22,22,22,0.45)] backdrop-blur-xl">
+      <div className="mx-auto flex min-h-[4.75rem] max-w-[96rem] items-center gap-4 px-4 sm:px-7 xl:min-h-[5.75rem] xl:px-6 2xl:px-8">
+        <Link href="/" prefetch={false} aria-label="AIXCO.Global home" className="inline-flex min-w-max items-center gap-2 transition-colors hover:text-primary">
+          <img src={aixcoLiveLogos.aixcoMark} alt="" aria-hidden="true" className="h-auto w-11 shrink-0 object-contain [filter:brightness(0)_saturate(100%)] xl:w-12" />
+          <span className="whitespace-nowrap text-[0.78rem] font-semibold tracking-[-0.02em] xl:text-[0.86rem]">AIXCO.GLOBAL</span>
+        </Link>
+
+        <nav aria-label="Main navigation" className="hidden min-w-0 flex-1 items-center gap-1 pl-3 xl:flex">
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              prefetch={false}
+              aria-current={item.active ? "page" : undefined}
+              className={`inline-flex min-h-11 items-center gap-1.5 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.05em] transition-colors hover:text-primary ${item.active ? "text-primary" : "text-[#161616]/72"}`}
+            >
+              <Tx>{item.label}</Tx>
+              {item.grouped ? <ChevronDown className="h-3 w-3 opacity-70" aria-hidden /> : null}
             </Link>
-            <Link href="/#contact" prefetch={false} className="inline-flex items-center gap-2 rounded-md py-2 text-foreground/75 transition-colors hover:text-primary">
-              <Tx>Contact AIXCO</Tx>
-            </Link>
-          </nav>
+          ))}
+        </nav>
+
+        <div className="ml-auto hidden items-center xl:flex">
+          <span className="inline-flex min-h-12 items-center gap-2.5 rounded-xl border border-[#161616]/10 bg-white px-4 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-[#161616] shadow-[0_14px_32px_-26px_rgba(22,22,22,0.45)]">
+            <Globe className="h-3.5 w-3.5" aria-hidden />
+            EN
+            <ChevronDown className="h-3 w-3 opacity-70" aria-hidden />
+          </span>
         </div>
-        <p className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          <Tx>Property profile</Tx>
-        </p>
-      </aside>
-      <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-foreground/10 bg-white/96 px-4 py-3 text-foreground shadow-[0_18px_50px_-42px_rgba(0,0,0,0.44)] backdrop-blur-xl xl:hidden">
-        <Link href="/" prefetch={false} className="inline-flex min-w-0 items-center gap-2 text-foreground">
-          <img src={aixcoLiveLogos.aixcoMark} alt="" aria-hidden="true" className="h-auto w-11 shrink-0 object-contain [filter:brightness(0)_saturate(100%)]" />
-          <span className="truncate text-sm font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
-        </Link>
-        <Link href="/#batumi" prefetch={false} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-foreground/10 bg-white px-3 text-xs font-semibold uppercase tracking-[0.12em] text-foreground">
-          <ArrowLeft className="h-4 w-4" aria-hidden />
-          <Tx>Back</Tx>
-        </Link>
-      </header>
-    </>
+
+        <nav aria-label="Property navigation" className="ml-auto flex items-center gap-2 xl:hidden">
+          <Link href="/#batumi" prefetch={false} className="inline-flex min-h-11 items-center gap-2 px-2 text-xs font-semibold text-[#161616] transition-colors hover:text-primary">
+            <ArrowLeft className="h-4 w-4" aria-hidden />
+            <Tx>Back</Tx>
+          </Link>
+          <span aria-hidden className="hidden h-6 w-px bg-[#161616]/15 sm:block" />
+          <Link href="/#contact" prefetch={false} className="hidden min-h-11 items-center px-2 text-xs font-semibold text-[#161616] transition-colors hover:text-primary sm:inline-flex">
+            <Tx>Contact AIXCO</Tx>
+          </Link>
+        </nav>
+      </div>
+    </header>
   );
 }
 
 function PropertyPageContent({ property }: { property: BatumiProperty }) {
   const image = batumiImageMap[property.image];
-  const video = batumiVideoMap[property.video];
   const documentHref = batumiDocumentMap[property.id];
   const assetHref = batumiDetailAssetMap[property.id];
   const ownershipDetails = getBatumiMarketDetails(siteContentDefaults.batumiBenefits);
+  const heroImage = property.id === "current-project"
+    ? "/aixco-global-op2/images/optimized/current-project-hero-towers.webp"
+    : image;
+  const heroMetrics = [
+    ...property.metrics,
+    { label: "Scale", value: "25,000 sqm", subtext: "infrastructure" },
+  ];
+  const investmentBenefits = [
+    { icon: Globe2, title: "100% Ownership", body: "Full freehold, no local partner, no conditions. Yours entirely." },
+    { icon: KeyRound, title: "No Residency Permit", body: "Ownership without relocation. Buy from anywhere." },
+    { icon: Percent, title: "1% Rental Income Tax", body: "Keep 99% of what your asset earns - rental income taxed at just 1%." },
+    { icon: BadgeCheck, title: "0% Capital Gains", body: "Hold for more than two years and keep the full upside." },
+    { icon: Landmark, title: "Minimum 60% Financing", body: "Local bank financing can cover at least 60% of the purchase price." },
+    { icon: FileCheck2, title: "Transparent Title", body: "ISO-certified guidance with clear, verifiable documentation." },
+  ];
 
   return (
-    <main className="min-h-screen bg-background text-foreground xl:pl-60">
+    <main className="min-h-screen bg-white text-[#161616]">
       <PropertyChrome />
-      <section className="property-hero-section grid min-h-screen grid-cols-1 pt-[4.75rem] xl:grid-cols-12 xl:pt-0">
-        <div className="property-hero-copy order-2 grid content-center gap-8 px-5 py-10 sm:px-8 lg:px-12 xl:order-1 xl:col-span-7 xl:px-14">
-          <div>
-            <p className="eyebrow text-primary">
+      <section className="relative mx-auto grid max-w-[96rem] overflow-hidden border-b border-[#9E9D9D]/35 lg:min-h-[40rem] lg:grid-cols-[minmax(0,1.16fr)_minmax(28rem,0.84fr)]">
+        <div className="order-2 flex flex-col justify-center px-5 py-10 sm:px-8 sm:py-12 lg:order-1 lg:px-[clamp(3rem,4.2vw,4.5rem)] lg:py-10">
+          <div className="max-w-[48rem]">
+            <p className="flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[#161616]">
+              <Diamond className="h-2.5 w-2.5 fill-[#E6C767] stroke-[#E6C767]" aria-hidden />
               <Tx>Batumi property profile</Tx>
             </p>
-            <h1 className="mt-5 max-w-4xl font-display text-[clamp(3rem,7vw,6.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground">
+            <h1 className="mt-5 max-w-4xl text-[clamp(3.5rem,5.6vw,5.5rem)] font-semibold leading-[0.96] tracking-[-0.035em] text-[#161616]">
               {property.name}
             </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-foreground/74 md:text-xl">
+            <p className="mt-2 border-l-[3px] border-[#E6C767] pl-4 text-[clamp(1.55rem,2.5vw,2.7rem)] font-medium leading-[1.08] tracking-[-0.02em] text-[#161616]">
+              <Tx>private residences</Tx>
+            </p>
+            <p className="mt-5 max-w-[42rem] text-[clamp(1.02rem,1.22vw,1.2rem)] font-normal leading-[1.5] text-[#161616]">
               <Tx>{property.summary}</Tx>
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
-            {property.metrics.map((metric) => (
+          <div className="mt-8 grid grid-cols-2 gap-y-6 border-y border-[#9E9D9D]/35 py-5 sm:grid-cols-4">
+            {heroMetrics.map((metric) => (
               <DetailMetric key={metric.label} label={metric.label} value={metric.value} subtext={metric.subtext} />
             ))}
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-3">
-            {property.highlights.map((highlight) => (
-              <article key={highlight.label} className="border-l border-primary/35 pl-4">
-                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-primary/80">
-                  <Tx>{highlight.label}</Tx>
-                </p>
-                <p className="mt-3 text-base leading-7 text-foreground/76">
-                  <Tx>{highlight.value}</Tx>
-                </p>
-              </article>
-            ))}
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            {ownershipDetails.map((detail) => (
-              <div key={detail.label} className="flex gap-3 border border-foreground/10 bg-white p-4">
-                <ShieldCheck className="mt-1 h-5 w-5 shrink-0 text-primary" aria-hidden />
-                <div>
-                  <p className="font-semibold text-foreground">
-                    <Tx>{detail.label}</Tx>
-                  </p>
-                  <p className="mt-1 text-sm leading-6 text-foreground/68">
-                    <Tx>{detail.content}</Tx>
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap gap-3">
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1.15fr_0.9fr]">
             {assetHref ? (
-              <Link href={assetHref} prefetch={false} className="btn-gold" target="_blank" rel="noreferrer">
-                <FileText className="h-4 w-4" aria-hidden />
+              <Link href={assetHref} prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#161616] bg-[#161616] px-3 text-[0.63rem] font-semibold uppercase tracking-[0.17em] text-white transition-colors hover:border-black hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]" target="_blank" rel="noreferrer">
+                <BookOpen className="h-4 w-4 text-[#E6C767]" aria-hidden />
                 <Tx>View catalog</Tx>
+                <ArrowRight className="h-4 w-4 text-[#E6C767]" aria-hidden />
               </Link>
             ) : null}
             {documentHref ? (
-              <Link href={documentHref} prefetch={false} className="btn-ghost-gold" target="_blank" rel="noreferrer">
+              <Link href={documentHref} prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-[0.63rem] font-semibold uppercase tracking-[0.15em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]" target="_blank" rel="noreferrer">
                 <Download className="h-4 w-4" aria-hidden />
                 <Tx>Download brochure</Tx>
               </Link>
             ) : null}
-            <Link href="/#contact" prefetch={false} className="btn-ghost-gold">
+            <Link href="/#contact" prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-[0.63rem] font-semibold uppercase tracking-[0.15em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
               <Tx>Contact AIXCO</Tx>
-              <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
         </div>
 
-        <aside className="property-hero-media relative order-1 min-h-[38rem] overflow-hidden bg-foreground xl:order-2 xl:col-span-5 xl:min-h-screen">
-          {video ? (
-            <video src={video.src} poster={image} autoPlay muted loop playsInline preload="metadata" className="absolute inset-0 h-full w-full object-cover" />
-          ) : (
-            <Image
-              src={image}
-              alt={property.name}
-              fill
-              sizes="(min-width: 1280px) 38vw, 100vw"
-              className="object-cover"
-              preload
-              fetchPriority="high"
-              loading="eager"
-            />
-          )}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,16,14,0.05),rgba(17,16,14,0.32)),linear-gradient(90deg,rgba(17,16,14,0.24),transparent_42%)]" />
-          <div className="absolute bottom-6 left-6 right-6 grid gap-3 text-white">
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-black/24 px-4 py-2 text-sm font-semibold backdrop-blur-md">
-              <MapPin className="h-4 w-4" aria-hidden />
-              <Tx>Selected AIXCO access</Tx>
-            </div>
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-black/24 px-4 py-2 text-sm font-semibold backdrop-blur-md">
-              <Building2 className="h-4 w-4" aria-hidden />
-              <Tx>Current project</Tx>
-            </div>
-          </div>
+        <aside className="relative order-1 min-h-[23rem] overflow-hidden bg-[#161616] sm:min-h-[32rem] lg:order-2 lg:min-h-full">
+          <Image
+            src={heroImage}
+            alt={property.name}
+            fill
+            sizes="(min-width: 1024px) 44vw, 100vw"
+            className="object-cover object-[62%_center]"
+            preload
+            fetchPriority="high"
+            loading="eager"
+          />
         </aside>
+      </section>
+
+      <section className="border-b border-[#9E9D9D]/35 bg-white px-5 py-12 sm:px-8 lg:px-10 lg:py-14">
+        <div className="mx-auto max-w-[88rem]">
+          <div className="text-center">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#161616]"><Tx>The investment case</Tx></p>
+            <span aria-hidden className="mx-auto mt-3 block h-px w-12 bg-[#E6C767]" />
+          </div>
+          <div className="mt-9 grid gap-px bg-[#9E9D9D]/45 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+            {investmentBenefits.map(({ icon: Icon, title, body }) => (
+              <article key={title} className="min-h-[11rem] bg-white px-5 py-5">
+                <Icon className="h-7 w-7 stroke-[1.35] text-[#161616]" aria-hidden />
+                <h2 className="mt-4 text-[1.05rem] font-semibold leading-tight text-[#161616]"><Tx>{title}</Tx></h2>
+                <p className="mt-2 text-sm leading-6 text-[#161616]"><Tx>{body}</Tx></p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#161616] px-5 py-14 text-white sm:px-8 lg:px-10 lg:py-20">
+        <div className="mx-auto grid max-w-[82rem] gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
+          <div>
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[#E6C767]"><Tx>Project highlights</Tx></p>
+            <h2 className="mt-5 max-w-[12ch] text-[clamp(2.8rem,5vw,5rem)] font-semibold leading-[0.98] tracking-[-0.03em]">
+              <Tx>Selected access, structured for ownership.</Tx>
+            </h2>
+            <p className="mt-5 max-w-[34rem] border-l-[3px] border-[#E6C767] pl-4 text-lg font-normal leading-8 text-white">
+              <Tx>Clear guidance, real project information, and supporting materials from AIXCO.</Tx>
+            </p>
+          </div>
+          <div className="grid gap-0 border-t border-white/30">
+            {property.highlights.map((highlight, index) => (
+              <article key={highlight.label} className="grid gap-3 border-b border-white/20 py-6 sm:grid-cols-[4rem_10rem_1fr] sm:items-start">
+                <span className="text-3xl font-medium text-[#E6C767]">{String(index + 1).padStart(2, "0")}</span>
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]"><Tx>{highlight.label}</Tx></p>
+                <p className="text-base leading-7 text-white/80"><Tx>{highlight.value}</Tx></p>
+              </article>
+            ))}
+            {ownershipDetails.length ? (
+              <p className="pt-6 text-sm leading-6 text-white/65">
+                <Tx>{ownershipDetails.map((detail) => detail.label).join(" / ")}</Tx>
+              </p>
+            ) : null}
+          </div>
+        </div>
       </section>
     </main>
   );

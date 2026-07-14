@@ -149,7 +149,7 @@ export function ExpandableImage({ src, title, className = "", children, style, t
             <button
               type="button"
               aria-label={`${tx("Close image")}: ${tx(title)}`}
-              className="absolute inset-0 bg-black/30 backdrop-blur-xl"
+              className="absolute inset-0 bg-black/40 backdrop-blur-xl"
               onClick={closeExpandedImage}
             />
             <div
@@ -169,7 +169,7 @@ export function ExpandableImage({ src, title, className = "", children, style, t
                   type="button"
                   aria-label={`${tx("Close image")}: ${tx(title)}`}
                   onClick={closeExpandedImage}
-                  className="absolute right-3 top-3 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/62 text-white shadow-[0_14px_34px_rgb(0_0_0/0.28)] backdrop-blur-md transition-colors duration-200 hover:bg-black/78 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80"
+                  className="absolute right-1 top-1 z-20 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/72 text-white shadow-[0_14px_34px_rgb(0_0_0/0.34)] backdrop-blur-md transition-colors duration-200 hover:bg-black/88 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/50 md:right-0 md:top-0 md:-translate-y-1/2 md:translate-x-1/2"
                 >
                   <X className="h-4 w-4" />
                   <span className="sr-only">{tx("Close")}</span>
@@ -181,7 +181,7 @@ export function ExpandableImage({ src, title, className = "", children, style, t
                   fill
                   sizes="(min-width: 768px) 82vw, 92vw"
                   unoptimized
-                  className="block h-auto max-h-[min(70svh,42rem)] max-w-full rounded-md object-contain shadow-[0_30px_90px_rgb(0_0_0/0.22)] md:max-h-[min(68svh,42rem)]"
+                  className="block h-auto max-h-[min(70svh,42rem)] max-w-full rounded-md object-contain shadow-[0_0_48px_rgb(0_0_0/0.2)] md:max-h-[min(68svh,42rem)]"
                   decoding="async"
                 />
               </div>

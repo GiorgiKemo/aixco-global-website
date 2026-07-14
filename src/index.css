@@ -7200,6 +7200,27 @@ html[data-home-experience='story'] {
   letter-spacing: -0.025em;
 }
 
+[data-story-section='legacy'] [data-layout='story-legacy-timeline'] {
+  gap: clamp(0.7rem, 1.25svh, 0.95rem);
+}
+
+[data-story-section='legacy'] [data-layout='story-legacy-timeline'] > div {
+  margin-top: 0 !important;
+  background:
+    linear-gradient(135deg, hsl(var(--primary) / 0.08), hsl(var(--primary) / 0.035)),
+    hsl(var(--background) / 0.82);
+}
+
+@media (min-width: 768px) {
+  [data-story-section='aboutAccess'],
+  [data-story-section='aboutAccess'] > div:not(.story-section-boundary),
+  [data-story-section='aboutAccess'] > div:not(.story-section-boundary) > div,
+  [data-story-section='aboutAccess'] .story-about-access-stage,
+  [data-story-section='aboutAccess'] .story-scene-reveal {
+    min-height: calc(100svh + var(--story-top-nav-height, 4.75rem)) !important;
+  }
+}
+
 .story-glyph-safe,
 .story-batumi-benefit__metric,
 .story-batumi-benefit__label,
@@ -7447,21 +7468,22 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
 
   [data-layout='story-dubai-funds'] .story-dubai-portfolio-card {
     display: grid;
-    height: 21rem !important;
-    min-height: 21rem !important;
-    max-height: 21rem !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
     align-self: stretch;
-    grid-template-rows: 7rem minmax(0, 14rem) !important;
+    grid-template-rows: auto auto !important;
   }
 
   .story-dubai-portfolio-card__header {
-    min-height: 7rem;
+    min-height: 4.75rem;
     padding: clamp(0.9rem, 1.5svh, 1.15rem) clamp(1rem, 1.5vw, 1.3rem);
   }
 
   .story-dubai-portfolio-card__metric {
-    min-height: 14rem;
-    justify-content: space-between;
+    min-height: 8.5rem;
+    justify-content: flex-start;
+    gap: 1rem;
     padding: clamp(1rem, 1.8svh, 1.3rem) clamp(1rem, 1.45vw, 1.3rem);
   }
 
@@ -8313,9 +8335,9 @@ html[data-home-experience='story'] {
 
   [data-story-section='batumi'] [data-layout='story-batumi-properties'] a {
     padding: 0.9rem !important;
-    border: 1px solid hsl(var(--foreground) / 0.1);
+    border: 1px solid hsl(var(--primary) / 0.3);
     border-radius: 0.5rem;
-    background: hsl(var(--background) / 0.76);
+    background: hsl(var(--primary) / 0.07);
   }
 
   [data-story-section='materials'] [data-story-scene-copy] .divide-y {
