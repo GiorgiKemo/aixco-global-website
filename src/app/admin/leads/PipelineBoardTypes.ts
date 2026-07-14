@@ -2,6 +2,7 @@ import type { LeadResource, LeadStatus } from "@/lib/admin/leads";
 
 export type DashboardLead = {
   id: string;
+  reference?: string;
   resource: LeadResource;
   status: LeadStatus;
   createdAt: string;

@@ -152,6 +152,11 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
                 <span className="rounded border border-[#161616]/10 bg-white px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#6f6e6a]">
                   {lead.resource === "contact" ? "Form" : "Chat"}
                 </span>
+                {lead.reference ? (
+                  <span className="rounded border border-[#e6c767]/70 bg-[#e6c767]/15 px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.06em] text-[#6f5112]">
+                    {lead.reference}
+                  </span>
+                ) : null}
               </div>
               <p className="mt-1 line-clamp-1 text-xs text-[#6f6e6a]">{lead.interest}</p>
               <p className="mt-2 line-clamp-2 whitespace-pre-line break-words text-xs leading-5 text-[#55534f]">{lead.body}</p>

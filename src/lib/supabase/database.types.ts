@@ -39,6 +39,7 @@ export type Database = {
       contact_submissions: {
         Row: {
           id: string;
+          request_reference: string;
           created_at: string;
           updated_at: string;
           source: "contact_form";
@@ -55,6 +56,7 @@ export type Database = {
         };
         Insert: {
           id?: string;
+          request_reference?: never;
           created_at?: string;
           updated_at?: string;
           source?: "contact_form";
@@ -70,6 +72,7 @@ export type Database = {
           metadata?: Json;
         };
         Update: {
+          request_reference?: never;
           updated_at?: string;
           source?: "contact_form";
           name?: string;

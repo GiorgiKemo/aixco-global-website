@@ -17,6 +17,7 @@ const leads: DashboardLead[] = [
   },
   {
     id: "22222222-2222-4222-8222-222222222222",
+    reference: "AIX-2026-000001",
     resource: "contact",
     status: "contacted",
     createdAt: "2026-05-19T07:09:00.000Z",
@@ -46,6 +47,7 @@ describe("PipelineBoard", () => {
 
     expect(boardGrid).toHaveClass("grid-cols-1", "md:grid-cols-2", "xl:grid-cols-4");
     expect(boardGrid).not.toHaveClass("min-w-[980px]", "overflow-x-auto");
+    expect(screen.getByText("AIX-2026-000001")).toBeInTheDocument();
   });
 
   it("moves a lead with pointer dragging from the card surface", async () => {

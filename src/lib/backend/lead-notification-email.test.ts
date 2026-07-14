@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { sendLeadNotificationTestEmail } from "./lead-notification-email";
+import { sendContactLeadNotificationEmail, sendLeadNotificationTestEmail } from "./lead-notification-email";
 
 const configuredEnv = {
   RESEND_API_KEY: "re_test_key",
@@ -8,6 +8,39 @@ const configuredEnv = {
 };
 
 describe("lead notification email", () => {
+  it("shows the database request reference in the subject and message", async () => {
+    const fetchMock = vi.fn(async () =>
+      new Response(JSON.stringify({ id: "email_lead_123" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+
+    await expect(
+      sendContactLeadNotificationEmail(
+        {
+          requestReference: "AIX-2026-000001",
+          name: "Reference User",
+          email: "reference@example.com",
+          interest: "Website inquiry",
+          message: "Please send more information about the current project.",
+          locale: "en",
+          pagePath: "/#contact",
+          userAgent: "Vitest",
+          metadata: {},
+        },
+        { env: configuredEnv, fetchImpl: fetchMock as unknown as typeof fetch },
+      ),
+    ).resolves.toEqual({ ok: true });
+
+    const request = fetchMock.mock.calls[0]?.[1] as RequestInit;
+    const body = JSON.parse(String(request.body)) as Record<string, unknown>;
+
+    expect(body.subject).toBe("[AIX-2026-000001] New AIXCO lead: Website inquiry");
+    expect(String(body.text)).toContain("Request reference: AIX-2026-000001");
+    expect(String(body.html)).toContain("AIX-2026-000001");
+  });
+
   it("sends a marked inbox test to the configured recipient and returns the Resend id", async () => {
     const fetchMock = vi.fn(async () =>
       new Response(JSON.stringify({ id: "email_test_123" }), {

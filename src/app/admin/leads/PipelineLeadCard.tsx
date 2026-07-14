@@ -148,6 +148,11 @@ export function PipelineLeadCard({
 
           <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#6f6e6a]">
             <span className="rounded border border-[#161616]/10 bg-[#f8f7f3] px-2 py-1">{getSourceLabel(lead.resource)}</span>
+            {lead.reference ? (
+              <span className="rounded border border-[#e6c767]/70 bg-[#e6c767]/15 px-2 py-1 font-mono tracking-[0.06em] text-[#6f5112]">
+                {lead.reference}
+              </span>
+            ) : null}
             <time dateTime={lead.createdAt} className="rounded border border-[#161616]/10 bg-[#f8f7f3] px-2 py-1">
               {formatDate(lead.createdAt)}
             </time>
@@ -195,6 +200,9 @@ export function PipelineDragOverlay({
             <StatusBadge status={lead.status} />
           </div>
           <p className="mt-2 line-clamp-2 whitespace-pre-line break-words text-xs leading-5 text-[#55534f]">{lead.body}</p>
+          {lead.reference ? (
+            <p className="mt-2 font-mono text-[10px] font-semibold tracking-[0.06em] text-[#6f5112]">{lead.reference}</p>
+          ) : null}
         </div>
       </div>
     </div>

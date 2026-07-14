@@ -4,6 +4,7 @@ import type { Json } from "@/lib/supabase/database.types";
 type Env = Record<string, string | undefined>;
 
 export type ContactLeadNotification = {
+  requestReference: string;
   name: string;
   email: string;
   interest: string | null;
@@ -85,6 +86,7 @@ function buildText(notification: ContactLeadNotification) {
   return [
     "New AIXCO website contact request",
     "",
+    formatLine("Request reference", notification.requestReference),
     formatLine("Name", notification.name),
     formatLine("Email", notification.email),
     formatLine("Interest", notification.interest),
@@ -105,6 +107,7 @@ function buildText(notification: ContactLeadNotification) {
 function buildHtml(notification: ContactLeadNotification) {
   const metadata = getMetadataObject(notification.metadata);
   const rows = [
+    ["Request reference", notification.requestReference],
     ["Name", notification.name],
     ["Email", notification.email],
     ["Interest", notification.interest],
@@ -245,7 +248,7 @@ export async function sendContactLeadNotificationEmail(
       from: config.from,
       to: config.to,
       reply_to: notification.email,
-      subject: `New AIXCO lead: ${notification.interest ?? "Website inquiry"}`,
+      subject: `[${notification.requestReference}] New AIXCO lead: ${notification.interest ?? "Website inquiry"}`,
       text: buildText(notification),
       html: buildHtml(notification),
     }),

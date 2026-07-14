@@ -54,6 +54,7 @@ function trimText(value: string | null, maxLength = 210) {
 function toContactLead(lead: ContactLead): DashboardLead {
   return {
     id: lead.id,
+    reference: lead.request_reference,
     resource: "contact",
     status: lead.status,
     createdAt: lead.created_at,
@@ -304,6 +305,11 @@ function LeadRows({
               <span className="rounded-full bg-[#f1efe8] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6f6e6a]">
                 {lead.resource === "contact" ? "Form" : "Chat"}
               </span>
+              {lead.reference ? (
+                <span className="rounded border border-[#e6c767]/70 bg-[#e6c767]/15 px-2 py-0.5 font-mono text-[10px] font-semibold tracking-[0.06em] text-[#6f5112]">
+                  {lead.reference}
+                </span>
+              ) : null}
               <StatusBadge status={lead.status} />
             </div>
             <p className="text-xs text-[#6f6e6a]">{lead.interest}</p>

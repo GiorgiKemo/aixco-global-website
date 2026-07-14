@@ -18,6 +18,7 @@ import {
 } from "./lead-notification-email";
 
 type ContactInsert = Database["public"]["Tables"]["contact_submissions"]["Insert"];
+type ContactRow = Database["public"]["Tables"]["contact_submissions"]["Row"];
 type ChatInsert = Database["public"]["Tables"]["chat_transcripts"]["Insert"];
 type PortalEventInsert = Database["public"]["Tables"]["portal_click_events"]["Insert"];
 
@@ -25,6 +26,16 @@ type CaptureTable = "contact_submissions" | "chat_transcripts" | "portal_click_e
 type CaptureInsert = ContactInsert | ChatInsert | PortalEventInsert;
 type InsertResult = Promise<{ error: { message: string } | null }>;
 type InsertBuilder = { insert: (payload: CaptureInsert) => InsertResult };
+type ContactInsertBuilder = {
+  insert: (payload: ContactInsert) => {
+    select: (columns: "request_reference") => {
+      single: () => Promise<{
+        data: Pick<ContactRow, "request_reference"> | null;
+        error: { message: string } | null;
+      }>;
+    };
+  };
+};
 type ChatTranscriptBuilder = {
   insert: (payload: ChatInsert) => InsertResult;
   upsert: (payload: ChatInsert, options: { onConflict: "session_id" }) => InsertResult;
@@ -125,6 +136,39 @@ function omitChatSessionId(payload: ChatInsert): ChatInsert {
   return legacyPayload;
 }
 
+async function insertContactRow(
+  payload: ContactInsert,
+  options: LeadCaptureOptions,
+): Promise<{ ok: true; reference: string } | CaptureFailure> {
+  if (!options.client && !(options.hasServerConfig ?? getSupabaseAdminConfig().configured)) {
+    return { ok: false, skipped: true, reason: "Supabase admin configuration is not available." };
+  }
+
+  try {
+    const client = (options.client ?? (await getSupabaseAdminClient())) as LeadCaptureClient;
+    const tableClient = client.from("contact_submissions") as ContactInsertBuilder;
+    const { data, error } = await tableClient
+      .insert(payload)
+      .select("request_reference")
+      .single();
+
+    if (error) {
+      return { ok: false, reason: error.message };
+    }
+
+    if (!data?.request_reference) {
+      return { ok: false, reason: "The database did not return a contact request reference." };
+    }
+
+    return { ok: true, reference: data.request_reference };
+  } catch (error) {
+    return {
+      ok: false,
+      reason: error instanceof Error ? error.message : "Unknown lead capture error.",
+    };
+  }
+}
+
 async function insertRow(
   table: CaptureTable,
   payload: CaptureInsert,
@@ -203,10 +247,11 @@ export async function captureContactSubmission(
     ...serverContext,
   };
 
-  const insertResult = await insertRow("contact_submissions", payload, options);
+  const insertResult = await insertContactRow(payload, options);
   if (!insertResult.ok) return insertResult;
 
   const notification: ContactLeadNotification = {
+    requestReference: insertResult.reference,
     name: payload.name,
     email: payload.email,
     interest: payload.interest ?? null,

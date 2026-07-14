@@ -19,9 +19,19 @@ function createCaptureClient(error: { message: string } | null = null) {
     upserts,
     client: {
       from: (table: string) => ({
-        insert: async (payload: Record<string, unknown>) => {
+        insert: (payload: Record<string, unknown>) => {
           inserts.push({ table, payload });
-          return { error };
+          if (table === "contact_submissions") {
+            return {
+              select: () => ({
+                single: async () => ({
+                  data: error ? null : { request_reference: "AIX-2026-000001" },
+                  error,
+                }),
+              }),
+            };
+          }
+          return Promise.resolve({ error });
         },
         upsert: async (payload: Record<string, unknown>) => {
           upserts.push({ table, payload });
@@ -83,7 +93,7 @@ describe("lead capture service", () => {
         },
         { client, headers },
       ),
-    ).resolves.toEqual({ ok: true });
+    ).resolves.toEqual({ ok: true, reference: "AIX-2026-000001" });
 
     expect(inserts).toHaveLength(1);
     expect(inserts[0]).toMatchObject({
@@ -122,11 +132,12 @@ describe("lead capture service", () => {
           },
         },
       ),
-    ).resolves.toEqual({ ok: true });
+    ).resolves.toEqual({ ok: true, reference: "AIX-2026-000001" });
 
     expect(inserts).toHaveLength(1);
     expect(notifications).toHaveLength(1);
     expect(notifications[0]).toMatchObject({
+      requestReference: "AIX-2026-000001",
       name: "Email User",
       email: "email@example.com",
       interest: "Schedule a Call",

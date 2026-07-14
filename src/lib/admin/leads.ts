@@ -9,7 +9,7 @@ export type LeadStatus = z.infer<typeof leadStatusSchema>;
 export type LeadResource = z.infer<typeof leadResourceSchema>;
 export type ContactLead = Pick<
   Database["public"]["Tables"]["contact_submissions"]["Row"],
-  "id" | "created_at" | "name" | "email" | "interest" | "message" | "locale" | "page_path" | "status"
+  "id" | "request_reference" | "created_at" | "name" | "email" | "interest" | "message" | "locale" | "page_path" | "status"
 >;
 export type ChatLead = Pick<
   Database["public"]["Tables"]["chat_transcripts"]["Row"],
@@ -46,7 +46,7 @@ type StatusUpdateBuilder = {
   };
 };
 
-const CONTACT_COLUMNS = "id, created_at, name, email, interest, message, locale, page_path, status";
+const CONTACT_COLUMNS = "id, request_reference, created_at, name, email, interest, message, locale, page_path, status";
 const CHAT_COLUMNS = "id, created_at, interest, transcript, message_count, locale, page_path, status";
 const PORTAL_COLUMNS = "id, created_at, mode, role_title, action, portal_url, locale, page_path";
 

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export type CaptureResult =
-  | { ok: true }
+  | { ok: true; reference?: string }
   | { ok: false; skipped?: boolean; reason: string };
 
 const optionalTextSchema = (maxLength: number) =>
