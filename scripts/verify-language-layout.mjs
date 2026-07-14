@@ -111,6 +111,46 @@ try {
             }
           }
 
+          for (const heading of document.querySelectorAll("h1, h2, h3")) {
+            if (!(heading instanceof HTMLElement) || !rendered(heading) || heading.closest(skip)) continue;
+            const headingRect = heading.getBoundingClientRect();
+            const words = heading.querySelectorAll(".story-letter-reveal__word");
+
+            for (const word of words) {
+              if (!(word instanceof HTMLElement) || !rendered(word)) continue;
+              const rect = word.getBoundingClientRect();
+              const outsideHeading = rect.left < headingRect.left - 3 || rect.right > headingRect.right + 3;
+              const outsideViewport = rect.left < -3 || rect.right > root.clientWidth + 3;
+              if (outsideHeading || outsideViewport) {
+                const overflow = Math.ceil(Math.max(
+                  0,
+                  headingRect.left - rect.left,
+                  rect.right - headingRect.right,
+                  -rect.left,
+                  rect.right - root.clientWidth,
+                ));
+                report(heading, `localized title word exceeds its line container by ${overflow}px`);
+              }
+            }
+
+            const plainTitle = heading.querySelector(".story-text-reveal__tiny-plain");
+            if (plainTitle instanceof HTMLElement && rendered(plainTitle)) {
+              const range = document.createRange();
+              range.selectNodeContents(plainTitle);
+              for (const rect of range.getClientRects()) {
+                if (rect.left < headingRect.left - 3 || rect.right > headingRect.right + 3) {
+                  const overflow = Math.ceil(Math.max(
+                    0,
+                    headingRect.left - rect.left,
+                    rect.right - headingRect.right,
+                  ));
+                  report(heading, `plain localized title exceeds its line container by ${overflow}px`);
+                  break;
+                }
+              }
+            }
+          }
+
           const heroNote = document.querySelector("[data-story-section='hero'] .story-hero-statement__note");
           if (heroNote instanceof HTMLElement && rendered(heroNote)) {
             const range = document.createRange();
@@ -136,6 +176,18 @@ try {
             const verticalClip = element.scrollHeight - element.clientHeight > 3
               && ["hidden", "clip"].includes(style.overflowY);
             if (horizontalClip || verticalClip) report(element, horizontalClip ? "text width clipped" : "text height clipped");
+
+            if (!element.querySelector(".story-text-reveal")) {
+              const range = document.createRange();
+              range.selectNodeContents(element);
+              for (const rect of range.getClientRects()) {
+                if (rect.left < -3 || rect.right > root.clientWidth + 3) {
+                  const overflow = Math.ceil(Math.max(0, -rect.left, rect.right - root.clientWidth));
+                  report(element, `visible text line extends beyond viewport by ${overflow}px`);
+                  break;
+                }
+              }
+            }
           }
 
           return {
