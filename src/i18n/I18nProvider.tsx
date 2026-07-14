@@ -9,6 +9,7 @@ import { polishTranslationsExtra } from "./polish-translations-extra";
 import { polishTranslationsFinal } from "./polish-translations-final";
 import { polishContentTranslations } from "./polish-content-translations";
 import { polishRuntimeTranslations } from "./polish-runtime-translations";
+import { propertyPageTranslations } from "./property-page-translations";
 
 export const LANGS = languageOptions;
 const DEFAULT_LANG: Lang = "en";
@@ -1594,6 +1595,7 @@ const baseCatalogSources: TranslationSource[] = [
   polishRuntimeTranslations,
   polishContentTranslations,
   curatedVisibleTranslations,
+  propertyPageTranslations,
   germanQualityTranslations,
   supplementalTranslations,
   clientBriefPassthroughTranslations,
@@ -1627,6 +1629,7 @@ function loadTranslationCatalogs() {
         polishRuntimeTranslations,
         polishContentTranslations,
         curatedVisibleTranslations,
+        propertyPageTranslations,
         germanQualityTranslations,
         supplementalTranslations,
         translations.textTranslations,

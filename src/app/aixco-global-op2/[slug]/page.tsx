@@ -2,15 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowLeft,
   ArrowRight,
   BadgeCheck,
   BookOpen,
-  ChevronDown,
   Diamond,
   Download,
   FileCheck2,
-  Globe,
   Globe2,
   KeyRound,
   Landmark,
@@ -18,8 +15,8 @@ import {
 } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import { siteContentDefaults } from "@/lib/backend/site-content";
-import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { Tx } from "@/components/i18n/Tx";
+import { PropertyChrome } from "@/components/property/PropertyChrome";
 import {
   batumiDetailAssetMap,
   batumiDocumentMap,
@@ -92,68 +89,13 @@ function DetailMetric({ label, value, subtext }: { label: string; value: string;
       <p className="text-[0.67rem] font-semibold uppercase tracking-[0.22em] text-[#161616]">
         <Tx>{label}</Tx>
       </p>
-      <p className="mt-2 text-[clamp(2rem,3vw,3.25rem)] font-medium leading-none tracking-[-0.025em] text-[#161616]">{value}</p>
+      <p className="mt-2 text-[clamp(2rem,3vw,3.25rem)] font-medium leading-none tracking-[-0.025em] text-[#161616]"><Tx>{value}</Tx></p>
       {subtext ? (
         <p className="mt-2 text-sm leading-relaxed text-[#9E9D9D]">
           <Tx>{subtext}</Tx>
         </p>
       ) : null}
     </div>
-  );
-}
-
-function PropertyChrome() {
-  const navItems = [
-    { label: "AIXCO", href: "/" },
-    { label: "About AIXCO", href: "/#about", grouped: true },
-    { label: "Legacy", href: "/#legacy", grouped: true },
-    { label: "Opportunities", href: "/#batumi", grouped: true, active: true },
-    { label: "Company", href: "/#team", grouped: true },
-  ];
-
-  return (
-    <header className="sticky inset-x-0 top-0 z-40 border-b border-[#161616]/10 bg-white/90 text-[#161616] shadow-[0_18px_46px_-42px_rgba(22,22,22,0.45)] backdrop-blur-xl">
-      <div className="mx-auto flex min-h-[4.75rem] max-w-[96rem] items-center gap-4 px-4 sm:px-7 xl:min-h-[5.75rem] xl:px-6 2xl:px-8">
-        <Link href="/" prefetch={false} aria-label="AIXCO.Global home" className="inline-flex min-w-max items-center gap-2 transition-colors hover:text-primary">
-          <img src={aixcoLiveLogos.aixcoMark} alt="" aria-hidden="true" className="h-auto w-11 shrink-0 object-contain [filter:brightness(0)_saturate(100%)] xl:w-12" />
-          <span className="whitespace-nowrap text-[0.78rem] font-semibold tracking-[-0.02em] xl:text-[0.86rem]">AIXCO.GLOBAL</span>
-        </Link>
-
-        <nav aria-label="Main navigation" className="hidden min-w-0 flex-1 items-center gap-1 pl-3 xl:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              prefetch={false}
-              aria-current={item.active ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center gap-1.5 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.05em] transition-colors hover:text-primary ${item.active ? "text-primary" : "text-[#161616]/72"}`}
-            >
-              <Tx>{item.label}</Tx>
-              {item.grouped ? <ChevronDown className="h-3 w-3 opacity-70" aria-hidden /> : null}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="ml-auto hidden items-center xl:flex">
-          <span className="inline-flex min-h-12 items-center gap-2.5 rounded-xl border border-[#161616]/10 bg-white px-4 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-[#161616] shadow-[0_14px_32px_-26px_rgba(22,22,22,0.45)]">
-            <Globe className="h-3.5 w-3.5" aria-hidden />
-            EN
-            <ChevronDown className="h-3 w-3 opacity-70" aria-hidden />
-          </span>
-        </div>
-
-        <nav aria-label="Property navigation" className="ml-auto flex items-center gap-2 xl:hidden">
-          <Link href="/#batumi" prefetch={false} className="inline-flex min-h-11 items-center gap-2 px-2 text-xs font-semibold text-[#161616] transition-colors hover:text-primary">
-            <ArrowLeft className="h-4 w-4" aria-hidden />
-            <Tx>Back</Tx>
-          </Link>
-          <span aria-hidden className="hidden h-6 w-px bg-[#161616]/15 sm:block" />
-          <Link href="/#contact" prefetch={false} className="hidden min-h-11 items-center px-2 text-xs font-semibold text-[#161616] transition-colors hover:text-primary sm:inline-flex">
-            <Tx>Contact AIXCO</Tx>
-          </Link>
-        </nav>
-      </div>
-    </header>
   );
 }
 
@@ -189,7 +131,7 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
               <Tx>Batumi property profile</Tx>
             </p>
             <h1 className="mt-5 max-w-4xl text-[clamp(3.5rem,5.6vw,5.5rem)] font-semibold leading-[0.96] tracking-[-0.035em] text-[#161616]">
-              {property.name}
+              <Tx>{property.name}</Tx>
             </h1>
             <p className="mt-2 border-l-[3px] border-[#E6C767] pl-4 text-[clamp(1.55rem,2.5vw,2.7rem)] font-medium leading-[1.08] tracking-[-0.02em] text-[#161616]">
               <Tx>private residences</Tx>
@@ -278,7 +220,12 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
             ))}
             {ownershipDetails.length ? (
               <p className="pt-6 text-sm leading-6 text-white/65">
-                <Tx>{ownershipDetails.map((detail) => detail.label).join(" / ")}</Tx>
+                {ownershipDetails.map((detail, index) => (
+                  <span key={detail.label}>
+                    {index ? " / " : null}
+                    <Tx>{detail.label}</Tx>
+                  </span>
+                ))}
               </p>
             ) : null}
           </div>
