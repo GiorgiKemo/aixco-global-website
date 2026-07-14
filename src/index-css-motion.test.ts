@@ -459,7 +459,15 @@ describe("index.css motion rules", () => {
     expect(css).toContain("gap: 0.65rem 0.7rem");
     expect(css).toContain("[data-story-section='dubai']\n      [data-story-scene-copy]\n      [data-layout='story-dubai-marquee']");
     expect(css).toContain("[data-story-section='dubai']\n      [data-story-scene-copy]\n      [data-layout='story-dubai-marquee']\n      .dubai-gallery-tile");
-    expect(css).toContain("flex-basis: clamp(10.8rem, 47vw, 12.5rem)");
+    expect(css).toContain("[data-story-section='dubai']\n      [data-story-scene-copy]\n      [data-layout='story-dubai-marquee']\n      .dubai-image-marquee-set");
+    expect(css).toContain("grid-auto-columns: clamp(10.8rem, 47vw, 12.5rem)");
+  });
+
+  it("sizes Dubai marquee loops from fixed tracks instead of image intrinsic widths", () => {
+    expect(css).toContain(".dubai-image-marquee-set {\n    display: grid;");
+    expect(css).toContain("grid-auto-flow: column");
+    expect(css).toContain("grid-auto-columns: clamp(17rem, 34vw, 30rem)");
+    expect(css).toContain(".dubai-gallery-tile {\n    width: 100%;\n    min-width: 0;");
   });
 
   it("keeps dense story sections readable on short phone demo viewports", () => {

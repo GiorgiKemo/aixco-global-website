@@ -14,12 +14,11 @@ const eagerGalleryTileCount = 3;
 
 type GalleryTileLoading = {
   isGalleryInView: boolean;
-  setIndex: number;
   imageIndex: number;
 };
 
-function getGalleryTileLoading({ isGalleryInView, setIndex, imageIndex }: GalleryTileLoading) {
-  const shouldEagerLoad = isGalleryInView && setIndex === 0 && imageIndex < eagerGalleryTileCount;
+function getGalleryTileLoading({ isGalleryInView, imageIndex }: GalleryTileLoading) {
+  const shouldEagerLoad = isGalleryInView && imageIndex < eagerGalleryTileCount;
 
   return {
     loading: shouldEagerLoad ? "eager" : "lazy",
@@ -294,7 +293,7 @@ export function DubaiImageMarquee({
             data-gallery-set={setIndex === 0 ? "primary" : "duplicate"}
           >
             {group.images.map((image, imageIndex) => {
-              const tileLoading = getGalleryTileLoading({ isGalleryInView, setIndex, imageIndex });
+              const tileLoading = getGalleryTileLoading({ isGalleryInView, imageIndex });
 
               return (
                 <figure key={`${setIndex}-${image.src}`} className="dubai-gallery-tile" data-gallery-tile>

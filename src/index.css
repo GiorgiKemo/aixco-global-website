@@ -3173,14 +3173,17 @@
   }
 
   .dubai-image-marquee-set {
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: clamp(17rem, 34vw, 30rem);
     flex-shrink: 0;
     gap: var(--dubai-image-marquee-gap);
     padding-right: var(--dubai-image-marquee-gap);
   }
 
   .dubai-gallery-tile {
-    flex: 0 0 clamp(17rem, 34vw, 30rem);
+    width: 100%;
+    min-width: 0;
     height: clamp(12.5rem, 23vw, 19.5rem);
     overflow: hidden;
     border: 1px solid hsl(var(--foreground) / 0.08);
@@ -4658,8 +4661,13 @@
 
     [data-story-scene-copy]
       [data-layout='story-dubai-marquee']
+      .dubai-image-marquee-set {
+      grid-auto-columns: clamp(18rem, 32vw, 28rem);
+    }
+
+    [data-story-scene-copy]
+      [data-layout='story-dubai-marquee']
       .dubai-gallery-tile {
-      flex-basis: clamp(18rem, 32vw, 28rem);
       height: clamp(10.25rem, 18svh, 14.75rem);
       border-radius: calc(var(--radius) * 1.2);
     }
@@ -6348,8 +6356,14 @@
     [data-story-section='dubai']
       [data-story-scene-copy]
       [data-layout='story-dubai-marquee']
+      .dubai-image-marquee-set {
+      grid-auto-columns: clamp(10.8rem, 47vw, 12.5rem);
+    }
+
+    [data-story-section='dubai']
+      [data-story-scene-copy]
+      [data-layout='story-dubai-marquee']
       .dubai-gallery-tile {
-      flex-basis: clamp(10.8rem, 47vw, 12.5rem);
       height: clamp(6.6rem, 15svh, 7.75rem);
     }
   }
