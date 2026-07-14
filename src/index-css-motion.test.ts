@@ -106,6 +106,15 @@ describe("index.css motion rules", () => {
     expect(css).toContain("hyphens: none");
   });
 
+  it("renders metric symbols with a complete system font and no artificial spacing", () => {
+    expect(desktopStoryHome).toContain('numericValue.split(/([.,])/u).filter(Boolean)');
+    expect(desktopStoryHome).toContain('"story-philosophy-stat__punctuation"');
+    expect(css).toContain(".story-philosophy-stat__punctuation,\n  .story-philosophy-stat__affix");
+    expect(css).toContain("font-family: var(--font-legacy-display);");
+    expect(css).toContain(".story-philosophy-stat__affix--prefix {\n    margin-right: 0;");
+    expect(css).toContain(".story-philosophy-stat__affix--suffix {\n    margin-left: 0;");
+  });
+
   it("registers the supplied AIXCO SVG icons for contact/social slots", () => {
     expect(liveAssets).toContain("AIXCO_icons-01.svg");
     expect(liveAssets).toContain("AIXCO_icons-02.svg");

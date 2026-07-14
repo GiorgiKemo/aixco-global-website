@@ -3590,6 +3590,16 @@
     line-height: 0.92;
   }
 
+  .story-philosophy-stat__number-part {
+    font: inherit;
+    letter-spacing: 0;
+  }
+
+  .story-philosophy-stat__punctuation,
+  .story-philosophy-stat__affix {
+    font-family: var(--font-legacy-display);
+  }
+
   .story-philosophy-stat__affix {
     display: inline-block;
     flex: 0 0 auto;
@@ -3600,11 +3610,11 @@
   }
 
   .story-philosophy-stat__affix--prefix {
-    margin-right: 0.1em;
+    margin-right: 0;
   }
 
   .story-philosophy-stat__affix--suffix {
-    margin-left: 0.1em;
+    margin-left: 0;
   }
 
   .story-philosophy-panel {

@@ -1775,13 +1775,26 @@ function PhilosophyPlatformScene({
           const prefix = stat.value.startsWith("$") ? "$" : "";
           const suffix = stat.value.endsWith("+") ? "+" : "";
           const numericValue = stat.value.slice(prefix.length, suffix ? -1 : undefined);
+          const numericSegments = numericValue.split(/([.,])/u).filter(Boolean);
 
           return (
             <div key={stat.label} className="story-philosophy-stat">
               <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
               <dd className="story-metric-value story-philosophy-stat__value text-primary" aria-label={stat.value}>
                 {prefix ? <span className="story-philosophy-stat__affix story-philosophy-stat__affix--prefix">{prefix}</span> : null}
-                <span className="story-philosophy-stat__number">{numericValue}</span>
+                <span className="story-philosophy-stat__number">
+                  {numericSegments.map((segment, segmentIndex) => (
+                    <span
+                      key={`${segment}:${segmentIndex}`}
+                      className={cn(
+                        "story-philosophy-stat__number-part",
+                        /^[.,]$/u.test(segment) && "story-philosophy-stat__punctuation",
+                      )}
+                    >
+                      {segment}
+                    </span>
+                  ))}
+                </span>
                 {suffix ? <span className="story-philosophy-stat__affix story-philosophy-stat__affix--suffix">{suffix}</span> : null}
               </dd>
             </div>
