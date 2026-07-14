@@ -131,11 +131,11 @@ export function PropertyChrome() {
 
   return (
     <>
-      <header ref={headerRef} className="sticky inset-x-0 top-0 z-[60] border-b border-[#161616]/10 bg-white/90 text-[#161616] shadow-[0_18px_46px_-42px_rgba(22,22,22,0.45)] backdrop-blur-xl">
+      <header ref={headerRef} className="sticky inset-x-0 top-0 z-[60] border-b border-[#161616]/10 bg-[#F3EDE1]/95 text-[#161616] shadow-[0_18px_46px_-42px_rgba(22,22,22,0.45)] backdrop-blur-xl">
         <div className="mx-auto flex min-h-[4.75rem] max-w-[96rem] items-center gap-4 px-4 sm:px-7 xl:min-h-[5.75rem] xl:px-6 2xl:px-8">
-          <Link href="/" prefetch={false} onClick={closeAll} aria-label={tx("AIXCO.GLOBAL home")} className="inline-flex min-w-max items-center gap-2 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45">
-            <img src={aixcoLiveLogos.aixcoMark} alt="" aria-hidden="true" className="h-auto w-11 shrink-0 object-contain [filter:brightness(0)_saturate(100%)] xl:w-12" />
-            <span className="whitespace-nowrap text-[0.78rem] font-semibold tracking-[-0.02em] xl:text-[0.86rem]">AIXCO.GLOBAL</span>
+          <Link href="/" prefetch={false} onClick={closeAll} aria-label={tx("AIXCO.GLOBAL home")} className="inline-flex min-w-max items-center transition-opacity hover:opacity-72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45">
+            <img src={aixcoLiveLogos.aixcoHorizontalDark} alt="" aria-hidden="true" className="h-auto w-[9.5rem] shrink-0 object-contain xl:w-[10.75rem]" />
+            <span className="sr-only">AIXCO.GLOBAL</span>
           </Link>
 
           <nav aria-label={tx("Story navigation")} className="hidden min-w-0 flex-1 items-center gap-1 pl-3 xl:flex">
@@ -166,7 +166,7 @@ export function PropertyChrome() {
                     <ChevronDown className={cn("h-3 w-3 opacity-70 transition-transform", isOpen && "rotate-180")} aria-hidden />
                   </button>
                   {isOpen ? (
-                    <div id={menuId} role="menu" className="absolute left-0 top-[calc(100%+0.35rem)] z-[80] min-w-56 rounded-xl border border-foreground/10 bg-white p-1.5 text-foreground shadow-elegant">
+                    <div id={menuId} role="menu" className="absolute left-0 top-[calc(100%+0.35rem)] z-[80] min-w-56 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 text-foreground shadow-elegant">
                       {group.items.map((item) => (
                         <Link key={item.href} href={item.href} prefetch={false} role="menuitem" onClick={closeAll} className="flex min-h-10 items-center rounded-lg px-3 py-2 text-sm font-medium text-foreground/75 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
                           {tx(item.label)}
@@ -190,14 +190,14 @@ export function PropertyChrome() {
                 setDesktopGroupOpen(null);
                 setLangOpen((current) => !current);
               }}
-              className="inline-flex min-h-12 items-center gap-2.5 rounded-xl border border-[#161616]/10 bg-white px-4 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-[#161616] shadow-[0_14px_32px_-26px_rgba(22,22,22,0.45)] transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+              className="inline-flex min-h-12 items-center gap-2.5 rounded-sm border border-[#161616]/15 bg-transparent px-4 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-[#161616] transition-colors hover:border-primary/55 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             >
               <Globe className="h-3.5 w-3.5" aria-hidden />
               {currentLangName}
               <ChevronDown className={cn("h-3 w-3 opacity-70 transition-transform", langOpen && "rotate-180")} aria-hidden />
             </button>
             {langOpen ? (
-              <div id="property-language-list" className="absolute right-0 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-xl border border-foreground/10 bg-white p-1.5 shadow-elegant">
+              <div id="property-language-list" className="absolute right-0 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant">
                 {languageOptions}
               </div>
             ) : null}
@@ -214,7 +214,7 @@ export function PropertyChrome() {
                 setMobileOpen(false);
                 setLangOpen((current) => !current);
               }}
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-foreground/10 bg-white px-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-sm border border-foreground/15 bg-transparent px-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             >
               <Globe className="h-3.5 w-3.5" aria-hidden />
               {currentLangName}
@@ -228,14 +228,14 @@ export function PropertyChrome() {
                 setLangOpen(false);
                 setMobileOpen((current) => !current);
               }}
-              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-foreground/10 bg-white text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm border border-foreground/15 bg-transparent text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             >
               {mobileOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
             </button>
           </div>
 
           {langOpen ? (
-            <div id="property-mobile-language-list" className="absolute right-4 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-xl border border-foreground/10 bg-white p-1.5 shadow-elegant xl:hidden">
+            <div id="property-mobile-language-list" className="absolute right-4 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant xl:hidden">
               {languageOptions}
             </div>
           ) : null}
@@ -247,7 +247,7 @@ export function PropertyChrome() {
       ) : null}
 
       {mobileOpen ? (
-        <aside id="property-mobile-menu" className="fixed bottom-0 right-0 top-0 z-50 w-[min(22rem,88vw)] overflow-y-auto border-l border-foreground/10 bg-white px-5 pb-8 pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] xl:hidden">
+        <aside id="property-mobile-menu" className="fixed bottom-0 right-0 top-0 z-50 w-[min(22rem,88vw)] overflow-y-auto border-l border-foreground/10 bg-[#F3EDE1] px-5 pb-8 pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] xl:hidden">
           <nav aria-label={tx("Story navigation")} className="grid gap-2">
             <Link href="/" prefetch={false} onClick={closeAll} className="rounded-lg px-3 py-3 text-sm font-semibold hover:bg-muted/70">{tx("AIXCO")}</Link>
             {navGroups.map((group) => (

@@ -741,17 +741,14 @@ function StoryChrome({
           )}
         >
           <img
-            src={aixcoLiveLogos.aixcoMark}
+            src={useLightMobileLogo ? aixcoLiveLogos.aixcoHorizontalLight : aixcoLiveLogos.aixcoHorizontalDark}
             alt=""
             aria-hidden="true"
-            width={783}
-            height={705}
-            className={cn(
-              "h-auto w-10 shrink-0 object-contain sm:w-11",
-              !useLightMobileLogo && "[filter:brightness(0)_saturate(100%)]",
-            )}
+            width={1600}
+            height={333}
+            className="h-auto w-[9rem] shrink-0 object-contain sm:w-[10rem]"
           />
-          <span className="whitespace-nowrap text-[0.78rem] font-semibold tracking-[-0.02em] sm:text-sm">AIXCO.GLOBAL</span>
+          <span className="sr-only">AIXCO.GLOBAL</span>
         </a>
         <div className="flex shrink-0 items-center gap-2">
           <button
@@ -870,17 +867,14 @@ function StoryChrome({
           )}
         >
           <img
-            src={aixcoLiveLogos.aixcoMark}
+            src={useLightMobileLogo ? aixcoLiveLogos.aixcoHorizontalLight : aixcoLiveLogos.aixcoHorizontalDark}
             alt=""
             aria-hidden="true"
-            width={783}
-            height={705}
-            className={cn(
-              "h-auto w-12 shrink-0 object-contain",
-              !useLightMobileLogo && "[filter:brightness(0)_saturate(100%)]",
-            )}
+            width={1600}
+            height={333}
+            className="h-auto w-[10.75rem] shrink-0 object-contain 2xl:w-[11.5rem]"
           />
-          <span className="whitespace-nowrap text-[0.86rem] font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
+          <span className="sr-only">AIXCO.GLOBAL</span>
         </a>
 
         <nav ref={desktopNavRef} aria-label={tx("Story navigation")} className="story-desktop-nav min-w-0 flex-1">
@@ -1287,9 +1281,17 @@ function HeroScene({
             <header className="story-hero-brand">
               <p className="story-hero-kicker">{tx("Global Real Estate")}</p>
               <h1 aria-label="AIXCO.GLOBAL" data-brand-lockup="story-hero" className="story-hero-wordmark hero-title-shadow">
-                <span className="story-hero-wordmark__text">
-                  AIXCO<span className="hero-title-dot text-primary-glow">.</span>GLOBAL
-                </span>
+                <Image
+                  src={aixcoLiveLogos.aixcoHorizontalLight}
+                  alt=""
+                  aria-hidden="true"
+                  width={1600}
+                  height={333}
+                  priority
+                  sizes="(min-width: 1280px) 52vw, 88vw"
+                  className="story-hero-official-logo h-auto w-full max-w-[44rem] object-contain object-left"
+                />
+                <span className="sr-only">AIXCO.GLOBAL</span>
               </h1>
             </header>
 
@@ -1631,21 +1633,16 @@ function AboutScene({
                 data-brand-lockup="story-about"
                 className="max-w-none font-semibold leading-[1.04] tracking-normal text-white drop-shadow-[0_18px_48px_rgba(0,0,0,0.36)]"
               >
-                <span className="flex min-w-0 items-center gap-[clamp(0.9rem,1.6vw,1.35rem)]">
-                  <Image
-                    src={aixcoLiveLogos.aixcoMarkPng}
-                    alt=""
-                    aria-hidden="true"
-                    width={783}
-                    height={705}
-                    unoptimized
-                    sizes="(min-width: 1280px) 10vw, 28vw"
-                    className="story-about-brand-mark h-[clamp(4.4rem,8vw,8.8rem)] w-[clamp(4.4rem,8vw,8.8rem)] shrink-0 object-contain"
-                  />
-                  <span className="text-[clamp(2.3rem,5.2vw,5.85rem)] uppercase tracking-[-0.04em]">
-                    <StoryTextReveal label="AIXCO.GLOBAL" />
-                  </span>
-                </span>
+                <Image
+                  src={aixcoLiveLogos.aixcoHorizontalLight}
+                  alt=""
+                  aria-hidden="true"
+                  width={1600}
+                  height={333}
+                  sizes="(min-width: 1280px) 48vw, 84vw"
+                  className="story-about-official-logo h-auto w-full max-w-[42rem] object-contain object-left"
+                />
+                <span className="sr-only">AIXCO.GLOBAL</span>
               </h2>
               <p className="mt-[clamp(1.2rem,2.4svh,2rem)] max-w-[46rem] text-[clamp(1.05rem,1.28vw,1.34rem)] leading-[1.62] text-white/88">
                 {tx("Since 2009, AIXCO has bought, sold, and brokered real estate across Europe and the Gulf - today focused on selected emerging-market opportunities, with a legacy track record in Switzerland and Dubai.")}

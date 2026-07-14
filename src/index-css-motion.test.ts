@@ -250,7 +250,7 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain("story-hero-wordmark-under-in");
     expect(liveAssets).toContain("AIXW-transparent.webp");
     expect(liveAssets).toContain("aixco-group-dubai-hero.mp4");
-    expect(appLayout).toContain('href="/aixco-global-op2/images/AIXW-transparent.webp"');
+    expect(appLayout).toContain('href="/aixco-global-op2/images/AIXCOGlobal-horizontal-light.webp"');
     expect(appLayout).toContain('href="/aixco-global-op2/videos/aixco-group-dubai-hero.mp4"');
     expect(appLayout).toContain('as="video"');
     expect(appLayout).toContain('fetchPriority="high"');

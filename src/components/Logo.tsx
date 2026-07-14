@@ -22,7 +22,7 @@ function normalizePath(path: string) {
 
 export function Logo({
   className = "",
-  iconClassName = "[filter:brightness(0)_saturate(100%)]",
+  iconClassName = "",
   textClassName = "",
   onHomeClick,
   preloadMark = false,
@@ -47,23 +47,21 @@ export function Logo({
       prefetch={false}
       aria-label={ariaLabel}
       onClick={handleClick}
-      className={`inline-flex min-h-11 shrink-0 items-center gap-2.5 text-foreground ${className}`}
+      className={`inline-flex min-h-11 shrink-0 items-center text-foreground ${className}`}
     >
       <Image
-        src={aixcoLiveLogos.aixcoMark}
+        src={aixcoLiveLogos.aixcoHorizontalDark}
         alt=""
         aria-hidden
-        className={`h-8 w-8 shrink-0 object-contain md:h-9 md:w-9 ${iconClassName}`}
-        width={780}
-        height={704}
-        sizes="36px"
+        className={`h-auto w-[9.5rem] shrink-0 object-contain md:w-[10.5rem] ${iconClassName}`}
+        width={1600}
+        height={333}
+        sizes="(min-width: 768px) 168px, 152px"
         loading={preloadMark ? "eager" : "lazy"}
         decoding="async"
         fetchPriority={preloadMark ? "high" : "auto"}
       />
-      <span className={`whitespace-nowrap text-sm font-medium tracking-[-0.02em] md:text-[15px] ${textClassName}`}>
-        AIXCO.GLOBAL
-      </span>
+      <span className={`sr-only ${textClassName}`}>AIXCO.GLOBAL</span>
     </Link>
   );
 }

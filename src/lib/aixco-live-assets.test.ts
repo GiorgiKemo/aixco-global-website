@@ -19,11 +19,10 @@ describe("aixcoLiveImages", () => {
     expect(aixcoLiveImages.batumiMosaicThumbBlueTower).toContain("/batumi-mosaic-thumbs/batumi-blue-tower.webp");
   });
 
-  it("publishes the clickable asset-detail catalogs and source images", () => {
+  it("publishes the downloadable source images", () => {
     expect(aixcoLiveAssetDetails.dubaiFundOne).toContain("/images/fund/fund1.jpeg");
     expect(aixcoLiveAssetDetails.dubaiFundTwo).toContain("/images/fund2.png");
     expect(aixcoLiveAssetDetails.clientBrochurePdf).toContain("/documents/aixco-client-brochure.pdf");
-    expect(aixcoLiveAssetDetails.currentProjectCatalog).toContain("/documents/current-project-catalog.jpeg");
   });
 
   it("publishes grouped Dubai asset galleries from the OP2 source files", () => {

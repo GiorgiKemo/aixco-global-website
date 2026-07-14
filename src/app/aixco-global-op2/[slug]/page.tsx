@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowRight,
   BadgeCheck,
-  BookOpen,
   Diamond,
   Download,
   FileCheck2,
@@ -18,7 +16,6 @@ import { siteContentDefaults } from "@/lib/backend/site-content";
 import { Tx } from "@/components/i18n/Tx";
 import { PropertyChrome } from "@/components/property/PropertyChrome";
 import {
-  batumiDetailAssetMap,
   batumiDocumentMap,
   batumiImageMap,
   batumiVideoMap,
@@ -102,7 +99,6 @@ function DetailMetric({ label, value, subtext }: { label: string; value: string;
 function PropertyPageContent({ property }: { property: BatumiProperty }) {
   const image = batumiImageMap[property.image];
   const documentHref = batumiDocumentMap[property.id];
-  const assetHref = batumiDetailAssetMap[property.id];
   const ownershipDetails = getBatumiMarketDetails(siteContentDefaults.batumiBenefits);
   const heroImage = property.id === "current-project"
     ? "/aixco-global-op2/images/optimized/current-project-hero-towers.webp"
@@ -121,10 +117,10 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
   ];
 
   return (
-    <main className="min-h-screen bg-white text-[#161616]">
+    <main className="min-h-screen bg-[#F3EDE1] text-[#161616]">
       <PropertyChrome />
       <section className="relative mx-auto grid max-w-[96rem] overflow-hidden border-b border-[#9E9D9D]/35 lg:min-h-[40rem] lg:grid-cols-[minmax(0,1.16fr)_minmax(28rem,0.84fr)]">
-        <div className="order-2 flex flex-col justify-center px-5 py-10 sm:px-8 sm:py-12 lg:order-1 lg:px-[clamp(3rem,4.2vw,4.5rem)] lg:py-10">
+        <div className="order-2 flex flex-col justify-center bg-[#F3EDE1] px-5 py-10 sm:px-8 sm:py-12 lg:order-1 lg:px-[clamp(3rem,4.2vw,4.5rem)] lg:py-10">
           <div className="max-w-[48rem]">
             <p className="flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[#161616]">
               <Diamond className="h-2.5 w-2.5 fill-[#E6C767] stroke-[#E6C767]" aria-hidden />
@@ -148,13 +144,6 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1.15fr_0.9fr]">
-            {assetHref ? (
-              <Link href={assetHref} prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#161616] bg-[#161616] px-3 text-[0.63rem] font-semibold uppercase tracking-[0.17em] text-white transition-colors hover:border-black hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]" target="_blank" rel="noreferrer">
-                <BookOpen className="h-4 w-4 text-[#E6C767]" aria-hidden />
-                <Tx>View catalog</Tx>
-                <ArrowRight className="h-4 w-4 text-[#E6C767]" aria-hidden />
-              </Link>
-            ) : null}
             {documentHref ? (
               <Link href={documentHref} prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-[0.63rem] font-semibold uppercase tracking-[0.15em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]" target="_blank" rel="noreferrer">
                 <Download className="h-4 w-4" aria-hidden />

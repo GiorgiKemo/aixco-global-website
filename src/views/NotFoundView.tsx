@@ -8,8 +8,8 @@ const NotFound = () => {
     <>
       <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-white/10 bg-[#11100e]/80 px-4 py-3 text-white backdrop-blur-xl">
         <Link href="/" prefetch={false} className="inline-flex min-w-0 items-center gap-2">
-          <img src={aixcoLiveLogos.aixcoMark} alt="" aria-hidden="true" className="h-auto w-11 shrink-0 object-contain" />
-          <span className="truncate text-sm font-semibold tracking-[-0.02em]">AIXCO.GLOBAL</span>
+          <img src={aixcoLiveLogos.aixcoHorizontalLight} alt="" aria-hidden="true" className="h-auto w-40 shrink-0 object-contain" />
+          <span className="sr-only">AIXCO.GLOBAL</span>
         </Link>
       </header>
       <main className="relative isolate flex min-h-screen items-center overflow-hidden bg-[#11100e] px-6 py-28 text-white md:px-8">

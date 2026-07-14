@@ -110,7 +110,7 @@ describe("home page performance structure", () => {
 
     expect(notFoundSource).not.toContain("<Nav />");
     expect(notFoundSource).not.toContain("<Footer />");
-    expect(notFoundSource).toContain("aixcoLiveLogos.aixcoMark");
+    expect(notFoundSource).toContain("aixcoLiveLogos.aixcoHorizontalLight");
     expect(notFoundSource).toContain("bg-[#11100e]");
     expect(notFoundSource).toContain("btn-gold");
   });

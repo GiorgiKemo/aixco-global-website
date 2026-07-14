@@ -115,7 +115,6 @@ export const aixcoLiveAssetDetails = {
   dubaiFundOne: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiFundTwo: `${liveImageBase}/fund2.png`,
   clientBrochurePdf: aixcoLiveDocuments.clientBrochure,
-  currentProjectCatalog: `${documentBase}/current-project-catalog.jpeg`,
   currentProjectPdf: aixcoLiveDocuments.currentProject,
 } as const;
 
@@ -156,6 +155,8 @@ export const aixcoDubaiHealthcareGallery = [
 
 export const aixcoLiveLogos = {
   aixcoGlobal: `${liveImageBase}/AIXCOGlobalWlong.png`,
+  aixcoHorizontalDark: `${liveImageBase}/AIXCOGlobal-horizontal-dark.webp`,
+  aixcoHorizontalLight: `${liveImageBase}/AIXCOGlobal-horizontal-light.webp`,
   aixcoMark: `${liveImageBase}/AIXW-transparent.webp`,
   aixcoMarkPng: `${liveImageBase}/AIXW.png`,
   globalPartners: `${liveImageBase}/Globalpartners.png`,
