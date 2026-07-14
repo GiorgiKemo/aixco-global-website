@@ -1718,7 +1718,7 @@ function PhilosophyScene({
                 <span className="hidden sm:inline">{tx(stat.label)}</span>
                 <span className="sm:hidden">{tx(mobileLabel)}</span>
               </dt>
-              <dd className="font-display text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary">{stat.value}</dd>
+              <dd className="story-glyph-safe tabular-nums text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary">{stat.value}</dd>
             </div>
           );
         })}

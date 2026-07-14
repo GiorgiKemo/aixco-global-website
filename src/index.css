@@ -8039,6 +8039,8 @@ html[data-home-experience='story'] {
   }
 
   [data-story-section='philosophy'] [data-layout='story-philosophy-stats'] > div {
+    display: flex;
+    flex-direction: column;
     min-height: 6.5rem;
     padding: 0.85rem;
     border: 1px solid hsl(var(--foreground) / 0.09);
@@ -8048,7 +8050,8 @@ html[data-home-experience='story'] {
   }
 
   [data-story-section='philosophy'] [data-layout='story-philosophy-stats'] dd {
-    margin-top: 0.8rem;
+    margin-top: auto;
+    padding-top: 0.8rem;
     font-size: clamp(1.6rem, 7.5vw, 2rem) !important;
   }
 
