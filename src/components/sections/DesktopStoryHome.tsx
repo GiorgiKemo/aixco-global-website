@@ -1654,7 +1654,7 @@ function AboutScene({
             <dl className="mt-[clamp(1.7rem,3.4svh,2.6rem)] grid max-w-[48rem] grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
               {metrics.slice(0, 4).map((metric) => (
                 <div key={metric.label} className="border-l border-white/28 pl-4">
-                  <dt className="text-[clamp(1.55rem,2.45vw,2.7rem)] font-normal leading-none text-primary-glow">
+                  <dt className="story-glyph-safe tabular-nums text-[clamp(1.55rem,2.45vw,2.7rem)] font-normal leading-none text-primary-glow">
                     {metric.value}
                   </dt>
                   <dd className="mt-2 text-[clamp(0.7rem,2.45vw,0.82rem)] font-semibold uppercase leading-relaxed tracking-[0.04em] text-white/70 [overflow-wrap:anywhere]">
