@@ -129,6 +129,13 @@ describe("index.css motion rules", () => {
     expect(css).toContain(".story-contact-card__svg-icon");
   });
 
+  it("keeps the email and address values on identical typography", () => {
+    const sharedContactValueClass =
+      'className="story-body story-glyph-safe min-w-0 text-foreground/82 [overflow-wrap:anywhere]"';
+
+    expect(desktopStoryHome.split(sharedContactValueClass)).toHaveLength(3);
+  });
+
   it("primes the next-section About video before the scroll handoff", () => {
     expect(desktopStoryHome).toContain("const shouldPrimeVideo = isRevealed || isActive;");
     expect(desktopStoryHome).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");

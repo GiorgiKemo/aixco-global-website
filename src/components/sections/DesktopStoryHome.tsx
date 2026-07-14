@@ -2696,7 +2696,7 @@ function ContactScene({
                       <span className="story-contact-card__icon-tile" aria-hidden="true">
                         <img src={aixcoLiveIcons.email} alt="" className="story-contact-card__svg-icon" />
                       </span>
-                      <span className="story-card-title story-glyph-safe min-w-0 text-[clamp(0.95rem,1vw,1.05rem)] font-medium leading-snug [overflow-wrap:anywhere]">
+                      <span className="story-body story-glyph-safe min-w-0 text-foreground/82 [overflow-wrap:anywhere]">
                         {company.email}
                       </span>
                     </span>
