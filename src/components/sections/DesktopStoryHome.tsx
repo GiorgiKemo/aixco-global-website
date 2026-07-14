@@ -1623,8 +1623,7 @@ function AboutScene({
             className="story-about-cinematic-copy relative z-10 flex h-full min-h-0 flex-col justify-end px-[clamp(2rem,5vw,5.5rem)] pb-[clamp(2.8rem,7svh,5.6rem)] pt-[clamp(4rem,8svh,6rem)]"
           >
             <div data-layout="story-about-cinematic" className="max-w-[52rem]">
-              <p className="mb-5 flex items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-white/78">
-                <span className="h-px w-8 bg-white/58" aria-hidden />
+              <p className="mb-5 text-[clamp(0.84rem,0.86vw,0.96rem)] font-semibold uppercase tracking-[0.16em] text-white/82">
                 {tx("About AIXCO")}
               </p>
               <h2

@@ -7173,6 +7173,23 @@ html[data-home-experience='story'] {
   text-wrap: balance;
 }
 
+[data-story-section='aboutAccess'] {
+  font-family: var(--font-legacy-ui);
+}
+
+[data-story-section='aboutAccess'] [data-layout='story-about-access'] h2 {
+  font-family: var(--font-legacy-display);
+  font-size: clamp(3.5rem, 4.65vw, 5.35rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.015em !important;
+  text-transform: none;
+}
+
+[data-story-section='aboutAccess'] [data-layout='story-about-access'] > div:first-child > p:first-child {
+  font-family: var(--font-legacy-display);
+  letter-spacing: -0.025em;
+}
+
 .story-glyph-safe,
 .story-batumi-benefit__metric,
 .story-batumi-benefit__label,
