@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getPortalRoleForHost } from "@/lib/portal-wrapper";
 
 export function proxy(request: NextRequest) {
-  const forwardedHost = request.headers.get("x-forwarded-host");
-  const role = getPortalRoleForHost(forwardedHost ?? request.headers.get("host"));
+  const role = getPortalRoleForHost(request.nextUrl.hostname);
 
   if (!role) return NextResponse.next();
 

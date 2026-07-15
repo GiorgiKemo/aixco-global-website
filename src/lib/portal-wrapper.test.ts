@@ -18,6 +18,7 @@ describe("portal wrapper", () => {
     expect(html).toContain("Back to AIXCO Global");
     expect(html).toContain("min-height: 44px");
     expect(html).toContain("height: 100dvh");
+    expect(html).toContain("padding-bottom: env(safe-area-inset-bottom)");
   });
 
   it("rejects unsupported portal roles", () => {

@@ -72,6 +72,7 @@ export function createPortalWrapperHtml(role: PortalRole) {
         width: 100%;
         height: 100vh;
         height: 100dvh;
+        padding-bottom: env(safe-area-inset-bottom);
       }
 
       .portal-toolbar {
