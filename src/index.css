@@ -7850,6 +7850,16 @@ html[data-home-experience='story'] {
     object-fit: cover !important;
   }
 
+  [data-story-section='dubai'] [data-story-scene-media] {
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 2850 / 4032;
+  }
+
+  [data-story-section='dubai'] .story-media-panel__image {
+    object-position: center top !important;
+  }
+
   [data-story-section='team'] [data-story-scene-media] {
     height: clamp(22rem, 104vw, 29rem);
     min-height: clamp(22rem, 104vw, 29rem);

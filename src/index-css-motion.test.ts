@@ -480,6 +480,11 @@ describe("index.css motion rules", () => {
     expect(css).toContain(".dubai-gallery-tile {\n    width: 100%;\n    min-width: 0;");
   });
 
+  it("keeps the complete portrait Dubai skyline visible on phones", () => {
+    expect(css).toContain("[data-story-section='dubai'] [data-story-scene-media] {\n    height: auto !important;\n    min-height: 0 !important;\n    aspect-ratio: 2850 / 4032;");
+    expect(css).toContain("[data-story-section='dubai'] .story-media-panel__image {\n    object-position: center top !important;");
+  });
+
   it("keeps dense story sections readable on short phone demo viewports", () => {
     expect(css).toContain("@media (max-width: 559px) and (max-height: 740px)");
     expect(css).toContain("[data-story-section='participate'] [data-layout='story-participation-routes'] button");
