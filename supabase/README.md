@@ -31,9 +31,12 @@ npx supabase migration new <name>
 npx supabase db push --linked
 ```
 
-The contact email worker must call `/api/cron/contact-email-deliveries` at least
-once per minute with `Authorization: Bearer $CRON_SECRET`. Verify production after
-migrations and environment variables are deployed:
+The contact email worker is invoked every five minutes by
+`.github/workflows/contact-email-worker.yml` with
+`Authorization: Bearer $CRON_SECRET`. The workflow secret
+`CONTACT_EMAIL_CRON_SECRET` and the Vercel environment variable `CRON_SECRET`
+must contain the same value. Verify production after migrations and environment
+variables are deployed:
 
 ```powershell
 Invoke-WebRequest https://www.aixco.global/api/health/contact-pipeline
