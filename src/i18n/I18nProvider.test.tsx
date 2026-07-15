@@ -132,8 +132,13 @@ describe("I18nProvider", () => {
     });
   });
 
-  it("translates the document title for non-English languages", async () => {
+  it("preserves route-specific metadata when the language changes", async () => {
     localStorage.setItem("aixco-lang", "de");
+    document.title = "Reverance by Otium | AIXCO.Global";
+    const description = document.createElement("meta");
+    description.name = "description";
+    description.content = "Reverance route description";
+    document.head.append(description);
 
     render(
       <I18nProvider>
@@ -142,8 +147,12 @@ describe("I18nProvider", () => {
     );
 
     await waitFor(() => {
-      expect(document.title).toBe("AIXCO.Global | Immobilieninvestment");
+      expect(document.documentElement.lang).toBe("de");
     });
+
+    expect(document.title).toBe("Reverance by Otium | AIXCO.Global");
+    expect(description.content).toBe("Reverance route description");
+    description.remove();
   });
 
   it("uses the approved German market access headline", async () => {

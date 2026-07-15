@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPortalRoleForHost } from "@/lib/portal-wrapper";
+import { refreshSupabaseAuthSession } from "@/lib/supabase/auth-proxy";
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith("/admin")) {
+    return refreshSupabaseAuthSession(request);
+  }
+
   const role = getPortalRoleForHost(request.nextUrl.hostname);
 
   if (!role) return NextResponse.next();
@@ -14,5 +19,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/",
+  matcher: ["/", "/admin/:path*"],
 };

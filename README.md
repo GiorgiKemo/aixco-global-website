@@ -38,3 +38,6 @@ npm audit --omit=dev
 ## Environment
 
 Copy `.env.example` to `.env.local` for local development and configure the Supabase and admin dashboard variables before enabling lead capture or `/admin` in production.
+
+The admin dashboard supports individual Supabase Auth identities with mandatory TOTP MFA. See
+[`docs/admin-auth-rollout.md`](docs/admin-auth-rollout.md) before changing `ADMIN_AUTH_MODE` in production.

@@ -15,7 +15,7 @@ const iconBase = aixcoLivePath("icons");
 const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
 const batumiGalleryPreviewBase = `${batumiGalleryBase}/previews`;
 const healthcareGalleryVersion = "healthcare-gallery-20260506";
-const heroVideoVersion = "hero-batumi-web-20260625";
+const heroVideoVersion = "hero-batumi-web-20260715-p1";
 
 const versionHealthcareImage = (src: string) => `${src}?v=${healthcareGalleryVersion}`;
 
@@ -88,7 +88,7 @@ export const aixcoLiveVideoPreviews = {
 export const aixcoHeroBackgroundVideo = {
   src: `${optimizedVideoBase}/hero-02-desktop.mp4?v=${heroVideoVersion}`,
   mobileSrc: `${optimizedVideoBase}/hero-02-mobile.mp4?v=${heroVideoVersion}`,
-  poster: `${optimizedVideoBase}/hero-02-poster.webp?v=${heroVideoVersion}`,
+  poster: `${optimizedVideoBase}/hero-02-poster.webp`,
   title: "AIXCO hero background",
 } as const;
 

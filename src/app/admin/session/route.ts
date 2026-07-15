@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import {
   ADMIN_SESSION_COOKIE_NAME,
   ADMIN_SESSION_COOKIE_PATH,
+  type AdminPrincipal,
   createAdminSessionCookieValue,
   getAdminAuthConfig,
 } from "@/lib/admin/auth";
+import { auditAdminAction } from "@/lib/admin/audit";
 import { DEFAULT_ADMIN_SESSION_TTL_SECONDS, verifyAdminPassword } from "@/lib/admin/session-token";
 import { checkRateLimit, getRateLimitClientId } from "@/lib/security/rate-limit";
 
@@ -23,8 +25,13 @@ function redirectTo(request: Request, path: string) {
 
 export async function POST(request: Request) {
   const config = getAdminAuthConfig();
-  if (!config.configured) {
+  if (!config.configured || !config.legacy.enabled || !config.legacy.configured) {
     return redirectTo(request, "/admin/login?error=config");
+  }
+
+  const requestOrigin = request.headers.get("origin");
+  if (requestOrigin && requestOrigin !== new URL(request.url).origin) {
+    return new NextResponse("Forbidden", { status: 403 });
   }
 
   const rateLimit = checkRateLimit({
@@ -45,7 +52,7 @@ export async function POST(request: Request) {
 
   const password = String(formData.get("password") ?? "");
 
-  if (!verifyAdminPassword(password, config.password, config.sessionSecret)) {
+  if (!verifyAdminPassword(password, config.legacy.password, config.legacy.sessionSecret)) {
     return redirectTo(request, "/admin/login?error=invalid");
   }
 
@@ -58,6 +65,19 @@ export async function POST(request: Request) {
     secure: getSecureCookieSetting(),
     path: ADMIN_SESSION_COOKIE_PATH,
     maxAge: DEFAULT_ADMIN_SESSION_TTL_SECONDS,
+  });
+
+  const principal: AdminPrincipal = {
+    id: "legacy-shared-password",
+    email: null,
+    authentication: "legacy-shared-password",
+    aal: null,
+  };
+  auditAdminAction({
+    action: "admin.login",
+    actor: principal,
+    outcome: "success",
+    details: { migrationMode: true },
   });
 
   return response;

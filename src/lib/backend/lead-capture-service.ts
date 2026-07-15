@@ -12,13 +12,8 @@ import {
 import { isSafePortalUrl } from "@/lib/security/urls";
 import { getSupabaseAdminClient, getSupabaseAdminConfig } from "@/lib/supabase/admin";
 import type { Database, Json } from "@/lib/supabase/database.types";
-import {
-  sendContactLeadNotificationEmail,
-  type ContactLeadNotification,
-} from "./lead-notification-email";
 
 type ContactInsert = Database["public"]["Tables"]["contact_submissions"]["Insert"];
-type ContactRow = Database["public"]["Tables"]["contact_submissions"]["Row"];
 type ChatInsert = Database["public"]["Tables"]["chat_transcripts"]["Insert"];
 type PortalEventInsert = Database["public"]["Tables"]["portal_click_events"]["Insert"];
 
@@ -26,25 +21,24 @@ type CaptureTable = "contact_submissions" | "chat_transcripts" | "portal_click_e
 type CaptureInsert = ContactInsert | ChatInsert | PortalEventInsert;
 type InsertResult = Promise<{ error: { message: string } | null }>;
 type InsertBuilder = { insert: (payload: CaptureInsert) => InsertResult };
-type ContactInsertBuilder = {
-  insert: (payload: ContactInsert) => {
-    select: (columns: "request_reference") => {
-      single: () => Promise<{
-        data: Pick<ContactRow, "request_reference"> | null;
-        error: { message: string } | null;
-      }>;
-    };
-  };
+type ContactRpcResult = {
+  data: { request_reference: string; delivery_status: string } | null;
+  error: { message: string; code?: string } | null;
 };
 type ChatTranscriptBuilder = {
   insert: (payload: ChatInsert) => InsertResult;
   upsert: (payload: ChatInsert, options: { onConflict: "session_id" }) => InsertResult;
 };
-type LeadCaptureClient = { from: (table: CaptureTable) => unknown };
+type LeadCaptureClient = {
+  from: (table: CaptureTable) => unknown;
+  rpc?: (
+    fn: "create_contact_submission",
+    args: { p_submission: Json },
+  ) => { single: () => Promise<ContactRpcResult> };
+};
 
 type LeadCaptureOptions = {
   client?: LeadCaptureClient;
-  contactEmailNotifier?: (notification: ContactLeadNotification) => Promise<CaptureResult>;
   headers?: Headers;
   hasServerConfig?: boolean;
 };
@@ -139,32 +133,59 @@ function omitChatSessionId(payload: ChatInsert): ChatInsert {
 async function insertContactRow(
   payload: ContactInsert,
   options: LeadCaptureOptions,
-): Promise<{ ok: true; reference: string } | CaptureFailure> {
+): Promise<
+  | {
+      ok: true;
+      reference: string;
+      emailDelivery: {
+        status: "queued";
+        internal: "queued";
+        confirmation: "queued";
+      };
+    }
+  | CaptureFailure
+> {
   if (!options.client && !(options.hasServerConfig ?? getSupabaseAdminConfig().configured)) {
     return { ok: false, skipped: true, reason: "Supabase admin configuration is not available." };
   }
 
   try {
     const client = (options.client ?? (await getSupabaseAdminClient())) as LeadCaptureClient;
-    const tableClient = client.from("contact_submissions") as ContactInsertBuilder;
-    const { data, error } = await tableClient
-      .insert(payload)
-      .select("request_reference")
+    if (!client.rpc) {
+      return {
+        ok: false,
+        skipped: true,
+        reason: "The durable contact delivery schema is not available.",
+      };
+    }
+
+    const { data, error } = await client
+      .rpc("create_contact_submission", { p_submission: payload as unknown as Json })
       .single();
 
     if (error) {
-      return { ok: false, reason: error.message };
+      console.error(`Contact submission transaction failed: ${error.code ?? "database_error"}.`);
+      return { ok: false, reason: "The contact request could not be stored right now." };
     }
 
     if (!data?.request_reference) {
       return { ok: false, reason: "The database did not return a contact request reference." };
     }
 
-    return { ok: true, reference: data.request_reference };
+    return {
+      ok: true,
+      reference: data.request_reference,
+      emailDelivery: {
+        status: "queued",
+        internal: "queued",
+        confirmation: "queued",
+      },
+    };
   } catch (error) {
+    console.error("Contact submission transaction failed unexpectedly.", error);
     return {
       ok: false,
-      reason: error instanceof Error ? error.message : "Unknown lead capture error.",
+      reason: "The contact request could not be stored right now.",
     };
   }
 }
@@ -249,23 +270,6 @@ export async function captureContactSubmission(
 
   const insertResult = await insertContactRow(payload, options);
   if (!insertResult.ok) return insertResult;
-
-  const notification: ContactLeadNotification = {
-    requestReference: insertResult.reference,
-    name: payload.name,
-    email: payload.email,
-    interest: payload.interest ?? null,
-    message: payload.message,
-    locale: payload.locale ?? null,
-    pagePath: payload.page_path ?? null,
-    userAgent: payload.user_agent ?? null,
-    metadata: payload.metadata ?? {},
-  };
-  const emailResult = await (options.contactEmailNotifier ?? sendContactLeadNotificationEmail)(notification);
-
-  if (!emailResult.ok && !emailResult.skipped) {
-    console.error(`Lead notification email failed: ${emailResult.reason}`);
-  }
 
   return insertResult;
 }

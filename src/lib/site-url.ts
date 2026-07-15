@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://aixco-global-website.vercel.app";
+const DEFAULT_SITE_URL = "https://www.aixco.global";
 
 function normalizeSiteUrl(value: string | undefined) {
   const candidate = value?.trim();

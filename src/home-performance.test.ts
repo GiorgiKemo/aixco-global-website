@@ -69,7 +69,7 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).not.toContain("rgba(17,16,14,0.78)");
   });
 
-  it("primes the about video from the initial nearby scene render", () => {
+  it("defers the about video until the section becomes active", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const aboutSceneStart = desktopStorySource.indexOf("function AboutScene");
     const philosophySceneStart = desktopStorySource.indexOf("function PhilosophyScene");
@@ -77,13 +77,13 @@ describe("home page performance structure", () => {
 
     expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
     expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
-    expect(aboutSceneSource).toContain("const shouldPrimeVideo = isRevealed || isActive;");
+    expect(aboutSceneSource).toContain("const shouldPrimeVideo = isActive && shouldReduceMotion !== true;");
     expect(aboutSceneSource).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
     expect(aboutSceneSource).toContain("autoPlay={shouldPrimeVideo}");
-    expect(aboutSceneSource).toContain('preload={shouldPrimeVideo ? "auto" : "none"}');
+    expect(aboutSceneSource).toContain('preload={shouldPrimeVideo ? "metadata" : "none"}');
     expect(desktopStorySource).toContain("storyChapters.map((_, index) => index <= 1)");
-    expect(aboutSceneSource).not.toContain("src={isActive ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(aboutSceneSource).not.toContain('preload={isActive ? "auto" : "none"}');
+    expect(aboutSceneSource).not.toContain("const shouldPrimeVideo = isRevealed || isActive;");
+    expect(aboutSceneSource).not.toContain('preload={shouldPrimeVideo ? "auto" : "none"}');
   });
 
   it("does not mount heavy story media before its section is revealed", () => {
@@ -115,17 +115,17 @@ describe("home page performance structure", () => {
     expect(notFoundSource).toContain("btn-gold");
   });
 
-  it("keeps the story boot surface on the normal page background", () => {
+  it("server-renders a meaningful branded shell while the story bundle loads", () => {
     const homeExperienceSource = readSource("src/components/sections/HomeExperience.tsx");
     const appLayoutSource = readSource("src/app/layout.tsx");
 
     expect(homeExperienceSource).toContain("function StoryBootSurface");
-    expect(homeExperienceSource).toContain('className="fixed inset-0 min-h-[100svh] bg-background"');
-    expect(homeExperienceSource).not.toContain("bg-white");
-    expect(homeExperienceSource).not.toContain("bg-black");
+    expect(homeExperienceSource).toContain('data-home-ssr-shell="true"');
+    expect(homeExperienceSource).toContain("Wise selection. Recurring income generation.");
+    expect(homeExperienceSource).toContain('href="#contact"');
+    expect(homeExperienceSource).not.toContain("ssr: false");
     expect(appLayoutSource).not.toContain("homeStoryBootScript");
     expect(appLayoutSource).not.toContain("home-desktop-story-boot");
-    expect(homeExperienceSource).not.toContain("fixed inset-y-0 left-0");
   });
 
   it("marks the story scroll mode before the lazy story component hydrates", () => {

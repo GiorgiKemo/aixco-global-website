@@ -4,12 +4,16 @@ import {
   type ChatMessageInput,
   type ChatTranscriptInput,
   type ContactSubmissionInput,
+  type LeadCaptureAntiAbuseInput,
   type PortalEventInput,
 } from "@/lib/backend/lead-capture-contracts";
 import { isSafePortalUrl } from "@/lib/security/urls";
 
 type CaptureEndpoint = "contact" | "chat" | "portal-event";
 type ChatTranscriptOptions = Pick<ChatTranscriptInput, "reason" | "sessionId">;
+type ContactSubmissionOptions = { antiAbuse?: LeadCaptureAntiAbuseInput };
+
+const contactExperienceStartedAt = Date.now();
 
 const CAPTURE_ENDPOINTS: Record<CaptureEndpoint, string> = {
   contact: "/api/lead-capture/contact",
@@ -49,12 +53,20 @@ async function readCaptureResponse(response: Response): Promise<CaptureResult> {
       skipped: boolean;
       reason: string;
       reference: string;
+      emailDelivery: {
+        status: "queued" | "processing" | "retrying" | "provider_accepted" | "failed";
+        internal: "queued" | "processing" | "retrying" | "provider_accepted" | "failed";
+        confirmation: "queued" | "processing" | "retrying" | "provider_accepted" | "failed";
+      };
     }>;
 
     if (payload.ok === true) {
       return {
         ok: true,
         ...(typeof payload.reference === "string" ? { reference: payload.reference } : {}),
+        ...(payload.emailDelivery && typeof payload.emailDelivery === "object"
+          ? { emailDelivery: payload.emailDelivery }
+          : {}),
       };
     }
 
@@ -68,7 +80,11 @@ async function readCaptureResponse(response: Response): Promise<CaptureResult> {
   }
 }
 
-async function postCapture(endpoint: CaptureEndpoint, payload: unknown): Promise<CaptureResult> {
+async function postCapture(
+  endpoint: CaptureEndpoint,
+  payload: unknown,
+  antiAbuse?: LeadCaptureAntiAbuseInput,
+): Promise<CaptureResult> {
   if (shouldSkipNetworkCapture()) {
     return { ok: false, skipped: true, reason: "Lead capture API is not available in this environment." };
   }
@@ -77,7 +93,7 @@ async function postCapture(endpoint: CaptureEndpoint, payload: unknown): Promise
     const response = await fetch(CAPTURE_ENDPOINTS[endpoint], {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ payload, context: getBrowserContext() }),
+      body: JSON.stringify({ payload, context: getBrowserContext(), ...(antiAbuse ? { antiAbuse } : {}) }),
       keepalive: true,
     });
     const result = await readCaptureResponse(response);
@@ -107,8 +123,14 @@ export async function recordChatTranscript(
   return postCapture("chat", { ...options, messages: normalizedMessages });
 }
 
-export async function recordContactSubmission(input: ContactSubmissionInput): Promise<CaptureResult> {
-  return postCapture("contact", input);
+export async function recordContactSubmission(
+  input: ContactSubmissionInput,
+  options: ContactSubmissionOptions = {},
+): Promise<CaptureResult> {
+  return postCapture("contact", input, options.antiAbuse ?? {
+    website: "",
+    startedAt: contactExperienceStartedAt,
+  });
 }
 
 export async function recordPortalEvent(input: PortalEventInput): Promise<CaptureResult> {

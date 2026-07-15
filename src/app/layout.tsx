@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: metadataTitle,
   description: metadataDescription,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: metadataTitle,
     description: metadataDescription,
@@ -35,8 +38,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/aixco-global-op2/images/optimized/batumi.webp",
-        width: 1200,
-        height: 630,
+        width: 1600,
+        height: 1066,
         alt: "AIXCO.Global real estate opportunities",
       },
     ],
@@ -76,12 +79,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           href="/aixco-global-op2/images/AIXCOGlobal-horizontal-light.webp"
           type="image/webp"
           fetchPriority="high"
-        />
-        <link
-          rel="preload"
-          as="video"
-          href="/aixco-global-op2/videos/aixco-group-dubai-hero.mp4"
-          type="video/mp4"
         />
       </head>
       <body suppressHydrationWarning>

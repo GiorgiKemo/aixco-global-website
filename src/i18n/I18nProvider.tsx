@@ -49,17 +49,47 @@ const keyedText: Record<string, string> = {
   "cta.start": "Explore opportunities",
   "cta.contact": "Contact AIXCO",
 };
-const pageTitle = "AIXCO.Global | Real Estate Investment";
-const pageDescription =
-  "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
-const localizedPageMetadata: Partial<Record<Lang, { title: string; description: string }>> = {
-  pl: {
-    title: "AIXCO.Global | Inwestycje w nieruchomości",
-    description: "Poznaj wybrane możliwości inwestycyjne w nieruchomości z przejrzystymi cenami w euro od 45 000 EUR, pośrednictwem i zarządzaniem przez AIXCO.",
-  },
-};
-
 const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
+  "Request reference": {
+    de: "Anfragereferenz",
+    ru: "Номер обращения",
+    ka: "მოთხოვნის ნომერი",
+    tr: "Talep referansı",
+    ar: "مرجع الطلب",
+    pl: "Numer zgłoszenia",
+  },
+  "Pause partner movement": {
+    de: "Partnerbewegung pausieren",
+    ru: "Приостановить движение партнёров",
+    ka: "პარტნიორების მოძრაობის შეჩერება",
+    tr: "İş ortakları hareketini duraklat",
+    ar: "إيقاف حركة الشركاء مؤقتًا",
+    pl: "Wstrzymaj ruch partnerów",
+  },
+  "Resume partner movement": {
+    de: "Partnerbewegung fortsetzen",
+    ru: "Возобновить движение партнёров",
+    ka: "პარტნიორების მოძრაობის გაგრძელება",
+    tr: "İş ortakları hareketini sürdür",
+    ar: "استئناف حركة الشركاء",
+    pl: "Wznów ruch partnerów",
+  },
+  "Pause gallery movement": {
+    de: "Galeriebewegung pausieren",
+    ru: "Приостановить движение галереи",
+    ka: "გალერეის მოძრაობის შეჩერება",
+    tr: "Galeri hareketini duraklat",
+    ar: "إيقاف حركة المعرض مؤقتًا",
+    pl: "Wstrzymaj ruch galerii",
+  },
+  "Resume gallery movement": {
+    de: "Galeriebewegung fortsetzen",
+    ru: "Возобновить движение галереи",
+    ka: "გალერეის მოძრაობის გაგრძელება",
+    tr: "Galeri hareketini sürdür",
+    ar: "استئناف حركة المعرض",
+    pl: "Wznów ruch galerii",
+  },
   "Global Real Estate": {
     de: "Globale Immobilien",
     ru: "Глобальная недвижимость",
@@ -1601,12 +1631,6 @@ const baseCatalogSources: TranslationSource[] = [
   clientBriefPassthroughTranslations,
 ];
 
-const emptyAttributeTranslations: AttributeTranslationCatalog = {
-  placeholder: {},
-  content: {},
-  title: {},
-};
-
 let translationCatalogPromise: Promise<LoadedTranslationCatalogs> | null = null;
 
 function loadTranslationCatalogs() {
@@ -1697,7 +1721,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [translationCatalogs, setTranslationCatalogs] = useState<LoadedTranslationCatalogs | null>(null);
   const dir = lang === "ar" ? "rtl" : "ltr";
   const activeCatalogSources = translationCatalogs?.sources ?? baseCatalogSources;
-  const activeAttributeTranslations = translationCatalogs?.attributes ?? emptyAttributeTranslations;
   const translationLookupCache = useMemo(() => ({
     lang,
     sources: activeCatalogSources,
@@ -1724,35 +1747,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [lang, translationCatalogs]);
 
   useEffect(() => {
-    const localizedTitle = lang === "en"
-      ? pageTitle
-      : localizedPageMetadata[lang]?.title ?? activeAttributeTranslations.title[pageTitle]?.[lang] ?? pageTitle;
-
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
-    const syncTitle = () => {
-      if (document.title !== localizedTitle) {
-        document.title = localizedTitle;
-      }
-    };
-
-    syncTitle();
-    const titleSync = window.setTimeout(syncTitle, 0);
-    const titleObserver = new MutationObserver(syncTitle);
-    titleObserver.observe(document.head, {
-      childList: true,
-      characterData: true,
-      subtree: true,
-    });
-    const description = document.querySelector('meta[name="description"]');
-    if (description) {
-      description.setAttribute(
-        "content",
-        lang === "en"
-          ? pageDescription
-          : localizedPageMetadata[lang]?.description ?? activeAttributeTranslations.content[pageDescription]?.[lang] ?? pageDescription,
-      );
-    }
     if (hasLoadedStoredLang) {
       try {
         localStorage.setItem("aixco-lang", lang);
@@ -1760,12 +1756,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         // Language persistence is optional when browser storage is unavailable.
       }
     }
-
-    return () => {
-      window.clearTimeout(titleSync);
-      titleObserver.disconnect();
-    };
-  }, [lang, dir, activeAttributeTranslations, hasLoadedStoredLang]);
+  }, [lang, dir, hasLoadedStoredLang]);
 
   const value = useMemo<Ctx>(() => ({
     lang,

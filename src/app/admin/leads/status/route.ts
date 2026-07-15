@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { hasAdminSession } from "@/lib/admin/auth";
+import { getAdminAuthDecision } from "@/lib/admin/auth";
+import { auditAdminAction } from "@/lib/admin/audit";
 import { leadResourceSchema, leadStatusSchema, updateLeadStatus } from "@/lib/admin/leads";
 
 const statusUpdateSchema = z.object({
@@ -32,9 +33,16 @@ export async function POST(request: Request) {
       request.headers.get("content-type")?.includes("application/json"),
   );
 
-  if (!(await hasAdminSession())) {
+  const auth = await getAdminAuthDecision();
+  if (!auth.ok) {
     if (wantsJson) return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
     return redirectTo(request, "/admin/login");
+  }
+
+  const requestOrigin = request.headers.get("origin");
+  if (requestOrigin && requestOrigin !== new URL(request.url).origin) {
+    if (wantsJson) return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
+    return new NextResponse("Forbidden", { status: 403 });
   }
 
   const parsed = statusUpdateSchema.safeParse(await readStatusUpdatePayload(request, wantsJson));
@@ -46,9 +54,23 @@ export async function POST(request: Request) {
 
   try {
     await updateLeadStatus(parsed.data.resource, parsed.data.id, parsed.data.status);
+    auditAdminAction({
+      action: "lead.status.update",
+      actor: auth.principal,
+      outcome: "success",
+      target: `${parsed.data.resource}:${parsed.data.id}`,
+      details: { status: parsed.data.status },
+    });
     if (wantsJson) return NextResponse.json({ ok: true });
     return redirectTo(request, `/admin/leads?updated=1#${parsed.data.resource}-${parsed.data.id}`);
   } catch {
+    auditAdminAction({
+      action: "lead.status.update",
+      actor: auth.principal,
+      outcome: "failure",
+      target: `${parsed.data.resource}:${parsed.data.id}`,
+      details: { status: parsed.data.status },
+    });
     if (wantsJson) return NextResponse.json({ ok: false, error: "status-update-failed" }, { status: 500 });
     return redirectTo(request, "/admin/leads?error=status-update-failed");
   }

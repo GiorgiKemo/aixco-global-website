@@ -26,10 +26,20 @@ export default async function AdminLoginPage() {
         <p className="eyebrow">AIXCO Admin</p>
         <h1 className="mt-4 font-display text-4xl leading-tight">Lead dashboard</h1>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-          Sign in to review contact submissions, live chat transcripts, and portal handoff activity.
+          Sign in with your individual admin identity and authenticator app to review contact submissions, live chat transcripts,
+          and portal handoff activity.
         </p>
 
-        <AdminLoginForm config={{ configured: config.configured, missing: config.missing }} />
+        <AdminLoginForm
+          config={{
+            configured: config.configured,
+            missing: config.missing,
+            mode: config.mode,
+            role: config.role,
+            identityAvailable: config.identity.configured,
+            legacyAvailable: config.legacy.enabled && config.legacy.configured,
+          }}
+        />
       </section>
     </main>
   );

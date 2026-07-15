@@ -1,6 +1,11 @@
 type PolishTranslationSource = Partial<Record<string, { pl: string }>>;
 
 export const polishTranslationsFinal = {
+  "Request reference": { pl: "Numer zgłoszenia" },
+  "Pause partner movement": { pl: "Wstrzymaj ruch partnerów" },
+  "Resume partner movement": { pl: "Wznów ruch partnerów" },
+  "Pause gallery movement": { pl: "Wstrzymaj ruch galerii" },
+  "Resume gallery movement": { pl: "Wznów ruch galerii" },
   "Your request was received.": { pl: "Otrzymaliśmy Twoje zgłoszenie." },
   "We saved your details for the AIXCO team. You can also open an email draft if you want to send extra context.": { pl: "Zapisaliśmy Twoje dane dla zespołu AIXCO. Możesz również otworzyć wersję roboczą wiadomości, aby dodać więcej informacji." },
   "Please enter your name": { pl: "Wpisz swoje imię i nazwisko" },

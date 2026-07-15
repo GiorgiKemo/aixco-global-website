@@ -21,6 +21,62 @@ type LiveVideoProps = {
 
 const focusThreshold = 0.45;
 const expandedVideoEvent = "aixco-live-video-expanded";
+const videoDialogFocusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled]):not([type='hidden'])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "video[controls]",
+  "audio[controls]",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function keepVideoDialogFocus(event: KeyboardEvent, container: HTMLElement) {
+  if (event.key !== "Tab") return;
+
+  const focusable = Array.from(container.querySelectorAll<HTMLElement>(videoDialogFocusableSelector)).filter(
+    (element) => element.tabIndex >= 0 && element.getAttribute("aria-hidden") !== "true" && !element.closest("[inert]"),
+  );
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (!first || !last) {
+    event.preventDefault();
+    container.focus({ preventScroll: true });
+  } else if (event.shiftKey && (document.activeElement === first || !container.contains(document.activeElement))) {
+    event.preventDefault();
+    last.focus({ preventScroll: true });
+  } else if (!event.shiftKey && (document.activeElement === last || !container.contains(document.activeElement))) {
+    event.preventDefault();
+    first.focus({ preventScroll: true });
+  }
+}
+
+function isolateVideoDialog(layer: HTMLElement) {
+  const previousStates: Array<{ element: HTMLElement; inert: boolean; ariaHidden: string | null }> = [];
+  let current: HTMLElement = layer;
+
+  while (current.parentElement) {
+    const parent = current.parentElement;
+    Array.from(parent.children).forEach((sibling) => {
+      if (sibling === current || !(sibling instanceof HTMLElement)) return;
+      previousStates.push({ element: sibling, inert: sibling.inert, ariaHidden: sibling.getAttribute("aria-hidden") });
+      sibling.inert = true;
+      sibling.setAttribute("aria-hidden", "true");
+    });
+    if (parent === document.body) break;
+    current = parent;
+  }
+
+  return () => {
+    previousStates.reverse().forEach(({ element, inert, ariaHidden }) => {
+      element.inert = inert;
+      if (ariaHidden === null) element.removeAttribute("aria-hidden");
+      else element.setAttribute("aria-hidden", ariaHidden);
+    });
+  };
+}
 
 export function LiveVideo({
   src,
@@ -41,6 +97,10 @@ export function LiveVideo({
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const expandedVideoRef = useRef<HTMLVideoElement | null>(null);
+  const openButtonRef = useRef<HTMLButtonElement | null>(null);
+  const modalShellRef = useRef<HTMLDivElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(eager);
   const [isInFocus, setIsInFocus] = useState(eager);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -166,6 +226,8 @@ export function LiveVideo({
 
     const previousOverflow = document.body.style.overflow;
     const previousRootOverflow = document.documentElement.style.overflow;
+    const opener = openButtonRef.current;
+    const restoreIsolation = modalShellRef.current ? isolateVideoDialog(modalShellRef.current) : () => undefined;
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
 
@@ -173,43 +235,51 @@ export function LiveVideo({
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        event.preventDefault();
         closeExpandedPlayer();
+        return;
       }
+      if (dialogRef.current) keepVideoDialogFocus(event, dialogRef.current);
     };
 
     window.addEventListener("keydown", handleKeyDown);
+    (closeButtonRef.current ?? dialogRef.current)?.focus({ preventScroll: true });
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = previousOverflow;
       document.documentElement.style.overflow = previousRootOverflow;
+      restoreIsolation();
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
     };
   }, [closeExpandedPlayer, isExpanded]);
 
   const expandedPlayer =
     isExpanded && typeof document !== "undefined"
       ? createPortal(
-          <div className="live-video-modal-shell fixed inset-0 z-[100] flex items-center justify-center p-3 pt-16 animate-fade-in md:p-6 md:pt-20">
-            <button
-              type="button"
-              aria-label={`${tx("Close video")}: ${tx("Expanded video")} ${tx(title)}`}
+          <div ref={modalShellRef} className="live-video-modal-shell fixed inset-0 z-[100] flex items-center justify-center p-3 pt-16 animate-fade-in md:p-6 md:pt-20">
+            <div
+              aria-hidden="true"
               className="absolute inset-0 bg-background/80 backdrop-blur-xl"
               onClick={closeExpandedPlayer}
             />
-            <button
-              type="button"
-              aria-label={`${tx("Close video")}: ${tx(title)}`}
-              onClick={closeExpandedPlayer}
-              className="live-video-modal-close absolute end-4 top-4 z-20 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80 md:end-6 md:top-6"
-            >
-              <X className="h-5 w-5" />
-              <span className="sr-only">{tx("Close")}</span>
-            </button>
             <div
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-label={`${tx("Expanded video")}: ${tx(title)}`}
+              tabIndex={-1}
               className="relative z-10 max-h-[calc(100dvh-5rem)] max-w-[calc(100vw-1.5rem)] animate-scale-in md:max-h-[calc(100dvh-6.5rem)] md:max-w-6xl"
             >
+              <button
+                ref={closeButtonRef}
+                type="button"
+                aria-label={`${tx("Close video")}: ${tx(title)}`}
+                onClick={closeExpandedPlayer}
+                className="live-video-modal-close fixed end-4 top-4 z-20 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80 md:end-6 md:top-6"
+              >
+                <X className="h-5 w-5" />
+                <span className="sr-only">{tx("Close")}</span>
+              </button>
               <div className="overflow-hidden rounded-lg border border-white/10 bg-black/95 shadow-elegant">
                 <video
                   ref={expandedVideoRef}
@@ -280,16 +350,19 @@ export function LiveVideo({
             }
           }}
         />
-        {!isExpanded && (
-          <button
-            type="button"
-            onClick={openExpandedPlayer}
-            aria-label={`${tx("Play video")}: ${tx(title)}`}
-            className="absolute inset-0 z-10 cursor-pointer bg-transparent outline-none transition duration-300 hover:bg-black/[0.03] focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          >
-            <span className="sr-only">{tx("Play video")}</span>
-          </button>
-        )}
+        <button
+          ref={openButtonRef}
+          type="button"
+          onClick={openExpandedPlayer}
+          aria-label={`${tx("Play video")}: ${tx(title)}`}
+          aria-hidden={isExpanded ? "true" : undefined}
+          tabIndex={isExpanded ? -1 : undefined}
+          className={`absolute inset-0 z-10 bg-transparent outline-none transition duration-300 focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+            isExpanded ? "pointer-events-none opacity-0" : "cursor-pointer hover:bg-black/[0.03]"
+          }`}
+        >
+          <span className="sr-only">{tx("Play video")}</span>
+        </button>
       </div>
       {expandedPlayer}
     </>

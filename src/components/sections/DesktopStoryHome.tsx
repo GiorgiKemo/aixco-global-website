@@ -15,6 +15,8 @@ import {
   KeyRound,
   Menu,
   MapPin,
+  Pause,
+  Play,
   ShieldCheck,
   TrendingUp,
   X,
@@ -410,6 +412,7 @@ function StoryTextReveal({
 }) {
   const rootRef = useRef<HTMLSpanElement>(null);
   const isInView = useStoryTextInView(rootRef);
+  const shouldReduceMotion = useHydratedReducedMotion();
   const visualLabel = mobileLabel ?? label;
   const tokens = useMemo(
     () => visualLabel
@@ -447,9 +450,15 @@ function StoryTextReveal({
 
   useLayoutEffect(() => {
     if (!isInView || animationState !== "idle") return;
+
+    if (shouldReduceMotion) {
+      setAnimationState("played");
+      return;
+    }
+
     setAnimationRun((current) => current + 1);
     setAnimationState("animating");
-  }, [animationState, isInView]);
+  }, [animationState, isInView, shouldReduceMotion]);
 
   useEffect(() => {
     if (animationState !== "animating") return undefined;
@@ -735,7 +744,7 @@ function StoryChrome({
           useLightMobileLogo ? "story-mobile-header--dark text-white" : "story-mobile-header--light text-foreground",
         )}
       >
-        <a
+        <Link
           href="/"
           aria-label={tx("AIXCO.GLOBAL home")}
           onClick={(event) => handleChapterLink(event, storyChapters[0])}
@@ -744,16 +753,19 @@ function StoryChrome({
             useLightMobileLogo ? "text-white" : "text-foreground",
           )}
         >
-          <img
+          <Image
             src={useLightMobileLogo ? aixcoLiveLogos.aixcoHorizontalLight : aixcoLiveLogos.aixcoHorizontalDark}
             alt=""
             aria-hidden="true"
             width={1600}
             height={333}
+            unoptimized
+            loading="eager"
+            sizes="(max-width: 767px) 9rem, 10rem"
             className="h-auto w-[9rem] shrink-0 object-contain sm:w-[10rem]"
           />
           <span className="sr-only">AIXCO.GLOBAL</span>
-        </a>
+        </Link>
         <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
@@ -837,7 +849,7 @@ function StoryChrome({
               const href = chapter.id ? `#${chapter.id}` : "/";
 
               return (
-                <a
+                <Link
                   key={chapter.key}
                   href={href}
                   aria-current={isActive ? "true" : undefined}
@@ -856,7 +868,7 @@ function StoryChrome({
                     aria-hidden="true"
                   />
                   <span className="min-w-0 [overflow-wrap:anywhere]">{tx(chapter.label)}</span>
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -870,7 +882,7 @@ function StoryChrome({
           isDesktopHeaderTransparent && "story-desktop-header--transparent",
         )}
       >
-        <a
+        <Link
           href="/"
           aria-label={tx("AIXCO.GLOBAL home")}
           onClick={(event) => handleChapterLink(event, storyChapters[0])}
@@ -879,16 +891,19 @@ function StoryChrome({
             useLightMobileLogo ? "text-white" : "text-foreground",
           )}
         >
-          <img
+          <Image
             src={useLightMobileLogo ? aixcoLiveLogos.aixcoHorizontalLight : aixcoLiveLogos.aixcoHorizontalDark}
             alt=""
             aria-hidden="true"
             width={1600}
             height={333}
+            unoptimized
+            loading="eager"
+            sizes="12rem"
             className="h-auto w-[10.75rem] shrink-0 object-contain 2xl:w-[11.5rem]"
           />
           <span className="sr-only">AIXCO.GLOBAL</span>
-        </a>
+        </Link>
 
         <nav ref={desktopNavRef} aria-label={tx("Story navigation")} className="story-desktop-nav min-w-0 flex-1">
           <div className="story-desktop-nav__scroller">
@@ -897,7 +912,7 @@ function StoryChrome({
               const isActive = activeChapterKey === chapter.key;
 
               return (
-                <a
+                <Link
                   key={chapter.key}
                   href="/"
                   aria-current={isActive ? "true" : undefined}
@@ -906,7 +921,7 @@ function StoryChrome({
                   className="story-desktop-nav-link"
                 >
                   <span>{tx(chapter.label)}</span>
-                </a>
+                </Link>
               );
             })()}
             {desktopStoryNavGroups.map((group) => {
@@ -938,7 +953,7 @@ function StoryChrome({
                         const href = chapter.id ? `#${chapter.id}` : "/";
 
                         return (
-                          <a
+                          <Link
                             key={chapter.key}
                             href={href}
                             role="menuitem"
@@ -948,7 +963,7 @@ function StoryChrome({
                             className="story-desktop-nav-menu-link"
                           >
                             {tx(chapter.label)}
-                          </a>
+                          </Link>
                         );
                       })}
                     </div>
@@ -1021,14 +1036,29 @@ function StoryChrome({
 function FixedHeroBackdrop({ visible }: { visible: boolean }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const videoSrc = useHeroBackdropVideoSrc();
-  const [shouldRenderVideo, setShouldRenderVideo] = useState(visible);
+  const shouldReduceMotion = useHydratedReducedMotion();
+  const canAnimate = shouldReduceMotion !== true;
+  const [isPaused, setIsPaused] = useState(false);
+  const [shouldRenderVideo, setShouldRenderVideo] = useState(visible && canAnimate);
 
   useEffect(() => {
     const video = videoRef.current;
 
+    if (!canAnimate) {
+      video?.pause();
+      setShouldRenderVideo(false);
+      return undefined;
+    }
+
     if (visible) {
       setShouldRenderVideo(true);
-      void video?.play().catch(() => undefined);
+
+      if (isPaused) {
+        video?.pause();
+      } else {
+        void video?.play().catch(() => undefined);
+      }
+
       return undefined;
     }
 
@@ -1038,31 +1068,55 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
     }, 760);
 
     return () => window.clearTimeout(cleanupTimer);
-  }, [videoSrc, visible]);
+  }, [canAnimate, isPaused, videoSrc, visible]);
 
   return (
-    <div
-      aria-hidden="true"
-      className={`pointer-events-none fixed bottom-0 right-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 [transition-timing-function:var(--ease-apple)] ${
-        visible ? "opacity-100" : "opacity-0"
-      }`}
-      style={{ left: "var(--story-fixed-backdrop-left, 0px)" }}
-    >
-      {shouldRenderVideo && videoSrc ? (
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          poster={aixcoHeroBackgroundVideo.poster}
-          autoPlay={visible}
-          muted
-          loop
-          playsInline
-          preload="auto"
-          className="h-full w-full object-cover brightness-[1.08] saturate-[1.08]"
+    <>
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none fixed bottom-0 right-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 [transition-timing-function:var(--ease-apple)] ${
+          visible ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ left: "var(--story-fixed-backdrop-left, 0px)" }}
+      >
+        <Image
+          src={aixcoHeroBackgroundVideo.poster}
+          alt=""
+          fill
+          fetchPriority="high"
+          loading="eager"
+          quality={78}
+          sizes="100vw"
+          className="object-cover brightness-[1.08] saturate-[1.08]"
         />
+        {shouldRenderVideo && videoSrc ? (
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            poster={aixcoHeroBackgroundVideo.poster}
+            autoPlay={visible && !isPaused}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 h-full w-full object-cover brightness-[1.08] saturate-[1.08]"
+          />
+        ) : null}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.20)_44%,rgba(17,16,14,0.54)),linear-gradient(180deg,rgba(17,16,14,0.16),rgba(17,16,14,0.58))]" />
+      </div>
+      {visible && canAnimate && videoSrc ? (
+        <button
+          type="button"
+          aria-pressed={isPaused}
+          aria-label={isPaused ? "Play background video" : "Pause background video"}
+          onClick={() => setIsPaused((value) => !value)}
+          className="fixed bottom-20 right-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-sm border border-white/35 bg-[#11100e]/72 px-3 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur-md transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary xl:bottom-6 xl:right-6"
+        >
+          {isPaused ? <Play className="h-3.5 w-3.5" aria-hidden /> : <Pause className="h-3.5 w-3.5" aria-hidden />}
+          <span>{isPaused ? "Play" : "Pause"}</span>
+        </button>
       ) : null}
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.20)_44%,rgba(17,16,14,0.54)),linear-gradient(180deg,rgba(17,16,14,0.16),rgba(17,16,14,0.58))]" />
-    </div>
+    </>
   );
 }
 
@@ -1300,7 +1354,7 @@ function HeroScene({
                   aria-hidden="true"
                   width={1600}
                   height={333}
-                  priority
+                  preload
                   sizes="(min-width: 1280px) 52vw, 88vw"
                   className="story-hero-official-logo h-auto w-full max-w-[44rem] object-contain object-left"
                 />
@@ -1330,7 +1384,7 @@ function HeroScene({
             </div>
 
             <div className="story-hero-actions">
-              <a
+              <Link
                 href="#batumi"
                 onClick={(event) => {
                   event.preventDefault();
@@ -1340,7 +1394,7 @@ function HeroScene({
                 className="btn-ghost-gold story-hero-actions__ghost"
               >
                 {tx("EXPLORE OPPORTUNITIES")}
-              </a>
+              </Link>
               <button type="button" onClick={onRegister} className="btn-gold">
                 {tx("REGISTER")}
                 <ArrowRight className="h-4 w-4" aria-hidden />
@@ -1528,8 +1582,9 @@ function AboutScene({
   tx: (copy: string) => string;
 }) {
   const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
+  const shouldReduceMotion = useHydratedReducedMotion();
   const [videoStarted, setVideoStarted] = useState(false);
-  const shouldPrimeVideo = isRevealed || isActive;
+  const shouldPrimeVideo = isActive && shouldReduceMotion !== true;
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
@@ -1596,9 +1651,8 @@ function AboutScene({
                 poster={aixcoDubaiHeroVideo.poster}
                 autoPlay={shouldPrimeVideo}
                 muted
-                loop
                 playsInline
-                preload={shouldPrimeVideo ? "auto" : "none"}
+                preload={shouldPrimeVideo ? "metadata" : "none"}
                 aria-label={tx(aixcoDubaiHeroVideo.title)}
                 onLoadedData={(event) => {
                   event.currentTarget.playbackRate = 0.82;
@@ -1616,15 +1670,17 @@ function AboutScene({
                   }
                 }}
               />
-              <img
+              <Image
                 src={aixcoDubaiHeroVideo.poster}
                 alt=""
                 aria-hidden="true"
+                fill
                 data-about-video-poster=""
                 data-video-started={videoStarted ? "true" : "false"}
-                className="story-about-cinematic-poster absolute inset-0 h-full w-full object-cover"
+                className="story-about-cinematic-poster object-cover"
                 loading="lazy"
                 fetchPriority="low"
+                sizes="100vw"
                 decoding="async"
               />
             </div>

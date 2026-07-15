@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { hasAdminSession } from "@/lib/admin/auth";
+import { getAdminAuthDecision } from "@/lib/admin/auth";
+import { auditAdminAction } from "@/lib/admin/audit";
 import { sendLeadNotificationTestEmail } from "@/lib/backend/lead-notification-email";
 import { checkRateLimit, getRateLimitClientId } from "@/lib/security/rate-limit";
 
@@ -31,7 +32,8 @@ function errorRedirect(request: Request, error: string, detail?: string) {
 }
 
 export async function POST(request: Request) {
-  if (!(await hasAdminSession())) {
+  const auth = await getAdminAuthDecision();
+  if (!auth.ok) {
     return redirectTo(request, "/admin/login");
   }
 
@@ -67,8 +69,21 @@ export async function POST(request: Request) {
 
   const result = await sendLeadNotificationTestEmail(parsed.data);
   if (!result.ok) {
+    auditAdminAction({
+      action: "email.delivery.test",
+      actor: auth.principal,
+      outcome: "failure",
+      details: { skipped: result.skipped },
+    });
     return errorRedirect(request, result.skipped ? "config" : "send", result.reason);
   }
+
+  auditAdminAction({
+    action: "email.delivery.test",
+    actor: auth.principal,
+    outcome: "success",
+    target: result.id,
+  });
 
   const url = new URL("/admin/email-test", request.url);
   url.searchParams.set("status", "sent");

@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { useUI } from "./ui-state";
@@ -47,6 +47,77 @@ type PartnerDetailData = {
 };
 type LegalTitle = "Terms & Conditions" | "Privacy Policy";
 type LegalSection = { heading: string; body: string; items?: string[] };
+
+const dialogFocusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled]):not([type='hidden'])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "video[controls]",
+  "audio[controls]",
+  "[contenteditable='true']",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function getDialogFocusableElements(container: HTMLElement) {
+  return Array.from(container.querySelectorAll<HTMLElement>(dialogFocusableSelector)).filter(
+    (element) => element.tabIndex >= 0 && element.getAttribute("aria-hidden") !== "true" && !element.closest("[inert]"),
+  );
+}
+
+function keepFocusInsideDialog(event: KeyboardEvent, container: HTMLElement) {
+  if (event.key !== "Tab") return;
+
+  const focusable = getDialogFocusableElements(container);
+  if (!focusable.length) {
+    event.preventDefault();
+    container.focus({ preventScroll: true });
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  const active = document.activeElement;
+
+  if (event.shiftKey && (active === first || !container.contains(active))) {
+    event.preventDefault();
+    last.focus({ preventScroll: true });
+  } else if (!event.shiftKey && (active === last || !container.contains(active))) {
+    event.preventDefault();
+    first.focus({ preventScroll: true });
+  }
+}
+
+function isolateDialogLayer(layer: HTMLElement) {
+  const previousStates: Array<{ element: HTMLElement; inert: boolean; ariaHidden: string | null }> = [];
+  let current: HTMLElement = layer;
+
+  while (current.parentElement) {
+    const parent = current.parentElement;
+    Array.from(parent.children).forEach((sibling) => {
+      if (sibling === current || !(sibling instanceof HTMLElement)) return;
+      previousStates.push({
+        element: sibling,
+        inert: sibling.inert,
+        ariaHidden: sibling.getAttribute("aria-hidden"),
+      });
+      sibling.inert = true;
+      sibling.setAttribute("aria-hidden", "true");
+    });
+
+    if (parent === document.body) break;
+    current = parent;
+  }
+
+  return () => {
+    previousStates.reverse().forEach(({ element, inert, ariaHidden }) => {
+      element.inert = inert;
+      if (ariaHidden === null) element.removeAttribute("aria-hidden");
+      else element.setAttribute("aria-hidden", ariaHidden);
+    });
+  };
+}
 
 function getLoginRoles(portals: SiteContent["company"]["portals"]) {
   return [
@@ -302,22 +373,63 @@ function getModalAccessibleName(modal: NonNullable<ReturnType<typeof useUI>["mod
 }
 
 export function Modals() {
-  const { modal, modalData, close } = useUI();
+  const { modal, modalData, close, openContact } = useUI();
   const { tx } = useI18n();
+  const shellRef = useRef<HTMLDivElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const handledContactUrlRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const openContactFromUrl = () => {
+      const url = new URL(window.location.href);
+      const signature = `${url.pathname}${url.search}${url.hash}`;
+      const requestsContact = url.pathname === "/" && url.searchParams.get("modal") === "contact";
+
+      if (!requestsContact) {
+        handledContactUrlRef.current = null;
+        return;
+      }
+
+      if (handledContactUrlRef.current === signature) return;
+      handledContactUrlRef.current = signature;
+      openContact();
+    };
+
+    openContactFromUrl();
+    window.addEventListener("popstate", openContactFromUrl);
+    return () => window.removeEventListener("popstate", openContactFromUrl);
+  }, [openContact]);
 
   useEffect(() => {
     if (!modal) return;
 
+    const shell = shellRef.current;
+    const dialog = dialogRef.current;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const previousOverflow = document.body.style.overflow;
     const previousRootOverflow = document.documentElement.style.overflow;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    const restoreIsolation = shell ? isolateDialogLayer(shell) : () => undefined;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+        return;
+      }
+      if (dialog) keepFocusInsideDialog(event, dialog);
+    };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
+    (closeButtonRef.current ?? dialog)?.focus({ preventScroll: true });
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = previousOverflow;
       document.documentElement.style.overflow = previousRootOverflow;
+      restoreIsolation();
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
     };
   }, [modal, close]);
 
@@ -326,15 +438,17 @@ export function Modals() {
   const dialogLabel = tx(getModalAccessibleName(modal, modalData));
 
   return (
-    <div className="modal-shell fixed inset-0 z-[100] flex min-h-[100dvh] items-center justify-center overscroll-contain p-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] pt-[max(1rem,env(safe-area-inset-top,0px))] md:p-6">
+    <div ref={shellRef} className="modal-shell fixed inset-0 z-[100] flex min-h-[100dvh] items-center justify-center overscroll-contain p-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] pt-[max(1rem,env(safe-area-inset-top,0px))] md:p-6">
       <div className="modal-backdrop absolute inset-0 bg-transparent backdrop-blur-lg backdrop-saturate-150" onClick={close} aria-hidden />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label={dialogLabel}
+        tabIndex={-1}
         className="modal-panel relative max-h-[calc(100dvh-2rem)] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-lg border border-border/70 bg-surface-elevated shadow-elegant [overflow-wrap:anywhere] md:max-h-[88dvh]"
       >
-        <button aria-label={tx("Close")} onClick={close} className="icon-button-glass absolute end-3 top-3 z-10 h-11 w-11">
+        <button ref={closeButtonRef} aria-label={tx("Close")} onClick={close} className="icon-button-glass absolute end-3 top-3 z-10 h-11 w-11">
           <X className="h-4 w-4" />
         </button>
         <div className="p-5 sm:p-7 md:p-10">
@@ -386,9 +500,11 @@ function formatPreferredCallTime(value: string) {
 function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
   const [mode, setMode] = useState<ContactMode | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [requestReference, setRequestReference] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [minimumCallTime, setMinimumCallTime] = useState("");
+  const formStartedAtRef = useRef(Date.now());
 
   useEffect(() => {
     if (mode === "call") {
@@ -404,6 +520,7 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
     const phone = String(form.get("phone") ?? "").trim();
     const preferredTime = String(form.get("preferredTime") ?? "").trim();
     const message = String(form.get("message") ?? "").trim();
+    const website = String(form.get("website") ?? "").trim();
 
     if (!mode || isSubmitting) return;
 
@@ -424,10 +541,13 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
             message,
           };
 
-    const result = await recordContactSubmission(payload);
+    const result = await recordContactSubmission(payload, {
+      antiAbuse: { website, startedAt: formStartedAtRef.current },
+    });
     setIsSubmitting(false);
 
     if (result.ok) {
+      setRequestReference(result.reference ?? null);
       setSubmitted(true);
       return;
     }
@@ -437,9 +557,14 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
 
   if (submitted) {
     return (
-      <div className="contact-request-modal max-w-2xl">
+      <div className="contact-request-modal max-w-2xl" role="status" aria-live="polite" aria-atomic="true">
         <p className="eyebrow mb-3">{tx("Contact AIXCO")}</p>
         <h3 className="heading-section">{tx("Thank you. We will contact you shortly.")}</h3>
+        {requestReference ? (
+          <p className="mt-4 text-sm font-semibold text-foreground">
+            {tx("Request reference")}: <span className="font-mono">{requestReference}</span>
+          </p>
+        ) : null}
       </div>
     );
   }
@@ -475,6 +600,12 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
 
       {mode ? (
         <form onSubmit={handleSubmit} className="contact-request-form mt-6 grid gap-4">
+          <div aria-hidden="true" className="pointer-events-none absolute start-[-10000px] top-auto h-px w-px overflow-hidden">
+            <label>
+              Website
+              <input name="website" type="text" tabIndex={-1} autoComplete="off" />
+            </label>
+          </div>
           <label className="grid gap-2">
             <span className="story-metric-label text-foreground/60">{tx("Name & Surname")}</span>
             <input

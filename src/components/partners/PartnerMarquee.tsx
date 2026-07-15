@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Pause, Play } from "lucide-react";
 import { useState } from "react";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
@@ -37,21 +38,37 @@ export function PartnerMarquee({
   ariaLabel?: string;
   className?: string;
 }) {
+  const [isPaused, setIsPaused] = useState(false);
+
   if (items.length === 0) return null;
 
   const marqueeLabel = ariaLabel ?? (title ? tx(title) : undefined);
 
   return (
-    <div className={`mb-0 ${className}`.trim()}>
+    <div className={`relative mb-0 ${className}`.trim()}>
       {title ? (
         <h3 className="sr-only">{tx(title)}</h3>
       ) : null}
       <div
         className="partner-marquee partner-marquee--story"
         aria-label={marqueeLabel}
-        data-marquee-paused="false"
+        data-marquee-paused={isPaused ? "true" : "false"}
       >
-        <div className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""}`}>
+        <button
+          type="button"
+          aria-pressed={isPaused}
+          aria-label={tx(isPaused ? "Resume partner movement" : "Pause partner movement")}
+          title={tx(isPaused ? "Resume partner movement" : "Pause partner movement")}
+          onClick={() => setIsPaused((value) => !value)}
+          className="partner-marquee-motion-toggle"
+        >
+          {isPaused ? <Play aria-hidden /> : <Pause aria-hidden />}
+        </button>
+        <div
+          className={`partner-marquee-track ${reverse ? "partner-marquee-track-reverse" : ""} ${
+            isPaused ? "partner-marquee-track-paused" : ""
+          }`}
+        >
           {[0, 1].map((setIndex) => (
             <div key={setIndex} className="partner-marquee-set" aria-hidden={setIndex === 1 ? "true" : undefined}>
               {items.map((partner) => (

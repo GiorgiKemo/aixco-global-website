@@ -92,15 +92,16 @@ describe("LiveVideo", () => {
     const dialog = screen.getByRole("dialog", { name: /expanded video: sound controls test/i });
     const expandedVideo = screen.getByLabelText("Sound controls test expanded player");
     const closeButton = screen.getByRole("button", { name: /close video: sound controls test/i });
+    expect(screen.getAllByRole("button", { name: /close video: sound controls test/i })).toHaveLength(1);
     const videoFrame = expandedVideo.parentElement;
     const modalShell = dialog.parentElement;
 
     expect(modalShell).toContainElement(closeButton);
-    expect(dialog).not.toContainElement(closeButton);
+    expect(dialog).toContainElement(closeButton);
     expect(videoFrame).toContainElement(expandedVideo);
     expect(videoFrame).not.toContainElement(closeButton);
     expect(modalShell).toHaveClass("pt-16");
-    expect(closeButton).toHaveClass("absolute", "end-4", "top-4");
+    expect(closeButton).toHaveClass("fixed", "end-4", "top-4");
     expect(closeButton).toHaveClass("shrink-0");
   });
 
@@ -228,14 +229,22 @@ describe("LiveVideo", () => {
   it("closes the expanded player with Escape and pauses playback", () => {
     render(<LiveVideo src="/sample-video.mp4" title="Batumi gallery 1" poster="/poster.jpg" eager />);
 
-    fireEvent.click(screen.getByRole("button", { name: /play video: batumi gallery 1/i }));
+    const previewButton = screen.getByRole("button", { name: /play video: batumi gallery 1/i });
+    previewButton.focus();
+    fireEvent.click(previewButton);
 
     expect(screen.getByRole("dialog", { name: /expanded video: batumi gallery 1/i })).toBeInTheDocument();
+    const closeButton = screen.getByRole("button", { name: /close video: batumi gallery 1/i });
+    expect(closeButton).toHaveFocus();
+
+    fireEvent.keyDown(window, { key: "Tab" });
+    expect(closeButton).toHaveFocus();
 
     fireEvent.keyDown(window, { key: "Escape" });
 
     expect(screen.queryByRole("dialog", { name: /expanded video: batumi gallery 1/i })).not.toBeInTheDocument();
     expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: /play video: batumi gallery 1/i })).toHaveFocus();
   });
 
   it("keeps the inline preview muted while the expanded player is audible", () => {

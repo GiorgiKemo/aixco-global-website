@@ -23,12 +23,71 @@ type ExpandableImageProps = {
   tabIndex?: number;
 };
 
+const imageDialogFocusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled]):not([type='hidden'])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function keepImageDialogFocus(event: KeyboardEvent, container: HTMLElement) {
+  if (event.key !== "Tab") return;
+
+  const focusable = Array.from(container.querySelectorAll<HTMLElement>(imageDialogFocusableSelector)).filter(
+    (element) => element.tabIndex >= 0 && element.getAttribute("aria-hidden") !== "true" && !element.closest("[inert]"),
+  );
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (!first || !last) {
+    event.preventDefault();
+    container.focus({ preventScroll: true });
+  } else if (event.shiftKey && (document.activeElement === first || !container.contains(document.activeElement))) {
+    event.preventDefault();
+    last.focus({ preventScroll: true });
+  } else if (!event.shiftKey && (document.activeElement === last || !container.contains(document.activeElement))) {
+    event.preventDefault();
+    first.focus({ preventScroll: true });
+  }
+}
+
+function isolateImageDialog(layer: HTMLElement) {
+  const previousStates: Array<{ element: HTMLElement; inert: boolean; ariaHidden: string | null }> = [];
+  let current: HTMLElement = layer;
+
+  while (current.parentElement) {
+    const parent = current.parentElement;
+    Array.from(parent.children).forEach((sibling) => {
+      if (sibling === current || !(sibling instanceof HTMLElement)) return;
+      previousStates.push({ element: sibling, inert: sibling.inert, ariaHidden: sibling.getAttribute("aria-hidden") });
+      sibling.inert = true;
+      sibling.setAttribute("aria-hidden", "true");
+    });
+    if (parent === document.body) break;
+    current = parent;
+  }
+
+  return () => {
+    previousStates.reverse().forEach(({ element, inert, ariaHidden }) => {
+      element.inert = inert;
+      if (ariaHidden === null) element.removeAttribute("aria-hidden");
+      else element.setAttribute("aria-hidden", ariaHidden);
+    });
+  };
+}
+
 export function ExpandableImage({ src, title, className = "", children, style, tabIndex }: ExpandableImageProps) {
   const tx = useOptionalI18n()?.tx ?? ((text: string) => text);
   const imageId = useId();
   const [isExpanded, setIsExpanded] = useState(false);
   const [expandedImageSize, setExpandedImageSize] = useState<{ width: number; height: number } | null>(null);
   const suppressClickRef = useRef(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const modalShellRef = useRef<HTMLDivElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const closeExpandedImage = useCallback(() => {
     setIsExpanded(false);
@@ -39,20 +98,28 @@ export function ExpandableImage({ src, title, className = "", children, style, t
 
     const previousOverflow = document.body.style.overflow;
     const previousRootOverflow = document.documentElement.style.overflow;
+    const opener = triggerRef.current;
+    const restoreIsolation = modalShellRef.current ? isolateImageDialog(modalShellRef.current) : () => undefined;
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        event.preventDefault();
         closeExpandedImage();
+        return;
       }
+      if (dialogRef.current) keepImageDialogFocus(event, dialogRef.current);
     };
 
     window.addEventListener("keydown", handleKeyDown);
+    (closeButtonRef.current ?? dialogRef.current)?.focus({ preventScroll: true });
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = previousOverflow;
       document.documentElement.style.overflow = previousRootOverflow;
+      restoreIsolation();
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
     };
   }, [closeExpandedImage, isExpanded]);
 
@@ -148,17 +215,18 @@ export function ExpandableImage({ src, title, className = "", children, style, t
   const expandedImage =
     isExpanded && typeof document !== "undefined"
       ? createPortal(
-          <div className="expandable-image-modal-shell fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-6">
-            <button
-              type="button"
-              aria-label={`${tx("Close image")}: ${tx(title)}`}
+          <div ref={modalShellRef} className="expandable-image-modal-shell fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-6">
+            <div
+              aria-hidden="true"
               className="absolute inset-0 bg-black/40 backdrop-blur-xl"
               onClick={closeExpandedImage}
             />
             <div
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-label={`${tx("Expanded image")}: ${tx(title)}`}
+              tabIndex={-1}
               className="relative z-10 flex max-h-[calc(100dvh-2rem)] max-w-[min(92vw,72rem)] flex-col items-center overflow-visible outline-none animate-scale-in md:max-w-[min(82vw,68rem)]"
             >
               <div
@@ -169,6 +237,7 @@ export function ExpandableImage({ src, title, className = "", children, style, t
                 }}
               >
                 <button
+                  ref={closeButtonRef}
                   type="button"
                   aria-label={`${tx("Close image")}: ${tx(title)}`}
                   onClick={closeExpandedImage}
@@ -197,6 +266,7 @@ export function ExpandableImage({ src, title, className = "", children, style, t
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         aria-label={`${tx("Expand image")}: ${tx(title)}`}
         className={`expandable-image-trigger block overflow-hidden border-0 bg-transparent p-0 text-left ${className}`}

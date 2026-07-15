@@ -3,18 +3,18 @@ import { describe, expect, it } from "vitest";
 import { proxy } from "./proxy";
 
 describe("portal host proxy", () => {
-  it.each(["customer", "broker", "developer"])("rewrites the %s subdomain to its portal route", (role) => {
+  it.each(["customer", "broker", "developer"])("rewrites the %s subdomain to its portal route", async (role) => {
     const request = new NextRequest(`https://${role}.aixco.global/`);
-    const response = proxy(request);
+    const response = await proxy(request);
 
     expect(response.headers.get("x-middleware-rewrite")).toBe(`https://${role}.aixco.global/portal/${role}`);
   });
 
-  it("does not trust a spoofed forwarded host on the marketing site", () => {
+  it("does not trust a spoofed forwarded host on the marketing site", async () => {
     const request = new NextRequest("https://www.aixco.global/", {
       headers: { "x-forwarded-host": "customer.aixco.global" },
     });
-    const response = proxy(request);
+    const response = await proxy(request);
 
     expect(response.headers.get("x-middleware-rewrite")).toBeNull();
     expect(response.headers.get("x-middleware-next")).toBe("1");

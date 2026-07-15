@@ -1,24 +1,190 @@
 "use client";
 
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { type FormEvent, useCallback, useEffect, useState } from "react";
+import type { User } from "@supabase/supabase-js";
+import { hasAdminRole } from "@/lib/admin/policy";
+import { getSupabaseAuthBrowserClient } from "@/lib/supabase/auth-browser";
 
 type AdminLoginFormProps = {
   config: {
     configured: boolean;
     missing: string[];
+    mode: "identity" | "migration";
+    role: string;
+    identityAvailable: boolean;
+    legacyAvailable: boolean;
   };
 };
 
+type MfaStage = "credentials" | "challenge" | "enroll";
+
 function getErrorMessage(error: string | null) {
-  if (error === "invalid") return "The admin password is incorrect.";
+  if (error === "invalid") return "The sign-in details are incorrect.";
   if (error === "config") return "Admin authentication is not configured.";
   if (error === "rate-limited") return "Too many sign-in attempts. Please try again shortly.";
+  if (error === "not-authorized") return "This identity is not assigned the AIXCO admin role.";
+  if (error === "mfa-required") return "Enter your authenticator code to complete sign-in.";
+  if (error === "not-authenticated") return "Your admin session expired. Please sign in again.";
   return "";
+}
+
+function readableAuthError(message: string) {
+  const lower = message.toLowerCase();
+  if (lower.includes("invalid login credentials")) return "The email or password is incorrect.";
+  if (lower.includes("mfa") || lower.includes("factor") || lower.includes("challenge")) {
+    return "The authenticator code could not be verified. Check the six digits and try again.";
+  }
+  return "Admin sign-in could not be completed. Please try again.";
 }
 
 export function AdminLoginForm({ config }: AdminLoginFormProps) {
   const params = useSearchParams();
-  const errorMessage = getErrorMessage(params?.get("error") ?? null);
+  const queryError = getErrorMessage(params?.get("error") ?? null);
+  const [stage, setStage] = useState<MfaStage>("credentials");
+  const [factorId, setFactorId] = useState("");
+  const [qrCode, setQrCode] = useState("");
+  const [totpSecret, setTotpSecret] = useState("");
+  const [totpCode, setTotpCode] = useState("");
+  const [identityEmail, setIdentityEmail] = useState("");
+  const [errorMessage, setErrorMessage] = useState(queryError);
+  const [working, setWorking] = useState(false);
+
+  const prepareMfa = useCallback(
+    async (user: User) => {
+      const supabase = getSupabaseAuthBrowserClient();
+      if (!hasAdminRole(user.app_metadata, config.role)) {
+        await supabase.auth.signOut();
+        setStage("credentials");
+        setErrorMessage("This identity is not assigned the AIXCO admin role.");
+        return;
+      }
+
+      setIdentityEmail(user.email ?? "your admin account");
+      const assurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (assurance.error) throw assurance.error;
+
+      if (assurance.data.currentLevel === "aal2") {
+        window.location.assign("/admin/leads");
+        return;
+      }
+
+      const factors = await supabase.auth.mfa.listFactors();
+      if (factors.error) throw factors.error;
+
+      const verifiedTotp = factors.data.totp.find((factor) => factor.status === "verified");
+      if (verifiedTotp) {
+        setFactorId(verifiedTotp.id);
+        setStage("challenge");
+        return;
+      }
+
+      // Remove abandoned, unverified enrollments so a fresh QR code and secret
+      // can be presented after a reload.
+      const staleFactors = factors.data.all.filter(
+        (factor) => factor.factor_type === "totp" && factor.status === "unverified",
+      );
+      await Promise.all(staleFactors.map((factor) => supabase.auth.mfa.unenroll({ factorId: factor.id })));
+
+      const enrollment = await supabase.auth.mfa.enroll({
+        factorType: "totp",
+        friendlyName: "AIXCO Admin",
+      });
+      if (enrollment.error) throw enrollment.error;
+
+      setFactorId(enrollment.data.id);
+      setQrCode(enrollment.data.totp.qr_code);
+      setTotpSecret(enrollment.data.totp.secret);
+      setStage("enroll");
+    },
+    [config.role],
+  );
+
+  useEffect(() => {
+    if (!config.identityAvailable) return;
+
+    let cancelled = false;
+    void (async () => {
+      const supabase = getSupabaseAuthBrowserClient();
+      const currentUser = await supabase.auth.getUser();
+      if (cancelled || currentUser.error || !currentUser.data.user) return;
+
+      setWorking(true);
+      try {
+        await prepareMfa(currentUser.data.user);
+      } catch (error) {
+        if (!cancelled) {
+          setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
+        }
+      } finally {
+        if (!cancelled) setWorking(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [config.identityAvailable, prepareMfa]);
+
+  async function handleIdentityLogin(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setErrorMessage("");
+    setWorking(true);
+
+    const formData = new FormData(event.currentTarget);
+    const email = String(formData.get("email") ?? "").trim();
+    const password = String(formData.get("password") ?? "");
+
+    try {
+      const supabase = getSupabaseAuthBrowserClient();
+      const result = await supabase.auth.signInWithPassword({ email, password });
+      if (result.error || !result.data.user) throw result.error ?? new Error("Missing user");
+      await prepareMfa(result.data.user);
+    } catch (error) {
+      setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
+    } finally {
+      setWorking(false);
+    }
+  }
+
+  async function handleMfaVerification(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!factorId || totpCode.trim().length !== 6) return;
+
+    setWorking(true);
+    setErrorMessage("");
+    try {
+      const supabase = getSupabaseAuthBrowserClient();
+      const result = await supabase.auth.mfa.challengeAndVerify({
+        factorId,
+        code: totpCode.trim(),
+      });
+      if (result.error) throw result.error;
+      window.location.assign("/admin/leads");
+    } catch (error) {
+      setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
+      setTotpCode("");
+    } finally {
+      setWorking(false);
+    }
+  }
+
+  async function resetIdentity() {
+    setWorking(true);
+    try {
+      await getSupabaseAuthBrowserClient().auth.signOut();
+    } finally {
+      setStage("credentials");
+      setFactorId("");
+      setQrCode("");
+      setTotpSecret("");
+      setTotpCode("");
+      setIdentityEmail("");
+      setErrorMessage("");
+      setWorking(false);
+    }
+  }
 
   return (
     <div className="mt-8 rounded-lg border border-border/70 bg-surface-elevated p-6 shadow-elegant">
@@ -26,7 +192,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
         <div>
           <h2 className="font-display text-xl">Admin access is not configured</h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-            Add these server-only environment variables, then restart the app:
+            Add these server environment variables, then redeploy the app:
           </p>
           <ul className="mt-4 space-y-2 text-sm text-foreground/80">
             {config.missing.map((item) => (
@@ -37,40 +203,187 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
           </ul>
         </div>
       ) : (
-        <form action="/admin/session" method="post" className="grid gap-5">
+        <div className="grid gap-6">
           {errorMessage && (
             <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
               {errorMessage}
             </p>
           )}
-          <input
-            type="text"
-            name="username"
-            autoComplete="username"
-            value="admin"
-            readOnly
-            tabIndex={-1}
-            aria-hidden="true"
-            className="sr-only"
-          />
-          <div>
-            <label htmlFor="password" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              Admin password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              className="form-control"
-            />
-          </div>
-          <button type="submit" className="btn-gold justify-center">
-            Sign in
-          </button>
-        </form>
+
+          {config.identityAvailable && stage === "credentials" && (
+            <form onSubmit={handleIdentityLogin} className="grid gap-5">
+              <div>
+                <h2 className="font-display text-xl">Individual admin sign-in</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Use your invited AIXCO admin account. An authenticator code is required.
+                </p>
+              </div>
+              <div>
+                <label htmlFor="admin-email" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Email
+                </label>
+                <input id="admin-email" name="email" type="email" autoComplete="username" required className="form-control" />
+              </div>
+              <div>
+                <label htmlFor="admin-password" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Password
+                </label>
+                <input
+                  id="admin-password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className="form-control"
+                />
+              </div>
+              <button type="submit" disabled={working} className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60">
+                {working ? "Checking account…" : "Continue securely"}
+              </button>
+            </form>
+          )}
+
+          {config.identityAvailable && stage === "enroll" && (
+            <div className="grid gap-5">
+              <div>
+                <p className="eyebrow">One-time setup</p>
+                <h2 className="mt-2 font-display text-xl">Protect your admin account</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Scan this QR code with 1Password, Google Authenticator, Microsoft Authenticator, or another TOTP app.
+                </p>
+              </div>
+              {qrCode && (
+                <div className="mx-auto rounded-md border border-border bg-white p-3">
+                  <Image src={qrCode} alt="QR code for AIXCO admin authenticator setup" width={208} height={208} unoptimized />
+                </div>
+              )}
+              {totpSecret && (
+                <details className="rounded-md border border-border/70 bg-background/60 px-3 py-2 text-sm">
+                  <summary className="cursor-pointer font-medium">Cannot scan the QR code?</summary>
+                  <p className="mt-2 text-xs text-muted-foreground">Enter this setup key manually:</p>
+                  <code className="mt-1 block break-all font-mono text-xs">{totpSecret}</code>
+                </details>
+              )}
+              <MfaCodeForm
+                email={identityEmail}
+                code={totpCode}
+                working={working}
+                submitLabel="Enable MFA and sign in"
+                onChange={setTotpCode}
+                onSubmit={handleMfaVerification}
+                onReset={resetIdentity}
+              />
+            </div>
+          )}
+
+          {config.identityAvailable && stage === "challenge" && (
+            <div className="grid gap-5">
+              <div>
+                <p className="eyebrow">Second factor</p>
+                <h2 className="mt-2 font-display text-xl">Authenticator code</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Open your authenticator app and enter the current six-digit code.
+                </p>
+              </div>
+              <MfaCodeForm
+                email={identityEmail}
+                code={totpCode}
+                working={working}
+                submitLabel="Verify and sign in"
+                onChange={setTotpCode}
+                onSubmit={handleMfaVerification}
+                onReset={resetIdentity}
+              />
+            </div>
+          )}
+
+          {config.mode === "migration" && config.legacyAvailable && (
+            <div className={config.identityAvailable ? "border-t border-border/70 pt-6" : ""}>
+              <div className="mb-4 rounded-md border border-amber-700/20 bg-amber-50 px-3 py-3 text-sm text-amber-950">
+                Temporary migration access. This shared-password path must be removed after individual admins enroll MFA.
+              </div>
+              <form action="/admin/session" method="post" className="grid gap-5">
+                <input
+                  type="text"
+                  name="username"
+                  autoComplete="username"
+                  value="migration-admin"
+                  readOnly
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  className="sr-only"
+                />
+                <div>
+                  <label htmlFor="migration-password" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    Migration password
+                  </label>
+                  <input
+                    id="migration-password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    className="form-control"
+                  />
+                </div>
+                <button type="submit" className="btn-gold justify-center">
+                  Use migration access
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
       )}
     </div>
+  );
+}
+
+function MfaCodeForm({
+  email,
+  code,
+  working,
+  submitLabel,
+  onChange,
+  onSubmit,
+  onReset,
+}: {
+  email: string;
+  code: string;
+  working: boolean;
+  submitLabel: string;
+  onChange: (value: string) => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onReset: () => void;
+}) {
+  return (
+    <form onSubmit={onSubmit} className="grid gap-4">
+      <p className="text-xs text-muted-foreground">Signed in as {email}</p>
+      <div>
+        <label htmlFor="admin-totp" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          Six-digit code
+        </label>
+        <input
+          id="admin-totp"
+          name="totp"
+          type="text"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          pattern="[0-9]{6}"
+          minLength={6}
+          maxLength={6}
+          required
+          autoFocus
+          value={code}
+          onChange={(event) => onChange(event.target.value.replace(/\D/g, "").slice(0, 6))}
+          className="form-control text-center font-mono text-lg tracking-[0.35em]"
+        />
+      </div>
+      <button type="submit" disabled={working || code.length !== 6} className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60">
+        {working ? "Verifying…" : submitLabel}
+      </button>
+      <button type="button" disabled={working} onClick={onReset} className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+        Use another account
+      </button>
+    </form>
   );
 }

@@ -2905,6 +2905,58 @@
     animation-play-state: paused;
   }
 
+  .partner-marquee:hover .partner-marquee-track,
+  .partner-marquee:focus-within .partner-marquee-track {
+    animation-play-state: paused;
+  }
+
+  .partner-marquee-motion-toggle,
+  .dubai-image-marquee__motion-toggle {
+    position: absolute;
+    z-index: 6;
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid hsl(var(--foreground) / 0.18);
+    border-radius: 999px;
+    background: hsl(var(--background) / 0.94);
+    color: hsl(var(--foreground));
+    box-shadow: 0 12px 30px -22px hsl(var(--foreground) / 0.55);
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    cursor: pointer;
+  }
+
+  .partner-marquee-motion-toggle {
+    top: 0.55rem;
+    inset-inline-end: clamp(1.5rem, 6%, 3.75rem);
+  }
+
+  .dubai-image-marquee__motion-toggle {
+    top: 0.75rem;
+    inset-inline-end: 0.75rem;
+  }
+
+  .partner-marquee-motion-toggle:hover,
+  .dubai-image-marquee__motion-toggle:hover {
+    border-color: hsl(var(--primary) / 0.72);
+    color: hsl(var(--primary));
+  }
+
+  .partner-marquee-motion-toggle:focus-visible,
+  .dubai-image-marquee__motion-toggle:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 3px;
+  }
+
+  .partner-marquee-motion-toggle svg,
+  .dubai-image-marquee__motion-toggle svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
   .partner-marquee-track-reverse {
     animation-direction: reverse;
   }
@@ -4003,16 +4055,12 @@
     }
 
     .float-slow,
-    .shimmer-text {
-      animation-duration: 12s !important;
-    }
-
-    .hero-scroll-arrow {
-      animation-duration: 7s !important;
-    }
-
+    .shimmer-text,
+    .hero-scroll-arrow,
     .partner-marquee-track {
-      animation-duration: 72s !important;
+      animation: none !important;
+      transform: none !important;
+      will-change: auto !important;
     }
 
     .partner-marquee {
@@ -4020,14 +4068,30 @@
       -webkit-mask-image: none;
     }
 
-    .partner-marquee:not(.partner-marquee--story) .partner-marquee-track {
+    .partner-marquee:not(.partner-marquee--story) .partner-marquee-track,
+    .partner-marquee--story .partner-marquee-track {
       animation-play-state: paused !important;
       will-change: auto !important;
     }
 
-    .partner-marquee--story .partner-marquee-track {
-      animation-play-state: running !important;
-      animation-duration: 72s !important;
+    .story-letter-reveal__text,
+    .story-letter-reveal--active .story-letter-reveal__text,
+    .story-letter-reveal--played .story-letter-reveal__text {
+      visibility: visible !important;
+      opacity: 1 !important;
+      clip-path: none !important;
+      transform: none !important;
+      filter: none !important;
+      animation: none !important;
+    }
+
+    .story-letter-reveal__char,
+    .story-letter-reveal--active .story-letter-reveal__char,
+    .story-letter-reveal--played .story-letter-reveal__char {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+      will-change: auto !important;
     }
 
     .news-ticker-track {
@@ -7712,14 +7776,22 @@ html[data-home-experience='story'] {
   }
 
   .story-mobile-header--dark {
-    border-bottom-color: transparent !important;
-    box-shadow: none;
+    --story-mobile-header-bg-start: rgb(17 16 14 / 0.96);
+    --story-mobile-header-bg-mid: rgb(17 16 14 / 0.90);
+    --story-mobile-header-bg-end: rgb(17 16 14 / 0.82);
+    border-bottom-color: rgb(255 255 255 / 0.14) !important;
+    box-shadow: 0 12px 32px -25px rgb(0 0 0 / 0.88);
   }
 
   .story-mobile-header--dark::before {
-    background: transparent !important;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    background: linear-gradient(
+      180deg,
+      var(--story-mobile-header-bg-start) 0%,
+      var(--story-mobile-header-bg-mid) 72%,
+      var(--story-mobile-header-bg-end) 100%
+    ) !important;
+    backdrop-filter: blur(20px) saturate(142%);
+    -webkit-backdrop-filter: blur(20px) saturate(142%);
   }
 
   .story-mobile-header > a {

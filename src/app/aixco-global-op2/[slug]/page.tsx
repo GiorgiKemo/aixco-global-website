@@ -14,7 +14,7 @@ import {
 import { notFound, redirect } from "next/navigation";
 import { siteContentDefaults } from "@/lib/backend/site-content";
 import { Tx } from "@/components/i18n/Tx";
-import { PropertyChrome } from "@/components/property/PropertyChrome";
+import { PropertyChrome, PropertyContactLink } from "@/components/property/PropertyChrome";
 import {
   batumiDocumentMap,
   batumiImageMap,
@@ -66,16 +66,44 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
     };
   }
 
+  const title = `${property.name} | AIXCO.Global`;
+  const canonicalPath = `/aixco-global-op2/${property.url}`;
+  const socialImage = property.id === "current-project"
+    ? {
+        url: "/aixco-global-op2/images/optimized/current-project-hero-towers.webp",
+        width: 1280,
+        height: 610,
+        alt: `${property.name} private residences in Batumi`,
+      }
+    : {
+        url: batumiImageMap[property.image],
+        alt: `${property.name} property opportunity`,
+      };
+
   return {
-    title: `${property.name} | AIXCO.Global`,
+    title,
     description: property.summary,
     alternates: {
-      canonical: `/aixco-global-op2/${property.url}`,
+      canonical: canonicalPath,
+    },
+    robots: {
+      index: true,
+      follow: true,
     },
     openGraph: {
-      title: `${property.name} | AIXCO.Global`,
+      title,
       description: property.summary,
-      images: [batumiImageMap[property.image]],
+      url: canonicalPath,
+      siteName: "AIXCO.Global",
+      locale: "en_US",
+      type: "website",
+      images: [socialImage],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: property.summary,
+      images: [socialImage],
     },
   };
 }
@@ -88,7 +116,7 @@ function DetailMetric({ label, value, subtext }: { label: string; value: string;
       </p>
       <p className="mt-2 text-[clamp(2rem,3vw,3.25rem)] font-medium leading-none tracking-[-0.025em] text-[#161616]"><Tx>{value}</Tx></p>
       {subtext ? (
-        <p className="mt-2 text-sm leading-relaxed text-[#9E9D9D]">
+        <p className="mt-2 text-sm leading-relaxed text-[#5F5F5F]">
           <Tx>{subtext}</Tx>
         </p>
       ) : null}
@@ -150,9 +178,9 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
                 <Tx>Download brochure</Tx>
               </Link>
             ) : null}
-            <Link href="/#contact" prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
+            <PropertyContactLink className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
               <Tx>Contact AIXCO</Tx>
-            </Link>
+            </PropertyContactLink>
           </div>
         </div>
 

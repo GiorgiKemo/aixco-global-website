@@ -15,9 +15,7 @@ describe("ExpandableImage", () => {
     const dialog = screen.getByRole("dialog", { name: "Expanded image: Dubai asset" });
     const expandedImage = screen.getAllByAltText("Dubai asset").find((image) => image.closest("[role='dialog']"));
     const modalShell = dialog.parentElement;
-    const backdrop = screen.getAllByRole("button", { name: "Close image: Dubai asset" }).find((control) =>
-      control.className.includes("backdrop-blur-xl"),
-    );
+    const backdrop = modalShell?.querySelector("[aria-hidden='true'].backdrop-blur-xl");
 
     expect(dialog).toBeInTheDocument();
     expect(modalShell?.className).not.toContain("animate-fade-in");
@@ -34,6 +32,7 @@ describe("ExpandableImage", () => {
     expect(expandedImage?.className).toContain("rounded-md");
     expect(expandedImage?.className).toContain("shadow-[0_0_48px_rgb(0_0_0/0.2)]");
     const closeControls = screen.getAllByRole("button", { name: "Close image: Dubai asset" });
+    expect(closeControls).toHaveLength(1);
     expect(
       closeControls.some(
         (control) =>
@@ -49,6 +48,30 @@ describe("ExpandableImage", () => {
     fireEvent.keyDown(window, { key: "Escape" });
 
     expect(screen.queryByRole("dialog", { name: "Expanded image: Dubai asset" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Expand image: Dubai asset" })).toHaveFocus();
+  });
+
+  it("moves focus into the dialog, traps it, and hides the background from assistive technology", () => {
+    const { container } = render(
+      <ExpandableImage src="/asset.jpg" title="Accessible asset">
+        <img src="/asset.jpg" alt="Accessible asset" />
+      </ExpandableImage>,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Expand image: Accessible asset" });
+    trigger.focus();
+    fireEvent.click(trigger);
+
+    const closeButton = screen.getByRole("button", { name: "Close image: Accessible asset" });
+    expect(closeButton).toHaveFocus();
+    expect(container).toHaveAttribute("aria-hidden", "true");
+
+    fireEvent.keyDown(window, { key: "Tab" });
+    expect(closeButton).toHaveFocus();
+
+    fireEvent.click(closeButton);
+    expect(trigger).toHaveFocus();
+    expect(container).not.toHaveAttribute("aria-hidden");
   });
 
   it("does not open from the click generated after a drag", () => {

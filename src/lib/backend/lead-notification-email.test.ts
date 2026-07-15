@@ -1,10 +1,28 @@
 import { describe, expect, it, vi } from "vitest";
-import { sendContactLeadNotificationEmail, sendLeadNotificationTestEmail } from "./lead-notification-email";
+import {
+  buildContactConfirmationEmail,
+  buildContactLeadNotificationHtml,
+  sendContactConfirmationEmail,
+  sendContactLeadNotificationEmail,
+  sendLeadNotificationTestEmail,
+} from "./lead-notification-email";
 
 const configuredEnv = {
   RESEND_API_KEY: "re_test_key",
   LEAD_NOTIFICATION_FROM: "AIXCO Website <leads@aixco.global>",
   LEAD_NOTIFICATION_TO: "info@aixco.global",
+};
+
+const notification = {
+  requestReference: "AIX-2026-000001",
+  name: "Reference User",
+  email: "reference@example.com",
+  interest: "Schedule a Call",
+  message: "Schedule a call request. Phone number: +995555555555.",
+  locale: "en",
+  pagePath: "/#contact",
+  userAgent: "Vitest",
+  metadata: {},
 };
 
 describe("lead notification email", () => {
@@ -29,16 +47,52 @@ describe("lead notification email", () => {
           userAgent: "Vitest",
           metadata: {},
         },
-        { env: configuredEnv, fetchImpl: fetchMock as unknown as typeof fetch },
+        {
+          env: configuredEnv,
+          fetchImpl: fetchMock as unknown as typeof fetch,
+          idempotencyKey: "lead-notification/AIX-2026-000001",
+        },
       ),
-    ).resolves.toEqual({ ok: true });
+    ).resolves.toEqual({ ok: true, providerMessageId: "email_lead_123" });
 
     const request = fetchMock.mock.calls[0]?.[1] as RequestInit;
+    expect(new Headers(request.headers).get("Idempotency-Key")).toBe(
+      "lead-notification/AIX-2026-000001",
+    );
     const body = JSON.parse(String(request.body)) as Record<string, unknown>;
 
     expect(body.subject).toBe("[AIX-2026-000001] New AIXCO lead: Website inquiry");
     expect(String(body.text)).toContain("Request reference: AIX-2026-000001");
     expect(String(body.html)).toContain("AIX-2026-000001");
+    expect(String(body.html)).toContain("#161616");
+    expect(String(body.html)).toContain("#E6C767");
+    expect(String(body.html)).toContain("#F3EDE1");
+    expect(String(body.html)).toContain("AIXCOGlobal-horizontal-dark.png");
+    expect(String(body.html)).toContain('class="aixco-logo"');
+    expect(String(body.html)).toContain('width="360"');
+    expect(String(body.html)).toContain("background: #002147");
+    expect(String(body.html)).toContain("Reply to Reference User");
+  });
+
+  it("escapes submitted content and only links safe web referrers", () => {
+    const html = buildContactLeadNotificationHtml({
+      requestReference: "AIX-2026-000009",
+      name: "<img src=x onerror=alert(1)>",
+      email: "lead@example.com",
+      interest: "Current project",
+      message: "Please send <script>alert('x')</script> details.",
+      locale: "en",
+      pagePath: "/#contact",
+      userAgent: "Vitest",
+      metadata: {
+        referrer: "javascript:alert(1)",
+      },
+    });
+
+    expect(html).toContain("&lt;img src=x onerror=alert(1)&gt;");
+    expect(html).toContain("&lt;script&gt;alert(&#39;x&#39;)&lt;/script&gt;");
+    expect(html).not.toContain("href=\"javascript:");
+    expect(html).toContain("javascript:alert(1)");
   });
 
   it("sends a marked inbox test to the configured recipient and returns the Resend id", async () => {
@@ -80,6 +134,8 @@ describe("lead notification email", () => {
       tags: [{ name: "source", value: "admin_email_test" }],
     });
     expect(String(body.text)).toContain("Confirm that the info inbox receives this test.");
+    expect(String(body.html)).toContain("AIXCO inbox verification");
+    expect(String(body.html)).toContain("AIXCOGlobal-horizontal-dark.png");
   });
 
   it("does not call Resend when the notification configuration is incomplete", async () => {
@@ -100,5 +156,139 @@ describe("lead notification email", () => {
         "Lead notification email configuration is not available: RESEND_API_KEY, LEAD_NOTIFICATION_FROM, LEAD_NOTIFICATION_TO.",
     });
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("builds the document-approved call confirmation with its request reference", () => {
+    const confirmation = buildContactConfirmationEmail(notification);
+
+    expect(confirmation.requestType).toBe("call");
+    expect(confirmation.subject).toBe(
+      "[AIX-2026-000001] Your AIXCO Call Request Has Been Received",
+    );
+    expect(confirmation.text).toContain("Dear Sir or Madam,");
+    expect(confirmation.text).toContain("Thank you for scheduling a call with AIXCO.");
+    expect(confirmation.text).toContain(
+      "One of our team members will review your request and contact you shortly to confirm your appointment",
+    );
+    expect(confirmation.text).toContain("Request reference: AIX-2026-000001");
+    expect(confirmation.text).toContain("Please do not reply to this message, as replies are not monitored.");
+    expect(confirmation.text).not.toContain("Thank you for your interest in AIXCO.");
+    expect(confirmation.html).toContain("Your AIXCO Call Request Has Been Received");
+    expect(confirmation.html).toContain("AIX-2026-000001");
+    expect(confirmation.html).toContain("AIXCOGlobal-horizontal-dark.png");
+    expect(confirmation.html).not.toContain("+995555555555");
+  });
+
+  it("builds the document-approved message confirmation and escapes the reference", () => {
+    const confirmation = buildContactConfirmationEmail({
+      ...notification,
+      requestReference: "AIX-2026-000002<script>",
+      interest: "Send an Email",
+    });
+
+    expect(confirmation.requestType).toBe("message");
+    expect(confirmation.subject).toBe("[AIX-2026-000002<script>] We Have Received Your Message");
+    expect(confirmation.text).toContain("Thank you for contacting AIXCO.");
+    expect(confirmation.text).toContain(
+      "One of our team members will review your enquiry and get back to you as soon as possible.",
+    );
+    expect(confirmation.text).toContain(
+      "Thank you for your interest in AIXCO. We look forward to assisting you.",
+    );
+    expect(confirmation.html).toContain("AIX-2026-000002&lt;script&gt;");
+    expect(confirmation.html).not.toContain("AIX-2026-000002<script>");
+  });
+
+  it("sends the confirmation to the requester without requiring or exposing the internal inbox", async () => {
+    const fetchMock = vi.fn(async () =>
+      new Response(JSON.stringify({ id: "email_confirmation_123" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+
+    await expect(
+      sendContactConfirmationEmail(notification, {
+        env: {
+          RESEND_API_KEY: configuredEnv.RESEND_API_KEY,
+          LEAD_NOTIFICATION_FROM: configuredEnv.LEAD_NOTIFICATION_FROM,
+        },
+        fetchImpl: fetchMock as unknown as typeof fetch,
+        idempotencyKey: "contact-confirmation/AIX-2026-000001",
+      }),
+    ).resolves.toEqual({ ok: true, providerMessageId: "email_confirmation_123" });
+
+    const request = fetchMock.mock.calls[0]?.[1] as RequestInit;
+    expect(new Headers(request.headers).get("Idempotency-Key")).toBe(
+      "contact-confirmation/AIX-2026-000001",
+    );
+    const body = JSON.parse(String(request.body)) as Record<string, unknown>;
+
+    expect(body).toMatchObject({
+      from: "AIXCO Website <leads@aixco.global>",
+      to: ["reference@example.com"],
+      subject: "[AIX-2026-000001] Your AIXCO Call Request Has Been Received",
+      tags: [
+        { name: "source", value: "contact_confirmation" },
+        { name: "request_type", value: "call" },
+      ],
+    });
+    expect(body).not.toHaveProperty("reply_to");
+    expect(String(body.text)).toContain("Please do not reply to this message");
+  });
+
+  it("reports confirmation configuration and provider failures without sending a real email", async () => {
+    const fetchMock = vi.fn();
+
+    await expect(
+      sendContactConfirmationEmail(notification, {
+        env: {},
+        fetchImpl: fetchMock as unknown as typeof fetch,
+      }),
+    ).resolves.toEqual({
+      ok: false,
+      skipped: true,
+      retryable: false,
+      reason:
+        "Contact confirmation email configuration is not available: RESEND_API_KEY, LEAD_NOTIFICATION_FROM.",
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    const failingFetch = vi.fn(async () =>
+      new Response(JSON.stringify({ message: "sender rejected" }), {
+        status: 422,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    await expect(
+      sendContactConfirmationEmail(notification, {
+        env: configuredEnv,
+        fetchImpl: failingFetch as unknown as typeof fetch,
+      }),
+    ).resolves.toEqual({ ok: false, reason: "sender rejected", retryable: false });
+  });
+
+  it("times out a stalled provider request", async () => {
+    const stalledFetch = vi.fn(
+      (_url: string | URL | Request, init?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener("abort", () => {
+            reject(new DOMException("Aborted", "AbortError"));
+          });
+        }),
+    );
+
+    await expect(
+      sendContactLeadNotificationEmail(notification, {
+        env: configuredEnv,
+        fetchImpl: stalledFetch as unknown as typeof fetch,
+        timeoutMs: 10,
+        idempotencyKey: "lead-notification/AIX-2026-000001",
+      }),
+    ).resolves.toEqual({
+      ok: false,
+      reason: "Resend request timed out after 10ms.",
+      retryable: true,
+    });
   });
 });

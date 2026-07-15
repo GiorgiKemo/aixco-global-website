@@ -44,11 +44,14 @@ function ContactTrigger() {
 
 describe("Modals", () => {
   beforeEach(() => {
-    vi.mocked(recordContactSubmission).mockResolvedValue({ ok: true });
+    window.history.replaceState({}, "", "/");
+    vi.mocked(recordContactSubmission).mockResolvedValue({ ok: true, reference: "AIX-2026-000018" });
   });
 
   afterEach(() => {
     document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
+    window.history.replaceState({}, "", "/");
     vi.clearAllMocks();
   });
 
@@ -65,6 +68,47 @@ describe("Modals", () => {
     fireEvent.click(screen.getByRole("button", { name: /open privacy/i }));
 
     expect(screen.getByRole("dialog", { name: "Privacy Policy" })).toBeInTheDocument();
+  });
+
+  it("opens the contact dialog from the progressive-enhancement URL contract", () => {
+    window.history.replaceState({}, "", "/?modal=contact");
+
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    expect(screen.getByRole("dialog", { name: "Contact AIXCO" })).toBeInTheDocument();
+  });
+
+  it("traps focus, isolates the page, and restores the opener when dismissed", () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <PrivacyTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    const opener = screen.getByRole("button", { name: /open privacy/i });
+    opener.focus();
+    fireEvent.click(opener);
+
+    const closeButton = screen.getByRole("button", { name: "Close" });
+    expect(closeButton).toHaveFocus();
+    expect(opener).toHaveAttribute("aria-hidden", "true");
+
+    fireEvent.keyDown(window, { key: "Tab" });
+    expect(closeButton).toHaveFocus();
+
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(opener).toHaveFocus();
+    expect(opener).not.toHaveAttribute("aria-hidden");
   });
 
   it("uses a comfortable tap target for the modal close control", () => {
@@ -224,6 +268,16 @@ describe("Modals", () => {
     await waitFor(() => {
       expect(screen.getByText("Thank you. We will contact you shortly.")).toBeInTheDocument();
     });
+    expect(screen.getByRole("status")).toHaveTextContent("Request reference: AIX-2026-000018");
+    expect(recordContactSubmission).toHaveBeenCalledWith(
+      expect.objectContaining({ interest: "Schedule a Call" }),
+      {
+        antiAbuse: {
+          website: "",
+          startedAt: expect.any(Number),
+        },
+      },
+    );
   });
 
   it("submits the email request and shows confirmation", async () => {
@@ -246,6 +300,15 @@ describe("Modals", () => {
     await waitFor(() => {
       expect(screen.getByText("Thank you. We will contact you shortly.")).toBeInTheDocument();
     });
+    expect(recordContactSubmission).toHaveBeenCalledWith(
+      expect.objectContaining({ interest: "Send an Email" }),
+      {
+        antiAbuse: {
+          website: "",
+          startedAt: expect.any(Number),
+        },
+      },
+    );
   });
 
   it("does not show a false confirmation when contact capture fails", async () => {

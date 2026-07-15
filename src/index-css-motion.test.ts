@@ -50,20 +50,22 @@ describe("index.css motion rules", () => {
     expect(partnerCard).toContain("box-shadow 260ms");
   });
 
-  it("keeps partner marquee scrolling even when reduced motion is preferred", () => {
-    expect(css).not.toMatch(/\.partner-marquee-track\s*\{[^}]*animation:\s*none/);
+  it("stops continuous marquees when reduced motion is preferred", () => {
     expect(css).toContain("--partner-marquee-duration: 58s;");
-    expect(css).toContain("animation-duration: 72s !important");
+    expect(css).toContain(".partner-marquee-track {\n      animation: none !important;");
+    expect(css).toContain(".partner-marquee--story .partner-marquee-track {\n      animation-play-state: paused !important;");
+    expect(desktopStoryHome).toContain('aria-label={isPaused ? "Play background video" : "Pause background video"}');
   });
 
-  it("keeps story letter reveals active even when the browser prefers reduced motion", () => {
+  it("shows story text without animation when the browser prefers reduced motion", () => {
     expect(desktopStoryHome).toContain('const isAnimating = animationState === "animating";');
     expect(desktopStoryHome).toContain('const hasPlayed = animationState === "played";');
-    expect(desktopStoryHome).not.toContain('if (isInView || animationState === "idle") return;');
+    expect(desktopStoryHome).toContain("if (shouldReduceMotion) {");
+    expect(desktopStoryHome).toContain('setAnimationState("played");');
     expect(desktopStoryHome).toContain('<span className="sr-only">{label}</span>');
     expect(desktopStoryHome).not.toContain("aria-label={label}");
-    expect(css).not.toContain(".story-letter-reveal--active .story-letter-reveal__char {\n      opacity: 1 !important");
-    expect(css).not.toContain(".story-letter-reveal--active .story-letter-reveal__text,\n    .story-letter-reveal--compact .story-letter-reveal__text");
+    expect(css).toContain(".story-letter-reveal--active .story-letter-reveal__char,");
+    expect(css).toContain("animation: none !important;");
   });
 
   it("uses the split-letter layer on phones so wrapped lines reveal in reading order", () => {
@@ -108,6 +110,9 @@ describe("index.css motion rules", () => {
     expect(css).toContain(".story-mobile-header::before");
     expect(css).toContain("height: calc(100% + clamp(1.5rem, 4svh, 2.8rem))");
     expect(css).toContain("backdrop-filter: blur(14px) saturate(128%)");
+    expect(css).toContain("--story-mobile-header-bg-start: rgb(17 16 14 / 0.96);");
+    expect(css).toContain("border-bottom-color: rgb(255 255 255 / 0.14) !important;");
+    expect(css).not.toContain(".story-mobile-header--dark::before {\n    background: transparent !important;");
   });
 
   it("prevents automatic mobile hyphenation in story copy", () => {
@@ -146,12 +151,13 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome.split(sharedContactValueClass)).toHaveLength(3);
   });
 
-  it("primes the next-section About video before the scroll handoff", () => {
-    expect(desktopStoryHome).toContain("const shouldPrimeVideo = isRevealed || isActive;");
+  it("defers the About video until its section is active", () => {
+    expect(desktopStoryHome).toContain("const shouldPrimeVideo = isActive && shouldReduceMotion !== true;");
     expect(desktopStoryHome).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(desktopStoryHome).toContain('preload={shouldPrimeVideo ? "auto" : "none"}');
+    expect(desktopStoryHome).toContain('preload={shouldPrimeVideo ? "metadata" : "none"}');
     expect(desktopStoryHome).toContain("autoPlay={shouldPrimeVideo}");
     expect(desktopStoryHome).toContain("storyChapters.map((_, index) => index <= 1)");
+    expect(desktopStoryHome).not.toContain("const shouldPrimeVideo = isRevealed || isActive;");
     expect(desktopStoryHome).toContain("if (!shouldPrimeVideo) {");
     expect(desktopStoryHome).toContain("setVideoStarted(false);");
     expect(desktopStoryHome).toContain("if (shouldPrimeVideo) {\n                    void event.currentTarget.play().catch(() => undefined);");
@@ -261,8 +267,8 @@ describe("index.css motion rules", () => {
     expect(liveAssets).toContain("AIXW-transparent.webp");
     expect(liveAssets).toContain("aixco-group-dubai-hero.mp4");
     expect(appLayout).toContain('href="/aixco-global-op2/images/AIXCOGlobal-horizontal-light.webp"');
-    expect(appLayout).toContain('href="/aixco-global-op2/videos/aixco-group-dubai-hero.mp4"');
-    expect(appLayout).toContain('as="video"');
+    expect(appLayout).not.toContain('href="/aixco-global-op2/videos/aixco-group-dubai-hero.mp4"');
+    expect(appLayout).not.toContain('as="video"');
     expect(appLayout).toContain('fetchPriority="high"');
     expect(appLayout).not.toContain("homeStoryBootScript");
     expect(desktopStoryHome).not.toContain("StoryHeroIntroLoader");

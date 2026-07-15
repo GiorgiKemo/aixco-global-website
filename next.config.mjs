@@ -1,5 +1,6 @@
 const isDevelopment = process.env.NODE_ENV !== "production";
 const isVercel = process.env.VERCEL === "1";
+const canonicalSiteOrigin = "https://www.aixco.global";
 
 const getOrigin = (value) => {
   if (!value) return null;
@@ -77,6 +78,10 @@ const nextConfig = {
         search: "",
       },
       {
+        pathname: "/aixco-global-op2/videos/**",
+        search: "",
+      },
+      {
         pathname: "/aixco-global-op2/documents/**",
         search: "",
       },
@@ -84,6 +89,47 @@ const nextConfig = {
   },
   turbopack: {
     root: process.cwd(),
+  },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "aixco.global" }],
+        destination: `${canonicalSiteOrigin}/:path*`,
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "aixco-global-website.vercel.app" }],
+        destination: `${canonicalSiteOrigin}/:path*`,
+        permanent: true,
+      },
+      {
+        source: "/aixco-global-op2",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/aixco-global-op2/index",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/aixco-global-op2/index.html",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/aixco-global-op2/current-project.html",
+        destination: "/aixco-global-op2/current-project",
+        permanent: true,
+      },
+      {
+        source: "/op2/index.html",
+        destination: "/",
+        permanent: true,
+      },
+    ];
   },
   async headers() {
     return [

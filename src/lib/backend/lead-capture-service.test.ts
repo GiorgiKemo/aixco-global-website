@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   captureChatTranscript,
   captureContactSubmission,
@@ -13,24 +13,27 @@ type InsertRecord = {
 function createCaptureClient(error: { message: string } | null = null) {
   const inserts: InsertRecord[] = [];
   const upserts: InsertRecord[] = [];
+  const rpcCalls: { fn: string; args: Record<string, unknown> }[] = [];
 
   return {
     inserts,
     upserts,
+    rpcCalls,
     client: {
+      rpc: (fn: string, args: Record<string, unknown>) => {
+        rpcCalls.push({ fn, args });
+        return {
+          single: async () => ({
+            data: error
+              ? null
+              : { request_reference: "AIX-2026-000001", delivery_status: "queued" },
+            error,
+          }),
+        };
+      },
       from: (table: string) => ({
         insert: (payload: Record<string, unknown>) => {
           inserts.push({ table, payload });
-          if (table === "contact_submissions") {
-            return {
-              select: () => ({
-                single: async () => ({
-                  data: error ? null : { request_reference: "AIX-2026-000001" },
-                  error,
-                }),
-              }),
-            };
-          }
           return Promise.resolve({ error });
         },
         upsert: async (payload: Record<string, unknown>) => {
@@ -72,7 +75,7 @@ const headers = new Headers({
 
 describe("lead capture service", () => {
   it("normalizes and stores contact submissions through the server client", async () => {
-    const { client, inserts } = createCaptureClient();
+    const { client, inserts, rpcCalls } = createCaptureClient();
 
     await expect(
       captureContactSubmission(
@@ -93,12 +96,18 @@ describe("lead capture service", () => {
         },
         { client, headers },
       ),
-    ).resolves.toEqual({ ok: true, reference: "AIX-2026-000001" });
+    ).resolves.toEqual({
+      ok: true,
+      reference: "AIX-2026-000001",
+      emailDelivery: { status: "queued", internal: "queued", confirmation: "queued" },
+    });
 
-    expect(inserts).toHaveLength(1);
-    expect(inserts[0]).toMatchObject({
-      table: "contact_submissions",
-      payload: {
+    expect(inserts).toHaveLength(0);
+    expect(rpcCalls).toHaveLength(1);
+    expect(rpcCalls[0]).toMatchObject({
+      fn: "create_contact_submission",
+      args: {
+        p_submission: {
         source: "contact_form",
         name: "Audit User",
         email: "audit@example.com",
@@ -106,13 +115,13 @@ describe("lead capture service", () => {
         locale: "en",
         page_path: "/#contact",
         user_agent: "Vitest",
+        },
       },
     });
   });
 
-  it("emails a notification after a contact submission is stored", async () => {
-    const { client, inserts } = createCaptureClient();
-    const notifications: Record<string, unknown>[] = [];
+  it("returns a truthful queued state without sending email inside the form request", async () => {
+    const { client, inserts, rpcCalls } = createCaptureClient();
 
     await expect(
       captureContactSubmission(
@@ -123,54 +132,41 @@ describe("lead capture service", () => {
           message: "Schedule a call request. Phone number: +995555555555. Preferred time for a call: Jul 8, 2026, 3:00 PM",
         },
         { page_path: "/#contact" },
-        {
-          client,
-          headers,
-          contactEmailNotifier: async (notification) => {
-            notifications.push(notification);
-            return { ok: true };
-          },
-        },
+        { client, headers },
       ),
-    ).resolves.toEqual({ ok: true, reference: "AIX-2026-000001" });
-
-    expect(inserts).toHaveLength(1);
-    expect(notifications).toHaveLength(1);
-    expect(notifications[0]).toMatchObject({
-      requestReference: "AIX-2026-000001",
-      name: "Email User",
-      email: "email@example.com",
-      interest: "Schedule a Call",
-      pagePath: "/#contact",
-      userAgent: "Vitest",
+    ).resolves.toEqual({
+      ok: true,
+      reference: "AIX-2026-000001",
+      emailDelivery: { status: "queued", internal: "queued", confirmation: "queued" },
     });
+
+    expect(inserts).toHaveLength(0);
+    expect(rpcCalls).toHaveLength(1);
   });
 
-  it("does not email a notification when contact storage fails", async () => {
+  it("sanitizes database failures from the public contact result", async () => {
     const { client } = createCaptureClient({ message: "database unavailable" });
-    let notificationCount = 0;
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
 
-    await expect(
-      captureContactSubmission(
-        {
-          name: "Fail User",
-          email: "fail@example.com",
-          interest: "Send an Email",
-          message: "Please send more information about AIXCO.",
-        },
-        {},
-        {
-          client,
-          headers,
-          contactEmailNotifier: async () => {
-            notificationCount += 1;
-            return { ok: true };
+    try {
+      await expect(
+        captureContactSubmission(
+          {
+            name: "Fail User",
+            email: "fail@example.com",
+            interest: "Send an Email",
+            message: "Please send more information about AIXCO.",
           },
-        },
-      ),
-    ).resolves.toEqual({ ok: false, reason: "database unavailable" });
-
-    expect(notificationCount).toBe(0);
+          {},
+          { client, headers },
+        ),
+      ).resolves.toEqual({
+        ok: false,
+        reason: "The contact request could not be stored right now.",
+      });
+    } finally {
+      consoleError.mockRestore();
+    }
   });
 
   it("derives a chat interest and stores the normalized transcript", async () => {

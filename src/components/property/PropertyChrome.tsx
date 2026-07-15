@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { ChevronDown, Globe, Menu, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useUI } from "@/components/ui-state";
 import { LANGS, useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,77 @@ type PropertyNavGroup = {
   active?: boolean;
   items: PropertyNavItem[];
 };
+
+const drawerFocusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled]):not([type='hidden'])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function keepDrawerFocus(event: KeyboardEvent, container: HTMLElement) {
+  if (event.key !== "Tab") return;
+
+  const focusable = Array.from(container.querySelectorAll<HTMLElement>(drawerFocusableSelector)).filter(
+    (element) => element.tabIndex >= 0 && element.getAttribute("aria-hidden") !== "true" && !element.closest("[inert]"),
+  );
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (!first || !last) {
+    event.preventDefault();
+    container.focus({ preventScroll: true });
+  } else if (event.shiftKey && (document.activeElement === first || !container.contains(document.activeElement))) {
+    event.preventDefault();
+    last.focus({ preventScroll: true });
+  } else if (!event.shiftKey && (document.activeElement === last || !container.contains(document.activeElement))) {
+    event.preventDefault();
+    first.focus({ preventScroll: true });
+  }
+}
+
+function isolateDrawerLayer(layer: HTMLElement) {
+  const previousStates: Array<{ element: HTMLElement; inert: boolean; ariaHidden: string | null }> = [];
+  let current: HTMLElement = layer;
+
+  while (current.parentElement) {
+    const parent = current.parentElement;
+    Array.from(parent.children).forEach((sibling) => {
+      if (sibling === current || !(sibling instanceof HTMLElement)) return;
+      previousStates.push({ element: sibling, inert: sibling.inert, ariaHidden: sibling.getAttribute("aria-hidden") });
+      sibling.inert = true;
+      sibling.setAttribute("aria-hidden", "true");
+    });
+    if (parent === document.body) break;
+    current = parent;
+  }
+
+  return () => {
+    previousStates.reverse().forEach(({ element, inert, ariaHidden }) => {
+      element.inert = inert;
+      if (ariaHidden === null) element.removeAttribute("aria-hidden");
+      else element.setAttribute("aria-hidden", ariaHidden);
+    });
+  };
+}
+
+export function PropertyContactLink({ className, children }: { className?: string; children: ReactNode }) {
+  const { openContact } = useUI();
+
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    openContact();
+  };
+
+  return (
+    <Link href="/?modal=contact" prefetch={false} onClick={handleClick} className={className}>
+      {children}
+    </Link>
+  );
+}
 
 const navGroups: PropertyNavGroup[] = [
   {
@@ -67,6 +139,10 @@ export function PropertyChrome() {
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
+  const mobileLayerRef = useRef<HTMLDivElement | null>(null);
+  const mobileDrawerRef = useRef<HTMLElement | null>(null);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const mobileCloseButtonRef = useRef<HTMLButtonElement | null>(null);
   const currentLangName = LANGS.find((option) => option.code === lang)?.native ?? lang.toUpperCase();
 
   useEffect(() => {
@@ -102,6 +178,30 @@ export function PropertyChrome() {
       document.documentElement.classList.remove("overflow-hidden");
       document.body.classList.remove("property-mobile-menu-open");
       document.documentElement.classList.remove("property-mobile-menu-open");
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const drawer = mobileDrawerRef.current;
+    const opener = mobileMenuButtonRef.current;
+    const restoreIsolation = mobileLayerRef.current ? isolateDrawerLayer(mobileLayerRef.current) : () => undefined;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMobileOpen(false);
+        return;
+      }
+      if (drawer) keepDrawerFocus(event, drawer);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    (mobileCloseButtonRef.current ?? drawer)?.focus({ preventScroll: true });
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      restoreIsolation();
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
     };
   }, [mobileOpen]);
 
@@ -228,6 +328,7 @@ export function PropertyChrome() {
               {currentLangName}
             </button>
             <button
+              ref={mobileMenuButtonRef}
               type="button"
               aria-expanded={mobileOpen}
               aria-controls="property-mobile-menu"
@@ -251,31 +352,41 @@ export function PropertyChrome() {
       </header>
 
       {mobileOpen ? (
-        <button type="button" aria-label={tx("Close menu")} onClick={() => setMobileOpen(false)} className="fixed inset-0 z-40 bg-foreground/35 backdrop-blur-sm xl:hidden" />
-      ) : null}
-
-      {mobileOpen ? (
-        <aside
-          id="property-mobile-menu"
-          role="dialog"
-          aria-modal="true"
-          aria-label={tx("Story navigation")}
-          className="property-mobile-menu fixed bottom-0 end-0 top-0 z-50 max-h-[100dvh] w-[min(22rem,88vw)] overflow-y-auto overscroll-contain border-s border-foreground/10 bg-[#F3EDE1] px-5 pb-8 pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] xl:hidden"
-        >
-          <nav aria-label={tx("Story navigation")} className="grid gap-2">
-            <Link href="/" prefetch={false} onClick={closeAll} className="rounded-lg px-3 py-3 text-sm font-semibold hover:bg-muted/70">{tx("AIXCO")}</Link>
-            {navGroups.map((group) => (
-              <div key={group.key} className="border-t border-foreground/10 pt-2">
-                <p className={cn("px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.16em]", group.active ? "text-primary" : "text-foreground/55")}>{tx(group.label)}</p>
-                {group.items.map((item) => (
-                  <Link key={item.href} href={item.href} prefetch={false} onClick={closeAll} className="flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium text-foreground/78 hover:bg-primary/10 hover:text-primary">
-                    {tx(item.label)}
-                  </Link>
-                ))}
-              </div>
-            ))}
-          </nav>
-        </aside>
+        <div ref={mobileLayerRef} className="fixed inset-0 z-[70] xl:hidden">
+          <div aria-hidden="true" onClick={() => setMobileOpen(false)} className="absolute inset-0 bg-foreground/35 backdrop-blur-sm" />
+          <aside
+            ref={mobileDrawerRef}
+            id="property-mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label={tx("Story navigation")}
+            tabIndex={-1}
+            className="property-mobile-menu absolute bottom-0 end-0 top-0 z-10 max-h-[100dvh] w-[min(22rem,88vw)] overflow-y-auto overscroll-contain border-s border-foreground/10 bg-[#F3EDE1] px-5 pb-8 pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)]"
+          >
+            <button
+              ref={mobileCloseButtonRef}
+              type="button"
+              aria-label={tx("Close menu")}
+              onClick={() => setMobileOpen(false)}
+              className="absolute end-5 top-5 inline-flex h-11 w-11 items-center justify-center rounded-sm border border-foreground/15 bg-[#F3EDE1] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+            >
+              <X className="h-5 w-5" aria-hidden />
+            </button>
+            <nav aria-label={tx("Story navigation")} className="grid gap-2">
+              <Link href="/" prefetch={false} onClick={closeAll} className="rounded-lg px-3 py-3 text-sm font-semibold hover:bg-muted/70">{tx("AIXCO")}</Link>
+              {navGroups.map((group) => (
+                <div key={group.key} className="border-t border-foreground/10 pt-2">
+                  <p className={cn("px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.16em]", group.active ? "text-primary" : "text-foreground/55")}>{tx(group.label)}</p>
+                  {group.items.map((item) => (
+                    <Link key={item.href} href={item.href} prefetch={false} onClick={closeAll} className="flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium text-foreground/78 hover:bg-primary/10 hover:text-primary">
+                      {tx(item.label)}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </nav>
+          </aside>
+        </div>
       ) : null}
     </>
   );

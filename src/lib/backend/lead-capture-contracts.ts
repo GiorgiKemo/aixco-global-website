@@ -1,8 +1,23 @@
 import { z } from "zod";
 
+export type ContactEmailQueueStatus = "queued" | "processing" | "retrying" | "provider_accepted" | "failed";
+
+export type ContactEmailDeliverySummary = {
+  status: ContactEmailQueueStatus;
+  internal: ContactEmailQueueStatus;
+  confirmation: ContactEmailQueueStatus;
+};
+
 export type CaptureResult =
-  | { ok: true; reference?: string }
+  | { ok: true; reference?: string; emailDelivery?: ContactEmailDeliverySummary }
   | { ok: false; skipped?: boolean; reason: string };
+
+export const leadCaptureAntiAbuseSchema = z
+  .object({
+    website: z.string().max(200).optional().default(""),
+    startedAt: z.number().int().positive().optional(),
+  })
+  .strict();
 
 const optionalTextSchema = (maxLength: number) =>
   z
@@ -67,3 +82,4 @@ export type ChatMessageInput = z.infer<typeof chatMessageSchema>;
 export type ChatTranscriptInput = z.infer<typeof chatTranscriptSchema>;
 export type PortalEventInput = z.infer<typeof portalEventSchema>;
 export type BrowserContextInput = z.infer<typeof browserContextSchema>;
+export type LeadCaptureAntiAbuseInput = z.infer<typeof leadCaptureAntiAbuseSchema>;

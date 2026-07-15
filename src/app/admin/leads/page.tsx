@@ -476,7 +476,7 @@ type AdminLeadsPageProps = {
 };
 
 export default async function AdminLeadsPage({ searchParams }: AdminLeadsPageProps) {
-  await requireAdminSession();
+  const adminPrincipal = await requireAdminSession();
 
   const params = searchParams ? await searchParams : {};
   const activeView = getActiveView(params.tab);
@@ -490,7 +490,9 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="font-display text-lg font-bold leading-tight">Admin Panel</h1>
-              <p className="mt-0.5 text-sm text-white/70">AIXCO lead center</p>
+              <p className="mt-0.5 text-sm text-white/70">
+                AIXCO lead center · {adminPrincipal.email ?? "temporary migration access"}
+              </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <Link
