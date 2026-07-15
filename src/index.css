@@ -7887,7 +7887,7 @@ html[data-home-experience='story'] {
     min-height: 0 !important;
     height: auto !important;
     justify-content: flex-start !important;
-    padding: var(--story-mobile-section-top) var(--story-mobile-gutter)
+    padding: clamp(1.75rem, 5vw, 2.25rem) var(--story-mobile-gutter)
       var(--story-mobile-section-bottom) !important;
   }
 
@@ -7899,6 +7899,11 @@ html[data-home-experience='story'] {
     height: auto !important;
     flex: 0 0 auto !important;
     justify-content: flex-start !important;
+  }
+
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])
+    [data-story-scene-copy] {
+    padding-top: 0 !important;
   }
 
   [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
@@ -7930,15 +7935,6 @@ html[data-home-experience='story'] {
 
   [data-story-section='dubai'] .story-media-panel__image {
     object-position: center top !important;
-  }
-
-  [data-story-section='batumi']:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])
-    [data-story-scene-column] {
-    padding-top: clamp(1.75rem, 5vw, 2.25rem) !important;
-  }
-
-  [data-story-section='batumi'] [data-story-scene-copy] {
-    padding-top: 0 !important;
   }
 
   [data-story-section='team'] [data-story-scene-media] {
@@ -8390,7 +8386,7 @@ html[data-home-experience='story'] {
   }
 
   [data-story-section='dubai'] [data-story-scene-column] {
-    padding-top: var(--story-mobile-section-top) !important;
+    padding-top: clamp(1.75rem, 5vw, 2.25rem) !important;
   }
 
   [data-layout='story-dubai-funds'] {
@@ -8672,7 +8668,7 @@ html[data-home-experience='story'] {
   }
 
   [data-story-section='contact'] .container-x {
-    padding: var(--story-mobile-section-top) var(--story-mobile-gutter)
+    padding: clamp(1.75rem, 5vw, 2.25rem) var(--story-mobile-gutter)
       max(2rem, env(safe-area-inset-bottom, 0px)) !important;
   }
 

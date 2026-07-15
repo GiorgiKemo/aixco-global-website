@@ -491,9 +491,11 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-story-section='dubai'] .story-media-panel__image {\n    object-position: center top !important;");
   });
 
-  it("keeps the Dubai-to-Batumi handoff compact on phones", () => {
-    expect(css).toContain("[data-story-section='batumi']:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])\n    [data-story-scene-column] {\n    padding-top: clamp(1.75rem, 5vw, 2.25rem) !important;");
-    expect(css).toContain("[data-story-section='batumi'] [data-story-scene-copy] {\n    padding-top: 0 !important;");
+  it("keeps standard mobile section handoffs compact without stacked top padding", () => {
+    expect(css).toContain("padding: clamp(1.75rem, 5vw, 2.25rem) var(--story-mobile-gutter)\n      var(--story-mobile-section-bottom) !important;");
+    expect(css).toContain("[data-story-section]:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])\n    [data-story-scene-copy] {\n    padding-top: 0 !important;");
+    expect(css).toContain("[data-story-section='dubai'] [data-story-scene-column] {\n    padding-top: clamp(1.75rem, 5vw, 2.25rem) !important;");
+    expect(css).toContain("[data-story-section='contact'] .container-x {\n    padding: clamp(1.75rem, 5vw, 2.25rem) var(--story-mobile-gutter)");
   });
 
   it("keeps dense story sections readable on short phone demo viewports", () => {
