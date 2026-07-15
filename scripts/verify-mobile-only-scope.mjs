@@ -26,6 +26,9 @@ try {
       const hero = document.querySelector('[data-story-section="hero"]');
       const materialsTitle = style(".story-mobile-materials-title");
       const journeys = style('[data-layout="story-journeys"]');
+      const journeyTrack = style(".story-journeys-track");
+      const journeyPrimary = style('[data-journey-set="primary"]');
+      const journeyDuplicate = style('[data-journey-set="duplicate"]');
       const team = style('[data-layout="story-team-list"]');
       const mobileHeader = style(".story-mobile-header");
       const desktopHeader = style(".story-desktop-header");
@@ -33,7 +36,12 @@ try {
       return {
         heroHeight: Math.round(hero?.getBoundingClientRect().height ?? 0),
         materialsTitleDisplay: materialsTitle?.display,
-        journeyAutoFlow: journeys?.gridAutoFlow,
+        journeyDisplay: journeys?.display,
+        journeyOverflowX: journeys?.overflowX,
+        journeyTrackDisplay: journeyTrack?.display,
+        journeyTrackAnimationName: journeyTrack?.animationName,
+        journeyPrimaryDisplay: journeyPrimary?.display,
+        journeyDuplicateDisplay: journeyDuplicate?.display,
         teamAutoFlow: team?.gridAutoFlow,
         mobileHeaderDisplay: mobileHeader?.display,
         desktopHeaderDisplay: desktopHeader?.display,
@@ -42,12 +50,18 @@ try {
 
     if (width === 767) {
       if (metrics.materialsTitleDisplay === "none") errors.push("767px: mobile materials title is hidden");
-      if (metrics.journeyAutoFlow !== "column") errors.push(`767px: journey cards use ${metrics.journeyAutoFlow} flow`);
+      if (metrics.journeyDisplay !== "block") errors.push(`767px: journey viewport uses ${metrics.journeyDisplay} display`);
+      if (metrics.journeyOverflowX !== "hidden") errors.push(`767px: journey overflow is ${metrics.journeyOverflowX}`);
+      if (metrics.journeyTrackAnimationName !== "story-mobile-journeys-loop") errors.push(`767px: journey animation is ${metrics.journeyTrackAnimationName}`);
+      if (metrics.journeyPrimaryDisplay !== "flex") errors.push(`767px: primary journey set uses ${metrics.journeyPrimaryDisplay} display`);
+      if (metrics.journeyDuplicateDisplay !== "flex") errors.push(`767px: duplicate journey set uses ${metrics.journeyDuplicateDisplay} display`);
       if (metrics.teamAutoFlow !== "column") errors.push(`767px: team cards use ${metrics.teamAutoFlow} flow`);
       if (metrics.heroHeight >= height - 8) errors.push(`767px: mobile hero does not reveal the next section (${metrics.heroHeight}px)`);
     } else {
       if (metrics.materialsTitleDisplay !== "none") errors.push(`${width}px: mobile-only materials title is visible`);
-      if (metrics.journeyAutoFlow === "column") errors.push(`${width}px: mobile journey carousel leaked outside phone breakpoint`);
+      if (metrics.journeyDisplay !== "grid") errors.push(`${width}px: journey grid uses ${metrics.journeyDisplay} display`);
+      if (metrics.journeyTrackDisplay !== "contents") errors.push(`${width}px: mobile journey track leaked outside phone breakpoint`);
+      if (metrics.journeyDuplicateDisplay !== "none") errors.push(`${width}px: duplicate journey set is visible outside phone breakpoint`);
       if (metrics.teamAutoFlow === "column") errors.push(`${width}px: mobile team carousel leaked outside phone breakpoint`);
       if (metrics.heroHeight < height - 8) errors.push(`${width}px: mobile hero height leaked outside phone breakpoint (${metrics.heroHeight}px)`);
     }
@@ -59,6 +73,32 @@ try {
 
     await context.close();
   }
+
+  const animatedContext = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    reducedMotion: "no-preference",
+  });
+  const animatedPage = await animatedContext.newPage();
+  await animatedPage.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
+  await animatedPage.waitForFunction(() => document.querySelectorAll("[data-story-section]").length === 17);
+  const animatedJourney = await animatedPage.evaluate(() => {
+    const journeys = document.querySelector('[data-layout="story-journeys"]');
+    const track = document.querySelector(".story-journeys-track");
+    const duplicate = document.querySelector('[data-journey-set="duplicate"]');
+    return {
+      overflowX: journeys ? getComputedStyle(journeys).overflowX : null,
+      animationName: track ? getComputedStyle(track).animationName : null,
+      animationDuration: track ? getComputedStyle(track).animationDuration : null,
+      duplicateDisplay: duplicate ? getComputedStyle(duplicate).display : null,
+      duplicateAriaHidden: duplicate?.getAttribute("aria-hidden"),
+    };
+  });
+  if (animatedJourney.overflowX !== "hidden") errors.push(`390px: animated journey overflow is ${animatedJourney.overflowX}`);
+  if (animatedJourney.animationName !== "story-mobile-journeys-loop") errors.push(`390px: journey animation is ${animatedJourney.animationName}`);
+  if (animatedJourney.animationDuration !== "32s") errors.push(`390px: journey animation duration is ${animatedJourney.animationDuration}`);
+  if (animatedJourney.duplicateDisplay !== "flex") errors.push(`390px: duplicate journey set uses ${animatedJourney.duplicateDisplay} display`);
+  if (animatedJourney.duplicateAriaHidden !== "true") errors.push("390px: duplicate journey set is exposed to assistive technology");
+  await animatedContext.close();
 } finally {
   await browser.close();
 }
