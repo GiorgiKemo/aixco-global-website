@@ -31,6 +31,7 @@ const getContentSecurityPolicy = () => {
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
     `connect-src ${connectSources.join(" ")}`,
+    "frame-src https://workw.com",
     "media-src 'self' blob:",
     "worker-src 'self' blob:",
     "object-src 'none'",
