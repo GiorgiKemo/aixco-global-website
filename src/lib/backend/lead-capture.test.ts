@@ -24,7 +24,7 @@ describe("lead capture backend helpers", () => {
         mode: "register",
         roleTitle: "Why become a broker?",
         action: "Start broker registration",
-        portalUrl: "https://workw.com/realestate/broker/signup",
+        portalUrl: "https://broker.aixco.global/",
       }),
     ).resolves.toMatchObject({ ok: false, skipped: true });
   });
@@ -35,7 +35,7 @@ describe("lead capture backend helpers", () => {
         mode: "register",
         roleTitle: "Why become a broker?",
         action: "Start broker registration",
-        portalUrl: "https://workw.com.evil.example/realestate/broker/signup",
+        portalUrl: "https://broker.aixco.global.evil.example/",
       }),
     ).resolves.toMatchObject({ ok: false, skipped: true, reason: "Portal URL is not allowed." });
   });

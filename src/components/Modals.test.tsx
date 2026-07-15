@@ -149,7 +149,7 @@ describe("Modals", () => {
     expect(document.body.style.overflow).toBe("clip");
   });
 
-  it("does not render portal links that are outside the approved Workwise portal", () => {
+  it("does not render portal links outside the approved AIXCO role portals", () => {
     render(
       <I18nProvider>
         <SiteContentContext.Provider
@@ -159,7 +159,7 @@ describe("Modals", () => {
               ...siteContentDefaults.company,
               portals: {
                 ...siteContentDefaults.company.portals,
-                customerLogin: "https://workw.com.evil.example/realestate/customer/login",
+                customerLogin: "https://customer.aixco.global.evil.example/",
               },
             },
           }}
@@ -177,7 +177,7 @@ describe("Modals", () => {
     expect(screen.queryByRole("link", { name: "Customer Login" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Broker Login" })).toHaveAttribute(
       "href",
-      "https://workw.com/realestate/broker/login",
+      "https://broker.aixco.global/",
     );
   });
 

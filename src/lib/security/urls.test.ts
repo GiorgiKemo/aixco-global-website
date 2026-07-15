@@ -18,13 +18,13 @@ describe("safe URL helpers", () => {
     expect(getSafeHttpsUrl("https://evil.example/aixco.global", "#", ["www.instagram.com"])).toBe("#");
   });
 
-  it("keeps portal links on the Workwise real estate surface", () => {
-    expect(getSafePortalUrl("https://workw.com/realestate/customer/login", "#")).toBe(
-      "https://workw.com/realestate/customer/login",
-    );
-    expect(isSafePortalUrl("https://workw.com/realestate/broker/signup")).toBe(true);
-    expect(getSafePortalUrl("https://workw.com/not-realestate/customer/login", "#")).toBe("#");
-    expect(getSafePortalUrl("https://workw.com.evil.example/realestate/customer/login", "#")).toBe("#");
+  it("keeps portal links on the three role-specific AIXCO roots", () => {
+    expect(getSafePortalUrl("https://customer.aixco.global", "#")).toBe("https://customer.aixco.global/");
+    expect(getSafePortalUrl("https://broker.aixco.global/", "#")).toBe("https://broker.aixco.global/");
+    expect(isSafePortalUrl("https://developer.aixco.global/")).toBe(true);
+    expect(getSafePortalUrl("https://customer.aixco.global/login", "#")).toBe("#");
+    expect(getSafePortalUrl("https://customer.aixco.global.evil.example/", "#")).toBe("#");
+    expect(getSafePortalUrl("https://workw.com/realestate/customer/login", "#")).toBe("#");
   });
 
   it("keeps news and asset links inside the published AIXCO surfaces", () => {

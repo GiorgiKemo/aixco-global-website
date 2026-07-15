@@ -4,6 +4,14 @@ import { buildSiteContent, fetchSiteContent, siteContentDefaults } from "./site-
 describe("site content backend", () => {
   it("keeps the current website content available as a fallback", () => {
     expect(siteContentDefaults.company.name).toBe("AIXCO.Global");
+    expect(siteContentDefaults.company.portals).toEqual({
+      customerLogin: "https://customer.aixco.global/",
+      brokerLogin: "https://broker.aixco.global/",
+      developerLogin: "https://developer.aixco.global/",
+      customerSignup: "https://customer.aixco.global/",
+      brokerSignup: "https://broker.aixco.global/",
+      developerSignup: "https://developer.aixco.global/",
+    });
     expect(siteContentDefaults.metrics.length).toBeGreaterThan(0);
     expect(siteContentDefaults.partners.some((partner) => partner.name === "Global Partners")).toBe(true);
     expect(siteContentDefaults.newsTickerItems.length).toBeGreaterThan(0);
@@ -33,7 +41,7 @@ describe("site content backend", () => {
           },
           portals: {
             ...siteContentDefaults.company.portals,
-            customerLogin: "https://workw.com.evil.example/realestate/customer/login",
+            customerLogin: "https://customer.aixco.global.evil.example/",
           },
         },
       },

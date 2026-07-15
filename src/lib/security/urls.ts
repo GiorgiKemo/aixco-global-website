@@ -1,6 +1,11 @@
 type HostRule = string | { host: string; includeSubdomains?: boolean };
 
 const SIMPLE_EMAIL_PATTERN = /^[^\s@<>()"']+@[^\s@<>()"']+\.[^\s@<>()"']+$/;
+const AIXCO_PORTAL_HOSTS = [
+  "customer.aixco.global",
+  "broker.aixco.global",
+  "developer.aixco.global",
+] as const;
 
 function hasControlCharacter(value: string) {
   return Array.from(value).some((character) => {
@@ -53,12 +58,19 @@ export function getSafeEmail(value: unknown, fallback: string) {
 }
 
 export function getSafePortalUrl(value: unknown, fallback: string) {
-  const safeUrl = getSafeHttpsUrl(value, fallback, ["workw.com"]);
+  const safeUrl = getSafeHttpsUrl(value, fallback, AIXCO_PORTAL_HOSTS);
 
   try {
     const url = new URL(safeUrl);
+    const isPortalHost = AIXCO_PORTAL_HOSTS.includes(url.hostname as (typeof AIXCO_PORTAL_HOSTS)[number]);
+    const isBareHttpsRoot = url.pathname === "/"
+      && url.port === ""
+      && url.username === ""
+      && url.password === ""
+      && url.search === ""
+      && url.hash === "";
 
-    return url.hostname === "workw.com" && url.pathname.startsWith("/realestate/") ? url.toString() : fallback;
+    return isPortalHost && isBareHttpsRoot ? url.toString() : fallback;
   } catch {
     return fallback;
   }

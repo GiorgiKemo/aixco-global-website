@@ -15,12 +15,12 @@ export const company = {
     x: "",
   },
   portals: {
-    customerLogin: "https://workw.com/realestate/customer/login",
-    brokerLogin: "https://workw.com/realestate/broker/login",
-    developerLogin: "https://workw.com/realestate/developer/login",
-    customerSignup: "https://workw.com/realestate/customer/signup",
-    brokerSignup: "https://workw.com/realestate/broker/signup",
-    developerSignup: "https://workw.com/realestate/developer/signup",
+    customerLogin: "https://customer.aixco.global/",
+    brokerLogin: "https://broker.aixco.global/",
+    developerLogin: "https://developer.aixco.global/",
+    customerSignup: "https://customer.aixco.global/",
+    brokerSignup: "https://broker.aixco.global/",
+    developerSignup: "https://developer.aixco.global/",
   },
 };
 
