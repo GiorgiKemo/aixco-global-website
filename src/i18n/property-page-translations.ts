@@ -3,6 +3,46 @@ import type { Lang } from "./languages";
 type PropertyLocaleText = Partial<Record<Exclude<Lang, "en">, string>>;
 
 export const propertyPageTranslations = {
+  "Reverance by Otium is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for June 2028.": {
+    de: "Reverance by Otium ist ein Premium-Wohnkomplex am New Boulevard in Batumi. AIXCO bietet derzeit 28 ausgewählte Wohnungen im 13. und 14. Stock an; die Fertigstellung ist für Juni 2028 geplant.",
+    ru: "Reverance by Otium — жилой комплекс премиум-класса на Новом бульваре Батуми. Сейчас AIXCO предлагает 28 выбранных квартир на 13-м и 14-м этажах; завершение строительства запланировано на июнь 2028 года.",
+    ka: "Reverance by Otium არის პრემიუმ საცხოვრებელი კომპლექსი ბათუმის ახალ ბულვარზე. AIXCO ამჟამად გთავაზობთ 28 შერჩეულ ბინას მე-13 და მე-14 სართულებზე; დასრულება დაგეგმილია 2028 წლის ივნისისთვის.",
+    tr: "Reverance by Otium, Batum Yeni Bulvarı'nda yer alan premium bir konut kompleksidir. AIXCO şu anda 13. ve 14. katlarda seçili 28 daire sunmaktadır; tamamlanma Haziran 2028 olarak planlanmaktadır.",
+    ar: "Reverance by Otium مجمع سكني فاخر في البوليفارد الجديد في باتومي. تقدم AIXCO حاليا 28 شقة مختارة في الطابقين الثالث عشر والرابع عشر، ومن المقرر اكتمال المشروع في يونيو 2028.",
+    pl: "Reverance by Otium to kompleks mieszkaniowy klasy premium przy Nowym Bulwarze w Batumi. AIXCO oferuje obecnie 28 wybranych apartamentów na 13. i 14. piętrze; zakończenie budowy planowane jest na czerwiec 2028 r.",
+  },
+  "Available apartments": {
+    de: "Verfügbare Wohnungen",
+    ru: "Доступные квартиры",
+    ka: "ხელმისაწვდომი ბინები",
+    tr: "Mevcut daireler",
+    ar: "الشقق المتاحة",
+    pl: "Dostępne apartamenty",
+  },
+  "13th and 14th floors": {
+    de: "13. und 14. Stock",
+    ru: "13-й и 14-й этажи",
+    ka: "მე-13 და მე-14 სართულები",
+    tr: "13. ve 14. katlar",
+    ar: "الطابقان 13 و14",
+    pl: "13. i 14. piętro",
+  },
+  "Current availability": {
+    de: "Aktuelle Verfügbarkeit",
+    ru: "Текущая доступность",
+    ka: "მიმდინარე ხელმისაწვდომობა",
+    tr: "Güncel müsaitlik",
+    ar: "التوافر الحالي",
+    pl: "Aktualna dostępność",
+  },
+  "28 selected apartments on the 13th and 14th floors.": {
+    de: "28 ausgewählte Wohnungen im 13. und 14. Stock.",
+    ru: "28 выбранных квартир на 13-м и 14-м этажах.",
+    ka: "28 შერჩეული ბინა მე-13 და მე-14 სართულებზე.",
+    tr: "13. ve 14. katlarda seçili 28 daire.",
+    ar: "28 شقة مختارة في الطابقين الثالث عشر والرابع عشر.",
+    pl: "28 wybranych apartamentów na 13. i 14. piętrze.",
+  },
   "private residences": {
     de: "Private Residenzen",
     ru: "Частные резиденции",

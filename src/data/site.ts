@@ -87,19 +87,20 @@ export const batumiBenefits = rawBatumiBenefits.map((benefit) => benefit.replace
 export const batumiProperties = [
   {
     id: "current-project",
-    name: "Current project",
+    name: "Reverance by Otium",
     url: "current-project",
     image: "batumi-current-project",
     video: "currentProject",
-    summary: "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for June 2028.",
+    summary: "Reverance by Otium is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for June 2028.",
     metrics: [
       { label: "Floors", value: "17", subtext: "per building" },
       { label: "Apartments", value: "408", subtext: "total units" },
       { label: "Completion", value: "Jun 2028", subtext: "target", highlight: true },
     ],
     highlights: [
+      { label: "Current availability", value: "28 selected apartments on the 13th and 14th floors." },
       { label: "Scale", value: "25,000 sqm of comfort and community infrastructure across a 45,000 sqm planned site." },
-      { label: "Access", value: "AIXCO-managed buyer guidance, project information, and supporting materials available through the client route." },
+      { label: "Location", value: "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away." },
       { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck." },
     ],
   },

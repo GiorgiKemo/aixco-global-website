@@ -105,7 +105,7 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
     : image;
   const heroMetrics = [
     ...property.metrics,
-    { label: "Scale", value: "25,000 sqm", subtext: "infrastructure" },
+    { label: "Available apartments", value: "28", subtext: "13th and 14th floors" },
   ];
   const investmentBenefits = [
     { icon: Globe2, title: "100% Ownership", body: "Full freehold, no local partner, no conditions. Yours entirely." },
