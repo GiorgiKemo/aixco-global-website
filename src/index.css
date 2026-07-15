@@ -8783,31 +8783,6 @@ html[data-home-experience='story'] {
 }
 
 
-@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
-  [data-story-section='how'] [data-layout='story-journeys'] {
-    overflow-x: auto;
-    scroll-snap-type: inline mandatory;
-    touch-action: pan-x pan-y;
-  }
-
-  [data-story-section='how'] .story-journeys-track {
-    animation: none;
-    transform: none;
-    will-change: auto;
-  }
-
-  [data-story-section='how'] .story-journeys-set[data-journey-set='duplicate'] {
-    display: none;
-  }
-
-  [data-story-section='how'] .story-journeys-set {
-    padding-inline-end: 0;
-  }
-
-  [data-story-section='how'] .story-journeys-set > button {
-    scroll-snap-align: start;
-  }
-}
 
 /* Cross-language glyph coverage and long-word safety. */
 html[lang='ka'] {

@@ -507,8 +507,8 @@ describe("index.css motion rules", () => {
     expect(css).toContain("animation: story-mobile-journeys-loop 32s linear infinite");
     expect(css).toContain(".story-journeys-set[data-journey-set='duplicate'] {\n  display: none;");
     expect(css).toContain("[data-story-section='how'] .story-journeys-set[data-journey-set='duplicate'] {\n    display: flex;");
-    expect(css).toContain("@media (max-width: 767px) and (prefers-reduced-motion: reduce)");
-    expect(css).toContain("[data-story-section='how'] .story-journeys-track {\n    animation: none;");
+    expect(css).not.toContain("@media (max-width: 767px) and (prefers-reduced-motion: reduce)");
+    expect(css).not.toContain("[data-story-section='how'] .story-journeys-track {\n    animation: none;");
   });
 
   it("keeps dense story sections readable on short phone demo viewports", () => {
