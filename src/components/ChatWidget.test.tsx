@@ -57,7 +57,7 @@ describe("ChatWidget", () => {
 
     expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText(/message/i), {
+    fireEvent.change(screen.getByLabelText(/^message$/i), {
       target: { value: "I want to explore emerging market opportunities." },
     });
     fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
@@ -85,7 +85,7 @@ describe("ChatWidget", () => {
     renderWidget();
 
     fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
-    fireEvent.change(screen.getByLabelText(/message/i), {
+    fireEvent.change(screen.getByLabelText(/^message$/i), {
       target: { value: "Please contact me about broker partnership." },
     });
     fireEvent.click(screen.getByRole("button", { name: /^send$/i }));

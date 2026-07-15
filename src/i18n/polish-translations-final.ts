@@ -17,6 +17,8 @@ export const polishTranslationsFinal = {
   "Open live chat": { pl: "Otwórz czat" },
   "Minimize live chat": { pl: "Zminimalizuj czat" },
   "Message": { pl: "Wiadomość" },
+  "Chat messages": { pl: "Wiadomości czatu" },
+  "Please choose a valid preferred call time.": { pl: "Wybierz prawidłowy preferowany termin rozmowy." },
   "Type your message...": { pl: "Wpisz wiadomość..." },
   "Send": { pl: "Wyślij" },
   "Email transcript": { pl: "Wyślij zapis e-mailem" },

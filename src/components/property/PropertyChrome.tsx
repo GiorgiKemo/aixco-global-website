@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronDown, Globe, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { useUI } from "@/components/ui-state";
@@ -212,14 +213,13 @@ export function PropertyChrome() {
   };
 
   const languageOptions = (
-    <ul role="listbox" aria-label={tx("Change language")} className="grid gap-1">
+    <ul aria-label={tx("Change language")} className="grid gap-1">
       {LANGS.map((option) => (
         <li key={option.code}>
           <button
             type="button"
-            role="option"
             data-lang={option.code}
-            aria-selected={option.code === lang}
+            aria-current={option.code === lang ? "true" : undefined}
             onClick={() => {
               setLang(option.code);
               setLangOpen(false);
@@ -242,11 +242,11 @@ export function PropertyChrome() {
       <header ref={headerRef} data-property-chrome="true" className="property-chrome sticky inset-x-0 top-0 z-[60] border-b border-[#161616]/10 bg-[#F3EDE1]/95 text-[#161616] shadow-[0_18px_46px_-42px_rgba(22,22,22,0.45)] backdrop-blur-xl">
         <div className="property-chrome__inner mx-auto flex min-h-[4.75rem] max-w-[96rem] items-center gap-4 px-4 sm:px-7 xl:min-h-[5.75rem] xl:px-6 2xl:px-8">
           <Link href="/" prefetch={false} onClick={closeAll} aria-label={tx("AIXCO.GLOBAL home")} className="property-chrome__brand inline-flex min-h-11 min-w-0 items-center transition-opacity hover:opacity-72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45">
-            <img src={aixcoLiveLogos.aixcoHorizontalDark} alt="" aria-hidden="true" className="h-auto w-[9.5rem] shrink-0 object-contain xl:w-[10.75rem]" />
+            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="" aria-hidden="true" width={1600} height={333} sizes="(min-width: 1280px) 10.75rem, 9.5rem" unoptimized className="h-auto w-[9.5rem] shrink-0 object-contain xl:w-[10.75rem]" />
             <span className="sr-only">AIXCO.GLOBAL</span>
           </Link>
 
-          <nav aria-label={tx("Story navigation")} className="hidden min-w-0 flex-1 items-center gap-1 pl-3 xl:flex">
+          <nav aria-label={tx("Story navigation")} className="hidden min-w-0 flex-1 items-center gap-1 ps-3 xl:flex">
             <Link href="/" prefetch={false} onClick={closeAll} className="inline-flex min-h-11 items-center px-3 text-[0.7rem] font-semibold uppercase tracking-[0.05em] text-[#161616]/72 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45">
               {tx("AIXCO")}
             </Link>
@@ -258,7 +258,6 @@ export function PropertyChrome() {
                 <div key={group.key} className="relative">
                   <button
                     type="button"
-                    aria-haspopup="menu"
                     aria-expanded={isOpen}
                     aria-controls={menuId}
                     onClick={() => {
@@ -274,9 +273,9 @@ export function PropertyChrome() {
                     <ChevronDown className={cn("h-3 w-3 opacity-70 transition-transform", isOpen && "rotate-180")} aria-hidden />
                   </button>
                   {isOpen ? (
-                    <div id={menuId} role="menu" className="absolute left-0 top-[calc(100%+0.35rem)] z-[80] min-w-56 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 text-foreground shadow-elegant">
+                    <div id={menuId} className="absolute start-0 top-[calc(100%+0.35rem)] z-[80] min-w-56 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 text-foreground shadow-elegant">
                       {group.items.map((item) => (
-                        <Link key={item.href} href={item.href} prefetch={false} role="menuitem" onClick={closeAll} className="flex min-h-10 items-center rounded-lg px-3 py-2 text-sm font-medium text-foreground/75 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                        <Link key={item.href} href={item.href} prefetch={false} onClick={closeAll} className="flex min-h-10 items-center rounded-lg px-3 py-2 text-sm font-medium text-foreground/75 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
                           {tx(item.label)}
                         </Link>
                       ))}
@@ -287,10 +286,9 @@ export function PropertyChrome() {
             })}
           </nav>
 
-          <div className="relative ml-auto hidden xl:block">
+          <div className="relative ms-auto hidden xl:block">
             <button
               type="button"
-              aria-haspopup="listbox"
               aria-expanded={langOpen}
               aria-controls="property-language-list"
               aria-label={`${currentLangName} ${tx("Change language")}`}
@@ -305,16 +303,15 @@ export function PropertyChrome() {
               <ChevronDown className={cn("h-3 w-3 opacity-70 transition-transform", langOpen && "rotate-180")} aria-hidden />
             </button>
             {langOpen ? (
-              <div id="property-language-list" className="absolute right-0 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant">
+              <div id="property-language-list" className="absolute end-0 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant">
                 {languageOptions}
               </div>
             ) : null}
           </div>
 
-          <div className="ml-auto flex items-center gap-2 xl:hidden">
+          <div className="ms-auto flex items-center gap-2 xl:hidden">
             <button
               type="button"
-              aria-haspopup="listbox"
               aria-expanded={langOpen}
               aria-controls="property-mobile-language-list"
               aria-label={`${currentLangName} ${tx("Change language")}`}
@@ -344,7 +341,7 @@ export function PropertyChrome() {
           </div>
 
           {langOpen ? (
-            <div id="property-mobile-language-list" className="property-mobile-language-list absolute end-4 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant xl:hidden">
+            <div id="property-mobile-language-list" className="property-mobile-language-list absolute end-4 top-[calc(100%+0.5rem)] z-[80] max-h-[calc(100dvh-5.5rem)] w-64 overflow-y-auto overscroll-contain rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant xl:hidden">
               {languageOptions}
             </div>
           ) : null}

@@ -18,7 +18,7 @@ function createGuardClient(result: {
   data: { allowed: boolean; reason: string | null; retry_after_seconds: number }[] | null;
   error: { message: string; code?: string } | null;
 }) {
-  return { rpc: vi.fn(async () => result) };
+  return { rpc: vi.fn(async (_functionName: string, _args: Record<string, unknown>) => result) };
 }
 
 describe("distributed lead capture abuse guard", () => {

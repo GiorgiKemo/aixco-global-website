@@ -96,6 +96,13 @@ export async function getDevRuntimeVersion({
 }
 
 export async function GET() {
+  if (process.env.NODE_ENV !== "development") {
+    return new NextResponse(null, {
+      status: 404,
+      headers: { "Cache-Control": "no-store" },
+    });
+  }
+
   const response = NextResponse.json({
     version: await getDevRuntimeVersion(),
   });

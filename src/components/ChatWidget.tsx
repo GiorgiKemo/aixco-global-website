@@ -221,7 +221,7 @@ export function ChatWidget() {
               </button>
             </div>
 
-            <div data-chat-messages className="min-h-0 flex-1 space-y-4 overflow-y-auto bg-surface/80 p-4">
+            <div data-chat-messages role="log" aria-live="polite" aria-relevant="additions text" aria-label={tx("Chat messages")} className="min-h-0 flex-1 space-y-4 overflow-y-auto bg-surface/80 p-4">
               {messages.map((message) => {
                 const visitor = message.role === "visitor";
                 return (

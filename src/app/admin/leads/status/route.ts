@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getAdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
 import { leadResourceSchema, leadStatusSchema, updateLeadStatus } from "@/lib/admin/leads";
+import { readBoundedJson } from "@/lib/security/request-body";
 
 const statusUpdateSchema = z.object({
   resource: leadResourceSchema,
@@ -15,7 +16,10 @@ function redirectTo(request: Request, path: string) {
 }
 
 async function readStatusUpdatePayload(request: Request, wantsJson: boolean) {
-  if (wantsJson) return request.json().catch(() => ({}));
+  if (wantsJson) {
+    const body = await readBoundedJson(request, 4096);
+    return body.ok ? body.value : {};
+  }
 
   const formData = await request.formData().catch(() => null);
   if (!formData) return {};

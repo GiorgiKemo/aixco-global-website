@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { getDevRuntimeVersion, getWatchedRuntimeFiles, isRuntimeSourceFile } from "./route";
+import { GET, getDevRuntimeVersion, getWatchedRuntimeFiles, isRuntimeSourceFile } from "./route";
 
 describe("dev runtime version", () => {
+  it("is not exposed outside development", async () => {
+    expect((await GET()).status).toBe(404);
+  });
+
   it("tracks runtime component files that affect the open localhost page", async () => {
     const watchedFiles = await getWatchedRuntimeFiles(process.cwd());
 

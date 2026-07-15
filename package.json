@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "packageManager": "npm@11.6.4",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "node scripts/start-dev-auto-port.mjs",
     "dev:fixed": "next dev -p 8081",
@@ -11,6 +14,8 @@
     "build": "next build",
     "build:dev": "next build",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "typecheck:test": "tsc -p tsconfig.test.json --noEmit",
     "preview": "next start -p 4173",
     "smoke": "node scripts/render-smoke.mjs",
     "smoke:locales": "node scripts/render-locales-smoke.mjs",
@@ -20,6 +25,7 @@
     "smoke:mobile": "node scripts/verify-mobile-experience.mjs",
     "smoke:mobile-scope": "node scripts/verify-mobile-only-scope.mjs",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:i18n": "node scripts/verify-localizations.mjs",
     "test:fonts": "node scripts/verify-font-glyphs.mjs",
     "test:watch": "vitest"
@@ -51,8 +57,11 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react-swc": "^4.3.0",
+    "@vitest/coverage-v8": "^4.1.5",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.32.0",
+    "eslint-config-next": "^16.2.6",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^5.2.0",
     "fontkit": "^2.0.4",
     "globals": "^15.15.0",

@@ -116,6 +116,11 @@ function validationFailure(resource: string): CaptureResult {
   return { ok: false, reason: `Invalid ${resource} payload.` };
 }
 
+function storageFailure(resource: CaptureTable): CaptureResult {
+  const label = resource === "chat_transcripts" ? "chat transcript" : "request";
+  return { ok: false, reason: `The ${label} could not be stored right now.` };
+}
+
 function shouldFallbackToLegacyChatInsert(error: { message: string } | null) {
   const message = error?.message.toLowerCase() ?? "";
   return (
@@ -205,15 +210,14 @@ async function insertRow(
     const { error } = await tableClient.insert(payload);
 
     if (error) {
-      return { ok: false, reason: error.message };
+      console.error(`${table} insert failed.`);
+      return storageFailure(table);
     }
 
     return { ok: true };
   } catch (error) {
-    return {
-      ok: false,
-      reason: error instanceof Error ? error.message : "Unknown lead capture error.",
-    };
+    console.error(`${table} insert failed unexpectedly.`, error);
+    return storageFailure(table);
   }
 }
 
@@ -236,15 +240,14 @@ async function writeChatTranscript(payload: ChatInsert, options: LeadCaptureOpti
     }
 
     if (error) {
-      return { ok: false, reason: error.message };
+      console.error("chat_transcripts upsert failed.");
+      return storageFailure("chat_transcripts");
     }
 
     return { ok: true };
   } catch (error) {
-    return {
-      ok: false,
-      reason: error instanceof Error ? error.message : "Unknown lead capture error.",
-    };
+    console.error("chat_transcripts upsert failed unexpectedly.", error);
+    return storageFailure("chat_transcripts");
   }
 }
 
@@ -265,6 +268,10 @@ export async function captureContactSubmission(
     email: parsed.data.email.toLowerCase(),
     interest: parsed.data.interest ?? null,
     message: parsed.data.message,
+    request_type: parsed.data.requestType ?? "message",
+    phone: parsed.data.phone ?? null,
+    preferred_call_at: parsed.data.preferredCallAt ?? null,
+    preferred_call_timezone: parsed.data.preferredCallTimezone ?? null,
     ...serverContext,
   };
 

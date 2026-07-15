@@ -4,6 +4,7 @@ import { chatMessageSchema } from "@/lib/backend/lead-capture-contracts";
 import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
 import { answerWebsiteChat } from "@/lib/chatbot/website-chatbot";
 import { checkRateLimit, getRateLimitClientId } from "@/lib/security/rate-limit";
+import { readBoundedJson } from "@/lib/security/request-body";
 
 const CHATBOT_RATE_LIMIT = {
   limit: 40,
@@ -16,14 +17,6 @@ const chatbotRequestSchema = z
     locale: z.string().trim().max(35).nullable().optional(),
   })
   .strict();
-
-async function readJsonBody(request: Request) {
-  try {
-    return await request.json();
-  } catch {
-    return null;
-  }
-}
 
 export async function POST(request: Request) {
   const rateLimit = checkRateLimit({
@@ -48,7 +41,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const parsed = chatbotRequestSchema.safeParse(await readJsonBody(request));
+  const body = await readBoundedJson(request, 96 * 1024);
+  if (!body.ok && body.error === "payload-too-large") {
+    return NextResponse.json(
+      { ok: false, answer: "Please send a shorter message so the AIXCO assistant can answer it.", reason: "Request body is too large." },
+      { status: 413, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
+  const parsed = chatbotRequestSchema.safeParse(body.ok ? body.value : null);
   if (!parsed.success) {
     return NextResponse.json(
       {

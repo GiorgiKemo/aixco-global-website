@@ -17,6 +17,8 @@ export function FooterLegalBar({
   className?: string;
   compact?: boolean;
 }) {
+  const currentYear = new Date().getFullYear();
+
   return (
     <div
       className={`site-footer-legal mt-auto shrink-0 border-t border-border/70 pt-4 md:pt-5 ${
@@ -52,7 +54,7 @@ export function FooterLegalBar({
       </a>
 
       <div className={`${compact ? "mt-3 pt-3" : "mt-5 pt-5"} flex flex-col gap-3 border-t border-border/60 text-xs text-muted-foreground sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4`}>
-        <p>&copy; AIXCO Global 2026. {tx("All Rights Reserved.")}</p>
+        <p>&copy; AIXCO Global {currentYear}. {tx("All Rights Reserved.")}</p>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <button
             type="button"

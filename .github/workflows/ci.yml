@@ -25,11 +25,46 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Typecheck application
+        run: npm run typecheck
+
+      - name: Typecheck tests
+        run: npm run typecheck:test
+
       - name: Test
-        run: npm run test
+        run: npm run test:coverage
 
       - name: Audit production dependencies
         run: npm audit --omit=dev
 
       - name: Build
         run: npm run build
+
+      - name: Install Chromium for browser gates
+        run: npx playwright install --with-deps chromium
+
+      - name: Run production browser gates
+        shell: bash
+        env:
+          SMOKE_URL: http://127.0.0.1:4173
+        run: |
+          set -euo pipefail
+          npm run preview > /tmp/aixco-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill ${PREVIEW_PID} 2>/dev/null || true' EXIT
+
+          for attempt in {1..45}; do
+            if curl --fail --silent --show-error "${SMOKE_URL}" > /dev/null; then
+              break
+            fi
+            if ! kill -0 "${PREVIEW_PID}" 2>/dev/null; then
+              cat /tmp/aixco-preview.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+          curl --fail --silent --show-error "${SMOKE_URL}" > /dev/null
+          npm run smoke
+          npm run smoke:nav
+          npm run smoke:mobile-scope

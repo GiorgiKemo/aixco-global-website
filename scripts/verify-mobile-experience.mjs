@@ -35,6 +35,7 @@ function observePageErrors(page) {
 
 try {
   for (const viewport of viewports) {
+    if (process.env.SMOKE_VIEWPORT && viewport.name !== process.env.SMOKE_VIEWPORT) continue;
     const context = await browser.newContext({
       viewport: { width: viewport.width, height: viewport.height },
       reducedMotion: "no-preference",
@@ -45,7 +46,12 @@ try {
     try {
       await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
       await page.waitForFunction(
-        () => document.querySelectorAll("[data-story-section]").length === 17,
+        () => {
+          const hero = document.querySelector('[data-story-section="hero"]');
+          return document.querySelectorAll("[data-story-section]").length === 17
+            && (hero?.getBoundingClientRect().height ?? 0) > 0
+            && document.body.innerText.trim().length >= 1_500;
+        },
         undefined,
         { timeout: 30_000 },
       );
@@ -190,8 +196,8 @@ try {
 
       if (viewport.orientation === "landscape") {
         await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-        await page.locator('.story-mobile-header button[aria-haspopup="listbox"]').click();
-        const languageList = page.getByRole("listbox", { name: "Change language" });
+        await page.locator('.story-mobile-header button[aria-label$="Change language"]').click();
+        const languageList = page.locator('.story-mobile-header ul[aria-label="Change language"]');
         await languageList.waitFor({ state: "visible" });
         const languageMetrics = await languageList.evaluate((listbox) => {
           const root = document.documentElement;
@@ -333,8 +339,8 @@ try {
         }
         await page.getByRole("button", { name: /Close live chat/i }).click();
 
-        await page.locator('.story-mobile-header button[aria-haspopup="listbox"]').click();
-        await page.locator('.story-mobile-header [role="listbox"] [role="option"][data-lang="ar"]').click();
+        await page.locator('.story-mobile-header button[aria-label$="Change language"]').click();
+        await page.locator('.story-mobile-header ul[aria-label="Change language"] [data-lang="ar"]').click();
         await page.waitForFunction(() => document.documentElement.dir === "rtl", undefined, { timeout: 5_000 });
         const rtlMetrics = await page.evaluate(() => {
           const root = document.documentElement;
@@ -362,6 +368,7 @@ try {
   }
 
   for (const viewport of propertyViewports) {
+    if (process.env.SMOKE_VIEWPORT && viewport.name !== process.env.SMOKE_VIEWPORT) continue;
     const context = await browser.newContext({
       viewport: { width: viewport.width, height: viewport.height },
       reducedMotion: "reduce",
@@ -489,7 +496,7 @@ try {
         }
         if (!propertyMenuMetrics.withinViewport) errors.push(`${label}/menu: drawer is outside the viewport`);
         if (!propertyMenuMetrics.chatHidden) errors.push(`${label}/menu: chat remains above the property drawer`);
-        await menuButton.click();
+        await propertyMenu.getByRole("button", { name: /Close menu/i }).click();
         await propertyMenu.waitFor({ state: "detached" });
       }
 

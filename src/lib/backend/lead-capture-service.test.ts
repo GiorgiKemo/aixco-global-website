@@ -144,6 +144,36 @@ describe("lead capture service", () => {
     expect(rpcCalls).toHaveLength(1);
   });
 
+  it("stores call details as structured fields", async () => {
+    const { client, rpcCalls } = createCaptureClient();
+    const preferredCallAt = new Date(Date.now() + 86_400_000).toISOString();
+
+    await expect(
+      captureContactSubmission(
+        {
+          name: "Call User",
+          email: "call@example.com",
+          interest: "Schedule a Call",
+          message: "Please call me about the current project.",
+          requestType: "call",
+          phone: "+995 555 123 456",
+          preferredCallAt,
+          preferredCallTimezone: "Asia/Tbilisi",
+        },
+        { locale: "ka", page_path: "/#contact" },
+        { client, headers },
+      ),
+    ).resolves.toMatchObject({ ok: true, reference: "AIX-2026-000001" });
+
+    expect(rpcCalls[0]?.args.p_submission).toMatchObject({
+      request_type: "call",
+      phone: "+995 555 123 456",
+      preferred_call_at: preferredCallAt,
+      preferred_call_timezone: "Asia/Tbilisi",
+      locale: "ka",
+    });
+  });
+
   it("sanitizes database failures from the public contact result", async () => {
     const { client } = createCaptureClient({ message: "database unavailable" });
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
@@ -194,6 +224,23 @@ describe("lead capture service", () => {
         transcript: "AIXCO: Welcome\nVisitor: I am interested in the broker route.",
       },
     });
+  });
+
+  it("sanitizes database failures from public chat results", async () => {
+    const { client } = createCaptureClient({ message: "sensitive database connection details" });
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    try {
+      await expect(
+        captureChatTranscript(
+          { messages: [{ role: "visitor", text: "Please save this message." }] },
+          {},
+          { client, headers },
+        ),
+      ).resolves.toEqual({ ok: false, reason: "The chat transcript could not be stored right now." });
+    } finally {
+      consoleError.mockRestore();
+    }
   });
 
   it("upserts live chat transcripts by session id", async () => {

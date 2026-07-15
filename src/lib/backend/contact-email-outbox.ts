@@ -65,6 +65,10 @@ const notificationPayloadSchema = z
     email: z.string().email().max(255),
     interest: z.string().max(255).nullable(),
     message: z.string().min(10).max(1500),
+    requestType: z.enum(["call", "message"]).optional(),
+    phone: z.string().max(40).nullable().optional(),
+    preferredCallAt: z.string().datetime({ offset: true }).nullable().optional(),
+    preferredCallTimezone: z.string().max(80).nullable().optional(),
     locale: z.string().max(35).nullable(),
     pagePath: z.string().max(800).nullable(),
     userAgent: z.string().max(500).nullable(),
@@ -210,3 +214,4 @@ export async function processContactEmailOutbox(
 
   return summary;
 }
+import "server-only";

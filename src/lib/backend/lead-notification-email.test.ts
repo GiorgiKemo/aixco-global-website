@@ -27,7 +27,7 @@ const notification = {
 
 describe("lead notification email", () => {
   it("shows the database request reference in the subject and message", async () => {
-    const fetchMock = vi.fn(async () =>
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
       new Response(JSON.stringify({ id: "email_lead_123" }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -74,7 +74,7 @@ describe("lead notification email", () => {
     expect(String(body.html)).toContain("Reply to Reference User");
   });
 
-  it("escapes submitted content and only links safe web referrers", () => {
+  it("escapes submitted content and renders referrers as non-clickable text", () => {
     const html = buildContactLeadNotificationHtml({
       requestReference: "AIX-2026-000009",
       name: "<img src=x onerror=alert(1)>",
@@ -96,7 +96,7 @@ describe("lead notification email", () => {
   });
 
   it("sends a marked inbox test to the configured recipient and returns the Resend id", async () => {
-    const fetchMock = vi.fn(async () =>
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
       new Response(JSON.stringify({ id: "email_test_123" }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -199,8 +199,27 @@ describe("lead notification email", () => {
     expect(confirmation.html).not.toContain("AIX-2026-000002<script>");
   });
 
+  it("uses the selected website language for customer confirmations", () => {
+    const german = buildContactConfirmationEmail({
+      ...notification,
+      requestType: "message",
+      locale: "de-DE",
+    });
+    const arabic = buildContactConfirmationEmail({
+      ...notification,
+      requestType: "call",
+      locale: "ar",
+    });
+
+    expect(german.subject).toContain("Wir haben Ihre Nachricht erhalten");
+    expect(german.text).toContain("Anfragereferenz: AIX-2026-000001");
+    expect(german.html).toContain('<html lang="de" dir="ltr">');
+    expect(arabic.subject).toContain("تم استلام طلب مكالمتك");
+    expect(arabic.html).toContain('<html lang="ar" dir="rtl">');
+  });
+
   it("sends the confirmation to the requester without requiring or exposing the internal inbox", async () => {
-    const fetchMock = vi.fn(async () =>
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
       new Response(JSON.stringify({ id: "email_confirmation_123" }), {
         status: 200,
         headers: { "Content-Type": "application/json" },

@@ -271,12 +271,13 @@ describe("Modals", () => {
     expect(screen.getByRole("status")).toHaveTextContent("Request reference: AIX-2026-000018");
     expect(recordContactSubmission).toHaveBeenCalledWith(
       expect.objectContaining({ interest: "Schedule a Call" }),
-      {
+      expect.objectContaining({
         antiAbuse: {
           website: "",
           startedAt: expect.any(Number),
         },
-      },
+        locale: "en",
+      }),
     );
   });
 
@@ -302,12 +303,13 @@ describe("Modals", () => {
     });
     expect(recordContactSubmission).toHaveBeenCalledWith(
       expect.objectContaining({ interest: "Send an Email" }),
-      {
+      expect.objectContaining({
         antiAbuse: {
           website: "",
           startedAt: expect.any(Number),
         },
-      },
+        locale: "en",
+      }),
     );
   });
 

@@ -56,3 +56,4 @@ export async function getSupabaseAdminClient() {
 
   return adminClient;
 }
+import "server-only";

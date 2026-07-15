@@ -9,6 +9,11 @@ import { textTranslations } from "./translations";
 
 type TranslationEntry = {
   de?: string;
+  ru?: string;
+  ka?: string;
+  tr?: string;
+  ar?: string;
+  pl?: string;
 };
 
 type TranslationSource = Record<string, TranslationEntry>;

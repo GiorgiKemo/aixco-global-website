@@ -209,3 +209,4 @@ export async function requireAdminSession() {
 
   return decision.principal;
 }
+import "server-only";

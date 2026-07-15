@@ -10,7 +10,12 @@ try {
     const context = await browser.newContext({ viewport: { width, height }, reducedMotion: "reduce" });
     const page = await context.newPage();
     await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
-    await page.waitForFunction(() => document.querySelectorAll("[data-story-section]").length === 17);
+    await page.waitForFunction(() => {
+      const hero = document.querySelector('[data-story-section="hero"]');
+      return document.querySelectorAll("[data-story-section]").length === 17
+        && (hero?.getBoundingClientRect().height ?? 0) > 0
+        && document.body.innerText.trim().length >= 1_500;
+    });
     await page.evaluate(() => document.fonts.ready);
 
     const metrics = await page.evaluate(() => {

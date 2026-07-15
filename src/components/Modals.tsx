@@ -374,7 +374,7 @@ function getModalAccessibleName(modal: NonNullable<ReturnType<typeof useUI>["mod
 
 export function Modals() {
   const { modal, modalData, close, openContact } = useUI();
-  const { tx } = useI18n();
+  const { tx, lang } = useI18n();
   const shellRef = useRef<HTMLDivElement | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -454,7 +454,7 @@ export function Modals() {
         <div className="p-5 sm:p-7 md:p-10">
           {modal === "login" && <AccessModal mode="login" tx={tx} />}
           {modal === "register" && <AccessModal mode="register" tx={tx} />}
-          {modal === "contact" && <ContactRequestModal tx={tx} />}
+          {modal === "contact" && <ContactRequestModal tx={tx} locale={lang} />}
           {modal === "terms" && <Legal title="Terms & Conditions" tx={tx} />}
           {modal === "privacy" && <Legal title="Privacy Policy" tx={tx} />}
           {modal === "journey" && <JourneyDetail data={modalData as JourneyDetailData} tx={tx} />}
@@ -497,7 +497,7 @@ function formatPreferredCallTime(value: string) {
   }).format(parsed);
 }
 
-function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
+function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; locale: string }) {
   const [mode, setMode] = useState<ContactMode | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [requestReference, setRequestReference] = useState<string | null>(null);
@@ -526,6 +526,13 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
 
     setIsSubmitting(true);
     setSubmitError(null);
+    const preferredDate = preferredTime ? new Date(preferredTime) : null;
+    if (preferredDate && Number.isNaN(preferredDate.getTime())) {
+      setSubmitError(tx("Please choose a valid preferred call time."));
+      return;
+    }
+    const preferredCallAt = preferredDate?.toISOString();
+    const preferredCallTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     const payload =
       mode === "call"
         ? {
@@ -533,16 +540,22 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
             email,
             interest: "Schedule a Call",
             message: `Schedule a call request. Phone number: ${phone}. Preferred time for a call: ${formatPreferredCallTime(preferredTime)}`,
+            requestType: "call" as const,
+            phone,
+            preferredCallAt,
+            preferredCallTimezone,
           }
         : {
             name,
             email,
             interest: "Send an Email",
             message,
+            requestType: "message" as const,
           };
 
     const result = await recordContactSubmission(payload, {
       antiAbuse: { website, startedAt: formStartedAtRef.current },
+      locale,
     });
     setIsSubmitting(false);
 
@@ -624,6 +637,8 @@ function ContactRequestModal({ tx }: { tx: (text: string) => string }) {
                 <span className="story-metric-label text-foreground/60">{tx("Phone Number")}</span>
                 <input
                   name="phone"
+                  type="tel"
+                  inputMode="tel"
                   required
                   minLength={5}
                   maxLength={40}

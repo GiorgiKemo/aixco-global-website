@@ -609,7 +609,7 @@ function StoryMediaPanel({
       fetchPriority={preloadMedia ? "high" : "auto"}
       loading={preloadMedia ? "eager" : "lazy"}
       decoding="async"
-      quality={95}
+      quality={75}
       sizes={media.sizes ?? "(min-width: 1280px) 56vw, 100vw"}
       className={cn(
         "story-media-panel__image h-full w-full",
@@ -773,7 +773,6 @@ function StoryChrome({
               setMenuOpen(false);
               setLangOpen((value) => !value);
             }}
-            aria-haspopup="listbox"
             aria-expanded={langOpen}
             aria-label={`${currentLangName} ${tx("Change language")}`}
             className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-foreground/10 bg-white px-3 text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
@@ -798,16 +797,14 @@ function StoryChrome({
         </div>
         {langOpen && (
           <ul
-            role="listbox"
             aria-label={tx("Change language")}
-            className="absolute end-16 top-[calc(100%+0.5rem)] z-[70] w-64 rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
+            className="absolute end-16 top-[calc(100%+0.5rem)] z-[70] max-h-[calc(100dvh-5.5rem)] w-64 overflow-y-auto overscroll-contain rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
           >
             {LANGS.map((option) => (
               <li key={option.code}>
                 <button
-                  role="option"
                   data-lang={option.code}
-                  aria-selected={option.code === lang}
+                  aria-current={option.code === lang ? "true" : undefined}
                   onClick={() => {
                     setLang(option.code);
                     setLangOpen(false);
@@ -933,7 +930,6 @@ function StoryChrome({
                 <div key={group.key} className="story-desktop-nav-group">
                   <button
                     type="button"
-                    aria-haspopup="menu"
                     aria-expanded={isOpen}
                     aria-controls={menuId}
                     data-active={isActive ? "true" : "false"}
@@ -947,7 +943,7 @@ function StoryChrome({
                     <ChevronDown className="story-desktop-nav-trigger__icon" aria-hidden />
                   </button>
                   {isOpen && (
-                    <div id={menuId} role="menu" className="story-desktop-nav-menu">
+                    <div id={menuId} className="story-desktop-nav-menu">
                       {group.chapters.map((chapter) => {
                         const isChapterActive = activeChapterKey === chapter.key;
                         const href = chapter.id ? `#${chapter.id}` : "/";
@@ -956,7 +952,6 @@ function StoryChrome({
                           <Link
                             key={chapter.key}
                             href={href}
-                            role="menuitem"
                             aria-current={isChapterActive ? "true" : undefined}
                             data-active={isChapterActive ? "true" : "false"}
                             onClick={(event) => handleChapterLink(event, chapter)}
@@ -984,7 +979,6 @@ function StoryChrome({
               setDesktopGroupOpen(null);
               setLangOpen((value) => !value);
             }}
-            aria-haspopup="listbox"
             aria-expanded={langOpen}
             aria-label={`${currentLangName} ${tx("Change language")}`}
             className="story-desktop-lang-button"
@@ -995,15 +989,14 @@ function StoryChrome({
           </button>
           {langOpen && (
             <ul
-              role="listbox"
-              className="absolute right-0 top-[calc(100%+0.65rem)] z-[70] w-72 rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
+              aria-label={tx("Change language")}
+              className="absolute end-0 top-[calc(100%+0.65rem)] z-[70] w-72 rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
             >
               {LANGS.map((option) => (
                 <li key={option.code}>
                   <button
-                    role="option"
                     data-lang={option.code}
-                    aria-selected={option.code === lang}
+                    aria-current={option.code === lang ? "true" : undefined}
                     onClick={() => {
                       setLang(option.code);
                       setLangOpen(false);
@@ -1074,10 +1067,10 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
     <>
       <div
         aria-hidden="true"
-        className={`pointer-events-none fixed bottom-0 right-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 [transition-timing-function:var(--ease-apple)] ${
+        className={`pointer-events-none fixed bottom-0 end-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 [transition-timing-function:var(--ease-apple)] ${
           visible ? "opacity-100" : "opacity-0"
         }`}
-        style={{ left: "var(--story-fixed-backdrop-left, 0px)" }}
+        style={{ insetInlineStart: "var(--story-fixed-backdrop-left, 0px)" }}
       >
         <Image
           src={aixcoHeroBackgroundVideo.poster}
@@ -1110,7 +1103,7 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
           aria-pressed={isPaused}
           aria-label={isPaused ? "Play background video" : "Pause background video"}
           onClick={() => setIsPaused((value) => !value)}
-          className="fixed bottom-20 right-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-sm border border-white/35 bg-[#11100e]/72 px-3 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur-md transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary xl:bottom-6 xl:right-6"
+          className="fixed bottom-20 end-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-sm border border-white/35 bg-[#11100e]/72 px-3 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur-md transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary xl:bottom-6 xl:end-6"
         >
           {isPaused ? <Play className="h-3.5 w-3.5" aria-hidden /> : <Pause className="h-3.5 w-3.5" aria-hidden />}
           <span>{isPaused ? "Play" : "Pause"}</span>
@@ -1131,8 +1124,6 @@ function StorySceneBody({
   isRevealed: boolean;
   fitContent?: boolean;
 }) {
-  const copyRef = useRef<HTMLDivElement | null>(null);
-
   const densityClass =
     density === "dense"
       ? "gap-[clamp(0.85rem,1.45svh,1.15rem)]"
@@ -1140,67 +1131,10 @@ function StorySceneBody({
         ? "gap-[clamp(0.95rem,1.65svh,1.3rem)]"
         : "gap-[clamp(1rem,2svh,1.55rem)]";
 
-  useLayoutEffect(() => {
-    const copy = copyRef.current;
-    const column = copy?.parentElement;
-    if (!copy || !column) return undefined;
-
-    if (!isRevealed || !fitContent) {
-      copy.style.removeProperty("zoom");
-      copy.style.removeProperty("width");
-      return undefined;
-    }
-
-    let fitFrame: number | null = null;
-
-    const fitCopy = () => {
-      fitFrame = null;
-      copy.style.removeProperty("zoom");
-      copy.style.removeProperty("width");
-      const columnAvailable = column.clientHeight;
-      const copyAvailable = copy.clientHeight;
-      const available =
-        copyAvailable > 0 ? Math.min(columnAvailable, copyAvailable) : columnAvailable;
-
-      let zoom = 1;
-      for (let attempt = 0; attempt < 4; attempt += 1) {
-        const needed = copy.scrollHeight;
-        if (needed <= available + 2) break;
-
-        const rawZoom = (available - 2) / needed;
-        zoom = Math.max(0.8, Math.min(zoom, rawZoom));
-        copy.style.setProperty("zoom", String(zoom));
-      }
-    };
-
-    const scheduleFit = () => {
-      if (fitFrame !== null) {
-        window.cancelAnimationFrame(fitFrame);
-      }
-      fitFrame = window.requestAnimationFrame(fitCopy);
-    };
-
-    const observer = new ResizeObserver(scheduleFit);
-
-    observer.observe(column);
-    scheduleFit();
-    window.addEventListener("resize", scheduleFit);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", scheduleFit);
-      if (fitFrame !== null) {
-        window.cancelAnimationFrame(fitFrame);
-      }
-      copy.style.removeProperty("zoom");
-      copy.style.removeProperty("width");
-    };
-  }, [children, fitContent, isRevealed]);
-
   return (
     <div
-      ref={copyRef}
       data-story-scene-copy
+      data-story-fit-content={fitContent ? "true" : "false"}
       className="flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center overflow-visible"
     >
       <StorySceneReveal
@@ -1347,7 +1281,7 @@ function HeroScene({
           >
             <header className="story-hero-brand">
               <p className="story-hero-kicker">{tx("Global Real Estate")}</p>
-              <h1 aria-label="AIXCO.GLOBAL" data-brand-lockup="story-hero" className="story-hero-wordmark hero-title-shadow">
+              <h1 data-brand-lockup="story-hero" className="story-hero-wordmark hero-title-shadow">
                 <Image
                   src={aixcoLiveLogos.aixcoHorizontalLight}
                   alt=""
@@ -1358,7 +1292,7 @@ function HeroScene({
                   sizes="(min-width: 1280px) 52vw, 88vw"
                   className="story-hero-official-logo h-auto w-full max-w-[44rem] object-contain object-left"
                 />
-                <span className="sr-only">AIXCO.GLOBAL</span>
+                <span className="sr-only">AIXCO.GLOBAL - {tx("Emerging Market Opportunities")}</span>
               </h1>
             </header>
 
@@ -1397,7 +1331,7 @@ function HeroScene({
               </Link>
               <button type="button" onClick={onRegister} className="btn-gold">
                 {tx("REGISTER")}
-                <ArrowRight className="h-4 w-4" aria-hidden />
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
               </button>
               <button type="button" onClick={onContact} className="btn-ghost-gold story-hero-actions__ghost">
                 {tx("CONTACT ME")}
@@ -1499,7 +1433,7 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
           alt={selectedImage.alt}
           fill
           sizes="(min-width: 1280px) 100vw, 100vw"
-          quality={90}
+          quality={75}
           loading="lazy"
           data-batumi-hero-image={selectedImage.key}
           className="story-batumi-gallery__hero-image"
@@ -1719,7 +1653,7 @@ function AboutScene({
             </div>
             <dl className="mt-[clamp(1.7rem,3.4svh,2.6rem)] grid max-w-[48rem] grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
               {metrics.slice(0, 4).map((metric) => (
-                <div key={metric.label} className="border-l border-white/28 pl-4">
+                <div key={metric.label} className="border-s border-white/28 ps-4">
                   <dt className="story-glyph-safe tabular-nums text-[clamp(1.55rem,2.45vw,2.7rem)] font-normal leading-none text-primary-glow">
                     {metric.value}
                   </dt>
@@ -1978,7 +1912,7 @@ function AboutObjectivesScene({
               fill
               loading="lazy"
               decoding="async"
-              quality={95}
+              quality={75}
               sizes="(min-width: 1280px) calc(100vw - 14rem), 100vw"
               className="h-full w-full object-cover"
               style={{ objectPosition: "center 64%" }}
@@ -1992,7 +1926,7 @@ function AboutObjectivesScene({
               fill
               loading="lazy"
               decoding="async"
-              quality={90}
+              quality={75}
               sizes="(max-width: 1279px) 140vw, 1px"
               className="h-full w-full object-cover xl:hidden"
               style={{ objectPosition: "center 56%" }}
@@ -2003,7 +1937,7 @@ function AboutObjectivesScene({
               fill
               loading="lazy"
               decoding="async"
-              quality={90}
+              quality={75}
               sizes="(min-width: 1280px) 120vw, 1px"
               className="hidden h-full w-full object-cover xl:block"
               style={{ objectPosition: "center 58%" }}
@@ -2055,7 +1989,7 @@ function AboutAccessScene({
                 fill
                 loading="lazy"
                 decoding="async"
-                quality={95}
+                quality={75}
                 sizes="(max-width: 1279px) 140vw, 1px"
                 className="h-full w-full object-cover xl:hidden"
                 style={{ objectPosition: "center 56%" }}
@@ -2066,7 +2000,7 @@ function AboutAccessScene({
                 fill
                 loading="lazy"
                 decoding="async"
-                quality={95}
+                quality={75}
                 sizes="(min-width: 1280px) 120vw, 1px"
                 className="hidden h-full w-full object-cover xl:block"
                 style={{ objectPosition: "center 58%" }}
@@ -2084,7 +2018,7 @@ function AboutAccessScene({
               fill
               loading="lazy"
               decoding="async"
-              quality={90}
+              quality={75}
               sizes="100vw"
               className="h-full w-full object-cover"
               style={{ objectPosition: "58% 56%" }}
@@ -2278,7 +2212,7 @@ function BatumiScene({
               </span>
             </span>
             <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-background/70 text-primary shadow-sm" aria-hidden>
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </span>
           </Link>
         ))}
@@ -2393,14 +2327,14 @@ function ParticipateScene({
             type="button"
             data-participation-card={route.id}
             onClick={onRegister}
-            className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-left transition-colors hover:text-primary"
+            className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-start transition-colors hover:text-primary"
           >
             <span className="story-metric-value text-primary/45">{formatChapterNumber(index + 1)}</span>
             <span className="min-w-0">
               <span className="story-card-title block">{tx(route.title)}</span>
               <span className="story-body block text-foreground/64">{tx(route.body)}</span>
             </span>
-            <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-1" aria-hidden />
+            <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" aria-hidden />
           </button>
         ))}
       </div>
@@ -2446,7 +2380,7 @@ function HowScene({
       </p>
       <div data-layout="story-journeys" className="grid w-full sm:grid-cols-2">
         {journeys.map((journey, index) => (
-          <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group flex min-w-0 flex-col items-stretch justify-start text-left transition-colors hover:text-primary">
+          <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group flex min-w-0 flex-col items-stretch justify-start text-start transition-colors hover:text-primary">
             <p className="story-metric-label text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
             <h3 className="story-card-title">{tx(journey.role)}</h3>
             <p className="story-body text-foreground/65">{tx(journey.summary)}</p>
@@ -2455,7 +2389,7 @@ function HowScene({
       </div>
       <button type="button" onClick={onRegister} className="btn-gold w-fit shrink-0">
         {tx("Register")}
-        <ArrowRight className="h-4 w-4" aria-hidden />
+        <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
       </button>
     </SceneShell>
   );
@@ -2519,13 +2453,13 @@ function TeamScene({
                 openTeam(member);
               }}
               className={cn(
-                "group/story-team-member relative grid w-full cursor-pointer grid-cols-[3.75rem_minmax(0,1fr)] gap-3 px-3 text-left transition-colors duration-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2",
+                "group/story-team-member relative grid w-full cursor-pointer grid-cols-[3.75rem_minmax(0,1fr)] gap-3 px-3 text-start transition-colors duration-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2",
                 isSelected && "bg-foreground/[0.04] text-primary",
               )}
             >
               <span
                 className={cn(
-                  "absolute bottom-0 left-0 top-0 w-[0.2rem] bg-foreground/15 transition-[background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
+                  "absolute bottom-0 start-0 top-0 w-[0.2rem] bg-foreground/15 transition-[background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
                   "group-hover/story-team-member:bg-primary-glow group-focus-visible/story-team-member:bg-primary-glow",
                   isSelected && "bg-primary",
                 )}
@@ -2534,7 +2468,7 @@ function TeamScene({
               <div className="relative aspect-square overflow-hidden">
                 <Image
                   src={teamImageMap[member.image as keyof typeof teamImageMap]}
-                  alt={tx(member.name)}
+                  alt=""
                   fill
                   sizes="5rem"
                   className="object-cover object-top"
@@ -2653,6 +2587,8 @@ function StoryFaqDropdown({
       </button>
       <div
         id={panelId}
+        aria-hidden={!isOpen}
+        inert={!isOpen ? true : undefined}
         className={cn("story-faq-answer", isOpen && "story-faq-answer--open")}
       >
         <div className="min-h-0 overflow-hidden">
@@ -2754,7 +2690,7 @@ function ContactScene({
                   </button>
                   <button type="button" onClick={onRegister} className="btn-gold">
                     {tx("Register")}
-                    <ArrowRight className="h-4 w-4" aria-hidden />
+                    <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
                   </button>
                 </div>
               </div>
@@ -2765,7 +2701,7 @@ function ContactScene({
                     <span className="story-metric-label text-primary/75">{tx("Email")}</span>
                     <span className="story-contact-card__row">
                       <span className="story-contact-card__icon-tile" aria-hidden="true">
-                        <img src={aixcoLiveIcons.email} alt="" className="story-contact-card__svg-icon" />
+                        <Image src={aixcoLiveIcons.email} alt="" width={28} height={28} unoptimized className="story-contact-card__svg-icon" />
                       </span>
                       <span className="story-body story-glyph-safe min-w-0 text-foreground/82 [overflow-wrap:anywhere]">
                         {company.email}
@@ -3047,6 +2983,7 @@ export function DesktopStoryHome() {
       if (!chapter.id) {
         replaceLocationHash("");
         scrollToPageTop();
+        window.requestAnimationFrame(() => document.getElementById("main-content")?.focus({ preventScroll: true }));
         requestScrollSync();
         return;
       }
@@ -3054,6 +2991,7 @@ export function DesktopStoryHome() {
       const hash = `#${chapter.id}`;
       replaceLocationHash(hash);
       scrollToHash(hash);
+      window.requestAnimationFrame(() => document.getElementById(chapter.id ?? "")?.focus({ preventScroll: true }));
       requestScrollSync();
     },
     [requestScrollSync],
@@ -3103,7 +3041,7 @@ export function DesktopStoryHome() {
   );
 
   return (
-    <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress-scale": 0 } as CSSProperties}>
+    <div id="main-content" tabIndex={-1} ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress-scale": 0 } as CSSProperties}>
       <FixedHeroBackdrop visible={heroBackdropVisible} />
       <StoryChrome
         activeIndex={activeIndex}
@@ -3126,6 +3064,7 @@ export function DesktopStoryHome() {
                 sectionRefs.current[index] = node;
               }}
               id={chapter.id}
+              tabIndex={-1}
               data-story-section={chapter.key}
               data-story-active={isActive ? "true" : "false"}
               data-story-revealed={sectionPresence[index] ? "true" : "false"}

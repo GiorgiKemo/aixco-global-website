@@ -54,3 +54,4 @@ export function verifyAdminSessionToken(token: string | undefined, secret: strin
 
   return safeEqual(parts[2], expectedSignature);
 }
+import "server-only";

@@ -33,8 +33,33 @@ export const contactSubmissionSchema = z
     email: z.string().trim().email().max(255),
     interest: optionalTextSchema(255),
     message: z.string().trim().min(10).max(1500),
+    requestType: z.enum(["call", "message"]).optional(),
+    phone: z
+      .string()
+      .trim()
+      .min(5)
+      .max(40)
+      .regex(/^[+()0-9\s.-]+$/, "Phone number contains unsupported characters.")
+      .optional(),
+    preferredCallAt: z.string().datetime({ offset: true }).optional(),
+    preferredCallTimezone: z.string().trim().min(1).max(80).optional(),
   })
-  .strict();
+  .strict()
+  .superRefine((value, context) => {
+    if (value.requestType !== "call") return;
+
+    if (!value.phone) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ["phone"], message: "Phone number is required." });
+    }
+    if (!value.preferredCallAt) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ["preferredCallAt"], message: "Preferred call time is required." });
+    } else if (new Date(value.preferredCallAt).getTime() < Date.now() - 60_000) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ["preferredCallAt"], message: "Preferred call time must be in the future." });
+    }
+    if (!value.preferredCallTimezone) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ["preferredCallTimezone"], message: "Call timezone is required." });
+    }
+  });
 
 export const chatMessageSchema = z
   .object({

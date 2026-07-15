@@ -17,7 +17,7 @@ describe("FooterLegalBar", () => {
       "href",
       "https://www.iafcertsearch.org/certified-entity/NjliMzc3N2MtNGQ2Zi01YzY2LThiOTUtMGIwZmViNWMxODk3",
     );
-    expect(screen.getByText(/AIXCO Global 2026/)).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`AIXCO Global ${new Date().getFullYear()}`))).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Terms & Conditions" }));
     fireEvent.click(screen.getByRole("button", { name: "Privacy Policy" }));

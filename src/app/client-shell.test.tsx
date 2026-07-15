@@ -36,8 +36,6 @@ vi.mock("@/components/ScrollManager", () => ({ ScrollManager: () => null }));
 vi.mock("@/components/ScrollToTopButton", () => ({ ScrollToTopButton: () => <div data-testid="scroll-to-top" /> }));
 vi.mock("@/components/Modals", () => ({ Modals: () => <div data-testid="modals" /> }));
 vi.mock("@/components/ChatWidget", () => ({ ChatWidget: () => <div data-testid="chat-widget" /> }));
-vi.mock("@/components/ui/toaster", () => ({ Toaster: () => <div data-testid="toaster" /> }));
-vi.mock("@/components/ui/sonner", () => ({ Toaster: () => <div data-testid="sonner" /> }));
 
 describe("ClientShell", () => {
   beforeEach(() => {
@@ -64,7 +62,6 @@ describe("ClientShell", () => {
 
     expect(screen.queryByTestId("chat-widget")).not.toBeInTheDocument();
     expect(screen.queryByTestId("modals")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("toaster")).not.toBeInTheDocument();
 
     idleState.delayedReady = true;
     rerender(
@@ -74,7 +71,6 @@ describe("ClientShell", () => {
     );
 
     expect(await screen.findByTestId("modals")).toBeInTheDocument();
-    expect(await screen.findByTestId("toaster")).toBeInTheDocument();
     expect(await screen.findByTestId("chat-widget")).toBeInTheDocument();
   });
 });

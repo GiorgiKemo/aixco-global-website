@@ -11,7 +11,7 @@ type RuntimeStatusClient = {
   }>;
 };
 
-export const CONTACT_PIPELINE_SCHEMA_VERSION = "20260715125925";
+export const CONTACT_PIPELINE_SCHEMA_VERSION = "20260715231000";
 
 function value(env: Env, name: string) {
   return env[name]?.trim() ?? "";

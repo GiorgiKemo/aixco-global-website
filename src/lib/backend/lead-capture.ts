@@ -11,7 +11,7 @@ import { isSafePortalUrl } from "@/lib/security/urls";
 
 type CaptureEndpoint = "contact" | "chat" | "portal-event";
 type ChatTranscriptOptions = Pick<ChatTranscriptInput, "reason" | "sessionId">;
-type ContactSubmissionOptions = { antiAbuse?: LeadCaptureAntiAbuseInput };
+type ContactSubmissionOptions = { antiAbuse?: LeadCaptureAntiAbuseInput; locale?: string };
 
 const contactExperienceStartedAt = Date.now();
 
@@ -25,7 +25,7 @@ function shouldSkipNetworkCapture() {
   return typeof window === "undefined" || process.env.NODE_ENV === "test" || process.env.VITEST === "true";
 }
 
-function getBrowserContext(): BrowserContextInput {
+function getBrowserContext(locale?: string): BrowserContextInput {
   if (typeof window === "undefined") {
     return {
       locale: null,
@@ -35,7 +35,7 @@ function getBrowserContext(): BrowserContextInput {
   }
 
   return {
-    locale: window.navigator.language || null,
+    locale: locale?.trim() || window.navigator.language || null,
     page_path: `${window.location.pathname}${window.location.search}${window.location.hash}`,
     metadata: {
       referrer: document.referrer || null,
@@ -84,6 +84,7 @@ async function postCapture(
   endpoint: CaptureEndpoint,
   payload: unknown,
   antiAbuse?: LeadCaptureAntiAbuseInput,
+  locale?: string,
 ): Promise<CaptureResult> {
   if (shouldSkipNetworkCapture()) {
     return { ok: false, skipped: true, reason: "Lead capture API is not available in this environment." };
@@ -93,7 +94,7 @@ async function postCapture(
     const response = await fetch(CAPTURE_ENDPOINTS[endpoint], {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ payload, context: getBrowserContext(), ...(antiAbuse ? { antiAbuse } : {}) }),
+      body: JSON.stringify({ payload, context: getBrowserContext(locale), ...(antiAbuse ? { antiAbuse } : {}) }),
       keepalive: true,
     });
     const result = await readCaptureResponse(response);
@@ -130,7 +131,7 @@ export async function recordContactSubmission(
   return postCapture("contact", input, options.antiAbuse ?? {
     website: "",
     startedAt: contactExperienceStartedAt,
-  });
+  }, options.locale);
 }
 
 export async function recordPortalEvent(input: PortalEventInput): Promise<CaptureResult> {

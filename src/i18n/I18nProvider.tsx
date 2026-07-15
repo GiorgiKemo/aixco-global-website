@@ -929,6 +929,8 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, stri
   "Open live chat": { de: "Live-Chat öffnen", ru: "Открыть онлайн-чат", ka: "ჩატის გახსნა", tr: "Canlı sohbeti aç", ar: "فتح الدردشة المباشرة" },
   "Minimize live chat": { de: "Live-Chat minimieren", ru: "Свернуть онлайн-чат", ka: "ჩატის ჩაკეცვა", tr: "Canlı sohbeti küçült", ar: "تصغير الدردشة المباشرة" },
   Message: { de: "Nachricht", ru: "Сообщение", ka: "შეტყობინება", tr: "Mesaj", ar: "الرسالة" },
+  "Chat messages": { de: "Chatnachrichten", ru: "Сообщения чата", ka: "ჩატის შეტყობინებები", tr: "Sohbet mesajları", ar: "رسائل الدردشة" },
+  "Please choose a valid preferred call time.": { de: "Bitte wählen Sie eine gültige bevorzugte Anrufzeit.", ru: "Выберите корректное предпочтительное время звонка.", ka: "გთხოვთ აირჩიოთ ზარის სასურველი დრო.", tr: "Lütfen geçerli bir tercih edilen arama saati seçin.", ar: "يرجى اختيار وقت مفضل صالح للمكالمة." },
   "Type your message...": { de: "Ihre Nachricht eingeben...", ru: "Введите сообщение...", ka: "ჩაწერეთ თქვენი შეტყობინება...", tr: "Mesajınızı yazın...", ar: "اكتب رسالتك..." },
   Send: { de: "Senden", ru: "Отправить", ka: "გაგზავნა", tr: "Gönder", ar: "إرسال" },
   "Email transcript": { de: "Protokoll per E-Mail senden", ru: "Отправить стенограмму по email", ka: "ტრანსკრიპტის ელფოსტით გაგზავნა", tr: "Dökümü e-postayla gönder", ar: "إرسال نسخة المحادثة بالبريد" },

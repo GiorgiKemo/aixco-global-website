@@ -1,6 +1,6 @@
-import js from "@eslint/js";
 import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
@@ -17,19 +17,24 @@ export default tseslint.config(
       "tmp/**",
     ],
   },
+  ...nextVitals,
+  ...nextTypescript,
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
     },
-    plugins: {
-      "react-hooks": reactHooks,
-    },
     rules: {
-      ...reactHooks.configs.recommended.rules,
       "@typescript-eslint/no-unused-vars": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/purity": "off",
+    },
+  },
+  {
+    files: ["**/*.test.{ts,tsx}"],
+    rules: {
+      "@next/next/no-img-element": "off",
     },
   },
 );

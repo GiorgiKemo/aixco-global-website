@@ -2,18 +2,17 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "lenis/dist/lenis.css";
 import "@/index.css";
-import { ClientShell } from "./client-shell";
-import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
 import { getSiteUrl } from "@/lib/site-url";
+import { WebVitals } from "./web-vitals";
 
 const gilroy = localFont({
   src: [
-    { path: "../assets/fonts/gilroy/Gilroy-Thin.ttf", weight: "100", style: "normal" },
-    { path: "../assets/fonts/gilroy/Gilroy-Regular.ttf", weight: "400", style: "normal" },
-    { path: "../assets/fonts/gilroy/Gilroy-Medium.ttf", weight: "500", style: "normal" },
-    { path: "../assets/fonts/gilroy/Gilroy-SemiBold.ttf", weight: "600", style: "normal" },
-    { path: "../assets/fonts/gilroy/Gilroy-ExtraBold.ttf", weight: "800", style: "normal" },
-    { path: "../assets/fonts/gilroy/Gilroy-Black.ttf", weight: "900", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-Thin.woff2", weight: "100", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-ExtraBold.woff2", weight: "800", style: "normal" },
+    { path: "../assets/fonts/gilroy/Gilroy-Black.woff2", weight: "900", style: "normal" },
   ],
   display: "swap",
   variable: "--font-gilroy",
@@ -65,29 +64,12 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export const revalidate = 300;
-
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const initialSiteContent = await fetchSiteContentForServer();
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={gilroy.variable} suppressHydrationWarning>
-      <head>
-        <link
-          rel="preload"
-          as="image"
-          href="/aixco-global-op2/images/AIXCOGlobal-horizontal-light.webp"
-          type="image/webp"
-          fetchPriority="high"
-        />
-      </head>
+    <html lang="en" dir="ltr" className={gilroy.variable} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <ClientShell
-          initialSiteContent={initialSiteContent.content}
-          initialSiteContentSource={initialSiteContent.source}
-        >
-          {children}
-        </ClientShell>
+        <WebVitals />
+        {children}
       </body>
     </html>
   );

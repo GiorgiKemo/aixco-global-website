@@ -1,5 +1,4 @@
 const isDevelopment = process.env.NODE_ENV !== "production";
-const isVercel = process.env.VERCEL === "1";
 const canonicalSiteOrigin = "https://www.aixco.global";
 
 const getOrigin = (value) => {
@@ -19,15 +18,16 @@ const getContentSecurityPolicy = () => {
     "https://*.supabase.co",
     "wss://*.supabase.co",
     supabaseOrigin,
-    !isVercel ? "http://localhost:*" : null,
-    !isVercel ? "http://127.0.0.1:*" : null,
-    !isVercel ? "ws://localhost:*" : null,
-    !isVercel ? "ws://127.0.0.1:*" : null,
+    isDevelopment ? "http://localhost:*" : null,
+    isDevelopment ? "http://127.0.0.1:*" : null,
+    isDevelopment ? "ws://localhost:*" : null,
+    isDevelopment ? "ws://127.0.0.1:*" : null,
   ].filter(Boolean);
 
   return [
     "default-src 'self'",
     `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
+    "script-src-attr 'none'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
@@ -61,9 +61,12 @@ const nextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   experimental: {
     webVitalsAttribution: ["CLS", "LCP", "INP"],
+    sri: {
+      algorithm: "sha256",
+    },
   },
   images: {
-    qualities: [62, 75, 90, 95],
+    qualities: [62, 75],
     localPatterns: [
       {
         pathname: "/aixco-global-op2/images/**",
@@ -170,7 +173,7 @@ const nextConfig = {
               headers: [
                 {
                   key: "Cache-Control",
-                  value: "public, max-age=31536000, immutable",
+                  value: "public, max-age=86400, stale-while-revalidate=604800",
                 },
               ],
             },

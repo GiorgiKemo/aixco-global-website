@@ -1,8 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 import { siteContentDefaults } from "./site-content";
 import { fetchSiteContentForServer } from "./site-content-server";
+import type { Json } from "@/lib/supabase/database.types";
 
-function createQueryClient(data: unknown, error: { message: string } | null = null) {
+type QueryRow = { section: string; entry_key: string; payload: Json };
+
+function createQueryClient(data: QueryRow[] | null, error: { message: string } | null = null) {
   const builder = {
     select: vi.fn(() => builder),
     eq: vi.fn(() => builder),
@@ -48,6 +51,7 @@ describe("server site content backend", () => {
     const result = await fetchSiteContentForServer("en", { client });
 
     expect(result.ok).toBe(false);
+    if (result.ok) throw new Error("Expected fallback site content");
     expect(result.source).toBe("fallback");
     expect(result.content.company.email).toBe(siteContentDefaults.company.email);
     expect(result.reason).toBe("network unavailable");

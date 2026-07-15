@@ -48,7 +48,8 @@ try {
         await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
         await page.waitForFunction(
           (selectedLocale) => document.documentElement.lang === selectedLocale
-            && document.querySelectorAll("[data-story-section]").length === 17,
+            && document.querySelectorAll("[data-story-section]").length === 17
+            && document.body.innerText.trim().length >= 1_500,
           locale,
           { timeout: 60_000 },
         );

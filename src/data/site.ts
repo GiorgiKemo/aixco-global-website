@@ -8,7 +8,7 @@ export const company = {
   offices: ["Vienna", "Dubai", "Batumi"],
   socials: {
     website: "https://aixco.group/",
-    linkedin: "https://www.linkedin.com/company/109396491/admin/dashboard/",
+    linkedin: "https://www.linkedin.com/company/aixco-global",
     facebook: "https://www.facebook.com/profile.php?id=61589341472475",
     instagram: "https://www.instagram.com/aixco.global/",
     youtube: "",

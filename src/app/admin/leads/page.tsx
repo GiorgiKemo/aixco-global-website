@@ -502,6 +502,13 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
                 <MailCheck className="h-3.5 w-3.5" aria-hidden="true" />
                 Test email
               </Link>
+              <Link
+                href="/admin/privacy"
+                className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
+              >
+                <UserCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                Privacy requests
+              </Link>
               <form action="/admin/logout" method="post">
                 <button
                   type="submit"

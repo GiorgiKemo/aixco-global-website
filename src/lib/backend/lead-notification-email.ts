@@ -8,6 +8,10 @@ export type ContactLeadNotification = {
   email: string;
   interest: string | null;
   message: string;
+  requestType?: ContactConfirmationType;
+  phone?: string | null;
+  preferredCallAt?: string | null;
+  preferredCallTimezone?: string | null;
   locale: string | null;
   pagePath: string | null;
   userAgent: string | null;
@@ -129,26 +133,17 @@ function displayValue(value: string | number | null | undefined) {
   return value === null || value === undefined || value === "" ? "Not provided" : String(value);
 }
 
-function safeWebUrl(value: string | null | undefined) {
-  if (!value) return null;
-
-  try {
-    const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:" ? url.toString() : null;
-  } catch {
-    return null;
-  }
-}
-
 function buildBrandedEmailShell(input: {
   preheader: string;
   eyebrow: string;
   title: string;
   subtitle?: string;
   content: string;
+  lang?: string;
+  dir?: "ltr" | "rtl";
 }) {
   return `<!doctype html>
-<html lang="en">
+<html lang="${escapeHtml(input.lang ?? "en")}" dir="${input.dir ?? "ltr"}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -224,48 +219,134 @@ function buildBrandedEmailShell(input: {
 </html>`;
 }
 
-const contactConfirmationCopy = {
-  call: {
-    title: "Your AIXCO Call Request Has Been Received",
-    opening: "Thank you for scheduling a call with AIXCO.",
-    response:
-      "We have successfully received your request. One of our team members will review your request and contact you shortly to confirm your appointment and answer any questions you may have.",
-    closing: null,
+type ConfirmationLanguage = "en" | "de" | "ru" | "ka" | "tr" | "ar" | "pl";
+
+type ConfirmationCopy = {
+  salutation: string;
+  automatedNotice: string;
+  requestReference: string;
+  eyebrow: string;
+  signoff: string;
+  team: string;
+  call: { title: string; opening: string; response: string; closing: string | null };
+  message: { title: string; opening: string; response: string; closing: string | null };
+};
+
+const contactConfirmationCopy: Record<ConfirmationLanguage, ConfirmationCopy> = {
+  en: {
+    salutation: "Dear Sir or Madam,",
+    automatedNotice: "Please note that this is an automated confirmation email. Please do not reply to this message, as replies are not monitored.",
+    requestReference: "Request reference",
+    eyebrow: "Request confirmation",
+    signoff: "Kind regards,",
+    team: "The AIXCO Team",
+    call: {
+      title: "Your AIXCO Call Request Has Been Received",
+      opening: "Thank you for scheduling a call with AIXCO.",
+      response: "We have successfully received your request. One of our team members will review your request and contact you shortly to confirm your appointment and answer any questions you may have.",
+      closing: null,
+    },
+    message: {
+      title: "We Have Received Your Message",
+      opening: "Thank you for contacting AIXCO.",
+      response: "We have successfully received your message. One of our team members will review your enquiry and get back to you as soon as possible.",
+      closing: "Thank you for your interest in AIXCO. We look forward to assisting you.",
+    },
   },
-  message: {
-    title: "We Have Received Your Message",
-    opening: "Thank you for contacting AIXCO.",
-    response:
-      "We have successfully received your message. One of our team members will review your enquiry and get back to you as soon as possible.",
-    closing: "Thank you for your interest in AIXCO. We look forward to assisting you.",
+  de: {
+    salutation: "Sehr geehrte Damen und Herren,",
+    automatedNotice: "Dies ist eine automatische Bestätigung. Bitte antworten Sie nicht auf diese E-Mail, da Antworten nicht überwacht werden.",
+    requestReference: "Anfragereferenz",
+    eyebrow: "Anfragebestätigung",
+    signoff: "Mit freundlichen Grüßen,",
+    team: "Das AIXCO-Team",
+    call: { title: "Ihre AIXCO-Rückrufanfrage ist eingegangen", opening: "Vielen Dank für Ihre Terminanfrage bei AIXCO.", response: "Wir haben Ihre Anfrage erhalten. Ein Mitglied unseres Teams wird sie prüfen und Sie in Kürze kontaktieren, um den Termin zu bestätigen und Ihre Fragen zu beantworten.", closing: null },
+    message: { title: "Wir haben Ihre Nachricht erhalten", opening: "Vielen Dank, dass Sie AIXCO kontaktiert haben.", response: "Wir haben Ihre Nachricht erhalten. Ein Mitglied unseres Teams wird Ihre Anfrage prüfen und sich so bald wie möglich bei Ihnen melden.", closing: "Vielen Dank für Ihr Interesse an AIXCO. Wir freuen uns darauf, Sie zu unterstützen." },
   },
-} as const;
+  ru: {
+    salutation: "Уважаемые дамы и господа,",
+    automatedNotice: "Это автоматическое подтверждение. Пожалуйста, не отвечайте на это письмо: ответы не отслеживаются.",
+    requestReference: "Номер запроса",
+    eyebrow: "Подтверждение запроса",
+    signoff: "С уважением,",
+    team: "Команда AIXCO",
+    call: { title: "Ваш запрос на звонок AIXCO получен", opening: "Благодарим вас за запись на звонок с AIXCO.", response: "Мы получили ваш запрос. Сотрудник нашей команды рассмотрит его и свяжется с вами в ближайшее время, чтобы подтвердить время и ответить на вопросы.", closing: null },
+    message: { title: "Мы получили ваше сообщение", opening: "Благодарим вас за обращение в AIXCO.", response: "Мы получили ваше сообщение. Сотрудник нашей команды рассмотрит запрос и свяжется с вами как можно скорее.", closing: "Благодарим вас за интерес к AIXCO. Будем рады помочь вам." },
+  },
+  ka: {
+    salutation: "ქალბატონებო და ბატონებო,",
+    automatedNotice: "ეს არის ავტომატური დასტური. გთხოვთ, არ უპასუხოთ ამ წერილს, რადგან პასუხები არ მოწმდება.",
+    requestReference: "მოთხოვნის ნომერი",
+    eyebrow: "მოთხოვნის დასტური",
+    signoff: "პატივისცემით,",
+    team: "AIXCO-ს გუნდი",
+    call: { title: "თქვენი AIXCO-ს ზარის მოთხოვნა მიღებულია", opening: "გმადლობთ AIXCO-სთან ზარის დაგეგმვისთვის.", response: "თქვენი მოთხოვნა მიღებულია. ჩვენი გუნდის წევრი განიხილავს მას და მალე დაგიკავშირდებათ დროის დასადასტურებლად და თქვენს კითხვებზე პასუხის გასაცემად.", closing: null },
+    message: { title: "თქვენი შეტყობინება მიღებულია", opening: "გმადლობთ AIXCO-სთან დაკავშირებისთვის.", response: "თქვენი შეტყობინება მიღებულია. ჩვენი გუნდის წევრი განიხილავს მოთხოვნას და შეძლებისდაგვარად მალე დაგიკავშირდებათ.", closing: "გმადლობთ AIXCO-სადმი ინტერესისთვის. მოხარული ვიქნებით დაგეხმაროთ." },
+  },
+  tr: {
+    salutation: "Sayın Yetkili,",
+    automatedNotice: "Bu otomatik bir onay e-postasıdır. Yanıtlar izlenmediği için lütfen bu mesaja cevap vermeyin.",
+    requestReference: "Talep referansı",
+    eyebrow: "Talep onayı",
+    signoff: "Saygılarımızla,",
+    team: "AIXCO Ekibi",
+    call: { title: "AIXCO görüşme talebiniz alındı", opening: "AIXCO ile bir görüşme planladığınız için teşekkür ederiz.", response: "Talebinizi aldık. Ekibimizden biri talebinizi inceleyecek, randevunuzu onaylamak ve sorularınızı yanıtlamak üzere kısa süre içinde sizinle iletişime geçecektir.", closing: null },
+    message: { title: "Mesajınızı aldık", opening: "AIXCO ile iletişime geçtiğiniz için teşekkür ederiz.", response: "Mesajınızı aldık. Ekibimizden biri talebinizi inceleyecek ve mümkün olan en kısa sürede size dönüş yapacaktır.", closing: "AIXCO'ya gösterdiğiniz ilgi için teşekkür ederiz. Size yardımcı olmaktan memnuniyet duyarız." },
+  },
+  ar: {
+    salutation: "السادة المحترمون،",
+    automatedNotice: "هذه رسالة تأكيد آلية. يُرجى عدم الرد عليها لأن الردود لا تتم متابعتها.",
+    requestReference: "مرجع الطلب",
+    eyebrow: "تأكيد الطلب",
+    signoff: "مع خالص التحية،",
+    team: "فريق AIXCO",
+    call: { title: "تم استلام طلب مكالمتك مع AIXCO", opening: "شكرًا لجدولة مكالمة مع AIXCO.", response: "تم استلام طلبك بنجاح. سيراجعه أحد أعضاء فريقنا ويتواصل معك قريبًا لتأكيد الموعد والإجابة عن أسئلتك.", closing: null },
+    message: { title: "لقد استلمنا رسالتك", opening: "شكرًا لتواصلك مع AIXCO.", response: "تم استلام رسالتك بنجاح. سيراجع أحد أعضاء فريقنا استفسارك ويتواصل معك في أقرب وقت ممكن.", closing: "شكرًا لاهتمامك بـ AIXCO. نتطلع إلى مساعدتك." },
+  },
+  pl: {
+    salutation: "Szanowni Państwo,",
+    automatedNotice: "To jest automatyczne potwierdzenie. Prosimy nie odpowiadać na tę wiadomość, ponieważ odpowiedzi nie są monitorowane.",
+    requestReference: "Numer zgłoszenia",
+    eyebrow: "Potwierdzenie zgłoszenia",
+    signoff: "Z poważaniem,",
+    team: "Zespół AIXCO",
+    call: { title: "Otrzymaliśmy prośbę o rozmowę z AIXCO", opening: "Dziękujemy za umówienie rozmowy z AIXCO.", response: "Otrzymaliśmy Państwa zgłoszenie. Członek naszego zespołu przejrzy je i wkrótce skontaktuje się, aby potwierdzić termin oraz odpowiedzieć na pytania.", closing: null },
+    message: { title: "Otrzymaliśmy Państwa wiadomość", opening: "Dziękujemy za kontakt z AIXCO.", response: "Otrzymaliśmy Państwa wiadomość. Członek naszego zespołu przejrzy zapytanie i odpowie tak szybko, jak to możliwe.", closing: "Dziękujemy za zainteresowanie AIXCO. Z przyjemnością Państwu pomożemy." },
+  },
+};
+
+function getConfirmationLanguage(locale: string | null): ConfirmationLanguage {
+  const base = locale?.trim().toLowerCase().split(/[-_]/)[0];
+  return base && base in contactConfirmationCopy ? (base as ConfirmationLanguage) : "en";
+}
 
 function getContactConfirmationType(notification: ContactLeadNotification): ContactConfirmationType {
+  if (notification.requestType) return notification.requestType;
   return notification.interest?.trim().toLowerCase() === "schedule a call" ? "call" : "message";
 }
 
 export function buildContactConfirmationEmail(notification: ContactLeadNotification): ContactConfirmationEmail {
   const requestType = getContactConfirmationType(notification);
-  const copy = contactConfirmationCopy[requestType];
-  const automatedNotice =
-    "Please note that this is an automated confirmation email. Please do not reply to this message, as replies are not monitored.";
+  const language = getConfirmationLanguage(notification.locale);
+  const localeCopy = contactConfirmationCopy[language];
+  const copy = localeCopy[requestType];
+  const automatedNotice = localeCopy.automatedNotice;
   const text = [
     copy.title,
     "",
-    "Dear Sir or Madam,",
+    localeCopy.salutation,
     "",
     copy.opening,
     "",
     copy.response,
     "",
-    `Request reference: ${notification.requestReference}`,
+    `${localeCopy.requestReference}: ${notification.requestReference}`,
     "",
     automatedNotice,
     ...(copy.closing ? ["", copy.closing] : []),
     "",
-    "Kind regards,",
-    "The AIXCO Team",
+    localeCopy.signoff,
+    localeCopy.team,
     "AIXCO Global",
     "info@aixco.global",
     "www.aixco.global",
@@ -273,29 +354,31 @@ export function buildContactConfirmationEmail(notification: ContactLeadNotificat
 
   const paragraphStyle = `margin: 0 0 20px; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 18px; line-height: 1.65; color: ${emailBrand.onyx};`;
   const html = buildBrandedEmailShell({
-    preheader: `${copy.title}. Reference ${notification.requestReference}.`,
-    eyebrow: "Request confirmation",
+    preheader: `${copy.title}. ${localeCopy.requestReference}: ${notification.requestReference}.`,
+    eyebrow: localeCopy.eyebrow,
     title: copy.title,
+    lang: language,
+    dir: language === "ar" ? "rtl" : "ltr",
     content: `
       <tr>
         <td class="aixco-shell-padding" style="padding: 0 46px 42px; background: ${emailBrand.white};">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width: 100%; border-collapse: collapse; margin: 0 0 34px;">
             <tr>
               <td style="padding: 25px 29px 24px; background: ${emailBrand.gold}; color: ${emailBrand.onyx};">
-                <p style="margin: 0 0 8px; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 1.3; font-weight: 700; letter-spacing: 2.1px; text-transform: uppercase;">Request reference</p>
+                <p style="margin: 0 0 8px; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 1.3; font-weight: 700; letter-spacing: 2.1px; text-transform: uppercase;">${escapeHtml(localeCopy.requestReference)}</p>
                 <p class="aixco-reference" style="margin: 0; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 28px; line-height: 1.2; font-weight: 700; letter-spacing: 0.4px;">${escapeHtml(notification.requestReference)}</p>
               </td>
             </tr>
           </table>
-          <p class="aixco-body-copy" style="${paragraphStyle}">Dear Sir or Madam,</p>
+          <p class="aixco-body-copy" style="${paragraphStyle}">${escapeHtml(localeCopy.salutation)}</p>
           <p class="aixco-body-copy" style="${paragraphStyle}">${escapeHtml(copy.opening)}</p>
           <p class="aixco-body-copy" style="${paragraphStyle}">${escapeHtml(copy.response)}</p>
           <div style="margin: 30px 0; padding: 22px 23px; border-left: 4px solid ${emailBrand.documentGold}; background: ${emailBrand.ivory};">
             <p class="aixco-body-copy" style="margin: 0; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.65; color: #4F4F4F;">${escapeHtml(automatedNotice)}</p>
           </div>
           ${copy.closing ? `<p class="aixco-body-copy" style="${paragraphStyle}">${escapeHtml(copy.closing)}</p>` : ""}
-          <p class="aixco-body-copy" style="margin: 28px 0 4px; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 18px; line-height: 1.65; color: ${emailBrand.onyx};">Kind regards,</p>
-          <p class="aixco-body-copy" style="margin: 0; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 18px; line-height: 1.6; font-weight: 700; color: ${emailBrand.onyx};">The AIXCO Team</p>
+          <p class="aixco-body-copy" style="margin: 28px 0 4px; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 18px; line-height: 1.65; color: ${emailBrand.onyx};">${escapeHtml(localeCopy.signoff)}</p>
+          <p class="aixco-body-copy" style="margin: 0; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 18px; line-height: 1.6; font-weight: 700; color: ${emailBrand.onyx};">${escapeHtml(localeCopy.team)}</p>
           <p class="aixco-body-copy" style="margin: 0; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.7; color: #555555;">AIXCO Global<br><a href="mailto:info@aixco.global" style="color: ${emailBrand.navy}; text-decoration: underline;">info@aixco.global</a><br><a href="https://www.aixco.global/" style="color: ${emailBrand.navy}; text-decoration: underline;">www.aixco.global</a></p>
         </td>
       </tr>`,
@@ -319,6 +402,10 @@ function buildText(notification: ContactLeadNotification) {
     formatLine("Name", notification.name),
     formatLine("Email", notification.email),
     formatLine("Interest", notification.interest),
+    formatLine("Request type", notification.requestType),
+    formatLine("Phone", notification.phone),
+    formatLine("Preferred call time", notification.preferredCallAt),
+    formatLine("Preferred call timezone", notification.preferredCallTimezone),
     "",
     "Message:",
     notification.message,
@@ -338,6 +425,10 @@ export function buildContactLeadNotificationHtml(notification: ContactLeadNotifi
   const contextRows = [
     ["Page", notification.pagePath],
     ["Locale", notification.locale],
+    ["Request type", notification.requestType],
+    ["Phone", notification.phone],
+    ["Preferred call time", notification.preferredCallAt],
+    ["Preferred call timezone", notification.preferredCallTimezone],
     ["Timezone", typeof metadata.timezone === "string" ? metadata.timezone : null],
     ["Referrer", typeof metadata.referrer === "string" ? metadata.referrer : null],
     [
@@ -345,7 +436,6 @@ export function buildContactLeadNotificationHtml(notification: ContactLeadNotifi
       metadata.viewport_width && metadata.viewport_height ? `${metadata.viewport_width}x${metadata.viewport_height}` : null,
     ],
   ];
-  const referrerUrl = safeWebUrl(typeof metadata.referrer === "string" ? metadata.referrer : null);
   const replyHref = `mailto:${notification.email}?subject=${encodeURIComponent(`Re: ${notification.requestReference}`)}`;
 
   return buildBrandedEmailShell({
@@ -413,11 +503,10 @@ export function buildContactLeadNotificationHtml(notification: ContactLeadNotifi
             ${contextRows
               .map(([label, value]) => {
                 const renderedValue = escapeHtml(displayValue(value));
-                const isReferrer = label === "Referrer" && referrerUrl;
                 return `
                   <tr>
                     <th width="34%" valign="top" style="padding: 14px 14px 14px 0; border-bottom: 1px solid #E2D8BF; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 1.45; font-weight: 600; letter-spacing: 1.5px; color: #6F6F6F; text-align: left; text-transform: uppercase;">${escapeHtml(String(label))}</th>
-                    <td valign="top" style="padding: 14px 0; border-bottom: 1px solid #E2D8BF; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.5; color: ${emailBrand.onyx}; word-break: break-word;">${isReferrer ? `<a href="${escapeHtml(referrerUrl)}" style="color: #1155CC; text-decoration: underline;">${renderedValue}</a>` : renderedValue}</td>
+                    <td valign="top" style="padding: 14px 0; border-bottom: 1px solid #E2D8BF; font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.5; color: ${emailBrand.onyx}; word-break: break-word;">${renderedValue}</td>
                   </tr>`;
               })
               .join("")}
@@ -604,3 +693,4 @@ export async function sendContactConfirmationEmail(
     options,
   );
 }
+import "server-only";

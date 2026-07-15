@@ -30,3 +30,4 @@ export async function getSupabaseAuthServerClient() {
     },
   });
 }
+import "server-only";

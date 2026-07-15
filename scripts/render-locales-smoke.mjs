@@ -38,9 +38,11 @@ try {
       try {
         await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
         await page.waitForFunction(
-          ([selectedLocale]) => document.documentElement.lang === selectedLocale
-            && document.querySelectorAll("[data-story-section]").length === 17,
-          [locale],
+          ({ selectedLocale, direction }) => document.documentElement.lang === selectedLocale
+            && document.documentElement.dir === direction
+            && document.querySelectorAll("[data-story-section]").length === 17
+            && document.body.innerText.trim().length >= 1_500,
+          { selectedLocale: locale, direction: expectedDirection(locale) },
           { timeout: 30_000 },
         );
         await page.evaluate(() => document.fonts.ready);

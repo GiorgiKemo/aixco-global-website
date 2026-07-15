@@ -48,6 +48,10 @@ export type Database = {
           email_normalized: string;
           interest: string | null;
           message: string;
+          request_type: "call" | "message";
+          phone: string | null;
+          preferred_call_at: string | null;
+          preferred_call_timezone: string | null;
           locale: string | null;
           page_path: string | null;
           user_agent: string | null;
@@ -74,6 +78,10 @@ export type Database = {
           email_normalized?: never;
           interest?: string | null;
           message: string;
+          request_type?: "call" | "message";
+          phone?: string | null;
+          preferred_call_at?: string | null;
+          preferred_call_timezone?: string | null;
           locale?: string | null;
           page_path?: string | null;
           user_agent?: string | null;
@@ -98,6 +106,10 @@ export type Database = {
           email_normalized?: never;
           interest?: string | null;
           message?: string;
+          request_type?: "call" | "message";
+          phone?: string | null;
+          preferred_call_at?: string | null;
+          preferred_call_timezone?: string | null;
           locale?: string | null;
           page_path?: string | null;
           user_agent?: string | null;
@@ -347,6 +359,20 @@ export type Database = {
       prune_lead_capture_attempts: {
         Args: Record<PropertyKey, never>;
         Returns: number;
+      };
+      purge_expired_operational_data: {
+        Args: {
+          p_contact_days?: number;
+          p_chat_days?: number;
+          p_portal_days?: number;
+          p_abuse_attempt_days?: number;
+        };
+        Returns: {
+          contacts_deleted: number;
+          chats_deleted: number;
+          portal_events_deleted: number;
+          abuse_attempts_deleted: number;
+        }[];
       };
     };
     Enums: Record<string, never>;

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { aixcoLiveIcons } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 import type { SiteContent } from "@/lib/backend/site-content";
@@ -37,9 +38,9 @@ const socialLinks: SocialLink[] = [
   {
     key: "linkedin",
     label: "LinkedIn",
-    fallback: "https://www.linkedin.com/company/109396491/admin/dashboard/",
+    fallback: "https://www.linkedin.com/company/aixco-global",
     allowedHosts: ["linkedin.com", "www.linkedin.com"],
-    allowedPath: "/company/109396491/admin/dashboard",
+    allowedPath: "/company/aixco-global",
     iconSrc: aixcoLiveIcons.linkedin,
   },
   {
@@ -98,7 +99,7 @@ export function SocialLinks({
               )}
               aria-hidden
             />
-            <img src={iconSrc} alt="" aria-hidden="true" className="social-link__icon relative h-[2.1rem] w-[2.1rem] object-contain" />
+            <Image src={iconSrc} alt="" aria-hidden="true" width={34} height={34} unoptimized className="social-link__icon relative h-[2.1rem] w-[2.1rem] object-contain" />
           </a>
         );
       })}

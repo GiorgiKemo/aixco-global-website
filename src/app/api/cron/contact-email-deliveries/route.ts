@@ -1,7 +1,7 @@
-import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { processContactEmailOutbox } from "@/lib/backend/contact-email-outbox";
 import { getContactPipelineReadiness } from "@/lib/backend/contact-pipeline-readiness";
+import { isAuthorizedCronRequest } from "@/lib/security/cron-auth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -10,12 +10,7 @@ export function isAuthorizedContactEmailWorker(
   request: Request,
   env: Record<string, string | undefined> = process.env,
 ) {
-  const secret = env.CRON_SECRET?.trim() ?? "";
-  const authorization = request.headers.get("authorization") ?? "";
-  const provided = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
-
-  if (secret.length < 32 || provided.length !== secret.length) return false;
-  return timingSafeEqual(Buffer.from(provided), Buffer.from(secret));
+  return isAuthorizedCronRequest(request, env);
 }
 
 async function runContactEmailWorker(request: Request) {

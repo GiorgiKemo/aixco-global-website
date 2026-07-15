@@ -1,0 +1,38 @@
+name: Operational data retention
+
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: operational-data-retention-production
+  cancel-in-progress: false
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Purge expired operational data
+        env:
+          CRON_SECRET: ${{ secrets.CONTACT_EMAIL_CRON_SECRET }}
+          ENDPOINT: https://www.aixco.global/api/cron/data-retention
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ${#CRON_SECRET} -lt 32 ]]; then
+            echo "CONTACT_EMAIL_CRON_SECRET is missing or too short."
+            exit 1
+          fi
+
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer ${CRON_SECRET}" \
+            --retry 2 \
+            --retry-all-errors \
+            --max-time 50 \
+            "${ENDPOINT}"

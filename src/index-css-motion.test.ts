@@ -9,6 +9,7 @@ function readSource(path: string) {
 const css = readSource("src/index.css");
 const appLayout = readSource("src/app/layout.tsx");
 const desktopStoryHome = readSource("src/components/sections/DesktopStoryHome.tsx");
+const homeExperience = readSource("src/components/sections/HomeExperience.tsx");
 const socialLinks = readSource("src/components/SocialLinks.tsx");
 const liveAssets = readSource("src/lib/aixco-live-assets.ts");
 
@@ -266,10 +267,10 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain("story-hero-wordmark-under-in");
     expect(liveAssets).toContain("AIXW-transparent.webp");
     expect(liveAssets).toContain("aixco-group-dubai-hero.mp4");
-    expect(appLayout).toContain('href="/aixco-global-op2/images/AIXCOGlobal-horizontal-light.webp"');
+    expect(homeExperience).toContain("aixcoLiveLogos.aixcoHorizontalLight");
     expect(appLayout).not.toContain('href="/aixco-global-op2/videos/aixco-group-dubai-hero.mp4"');
     expect(appLayout).not.toContain('as="video"');
-    expect(appLayout).toContain('fetchPriority="high"');
+    expect(homeExperience).toContain('fetchPriority="high"');
     expect(appLayout).not.toContain("homeStoryBootScript");
     expect(desktopStoryHome).not.toContain("StoryHeroIntroLoader");
     expect(desktopStoryHome).not.toContain("useStoryHeroIntroGate");

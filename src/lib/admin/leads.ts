@@ -49,6 +49,9 @@ type StatusUpdateBuilder = {
 const CONTACT_COLUMNS = "id, request_reference, created_at, name, email, interest, message, locale, page_path, status";
 const CHAT_COLUMNS = "id, created_at, interest, transcript, message_count, locale, page_path, status";
 const PORTAL_COLUMNS = "id, created_at, mode, role_title, action, portal_url, locale, page_path";
+const ADMIN_QUERY_PAGE_SIZE = 500;
+
+type AdminClient = Awaited<ReturnType<typeof getSupabaseAdminClient>>;
 
 function applyStatusFilter<T extends { eq: (column: "status", value: LeadStatus) => T }>(query: T, status?: LeadStatus) {
   return status ? query.eq("status", status) : query;
@@ -62,6 +65,56 @@ async function countRows(table: "contact_submissions" | "chat_transcripts" | "po
   if (error) throw new Error(error.message);
 
   return count ?? 0;
+}
+
+async function fetchAllContacts(client: AdminClient, status?: LeadStatus) {
+  const rows: ContactLead[] = [];
+
+  for (let from = 0; ; from += ADMIN_QUERY_PAGE_SIZE) {
+    const query = client
+      .from("contact_submissions")
+      .select(CONTACT_COLUMNS)
+      .order("created_at", { ascending: false })
+      .range(from, from + ADMIN_QUERY_PAGE_SIZE - 1);
+    const { data, error } = await applyStatusFilter(query, status);
+
+    if (error) throw new Error(error.message);
+    rows.push(...(data ?? []));
+    if (!data || data.length < ADMIN_QUERY_PAGE_SIZE) return rows;
+  }
+}
+
+async function fetchAllChats(client: AdminClient, status?: LeadStatus) {
+  const rows: ChatLead[] = [];
+
+  for (let from = 0; ; from += ADMIN_QUERY_PAGE_SIZE) {
+    const query = client
+      .from("chat_transcripts")
+      .select(CHAT_COLUMNS)
+      .order("created_at", { ascending: false })
+      .range(from, from + ADMIN_QUERY_PAGE_SIZE - 1);
+    const { data, error } = await applyStatusFilter(query, status);
+
+    if (error) throw new Error(error.message);
+    rows.push(...(data ?? []));
+    if (!data || data.length < ADMIN_QUERY_PAGE_SIZE) return rows;
+  }
+}
+
+async function fetchAllPortalEvents(client: AdminClient) {
+  const rows: PortalEvent[] = [];
+
+  for (let from = 0; ; from += ADMIN_QUERY_PAGE_SIZE) {
+    const { data, error } = await client
+      .from("portal_click_events")
+      .select(PORTAL_COLUMNS)
+      .order("created_at", { ascending: false })
+      .range(from, from + ADMIN_QUERY_PAGE_SIZE - 1);
+
+    if (error) throw new Error(error.message);
+    rows.push(...(data ?? []));
+    if (!data || data.length < ADMIN_QUERY_PAGE_SIZE) return rows;
+  }
 }
 
 export function parseLeadStatus(value: unknown): LeadStatus | undefined {
@@ -81,26 +134,11 @@ export async function fetchAdminLeadDashboard(filters: LeadFilters = {}): Promis
 
   try {
     const supabase = await getSupabaseAdminClient();
-    const contactQuery = supabase
-      .from("contact_submissions")
-      .select(CONTACT_COLUMNS)
-      .order("created_at", { ascending: false })
-      .limit(75);
-    const chatQuery = supabase
-      .from("chat_transcripts")
-      .select(CHAT_COLUMNS)
-      .order("created_at", { ascending: false })
-      .limit(75);
-
     const [contactsResult, chatsResult, portalEventsResult, newContacts, newChats, totalContacts, totalChats, totalPortalEvents] =
       await Promise.all([
-        applyStatusFilter(contactQuery, filters.status),
-        applyStatusFilter(chatQuery, filters.status),
-        supabase
-          .from("portal_click_events")
-          .select(PORTAL_COLUMNS)
-          .order("created_at", { ascending: false })
-          .limit(75),
+        fetchAllContacts(supabase, filters.status),
+        fetchAllChats(supabase, filters.status),
+        fetchAllPortalEvents(supabase),
         countRows("contact_submissions", "new"),
         countRows("chat_transcripts", "new"),
         countRows("contact_submissions"),
@@ -108,16 +146,12 @@ export async function fetchAdminLeadDashboard(filters: LeadFilters = {}): Promis
         countRows("portal_click_events"),
       ]);
 
-    if (contactsResult.error) throw new Error(contactsResult.error.message);
-    if (chatsResult.error) throw new Error(chatsResult.error.message);
-    if (portalEventsResult.error) throw new Error(portalEventsResult.error.message);
-
     return {
       ok: true,
       data: {
-        contacts: contactsResult.data ?? [],
-        chats: chatsResult.data ?? [],
-        portalEvents: portalEventsResult.data ?? [],
+        contacts: contactsResult,
+        chats: chatsResult,
+        portalEvents: portalEventsResult,
         stats: {
           newContacts,
           newChats,

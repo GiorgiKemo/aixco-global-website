@@ -31,14 +31,14 @@ describe("PropertyChrome", () => {
     fireEvent.click(aboutButton);
 
     expect(aboutButton).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("menuitem", { name: "Origins" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Origins" })).toHaveAttribute(
       "href",
       "/#philosophy-origins",
     );
 
     fireEvent.keyDown(window, { key: "Escape" });
     expect(aboutButton).toHaveAttribute("aria-expanded", "false");
-    expect(screen.queryByRole("menuitem", { name: "Origins" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Origins" })).not.toBeInTheDocument();
   });
 
   it("switches language and updates the document direction", async () => {
@@ -46,7 +46,7 @@ describe("PropertyChrome", () => {
 
     const languageButton = screen.getAllByRole("button", { name: /change language/i })[0];
     fireEvent.click(languageButton);
-    fireEvent.click(screen.getAllByRole("option", { name: /العربية/i })[0]);
+    fireEvent.click(screen.getAllByRole("button", { name: /العربية/i })[0]);
 
     await waitFor(() => {
       expect(document.documentElement).toHaveAttribute("lang", "ar");

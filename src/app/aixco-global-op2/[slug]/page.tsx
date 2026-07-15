@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { cache } from "react";
 import {
   BadgeCheck,
   Diamond,
@@ -13,6 +14,9 @@ import {
 } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import { siteContentDefaults } from "@/lib/backend/site-content";
+import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
+import { ClientShell } from "@/app/client-shell";
+import { JsonLd } from "@/components/JsonLd";
 import { Tx } from "@/components/i18n/Tx";
 import { PropertyChrome, PropertyContactLink } from "@/components/property/PropertyChrome";
 import {
@@ -22,6 +26,7 @@ import {
   getBatumiMarketDetails,
   type BatumiProperty,
 } from "@/components/sections/batumi/batumi-data";
+import { getSiteUrl } from "@/lib/site-url";
 
 type PropertyPageProps = {
   params: Promise<{
@@ -41,9 +46,12 @@ function normalizeSlug(slug: string) {
   return decodedSlug.replace(/\/+$/, "").replace(/\.html$/i, "").toLowerCase();
 }
 
-function getPropertyBySlug(slug: string) {
+const getCurrentSiteContent = cache(() => fetchSiteContentForServer());
+
+async function getPropertyBySlug(slug: string) {
   const normalizedSlug = normalizeSlug(slug);
-  return siteContentDefaults.batumiProperties.find(
+  const siteContent = await getCurrentSiteContent();
+  return siteContent.content.batumiProperties.find(
     (property) => normalizeSlug(property.url) === normalizedSlug || normalizeSlug(property.id) === normalizedSlug,
   );
 }
@@ -54,7 +62,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PropertyPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const property = getPropertyBySlug(slug);
+  const property = await getPropertyBySlug(slug);
 
   if (!property) {
     return {
@@ -124,10 +132,10 @@ function DetailMetric({ label, value, subtext }: { label: string; value: string;
   );
 }
 
-function PropertyPageContent({ property }: { property: BatumiProperty }) {
+function PropertyPageContent({ property, batumiBenefits }: { property: BatumiProperty; batumiBenefits: string[] }) {
   const image = batumiImageMap[property.image];
   const documentHref = batumiDocumentMap[property.id];
-  const ownershipDetails = getBatumiMarketDetails(siteContentDefaults.batumiBenefits);
+  const ownershipDetails = getBatumiMarketDetails(batumiBenefits);
   const heroImage = property.id === "current-project"
     ? "/aixco-global-op2/images/optimized/current-project-hero-towers.webp"
     : image;
@@ -145,7 +153,7 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
   ];
 
   return (
-    <main className="min-h-screen bg-[#F3EDE1] text-[#161616]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#F3EDE1] text-[#161616]">
       <PropertyChrome />
       <section className="property-hero relative mx-auto grid max-w-[96rem] overflow-hidden border-b border-[#9E9D9D]/35 lg:min-h-[40rem] lg:grid-cols-[minmax(0,1.16fr)_minmax(28rem,0.84fr)]">
         <div className="property-hero__content order-2 flex flex-col justify-center bg-[#F3EDE1] px-5 py-10 sm:px-8 sm:py-12 lg:order-1 lg:px-[clamp(3rem,4.2vw,4.5rem)] lg:py-10">
@@ -259,11 +267,53 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
     redirect("/");
   }
 
-  const property = getPropertyBySlug(slug);
+  const siteContent = await getCurrentSiteContent();
+  const property = siteContent.content.batumiProperties.find(
+    (item) => normalizeSlug(item.url) === normalizeSlug(slug) || normalizeSlug(item.id) === normalizeSlug(slug),
+  );
 
   if (!property) {
     notFound();
   }
 
-  return <PropertyPageContent property={property} />;
+  const siteUrl = getSiteUrl();
+  const canonicalUrl = `${siteUrl}/aixco-global-op2/${property.url}`;
+  const propertyImage = property.id === "current-project"
+    ? "/aixco-global-op2/images/optimized/current-project-hero-towers.webp"
+    : batumiImageMap[property.image];
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: property.name,
+    description: property.summary,
+    sku: property.id,
+    category: "Residential real estate",
+    url: canonicalUrl,
+    image: new URL(propertyImage, siteUrl).toString(),
+    brand: {
+      "@type": "Brand",
+      name: "AIXCO.Global",
+    },
+    areaServed: {
+      "@type": "Place",
+      name: "Batumi, Georgia",
+    },
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "EUR",
+      lowPrice: "45000",
+      offerCount: "28",
+      availability: "https://schema.org/InStock",
+      url: canonicalUrl,
+    },
+  };
+
+  return (
+    <>
+      <JsonLd data={structuredData} />
+      <ClientShell initialSiteContent={siteContent.content} initialSiteContentSource={siteContent.source}>
+        <PropertyPageContent property={property} batumiBenefits={siteContent.content.batumiBenefits} />
+      </ClientShell>
+    </>
+  );
 }

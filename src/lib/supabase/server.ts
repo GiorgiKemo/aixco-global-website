@@ -17,8 +17,6 @@ export function getSupabaseServerConfig() {
   const supabaseUrl =
     getEnvValue(process.env.SUPABASE_URL) || getEnvValue(process.env.NEXT_PUBLIC_SUPABASE_URL);
   const supabaseKey =
-    getEnvValue(process.env.SUPABASE_SECRET_KEY) ||
-    getEnvValue(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
     getEnvValue(process.env.SUPABASE_PUBLISHABLE_KEY) ||
     getEnvValue(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 
@@ -58,3 +56,4 @@ export async function getSupabaseServerClient() {
 
   return serverClient;
 }
+import "server-only";
