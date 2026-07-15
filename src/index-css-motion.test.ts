@@ -91,6 +91,16 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-story-section='philosophy'] .story-philosophy-title {\n      max-width: min(100%, 13ch);");
   });
 
+  it("keeps the mobile ownership copy inside its dark section", () => {
+    expect(css).toContain("--story-mobile-access-exit-clearance: clamp(6rem, 12svh, 8.5rem);");
+    expect(css).toContain(
+      "[data-story-section]:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])",
+    );
+    expect(css).toContain(
+      "var(--story-mobile-access-exit-clearance) +\n          max(1.25rem, env(safe-area-inset-bottom, 0px))",
+    );
+  });
+
   it("blocks scrolled content behind the fixed mobile story header", () => {
     expect(desktopStoryHome).toContain("story-mobile-header fixed inset-x-0 top-0");
     expect(desktopStoryHome).toContain("story-mobile-header--light");

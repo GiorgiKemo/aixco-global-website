@@ -7073,7 +7073,7 @@ html[data-home-experience='story'] {
     padding-bottom: 0 !important;
   }
 
-  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])
     .story-scene-reveal {
     flex: 0 0 auto !important;
     justify-content: flex-start !important;
@@ -7819,9 +7819,9 @@ html[data-home-experience='story'] {
       var(--story-mobile-section-bottom) !important;
   }
 
-  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])
     [data-story-scene-copy],
-  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])
     .story-scene-reveal {
     min-height: 0 !important;
     height: auto !important;
@@ -8192,6 +8192,7 @@ html[data-home-experience='story'] {
 
   [data-story-section='aboutAccess'] {
     --story-mobile-access-overlap: clamp(5.25rem, 14svh, 7.25rem);
+    --story-mobile-access-exit-clearance: clamp(6rem, 12svh, 8.5rem);
     margin-top: calc(var(--story-mobile-access-overlap) * -1);
   }
 
@@ -8233,7 +8234,10 @@ html[data-home-experience='story'] {
     justify-content: flex-end !important;
     gap: 0.9rem;
     padding: 7rem var(--story-mobile-gutter)
-      max(4.5rem, env(safe-area-inset-bottom, 0px)) !important;
+      calc(
+        var(--story-mobile-access-exit-clearance) +
+          max(1.25rem, env(safe-area-inset-bottom, 0px))
+      ) !important;
   }
 
   [data-story-section='aboutAccess'] [data-layout='story-about-access'] {
