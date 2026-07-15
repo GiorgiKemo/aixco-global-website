@@ -65,3 +65,53 @@ The full implementation image was assembled from browser-rendered viewport segme
 - P3: after deployment, run one real-message rendering check in Gmail and Outlook because browser rendering cannot reproduce every proprietary inbox engine.
 
 final result: passed
+
+---
+
+# AIXCO Mobile Story Menu - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-17ecedbd-44ce-45d2-b6af-86351dc8a6e9.png`
+- Browser-rendered implementation: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/playwright/menu-after-iteration-1.png`
+- Full-view comparison: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/playwright/menu-comparison.png`
+- Responsive evidence: `menu-320.png`, `menu-390x844.png`, and `menu-768.png`
+- Viewports: 320 x 568, 390 x 844, 403 x 631, and 768 x 900
+- State: mobile/tablet story navigation open; active chapter shown; background scroll locked
+
+## Findings
+
+- No actionable P0, P1, or P2 issues remain.
+- P3: the 17-section navigation still requires vertical scrolling on short phones. This is intentional; compact 45.6 px targets retain usability and avoid cramped multi-column labels in translated languages.
+
+## Full-view comparison evidence
+
+The side-by-side comparison confirms that the disconnected dark strip and offset white drawer have been removed on phones. The header and navigation now share one ivory surface, the logo switches to a legible dark treatment, controls align within the same header row, and navigation spacing is substantially tighter while preserving clear active-state emphasis.
+
+## Focused comparison evidence
+
+No separate focused crop was needed because the 403 x 631 full-view comparison renders the logo, language control, close control, active item, dividers, typography, and menu spacing at readable size. Additional full-view captures validate the narrow-phone and tablet behaviors.
+
+## Comparison history
+
+1. Initial finding - P1: the phone drawer occupied 92% of the viewport while the header remained visually attached to the dark page underneath, creating a 29-35 px dark strip and a white logo disconnected from the ivory navigation. Fix: use a full-width phone sheet and a unified ivory header with a dark logo. Post-fix evidence: `menu-comparison.png`.
+2. Initial finding - P2: 52 px navigation rows and large gaps made the menu feel unusually stretched and exposed fewer destinations. Fix: reduce rows to 45.6 px, tighten gaps and padding, and retain full-size active-state treatment. Post-fix evidence: `menu-after-iteration-1.png` and `menu-390x844.png`.
+3. Responsive finding - P2: the same nearly-full-width treatment was not ideal for tablets. Fix: retain a contained 384 px side drawer from 640-1279 px while keeping the unified header. Post-fix evidence: `menu-768.png`.
+4. Final pass: no actionable P0/P1/P2 differences remain.
+
+## Required fidelity surfaces
+
+- Fonts and typography: existing Gilroy/legacy UI stack preserved; 0.94 rem navigation text remains crisp with controlled 1.2 line height and no clipping.
+- Spacing and layout rhythm: unified 76 px header, compact navigation rhythm, safe-area-aware padding, full-width phone sheet, and 384 px tablet drawer.
+- Colors and visual tokens: existing AIXCO ivory background, onyx foreground, and gold active treatment retained consistently across header and drawer.
+- Image quality and asset fidelity: official AIXCO horizontal logo remains in use; CSS only changes its open-menu color treatment and does not recreate the asset.
+- Copy and content: all 17 navigation labels and their destinations are unchanged.
+
+## Verification
+
+- 41 focused Vitest checks passed across the menu and motion suites.
+- Production build and TypeScript passed.
+- Phone widths: 320, 390, and 403 px have no horizontal overflow; drawer width equals viewport width.
+- Tablet width: 768 px uses a 384 px right-side drawer.
+- Navigation interaction: selecting About closes the dialog, removes the body lock, and navigates to `#about`.
+- Browser console: zero errors.
+
+final result: passed

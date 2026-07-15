@@ -1,0 +1,70 @@
+/* Keep the open mobile navigation and its header on one coherent surface. */
+@media (max-width: 1279px) {
+  body.story-mobile-menu-open .story-mobile-header {
+    color: hsl(var(--foreground)) !important;
+    background: hsl(var(--background)) !important;
+    border-bottom-color: hsl(var(--foreground) / 0.1) !important;
+    box-shadow: 0 12px 32px -28px rgb(17 16 14 / 0.5) !important;
+  }
+
+  body.story-mobile-menu-open .story-mobile-header::before {
+    opacity: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  body.story-mobile-menu-open .story-mobile-header > a {
+    filter: none !important;
+  }
+
+  body.story-mobile-menu-open .story-mobile-header > a img {
+    filter: brightness(0) !important;
+  }
+
+  #story-mobile-menu {
+    top: var(--story-mobile-header-height) !important;
+    height: calc(100dvh - var(--story-mobile-header-height)) !important;
+    max-height: calc(100dvh - var(--story-mobile-header-height)) !important;
+    padding-top: 0.75rem !important;
+    padding-right: max(1rem, env(safe-area-inset-right, 0px)) !important;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px)) !important;
+    padding-left: max(1rem, env(safe-area-inset-left, 0px)) !important;
+    border-inline-start: 1px solid hsl(var(--foreground) / 0.08) !important;
+    background: hsl(var(--background)) !important;
+    scrollbar-gutter: auto !important;
+  }
+
+  #story-mobile-menu nav {
+    gap: 0.15rem !important;
+  }
+
+  #story-mobile-menu .story-chapter-link {
+    min-height: 2.85rem !important;
+    grid-template-columns: 0.9rem minmax(0, 1fr) !important;
+    gap: 0.65rem !important;
+    padding: 0.58rem 0.7rem !important;
+    border-radius: 0.6rem !important;
+    font-size: 0.94rem !important;
+    line-height: 1.2 !important;
+  }
+
+  #story-mobile-menu .story-chapter-link__line {
+    width: 0.55rem;
+  }
+}
+
+@media (max-width: 639px) {
+  #story-mobile-menu {
+    width: 100vw !important;
+    max-width: none !important;
+    border-inline-start: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1279px) {
+  #story-mobile-menu {
+    width: min(24rem, 90vw) !important;
+    box-shadow: -28px 0 72px -36px rgb(17 16 14 / 0.5) !important;
+  }
+}
