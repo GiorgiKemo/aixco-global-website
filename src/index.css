@@ -7860,6 +7860,15 @@ html[data-home-experience='story'] {
     object-position: center top !important;
   }
 
+  [data-story-section='batumi']:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])
+    [data-story-scene-column] {
+    padding-top: clamp(1.75rem, 5vw, 2.25rem) !important;
+  }
+
+  [data-story-section='batumi'] [data-story-scene-copy] {
+    padding-top: 0 !important;
+  }
+
   [data-story-section='team'] [data-story-scene-media] {
     height: clamp(22rem, 104vw, 29rem);
     min-height: clamp(22rem, 104vw, 29rem);

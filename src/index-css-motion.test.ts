@@ -485,6 +485,11 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-story-section='dubai'] .story-media-panel__image {\n    object-position: center top !important;");
   });
 
+  it("keeps the Dubai-to-Batumi handoff compact on phones", () => {
+    expect(css).toContain("[data-story-section='batumi']:not([data-story-section='hero']):not([data-story-section='about']):not([data-story-section='aboutAccess'])\n    [data-story-scene-column] {\n    padding-top: clamp(1.75rem, 5vw, 2.25rem) !important;");
+    expect(css).toContain("[data-story-section='batumi'] [data-story-scene-copy] {\n    padding-top: 0 !important;");
+  });
+
   it("keeps dense story sections readable on short phone demo viewports", () => {
     expect(css).toContain("@media (max-width: 559px) and (max-height: 740px)");
     expect(css).toContain("[data-story-section='participate'] [data-layout='story-participation-routes'] button");
