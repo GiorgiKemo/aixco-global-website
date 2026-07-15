@@ -94,7 +94,15 @@ export function PropertyChrome() {
 
   useEffect(() => {
     document.body.classList.toggle("overflow-hidden", mobileOpen);
-    return () => document.body.classList.remove("overflow-hidden");
+    document.documentElement.classList.toggle("overflow-hidden", mobileOpen);
+    document.body.classList.toggle("property-mobile-menu-open", mobileOpen);
+    document.documentElement.classList.toggle("property-mobile-menu-open", mobileOpen);
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+      document.documentElement.classList.remove("overflow-hidden");
+      document.body.classList.remove("property-mobile-menu-open");
+      document.documentElement.classList.remove("property-mobile-menu-open");
+    };
   }, [mobileOpen]);
 
   const closeAll = () => {
@@ -117,7 +125,7 @@ export function PropertyChrome() {
               setLangOpen(false);
             }}
             className={cn(
-              "flex min-h-10 w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45",
+              "flex min-h-11 w-full items-center justify-between rounded-md px-3 py-2 text-start text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45",
               option.code === lang ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted/70",
             )}
           >
@@ -131,9 +139,9 @@ export function PropertyChrome() {
 
   return (
     <>
-      <header ref={headerRef} className="sticky inset-x-0 top-0 z-[60] border-b border-[#161616]/10 bg-[#F3EDE1]/95 text-[#161616] shadow-[0_18px_46px_-42px_rgba(22,22,22,0.45)] backdrop-blur-xl">
-        <div className="mx-auto flex min-h-[4.75rem] max-w-[96rem] items-center gap-4 px-4 sm:px-7 xl:min-h-[5.75rem] xl:px-6 2xl:px-8">
-          <Link href="/" prefetch={false} onClick={closeAll} aria-label={tx("AIXCO.GLOBAL home")} className="inline-flex min-w-max items-center transition-opacity hover:opacity-72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45">
+      <header ref={headerRef} data-property-chrome="true" className="property-chrome sticky inset-x-0 top-0 z-[60] border-b border-[#161616]/10 bg-[#F3EDE1]/95 text-[#161616] shadow-[0_18px_46px_-42px_rgba(22,22,22,0.45)] backdrop-blur-xl">
+        <div className="property-chrome__inner mx-auto flex min-h-[4.75rem] max-w-[96rem] items-center gap-4 px-4 sm:px-7 xl:min-h-[5.75rem] xl:px-6 2xl:px-8">
+          <Link href="/" prefetch={false} onClick={closeAll} aria-label={tx("AIXCO.GLOBAL home")} className="property-chrome__brand inline-flex min-h-11 min-w-0 items-center transition-opacity hover:opacity-72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45">
             <img src={aixcoLiveLogos.aixcoHorizontalDark} alt="" aria-hidden="true" className="h-auto w-[9.5rem] shrink-0 object-contain xl:w-[10.75rem]" />
             <span className="sr-only">AIXCO.GLOBAL</span>
           </Link>
@@ -235,7 +243,7 @@ export function PropertyChrome() {
           </div>
 
           {langOpen ? (
-            <div id="property-mobile-language-list" className="absolute right-4 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant xl:hidden">
+            <div id="property-mobile-language-list" className="property-mobile-language-list absolute end-4 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant xl:hidden">
               {languageOptions}
             </div>
           ) : null}
@@ -247,7 +255,13 @@ export function PropertyChrome() {
       ) : null}
 
       {mobileOpen ? (
-        <aside id="property-mobile-menu" className="fixed bottom-0 right-0 top-0 z-50 w-[min(22rem,88vw)] overflow-y-auto border-l border-foreground/10 bg-[#F3EDE1] px-5 pb-8 pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] xl:hidden">
+        <aside
+          id="property-mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label={tx("Story navigation")}
+          className="property-mobile-menu fixed bottom-0 end-0 top-0 z-50 max-h-[100dvh] w-[min(22rem,88vw)] overflow-y-auto overscroll-contain border-s border-foreground/10 bg-[#F3EDE1] px-5 pb-8 pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] xl:hidden"
+        >
           <nav aria-label={tx("Story navigation")} className="grid gap-2">
             <Link href="/" prefetch={false} onClick={closeAll} className="rounded-lg px-3 py-3 text-sm font-semibold hover:bg-muted/70">{tx("AIXCO")}</Link>
             {navGroups.map((group) => (

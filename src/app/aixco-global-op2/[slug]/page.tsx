@@ -82,8 +82,8 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
 
 function DetailMetric({ label, value, subtext }: { label: string; value: string; subtext?: string }) {
   return (
-    <div className="min-w-0 border-l border-[#9E9D9D]/45 pl-5 first:border-l-0 first:pl-0">
-      <p className="text-[0.67rem] font-semibold uppercase tracking-[0.22em] text-[#161616]">
+    <div className="property-detail-metric min-w-0 border-l border-[#9E9D9D]/45 pl-5">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#161616]">
         <Tx>{label}</Tx>
       </p>
       <p className="mt-2 text-[clamp(2rem,3vw,3.25rem)] font-medium leading-none tracking-[-0.025em] text-[#161616]"><Tx>{value}</Tx></p>
@@ -119,17 +119,17 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
   return (
     <main className="min-h-screen bg-[#F3EDE1] text-[#161616]">
       <PropertyChrome />
-      <section className="relative mx-auto grid max-w-[96rem] overflow-hidden border-b border-[#9E9D9D]/35 lg:min-h-[40rem] lg:grid-cols-[minmax(0,1.16fr)_minmax(28rem,0.84fr)]">
-        <div className="order-2 flex flex-col justify-center bg-[#F3EDE1] px-5 py-10 sm:px-8 sm:py-12 lg:order-1 lg:px-[clamp(3rem,4.2vw,4.5rem)] lg:py-10">
+      <section className="property-hero relative mx-auto grid max-w-[96rem] overflow-hidden border-b border-[#9E9D9D]/35 lg:min-h-[40rem] lg:grid-cols-[minmax(0,1.16fr)_minmax(28rem,0.84fr)]">
+        <div className="property-hero__content order-2 flex flex-col justify-center bg-[#F3EDE1] px-5 py-10 sm:px-8 sm:py-12 lg:order-1 lg:px-[clamp(3rem,4.2vw,4.5rem)] lg:py-10">
           <div className="max-w-[48rem]">
             <p className="flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[#161616]">
               <Diamond className="h-2.5 w-2.5 fill-[#E6C767] stroke-[#E6C767]" aria-hidden />
               <Tx>Batumi property profile</Tx>
             </p>
-            <h1 className="mt-5 max-w-4xl text-[clamp(3.5rem,5.6vw,5.5rem)] font-semibold leading-[0.96] tracking-[-0.035em] text-[#161616]">
+            <h1 className="property-hero__title mt-5 max-w-4xl text-[clamp(3.5rem,5.6vw,5.5rem)] font-semibold leading-[0.96] tracking-[-0.035em] text-[#161616]">
               <Tx>{property.name}</Tx>
             </h1>
-            <p className="mt-2 border-l-[3px] border-[#E6C767] pl-4 text-[clamp(1.55rem,2.5vw,2.7rem)] font-medium leading-[1.08] tracking-[-0.02em] text-[#161616]">
+            <p className="property-hero__subtitle mt-2 text-[clamp(1.55rem,2.5vw,2.7rem)] font-medium leading-[1.08] tracking-[-0.02em] text-[#161616]">
               <Tx>private residences</Tx>
             </p>
             <p className="mt-5 max-w-[42rem] text-[clamp(1.02rem,1.22vw,1.2rem)] font-normal leading-[1.5] text-[#161616]">
@@ -137,7 +137,7 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
             </p>
           </div>
 
-          <div className="mt-8 grid grid-cols-2 gap-y-6 border-y border-[#9E9D9D]/35 py-5 sm:grid-cols-4">
+          <div className="property-hero__metrics mt-8 grid grid-cols-2 gap-y-6 border-y border-[#9E9D9D]/35 py-5 sm:grid-cols-4">
             {heroMetrics.map((metric) => (
               <DetailMetric key={metric.label} label={metric.label} value={metric.value} subtext={metric.subtext} />
             ))}
@@ -145,18 +145,18 @@ function PropertyPageContent({ property }: { property: BatumiProperty }) {
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1.15fr_0.9fr]">
             {documentHref ? (
-              <Link href={documentHref} prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-[0.63rem] font-semibold uppercase tracking-[0.15em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]" target="_blank" rel="noreferrer">
+              <Link href={documentHref} prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]" target="_blank" rel="noreferrer">
                 <Download className="h-4 w-4" aria-hidden />
                 <Tx>Download brochure</Tx>
               </Link>
             ) : null}
-            <Link href="/#contact" prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-[0.63rem] font-semibold uppercase tracking-[0.15em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
+            <Link href="/#contact" prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
               <Tx>Contact AIXCO</Tx>
             </Link>
           </div>
         </div>
 
-        <aside className="relative order-1 min-h-[23rem] overflow-hidden bg-[#161616] sm:min-h-[32rem] lg:order-2 lg:min-h-full">
+        <aside className="property-hero__media relative order-1 min-h-[23rem] overflow-hidden bg-[#161616] sm:min-h-[32rem] lg:order-2 lg:min-h-full">
           <Image
             src={heroImage}
             alt={property.name}

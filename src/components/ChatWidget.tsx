@@ -192,7 +192,7 @@ export function ChatWidget() {
   return (
     <div
       data-chat-floating-container="true"
-      className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))] right-[max(1.25rem,env(safe-area-inset-right,0px))] z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3 md:bottom-[max(1.5rem,env(safe-area-inset-bottom,0px))] md:right-[max(1.5rem,env(safe-area-inset-right,0px))]"
+      className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))] end-[max(1.25rem,env(safe-area-inset-right,0px))] z-[95] flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3 md:bottom-[max(1.5rem,env(safe-area-inset-bottom,0px))] md:end-[max(1.5rem,env(safe-area-inset-right,0px))]"
     >
       <AnimatePresence>
         {isOpen && (
@@ -204,7 +204,7 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="glass pointer-events-auto flex h-[min(640px,calc(100svh-6.5rem))] max-h-[calc(100svh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg bg-surface-elevated/95 shadow-elegant backdrop-blur-2xl"
+            className="glass pointer-events-auto flex h-[min(640px,calc(100dvh-6.5rem))] max-h-[calc(100dvh-6.5rem)] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-lg bg-surface-elevated/95 shadow-elegant backdrop-blur-2xl"
           >
             <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border/60 bg-surface-elevated/95 p-4">
               <div>
@@ -215,7 +215,7 @@ export function ChatWidget() {
                 type="button"
                 aria-label={tx("Close live chat")}
                 onClick={() => setIsOpen(false)}
-                className="icon-button-glass h-10 w-10 shrink-0"
+                className="icon-button-glass h-11 w-11 shrink-0"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -257,7 +257,7 @@ export function ChatWidget() {
                         type="button"
                         disabled={isAnswering}
                         onClick={() => sendMessage(reply)}
-                        className="min-h-8 rounded-md border border-primary/20 bg-primary/5 px-2.5 py-1.5 text-[11px] font-medium leading-none text-primary transition hover:border-primary/40 hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="min-h-11 rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-xs font-medium leading-tight text-primary transition hover:border-primary/40 hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {tx(reply)}
                       </button>
@@ -327,16 +327,16 @@ export function ChatWidget() {
                   onClick={() => {
                     void saveTranscript(messages, "email_transcript");
                   }}
-                  className="btn-ghost-gold !px-3 !py-2 text-xs"
+                  className="btn-ghost-gold min-h-11 !px-3 !py-2 text-xs"
                 >
                   <Mail className="h-4 w-4" />
                   {tx("Email transcript")}
                 </a>
                 <div className="flex gap-3">
-                  <button type="button" onClick={openRegister} className="inline-flex min-h-10 items-center px-1 text-xs uppercase tracking-widest text-primary">
+                  <button type="button" onClick={openRegister} className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-xs uppercase tracking-widest text-primary">
                     {tx("Register")}
                   </button>
-                  <button type="button" onClick={clearChat} className="inline-flex min-h-10 items-center px-1 text-xs uppercase tracking-widest text-muted-foreground">
+                  <button type="button" onClick={clearChat} className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-xs uppercase tracking-widest text-muted-foreground">
                     {tx("Clear")}
                   </button>
                 </div>

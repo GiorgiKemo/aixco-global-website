@@ -79,7 +79,7 @@ describe("Modals", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /open privacy/i }));
 
-    expect(screen.getByRole("button", { name: "Close" })).toHaveClass("h-10", "w-10");
+    expect(screen.getByRole("button", { name: "Close" })).toHaveClass("h-11", "w-11");
   });
 
   it("allows translated dialog copy to wrap inside narrow screens", () => {

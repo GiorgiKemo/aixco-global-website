@@ -147,8 +147,8 @@ describe("ChatWidget", () => {
     expect(screen.getByRole("dialog", { name: /aixco live chat/i })).toHaveClass(
       "flex",
       "bg-surface-elevated/95",
-      "h-[min(640px,calc(100svh-6.5rem))]",
-      "max-h-[calc(100svh-6.5rem)]",
+      "h-[min(640px,calc(100dvh-6.5rem))]",
+      "max-h-[calc(100dvh-6.5rem)]",
     );
     expect(screen.getByRole("dialog", { name: /aixco live chat/i })).not.toHaveClass("sm:mr-16", "md:mr-20");
     expect(container.querySelector("[data-chat-messages]")).toHaveClass("min-h-0", "flex-1", "overflow-y-auto");
@@ -163,12 +163,12 @@ describe("ChatWidget", () => {
     fireEvent.click(screen.getByRole("button", { name: /open live chat/i }));
 
     const dialog = screen.getByRole("dialog", { name: /aixco live chat/i });
-    expect(within(dialog).getByRole("button", { name: /close live chat/i })).toHaveClass("h-10", "w-10");
+    expect(within(dialog).getByRole("button", { name: /close live chat/i })).toHaveClass("h-11", "w-11");
     expect(screen.getByRole("button", { name: /minimize live chat/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Property administration" })).toHaveClass("min-h-8", "text-[11px]");
+    expect(screen.getByRole("button", { name: "Property administration" })).toHaveClass("min-h-11", "text-xs");
     expect(screen.getByRole("link", { name: /email transcript/i })).toHaveClass("btn-ghost-gold");
-    expect(screen.getByRole("button", { name: "Register" })).toHaveClass("min-h-10");
-    expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-10");
+    expect(screen.getByRole("button", { name: "Register" })).toHaveClass("min-h-11", "min-w-11");
+    expect(screen.getByRole("button", { name: "Clear" })).toHaveClass("min-h-11", "min-w-11");
   });
 
   it("removes compact suggested topics after the visitor sends a message", async () => {

@@ -3,6 +3,14 @@ import type { Lang } from "./languages";
 type PropertyLocaleText = Partial<Record<Exclude<Lang, "en">, string>>;
 
 export const propertyPageTranslations = {
+  "Reverance by Otium": {
+    de: "Reverance by Otium",
+    ru: "Reverance by Otium",
+    ka: "Reverance by Otium",
+    tr: "Reverance by Otium",
+    ar: "Reverance by Otium",
+    pl: "Reverance by Otium",
+  },
   "Reverance by Otium is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for June 2028.": {
     de: "Reverance by Otium ist ein Premium-Wohnkomplex am New Boulevard in Batumi. AIXCO bietet derzeit 28 ausgewählte Wohnungen im 13. und 14. Stock an; die Fertigstellung ist für Juni 2028 geplant.",
     ru: "Reverance by Otium — жилой комплекс премиум-класса на Новом бульваре Батуми. Сейчас AIXCO предлагает 28 выбранных квартир на 13-м и 14-м этажах; завершение строительства запланировано на июнь 2028 года.",

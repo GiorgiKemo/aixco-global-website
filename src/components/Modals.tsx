@@ -309,12 +309,15 @@ export function Modals() {
     if (!modal) return;
 
     const previousOverflow = document.body.style.overflow;
+    const previousRootOverflow = document.documentElement.style.overflow;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = previousRootOverflow;
     };
   }, [modal, close]);
 
@@ -323,15 +326,15 @@ export function Modals() {
   const dialogLabel = tx(getModalAccessibleName(modal, modalData));
 
   return (
-    <div className="modal-shell fixed inset-0 z-[100] flex items-center justify-center overscroll-contain p-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] pt-[max(1rem,env(safe-area-inset-top,0px))] md:p-6">
+    <div className="modal-shell fixed inset-0 z-[100] flex min-h-[100dvh] items-center justify-center overscroll-contain p-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] pt-[max(1rem,env(safe-area-inset-top,0px))] md:p-6">
       <div className="modal-backdrop absolute inset-0 bg-transparent backdrop-blur-lg backdrop-saturate-150" onClick={close} aria-hidden />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={dialogLabel}
-        className="modal-panel relative max-h-[calc(100svh-2rem)] w-full max-w-5xl overflow-y-auto rounded-lg border border-border/70 bg-surface-elevated shadow-elegant [overflow-wrap:anywhere] md:max-h-[88vh]"
+        className="modal-panel relative max-h-[calc(100dvh-2rem)] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-lg border border-border/70 bg-surface-elevated shadow-elegant [overflow-wrap:anywhere] md:max-h-[88dvh]"
       >
-        <button aria-label={tx("Close")} onClick={close} className="icon-button-glass absolute right-3 top-3 z-10 h-10 w-10">
+        <button aria-label={tx("Close")} onClick={close} className="icon-button-glass absolute end-3 top-3 z-10 h-11 w-11">
           <X className="h-4 w-4" />
         </button>
         <div className="p-5 sm:p-7 md:p-10">
@@ -611,7 +614,7 @@ function AccessModal({ mode, tx }: { mode: "login" | "register"; tx: (text: stri
                   portalUrl: role.url,
                 });
               }}
-              className="mt-5 inline-flex text-xs uppercase tracking-widest text-primary"
+              className="mt-5 inline-flex min-h-11 items-center py-2 text-xs uppercase tracking-widest text-primary"
             >
               {tx(role.cta)}
             </a>

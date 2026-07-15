@@ -165,7 +165,9 @@ export function LiveVideo({
     if (!isExpanded || typeof window === "undefined") return;
 
     const previousOverflow = document.body.style.overflow;
+    const previousRootOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     void expandedVideoRef.current?.play().catch(() => undefined);
 
@@ -179,13 +181,14 @@ export function LiveVideo({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = previousRootOverflow;
     };
   }, [closeExpandedPlayer, isExpanded]);
 
   const expandedPlayer =
     isExpanded && typeof document !== "undefined"
       ? createPortal(
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 pt-16 animate-fade-in md:p-6 md:pt-20">
+          <div className="live-video-modal-shell fixed inset-0 z-[100] flex items-center justify-center p-3 pt-16 animate-fade-in md:p-6 md:pt-20">
             <button
               type="button"
               aria-label={`${tx("Close video")}: ${tx("Expanded video")} ${tx(title)}`}
@@ -196,7 +199,7 @@ export function LiveVideo({
               type="button"
               aria-label={`${tx("Close video")}: ${tx(title)}`}
               onClick={closeExpandedPlayer}
-              className="absolute right-4 top-4 z-20 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80 md:right-6 md:top-6"
+              className="live-video-modal-close absolute end-4 top-4 z-20 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80 md:end-6 md:top-6"
             >
               <X className="h-5 w-5" />
               <span className="sr-only">{tx("Close")}</span>
@@ -205,7 +208,7 @@ export function LiveVideo({
               role="dialog"
               aria-modal="true"
               aria-label={`${tx("Expanded video")}: ${tx(title)}`}
-              className="relative z-10 max-h-[calc(100svh-5rem)] max-w-[calc(100vw-1.5rem)] animate-scale-in md:max-h-[calc(100svh-6.5rem)] md:max-w-6xl"
+              className="relative z-10 max-h-[calc(100dvh-5rem)] max-w-[calc(100vw-1.5rem)] animate-scale-in md:max-h-[calc(100dvh-6.5rem)] md:max-w-6xl"
             >
               <div className="overflow-hidden rounded-lg border border-white/10 bg-black/95 shadow-elegant">
                 <video
@@ -214,7 +217,7 @@ export function LiveVideo({
                   poster={poster}
                   aria-label={`${tx(title)} ${tx("expanded player")}`}
                   title={tx(title)}
-                  className="block h-auto max-h-[calc(100svh-5rem)] w-auto max-w-[calc(100vw-1.5rem)] bg-black object-contain md:max-h-[calc(100svh-6.5rem)] md:max-w-[calc(100vw-3rem)]"
+                  className="block h-auto max-h-[calc(100dvh-5rem)] w-auto max-w-[calc(100vw-1.5rem)] bg-black object-contain md:max-h-[calc(100dvh-6.5rem)] md:max-w-[calc(100vw-3rem)]"
                   autoPlay
                   controls
                   playsInline

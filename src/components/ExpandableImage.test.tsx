@@ -37,9 +37,11 @@ describe("ExpandableImage", () => {
     expect(
       closeControls.some(
         (control) =>
-          control.className.includes("absolute right-1 top-1") &&
-          control.className.includes("md:right-0 md:top-0") &&
-          control.className.includes("md:-translate-y-1/2 md:translate-x-1/2"),
+          control.className.includes("absolute end-1 top-1") &&
+          control.className.includes("md:end-0 md:top-0") &&
+          control.className.includes("md:-translate-y-1/2") &&
+          control.className.includes("ltr:md:translate-x-1/2") &&
+          control.className.includes("rtl:md:-translate-x-1/2"),
       ),
     ).toBe(true);
     expect(closeControls.every((control) => !control.className.includes("fixed right-4 top-4"))).toBe(true);

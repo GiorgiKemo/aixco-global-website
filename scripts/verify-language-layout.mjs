@@ -7,10 +7,12 @@ const macSafariUserAgent =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15";
 const locales = ["en", "de", "ru", "ka", "tr", "ar", "pl"];
 const viewports = [
+  { name: "foldable", width: 280, height: 653 },
   { name: "small-phone", width: 320, height: 568 },
   { name: "compact-phone", width: 360, height: 640 },
   { name: "phone", width: 390, height: 844 },
   { name: "large-phone", width: 430, height: 932 },
+  { name: "foldable-landscape", width: 653, height: 280 },
   { name: "tablet-portrait", width: 768, height: 1024 },
   { name: "large-tablet", width: 820, height: 1180 },
   { name: "tablet-landscape", width: 1024, height: 768 },
@@ -91,7 +93,24 @@ try {
             const key = `${section}:${type}:${text}`;
             if (!seen.has(key)) {
               seen.add(key);
-              defects.push({ section, type, text });
+              const rect = element.getBoundingClientRect();
+              const style = getComputedStyle(element);
+              defects.push({
+                section,
+                type,
+                text,
+                element: element.tagName.toLowerCase(),
+                className: typeof element.className === "string" ? element.className.slice(0, 120) : "",
+                bounds: {
+                  left: Math.round(rect.left * 10) / 10,
+                  right: Math.round(rect.right * 10) / 10,
+                  width: Math.round(rect.width * 10) / 10,
+                },
+                fontSize: style.fontSize,
+                letterSpacing: style.letterSpacing,
+                whiteSpace: style.whiteSpace,
+                overflowWrap: style.overflowWrap,
+              });
             }
           };
 

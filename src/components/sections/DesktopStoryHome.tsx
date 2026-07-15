@@ -679,9 +679,11 @@ function StoryChrome({
 
   useEffect(() => {
     document.body.classList.toggle("story-mobile-menu-open", menuOpen);
+    document.documentElement.classList.toggle("story-mobile-menu-open", menuOpen);
 
     return () => {
       document.body.classList.remove("story-mobile-menu-open");
+      document.documentElement.classList.remove("story-mobile-menu-open");
     };
   }, [menuOpen]);
 
@@ -699,6 +701,8 @@ function StoryChrome({
     const closeDesktopMenu = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setDesktopGroupOpen(null);
+        setLangOpen(false);
+        setMenuOpen(false);
       }
     };
 
@@ -714,7 +718,7 @@ function StoryChrome({
       window.removeEventListener("keydown", closeDesktopMenu);
       window.removeEventListener("pointerdown", closeDesktopMenuFromOutside);
     };
-  }, []);
+  }, [setLangOpen]);
 
   const handleChapterLink = (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => {
     setLangOpen(false);
@@ -736,7 +740,7 @@ function StoryChrome({
           aria-label={tx("AIXCO.GLOBAL home")}
           onClick={(event) => handleChapterLink(event, storyChapters[0])}
           className={cn(
-            "inline-flex min-w-0 items-center gap-1.5 drop-shadow-[0_3px_14px_rgb(0_0_0/0.34)] sm:gap-2",
+            "inline-flex min-h-11 min-w-0 items-center gap-1.5 drop-shadow-[0_3px_14px_rgb(0_0_0/0.34)] sm:gap-2",
             useLightMobileLogo ? "text-white" : "text-foreground",
           )}
         >
@@ -783,7 +787,8 @@ function StoryChrome({
         {langOpen && (
           <ul
             role="listbox"
-            className="absolute right-16 top-[calc(100%+0.5rem)] z-[70] w-64 rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
+            aria-label={tx("Change language")}
+            className="absolute end-16 top-[calc(100%+0.5rem)] z-[70] w-64 rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
           >
             {LANGS.map((option) => (
               <li key={option.code}>
@@ -796,7 +801,7 @@ function StoryChrome({
                     setLangOpen(false);
                   }}
                   className={cn(
-                    "flex min-h-10 w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
+                    "flex min-h-11 w-full items-center justify-between rounded-md px-3 py-2 text-start text-sm transition-colors",
                     option.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70",
                   )}
                 >
@@ -810,13 +815,21 @@ function StoryChrome({
       </div>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm xl:hidden" onClick={() => setMenuOpen(false)} aria-hidden="true" />
+        <button
+          type="button"
+          aria-label={tx("Close menu")}
+          className="fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm xl:hidden"
+          onClick={() => setMenuOpen(false)}
+        />
       )}
 
       {menuOpen && (
         <aside
           id="story-mobile-menu"
-          className="fixed bottom-0 right-0 top-0 z-50 max-h-[100svh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-l border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] [scrollbar-gutter:stable] xl:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label={tx("Story navigation")}
+          className="fixed bottom-0 end-0 top-0 z-50 max-h-[100dvh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-s border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] [scrollbar-gutter:stable] xl:hidden"
         >
           <nav aria-label={tx("Story navigation")} className="grid gap-1">
             {storyChapters.map((chapter, index) => {
