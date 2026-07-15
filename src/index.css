@@ -8556,6 +8556,12 @@ html[data-home-experience='story'] {
     scrollbar-width: none;
     padding: 0.15rem 0 0.65rem;
     touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+  }
+
+  [data-story-section='how'] [data-layout='story-journeys'][data-dragging='true'] {
+    cursor: grabbing;
   }
 
   [data-story-section='how'] [data-layout='story-journeys']::-webkit-scrollbar {
@@ -8568,6 +8574,10 @@ html[data-home-experience='story'] {
     max-width: none;
     animation: story-mobile-journeys-loop 32s linear infinite;
     will-change: transform;
+  }
+
+  [data-story-section='how'] [data-layout='story-journeys'][data-dragging='true'] .story-journeys-track {
+    animation-play-state: paused;
   }
 
   [data-story-section='how'] .story-journeys-set,
@@ -8779,6 +8789,12 @@ html[data-home-experience='story'] {
   [data-chat-floating-container='true'] {
     bottom: max(0.85rem, env(safe-area-inset-bottom, 0px)) !important;
     right: max(0.85rem, env(safe-area-inset-right, 0px)) !important;
+  }
+}
+
+@media (max-width: 767px) and (hover: hover) and (pointer: fine) {
+  [data-story-section='how'] [data-layout='story-journeys']:hover .story-journeys-track {
+    animation-play-state: paused;
   }
 }
 

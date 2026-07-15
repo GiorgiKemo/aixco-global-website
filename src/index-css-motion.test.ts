@@ -505,6 +505,11 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("tabIndex={setIndex === 1 ? -1 : undefined}");
     expect(css).toContain("@keyframes story-mobile-journeys-loop");
     expect(css).toContain("animation: story-mobile-journeys-loop 32s linear infinite");
+    expect(css).toContain("[data-layout='story-journeys']:hover .story-journeys-track");
+    expect(css).toContain("animation-play-state: paused");
+    expect(desktopStoryHome).toContain("onPointerDown={handleJourneyPointerDown}");
+    expect(desktopStoryHome).toContain("onPointerMove={handleJourneyPointerMove}");
+    expect(desktopStoryHome).toContain("drag.animation.currentTime");
     expect(css).toContain(".story-journeys-set[data-journey-set='duplicate'] {\n  display: none;");
     expect(css).toContain("[data-story-section='how'] .story-journeys-set[data-journey-set='duplicate'] {\n    display: flex;");
     expect(css).not.toContain("@media (max-width: 767px) and (prefers-reduced-motion: reduce)");

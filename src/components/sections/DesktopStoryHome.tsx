@@ -2356,6 +2356,78 @@ function HowScene({
   tx: (copy: string) => string;
 }) {
   const { journeys } = useSiteContent();
+  const journeyRailRef = useRef<HTMLDivElement>(null);
+  const journeyDragRef = useRef<{
+    animation: Animation;
+    didDrag: boolean;
+    pointerId: number;
+    startTime: number;
+    startX: number;
+  } | null>(null);
+  const suppressJourneyClickRef = useRef(false);
+
+  const finishJourneyDrag = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    const drag = journeyDragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    const rail = journeyRailRef.current;
+    if (rail?.hasPointerCapture(event.pointerId)) rail.releasePointerCapture(event.pointerId);
+    if (rail) delete rail.dataset.dragging;
+
+    const track = rail?.querySelector<HTMLElement>(".story-journeys-track");
+    if (track) track.style.animationPlayState = "";
+    drag.animation.play();
+    suppressJourneyClickRef.current = drag.didDrag;
+    journeyDragRef.current = null;
+  }, []);
+
+  const handleJourneyPointerDown = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    if ((event.pointerType === "mouse" && event.button !== 0) || !window.matchMedia("(max-width: 767px)").matches) return;
+
+    const rail = journeyRailRef.current;
+    const track = rail?.querySelector<HTMLElement>(".story-journeys-track");
+    const animation = track?.getAnimations()[0];
+    if (!rail || !track || !animation) return;
+
+    const currentTime = Number(animation.currentTime ?? 0);
+    journeyDragRef.current = {
+      animation,
+      didDrag: false,
+      pointerId: event.pointerId,
+      startTime: Number.isFinite(currentTime) ? currentTime : 0,
+      startX: event.clientX,
+    };
+    suppressJourneyClickRef.current = false;
+    rail.dataset.dragging = "true";
+    rail.setPointerCapture(event.pointerId);
+    track.style.animationPlayState = "paused";
+    animation.pause();
+  }, []);
+
+  const handleJourneyPointerMove = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    const drag = journeyDragRef.current;
+    const rail = journeyRailRef.current;
+    const track = rail?.querySelector<HTMLElement>(".story-journeys-track");
+    if (!drag || drag.pointerId !== event.pointerId || !track) return;
+
+    const deltaX = event.clientX - drag.startX;
+    if (Math.abs(deltaX) > 4) drag.didDrag = true;
+
+    const duration = drag.animation.effect?.getTiming().duration;
+    const loopDistance = track.scrollWidth / 2;
+    if (typeof duration !== "number" || loopDistance <= 0) return;
+
+    const requestedTime = drag.startTime - (deltaX / loopDistance) * duration;
+    drag.animation.currentTime = ((requestedTime % duration) + duration) % duration;
+  }, []);
+
+  const handleJourneyClick = useCallback((journey: ReturnType<typeof useSiteContent>["journeys"][number]) => {
+    if (suppressJourneyClickRef.current) {
+      suppressJourneyClickRef.current = false;
+      return;
+    }
+    onJourney(journey);
+  }, [onJourney]);
 
   return (
     <SceneShell
@@ -2378,7 +2450,15 @@ function HowScene({
       <p className="story-body text-foreground/76">
         {tx("Choose the journey that fits your role. The process is structured, transparent, and digitally managed.")}
       </p>
-      <div data-layout="story-journeys" className="grid w-full sm:grid-cols-2">
+      <div
+        ref={journeyRailRef}
+        data-layout="story-journeys"
+        className="grid w-full sm:grid-cols-2"
+        onPointerDown={handleJourneyPointerDown}
+        onPointerMove={handleJourneyPointerMove}
+        onPointerUp={finishJourneyDrag}
+        onPointerCancel={finishJourneyDrag}
+      >
         <div className="story-journeys-track">
           {[0, 1].map((setIndex) => (
             <div
@@ -2392,7 +2472,7 @@ function HowScene({
                   key={`${setIndex}-${journey.role}`}
                   type="button"
                   tabIndex={setIndex === 1 ? -1 : undefined}
-                  onClick={() => onJourney(journey)}
+                  onClick={() => handleJourneyClick(journey)}
                   className="group flex min-w-0 flex-col items-stretch justify-start text-start transition-colors hover:text-primary"
                 >
                   <p className="story-metric-label text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
