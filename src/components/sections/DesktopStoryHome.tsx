@@ -2379,13 +2379,30 @@ function HowScene({
         {tx("Choose the journey that fits your role. The process is structured, transparent, and digitally managed.")}
       </p>
       <div data-layout="story-journeys" className="grid w-full sm:grid-cols-2">
-        {journeys.map((journey, index) => (
-          <button key={journey.role} type="button" onClick={() => onJourney(journey)} className="group flex min-w-0 flex-col items-stretch justify-start text-start transition-colors hover:text-primary">
-            <p className="story-metric-label text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
-            <h3 className="story-card-title">{tx(journey.role)}</h3>
-            <p className="story-body text-foreground/65">{tx(journey.summary)}</p>
-          </button>
-        ))}
+        <div className="story-journeys-track">
+          {[0, 1].map((setIndex) => (
+            <div
+              key={setIndex}
+              className="story-journeys-set"
+              data-journey-set={setIndex === 0 ? "primary" : "duplicate"}
+              aria-hidden={setIndex === 1 ? true : undefined}
+            >
+              {journeys.map((journey, index) => (
+                <button
+                  key={`${setIndex}-${journey.role}`}
+                  type="button"
+                  tabIndex={setIndex === 1 ? -1 : undefined}
+                  onClick={() => onJourney(journey)}
+                  className="group flex min-w-0 flex-col items-stretch justify-start text-start transition-colors hover:text-primary"
+                >
+                  <p className="story-metric-label text-primary/75">{tx(journey.tag ?? `Journey ${formatChapterNumber(index + 1)}`)}</p>
+                  <h3 className="story-card-title">{tx(journey.role)}</h3>
+                  <p className="story-body text-foreground/65">{tx(journey.summary)}</p>
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
       <button type="button" onClick={onRegister} className="btn-gold w-fit shrink-0">
         {tx("Register")}

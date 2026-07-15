@@ -499,6 +499,18 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-story-section='contact'] .container-x {\n    padding: clamp(1.75rem, 5vw, 2.25rem) var(--story-mobile-gutter)");
   });
 
+  it("loops journey cards infinitely on phones while preserving the desktop grid", () => {
+    expect(desktopStoryHome).toContain('className="story-journeys-track"');
+    expect(desktopStoryHome).toContain('data-journey-set={setIndex === 0 ? "primary" : "duplicate"}');
+    expect(desktopStoryHome).toContain("tabIndex={setIndex === 1 ? -1 : undefined}");
+    expect(css).toContain("@keyframes story-mobile-journeys-loop");
+    expect(css).toContain("animation: story-mobile-journeys-loop 32s linear infinite");
+    expect(css).toContain(".story-journeys-set[data-journey-set='duplicate'] {\n  display: none;");
+    expect(css).toContain("[data-story-section='how'] .story-journeys-set[data-journey-set='duplicate'] {\n    display: flex;");
+    expect(css).toContain("@media (max-width: 767px) and (prefers-reduced-motion: reduce)");
+    expect(css).toContain("[data-story-section='how'] .story-journeys-track {\n    animation: none;");
+  });
+
   it("keeps dense story sections readable on short phone demo viewports", () => {
     expect(css).toContain("@media (max-width: 559px) and (max-height: 740px)");
     expect(css).toContain("[data-story-section='participate'] [data-layout='story-participation-routes'] button");
