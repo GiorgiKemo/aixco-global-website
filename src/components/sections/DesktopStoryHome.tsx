@@ -684,7 +684,7 @@ function StoryChrome({
   const desktopNavRef = useRef<HTMLElement | null>(null);
   const activeChapterKey = storyChapters[activeIndex]?.key ?? "hero";
   const useLightMobileLogo = ["hero", "about", "aboutAccess"].includes(activeChapterKey);
-  const isDesktopHeaderTransparent = activeChapterKey === "hero" && !hasScrolledFromTop;
+  const isHeaderTransparent = activeChapterKey === "hero" && !hasScrolledFromTop;
 
   useEffect(() => {
     document.body.classList.toggle("story-mobile-menu-open", menuOpen);
@@ -742,6 +742,7 @@ function StoryChrome({
         className={cn(
           "story-mobile-header fixed inset-x-0 top-0 z-[60] flex items-center justify-between gap-2 border-b border-transparent bg-transparent px-3 py-3 sm:px-4 xl:hidden",
           useLightMobileLogo ? "story-mobile-header--dark text-white" : "story-mobile-header--light text-foreground",
+          isHeaderTransparent && "story-mobile-header--transparent",
         )}
       >
         <Link
@@ -766,7 +767,7 @@ function StoryChrome({
           />
           <span className="sr-only">AIXCO.GLOBAL</span>
         </Link>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5">
           <button
             type="button"
             onClick={() => {
@@ -775,11 +776,11 @@ function StoryChrome({
             }}
             aria-expanded={langOpen}
             aria-label={`${currentLangName} ${tx("Change language")}`}
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-foreground/10 bg-white px-3 text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-foreground/10 bg-white px-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
           >
-            <Globe className="h-3.5 w-3.5" aria-hidden />
+            <Globe className="h-3 w-3" aria-hidden />
             {currentLangName}
-            <ChevronDown className="h-3 w-3 opacity-70" aria-hidden />
+            <ChevronDown className="h-2.5 w-2.5 opacity-70" aria-hidden />
           </button>
           <button
             type="button"
@@ -792,7 +793,7 @@ function StoryChrome({
             aria-label={menuOpen ? tx("Close menu") : tx("Open menu")}
             className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-foreground/10 bg-white text-foreground"
           >
-            {menuOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
+            {menuOpen ? <X className="h-[1.125rem] w-[1.125rem]" aria-hidden /> : <Menu className="h-[1.125rem] w-[1.125rem]" aria-hidden />}
           </button>
         </div>
         {langOpen && (
@@ -876,7 +877,7 @@ function StoryChrome({
         className={cn(
           "story-desktop-header fixed inset-x-0 top-0 z-[60] hidden items-center gap-4 border-b px-6 py-3 xl:flex 2xl:px-8",
           useLightMobileLogo ? "story-desktop-header--dark text-white" : "story-desktop-header--light text-foreground",
-          isDesktopHeaderTransparent && "story-desktop-header--transparent",
+          isHeaderTransparent && "story-desktop-header--transparent",
         )}
       >
         <Link

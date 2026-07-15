@@ -108,12 +108,20 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("story-mobile-header fixed inset-x-0 top-0");
     expect(desktopStoryHome).toContain("story-mobile-header--light");
     expect(desktopStoryHome).toContain("story-mobile-header--dark");
+    expect(desktopStoryHome).toContain('isHeaderTransparent && "story-mobile-header--transparent"');
     expect(css).toContain(".story-mobile-header::before");
     expect(css).toContain("height: calc(100% + clamp(1.5rem, 4svh, 2.8rem))");
     expect(css).toContain("backdrop-filter: blur(14px) saturate(128%)");
     expect(css).toContain("--story-mobile-header-bg-start: rgb(17 16 14 / 0.96);");
     expect(css).toContain("border-bottom-color: rgb(255 255 255 / 0.14) !important;");
-    expect(css).not.toContain(".story-mobile-header--dark::before {\n    background: transparent !important;");
+    expect(css).toContain(".story-mobile-header.story-mobile-header--transparent");
+    expect(css).toContain("background: transparent !important;");
+    expect(css).toContain(".story-mobile-header.story-mobile-header--transparent::before");
+    expect(css).toContain("opacity: 0;");
+    expect(css).toContain("width: clamp(7.75rem, 37vw, 10rem) !important;");
+    expect(css).toContain("min-height: 2.75rem !important;");
+    expect(desktopStoryHome).toContain('className="flex shrink-0 items-center gap-1.5"');
+    expect(desktopStoryHome).toContain('<Globe className="h-3 w-3" aria-hidden />');
   });
 
   it("prevents automatic mobile hyphenation in story copy", () => {

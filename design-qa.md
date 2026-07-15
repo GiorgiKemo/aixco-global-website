@@ -115,3 +115,59 @@ No separate focused crop was needed because the 403 x 631 full-view comparison r
 - Browser console: zero errors.
 
 final result: passed
+
+---
+
+
+# Mobile Navbar Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-b7cde3b7-139a-4381-8e88-0bb292c20768.png`
+- Implementation screenshot: `C:/Users/Administrator/.codex/visualizations/2026/07/14/019f603a-707a-7e10-81fb-ef88cdb5f644/mobile-navbar-balanced-local.png`
+- Combined comparison: `C:/Users/Administrator/.codex/visualizations/2026/07/14/019f603a-707a-7e10-81fb-ef88cdb5f644/mobile-navbar-comparison.png`
+- Viewport: 390 x 844 CSS pixels
+- State: Homepage at the top of the page, transparent mobile navbar, English selected, menus closed
+
+## Full-view comparison evidence
+
+The source shows the previous mobile navbar proportions. In the implementation, the AIXCO.GLOBAL logo is visibly larger while the language and menu controls are reduced and remain aligned within the same header row. The implementation has no horizontal overflow.
+
+## Focused region comparison evidence
+
+The navbar itself is the complete scope, so the 390 x 120 implementation crop is also the focused comparison. Measured implementation dimensions are:
+
+- Logo: 144.30 x 30.03 pixels
+- Language control: 74.78 x 44 pixels
+- Menu control: 44 x 44 pixels
+
+Both controls retain the recommended 44-pixel touch height. The language and burger icons are smaller than the source while preserving clear recognition.
+
+## Required fidelity surfaces
+
+- Fonts and typography: Existing brand font, weight, tracking, and `EN` label are unchanged.
+- Spacing and layout rhythm: Logo/control proportions and the inter-control gap are improved; vertical centering is consistent.
+- Colors and visual tokens: Existing white controls, dark text, borders, and transparent-at-top behavior are preserved.
+- Image quality and asset fidelity: The supplied AIXCO logo asset is preserved and rendered at a larger size without stretching.
+- Copy and content: No navigation labels or accessible names changed.
+
+## Findings
+
+No actionable P0, P1, or P2 differences remain within the requested scope.
+
+## Comparison history
+
+- Initial source finding: the logo read too small relative to the language and burger controls.
+- Fix: increased the responsive logo width, reduced both controls to 44 pixels, reduced icon sizes, and tightened spacing.
+- Post-fix evidence: the combined comparison and measured 390-pixel implementation show the requested visual hierarchy with no overflow.
+
+## Interaction and browser checks
+
+- Language menu opens and closes.
+- Mobile navigation menu opens.
+- Console errors: none.
+- Horizontal overflow: none.
+
+## Follow-up polish
+
+No P3 follow-up is required for this scoped adjustment.
+
+final result: passed
