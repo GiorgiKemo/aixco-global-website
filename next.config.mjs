@@ -61,9 +61,6 @@ const nextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   experimental: {
     webVitalsAttribution: ["CLS", "LCP", "INP"],
-    sri: {
-      algorithm: "sha256",
-    },
   },
   images: {
     qualities: [62, 75],
