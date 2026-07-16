@@ -436,7 +436,12 @@ function StoryTextReveal({
     [visualLabel],
   );
   const stableMobileLabel = mobileLabel ?? label;
-  const useCompactReveal = letterCount > maxAnimatedStoryLetters;
+  // Linux and Windows fallback fonts expose materially different Cyrillic
+  // glyph metrics. The chunk reveal preserves the title animation while
+  // allowing native line wrapping instead of positioning every glyph in its
+  // own inline box, which can push Russian titles beyond the viewport.
+  const useCompactReveal = letterCount > maxAnimatedStoryLetters
+    || /[\u0400-\u04ff]/u.test(visualLabel);
   const animationDurationMs = useMemo(
     () => useCompactReveal ? 1700 : Math.min(4200, Math.max(1900, letterCount * 30 + 980)),
     [letterCount, useCompactReveal],
