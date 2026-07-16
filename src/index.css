@@ -25,34 +25,34 @@
 
 @layer base {
   :root {
-    /* Warm ivory & champagne light theme */
-    --background: 40 43% 92%;
-    --foreground: 0 0% 9%;
+    /* Exact AIXCO brandbook palette. */
+    --background: 40 42.9% 91.8%;
+    --foreground: 0 0% 8.6%;
 
-    --surface: 40 28% 95%;
+    --surface: 40 42.9% 91.8%;
     --surface-elevated: 0 0% 100%;
-    --surface-glass: 40 32% 97%;
+    --surface-glass: 40 42.9% 91.8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 0 0% 8.6%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 0 0% 8.6%;
 
     /* Deep champagne gold = primary accent (darker for contrast on light bg) */
-    --primary: 43 45% 42%;
+    --primary: 42.5 44.4% 42.4%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 46 72% 65%;
-    --primary-deep: 43 45% 34%;
+    --primary-glow: 45.8 71.7% 65.3%;
+    --primary-deep: 42.5 44.4% 42.4%;
 
-    /* Muted teal as secondary accent */
-    --secondary: 212 100% 14%;
+    /* Brandbook navy as secondary accent. */
+    --secondary: 212.1 100% 13.9%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 89%;
-    --muted-foreground: 0 0% 38%;
+    --muted: 40 42.9% 91.8%;
+    --muted-foreground: 0 0% 60.4%;
 
-    --accent: 43 45% 42%;
+    --accent: 42.5 44.4% 42.4%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 70% 50%;
@@ -60,9 +60,9 @@
 
     --success: 150 50% 38%;
 
-    --border: 0 0% 78%;
-    --input: 0 0% 82%;
-    --ring: 43 45% 42%;
+    --border: 0 0% 60.4%;
+    --input: 0 0% 60.4%;
+    --ring: 42.5 44.4% 42.4%;
 
     --radius: 0.25rem;
 
@@ -75,29 +75,29 @@
     );
     --gradient-gold: linear-gradient(
       135deg,
-      hsl(46 72% 65%) 0%,
-      hsl(43 45% 42%) 58%,
-      hsl(43 45% 34%) 100%
+      hsl(var(--primary-glow)) 0%,
+      hsl(var(--primary)) 58%,
+      hsl(var(--primary)) 100%
     );
     --gradient-onyx: linear-gradient(
       180deg,
-      hsl(40 43% 96%) 0%,
-      hsl(40 43% 92%) 100%
+      hsl(var(--surface)) 0%,
+      hsl(var(--background)) 100%
     );
     --gradient-glow: radial-gradient(
       60% 60% at 50% 0%,
-      hsl(46 72% 65% / 0.13) 0%,
+      hsl(var(--primary-glow) / 0.13) 0%,
       transparent 72%
     );
 
     /* Shadows (softer for light) */
     --shadow-elegant:
-      0 22px 62px -38px hsl(0 0% 9% / 0.3),
+      0 22px 62px -38px hsl(var(--foreground) / 0.3),
       0 1px 0 hsl(0 0% 100% / 0.7) inset;
     --shadow-gold:
-      0 18px 48px -26px hsl(43 45% 42% / 0.4),
+      0 18px 48px -26px hsl(var(--primary) / 0.4),
       0 1px 0 hsl(0 0% 100% / 0.55) inset;
-    --shadow-soft: 0 14px 42px -30px hsl(0 0% 9% / 0.24);
+    --shadow-soft: 0 14px 42px -30px hsl(var(--foreground) / 0.24);
 
     /* Motion */
     --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
@@ -105,14 +105,14 @@
     --transition-smooth: all 0.45s var(--ease-apple);
 
     /* Sidebar (unused but kept) */
-    --sidebar-background: 40 43% 92%;
-    --sidebar-foreground: 0 0% 9%;
-    --sidebar-primary: 43 45% 42%;
+    --sidebar-background: 40 42.9% 91.8%;
+    --sidebar-foreground: 0 0% 8.6%;
+    --sidebar-primary: 42.5 44.4% 42.4%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 89%;
-    --sidebar-accent-foreground: 0 0% 9%;
-    --sidebar-border: 0 0% 78%;
-    --sidebar-ring: 43 45% 42%;
+    --sidebar-accent: 40 42.9% 91.8%;
+    --sidebar-accent-foreground: 0 0% 8.6%;
+    --sidebar-border: 0 0% 60.4%;
+    --sidebar-ring: 42.5 44.4% 42.4%;
 
     /* Desktop story mode — editorial typography scale (overridden per section height) */
     --font-brand-sans:
@@ -121,12 +121,8 @@
     --font-brand-display:
       var(--font-gilroy, -apple-system), BlinkMacSystemFont,
       'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
-    --font-legacy-ui:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
-      'Segoe UI', Inter, system-ui, sans-serif;
-    --font-legacy-display:
-      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      Inter, 'Segoe UI', system-ui, sans-serif;
+    --font-legacy-ui: var(--font-brand-sans);
+    --font-legacy-display: var(--font-brand-display);
     --font-display: var(--font-brand-display);
     --font-sans: var(--font-brand-sans);
 
@@ -2926,60 +2922,9 @@
     will-change: transform;
   }
 
-  .partner-marquee-track-paused {
-    animation-play-state: paused;
-  }
-
   .partner-marquee:hover .partner-marquee-track,
   .partner-marquee:focus-within .partner-marquee-track {
     animation-play-state: paused;
-  }
-
-  .partner-marquee-motion-toggle,
-  .dubai-image-marquee__motion-toggle {
-    position: absolute;
-    z-index: 6;
-    display: inline-flex;
-    width: 2.75rem;
-    height: 2.75rem;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid hsl(var(--foreground) / 0.18);
-    border-radius: 999px;
-    background: hsl(var(--background) / 0.94);
-    color: hsl(var(--foreground));
-    box-shadow: 0 12px 30px -22px hsl(var(--foreground) / 0.55);
-    backdrop-filter: blur(12px) saturate(130%);
-    -webkit-backdrop-filter: blur(12px) saturate(130%);
-    cursor: pointer;
-  }
-
-  .partner-marquee-motion-toggle {
-    top: 0.55rem;
-    inset-inline-end: clamp(1.5rem, 6%, 3.75rem);
-  }
-
-  .dubai-image-marquee__motion-toggle {
-    top: 0.75rem;
-    inset-inline-end: 0.75rem;
-  }
-
-  .partner-marquee-motion-toggle:hover,
-  .dubai-image-marquee__motion-toggle:hover {
-    border-color: hsl(var(--primary) / 0.72);
-    color: hsl(var(--primary));
-  }
-
-  .partner-marquee-motion-toggle:focus-visible,
-  .dubai-image-marquee__motion-toggle:focus-visible {
-    outline: 2px solid hsl(var(--primary));
-    outline-offset: 3px;
-  }
-
-  .partner-marquee-motion-toggle svg,
-  .dubai-image-marquee__motion-toggle svg {
-    width: 1rem;
-    height: 1rem;
   }
 
   .partner-marquee-track-reverse {
@@ -8586,6 +8531,11 @@ html[data-home-experience='story'] {
     animation-play-state: paused;
   }
 
+  [data-story-section='how'] [data-layout='story-journeys']:hover .story-journeys-track,
+  [data-story-section='how'] [data-layout='story-journeys']:focus-within .story-journeys-track {
+    animation-play-state: paused;
+  }
+
   [data-story-section='how'] .story-journeys-set,
   [data-story-section='how'] .story-journeys-set[data-journey-set='duplicate'] {
     display: flex;
@@ -8733,6 +8683,30 @@ html[data-home-experience='story'] {
   [data-story-section='contact'] .container-x {
     padding: clamp(1.75rem, 5vw, 2.25rem) var(--story-mobile-gutter)
       max(2rem, env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-story-section='how'] [data-layout='story-journeys'] {
+      overflow-x: auto;
+      scroll-snap-type: inline mandatory;
+      touch-action: pan-x pan-y;
+      cursor: auto;
+      user-select: auto;
+    }
+
+    [data-story-section='how'] .story-journeys-track {
+      animation: none !important;
+      transform: none !important;
+      will-change: auto;
+    }
+
+    [data-story-section='how'] .story-journeys-set > button {
+      scroll-snap-align: start;
+    }
+
+    [data-story-section='how'] .story-journeys-set[data-journey-set='duplicate'] {
+      display: none !important;
+    }
   }
 
   [data-story-section='contact'] [data-story-scene-copy] .story-scene-reveal > div > div > :first-child {
@@ -9062,8 +9036,13 @@ body {
 .story-hero-wordmark,
 [data-brand-lockup='story-hero'] {
   width: min(100%, 44rem);
-  filter: drop-shadow(0 18px 42px rgb(0 0 0 / 0.3));
+  filter: none;
   text-shadow: none;
+}
+
+.story-hero-wordmark__mark,
+[data-story-hero-title-mark='true'] {
+  filter: none;
 }
 
 .story-hero-official-logo {
@@ -9235,9 +9214,13 @@ html[dir='rtl'] {
     max-width: 100%;
   }
 
-  .story-mobile-header [role='listbox'] {
+  .story-mobile-language-list {
     right: auto !important;
-    inset-inline-end: max(4rem, var(--safe-inline-end)) !important;
+    inset-inline-end: max(0.75rem, var(--safe-inline-end)) !important;
+    /* Size against the fixed header's containing block, not 100vw. Desktop
+       scrollbars can make 100vw wider than the usable layout viewport. */
+    width: min(16rem, calc(100% - max(1.5rem, calc(var(--safe-inline-start) + var(--safe-inline-end))))) !important;
+    max-width: calc(100% - max(1.5rem, calc(var(--safe-inline-start) + var(--safe-inline-end))));
     max-height: calc(100dvh - var(--story-mobile-header-height) - 0.5rem);
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -9656,5 +9639,61 @@ html[dir='rtl'] {
   .property-hero__media {
     order: 2 !important;
     min-height: 100% !important;
+  }
+}
+
+/* Selected portrait-phone hero: centered brand lockup with an editorial left-aligned message. */
+@media (max-width: 767px) and (orientation: portrait) {
+  [data-story-section='hero'] .story-hero-copy {
+    align-items: stretch;
+    justify-content: flex-start;
+    padding-top: clamp(
+      calc(var(--story-mobile-header-height, 4.75rem) + 1.25rem),
+      14.5svh,
+      calc(var(--story-mobile-header-height, 4.75rem) + 2.4rem)
+    );
+    padding-inline: max(1rem, var(--safe-inline-start)) max(1rem, var(--safe-inline-end));
+    text-align: start;
+  }
+
+  [data-story-section='hero'] .story-hero-lockup {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  [data-story-section='hero'] .story-hero-brand {
+    align-items: center;
+  }
+
+  [data-story-section='hero'] .story-hero-kicker,
+  [data-story-section='hero'] [data-brand-lockup='story-hero'],
+  [data-story-section='hero'] .story-hero-wordmark {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  [data-story-section='hero'] .story-hero-statement {
+    width: 100%;
+    align-items: flex-start;
+    margin-inline: 0;
+  }
+
+  [data-story-section='hero'] .story-hero-statement__line,
+  [data-story-section='hero'] .story-hero-statement__line + .story-hero-statement__line {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    text-align: start;
+  }
+
+  [data-story-section='hero'] .story-hero-statement__note {
+    max-width: 21rem;
+    margin-inline: 0;
+    text-align: start;
+  }
+
+  [data-story-section='hero'] .story-hero-actions {
+    width: 100%;
+    margin-inline: 0;
   }
 }

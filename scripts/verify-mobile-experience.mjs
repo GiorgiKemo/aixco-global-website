@@ -226,13 +226,14 @@ try {
         await page.waitForTimeout(220);
 
         await page.locator('.story-mobile-header button[aria-controls="story-mobile-menu"]').click();
-        await page.waitForSelector('#story-mobile-menu[role="dialog"]', { state: "visible" });
+        await page.waitForSelector('[role="dialog"][aria-modal="true"] #story-mobile-menu', { state: "visible" });
         const menuMetrics = await page.evaluate(() => {
           const root = document.documentElement;
-          const drawer = document.querySelector('#story-mobile-menu[role="dialog"]');
+          const dialog = document.querySelector('[role="dialog"][aria-modal="true"]');
+          const drawer = document.querySelector("#story-mobile-menu");
           const rect = drawer?.getBoundingClientRect();
-          const targets = drawer
-            ? [...drawer.querySelectorAll("a, button")].map((target) => {
+          const targets = dialog
+            ? [...dialog.querySelectorAll("a, button")].map((target) => {
                 const targetRect = target.getBoundingClientRect();
                 return { width: Math.round(targetRect.width), height: Math.round(targetRect.height) };
               })
@@ -262,7 +263,7 @@ try {
           errors.push("phone/menu: drawer has tap targets below 44px");
         }
 
-        await page.locator('.story-mobile-header button[aria-controls="story-mobile-menu"]').click();
+        await page.locator('[role="dialog"][aria-modal="true"] > button').click();
         await page.waitForFunction(
           () => document.querySelector('[data-story-section="hero"]')?.getAttribute("data-story-active") === "true",
           undefined,

@@ -69,7 +69,7 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).not.toContain("rgba(17,16,14,0.78)");
   });
 
-  it("defers the about video until the section becomes active", () => {
+  it("primes the about video before its section and pauses it two chapters later", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const aboutSceneStart = desktopStorySource.indexOf("function AboutScene");
     const philosophySceneStart = desktopStorySource.indexOf("function PhilosophyScene");
@@ -77,13 +77,17 @@ describe("home page performance structure", () => {
 
     expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
     expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
-    expect(aboutSceneSource).toContain("const shouldPrimeVideo = isActive && shouldReduceMotion !== true;");
-    expect(aboutSceneSource).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(aboutSceneSource).toContain("const [motionPreferenceResolved, setMotionPreferenceResolved] = useState(false);");
+    expect(aboutSceneSource).toContain("const shouldLoadVideo = motionPreferenceResolved && shouldReduceMotion !== true;");
+    expect(aboutSceneSource).toContain("const shouldPrimeVideo = shouldLoadVideo && shouldPlayVideo;");
+    expect(aboutSceneSource).toContain("src={shouldLoadVideo ? aixcoDubaiHeroVideo.src : undefined}");
     expect(aboutSceneSource).toContain("autoPlay={shouldPrimeVideo}");
-    expect(aboutSceneSource).toContain('preload={shouldPrimeVideo ? "metadata" : "none"}');
+    expect(aboutSceneSource).toContain("loop");
+    expect(aboutSceneSource).toContain('preload={shouldLoadVideo ? "auto" : "none"}');
+    expect(desktopStorySource).toContain("shouldPlayVideo={activeIndex < 3}");
     expect(desktopStorySource).toContain("storyChapters.map((_, index) => index <= 1)");
-    expect(aboutSceneSource).not.toContain("const shouldPrimeVideo = isRevealed || isActive;");
-    expect(aboutSceneSource).not.toContain('preload={shouldPrimeVideo ? "auto" : "none"}');
+    expect(aboutSceneSource).toContain("if (!shouldPrimeVideo) {");
+    expect(aboutSceneSource).toContain("video.pause();");
   });
 
   it("does not mount heavy story media before its section is revealed", () => {
@@ -103,6 +107,7 @@ describe("home page performance structure", () => {
     expect(articleSource).toContain("PropertyPageContent");
     expect(articleSource).toContain("notFound()");
     expect(articleSource).not.toContain("<Nav />");
+    expect(articleSource.indexOf("<PropertyChrome />")).toBeLessThan(articleSource.indexOf('<main id="main-content"'));
   });
 
   it("keeps the not-found page aligned with the public brand layout", () => {
@@ -163,6 +168,19 @@ describe("home page performance structure", () => {
     expect(revealHookSource).toContain("threshold: 0");
     expect(revealHookSource).not.toContain("-18%");
     expect(revealHookSource).not.toContain("viewportHeight * 0.9");
+  });
+
+  it("replays story title animations whenever a chapter becomes active", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
+    const revealComponentEnd = desktopStorySource.indexOf("function useViewportHeight");
+    const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
+
+    expect(revealComponentSource).toContain("active?: boolean;");
+    expect(revealComponentSource).toContain("const shouldAnimate = active ?? isInView;");
+    expect(revealComponentSource).toContain('setAnimationState("idle");');
+    expect(revealComponentSource).toContain("if (!shouldAnimate) {");
+    expect(desktopStorySource).toContain("<StoryTextReveal active={isActive}");
   });
 
   it("keeps scroll progress on compositor-friendly transforms", () => {

@@ -10,6 +10,8 @@ const css = readSource("src/index.css");
 const appLayout = readSource("src/app/layout.tsx");
 const desktopStoryHome = readSource("src/components/sections/DesktopStoryHome.tsx");
 const homeExperience = readSource("src/components/sections/HomeExperience.tsx");
+const partnerMarquee = readSource("src/components/partners/PartnerMarquee.tsx");
+const dubaiImageMarquee = readSource("src/components/sections/dubai/DubaiImageMarquee.tsx");
 const socialLinks = readSource("src/components/SocialLinks.tsx");
 const liveAssets = readSource("src/lib/aixco-live-assets.ts");
 
@@ -55,7 +57,22 @@ describe("index.css motion rules", () => {
     expect(css).toContain("--partner-marquee-duration: 58s;");
     expect(css).toContain(".partner-marquee-track {\n      animation: none !important;");
     expect(css).toContain(".partner-marquee--story .partner-marquee-track {\n      animation-play-state: paused !important;");
-    expect(desktopStoryHome).toContain('aria-label={isPaused ? "Play background video" : "Pause background video"}');
+    expect(desktopStoryHome).not.toContain('data-hero-motion-control="true"');
+    expect(desktopStoryHome).not.toContain('aria-label={tx(isPaused ? "Play background video" : "Pause background video")}');
+    expect(desktopStoryHome).not.toContain("aria-pressed={isPaused}");
+    expect(desktopStoryHome).toContain("const [shouldRenderVideo, setShouldRenderVideo] = useState(false);");
+    expect(desktopStoryHome).toContain("shouldRenderVideo && canAnimate && videoSrc");
+    expect(desktopStoryHome).not.toContain("fixed bottom-20 end-4 z-30 inline-flex min-h-11 items-center gap-2");
+  });
+
+  it("does not render pause or resume controls for automatic website motion", () => {
+    expect(desktopStoryHome).not.toContain('data-hero-motion-control="true"');
+    expect(partnerMarquee).not.toContain("partner-marquee-motion-toggle");
+    expect(partnerMarquee).not.toContain("Pause partner movement");
+    expect(dubaiImageMarquee).not.toContain("dubai-image-marquee__motion-toggle");
+    expect(dubaiImageMarquee).not.toContain("Pause gallery movement");
+    expect(css).not.toContain(".partner-marquee-motion-toggle");
+    expect(css).not.toContain(".dubai-image-marquee__motion-toggle");
   });
 
   it("shows story text without animation when the browser prefers reduced motion", () => {
@@ -124,6 +141,13 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('<Globe className="h-3 w-3" aria-hidden />');
   });
 
+  it("keeps the language menu inside very narrow phone viewports", () => {
+    expect(desktopStoryHome).toContain('className="story-mobile-language-list');
+    expect(css).toContain(".story-mobile-language-list {");
+    expect(css).toContain("inset-inline-end: max(0.75rem, var(--safe-inline-end)) !important;");
+    expect(css).toContain("width: min(16rem, calc(100%");
+  });
+
   it("prevents automatic mobile hyphenation in story copy", () => {
     expect(css).toContain(".story-body,\n    .story-card-title,\n    .story-metric-label,\n    .story-batumi-benefit__label");
     expect(css).toContain("overflow-wrap: break-word");
@@ -160,11 +184,14 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome.split(sharedContactValueClass)).toHaveLength(3);
   });
 
-  it("defers the About video until its section is active", () => {
-    expect(desktopStoryHome).toContain("const shouldPrimeVideo = isActive && shouldReduceMotion !== true;");
-    expect(desktopStoryHome).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(desktopStoryHome).toContain('preload={shouldPrimeVideo ? "metadata" : "none"}');
+  it("starts the About video early and pauses it two chapters later", () => {
+    expect(desktopStoryHome).toContain("const shouldLoadVideo = motionPreferenceResolved && shouldReduceMotion !== true;");
+    expect(desktopStoryHome).toContain("const shouldPrimeVideo = shouldLoadVideo && shouldPlayVideo;");
+    expect(desktopStoryHome).toContain("src={shouldLoadVideo ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain('preload={shouldLoadVideo ? "auto" : "none"}');
     expect(desktopStoryHome).toContain("autoPlay={shouldPrimeVideo}");
+    expect(desktopStoryHome).toContain("loop");
+    expect(desktopStoryHome).toContain("shouldPlayVideo={activeIndex < 3}");
     expect(desktopStoryHome).toContain("storyChapters.map((_, index) => index <= 1)");
     expect(desktopStoryHome).not.toContain("const shouldPrimeVideo = isRevealed || isActive;");
     expect(desktopStoryHome).toContain("if (!shouldPrimeVideo) {");
@@ -173,7 +200,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("onPlaying={markVideoStarted}");
     expect(desktopStoryHome).toContain('data-about-video-poster=""');
     expect(desktopStoryHome).toContain('data-video-started={videoStarted ? "true" : "false"}');
-    expect(desktopStoryHome).toContain('fetchPriority="low"');
+    expect(desktopStoryHome).toContain('fetchPriority="high"');
     expect(css).toContain("[data-story-section='about'] .story-about-cinematic-poster");
     expect(css).toContain(".story-about-cinematic-poster[data-video-started='true']");
     expect(css).toContain("transition: opacity 900ms var(--ease-apple)");
@@ -193,7 +220,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('alt: tx("Burj Khalifa and Dubai skyline at sunset")');
     expect(desktopStoryHome).toContain('sizes: "(min-width: 1280px) 82vw, 100vw"');
     expect(desktopStoryHome).not.toContain('title: tx("Dubai legacy portfolio video")');
-    expect(desktopStoryHome).toContain("src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain("src={shouldLoadVideo ? aixcoDubaiHeroVideo.src : undefined}");
   });
 
   it("requests high-density images for tall cropped story panels", () => {
@@ -520,8 +547,10 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("drag.animation.currentTime");
     expect(css).toContain(".story-journeys-set[data-journey-set='duplicate'] {\n  display: none;");
     expect(css).toContain("[data-story-section='how'] .story-journeys-set[data-journey-set='duplicate'] {\n    display: flex;");
-    expect(css).not.toContain("@media (max-width: 767px) and (prefers-reduced-motion: reduce)");
-    expect(css).not.toContain("[data-story-section='how'] .story-journeys-track {\n    animation: none;");
+    expect(css).toContain("@media (prefers-reduced-motion: reduce) {");
+    expect(css).toContain("[data-story-section='how'] [data-layout='story-journeys']:focus-within .story-journeys-track");
+    expect(css).toContain("[data-story-section='how'] .story-journeys-track {\n      animation: none !important;");
+    expect(css).toContain("[data-story-section='how'] .story-journeys-set[data-journey-set='duplicate'] {\n      display: none !important;");
   });
 
   it("keeps dense story sections readable on short phone demo viewports", () => {
@@ -534,5 +563,29 @@ describe("index.css motion rules", () => {
     expect(css).toContain("@media (min-width: 768px) and (max-width: 1023px)");
     expect(css).toContain("[data-story-section='philosophyPlatform'] .story-philosophy-panel");
     expect(css).toContain("min-height: auto");
+  });
+
+  it("uses the selected portrait-phone hero composition without changing wider layouts", () => {
+    expect(css).toContain("@media (max-width: 767px) and (orientation: portrait)");
+    expect(css).toContain("justify-content: flex-start");
+    expect(css).toContain("14.5svh");
+    expect(css).toContain("[data-story-section='hero'] .story-hero-lockup {\n    width: 100%;");
+    expect(css).toContain("[data-story-section='hero'] .story-hero-statement {\n    width: 100%;\n    align-items: flex-start;");
+    expect(css).toContain("[data-story-section='hero'] .story-hero-statement__note {\n    max-width: 21rem;");
+  });
+
+  it("uses the exact AIXCO brandbook palette and Gilroy across legacy components", () => {
+    expect(css).toContain("--background: 40 42.9% 91.8%");
+    expect(css).toContain("--foreground: 0 0% 8.6%");
+    expect(css).toContain("--primary: 42.5 44.4% 42.4%");
+    expect(css).toContain("--primary-glow: 45.8 71.7% 65.3%");
+    expect(css).toContain("--secondary: 212.1 100% 13.9%");
+    expect(css).toContain("--muted-foreground: 0 0% 60.4%");
+    expect(css).toContain("--font-legacy-ui: var(--font-brand-sans)");
+    expect(css).toContain("--font-legacy-display: var(--font-brand-display)");
+    expect(css).toContain("hsl(var(--primary-glow)) 0%");
+    expect(css).toContain("hsl(var(--primary)) 58%");
+    expect(css).toContain("[data-brand-lockup='story-hero'] {\n  width: min(100%, 44rem);\n  filter: none;");
+    expect(css).toContain("[data-story-hero-title-mark='true'] {\n  filter: none;");
   });
 });

@@ -1,12 +1,9 @@
 # AIXCO Contact Emails - Design QA
 
-- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-c858906b-8c0a-4601-81fa-fc54eda83920.png`
-- Implementation HTML: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/email/aixco-contact-request-preview.html`
-- Customer call-confirmation preview: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/email/aixco-call-request-confirmation-preview.html`
-- Customer message-confirmation preview: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/email/aixco-message-confirmation-preview.html`
-- Desktop implementation evidence: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/email/aixco-contact-request-preview-desktop-v3-stitched.png`
-- Mobile implementation evidence: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/email/aixco-contact-request-preview-mobile-v2-top.png` and `aixco-contact-request-preview-mobile-v3-bottom.png`
-- Full-view comparison: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/email/aixco-contact-email-qa-full.png`
+- Source visual truth: user-approved AIXCO contact-request mock (conversation attachment; not committed)
+- Generated previews: `output/email/` (local QA artifacts; intentionally git-ignored)
+- Mobile implementation evidence: `output/email/aixco-contact-request-preview-mobile-v2-top.png` and `output/email/aixco-contact-request-preview-mobile-v3-bottom.png`
+- Full-view comparison: `output/email/aixco-contact-email-qa-full.png`
 - Focused comparisons: `aixco-contact-email-qa-top.png`, `aixco-contact-email-qa-message.png`, and `aixco-contact-email-qa-bottom.png`
 - Viewports: desktop comparison normalized to the source's 911 px canvas; mobile 390 x 844
 - State: populated website contact request with reference, requester, interest, full message, reply action, request context, and footer
@@ -48,9 +45,8 @@ The full implementation image was assembled from browser-rendered viewport segme
 
 ## Verification
 
-- Email-specific Vitest suite: 8 tests passed.
-- Lead-capture service Vitest suite: 9 tests passed.
-- Full Vitest suite: 199 tests passed across 44 files.
+- Email and lead-capture suites: covered by `npm run test:coverage`; use the CI result as the current source of truth.
+- Full Vitest suite: run `npm run test:coverage`; CI records the current test/file totals and enforces whole-source coverage floors.
 - ESLint: passed.
 - Production build and TypeScript: passed.
 - Browser-rendered desktop and 390 x 844 mobile checks for the internal request email and both customer confirmations: passed.
@@ -68,11 +64,81 @@ final result: passed
 
 ---
 
+# AIXCO Brandbook Typography and Color QA
+
+- Source of truth: `C:/Users/Administrator/Desktop/AIXCO_Brandbook_new.pdf`
+- Typography: Gilroy Thin 100, Regular 400, Medium 500, SemiBold 600, ExtraBold 800, and Black 900
+- Primary colors: Onyx `#161616`, White `#FFFFFF`, and Gold `#E6C767`
+- Supporting colors: document gold `#9C7F3C`, Navy `#002147`, Gray `#9A9A9A`, and Ivory `#F3EDE1`
+
+## Corrections
+
+- Replaced approximate HSL theme values with exact HSL equivalents of the approved brandbook colors.
+- Routed legacy UI and display typography aliases through the existing local Gilroy font family.
+- Removed the drop shadow from the official hero logo and mark, matching the brandbook logo-usage rules.
+- Preserved language-specific font fallbacks for scripts not supported by Gilroy.
+
+## Scope
+
+The changes are token- and typeface-only. The selected portrait-phone hero layout, desktop layout, responsive structure, copy, links, and behavior remain unchanged.
+
+final result: passed
+
+---
+
+# Selected Mobile Hero - Design QA
+
+- Source visual truth: `output/playwright/selected-mobile-hero-reference.png`
+- Implementation screenshot: `output/playwright/mobile-hero-selected-390x844-final.png`
+- Full-view comparison: `output/playwright/mobile-hero-selected-comparison-final.png`
+- Viewport: 390 x 844 CSS pixels
+- State: homepage hero, English selected, menus closed, background video paused for capture
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested mobile hero composition.
+- P3: the comparison shows different frames from the existing rotating hero video. This is expected dynamic content; the source image asset, overlay treatment, and hero media behavior were not changed.
+
+## Full-view comparison evidence
+
+The paired comparison shows the selected hierarchy reproduced at the same viewport: centered kicker and official AIXCO lockup, left-aligned two-line headline, left-aligned supporting statement, full-width Explore action, and equal Register/Contact actions below. The headline and action edges now align to the reference's 16 px phone gutter.
+
+## Focused comparison evidence
+
+A separate crop was not needed because the 780 x 844 paired image keeps the logo, typography, spacing, buttons, and header controls readable at their native mobile height.
+
+## Comparison history
+
+1. Initial local capture - P1: the complete hero stack was vertically and horizontally centered, placing the kicker around the middle of the image and indenting the headline. Fix: scope a new composition to portrait phones, move the hero to the top, keep the brand centered, and allow the statement/actions to use the full content width. Evidence: `mobile-hero-before-selected-layout.png` and `mobile-hero-after-selected-layout-v1.png`.
+2. First comparison - P2: the local statement used a 19.5 px gutter and sat about 5-6 px lower than the source. Fix: use a safe-area-aware 16 px gutter and tighten the responsive top offset. Evidence: `mobile-hero-selected-comparison-final.png`.
+3. Final pass: no actionable P0/P1/P2 mismatch remains.
+
+## Required fidelity surfaces
+
+- Fonts and typography: existing Gilroy/brand sans family, weights, sizes, tracking, line heights, wrapping, and casing are preserved.
+- Spacing and layout rhythm: source-matched top offset, centered brand lockup, 16 px logical gutters, two-line headline, three-line support copy, and CTA spacing are reproduced without horizontal overflow.
+- Colors and visual tokens: existing white, onyx transparency, gold action, borders, and overlay tokens are unchanged.
+- Image quality and asset fidelity: the existing official logo and hero video/poster assets remain intact; no image, icon, or logo was recreated.
+- Copy and content: all hero wording and CTA labels are unchanged.
+
+## Verification
+
+- 390 x 844 final capture: passed with `scrollWidth` equal to the 390 px viewport.
+- Additional portrait-phone captures: 320 x 568 and 430 x 932 passed without horizontal overflow or clipped primary actions.
+- 768 x 900 tablet capture remains outside the new portrait-phone rule and retains its existing composition.
+- Register and Contact Me actions both opened their existing dialogs successfully.
+- Final browser render: zero console errors; two existing image-preload/configuration warnings remain unrelated to this layout.
+- Targeted CSS suite: 41 tests passed.
+
+final result: passed
+
+---
+
 # AIXCO Mobile Story Menu - Design QA
 
-- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-17ecedbd-44ce-45d2-b6af-86351dc8a6e9.png`
-- Browser-rendered implementation: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/playwright/menu-after-iteration-1.png`
-- Full-view comparison: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/playwright/menu-comparison.png`
+- Source visual truth: user-provided mobile-menu screenshot (conversation attachment; not committed)
+- Browser-rendered QA artifacts: `output/playwright/` (local and git-ignored)
+- Full-view comparison: `output/playwright/menu-comparison.png`
 - Responsive evidence: `menu-320.png`, `menu-390x844.png`, and `menu-768.png`
 - Viewports: 320 x 568, 390 x 844, 403 x 631, and 768 x 900
 - State: mobile/tablet story navigation open; active chapter shown; background scroll locked
@@ -107,7 +173,7 @@ No separate focused crop was needed because the 403 x 631 full-view comparison r
 
 ## Verification
 
-- 41 focused Vitest checks passed across the menu and motion suites.
+- Menu and motion suites: covered by `npm run test:coverage`; use the CI result as the current source of truth.
 - Production build and TypeScript passed.
 - Phone widths: 320, 390, and 403 px have no horizontal overflow; drawer width equals viewport width.
 - Tablet width: 768 px uses a 384 px right-side drawer.
@@ -121,9 +187,8 @@ final result: passed
 
 # Mobile Navbar Design QA
 
-- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-b7cde3b7-139a-4381-8e88-0bb292c20768.png`
-- Implementation screenshot: `C:/Users/Administrator/.codex/visualizations/2026/07/14/019f603a-707a-7e10-81fb-ef88cdb5f644/mobile-navbar-balanced-local.png`
-- Combined comparison: `C:/Users/Administrator/.codex/visualizations/2026/07/14/019f603a-707a-7e10-81fb-ef88cdb5f644/mobile-navbar-comparison.png`
+- Source visual truth: user-provided navbar screenshot (conversation attachment; not committed)
+- Implementation evidence: regenerated by the mobile browser gates; local screenshots are intentionally git-ignored
 - Viewport: 390 x 844 CSS pixels
 - State: Homepage at the top of the page, transparent mobile navbar, English selected, menus closed
 

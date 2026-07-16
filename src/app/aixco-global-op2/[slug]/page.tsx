@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { cache } from "react";
 import {
   BadgeCheck,
@@ -153,8 +152,9 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
   ];
 
   return (
-    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#F3EDE1] text-[#161616]">
+    <>
       <PropertyChrome />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#F3EDE1] text-[#161616]">
       <section className="property-hero relative mx-auto grid max-w-[96rem] overflow-hidden border-b border-[#9E9D9D]/35 lg:min-h-[40rem] lg:grid-cols-[minmax(0,1.16fr)_minmax(28rem,0.84fr)]">
         <div className="property-hero__content order-2 flex flex-col justify-center bg-[#F3EDE1] px-5 py-10 sm:px-8 sm:py-12 lg:order-1 lg:px-[clamp(3rem,4.2vw,4.5rem)] lg:py-10">
           <div className="max-w-[48rem]">
@@ -181,10 +181,10 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1.15fr_0.9fr]">
             {documentHref ? (
-              <Link href={documentHref} prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]" target="_blank" rel="noreferrer">
+              <a href={documentHref} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]" target="_blank" rel="noreferrer">
                 <Download className="h-4 w-4" aria-hidden />
                 <Tx>Download brochure</Tx>
-              </Link>
+              </a>
             ) : null}
             <PropertyContactLink className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
               <Tx>Contact AIXCO</Tx>
@@ -256,7 +256,8 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
           </div>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }
 

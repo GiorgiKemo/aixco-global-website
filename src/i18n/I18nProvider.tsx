@@ -50,6 +50,30 @@ const keyedText: Record<string, string> = {
   "cta.contact": "Contact AIXCO",
 };
 const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
+  "Skip to main content": {
+    de: "Zum Hauptinhalt springen",
+    ru: "Перейти к основному содержанию",
+    ka: "მთავარ შინაარსზე გადასვლა",
+    tr: "Ana içeriğe geç",
+    ar: "انتقل إلى المحتوى الرئيسي",
+    pl: "Przejdź do głównej treści",
+  },
+  "Pause background video": {
+    de: "Hintergrundvideo pausieren",
+    ru: "Приостановить фоновое видео",
+    ka: "ფონური ვიდეოს შეჩერება",
+    tr: "Arka plan videosunu duraklat",
+    ar: "إيقاف فيديو الخلفية مؤقتًا",
+    pl: "Wstrzymaj wideo w tle",
+  },
+  "Play background video": {
+    de: "Hintergrundvideo abspielen",
+    ru: "Воспроизвести фоновое видео",
+    ka: "ფონური ვიდეოს დაკვრა",
+    tr: "Arka plan videosunu oynat",
+    ar: "تشغيل فيديو الخلفية",
+    pl: "Odtwórz wideo w tle",
+  },
   "Request reference": {
     de: "Anfragereferenz",
     ru: "Номер обращения",

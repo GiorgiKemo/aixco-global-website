@@ -55,6 +55,21 @@ describe("PropertyChrome", () => {
     expect(screen.getAllByRole("button", { name: /تغيير اللغة/i })[0]).toHaveTextContent("AR");
   });
 
+  it("closes the language menu from outside and restores its opener", async () => {
+    renderChrome();
+
+    const languageButton = screen.getAllByRole("button", { name: /change language/i })[0];
+    languageButton.focus();
+    fireEvent.click(languageButton);
+    expect(languageButton).toHaveAttribute("aria-expanded", "true");
+
+    fireEvent.pointerDown(document.body);
+    await waitFor(() => {
+      expect(languageButton).toHaveAttribute("aria-expanded", "false");
+      expect(languageButton).toHaveFocus();
+    });
+  });
+
   it("mounts the mobile menu only while it is open and locks page scroll", () => {
     renderChrome();
 

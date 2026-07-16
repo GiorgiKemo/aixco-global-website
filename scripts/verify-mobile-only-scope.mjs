@@ -51,10 +51,10 @@ try {
     if (width === 767) {
       if (metrics.materialsTitleDisplay === "none") errors.push("767px: mobile materials title is hidden");
       if (metrics.journeyDisplay !== "block") errors.push(`767px: journey viewport uses ${metrics.journeyDisplay} display`);
-      if (metrics.journeyOverflowX !== "hidden") errors.push(`767px: journey overflow is ${metrics.journeyOverflowX}`);
-      if (metrics.journeyTrackAnimationName !== "story-mobile-journeys-loop") errors.push(`767px: journey animation is ${metrics.journeyTrackAnimationName}`);
+      if (metrics.journeyOverflowX !== "auto") errors.push(`767px reduced motion: journey overflow is ${metrics.journeyOverflowX}`);
+      if (metrics.journeyTrackAnimationName !== "none") errors.push(`767px reduced motion: journey animation is ${metrics.journeyTrackAnimationName}`);
       if (metrics.journeyPrimaryDisplay !== "flex") errors.push(`767px: primary journey set uses ${metrics.journeyPrimaryDisplay} display`);
-      if (metrics.journeyDuplicateDisplay !== "flex") errors.push(`767px: duplicate journey set uses ${metrics.journeyDuplicateDisplay} display`);
+      if (metrics.journeyDuplicateDisplay !== "none") errors.push(`767px reduced motion: duplicate journey set uses ${metrics.journeyDuplicateDisplay} display`);
       if (metrics.teamAutoFlow !== "column") errors.push(`767px: team cards use ${metrics.teamAutoFlow} flow`);
       if (metrics.heroHeight >= height - 8) errors.push(`767px: mobile hero does not reveal the next section (${metrics.heroHeight}px)`);
     } else {
@@ -98,6 +98,10 @@ try {
   if (animatedJourney.animationDuration !== "32s") errors.push(`390px: journey animation duration is ${animatedJourney.animationDuration}`);
   if (animatedJourney.duplicateDisplay !== "flex") errors.push(`390px: duplicate journey set uses ${animatedJourney.duplicateDisplay} display`);
   if (animatedJourney.duplicateAriaHidden !== "true") errors.push("390px: duplicate journey set is exposed to assistive technology");
+
+  await animatedPage.locator('[data-journey-set="primary"] button').first().focus();
+  const focusedAnimationState = await animatedPage.locator(".story-journeys-track").evaluate((track) => getComputedStyle(track).animationPlayState);
+  if (focusedAnimationState !== "paused") errors.push(`390px: focused journey animation is ${focusedAnimationState}`);
   await animatedContext.close();
 } finally {
   await browser.close();

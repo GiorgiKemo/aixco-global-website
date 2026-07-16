@@ -58,6 +58,7 @@ describe("LiveVideo", () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
     vi.restoreAllMocks();
   });
 
@@ -154,6 +155,25 @@ describe("LiveVideo", () => {
 
     expect(inlineVideo).toHaveAttribute("src", "/preview-video.mp4");
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
+  });
+
+  it("does not attach or autoplay inline previews when reduced motion is preferred", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubGlobal("matchMedia", vi.fn(() => ({
+      matches: true,
+      media: "(prefers-reduced-motion: reduce)",
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })));
+
+    render(<LiveVideo src="/sample-video.mp4" title="Reduced motion preview" poster="/poster.jpg" eager />);
+
+    expect(screen.getByLabelText("Reduced motion preview")).not.toHaveAttribute("src");
+    expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
   });
 
   it("can still use full media inline when smooth previews are explicitly enabled", () => {

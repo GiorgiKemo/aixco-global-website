@@ -51,6 +51,7 @@ describe("ClientShell", () => {
 
     expect(screen.queryByTestId("motion-config")).not.toBeInTheDocument();
     expect(screen.getByText("Page content")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Skip to main content" })).toHaveAttribute("href", "#main-content");
   });
 
   it("defers noncritical floating UI until the browser is idle", async () => {

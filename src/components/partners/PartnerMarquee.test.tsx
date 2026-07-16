@@ -42,7 +42,7 @@ describe("PartnerMarquee", () => {
     });
   });
 
-  it("keeps story marquees running continuously", () => {
+  it("keeps story marquees running continuously without a motion toggle", () => {
     const { container } = render(
       <PartnerMarquee
         partners={partners}
@@ -51,8 +51,9 @@ describe("PartnerMarquee", () => {
       />,
     );
 
-    expect(container.querySelector(".partner-marquee-track-paused")).toBeNull();
-    expect(container.querySelector('[data-marquee-paused="false"]')).toBeInTheDocument();
+    expect(container.querySelector(".partner-marquee-track")).toBeInTheDocument();
+    expect(container.querySelector(".partner-marquee-motion-toggle")).toBeNull();
+    expect(screen.queryByLabelText("Pause partner movement")).toBeNull();
   });
 
 });

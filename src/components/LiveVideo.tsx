@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { useOptionalI18n } from "@/i18n/I18nProvider";
+import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 
 type LiveVideoProps = {
   src: string;
@@ -105,7 +106,10 @@ export function LiveVideo({
   const [isInFocus, setIsInFocus] = useState(eager);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasPreviewFrame, setHasPreviewFrame] = useState(false);
-  const shouldAttachVideo = shouldLoad && autoplayPreview && (isInFocus || isExpanded);
+  const shouldReduceMotion = useHydratedReducedMotion();
+  const [motionPreferenceResolved, setMotionPreferenceResolved] = useState(false);
+  const shouldAutoplayPreview = autoplayPreview && motionPreferenceResolved && !shouldReduceMotion;
+  const shouldAttachVideo = shouldLoad && shouldAutoplayPreview && isInFocus;
   const inlineSrc = smoothPreview ? src : previewSrc ?? src;
   const previewPreload = shouldAttachVideo && isInFocus && smoothPreview ? "auto" : shouldAttachVideo ? "metadata" : "none";
 
@@ -119,6 +123,10 @@ export function LiveVideo({
     setIsInFocus(true);
     setIsExpanded(true);
   };
+
+  useEffect(() => {
+    setMotionPreferenceResolved(true);
+  }, []);
 
   useEffect(() => {
     if (eager) {
@@ -195,12 +203,12 @@ export function LiveVideo({
 
     if (isExpanded) {
       video.pause();
-    } else if (isInFocus && autoplayPreview) {
+    } else if (isInFocus && shouldAutoplayPreview) {
       void video.play().catch(() => undefined);
     } else {
       video.pause();
     }
-  }, [autoplayPreview, isExpanded, isInFocus, shouldAttachVideo]);
+  }, [isExpanded, isInFocus, shouldAttachVideo, shouldAutoplayPreview]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -322,7 +330,7 @@ export function LiveVideo({
             sizes="(min-width: 1024px) 50vw, 100vw"
             className={`pointer-events-none absolute inset-0 h-full w-full ${
               fit === "contain" ? "object-contain" : "object-cover"
-            } transition-opacity duration-300 ${shouldAttachVideo && autoplayPreview && isInFocus && hasPreviewFrame && !isExpanded ? "opacity-0" : "opacity-100"}`}
+            } transition-opacity duration-300 ${shouldAttachVideo && shouldAutoplayPreview && isInFocus && hasPreviewFrame && !isExpanded ? "opacity-0" : "opacity-100"}`}
             loading={eager ? "eager" : "lazy"}
             fetchPriority={eager ? "high" : "auto"}
             decoding="async"
@@ -336,16 +344,16 @@ export function LiveVideo({
           title={tx(title)}
           className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}
           style={videoStyle}
-          autoPlay={autoplayPreview && isInFocus && shouldAttachVideo && !isExpanded}
+          autoPlay={shouldAutoplayPreview && isInFocus && shouldAttachVideo && !isExpanded}
           muted
-          loop={autoplayPreview}
+          loop={shouldAutoplayPreview}
           playsInline
           preload={previewPreload}
           onLoadedData={() => setHasPreviewFrame(true)}
           onError={() => setHasPreviewFrame(false)}
           onCanPlay={(event) => {
             setHasPreviewFrame(true);
-            if (shouldAttachVideo && isInFocus && autoplayPreview && !isExpanded && event.currentTarget.paused) {
+            if (shouldAttachVideo && isInFocus && shouldAutoplayPreview && !isExpanded && event.currentTarget.paused) {
               void event.currentTarget.play().catch(() => undefined);
             }
           }}

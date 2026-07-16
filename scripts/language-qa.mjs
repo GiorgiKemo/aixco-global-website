@@ -5,11 +5,12 @@ import { chromium } from "playwright";
 const baseUrl = process.env.LANGUAGE_QA_URL ?? "http://127.0.0.1:4173/";
 const outDir = path.resolve("output/playwright/language-qa");
 
-const defaultLanguages = ["en", "de", "ru", "ka", "tr", "ar"];
+const defaultLanguages = ["en", "de", "ru", "ka", "tr", "ar", "pl"];
 const defaultViewports = [
   { name: "desktop", width: 1365, height: 768, isMobile: false },
   { name: "ipad", width: 820, height: 1180, isMobile: false },
   { name: "mobile", width: 390, height: 844, isMobile: true },
+  { name: "narrow", width: 280, height: 653, isMobile: true },
 ];
 
 function parseLanguages(value) {
@@ -337,9 +338,14 @@ async function runCase(browser, lang, viewport) {
     await page.screenshot({ path: heroShot, fullPage: false });
     result.screenshots.push(heroShot);
 
-    const langButton = page.locator("button[aria-label*='Change language']:visible").first();
+    const langButton = page.locator("button[data-language-trigger='true']:visible").first();
     await langButton.click({ timeout: 5000 });
-    await page.locator(`[role='option'][data-lang='${lang}']:visible`).first().click({ timeout: 5000 });
+    const visibleLanguageMenu = page.locator(".story-mobile-language-list:visible, .story-desktop-header ul:visible").first();
+    const languageMenuBox = await visibleLanguageMenu.boundingBox();
+    if (languageMenuBox && (languageMenuBox.x < -1 || languageMenuBox.x + languageMenuBox.width > viewport.width + 1)) {
+      result.errors.push(`language menu extends outside viewport (${Math.round(languageMenuBox.x)}-${Math.round(languageMenuBox.x + languageMenuBox.width)}px)`);
+    }
+    await page.locator(`[data-lang='${lang}']:visible`).first().click({ timeout: 5000 });
     await wait(150);
 
     for (const section of sections) {

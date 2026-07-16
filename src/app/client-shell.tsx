@@ -1,7 +1,7 @@
 "use client";
 
 import { lazy, Suspense, useEffect, useState } from "react";
-import { I18nProvider } from "@/i18n/I18nProvider";
+import { I18nProvider, useI18n } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
 import { SiteContentProvider } from "@/data/SiteContentProvider";
 import { DevRuntimeRefresh } from "@/components/DevRuntimeRefresh";
@@ -50,6 +50,11 @@ function DeferredShellUi() {
   );
 }
 
+function SkipToContentLink() {
+  const { tx } = useI18n();
+  return <a href="#main-content" className="skip-link">{tx("Skip to main content")}</a>;
+}
+
 type ClientShellProps = {
   children: React.ReactNode;
   initialSiteContent?: SiteContent;
@@ -67,7 +72,7 @@ export function ClientShell({
         <UIProvider>
           <DevRuntimeRefresh />
           <ScrollManager />
-          <a href="#main-content" className="skip-link">Skip to main content</a>
+          <SkipToContentLink />
           {children}
           <DeferredShellUi />
         </UIProvider>

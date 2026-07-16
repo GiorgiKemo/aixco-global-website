@@ -144,21 +144,36 @@ export function PropertyChrome() {
   const mobileDrawerRef = useRef<HTMLElement | null>(null);
   const mobileMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const mobileCloseButtonRef = useRef<HTMLButtonElement | null>(null);
+  const shouldRestoreMobileMenuFocusRef = useRef(true);
+  const desktopLanguageButtonRef = useRef<HTMLButtonElement | null>(null);
+  const mobileLanguageButtonRef = useRef<HTMLButtonElement | null>(null);
+  const languageOpenerRef = useRef<HTMLButtonElement | null>(null);
   const currentLangName = LANGS.find((option) => option.code === lang)?.native ?? lang.toUpperCase();
 
   useEffect(() => {
+    const restoreLanguageFocus = () => {
+      const opener = languageOpenerRef.current;
+      window.requestAnimationFrame(() => {
+        if (opener?.isConnected) opener.focus({ preventScroll: true });
+      });
+    };
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setDesktopGroupOpen(null);
-      setLangOpen(false);
-      setMobileOpen(false);
+      if (langOpen) {
+        setLangOpen(false);
+        restoreLanguageFocus();
+      }
     };
 
     const closeFromOutside = (event: PointerEvent) => {
       const target = event.target;
       if (!(target instanceof Node) || headerRef.current?.contains(target)) return;
       setDesktopGroupOpen(null);
-      setLangOpen(false);
+      if (langOpen) {
+        setLangOpen(false);
+        restoreLanguageFocus();
+      }
     };
 
     window.addEventListener("keydown", closeOnEscape);
@@ -167,6 +182,20 @@ export function PropertyChrome() {
       window.removeEventListener("keydown", closeOnEscape);
       window.removeEventListener("pointerdown", closeFromOutside);
     };
+  }, [langOpen]);
+
+  useEffect(() => {
+    const desktopMedia = window.matchMedia("(min-width: 1280px)");
+    const closeMobileUiAtDesktopBreakpoint = () => {
+      if (!desktopMedia.matches) return;
+      shouldRestoreMobileMenuFocusRef.current = false;
+      setMobileOpen(false);
+      if (languageOpenerRef.current === mobileLanguageButtonRef.current) setLangOpen(false);
+    };
+
+    closeMobileUiAtDesktopBreakpoint();
+    desktopMedia.addEventListener("change", closeMobileUiAtDesktopBreakpoint);
+    return () => desktopMedia.removeEventListener("change", closeMobileUiAtDesktopBreakpoint);
   }, []);
 
   useEffect(() => {
@@ -202,7 +231,7 @@ export function PropertyChrome() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       restoreIsolation();
-      if (opener?.isConnected) opener.focus({ preventScroll: true });
+      if (shouldRestoreMobileMenuFocusRef.current && opener?.isConnected) opener.focus({ preventScroll: true });
     };
   }, [mobileOpen]);
 
@@ -223,6 +252,7 @@ export function PropertyChrome() {
             onClick={() => {
               setLang(option.code);
               setLangOpen(false);
+              window.requestAnimationFrame(() => languageOpenerRef.current?.focus({ preventScroll: true }));
             }}
             className={cn(
               "flex min-h-11 w-full items-center justify-between rounded-md px-3 py-2 text-start text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45",
@@ -288,11 +318,14 @@ export function PropertyChrome() {
 
           <div className="relative ms-auto hidden xl:block">
             <button
+              ref={desktopLanguageButtonRef}
+              data-language-trigger="true"
               type="button"
               aria-expanded={langOpen}
               aria-controls="property-language-list"
               aria-label={`${currentLangName} ${tx("Change language")}`}
-              onClick={() => {
+              onClick={(event) => {
+                languageOpenerRef.current = event.currentTarget;
                 setDesktopGroupOpen(null);
                 setLangOpen((current) => !current);
               }}
@@ -311,11 +344,14 @@ export function PropertyChrome() {
 
           <div className="ms-auto flex items-center gap-2 xl:hidden">
             <button
+              ref={mobileLanguageButtonRef}
+              data-language-trigger="true"
               type="button"
               aria-expanded={langOpen}
               aria-controls="property-mobile-language-list"
               aria-label={`${currentLangName} ${tx("Change language")}`}
-              onClick={() => {
+              onClick={(event) => {
+                languageOpenerRef.current = event.currentTarget;
                 setMobileOpen(false);
                 setLangOpen((current) => !current);
               }}
@@ -332,7 +368,10 @@ export function PropertyChrome() {
               aria-label={mobileOpen ? tx("Close menu") : tx("Open menu")}
               onClick={() => {
                 setLangOpen(false);
-                setMobileOpen((current) => !current);
+                setMobileOpen((current) => {
+                  if (!current) shouldRestoreMobileMenuFocusRef.current = true;
+                  return !current;
+                });
               }}
               className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm border border-foreground/15 bg-transparent text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             >

@@ -15,8 +15,6 @@ import {
   KeyRound,
   Menu,
   MapPin,
-  Pause,
-  Play,
   ShieldCheck,
   TrendingUp,
   X,
@@ -403,15 +401,18 @@ function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
 }
 
 function StoryTextReveal({
+  active,
   label,
   mobileLabel,
 }: {
+  active?: boolean;
   children?: React.ReactNode;
   label: string;
   mobileLabel?: string;
 }) {
   const rootRef = useRef<HTMLSpanElement>(null);
   const isInView = useStoryTextInView(rootRef);
+  const shouldAnimate = active ?? isInView;
   const shouldReduceMotion = useHydratedReducedMotion();
   const visualLabel = mobileLabel ?? label;
   const tokens = useMemo(
@@ -449,7 +450,12 @@ function StoryTextReveal({
   }, [label, mobileLabel]);
 
   useLayoutEffect(() => {
-    if (!isInView || animationState !== "idle") return;
+    if (!shouldAnimate) {
+      if (animationState !== "idle") setAnimationState("idle");
+      return;
+    }
+
+    if (animationState !== "idle") return;
 
     if (shouldReduceMotion) {
       setAnimationState("played");
@@ -458,7 +464,7 @@ function StoryTextReveal({
 
     setAnimationRun((current) => current + 1);
     setAnimationState("animating");
-  }, [animationState, isInView, shouldReduceMotion]);
+  }, [animationState, shouldAnimate, shouldReduceMotion]);
 
   useEffect(() => {
     if (animationState !== "animating") return undefined;
@@ -682,6 +688,16 @@ function StoryChrome({
   const [desktopGroupOpen, setDesktopGroupOpen] = useState<string | null>(null);
   const [hasScrolledFromTop, setHasScrolledFromTop] = useState(false);
   const desktopNavRef = useRef<HTMLElement | null>(null);
+  const mobileMenuLayerRef = useRef<HTMLDivElement | null>(null);
+  const mobileMenuRef = useRef<HTMLElement | null>(null);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const mobileMenuCloseButtonRef = useRef<HTMLButtonElement | null>(null);
+  const shouldRestoreMobileMenuFocusRef = useRef(true);
+  const mobileLanguageButtonRef = useRef<HTMLButtonElement | null>(null);
+  const desktopLanguageButtonRef = useRef<HTMLButtonElement | null>(null);
+  const mobileLanguageMenuRef = useRef<HTMLUListElement | null>(null);
+  const desktopLanguageMenuRef = useRef<HTMLUListElement | null>(null);
+  const languageOpenerRef = useRef<HTMLButtonElement | null>(null);
   const activeChapterKey = storyChapters[activeIndex]?.key ?? "hero";
   const useLightMobileLogo = ["hero", "about", "aboutAccess"].includes(activeChapterKey);
   const isHeaderTransparent = activeChapterKey === "hero" && !hasScrolledFromTop;
@@ -697,6 +713,91 @@ function StoryChrome({
   }, [menuOpen]);
 
   useEffect(() => {
+    const desktopMedia = window.matchMedia("(min-width: 1280px)");
+    const closeMobileUiAtDesktopBreakpoint = () => {
+      if (!desktopMedia.matches) return;
+      shouldRestoreMobileMenuFocusRef.current = false;
+      setMenuOpen(false);
+      if (languageOpenerRef.current === mobileLanguageButtonRef.current) setLangOpen(false);
+    };
+
+    closeMobileUiAtDesktopBreakpoint();
+    desktopMedia.addEventListener("change", closeMobileUiAtDesktopBreakpoint);
+    return () => desktopMedia.removeEventListener("change", closeMobileUiAtDesktopBreakpoint);
+  }, [setLangOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const menu = mobileMenuRef.current;
+    const layer = mobileMenuLayerRef.current;
+    const opener = mobileMenuButtonRef.current;
+    if (!menu || !layer) return;
+
+    const focusableSelector = [
+      "a[href]",
+      "button:not([disabled])",
+      "input:not([disabled]):not([type='hidden'])",
+      "select:not([disabled])",
+      "textarea:not([disabled])",
+      "[tabindex]:not([tabindex='-1'])",
+    ].join(",");
+    const previousStates: Array<{ element: HTMLElement; inert: boolean; ariaHidden: string | null }> = [];
+    let current: HTMLElement = layer;
+
+    while (current.parentElement) {
+      const parent = current.parentElement;
+      Array.from(parent.children).forEach((sibling) => {
+        if (sibling === current || !(sibling instanceof HTMLElement)) return;
+        previousStates.push({ element: sibling, inert: sibling.inert, ariaHidden: sibling.getAttribute("aria-hidden") });
+        sibling.inert = true;
+        sibling.setAttribute("aria-hidden", "true");
+      });
+      if (parent === document.body) break;
+      current = parent;
+    }
+
+    const handleMenuKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMenuOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const focusable = Array.from(menu.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+        (element) => element.tabIndex >= 0 && element.getAttribute("aria-hidden") !== "true" && !element.closest("[inert]"),
+      );
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (!first || !last) {
+        event.preventDefault();
+        menu.focus({ preventScroll: true });
+      } else if (event.shiftKey && (document.activeElement === first || !menu.contains(document.activeElement))) {
+        event.preventDefault();
+        last.focus({ preventScroll: true });
+      } else if (!event.shiftKey && (document.activeElement === last || !menu.contains(document.activeElement))) {
+        event.preventDefault();
+        first.focus({ preventScroll: true });
+      }
+    };
+
+    window.addEventListener("keydown", handleMenuKeyDown);
+    (mobileMenuCloseButtonRef.current ?? menu).focus({ preventScroll: true });
+
+    return () => {
+      window.removeEventListener("keydown", handleMenuKeyDown);
+      previousStates.reverse().forEach(({ element, inert, ariaHidden }) => {
+        element.inert = inert;
+        if (ariaHidden === null) element.removeAttribute("aria-hidden");
+        else element.setAttribute("aria-hidden", ariaHidden);
+      });
+      if (shouldRestoreMobileMenuFocusRef.current && opener?.isConnected) opener.focus({ preventScroll: true });
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
     const syncScrolledState = () => {
       setHasScrolledFromTop(window.scrollY > 10);
     };
@@ -707,18 +808,35 @@ function StoryChrome({
   }, []);
 
   useEffect(() => {
+    const restoreLanguageFocus = () => {
+      const opener = languageOpenerRef.current;
+      window.requestAnimationFrame(() => {
+        if (opener?.isConnected) opener.focus({ preventScroll: true });
+      });
+    };
     const closeDesktopMenu = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setDesktopGroupOpen(null);
-        setLangOpen(false);
-        setMenuOpen(false);
+        if (langOpen) {
+          setLangOpen(false);
+          restoreLanguageFocus();
+        }
       }
     };
 
     const closeDesktopMenuFromOutside = (event: Event) => {
       const target = event.target;
-      if (!(target instanceof Node) || desktopNavRef.current?.contains(target)) return;
-      setDesktopGroupOpen(null);
+      if (!(target instanceof Node)) return;
+      if (!desktopNavRef.current?.contains(target)) setDesktopGroupOpen(null);
+
+      const clickedLanguageUi = mobileLanguageButtonRef.current?.contains(target)
+        || desktopLanguageButtonRef.current?.contains(target)
+        || mobileLanguageMenuRef.current?.contains(target)
+        || desktopLanguageMenuRef.current?.contains(target);
+      if (langOpen && !clickedLanguageUi) {
+        setLangOpen(false);
+        restoreLanguageFocus();
+      }
     };
 
     window.addEventListener("keydown", closeDesktopMenu);
@@ -727,7 +845,7 @@ function StoryChrome({
       window.removeEventListener("keydown", closeDesktopMenu);
       window.removeEventListener("pointerdown", closeDesktopMenuFromOutside);
     };
-  }, [setLangOpen]);
+  }, [langOpen, setLangOpen]);
 
   const handleChapterLink = (event: MouseEvent<HTMLAnchorElement>, chapter: StoryChapter) => {
     setLangOpen(false);
@@ -769,8 +887,11 @@ function StoryChrome({
         </Link>
         <div className="flex shrink-0 items-center gap-1.5">
           <button
+            ref={mobileLanguageButtonRef}
+            data-language-trigger="true"
             type="button"
-            onClick={() => {
+            onClick={(event) => {
+              languageOpenerRef.current = event.currentTarget;
               setMenuOpen(false);
               setLangOpen((value) => !value);
             }}
@@ -783,10 +904,14 @@ function StoryChrome({
             <ChevronDown className="h-2.5 w-2.5 opacity-70" aria-hidden />
           </button>
           <button
+            ref={mobileMenuButtonRef}
             type="button"
             onClick={() => {
               setLangOpen(false);
-              setMenuOpen((value) => !value);
+              setMenuOpen((value) => {
+                if (!value) shouldRestoreMobileMenuFocusRef.current = true;
+                return !value;
+              });
             }}
             aria-expanded={menuOpen}
             aria-controls="story-mobile-menu"
@@ -798,8 +923,9 @@ function StoryChrome({
         </div>
         {langOpen && (
           <ul
+            ref={mobileLanguageMenuRef}
             aria-label={tx("Change language")}
-            className="absolute end-16 top-[calc(100%+0.5rem)] z-[70] max-h-[calc(100dvh-5.5rem)] w-64 overflow-y-auto overscroll-contain rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
+            className="story-mobile-language-list absolute end-16 top-[calc(100%+0.5rem)] z-[70] max-h-[calc(100dvh-5.5rem)] w-64 overflow-y-auto overscroll-contain rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
           >
             {LANGS.map((option) => (
               <li key={option.code}>
@@ -809,6 +935,7 @@ function StoryChrome({
                   onClick={() => {
                     setLang(option.code);
                     setLangOpen(false);
+                    window.requestAnimationFrame(() => languageOpenerRef.current?.focus({ preventScroll: true }));
                   }}
                   className={cn(
                     "flex min-h-11 w-full items-center justify-between rounded-md px-3 py-2 text-start text-sm transition-colors",
@@ -825,52 +952,67 @@ function StoryChrome({
       </div>
 
       {menuOpen && (
-        <button
-          type="button"
-          aria-label={tx("Close menu")}
-          className="fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm xl:hidden"
-          onClick={() => setMenuOpen(false)}
-        />
-      )}
-
-      {menuOpen && (
-        <aside
-          id="story-mobile-menu"
+        <div
+          ref={(node) => {
+            mobileMenuLayerRef.current = node;
+            mobileMenuRef.current = node;
+          }}
           role="dialog"
           aria-modal="true"
           aria-label={tx("Story navigation")}
-          className="fixed bottom-0 end-0 top-0 z-50 max-h-[100dvh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-s border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] [scrollbar-gutter:stable] xl:hidden"
+          tabIndex={-1}
+          className="fixed inset-0 z-[70] xl:hidden"
         >
-          <nav aria-label={tx("Story navigation")} className="grid gap-1">
-            {storyChapters.map((chapter, index) => {
-              const isActive = activeIndex === index;
-              const href = chapter.id ? `#${chapter.id}` : "/";
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 top-[var(--story-mobile-header-height)] bg-foreground/30 backdrop-blur-sm"
+            onClick={() => setMenuOpen(false)}
+          />
+          <button
+            ref={mobileMenuCloseButtonRef}
+            type="button"
+            aria-label={tx("Close menu")}
+            onClick={() => setMenuOpen(false)}
+            className="absolute end-[max(0.85rem,env(safe-area-inset-right,0px))] top-[max(0.8rem,env(safe-area-inset-top,0px))] z-20 inline-flex h-11 w-11 items-center justify-center rounded-lg border border-foreground/10 bg-white text-foreground shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            <X className="h-[1.125rem] w-[1.125rem]" aria-hidden />
+          </button>
+          <aside
+            id="story-mobile-menu"
+            aria-label={tx("Story navigation")}
+            className="absolute bottom-0 end-0 top-0 z-10 max-h-[100dvh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-s border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] [scrollbar-gutter:stable]"
+          >
+            <nav aria-label={tx("Story navigation")} className="grid gap-1">
+              {storyChapters.map((chapter, index) => {
+                const isActive = activeIndex === index;
+                const href = chapter.id ? `#${chapter.id}` : "/";
 
-              return (
-                <Link
-                  key={chapter.key}
-                  href={href}
-                  aria-current={isActive ? "true" : undefined}
-                  data-active={isActive ? "true" : "false"}
-                  onClick={(event) => handleChapterLink(event, chapter)}
-                  className={cn(
-                    "group/story-chapter story-chapter-link text-foreground/78 hover:text-primary focus-visible:text-primary",
-                    isActive && "story-chapter-link--active text-primary font-semibold",
-                  )}
-                >
-                  <span
+                return (
+                  <Link
+                    key={chapter.key}
+                    href={href}
+                    aria-current={isActive ? "true" : undefined}
+                    data-active={isActive ? "true" : "false"}
+                    onClick={(event) => handleChapterLink(event, chapter)}
                     className={cn(
-                      "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
-                      isActive && "story-chapter-link__line--active w-full bg-primary",
+                      "group/story-chapter story-chapter-link text-foreground/78 hover:text-primary focus-visible:text-primary",
+                      isActive && "story-chapter-link--active text-primary font-semibold",
                     )}
-                    aria-hidden="true"
-                  />
-                  <span className="min-w-0 [overflow-wrap:anywhere]">{tx(chapter.label)}</span>
-                </Link>
-              );
-            })}
-          </nav>
-        </aside>
+                  >
+                    <span
+                      className={cn(
+                        "story-chapter-link__line w-[0.65rem] bg-foreground/20 transition-[width,background-color] duration-300 [transition-timing-function:var(--ease-apple)]",
+                        isActive && "story-chapter-link__line--active w-full bg-primary",
+                      )}
+                      aria-hidden="true"
+                    />
+                    <span className="min-w-0 [overflow-wrap:anywhere]">{tx(chapter.label)}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </aside>
+        </div>
       )}
 
       <header
@@ -975,8 +1117,11 @@ function StoryChrome({
             {formatChapterNumber(activeIndex + 1)} / {formatChapterNumber(storyChapters.length)}
           </p>
           <button
+            ref={desktopLanguageButtonRef}
+            data-language-trigger="true"
             type="button"
-            onClick={() => {
+            onClick={(event) => {
+              languageOpenerRef.current = event.currentTarget;
               setDesktopGroupOpen(null);
               setLangOpen((value) => !value);
             }}
@@ -990,6 +1135,7 @@ function StoryChrome({
           </button>
           {langOpen && (
             <ul
+              ref={desktopLanguageMenuRef}
               aria-label={tx("Change language")}
               className="absolute end-0 top-[calc(100%+0.65rem)] z-[70] w-72 rounded-lg border border-foreground/10 bg-white p-1 text-foreground shadow-elegant"
             >
@@ -1001,6 +1147,7 @@ function StoryChrome({
                     onClick={() => {
                       setLang(option.code);
                       setLangOpen(false);
+                      window.requestAnimationFrame(() => languageOpenerRef.current?.focus({ preventScroll: true }));
                     }}
                     className={cn(
                       "flex min-h-10 w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors",
@@ -1032,8 +1179,9 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
   const videoSrc = useHeroBackdropVideoSrc();
   const shouldReduceMotion = useHydratedReducedMotion();
   const canAnimate = shouldReduceMotion !== true;
-  const [isPaused, setIsPaused] = useState(false);
-  const [shouldRenderVideo, setShouldRenderVideo] = useState(visible && canAnimate);
+  // Fail closed until the hydrated motion preference has been evaluated. This
+  // prevents an autoplay frame for visitors who request reduced motion.
+  const [shouldRenderVideo, setShouldRenderVideo] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -1046,12 +1194,7 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
 
     if (visible) {
       setShouldRenderVideo(true);
-
-      if (isPaused) {
-        video?.pause();
-      } else {
-        void video?.play().catch(() => undefined);
-      }
+      void video?.play().catch(() => undefined);
 
       return undefined;
     }
@@ -1062,11 +1205,10 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
     }, 760);
 
     return () => window.clearTimeout(cleanupTimer);
-  }, [canAnimate, isPaused, videoSrc, visible]);
+  }, [canAnimate, videoSrc, visible]);
 
   return (
-    <>
-      <div
+    <div
         aria-hidden="true"
         className={`pointer-events-none fixed bottom-0 end-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 [transition-timing-function:var(--ease-apple)] ${
           visible ? "opacity-100" : "opacity-0"
@@ -1083,12 +1225,12 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
           sizes="100vw"
           className="object-cover brightness-[1.08] saturate-[1.08]"
         />
-        {shouldRenderVideo && videoSrc ? (
+        {shouldRenderVideo && canAnimate && videoSrc ? (
           <video
             ref={videoRef}
             src={videoSrc}
             poster={aixcoHeroBackgroundVideo.poster}
-            autoPlay={visible && !isPaused}
+            autoPlay={visible}
             muted
             loop
             playsInline
@@ -1098,19 +1240,6 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
         ) : null}
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.20)_44%,rgba(17,16,14,0.54)),linear-gradient(180deg,rgba(17,16,14,0.16),rgba(17,16,14,0.58))]" />
       </div>
-      {visible && canAnimate && videoSrc ? (
-        <button
-          type="button"
-          aria-pressed={isPaused}
-          aria-label={isPaused ? "Play background video" : "Pause background video"}
-          onClick={() => setIsPaused((value) => !value)}
-          className="fixed bottom-20 end-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-sm border border-white/35 bg-[#11100e]/72 px-3 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur-md transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary xl:bottom-6 xl:end-6"
-        >
-          {isPaused ? <Play className="h-3.5 w-3.5" aria-hidden /> : <Pause className="h-3.5 w-3.5" aria-hidden />}
-          <span>{isPaused ? "Play" : "Pause"}</span>
-        </button>
-      ) : null}
-    </>
   );
 }
 
@@ -1508,18 +1637,20 @@ function BatumiBenefitIconGrid({
 
 
 function AboutScene({
-  isActive,
   isRevealed,
+  shouldPlayVideo,
   tx,
 }: {
-  isActive: boolean;
   isRevealed: boolean;
+  shouldPlayVideo: boolean;
   tx: (copy: string) => string;
 }) {
   const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
   const shouldReduceMotion = useHydratedReducedMotion();
+  const [motionPreferenceResolved, setMotionPreferenceResolved] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
-  const shouldPrimeVideo = isActive && shouldReduceMotion !== true;
+  const shouldLoadVideo = motionPreferenceResolved && shouldReduceMotion !== true;
+  const shouldPrimeVideo = shouldLoadVideo && shouldPlayVideo;
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
@@ -1528,16 +1659,25 @@ function AboutScene({
   ];
 
   useEffect(() => {
+    setMotionPreferenceResolved(true);
+  }, []);
+
+  useEffect(() => {
     const video = dubaiVideoRef.current;
     if (!video) return undefined;
 
     video.playbackRate = 0.82;
 
-    if (!shouldPrimeVideo) {
+    if (!shouldLoadVideo) {
       setVideoStarted(false);
       video.pause();
       video.removeAttribute("src");
       video.load();
+      return undefined;
+    }
+
+    if (!shouldPrimeVideo) {
+      video.pause();
       return undefined;
     }
 
@@ -1564,7 +1704,7 @@ function AboutScene({
       video.removeEventListener("loadeddata", playVideo);
       video.removeEventListener("canplay", playVideo);
     };
-  }, [shouldPrimeVideo]);
+  }, [shouldLoadVideo, shouldPrimeVideo]);
 
   const markVideoStarted = () => {
     setVideoStarted(true);
@@ -1581,13 +1721,14 @@ function AboutScene({
             <div className="story-about-cinematic-image relative h-full w-full">
               <video
                 ref={dubaiVideoRef}
-                src={shouldPrimeVideo ? aixcoDubaiHeroVideo.src : undefined}
+                src={shouldLoadVideo ? aixcoDubaiHeroVideo.src : undefined}
                 className="h-full w-full object-cover"
                 poster={aixcoDubaiHeroVideo.poster}
                 autoPlay={shouldPrimeVideo}
                 muted
                 playsInline
-                preload={shouldPrimeVideo ? "metadata" : "none"}
+                loop
+                preload={shouldLoadVideo ? "auto" : "none"}
                 aria-label={tx(aixcoDubaiHeroVideo.title)}
                 onLoadedData={(event) => {
                   event.currentTarget.playbackRate = 0.82;
@@ -1613,8 +1754,8 @@ function AboutScene({
                 data-about-video-poster=""
                 data-video-started={videoStarted ? "true" : "false"}
                 className="story-about-cinematic-poster object-cover"
-                loading="lazy"
-                fetchPriority="low"
+                loading="eager"
+                fetchPriority="high"
                 sizes="100vw"
                 decoding="async"
               />
@@ -1700,7 +1841,7 @@ function PhilosophyScene({
     >
       <p className="eyebrow story-eyebrow">{tx(philosophyHero.eyebrow)}</p>
       <h2 className="story-h2 story-philosophy-title">
-        <StoryTextReveal label={tx(philosophyHero.title)} />
+        <StoryTextReveal active={isActive} label={tx(philosophyHero.title)} />
       </h2>
       <p className="story-body text-foreground/76">{tx(philosophyHero.summary)}</p>
 
@@ -1765,7 +1906,7 @@ function PhilosophyPlatformScene({
     >
       <p className="eyebrow story-eyebrow">{tx("Global opportunities")}</p>
       <h2 className="story-h2 story-philosophy-platform-title">
-        <StoryTextReveal label={tx("Expanding through carefully selected opportunities")} />
+        <StoryTextReveal active={isActive} label={tx("Expanding through carefully selected opportunities")} />
       </h2>
       <p className="story-body text-foreground/76">
         {tx("AIXCO combines local market expertise with international experience to provide access to opportunities positioned for long-term growth and capital appreciation.")}
@@ -1863,7 +2004,7 @@ function PhilosophyDetailScene({
             <div className="story-philosophy-detail-intro">
               <p className="eyebrow story-eyebrow">{tx(eyebrow)}</p>
               <h2 className="story-philosophy-detail-title">
-                <StoryTextReveal label={tx(title)} />
+                <StoryTextReveal active={isActive} label={tx(title)} />
               </h2>
               <p className="story-philosophy-detail-summary">{tx(summary)}</p>
             </div>
@@ -1948,7 +2089,7 @@ function AboutObjectivesScene({
             <p className="eyebrow story-eyebrow text-primary/80">{tx("Client objectives")}</p>
             <div data-layout="story-about-objectives" className="story-objectives-grid mt-[clamp(1.4rem,3svh,2.4rem)] grid w-full gap-[clamp(1.4rem,4vw,4.5rem)]">
               <h2 className="story-objectives-title font-light tracking-normal text-foreground">
-                <StoryTextReveal label={tx("Every client starts with a different objective")} />
+                <StoryTextReveal active={isActive} label={tx("Every client starts with a different objective")} />
               </h2>
               <div className="story-objectives-text grid gap-4">
                 <p className="story-objectives-lead text-foreground/90">
@@ -2041,7 +2182,7 @@ function AboutAccessScene({
               </div>
               <div className="max-w-[34rem]">
                 <h2 className="text-[clamp(2.1rem,3.6vw,4.3rem)] font-semibold leading-[1.04] tracking-normal text-white">
-                  <StoryTextReveal label={tx("Ownership or flexible participation")} />
+                  <StoryTextReveal active={isActive} label={tx("Ownership or flexible participation")} />
                 </h2>
                 <p className="mt-5 text-[clamp(1rem,1.12vw,1.18rem)] leading-[1.65] text-white/80">
                   {tx("For many clients, this leads to direct ownership of carefully selected properties in emerging, profitable, sustainable markets.")}
@@ -2088,7 +2229,7 @@ function LegacyScene({
     >
       <p className="eyebrow story-eyebrow story-legacy-eyebrow">{tx("Our journey")}</p>
       <h2 className="story-h2">
-        <StoryTextReveal label={tx("From Switzerland to Dubai to Batumi")} />
+        <StoryTextReveal active={isActive} label={tx("From Switzerland to Dubai to Batumi")} />
       </h2>
       <div data-layout="story-legacy-timeline" className="grid w-full">
         {legacyTimelineChapters.slice(0, 3).map((chapter, index) => (
@@ -2135,7 +2276,7 @@ function DubaiScene({
     >
       <p className="eyebrow story-eyebrow">{tx("Dubai - Legacy portfolio")}</p>
       <h2 className="story-h2">
-        <StoryTextReveal label={tx("Our history in Dubai")} />
+        <StoryTextReveal active={isActive} label={tx("Our history in Dubai")} />
       </h2>
       <p className="story-body text-foreground/78">
         {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
@@ -2192,7 +2333,7 @@ function BatumiScene({
     >
       <p className="eyebrow story-eyebrow">{tx("Emerging market opportunity")}</p>
       <h2 className="story-h2">
-        <StoryTextReveal label={tx("Batumi")} />
+        <StoryTextReveal active={isActive} label={tx("Batumi")} />
       </h2>
       <p className="story-body story-glyph-safe text-foreground/78">
         {tx("Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.")}
@@ -2314,6 +2455,7 @@ function ParticipateScene({
       <p className="eyebrow story-eyebrow">{tx("How to work with AIXCO")}</p>
       <h2 className="story-h2">
         <StoryTextReveal
+          active={isActive}
           label={tx("ACQUIRE.PARTNER.CREATE VALUE.")}
           mobileLabel={tx("ACQUIRE.PARTNER.CREATE VALUE.").replace(/\./g, ".\u200B")}
         />
@@ -2446,7 +2588,7 @@ function HowScene({
     >
       <p className="eyebrow story-eyebrow">{tx("Journeys")}</p>
       <h2 className="story-h2">
-        <StoryTextReveal label={tx("How AIXCO Works")} />
+        <StoryTextReveal active={isActive} label={tx("How AIXCO Works")} />
       </h2>
       <p className="story-body text-foreground/76">
         {tx("Choose the journey that fits your role. The process is structured, transparent, and digitally managed.")}
@@ -2531,7 +2673,7 @@ function TeamScene({
     >
       <p className="eyebrow story-eyebrow">{tx("Team")}</p>
       <h2 className="story-h2">
-        <StoryTextReveal label={tx("AIXCO leadership")} />
+        <StoryTextReveal active={isActive} label={tx("AIXCO leadership")} />
       </h2>
       <div
         data-layout="story-team-list"
@@ -2641,7 +2783,7 @@ function PartnersScene({
     >
       <p className="eyebrow story-eyebrow">{tx("Partners")}</p>
       <h2 className="story-h2 story-partners-title">
-        <StoryTextReveal label={tx("Group companies and strategic partners")} />
+        <StoryTextReveal active={isActive} label={tx("Group companies and strategic partners")} />
       </h2>
       <div data-layout="story-partners-marquee" className="story-partners-section">
         <StoryPartnerRow label="Group companies" partners={groupCompanies} tx={tx} onPartnerClick={onPartnerClick} />
@@ -2721,7 +2863,7 @@ function FaqScene({
     >
       <p className="eyebrow story-eyebrow">{tx("FAQs")}</p>
       <h2 className="story-h2 story-faq-title">
-        <StoryTextReveal label={tx("FAQ essentials")} />
+        <StoryTextReveal active={isActive} label={tx("FAQ essentials")} />
       </h2>
       <p className="story-body text-foreground/70">
         {tx("Click a question to read the answer.")}
@@ -2742,6 +2884,7 @@ function FaqScene({
 }
 
 function ContactScene({
+  isActive,
   isRevealed,
   onLogin,
   onRegister,
@@ -2775,7 +2918,7 @@ function ContactScene({
                 <p className="eyebrow story-eyebrow">{tx("Contact")}</p>
                 <div className="space-y-[var(--story-item-gap)]">
                   <h2 className="story-h2">
-                    <StoryTextReveal label={tx("Start with AIXCO")} />
+                    <StoryTextReveal active={isActive} label={tx("Start with AIXCO")} />
                   </h2>
                   <p className="story-body text-foreground/76">
                     {tx("Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.")}
@@ -3101,7 +3244,12 @@ export function DesktopStoryHome() {
 
       return [
       <HeroScene key="hero" isActive={activeIndex === 0} tx={tx} onContact={openContact} onRegister={openRegister} />,
-      <AboutScene key="about" isActive={activeIndex === 1} isRevealed={isRevealed(1)} tx={tx} />,
+      <AboutScene
+        key="about"
+        isRevealed={isRevealed(1)}
+        shouldPlayVideo={activeIndex < 3}
+        tx={tx}
+      />,
       <PhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
       <PhilosophyDetailScene
         key="philosophy-origins"
@@ -3139,7 +3287,7 @@ export function DesktopStoryHome() {
   );
 
   return (
-    <div id="main-content" tabIndex={-1} ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress-scale": 0 } as CSSProperties}>
+    <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress-scale": 0 } as CSSProperties}>
       <FixedHeroBackdrop visible={heroBackdropVisible} />
       <StoryChrome
         activeIndex={activeIndex}
@@ -3150,7 +3298,7 @@ export function DesktopStoryHome() {
         tx={tx}
         onChapterClick={handleChapterClick}
       />
-      <div className="relative z-10">
+      <div id="main-content" tabIndex={-1} className="relative z-10">
         {scenes.map((scene, index) => {
           const chapter = storyChapters[index];
           const isActive = activeIndex === index;

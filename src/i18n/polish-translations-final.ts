@@ -1,6 +1,9 @@
 type PolishTranslationSource = Partial<Record<string, { pl: string }>>;
 
 export const polishTranslationsFinal = {
+  "Skip to main content": { pl: "Przejdź do głównej treści" },
+  "Pause background video": { pl: "Wstrzymaj wideo w tle" },
+  "Play background video": { pl: "Odtwórz wideo w tle" },
   "Request reference": { pl: "Numer zgłoszenia" },
   "Pause partner movement": { pl: "Wstrzymaj ruch partnerów" },
   "Resume partner movement": { pl: "Wznów ruch partnerów" },

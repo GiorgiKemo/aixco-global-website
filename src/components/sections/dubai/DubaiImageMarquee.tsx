@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Pause, Play } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -74,7 +73,6 @@ export function DubaiImageMarquee({
   const [isGalleryInView, setIsGalleryInView] = useState(
     () => process.env.NODE_ENV === "test" || process.env.VITEST === "true",
   );
-  const [isAutoScrollPaused, setIsAutoScrollPaused] = useState(false);
   const trackX = useMotionValue(0);
   const targetOffset = useMotionValue(0);
   const smoothOffset = useSpring(targetOffset, {
@@ -166,7 +164,6 @@ export function DubaiImageMarquee({
   useAnimationFrame((time, delta) => {
     if (
       shouldReduceMotion ||
-      isAutoScrollPaused ||
       !isGalleryInView ||
       !trackRef.current ||
       dragRef.current.active ||
@@ -274,7 +271,7 @@ export function DubaiImageMarquee({
       data-layout="horizontal-infinite-gallery"
       data-drag-scroll="pointer-capture"
       data-auto-scroll="continuous"
-      data-auto-scroll-paused={isAutoScrollPaused || shouldReduceMotion ? "true" : "false"}
+      data-auto-scroll-paused={shouldReduceMotion ? "true" : "false"}
       data-motion-preference={shouldReduceMotion ? "reduced" : "standard"}
       data-motion-engine="framer-motion"
       data-scroll-direction={reverse ? "reverse" : "forward"}
@@ -288,17 +285,6 @@ export function DubaiImageMarquee({
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
     >
-      <button
-        type="button"
-        aria-pressed={isAutoScrollPaused}
-        aria-label={tx(isAutoScrollPaused ? "Resume gallery movement" : "Pause gallery movement")}
-        title={tx(isAutoScrollPaused ? "Resume gallery movement" : "Pause gallery movement")}
-        onClick={() => setIsAutoScrollPaused((value) => !value)}
-        onPointerDown={(event) => event.stopPropagation()}
-        className="dubai-image-marquee__motion-toggle"
-      >
-        {isAutoScrollPaused ? <Play aria-hidden /> : <Pause aria-hidden />}
-      </button>
       <motion.div
         ref={trackRef}
         className="dubai-image-marquee-track"
