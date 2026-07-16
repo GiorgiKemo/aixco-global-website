@@ -432,7 +432,12 @@ try {
 
       const title = page.locator("main > section:first-of-type h1");
       await title.evaluate((element) => element.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" }));
-      await page.waitForTimeout(100);
+      await page.waitForFunction(() => {
+        const element = document.querySelector("main > section:first-of-type h1");
+        if (!(element instanceof HTMLElement)) return false;
+        const rect = element.getBoundingClientRect();
+        return rect.top >= -3 && rect.bottom <= window.innerHeight + 3;
+      }, undefined, { timeout: 5_000 });
       const titleMetrics = await title.evaluate((element) => {
         const root = document.documentElement;
         const rect = element.getBoundingClientRect();
