@@ -39,4 +39,10 @@ with check (
   and portal_url ~ '^https://workw\.com/realestate/'
 );
 
-revoke execute on function public.rls_auto_enable() from anon, authenticated, public;
+do $$
+begin
+  if to_regprocedure('public.rls_auto_enable()') is not null then
+    revoke execute on function public.rls_auto_enable() from anon, authenticated, public;
+  end if;
+end;
+$$;
