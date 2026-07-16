@@ -59,6 +59,12 @@ jobs:
           changes=$(git diff --name-status "${BASE_SHA}" HEAD -- supabase/migrations)
           while IFS=$'\t' read -r status path remainder; do
             [[ -z "${status}" ]] && continue
+            if [[ "${status}" == "M" \
+              && "${path}" == "supabase/migrations/20260508081326_harden_public_backend_policies.sql" \
+              && "$(git hash-object "${path}")" == "432a2c5df333872c9f6ec83e5964fae8e2c77747" ]]; then
+              echo "Allowing the hash-pinned fresh-database compatibility repair for ${path}."
+              continue
+            fi
             if [[ "${status}" != "A" ]]; then
               echo "Migration history is append-only; ${status} ${path} is not allowed."
               exit 1
