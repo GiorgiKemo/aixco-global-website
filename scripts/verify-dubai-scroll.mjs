@@ -4,6 +4,18 @@ const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
+async function scrollToY(targetScrollY) {
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    const currentScrollY = await page.evaluate(() => window.scrollY);
+    if (Math.abs(currentScrollY - targetScrollY) < 3) return;
+    await page.mouse.wheel(0, targetScrollY - currentScrollY);
+    await page.waitForTimeout(700);
+  }
+
+  const finalScrollY = await page.evaluate(() => window.scrollY);
+  throw new Error(`Could not settle at scroll position ${targetScrollY}; stopped at ${finalScrollY}.`);
+}
+
 try {
   await page.goto(`${baseUrl}/#dubai`, { waitUntil: "domcontentloaded" });
   await page.waitForSelector("[data-story-section='dubai']");
@@ -49,15 +61,14 @@ try {
   }
 
   for (const offset of [120, 360]) {
-    await page.evaluate((scrollY) => window.scrollTo(0, scrollY), layout.sectionTop + offset);
-    await page.waitForTimeout(120);
+    const targetScrollY = layout.sectionTop + offset;
+    await scrollToY(targetScrollY);
     const mediaTop = await page.locator("[data-story-section='dubai'] [data-story-scene-media]").evaluate((node) => node.getBoundingClientRect().top);
     if (mediaTop < 55 || mediaTop > 95) errors.push(`media did not remain pinned at offset ${offset}: top=${mediaTop}`);
   }
 
   const releaseScrollY = layout.sectionBottom - 240;
-  await page.evaluate((scrollY) => window.scrollTo(0, scrollY), releaseScrollY);
-  await page.waitForTimeout(120);
+  await scrollToY(releaseScrollY);
   const releaseLayout = await page.evaluate(() => {
     const section = document.querySelector("[data-story-section='dubai']");
     const media = section.querySelector("[data-story-scene-media]");
