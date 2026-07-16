@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
 import { getAdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
-import { exportContactSubjectData, privacyEmailSchema } from "@/lib/admin/privacy";
+import {
+  exportContactSubjectData,
+  privacyEmailSchema,
+  privacySubjectAuditTarget,
+} from "@/lib/admin/privacy";
 
 export async function POST(request: Request) {
   const auth = await getAdminAuthDecision();
   if (!auth.ok) return NextResponse.redirect(new URL("/admin/login", request.url), { status: 303 });
 
   const requestOrigin = request.headers.get("origin");
-  if (requestOrigin && requestOrigin !== new URL(request.url).origin) {
+  if (!requestOrigin || requestOrigin !== new URL(request.url).origin) {
     return new NextResponse("Forbidden", { status: 403 });
   }
 
@@ -22,8 +26,14 @@ export async function POST(request: Request) {
       action: "privacy.subject.export",
       actor: auth.principal,
       outcome: "success",
-      target: email.data,
-      details: { records: data.contactSubmissions.length },
+      target: privacySubjectAuditTarget(email.data),
+      details: {
+        submissions: data.contactSubmissions.length,
+        chatTranscripts: data.chatTranscripts.length,
+        deliveries: data.emailDeliveries.length,
+        deliveryEvents: data.emailEvents.length,
+        abuseAttempts: data.leadCaptureAttempts.length,
+      },
     });
 
     return new NextResponse(JSON.stringify(data, null, 2), {
@@ -38,7 +48,7 @@ export async function POST(request: Request) {
       action: "privacy.subject.export",
       actor: auth.principal,
       outcome: "failure",
-      target: email.data,
+      target: privacySubjectAuditTarget(email.data),
     });
     return NextResponse.redirect(new URL("/admin/privacy?error=export-failed", request.url), { status: 303 });
   }

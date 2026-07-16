@@ -1,16 +1,59 @@
 "use client";
 
-export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
+import { useEffect, useState } from "react";
+
+type RecoveryLang = "en" | "de" | "ru" | "ka" | "tr" | "ar" | "pl";
+
+const recoveryCopy: Record<RecoveryLang, { title: string; body: string; retry: string }> = {
+  en: { title: "Something went wrong.", body: "Please try again. If the problem continues, contact info@aixco.global.", retry: "Try again" },
+  de: { title: "Etwas ist schiefgelaufen.", body: "Bitte versuchen Sie es erneut. Wenn das Problem weiterhin besteht, kontaktieren Sie info@aixco.global.", retry: "Erneut versuchen" },
+  ru: { title: "Произошла ошибка.", body: "Повторите попытку. Если проблема не исчезнет, напишите на info@aixco.global.", retry: "Повторить" },
+  ka: { title: "დაფიქსირდა შეცდომა.", body: "გთხოვთ, სცადოთ ხელახლა. თუ პრობლემა გაგრძელდება, დაგვიკავშირდით: info@aixco.global.", retry: "ხელახლა ცდა" },
+  tr: { title: "Bir sorun oluştu.", body: "Lütfen tekrar deneyin. Sorun devam ederse info@aixco.global adresinden bize ulaşın.", retry: "Tekrar dene" },
+  ar: { title: "حدث خطأ ما.", body: "يُرجى المحاولة مرة أخرى. إذا استمرت المشكلة، تواصل معنا عبر info@aixco.global.", retry: "حاول مرة أخرى" },
+  pl: { title: "Coś poszło nie tak.", body: "Spróbuj ponownie. Jeśli problem będzie się powtarzał, skontaktuj się z nami: info@aixco.global.", retry: "Spróbuj ponownie" },
+};
+
+function readRecoveryLang(): RecoveryLang {
+  try {
+    const value = window.localStorage.getItem("aixco-lang");
+    return value && value in recoveryCopy ? value as RecoveryLang : "en";
+  } catch {
+    return "en";
+  }
+}
+
+export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  const [lang, setLang] = useState<RecoveryLang>("en");
+
+  useEffect(() => {
+    const storedLang = readRecoveryLang();
+    const safeDigest = error.digest && /^[a-zA-Z0-9._-]{1,128}$/.test(error.digest) ? error.digest : undefined;
+    setLang(storedLang);
+    document.documentElement.lang = storedLang;
+    document.documentElement.dir = storedLang === "ar" ? "rtl" : "ltr";
+    console.error("AIXCO root render failed.", { digest: safeDigest });
+    void fetch("/api/client-errors", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ kind: "root-render", digest: safeDigest, locale: storedLang }),
+      credentials: "same-origin",
+      keepalive: true,
+    }).catch(() => undefined);
+  }, [error]);
+
+  const copy = recoveryCopy[lang];
+
   return (
-    <html lang="en">
+    <html lang={lang} dir={lang === "ar" ? "rtl" : "ltr"}>
       <body style={{ margin: 0, background: "#F3EDE1", color: "#161616", fontFamily: "Arial, sans-serif" }}>
         <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
           <section style={{ width: "min(620px, 100%)", boxSizing: "border-box", border: "1px solid rgba(22,22,22,.16)", background: "#fff", padding: "48px 40px" }}>
             <p style={{ margin: 0, color: "#8b6a18", fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase" }}>AIXCO.Global</p>
-            <h1 style={{ margin: "22px 0 0", fontSize: "clamp(38px, 8vw, 64px)", lineHeight: 1, letterSpacing: -2 }}>Something went wrong.</h1>
-            <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.65, color: "#55534f" }}>Please try again. If the problem continues, contact info@aixco.global.</p>
+            <h1 style={{ margin: "22px 0 0", fontSize: "clamp(38px, 8vw, 64px)", lineHeight: 1, letterSpacing: -2 }}>{copy.title}</h1>
+            <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.65, color: "#55534f" }}>{copy.body}</p>
             <button type="button" onClick={reset} style={{ marginTop: 30, minHeight: 46, border: 0, background: "#161616", color: "#fff", padding: "0 24px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
-              Try again
+              {copy.retry}
             </button>
           </section>
         </main>

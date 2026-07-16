@@ -11,10 +11,12 @@ const authMocks = vi.hoisted(() => ({
   enroll: vi.fn(),
   unenroll: vi.fn(),
   challengeAndVerify: vi.fn(),
+  updateUser: vi.fn(),
+  searchParams: new URLSearchParams(),
 }));
 
 vi.mock("next/navigation", () => ({
-  useSearchParams: () => new URLSearchParams(),
+  useSearchParams: () => authMocks.searchParams,
 }));
 
 vi.mock("@/lib/supabase/auth-browser", () => ({
@@ -23,6 +25,7 @@ vi.mock("@/lib/supabase/auth-browser", () => ({
       getUser: authMocks.getUser,
       signInWithPassword: authMocks.signInWithPassword,
       signOut: authMocks.signOut,
+      updateUser: authMocks.updateUser,
       mfa: {
         getAuthenticatorAssuranceLevel: authMocks.getAssurance,
         listFactors: authMocks.listFactors,
@@ -44,10 +47,13 @@ const identityConfig = {
 };
 
 beforeEach(() => {
-  Object.values(authMocks).forEach((mock) => mock.mockReset());
+  Object.values(authMocks).forEach((value) => {
+    if (typeof value === "function" && "mockReset" in value) value.mockReset();
+  });
   authMocks.getUser.mockResolvedValue({ data: { user: null }, error: null });
   authMocks.signOut.mockResolvedValue({ error: null });
   authMocks.unenroll.mockResolvedValue({ data: {}, error: null });
+  authMocks.searchParams = new URLSearchParams();
 });
 
 describe("AdminLoginForm", () => {
@@ -138,5 +144,27 @@ describe("AdminLoginForm", () => {
     expect(screen.getByAltText("QR code for AIXCO admin authenticator setup")).toBeInTheDocument();
     fireEvent.click(screen.getByText("Cannot scan the QR code?"));
     expect(screen.getByText("AIXCO-TOTP-SECRET")).toBeInTheDocument();
+  });
+
+  it("requires an invited administrator to create a reusable password before MFA enrollment", async () => {
+    authMocks.searchParams = new URLSearchParams("setup=1");
+    const user = { id: "invited-admin", email: "invited@aixco.global", app_metadata: { role: "admin" } };
+    authMocks.getUser.mockResolvedValue({ data: { user }, error: null });
+    authMocks.updateUser.mockResolvedValue({ data: { user }, error: null });
+    authMocks.getAssurance.mockResolvedValue({ data: { currentLevel: "aal1", nextLevel: "aal1" }, error: null });
+    authMocks.listFactors.mockResolvedValue({ data: { all: [], totp: [], phone: [] }, error: null });
+    authMocks.enroll.mockResolvedValue({
+      data: { id: "factor-id", totp: { qr_code: "data:image/svg+xml,%3Csvg%3E%3C/svg%3E", secret: "SETUP" } },
+      error: null,
+    });
+
+    render(<AdminLoginForm config={identityConfig} />);
+    expect(await screen.findByRole("heading", { name: "Create your admin password" })).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("New password"), { target: { value: "long-secure-password" } });
+    fireEvent.change(screen.getByLabelText("Confirm password"), { target: { value: "long-secure-password" } });
+    fireEvent.submit(screen.getByRole("button", { name: "Save password and continue" }).closest("form")!);
+
+    await waitFor(() => expect(authMocks.updateUser).toHaveBeenCalledWith({ password: "long-secure-password" }));
+    expect(await screen.findByRole("heading", { name: "Protect your admin account" })).toBeInTheDocument();
   });
 });

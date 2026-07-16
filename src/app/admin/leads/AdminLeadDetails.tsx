@@ -1,10 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ExternalLink } from "lucide-react";
-import type { LeadStatus, PortalEvent } from "@/lib/admin/leads";
+import type { AdminLeadPage, LeadStatus, PortalEvent } from "@/lib/admin/leads";
 import type { DashboardLead } from "./PipelineBoard";
 
 const statusTabs: { label: string; value?: LeadStatus }[] = [
@@ -15,25 +14,8 @@ const statusTabs: { label: string; value?: LeadStatus }[] = [
   { label: "Archived", value: "archived" },
 ];
 
-const PAGE_SIZE = 15;
-
 function isLeadStatus(value: string | null): value is LeadStatus {
   return value === "new" || value === "contacted" || value === "qualified" || value === "archived";
-}
-
-function getPageNumber(value: string | null) {
-  const page = Number.parseInt(value ?? "1", 10);
-  return Number.isFinite(page) && page > 0 ? page : 1;
-}
-
-function clampPage(page: number, total: number, pageSize = PAGE_SIZE) {
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  return Math.min(page, totalPages);
-}
-
-function paginateItems<T>(items: T[], page: number, pageSize = PAGE_SIZE) {
-  const start = (page - 1) * pageSize;
-  return items.slice(start, start + pageSize);
 }
 
 function formatDate(value: string) {
@@ -45,17 +27,17 @@ function formatDate(value: string) {
   }).format(new Date(value));
 }
 
-function sortNewest<T extends { createdAt: string }>(items: T[]) {
-  return [...items].sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime());
-}
-
 function getReadablePagePath(value: string) {
   return value === "/" || value === "Unknown page" ? "" : value;
 }
 
-function getFeedbackMessage(updated: string | null, error: string | null) {
+function getFeedbackMessage(updated: string | null, requeued: string | null, error: string | null) {
   if (updated === "1") return { tone: "success", text: "Lead status updated." };
+  if (requeued) return { tone: "success", text: `${requeued} failed email delivery attempt(s) requeued.` };
   if (error === "invalid-status-update") return { tone: "error", text: "That status update was invalid." };
+  if (error === "lead-not-found") return { tone: "error", text: "That lead no longer exists." };
+  if (error === "no-email-to-requeue") return { tone: "error", text: "No API-failed email is eligible for a safe retry." };
+  if (error === "email-requeue-failed") return { tone: "error", text: "Could not requeue the failed email." };
   if (error === "status-update-failed") return { tone: "error", text: "Could not update lead status." };
   return null;
 }
@@ -84,21 +66,13 @@ function EmptyState({ label }: { label: string }) {
 }
 
 function Pagination({
-  page,
-  total,
-  pageSize = PAGE_SIZE,
+  pagination,
   hrefForPage,
 }: {
-  page: number;
-  total: number;
-  pageSize?: number;
+  pagination: AdminLeadPage;
   hrefForPage: (page: number) => string;
 }) {
-  const totalPages = Math.ceil(total / pageSize);
-  if (totalPages <= 1) return null;
-
-  const start = (page - 1) * pageSize + 1;
-  const end = Math.min(page * pageSize, total);
+  const { page, total, totalPages, start, end } = pagination;
   const buttonClass =
     "inline-flex h-9 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-white px-3 text-sm font-medium text-[#161616] transition-colors hover:bg-[#f6f4ef] sm:flex-none";
   const disabledClass =
@@ -107,9 +81,9 @@ function Pagination({
   return (
     <div className="mt-4 flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
       <span className="text-[#6f6e6a]">
-        Showing {start}-{end} of {total}
+        {total === 0 ? "Showing 0 of 0" : `Showing ${start}-${end} of ${total}`}
       </span>
-      <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
+      {totalPages > 1 ? <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
         {page > 1 ? (
           <Link href={hrefForPage(page - 1)} className={buttonClass}>
             Previous
@@ -131,7 +105,7 @@ function Pagination({
             Next
           </span>
         )}
-      </div>
+      </div> : null}
     </div>
   );
 }
@@ -171,6 +145,30 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
                 <p className="truncate">{lead.contactLabel}</p>
               )}
               {getReadablePagePath(lead.pagePath) && <p className="mt-1 truncate font-normal text-[#9e9d9d]">{getReadablePagePath(lead.pagePath)}</p>}
+              {lead.resource === "contact" ? (
+                <div className="mt-2 grid gap-1 font-normal text-[#6f6e6a]">
+                  <p>
+                    Request: <span className="font-semibold capitalize text-[#161616]">{lead.requestType ?? "message"}</span>
+                  </p>
+                  {lead.phone ? <a href={`tel:${lead.phone}`} className="font-semibold text-[#161616] underline-offset-4 hover:underline">{lead.phone}</a> : null}
+                  {lead.preferredCallAt ? (
+                    <p>
+                      Call: {formatDate(lead.preferredCallAt)}{lead.preferredCallTimezone ? ` (${lead.preferredCallTimezone})` : ""}
+                    </p>
+                  ) : null}
+                  <p>
+                    Email: <span className="font-semibold text-[#161616]">{lead.emailDeliveryStatus?.replaceAll("_", " ") ?? "unknown"}</span>
+                  </p>
+                  {lead.emailDeliveryStatus === "failed" || lead.emailDeliveryStatus === "delivery_issue" ? (
+                    <form action="/admin/leads/requeue-email" method="post" className="pt-1">
+                      <input type="hidden" name="contactId" value={lead.id} />
+                      <button type="submit" className="rounded border border-[#8b6a18]/30 bg-[#e6c767]/15 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6f5112] hover:bg-[#e6c767]/25">
+                        Retry failed email
+                      </button>
+                    </form>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
 
             <StatusBadge status={lead.status} />
@@ -185,7 +183,37 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
   );
 }
 
-function PortalActivity({ events }: { events: PortalEvent[] }) {
+function LeadRecordGroup({
+  title,
+  eyebrow,
+  leads,
+  pagination,
+  hrefForPage,
+}: {
+  title: string;
+  eyebrow: string;
+  leads: DashboardLead[];
+  pagination: AdminLeadPage;
+  hrefForPage: (page: number) => string;
+}) {
+  return (
+    <section>
+      <div className="rounded-lg border border-[#161616]/10 bg-white">
+        <div className="flex items-center justify-between gap-3 border-b border-[#161616]/10 px-4 py-4">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8b6a18]">{eyebrow}</p>
+            <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.03em] text-[#161616]">{title}</h2>
+          </div>
+          <span className="rounded-full border border-[#161616]/10 px-2.5 py-1 text-xs font-semibold text-[#6f6e6a]">{pagination.total}</span>
+        </div>
+        <LeadRecords leads={leads} />
+      </div>
+      <Pagination pagination={pagination} hrefForPage={hrefForPage} />
+    </section>
+  );
+}
+
+function PortalActivity({ events, total }: { events: PortalEvent[]; total: number }) {
   return (
     <section className="rounded-lg border border-[#161616]/10 bg-white">
       <div className="flex items-center justify-between gap-3 border-b border-[#161616]/10 px-4 py-4">
@@ -193,7 +221,7 @@ function PortalActivity({ events }: { events: PortalEvent[] }) {
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8b6a18]">Portal</p>
           <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.03em] text-[#161616]">Handoffs</h2>
         </div>
-        <span className="rounded-full border border-[#161616]/10 px-2.5 py-1 text-xs font-semibold text-[#6f6e6a]">{events.length}</span>
+        <span className="rounded-full border border-[#161616]/10 px-2.5 py-1 text-xs font-semibold text-[#6f6e6a]">{total}</span>
       </div>
 
       <div className="divide-y divide-[#161616]/10">
@@ -233,39 +261,48 @@ export function AdminLeadDetails({
   contactLeads,
   chatLeads,
   portalEvents,
+  contactPagination,
+  chatPagination,
+  portalPagination,
   section = "all",
 }: {
   contactLeads: DashboardLead[];
   chatLeads: DashboardLead[];
   portalEvents: PortalEvent[];
+  contactPagination: AdminLeadPage;
+  chatPagination: AdminLeadPage;
+  portalPagination: AdminLeadPage;
   section?: "all" | "records" | "portal";
 }) {
   const params = useSearchParams();
   const requestedStatus = params?.get("status") ?? null;
   const requestedTab = params?.get("tab") ?? null;
-  const requestedPage = getPageNumber(params?.get("page") ?? null);
   const activeStatus = isLeadStatus(requestedStatus) ? requestedStatus : undefined;
-  const feedback = getFeedbackMessage(params?.get("updated") ?? null, params?.get("error") ?? null);
-  const allLeads = useMemo(() => sortNewest([...contactLeads, ...chatLeads]), [chatLeads, contactLeads]);
-  const focusedLeads = useMemo(
-    () => (activeStatus ? allLeads.filter((lead) => lead.status === activeStatus) : allLeads),
-    [activeStatus, allLeads],
+  const feedback = getFeedbackMessage(
+    params?.get("updated") ?? null,
+    params?.get("requeued") ?? null,
+    params?.get("error") ?? null,
   );
   const showRecords = section === "all" || section === "records";
   const showPortal = section === "all" || section === "portal";
   const filterBaseHref = requestedTab ? `/admin/leads?tab=${requestedTab}` : "/admin/leads";
-  const recordsPage = clampPage(requestedPage, focusedLeads.length);
-  const pageLeads = paginateItems(focusedLeads, recordsPage);
-  const portalPage = clampPage(requestedPage, portalEvents.length);
-  const pagePortalEvents = paginateItems(portalEvents, portalPage);
-  const createPageHref = (page: number, options?: { includeStatus?: boolean }) => {
+  const createPageHref = (key: "contactPage" | "chatPage" | "portalPage", page: number) => {
     const query = new URLSearchParams();
     if (requestedTab) query.set("tab", requestedTab);
-    if (options?.includeStatus && activeStatus) query.set("status", activeStatus);
-    if (page > 1) query.set("page", String(page));
+    if (showRecords && activeStatus) query.set("status", activeStatus);
+    const pages = {
+      contactPage: contactPagination.page,
+      chatPage: chatPagination.page,
+      portalPage: portalPagination.page,
+    };
+    pages[key] = page;
+    for (const [pageKey, pageValue] of Object.entries(pages)) {
+      if (pageValue > 1 && (showRecords || pageKey === "portalPage")) query.set(pageKey, String(pageValue));
+    }
     const suffix = query.toString();
     return suffix ? `/admin/leads?${suffix}` : "/admin/leads";
   };
+  const totalRecords = contactPagination.total + chatPagination.total;
 
   return (
     <>
@@ -290,7 +327,7 @@ export function AdminLeadDetails({
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8b6a18]">Records</p>
                   <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.03em] text-[#161616]">
-                    {focusedLeads.length} {focusedLeads.length === 1 ? "lead" : "leads"}
+                    {totalRecords} {totalRecords === 1 ? "lead" : "leads"}
                   </h2>
                 </div>
                 <nav className="flex flex-wrap gap-2" aria-label="Lead status filter">
@@ -310,20 +347,28 @@ export function AdminLeadDetails({
                   })}
                 </nav>
               </div>
-              <LeadRecords leads={pageLeads} />
             </section>
-            <Pagination
-              page={recordsPage}
-              total={focusedLeads.length}
-              hrefForPage={(nextPage) => createPageHref(nextPage, { includeStatus: true })}
+            <LeadRecordGroup
+              title="Contact form requests"
+              eyebrow="Forms"
+              leads={contactLeads}
+              pagination={contactPagination}
+              hrefForPage={(page) => createPageHref("contactPage", page)}
+            />
+            <LeadRecordGroup
+              title="Live chat transcripts"
+              eyebrow="Chat"
+              leads={chatLeads}
+              pagination={chatPagination}
+              hrefForPage={(page) => createPageHref("chatPage", page)}
             />
           </>
         )}
 
         {showPortal && (
           <>
-            <PortalActivity events={pagePortalEvents} />
-            <Pagination page={portalPage} total={portalEvents.length} hrefForPage={(nextPage) => createPageHref(nextPage)} />
+            <PortalActivity events={portalEvents} total={portalPagination.total} />
+            <Pagination pagination={portalPagination} hrefForPage={(page) => createPageHref("portalPage", page)} />
           </>
         )}
       </section>

@@ -1,9 +1,10 @@
+import "server-only";
 import { createHmac } from "node:crypto";
 import { contactSubmissionSchema } from "./lead-capture-contracts";
 import { getRateLimitClientId } from "@/lib/security/rate-limit";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 
-export type LeadCaptureResource = "contact" | "chat" | "portal-event";
+export type LeadCaptureResource = "contact" | "chat" | "portal-event" | "telemetry";
 
 type GuardResult =
   | { allowed: true }
@@ -63,6 +64,12 @@ const rules: Record<
     recipientLimit: 0,
     recipientWindowSeconds: 60,
   },
+  telemetry: {
+    clientLimit: 120,
+    clientWindowSeconds: 10 * 60,
+    recipientLimit: 0,
+    recipientWindowSeconds: 60,
+  },
 };
 
 function getHashSecret(env: Record<string, string | undefined>) {
@@ -74,6 +81,14 @@ function getHashSecret(env: Record<string, string | undefined>) {
 
 function hashIdentity(secret: string, identity: string) {
   return createHmac("sha256", secret).update(identity).digest("hex");
+}
+
+export function hashLeadCaptureIdentity(
+  identity: string,
+  env: Record<string, string | undefined> = process.env,
+) {
+  const secret = getHashSecret(env);
+  return secret ? hashIdentity(secret, identity) : null;
 }
 
 function getRecipient(payload: unknown) {

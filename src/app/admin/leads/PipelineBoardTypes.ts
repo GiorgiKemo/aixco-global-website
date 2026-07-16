@@ -13,4 +13,10 @@ export type DashboardLead = {
   body: string;
   pagePath: string;
   meta: string;
+  requestType?: "call" | "message";
+  phone?: string | null;
+  preferredCallAt?: string | null;
+  preferredCallTimezone?: string | null;
+  emailDeliveryStatus?: string;
+  emailDeliveryUpdatedAt?: string;
 };

@@ -1,8 +1,10 @@
-name: Contact email worker
+name: Contact email recovery worker
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    # GitHub schedules are best-effort. This hourly job is a recovery path,
+    # not the primary five-minute production scheduler.
+    - cron: "17 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -15,12 +17,13 @@ concurrency:
 jobs:
   deliver:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 10
     steps:
-      - name: Process durable contact email queue
+      - name: Drain durable contact email queue
         env:
           CRON_SECRET: ${{ secrets.CONTACT_EMAIL_CRON_SECRET }}
           ENDPOINT: https://www.aixco.global/api/cron/contact-email-deliveries
+          HEALTH_ENDPOINT: https://www.aixco.global/api/health/contact-pipeline
         shell: bash
         run: |
           set -euo pipefail
@@ -29,10 +32,38 @@ jobs:
             exit 1
           fi
 
+          total_failed=0
+          for pass in {1..6}; do
+            response=$(curl --fail-with-body --silent --show-error \
+              --request POST \
+              --header "Authorization: Bearer ${CRON_SECRET}" \
+              --retry 2 \
+              --retry-all-errors \
+              --max-time 75 \
+              "${ENDPOINT}")
+            printf '%s\n' "${response}"
+
+            claimed=$(node -p 'JSON.parse(process.argv[1]).claimed' "${response}")
+            failed=$(node -p 'JSON.parse(process.argv[1]).failed' "${response}")
+            if ! [[ ${claimed} =~ ^[0-9]+$ && ${failed} =~ ^[0-9]+$ ]]; then
+              echo "Worker returned an invalid queue summary."
+              exit 1
+            fi
+
+            total_failed=$((total_failed + failed))
+            if (( claimed < 2 )); then
+              break
+            fi
+          done
+
+          if (( total_failed > 0 )); then
+            echo "Recovery worker found ${total_failed} permanently failed deliveries."
+            exit 1
+          fi
+
           curl --fail-with-body --silent --show-error \
-            --request POST \
             --header "Authorization: Bearer ${CRON_SECRET}" \
             --retry 2 \
             --retry-all-errors \
-            --max-time 50 \
-            "${ENDPOINT}"
+            --max-time 30 \
+            "${HEALTH_ENDPOINT}"

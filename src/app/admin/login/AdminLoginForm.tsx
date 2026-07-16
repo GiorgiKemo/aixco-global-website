@@ -18,7 +18,7 @@ type AdminLoginFormProps = {
   };
 };
 
-type MfaStage = "credentials" | "challenge" | "enroll";
+type MfaStage = "credentials" | "set-password" | "challenge" | "enroll";
 
 function getErrorMessage(error: string | null) {
   if (error === "invalid") return "The sign-in details are incorrect.";
@@ -27,6 +27,7 @@ function getErrorMessage(error: string | null) {
   if (error === "not-authorized") return "This identity is not assigned the AIXCO admin role.";
   if (error === "mfa-required") return "Enter your authenticator code to complete sign-in.";
   if (error === "not-authenticated") return "Your admin session expired. Please sign in again.";
+  if (error === "invite-invalid") return "The invitation is invalid or has expired. Request a new invitation.";
   return "";
 }
 
@@ -42,12 +43,15 @@ function readableAuthError(message: string) {
 export function AdminLoginForm({ config }: AdminLoginFormProps) {
   const params = useSearchParams();
   const queryError = getErrorMessage(params?.get("error") ?? null);
+  const setupRequested = params?.get("setup") === "1";
   const [stage, setStage] = useState<MfaStage>("credentials");
   const [factorId, setFactorId] = useState("");
   const [qrCode, setQrCode] = useState("");
   const [totpSecret, setTotpSecret] = useState("");
   const [totpCode, setTotpCode] = useState("");
   const [identityEmail, setIdentityEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(queryError);
   const [working, setWorking] = useState(false);
 
@@ -112,7 +116,17 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
 
       setWorking(true);
       try {
-        await prepareMfa(currentUser.data.user);
+        if (setupRequested) {
+          if (!hasAdminRole(currentUser.data.user.app_metadata, config.role)) {
+            await supabase.auth.signOut();
+            setErrorMessage("This identity is not assigned the AIXCO admin role.");
+          } else {
+            setIdentityEmail(currentUser.data.user.email ?? "your admin account");
+            setStage("set-password");
+          }
+        } else {
+          await prepareMfa(currentUser.data.user);
+        }
       } catch (error) {
         if (!cancelled) {
           setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
@@ -125,7 +139,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
     return () => {
       cancelled = true;
     };
-  }, [config.identityAvailable, prepareMfa]);
+  }, [config.identityAvailable, config.role, prepareMfa, setupRequested]);
 
   async function handleIdentityLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -170,6 +184,29 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
     }
   }
 
+  async function handlePasswordSetup(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (newPassword.length < 12 || newPassword !== confirmPassword) {
+      setErrorMessage(newPassword.length < 12 ? "Use at least 12 characters." : "The passwords do not match.");
+      return;
+    }
+
+    setWorking(true);
+    setErrorMessage("");
+    try {
+      const supabase = getSupabaseAuthBrowserClient();
+      const updated = await supabase.auth.updateUser({ password: newPassword });
+      if (updated.error || !updated.data.user) throw updated.error ?? new Error("Missing user");
+      setNewPassword("");
+      setConfirmPassword("");
+      await prepareMfa(updated.data.user);
+    } catch (error) {
+      setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
+    } finally {
+      setWorking(false);
+    }
+  }
+
   async function resetIdentity() {
     setWorking(true);
     try {
@@ -181,6 +218,8 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
       setTotpSecret("");
       setTotpCode("");
       setIdentityEmail("");
+      setNewPassword("");
+      setConfirmPassword("");
       setErrorMessage("");
       setWorking(false);
     }
@@ -274,6 +313,29 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
                 onReset={resetIdentity}
               />
             </div>
+          )}
+
+          {config.identityAvailable && stage === "set-password" && (
+            <form onSubmit={handlePasswordSetup} className="grid gap-5">
+              <div>
+                <p className="eyebrow">Invitation setup</p>
+                <h2 className="mt-2 font-display text-xl">Create your admin password</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  This password is required for future sign-ins. Authenticator enrollment follows next.
+                </p>
+              </div>
+              <p className="text-xs text-muted-foreground">Setting up {identityEmail}</p>
+              <div>
+                <label htmlFor="admin-new-password" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">New password</label>
+                <input id="admin-new-password" type="password" autoComplete="new-password" minLength={12} required value={newPassword} onChange={(event) => setNewPassword(event.target.value)} className="form-control" />
+              </div>
+              <div>
+                <label htmlFor="admin-confirm-password" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Confirm password</label>
+                <input id="admin-confirm-password" type="password" autoComplete="new-password" minLength={12} required value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="form-control" />
+              </div>
+              <button type="submit" disabled={working} className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60">{working ? "Saving…" : "Save password and continue"}</button>
+              <button type="button" disabled={working} onClick={resetIdentity} className="text-sm text-muted-foreground underline-offset-4 hover:underline">Cancel setup</button>
+            </form>
           )}
 
           {config.identityAvailable && stage === "challenge" && (

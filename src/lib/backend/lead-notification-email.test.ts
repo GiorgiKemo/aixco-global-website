@@ -287,6 +287,84 @@ describe("lead notification email", () => {
     ).resolves.toEqual({ ok: false, reason: "sender rejected", retryable: false });
   });
 
+  it("retries only the concurrent Resend 409 idempotency error", async () => {
+    const concurrent = vi.fn(async () =>
+      new Response(JSON.stringify({
+        name: "concurrent_idempotent_requests",
+        message: "The original request is still in progress.",
+      }), { status: 409, headers: { "Content-Type": "application/json" } }),
+    );
+    await expect(sendContactLeadNotificationEmail(notification, {
+      env: configuredEnv,
+      fetchImpl: concurrent as unknown as typeof fetch,
+      idempotencyKey: "lead-notification/AIX-2026-000001",
+    })).resolves.toMatchObject({ ok: false, retryable: true });
+
+    const mismatched = vi.fn(async () =>
+      new Response(JSON.stringify({
+        name: "invalid_idempotent_request",
+        message: "The key was previously used with a different payload.",
+      }), { status: 409, headers: { "Content-Type": "application/json" } }),
+    );
+    await expect(sendContactLeadNotificationEmail(notification, {
+      env: configuredEnv,
+      fetchImpl: mismatched as unknown as typeof fetch,
+      idempotencyKey: "lead-notification/AIX-2026-000001",
+    })).resolves.toMatchObject({ ok: false, retryable: false });
+  });
+
+  it("does not clear the durable payload when a successful Resend response has no message id", async () => {
+    const missingId = vi.fn(async () =>
+      new Response(JSON.stringify({}), { status: 200, headers: { "Content-Type": "application/json" } }),
+    );
+
+    await expect(sendContactLeadNotificationEmail(notification, {
+      env: configuredEnv,
+      fetchImpl: missingId as unknown as typeof fetch,
+      idempotencyKey: "lead-notification/AIX-2026-000001",
+    })).resolves.toEqual({
+      ok: false,
+      reason: "Resend accepted the request without a valid message identifier.",
+      retryable: true,
+    });
+  });
+
+  it("treats a malformed successful provider id as a retryable invalid response", async () => {
+    const malformedId = vi.fn(async () =>
+      new Response(JSON.stringify({ id: { nested: "not-a-string" } }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+
+    await expect(sendContactLeadNotificationEmail(notification, {
+      env: configuredEnv,
+      fetchImpl: malformedId as unknown as typeof fetch,
+    })).resolves.toEqual({
+      ok: false,
+      reason: "Resend accepted the request without a valid message identifier.",
+      retryable: true,
+    });
+  });
+
+  it("uses a safe status fallback for malformed provider error fields", async () => {
+    const malformedError = vi.fn(async () =>
+      new Response(JSON.stringify({ message: { private: "unsafe" }, name: 409 }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+
+    await expect(sendContactLeadNotificationEmail(notification, {
+      env: configuredEnv,
+      fetchImpl: malformedError as unknown as typeof fetch,
+    })).resolves.toEqual({
+      ok: false,
+      reason: "Resend request failed with status 400.",
+      retryable: false,
+    });
+  });
+
   it("times out a stalled provider request", async () => {
     const stalledFetch = vi.fn(
       (_url: string | URL | Request, init?: RequestInit) =>

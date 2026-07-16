@@ -14,6 +14,6 @@ describe("P3 request reference policy migration", () => {
     expect(migration).toContain("where counters.last_value < 999999");
     expect(migration).toContain("request reference capacity exhausted");
     expect(migration).toContain("'20260715231000'::text");
-    expect(CONTACT_PIPELINE_SCHEMA_VERSION).toBe("20260715231000");
+    expect(CONTACT_PIPELINE_SCHEMA_VERSION).toBe("20260715231001");
   });
 });

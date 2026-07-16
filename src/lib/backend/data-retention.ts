@@ -5,6 +5,8 @@ export const DATA_RETENTION_WINDOWS = {
   chats: 365,
   portalEvents: 180,
   abuseAttempts: 7,
+  unmatchedEmailEvents: 30,
+  telemetry: 30,
 } as const;
 
 export type DataRetentionSummary = {
@@ -12,6 +14,8 @@ export type DataRetentionSummary = {
   chatsDeleted: number;
   portalEventsDeleted: number;
   abuseAttemptsDeleted: number;
+  unmatchedEmailEventsDeleted: number;
+  telemetryEventsDeleted: number;
 };
 
 type RetentionRow = {
@@ -19,6 +23,8 @@ type RetentionRow = {
   chats_deleted: number;
   portal_events_deleted: number;
   abuse_attempts_deleted: number;
+  orphan_email_events_deleted: number;
+  telemetry_events_deleted: number;
 };
 
 type RetentionClient = {
@@ -29,6 +35,8 @@ type RetentionClient = {
       p_chat_days: number;
       p_portal_days: number;
       p_abuse_attempt_days: number;
+      p_email_event_days: number;
+      p_telemetry_days: number;
     },
   ) => Promise<{ data: RetentionRow[] | null; error: { message: string; code?: string } | null }>;
 };
@@ -40,6 +48,8 @@ export async function purgeExpiredOperationalData(client?: RetentionClient): Pro
     p_chat_days: DATA_RETENTION_WINDOWS.chats,
     p_portal_days: DATA_RETENTION_WINDOWS.portalEvents,
     p_abuse_attempt_days: DATA_RETENTION_WINDOWS.abuseAttempts,
+    p_email_event_days: DATA_RETENTION_WINDOWS.unmatchedEmailEvents,
+    p_telemetry_days: DATA_RETENTION_WINDOWS.telemetry,
   });
 
   if (error) {
@@ -54,6 +64,8 @@ export async function purgeExpiredOperationalData(client?: RetentionClient): Pro
     chatsDeleted: summary.chats_deleted,
     portalEventsDeleted: summary.portal_events_deleted,
     abuseAttemptsDeleted: summary.abuse_attempts_deleted,
+    unmatchedEmailEventsDeleted: summary.orphan_email_events_deleted,
+    telemetryEventsDeleted: summary.telemetry_events_deleted,
   };
 }
 import "server-only";

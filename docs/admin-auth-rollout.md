@@ -28,13 +28,28 @@ server-managed role name. Admin users must have either
 2. Set `ADMIN_AUTH_MODE=migration` before deploying this code. Keep the current
    `ADMIN_DASHBOARD_PASSWORD` (at least 16 characters) and
    `ADMIN_SESSION_SECRET` (at least 32 random characters) during this step.
-3. In Supabase Auth, invite every administrator using their own email address.
+3. Add `https://www.aixco.global/admin/auth/complete` and
+   `https://www.aixco.global/admin/auth/callback` to the Supabase Auth redirect
+   allowlist. The default Supabase invite returns session credentials in a URL
+   fragment. `/admin/auth/complete` consumes that fragment, synchronously
+   removes it from browser history before any asynchronous work, validates the
+   user, and redirects to the clean password-setup URL. Fragments are never
+   sent in HTTP requests or Referer headers.
+
+   Optionally, a custom **Invite user** email template can use the stricter
+   server-only token-hash callback:
+
+   ```html
+   <a href="{{ .SiteURL }}/admin/auth/callback?token_hash={{ .TokenHash }}&type=invite">Accept AIXCO admin invitation</a>
+   ```
+
+4. Open `/admin/identity-migration` while authenticated with temporary migration
+   access and invite every administrator using their own email address. The
+   server sends the Supabase invite and then assigns `app_metadata.role`; if
+   role assignment fails, it attempts a compensating delete of the new user.
    Disable public signup unless the website needs it for another feature.
-4. Assign each invited user's role with the server-side Supabase Admin API. Use
-   `auth.admin.updateUserById(userId, { app_metadata: { role: "admin" } })`.
-   Preserve any existing `app_metadata` fields when updating a user.
-5. Each administrator accepts the invite, sets a unique password, signs in at
-   `/admin/login`, scans the one-time QR code in an authenticator app, and
+5. Each administrator accepts the invite, creates a unique password of at least
+   12 characters, scans the one-time QR code in an authenticator app, and
    verifies the six-digit code. The admin area remains inaccessible until the
    session reaches AAL2.
 6. Confirm every expected administrator can sign in and that the lead dashboard
@@ -48,8 +63,9 @@ server-managed role name. Admin users must have either
 ## Operational notes
 
 - Successful admin mutations and email-delivery tests emit structured
-  `[aixco-admin-audit]` events containing the Supabase user ID, email, action,
-  outcome, and target identifier. Secrets and lead message bodies are excluded.
+  `[aixco-admin-audit]` events containing the Supabase user ID, a truncated
+  SHA-256 email hash, action, outcome, and non-PII target identifier. Raw email
+  addresses, secrets, and lead message bodies are excluded.
 - If an administrator replaces or loses their authenticator device, an owner of
   the Supabase project must follow the Supabase MFA recovery procedure. Do not
   switch the whole site back to migration mode for one user.

@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
 import { getAdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
-import { deleteContactSubjectData, privacyEmailSchema } from "@/lib/admin/privacy";
+import {
+  deleteContactSubjectData,
+  privacyEmailSchema,
+  privacySubjectAuditTarget,
+} from "@/lib/admin/privacy";
 
 export async function POST(request: Request) {
   const auth = await getAdminAuthDecision();
   if (!auth.ok) return NextResponse.redirect(new URL("/admin/login", request.url), { status: 303 });
 
   const requestOrigin = request.headers.get("origin");
-  if (requestOrigin && requestOrigin !== new URL(request.url).origin) {
+  if (!requestOrigin || requestOrigin !== new URL(request.url).origin) {
     return new NextResponse("Forbidden", { status: 403 });
   }
 
@@ -25,7 +29,7 @@ export async function POST(request: Request) {
       action: "privacy.subject.delete",
       actor: auth.principal,
       outcome: "success",
-      target: email.data,
+      target: privacySubjectAuditTarget(email.data),
       details: { records: result.deleted },
     });
     return NextResponse.redirect(new URL(`/admin/privacy?deleted=${result.deleted}`, request.url), { status: 303 });
@@ -34,7 +38,7 @@ export async function POST(request: Request) {
       action: "privacy.subject.delete",
       actor: auth.principal,
       outcome: "failure",
-      target: email.data,
+      target: privacySubjectAuditTarget(email.data),
     });
     return NextResponse.redirect(new URL("/admin/privacy?error=delete-failed", request.url), { status: 303 });
   }

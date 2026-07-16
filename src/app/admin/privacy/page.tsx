@@ -36,7 +36,7 @@ export default async function AdminPrivacyPage({ searchParams }: PrivacyPageProp
 
         {params.deleted ? (
           <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">
-            Deleted {params.deleted} matching contact submission(s).
+            Deleted {params.deleted} matching subject record(s).
           </p>
         ) : null}
         {params.error ? (
@@ -49,7 +49,7 @@ export default async function AdminPrivacyPage({ searchParams }: PrivacyPageProp
           <form action="/admin/privacy/export" method="post" className="border border-[#161616]/10 bg-white p-6">
             <Download className="h-5 w-5 text-[#8b6a18]" aria-hidden="true" />
             <h2 className="mt-3 font-display text-xl font-bold">Export subject data</h2>
-            <p className="mt-2 text-sm leading-6 text-[#6f6e6a]">Creates a JSON export of every matching contact submission.</p>
+            <p className="mt-2 text-sm leading-6 text-[#6f6e6a]">Creates a paginated JSON export of matching forms, delivery events, short-lived abuse-control records, and chats containing the verified address.</p>
             <label className="mt-5 grid gap-2 text-sm font-semibold">
               Verified email address
               <input name="email" type="email" required maxLength={255} className="h-11 border border-[#161616]/20 px-3 font-normal" />
@@ -62,7 +62,7 @@ export default async function AdminPrivacyPage({ searchParams }: PrivacyPageProp
           <form action="/admin/privacy/delete" method="post" className="border border-red-900/15 bg-white p-6">
             <Trash2 className="h-5 w-5 text-red-800" aria-hidden="true" />
             <h2 className="mt-3 font-display text-xl font-bold">Erase subject data</h2>
-            <p className="mt-2 text-sm leading-6 text-[#6f6e6a]">Permanently deletes matching submissions and their email-delivery records.</p>
+            <p className="mt-2 text-sm leading-6 text-[#6f6e6a]">Permanently deletes matching submissions, delivery records, abuse-control records, and chats containing the verified address.</p>
             <label className="mt-5 grid gap-2 text-sm font-semibold">
               Verified email address
               <input name="email" type="email" required maxLength={255} className="h-11 border border-[#161616]/20 px-3 font-normal" />

@@ -33,28 +33,38 @@ function delivery(
   };
 }
 
-function createOutboxClient(rows: ReturnType<typeof delivery>[], claimError: { code?: string; message: string } | null = null) {
+function createOutboxClient(
+  rows: ReturnType<typeof delivery>[],
+  claimError: { code?: string; message: string } | null = null,
+  persistClaim = true,
+) {
   const updates: { values: Record<string, unknown>; filters: [string, string][] }[] = [];
+  const remaining = [...rows];
 
   return {
     updates,
     client: {
-      rpc: vi.fn(async () => ({ data: claimError ? null : rows, error: claimError })),
+      rpc: vi.fn(async (functionName: string) => {
+        if (functionName === "prune_lead_capture_attempts") return { data: [], error: null };
+        if (claimError) return { data: null, error: claimError };
+        const next = remaining.shift();
+        return { data: next ? [next] : [], error: null };
+      }),
       from: () => ({
         update: (values: Record<string, unknown>) => {
           const filters: [string, string][] = [];
-          const result = { data: null, error: null };
           const query = {
             eq(column: string, value: string) {
               filters.push([column, value]);
               return query;
             },
-            then<TResult1 = typeof result, TResult2 = never>(
-              onfulfilled?: ((value: typeof result) => TResult1 | PromiseLike<TResult1>) | null,
-              onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
-            ) {
-              updates.push({ values, filters });
-              return Promise.resolve(result).then(onfulfilled, onrejected);
+            select() {
+              return {
+                maybeSingle: async () => {
+                  updates.push({ values, filters });
+                  return { data: persistClaim ? { id: rows[0]?.id ?? "delivery-id" } : null, error: null };
+                },
+              };
             },
           };
           return query;
@@ -165,11 +175,37 @@ describe("contact email outbox", () => {
     });
   });
 
+  it("redacts email addresses and provider secrets before persisting failures", async () => {
+    const { client, updates } = createOutboxClient([delivery("lead_notification")]);
+
+    await processContactEmailOutbox({
+      client,
+      leadNotificationSender: async () => ({
+        ok: false,
+        reason: "Recipient private@example.com rejected token re_super_secret_value",
+        retryable: false,
+      }),
+    });
+
+    expect(updates[0]?.values.last_error).toBe(
+      "Recipient [redacted-email] rejected token [redacted-secret]",
+    );
+  });
+
   it("fails the worker run when claiming the queue fails", async () => {
     const { client } = createOutboxClient([], { code: "42P01", message: "missing relation" });
 
     await expect(processContactEmailOutbox({ client })).rejects.toThrow(
       "Could not claim contact email deliveries (42P01).",
+    );
+  });
+
+  it("fails the run when the lease was reclaimed before state persistence", async () => {
+    const sender = vi.fn(async () => ({ ok: true as const, providerMessageId: "resend-late" }));
+    const { client } = createOutboxClient([delivery("lead_notification")], null, false);
+
+    await expect(processContactEmailOutbox({ client, leadNotificationSender: sender })).rejects.toThrow(
+      "Contact email delivery lease was lost before state persistence.",
     );
   });
 

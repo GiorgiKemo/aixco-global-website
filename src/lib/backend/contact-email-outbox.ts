@@ -1,3 +1,4 @@
+import "server-only";
 import { z } from "zod";
 import type { Json } from "@/lib/supabase/database.types";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -7,13 +8,24 @@ import {
   type ContactLeadNotification,
   type EmailProviderDeliveryResult,
 } from "./lead-notification-email";
+import { sanitizeOperationalError } from "./operational-error";
 
 type DeliveryChannel = "lead_notification" | "contact_confirmation";
 
 type DeliveryRow = {
   id: string;
   channel: DeliveryChannel;
-  status: "pending" | "processing" | "retrying" | "provider_accepted" | "failed";
+  status:
+    | "pending"
+    | "processing"
+    | "retrying"
+    | "provider_accepted"
+    | "delivered"
+    | "delivery_delayed"
+    | "bounced"
+    | "complained"
+    | "suppressed"
+    | "failed";
   idempotency_key: string;
   payload: Json;
   attempts: number;
@@ -23,14 +35,17 @@ type DeliveryRow = {
 
 type DatabaseError = { message: string; code?: string };
 type DatabaseResult<T> = { data: T; error: DatabaseError | null };
-type UpdateQuery = PromiseLike<DatabaseResult<null>> & {
+type UpdateQuery = {
   eq: (column: string, value: string) => UpdateQuery;
+  select: (columns: "id") => {
+    maybeSingle: () => PromiseLike<DatabaseResult<{ id: string } | null>>;
+  };
 };
 
 type OutboxClient = {
   rpc: (
-    fn: "claim_contact_email_deliveries",
-    args: { p_batch_size: number },
+    fn: "claim_contact_email_deliveries" | "claim_contact_email_deliveries_for_request",
+    args: { p_batch_size: number; p_request_reference?: string },
   ) => PromiseLike<DatabaseResult<DeliveryRow[] | null>>;
   from: (table: "contact_email_deliveries") => {
     update: (values: Record<string, unknown>) => UpdateQuery;
@@ -44,6 +59,7 @@ type EmailSender = (
 
 type ProcessOutboxOptions = {
   batchSize?: number;
+  requestReference?: string;
   client?: OutboxClient;
   confirmationSender?: EmailSender;
   leadNotificationSender?: EmailSender;
@@ -87,7 +103,7 @@ function parseNotificationPayload(payload: Json): ContactLeadNotification | null
 }
 
 function safeErrorMessage(reason: string) {
-  return reason.replace(/\s+/g, " ").trim().slice(0, 2000) || "Unknown email delivery error.";
+  return sanitizeOperationalError(reason, 2000) || "Unknown email delivery error.";
 }
 
 export function calculateContactEmailRetryAt(attempts: number, now = new Date()) {
@@ -105,7 +121,7 @@ async function updateClaimedDelivery(
     throw new Error(`Claimed delivery ${delivery.id} did not include a lock token.`);
   }
 
-  const { error } = await client
+  const { data, error } = await client
     .from("contact_email_deliveries")
     .update({
       ...values,
@@ -113,10 +129,15 @@ async function updateClaimedDelivery(
       lock_token: null,
     })
     .eq("id", delivery.id)
-    .eq("lock_token", delivery.lock_token);
+    .eq("lock_token", delivery.lock_token)
+    .select("id")
+    .maybeSingle();
 
   if (error) {
     throw new Error(`Could not persist contact email delivery state (${error.code ?? "database_error"}).`);
+  }
+  if (!data) {
+    throw new Error("Contact email delivery lease was lost before state persistence.");
   }
 }
 
@@ -124,25 +145,34 @@ export async function processContactEmailOutbox(
   options: ProcessOutboxOptions = {},
 ): Promise<ContactEmailOutboxSummary> {
   const client = (options.client ?? (await getSupabaseAdminClient())) as unknown as OutboxClient;
-  const batchSize = Math.max(1, Math.min(options.batchSize ?? 20, 100));
+  const batchSize = Math.max(1, Math.min(options.batchSize ?? 5, 20));
   const now = options.now ?? new Date();
-  const { data, error } = await client.rpc("claim_contact_email_deliveries", {
-    p_batch_size: batchSize,
-  });
-
-  if (error) {
-    throw new Error(`Could not claim contact email deliveries (${error.code ?? "database_error"}).`);
-  }
-
-  const deliveries = data ?? [];
   const summary: ContactEmailOutboxSummary = {
-    claimed: deliveries.length,
+    claimed: 0,
     providerAccepted: 0,
     retrying: 0,
     failed: 0,
   };
 
-  for (const delivery of deliveries) {
+  // Claim one lease at a time. If a serverless invocation is interrupted, at
+  // most one row remains locked instead of the whole batch. The database
+  // reclaims abandoned nonterminal leases after two minutes.
+  for (let index = 0; index < batchSize; index += 1) {
+    const claimFunction = options.requestReference
+      ? "claim_contact_email_deliveries_for_request"
+      : "claim_contact_email_deliveries";
+    const claimArgs = options.requestReference
+      ? { p_batch_size: 1, p_request_reference: options.requestReference }
+      : { p_batch_size: 1 };
+    const { data, error } = await client.rpc(claimFunction, claimArgs);
+
+    if (error) {
+      throw new Error(`Could not claim contact email deliveries (${error.code ?? "database_error"}).`);
+    }
+
+    const delivery = data?.[0];
+    if (!delivery) break;
+    summary.claimed += 1;
     const notification = parseNotificationPayload(delivery.payload);
 
     if (!notification) {
@@ -214,4 +244,3 @@ export async function processContactEmailOutbox(
 
   return summary;
 }
-import "server-only";

@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { resetRateLimitStore } from "@/lib/security/rate-limit";
-import { createLeadCaptureRoute, validateLeadCaptureAntiAbuse } from "./lead-capture-route";
+import {
+  createLeadCaptureRoute,
+  isTrustedLeadCaptureOrigin,
+  processImmediateContactEmailDelivery,
+  validateLeadCaptureAntiAbuse,
+} from "./lead-capture-route";
 
 describe("lead capture route", () => {
   afterEach(() => {
@@ -97,5 +102,75 @@ describe("lead capture route", () => {
     }));
 
     expect(response.status).toBe(413);
+  });
+
+  it("accepts a production same-origin beacon without Origin only with browser provenance", () => {
+    const request = new Request("https://www.aixco.global/api/web-vitals", {
+      headers: {
+        "sec-fetch-site": "same-origin",
+        referer: "https://www.aixco.global/aixco-global-op2/current-project",
+      },
+    });
+    expect(isTrustedLeadCaptureOrigin(request, { NODE_ENV: "production" })).toBe(true);
+  });
+
+  it("accepts a same-origin beacon whose browser omits Sec-Fetch-Site", () => {
+    const request = new Request("http://next-internal:3000/api/web-vitals", {
+      headers: {
+        host: "127.0.0.1:8081",
+        referer: "http://127.0.0.1:8081/",
+      },
+    });
+    expect(isTrustedLeadCaptureOrigin(request, { NODE_ENV: "production" })).toBe(true);
+  });
+
+  it("accepts the public browser origin when a trusted proxy rewrites the internal request URL", () => {
+    const request = new Request("http://next-internal:3000/api/web-vitals", {
+      headers: {
+        origin: "https://www.aixco.global",
+        host: "next-internal:3000",
+        "x-forwarded-host": "www.aixco.global",
+        "x-forwarded-proto": "https",
+      },
+    });
+    expect(isTrustedLeadCaptureOrigin(request, { NODE_ENV: "production" })).toBe(true);
+
+    const forged = new Request("http://next-internal:3000/api/web-vitals", {
+      headers: {
+        origin: "https://evil.example",
+        host: "next-internal:3000",
+        "x-forwarded-host": "www.aixco.global",
+        "x-forwarded-proto": "https",
+      },
+    });
+    expect(isTrustedLeadCaptureOrigin(forged, { NODE_ENV: "production" })).toBe(false);
+  });
+
+  it("rejects missing or forged production provenance when Origin is absent", () => {
+    const missing = new Request("https://www.aixco.global/api/web-vitals");
+    const crossSite = new Request("https://www.aixco.global/api/web-vitals", {
+      headers: { "sec-fetch-site": "cross-site", referer: "https://www.aixco.global/" },
+    });
+    const forgedReferrer = new Request("https://www.aixco.global/api/web-vitals", {
+      headers: { "sec-fetch-site": "same-origin", referer: "https://evil.example/" },
+    });
+
+    expect(isTrustedLeadCaptureOrigin(missing, { NODE_ENV: "production" })).toBe(false);
+    expect(isTrustedLeadCaptureOrigin(crossSite, { NODE_ENV: "production" })).toBe(false);
+    expect(isTrustedLeadCaptureOrigin(forgedReferrer, { NODE_ENV: "production" })).toBe(false);
+  });
+
+  it("leaves durable email rows queued when delivery/webhook readiness is incomplete", async () => {
+    const processor = vi.fn();
+    const readiness = vi.fn(async () => ({ ready: false })) as unknown as NonNullable<Parameters<
+      typeof processImmediateContactEmailDelivery
+    >[1]>["readiness"];
+
+    await expect(processImmediateContactEmailDelivery("AIX-2026-000001", {
+      readiness,
+      processor,
+    })).resolves.toEqual({ processed: false, reason: "pipeline_not_ready" });
+    expect(readiness).toHaveBeenCalledWith({ operational: false });
+    expect(processor).not.toHaveBeenCalled();
   });
 });

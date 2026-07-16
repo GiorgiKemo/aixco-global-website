@@ -1,8 +1,10 @@
-name: Operational data retention
+name: Operational data retention recovery
 
 on:
   schedule:
-    - cron: "17 2 * * *"
+    # Vercel Cron runs the primary daily purge. GitHub provides a delayed,
+    # best-effort recovery invocation in case that run fails.
+    - cron: "47 3 * * *"
   workflow_dispatch:
 
 permissions:

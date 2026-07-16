@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { checkRateLimit, getRateLimitClientId, resetRateLimitStore } from "./rate-limit";
+import { checkRateLimit, getRateLimitClientId, RATE_LIMIT_MAX_KEYS, resetRateLimitStore } from "./rate-limit";
 
 describe("rate limit utilities", () => {
   afterEach(() => {
@@ -20,6 +20,16 @@ describe("rate limit utilities", () => {
     expect(checkRateLimit({ key: "admin:1", limit: 1, windowMs: 1000, now: 100 }).allowed).toBe(true);
     expect(checkRateLimit({ key: "admin:1", limit: 1, windowMs: 1000, now: 200 }).allowed).toBe(false);
     expect(checkRateLimit({ key: "admin:1", limit: 1, windowMs: 1000, now: 1200 }).allowed).toBe(true);
+  });
+
+  it("bounds unique in-memory keys and evicts the oldest bucket", () => {
+    expect(checkRateLimit({ key: "oldest", limit: 1, windowMs: 10_000, now: 0 }).allowed).toBe(true);
+    for (let index = 1; index < RATE_LIMIT_MAX_KEYS; index += 1) {
+      checkRateLimit({ key: `unique-${index}`, limit: 1, windowMs: 20_000, now: 0 });
+    }
+    checkRateLimit({ key: "overflow", limit: 1, windowMs: 30_000, now: 0 });
+
+    expect(checkRateLimit({ key: "oldest", limit: 1, windowMs: 10_000, now: 1 }).allowed).toBe(true);
   });
 
   it("uses the first forwarded IP address as the client id", () => {

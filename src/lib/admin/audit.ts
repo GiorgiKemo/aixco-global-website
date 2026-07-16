@@ -1,4 +1,5 @@
 import type { AdminPrincipal } from "./auth";
+import { createHash } from "node:crypto";
 
 type AdminAuditEvent = {
   action: string;
@@ -13,6 +14,9 @@ type AdminAuditEvent = {
  * Do not include form messages, passwords, tokens, or other secrets in details.
  */
 export function auditAdminAction(event: AdminAuditEvent) {
+  const actorEmailHash = event.actor.email
+    ? createHash("sha256").update(event.actor.email.trim().toLowerCase()).digest("hex").slice(0, 24)
+    : null;
   console.info(
     "[aixco-admin-audit]",
     JSON.stringify({
@@ -21,7 +25,7 @@ export function auditAdminAction(event: AdminAuditEvent) {
       outcome: event.outcome,
       actor: {
         id: event.actor.id,
-        email: event.actor.email,
+        emailHash: actorEmailHash,
         authentication: event.actor.authentication,
       },
       target: event.target,

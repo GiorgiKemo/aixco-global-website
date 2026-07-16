@@ -144,6 +144,16 @@ export function PipelineLeadCard({
               <p className="truncate font-medium text-[#161616]">{lead.contactLabel}</p>
             )}
             <p className="line-clamp-2 whitespace-pre-line break-words leading-5 text-[#55534f]">{lead.body}</p>
+            {lead.resource === "contact" ? (
+              <div className="grid gap-1 rounded-md bg-[#f8f7f3] px-2.5 py-2 text-[11px]">
+                <p className="font-semibold capitalize text-[#161616]">{lead.requestType ?? "message"} request</p>
+                {lead.phone ? <a href={`tel:${lead.phone}`} className="font-medium text-[#161616] underline-offset-4 hover:underline">{lead.phone}</a> : null}
+                {lead.preferredCallAt ? (
+                  <p>Requested call: {formatDate(lead.preferredCallAt)}{lead.preferredCallTimezone ? ` (${lead.preferredCallTimezone})` : ""}</p>
+                ) : null}
+                <p>Email delivery: {lead.emailDeliveryStatus?.replaceAll("_", " ") ?? "unknown"}</p>
+              </div>
+            ) : null}
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#6f6e6a]">

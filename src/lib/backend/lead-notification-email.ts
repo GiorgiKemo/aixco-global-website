@@ -37,12 +37,6 @@ export type ContactConfirmationEmail = {
   html: string;
 };
 
-type ResendSendResponse = {
-  id?: string;
-  message?: string;
-  name?: string;
-};
-
 export type EmailDeliveryTestResult =
   | { ok: true; id: string | undefined; to: string[] }
   | { ok: false; skipped?: boolean; reason: string };
@@ -538,27 +532,42 @@ async function postResendEmail(
       signal: controller.signal,
     });
 
-    let payload: ResendSendResponse = {};
+    let payload: unknown = {};
     try {
-      payload = (await response.json()) as ResendSendResponse;
+      payload = await response.json();
     } catch {
       // A successful response may be empty, while failures still get a safe status fallback.
     }
 
+    const responseObject = payload && typeof payload === "object" && !Array.isArray(payload)
+      ? payload as Record<string, unknown>
+      : {};
+    const responseMessage = typeof responseObject.message === "string" ? responseObject.message : "";
+    const responseName = typeof responseObject.name === "string" ? responseObject.name : "";
+
     if (!response.ok) {
       return {
         ok: false,
-        reason: payload.message || payload.name || `Resend request failed with status ${response.status}.`,
+        reason: responseMessage || responseName || `Resend request failed with status ${response.status}.`,
         retryable:
           response.status === 408 ||
-          response.status === 409 ||
+          (response.status === 409 && responseName === "concurrent_idempotent_requests") ||
           response.status === 425 ||
           response.status === 429 ||
           response.status >= 500,
       };
     }
 
-    return { ok: true, providerMessageId: payload.id ?? null };
+    const providerMessageId = typeof responseObject.id === "string" ? responseObject.id.trim() : "";
+    if (!providerMessageId || providerMessageId.length > 255) {
+      return {
+        ok: false,
+        reason: "Resend accepted the request without a valid message identifier.",
+        retryable: true,
+      };
+    }
+
+    return { ok: true, providerMessageId };
   } catch (error) {
     if (controller.signal.aborted) {
       return { ok: false, reason: `Resend request timed out after ${timeoutMs}ms.`, retryable: true };

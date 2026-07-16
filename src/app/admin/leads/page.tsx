@@ -12,10 +12,13 @@ import {
   MessageCircle,
   MousePointerClick,
   UserCheck,
+  UserPlus,
 } from "lucide-react";
 import { requireAdminSession } from "@/lib/admin/auth";
 import {
   fetchAdminLeadDashboard,
+  parseLeadStatus,
+  type AdminLeadPage,
   type ChatLead,
   type ContactLead,
   type LeadStatus,
@@ -44,8 +47,6 @@ const adminViews: { label: string; value: AdminView }[] = [
   { label: "Portal", value: "portal" },
 ];
 
-const PAGE_SIZE = 15;
-
 function trimText(value: string | null, maxLength = 210) {
   if (!value) return "No message recorded.";
   return value.length > maxLength ? `${value.slice(0, maxLength).trim()}...` : value;
@@ -65,6 +66,12 @@ function toContactLead(lead: ContactLead): DashboardLead {
     body: trimText(lead.message),
     pagePath: lead.page_path ?? "Unknown page",
     meta: "Contact form",
+    requestType: lead.request_type,
+    phone: lead.phone,
+    preferredCallAt: lead.preferred_call_at,
+    preferredCallTimezone: lead.preferred_call_timezone,
+    emailDeliveryStatus: lead.email_delivery_status,
+    emailDeliveryUpdatedAt: lead.email_delivery_updated_at,
   };
 }
 
@@ -125,16 +132,6 @@ function getPageNumber(value: string | string[] | undefined) {
   return Number.isFinite(page) && page > 0 ? page : 1;
 }
 
-function clampPage(page: number, total: number, pageSize = PAGE_SIZE) {
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  return Math.min(page, totalPages);
-}
-
-function paginateItems<T>(items: T[], page: number, pageSize = PAGE_SIZE) {
-  const start = (page - 1) * pageSize;
-  return items.slice(start, start + pageSize);
-}
-
 function tabHref(view: AdminView) {
   return view === "overview" ? "/admin/leads" : `/admin/leads?tab=${view}`;
 }
@@ -145,21 +142,13 @@ function formatCountSuffix(count: number, hideWhenZero = false) {
 }
 
 function Pagination({
-  page,
-  total,
-  pageSize = PAGE_SIZE,
+  pagination,
   hrefForPage,
 }: {
-  page: number;
-  total: number;
-  pageSize?: number;
+  pagination: AdminLeadPage;
   hrefForPage: (page: number) => string;
 }) {
-  const totalPages = Math.ceil(total / pageSize);
-  if (totalPages <= 1) return null;
-
-  const start = (page - 1) * pageSize + 1;
-  const end = Math.min(page * pageSize, total);
+  const { page, total, totalPages, start, end } = pagination;
   const buttonClass =
     "inline-flex h-9 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-white px-3 text-sm font-medium text-[#161616] transition-colors hover:bg-[#f6f4ef] sm:flex-none";
   const disabledClass =
@@ -168,31 +157,33 @@ function Pagination({
   return (
     <div className="mt-4 flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
       <span className="text-[#6f6e6a]">
-        Showing {start}-{end} of {total}
+        {total === 0 ? "Showing 0 of 0" : `Showing ${start}-${end} of ${total}`}
       </span>
-      <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
-        {page > 1 ? (
-          <Link href={hrefForPage(page - 1)} className={buttonClass}>
-            Previous
-          </Link>
-        ) : (
-          <span className={disabledClass} aria-disabled="true">
-            Previous
+      {totalPages > 1 ? (
+        <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
+          {page > 1 ? (
+            <Link href={hrefForPage(page - 1)} className={buttonClass}>
+              Previous
+            </Link>
+          ) : (
+            <span className={disabledClass} aria-disabled="true">
+              Previous
+            </span>
+          )}
+          <span className="min-w-14 text-center text-xs text-[#6f6e6a]">
+            {page} / {totalPages}
           </span>
-        )}
-        <span className="min-w-14 text-center text-xs text-[#6f6e6a]">
-          {page} / {totalPages}
-        </span>
-        {page < totalPages ? (
-          <Link href={hrefForPage(page + 1)} className={buttonClass}>
-            Next
-          </Link>
-        ) : (
-          <span className={disabledClass} aria-disabled="true">
-            Next
-          </span>
-        )}
-      </div>
+          {page < totalPages ? (
+            <Link href={hrefForPage(page + 1)} className={buttonClass}>
+              Next
+            </Link>
+          ) : (
+            <span className={disabledClass} aria-disabled="true">
+              Next
+            </span>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -400,16 +391,24 @@ function SectionHeading({
 
 function OverviewSection({
   leads,
-  newLeads,
   portalEvents,
   stats,
 }: {
   leads: DashboardLead[];
-  newLeads: DashboardLead[];
   portalEvents: PortalEvent[];
-  stats: { totalContacts: number; totalChats: number; totalPortalEvents: number };
+  stats: {
+    newContacts: number;
+    newChats: number;
+    qualifiedContacts: number;
+    qualifiedChats: number;
+    totalContacts: number;
+    totalChats: number;
+    totalPortalEvents: number;
+  };
 }) {
-  const qualifiedCount = leads.filter((lead) => lead.status === "qualified").length;
+  const totalLeads = stats.totalContacts + stats.totalChats;
+  const openQueue = stats.newContacts + stats.newChats;
+  const qualifiedCount = stats.qualifiedContacts + stats.qualifiedChats;
 
   return (
     <div className="space-y-6">
@@ -419,8 +418,8 @@ function OverviewSection({
       </h2>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <StatCard label="Total Leads" value={leads.length} icon={BarChart3} />
-        <StatCard label="Open Queue" value={newLeads.length} icon={Inbox} />
+        <StatCard label="Total Leads" value={totalLeads} icon={BarChart3} />
+        <StatCard label="Open Queue" value={openQueue} icon={Inbox} />
         <StatCard label="Contacts" value={stats.totalContacts} icon={Mail} />
         <StatCard label="Live Chats" value={stats.totalChats} icon={MessageCircle} />
         <StatCard label="Qualified" value={qualifiedCount} icon={UserCheck} />
@@ -458,21 +457,52 @@ function OverviewSection({
   );
 }
 
-function NewLeadQueue({ leads, page }: { leads: DashboardLead[]; page: number }) {
-  const activePage = clampPage(page, leads.length);
-  const pageLeads = paginateItems(leads, activePage);
+function NewLeadQueue({
+  contactLeads,
+  chatLeads,
+  contactPagination,
+  chatPagination,
+}: {
+  contactLeads: DashboardLead[];
+  chatLeads: DashboardLead[];
+  contactPagination: AdminLeadPage;
+  chatPagination: AdminLeadPage;
+}) {
+  const total = contactPagination.total + chatPagination.total;
+  const hrefForPage = (resource: "contact" | "chat", page: number) => {
+    const query = new URLSearchParams({ tab: "new" });
+    if (resource === "contact" && page > 1) query.set("contactPage", String(page));
+    if (resource === "chat" && page > 1) query.set("chatPage", String(page));
+    if (resource !== "contact" && contactPagination.page > 1) query.set("contactPage", String(contactPagination.page));
+    if (resource !== "chat" && chatPagination.page > 1) query.set("chatPage", String(chatPagination.page));
+    return `/admin/leads?${query.toString()}`;
+  };
 
   return (
-    <section>
-      <SectionHeading title="New Leads" count={leads.length} />
-      <LeadRows leads={pageLeads} emptyLabel="No new leads right now." showActions />
-      <Pagination page={activePage} total={leads.length} hrefForPage={(nextPage) => `/admin/leads?tab=new&page=${nextPage}`} />
+    <section className="space-y-6">
+      <SectionHeading title="New Leads" count={total} />
+      <section>
+        <SectionHeading title="Contact form requests" count={contactPagination.total} />
+        <LeadRows leads={contactLeads} emptyLabel="No new contact requests right now." showActions />
+        <Pagination pagination={contactPagination} hrefForPage={(page) => hrefForPage("contact", page)} />
+      </section>
+      <section>
+        <SectionHeading title="Live chat transcripts" count={chatPagination.total} />
+        <LeadRows leads={chatLeads} emptyLabel="No new chat transcripts right now." showActions />
+        <Pagination pagination={chatPagination} hrefForPage={(page) => hrefForPage("chat", page)} />
+      </section>
     </section>
   );
 }
 
 type AdminLeadsPageProps = {
-  searchParams?: Promise<{ tab?: string | string[]; page?: string | string[] }>;
+  searchParams?: Promise<{
+    tab?: string | string[];
+    status?: string | string[];
+    contactPage?: string | string[];
+    chatPage?: string | string[];
+    portalPage?: string | string[];
+  }>;
 };
 
 export default async function AdminLeadsPage({ searchParams }: AdminLeadsPageProps) {
@@ -480,8 +510,14 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
 
   const params = searchParams ? await searchParams : {};
   const activeView = getActiveView(params.tab);
-  const currentPage = getPageNumber(params.page);
-  const result = await fetchAdminLeadDashboard();
+  const requestedStatus = parseLeadStatus(getQueryParam(params.status));
+  const result = await fetchAdminLeadDashboard({
+    status: activeView === "new" ? "new" : activeView === "records" ? requestedStatus : undefined,
+    contactPage: getPageNumber(params.contactPage),
+    chatPage: getPageNumber(params.chatPage),
+    portalPage: getPageNumber(params.portalPage),
+    mode: activeView === "pipeline" ? "pipeline" : "paged",
+  });
 
   return (
     <main data-admin-scrollbar="true" className="min-h-screen bg-[#f6f4ef] px-4 py-4 text-[#161616] sm:px-6 sm:py-8">
@@ -508,6 +544,13 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
               >
                 <UserCheck className="h-3.5 w-3.5" aria-hidden="true" />
                 Privacy requests
+              </Link>
+              <Link
+                href="/admin/identity-migration"
+                className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
+              >
+                <UserPlus className="h-3.5 w-3.5" aria-hidden="true" />
+                Admin identities
               </Link>
               <form action="/admin/logout" method="post">
                 <button
@@ -541,13 +584,14 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
             const contactLeads = result.data.contacts.map(toContactLead);
             const chatLeads = result.data.chats.map(toChatLead);
             const allLeads = sortNewest([...contactLeads, ...chatLeads]);
-            const newLeads = allLeads.filter((lead) => lead.status === "new");
+            const totalLeads = result.data.stats.totalContacts + result.data.stats.totalChats;
+            const totalNewLeads = result.data.stats.newContacts + result.data.stats.newChats;
             const counts: Record<AdminView, number> = {
-              overview: allLeads.length,
-              new: newLeads.length,
-              pipeline: allLeads.length,
-              records: allLeads.length,
-              portal: result.data.portalEvents.length,
+              overview: totalLeads,
+              new: totalNewLeads,
+              pipeline: totalLeads,
+              records: totalLeads,
+              portal: result.data.stats.totalPortalEvents,
             };
 
             return (
@@ -557,22 +601,52 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
                 {activeView === "overview" && (
                   <OverviewSection
                     leads={allLeads}
-                    newLeads={newLeads}
                     portalEvents={result.data.portalEvents}
                     stats={result.data.stats}
                   />
                 )}
 
-                {activeView === "new" && <NewLeadQueue leads={newLeads} page={currentPage} />}
+                {activeView === "new" && (
+                  <NewLeadQueue
+                    contactLeads={contactLeads}
+                    chatLeads={chatLeads}
+                    contactPagination={result.data.pagination.contacts}
+                    chatPagination={result.data.pagination.chats}
+                  />
+                )}
 
-                {activeView === "pipeline" && <PipelineBoard leads={allLeads} />}
+                {activeView === "pipeline" && (
+                  <section className="space-y-4">
+                    <div className="rounded-lg border border-[#8b6a18]/25 bg-[#e6c767]/15 px-4 py-3 text-sm leading-relaxed text-[#55534f]">
+                      Pipeline shows the {result.data.window.perResourceLimit} most recent contact requests and the {result.data.window.perResourceLimit} most recent chat transcripts
+                      ({allLeads.length} of {totalLeads} total leads). Older leads remain available in Records.
+                    </div>
+                    <PipelineBoard leads={allLeads} />
+                  </section>
+                )}
 
                 {activeView === "records" && (
-                  <AdminLeadDetails contactLeads={contactLeads} chatLeads={chatLeads} portalEvents={result.data.portalEvents} section="records" />
+                  <AdminLeadDetails
+                    contactLeads={contactLeads}
+                    chatLeads={chatLeads}
+                    portalEvents={result.data.portalEvents}
+                    contactPagination={result.data.pagination.contacts}
+                    chatPagination={result.data.pagination.chats}
+                    portalPagination={result.data.pagination.portalEvents}
+                    section="records"
+                  />
                 )}
 
                 {activeView === "portal" && (
-                  <AdminLeadDetails contactLeads={contactLeads} chatLeads={chatLeads} portalEvents={result.data.portalEvents} section="portal" />
+                  <AdminLeadDetails
+                    contactLeads={contactLeads}
+                    chatLeads={chatLeads}
+                    portalEvents={result.data.portalEvents}
+                    contactPagination={result.data.pagination.contacts}
+                    chatPagination={result.data.pagination.chats}
+                    portalPagination={result.data.pagination.portalEvents}
+                    section="portal"
+                  />
                 )}
               </>
             );

@@ -18,6 +18,7 @@ export type RateLimitResult = {
 };
 
 const STORE_KEY = "__AIXCO_RATE_LIMIT_STORE__";
+export const RATE_LIMIT_MAX_KEYS = 5_000;
 
 type RateLimitGlobal = typeof globalThis & {
   [STORE_KEY]?: Map<string, RateLimitEntry>;
@@ -56,6 +57,17 @@ export function checkRateLimit({ key, limit, windowMs, now = Date.now() }: RateL
   }
 
   const existing = store.get(key);
+  if (!existing && store.size >= RATE_LIMIT_MAX_KEYS) {
+    let oldestKey: string | undefined;
+    let oldestReset = Number.POSITIVE_INFINITY;
+    for (const [candidateKey, candidate] of store) {
+      if (candidate.resetAt < oldestReset) {
+        oldestKey = candidateKey;
+        oldestReset = candidate.resetAt;
+      }
+    }
+    if (oldestKey) store.delete(oldestKey);
+  }
   const entry =
     existing && existing.resetAt > now
       ? existing

@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getAdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
-import { leadResourceSchema, leadStatusSchema, updateLeadStatus } from "@/lib/admin/leads";
+import {
+  LeadNotFoundError,
+  leadResourceSchema,
+  leadStatusSchema,
+  updateLeadStatus,
+} from "@/lib/admin/leads";
 import { readBoundedJson } from "@/lib/security/request-body";
 
 const statusUpdateSchema = z.object({
@@ -44,7 +49,7 @@ export async function POST(request: Request) {
   }
 
   const requestOrigin = request.headers.get("origin");
-  if (requestOrigin && requestOrigin !== new URL(request.url).origin) {
+  if (!requestOrigin || requestOrigin !== new URL(request.url).origin) {
     if (wantsJson) return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
     return new NextResponse("Forbidden", { status: 403 });
   }
@@ -67,7 +72,7 @@ export async function POST(request: Request) {
     });
     if (wantsJson) return NextResponse.json({ ok: true });
     return redirectTo(request, `/admin/leads?updated=1#${parsed.data.resource}-${parsed.data.id}`);
-  } catch {
+  } catch (error) {
     auditAdminAction({
       action: "lead.status.update",
       actor: auth.principal,
@@ -75,7 +80,13 @@ export async function POST(request: Request) {
       target: `${parsed.data.resource}:${parsed.data.id}`,
       details: { status: parsed.data.status },
     });
-    if (wantsJson) return NextResponse.json({ ok: false, error: "status-update-failed" }, { status: 500 });
-    return redirectTo(request, "/admin/leads?error=status-update-failed");
+    const notFound = error instanceof LeadNotFoundError;
+    if (wantsJson) {
+      return NextResponse.json(
+        { ok: false, error: notFound ? "lead-not-found" : "status-update-failed" },
+        { status: notFound ? 404 : 500 },
+      );
+    }
+    return redirectTo(request, `/admin/leads?error=${notFound ? "lead-not-found" : "status-update-failed"}`);
   }
 }

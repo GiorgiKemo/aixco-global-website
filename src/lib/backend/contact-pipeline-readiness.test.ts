@@ -14,7 +14,26 @@ const readyEnv = {
   LEAD_NOTIFICATION_FROM: "AIXCO Website <notifications@send.aixco.global>",
   LEAD_NOTIFICATION_TO: "info@aixco.global, klem@example.com",
   CRON_SECRET: "abcdef0123456789abcdef0123456789",
+  RESEND_WEBHOOK_SECRET: "whsec_abcdef0123456789abcdef0123456789",
 };
+
+function runtimeStatus(overrides: Record<string, unknown> = {}) {
+  return {
+    schema_version: CONTACT_PIPELINE_SCHEMA_VERSION,
+    queued_count: 0,
+    failed_count: 0,
+    delivery_issue_count: 0,
+    oldest_queued_at: null,
+    oldest_processing_at: null,
+    worker_last_started_at: "2026-07-16T10:00:00.000Z",
+    worker_last_succeeded_at: "2026-07-16T10:00:00.000Z",
+    worker_last_failed_at: null,
+    worker_consecutive_failures: 0,
+    scheduler_active: true,
+    scheduler_last_succeeded_at: "2026-07-16T10:00:00.000Z",
+    ...overrides,
+  };
+}
 
 describe("contact pipeline readiness", () => {
   it("validates all production capture and worker dependencies", () => {
@@ -43,29 +62,95 @@ describe("contact pipeline readiness", () => {
       "invalid_notification_sender",
       "invalid_notification_recipients",
       "weak_cron_secret",
+      "invalid_resend_webhook_secret",
     ]));
   });
 
   it("verifies the exact database schema contract", async () => {
     const client = {
       rpc: vi.fn(async () => ({
-        data: [{
-          schema_version: CONTACT_PIPELINE_SCHEMA_VERSION,
-          queued_count: 4,
-          failed_count: 1,
-        }],
+        data: [runtimeStatus()],
         error: null,
       })),
     };
 
-    await expect(getContactPipelineReadiness({ client, env: readyEnv })).resolves.toEqual({
+    await expect(getContactPipelineReadiness({
+      client,
+      env: readyEnv,
+      now: new Date("2026-07-16T10:05:00.000Z"),
+    })).resolves.toEqual({
       ready: true,
       environment: { ready: true, issues: [] },
       schema: {
         ready: true,
         version: CONTACT_PIPELINE_SCHEMA_VERSION,
-        queued: 4,
-        failed: 1,
+        queued: 0,
+        failed: 0,
+        deliveryIssues: 0,
+      },
+      operations: {
+        ready: true,
+        issues: [],
+        oldestQueuedAt: null,
+        oldestProcessingAt: null,
+        workerLastStartedAt: "2026-07-16T10:00:00.000Z",
+        workerLastSucceededAt: "2026-07-16T10:00:00.000Z",
+        workerLastFailedAt: null,
+        workerConsecutiveFailures: 0,
+        schedulerActive: true,
+        schedulerLastSucceededAt: "2026-07-16T10:00:00.000Z",
+      },
+    });
+  });
+
+  it("reports recipient delivery issues without treating a historical bounce as a worker outage", async () => {
+    const client = {
+      rpc: vi.fn(async () => ({
+        data: [runtimeStatus({ delivery_issue_count: 3 })],
+        error: null,
+      })),
+    };
+
+    await expect(getContactPipelineReadiness({
+      client,
+      env: readyEnv,
+      now: new Date("2026-07-16T10:05:00.000Z"),
+    })).resolves.toMatchObject({
+      ready: true,
+      schema: { failed: 0, deliveryIssues: 3 },
+      operations: { ready: true, issues: [] },
+    });
+  });
+
+  it("fails health when delivery failures, stale work, or a stale worker heartbeat are present", async () => {
+    const client = {
+      rpc: vi.fn(async () => ({
+        data: [runtimeStatus({
+          queued_count: 4,
+          failed_count: 1,
+          oldest_queued_at: "2026-07-16T09:00:00.000Z",
+          worker_last_succeeded_at: "2026-07-16T09:00:00.000Z",
+          worker_consecutive_failures: 2,
+        })],
+        error: null,
+      })),
+    };
+
+    await expect(getContactPipelineReadiness({
+      client,
+      env: readyEnv,
+      now: new Date("2026-07-16T10:00:00.000Z"),
+    })).resolves.toMatchObject({
+      ready: false,
+      schema: { ready: true, queued: 4, failed: 1 },
+      operations: {
+        ready: false,
+        issues: expect.arrayContaining([
+          "failed_deliveries_present",
+          "oldest_queue_item_stale",
+          "worker_heartbeat_stale",
+          "worker_failures_present",
+        ]),
       },
     });
   });
@@ -73,7 +158,7 @@ describe("contact pipeline readiness", () => {
   it("fails closed when the required migration is missing", async () => {
     const client = {
       rpc: vi.fn(async () => ({
-        data: [{ schema_version: "old", queued_count: 0, failed_count: 0 }],
+        data: [runtimeStatus({ schema_version: "old" })],
         error: null,
       })),
     };
