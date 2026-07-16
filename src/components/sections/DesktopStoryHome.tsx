@@ -456,7 +456,10 @@ function StoryTextReveal({
 
   useLayoutEffect(() => {
     if (!shouldAnimate) {
-      if (animationState !== "idle") setAnimationState("idle");
+      // Let an in-flight reveal finish even if a short viewport scroll moves
+      // the heading past the observer boundary. Once it has completed, reset
+      // it off-screen so the next visit can replay from the beginning.
+      if (animationState === "played") setAnimationState("idle");
       return;
     }
 
