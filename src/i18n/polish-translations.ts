@@ -168,4 +168,7 @@ export const polishTranslations = {
   "Can I ask about AIXCO company financing?": { pl: "Czy mogę zapytać o finansowanie spółki AIXCO?" },
   "Official systems certified": { pl: "Oficjalnie certyfikowane systemy" },
   "Social media": { pl: "Media społecznościowe" },
+  "Access property reference images and supporting documentation.": {
+    pl: "Uzyskaj dostęp do referencyjnych zdjęć nieruchomości i dokumentacji pomocniczej.",
+  },
 } satisfies PolishTranslationSource;

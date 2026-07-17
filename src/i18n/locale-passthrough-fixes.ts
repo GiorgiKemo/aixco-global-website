@@ -51,4 +51,10 @@ export const localePassthroughFixes = {
   "Thanks. The AIXCO team can help with property administration, handover, documents, rental coordination, and owner reporting.": { ru: "Спасибо. Команда AIXCO поможет с управлением недвижимостью, передачей, документами, координацией аренды и отчетностью владельца.", ka: "გმადლობთ. AIXCO-ს გუნდი დაგეხმარებათ ქონების მართვაში, გადაცემაში, დოკუმენტებში, იჯარის კოორდინაციასა და მფლობელის ანგარიშგებაში.", ar: "شكرا. يمكن لفريق AIXCO المساعدة في إدارة العقار والتسليم والمستندات وتنسيق الإيجار وتقارير المالك." },
   "Batumi development update: strong buyer demand": { ru: "Обновление по Батуми: высокий спрос покупателей", ka: "ბათუმის განვითარების განახლება: მყიდველთა მაღალი მოთხოვნა", tr: "Batum gelişme güncellemesi: güçlü alıcı talebi", ar: "تحديث تطورات باتومي: طلب قوي من المشترين" },
   "Strategic partner update published for infrastructure partners": { ru: "Опубликовано обновление для стратегических инфраструктурных партнеров", ka: "გამოქვეყნდა განახლება სტრატეგიული ინფრასტრუქტურული პარტნიორებისთვის", tr: "Stratejik altyapı ortakları için güncelleme yayımlandı", ar: "نُشر تحديث للشركاء الاستراتيجيين في البنية التحتية" },
+  "Access property reference images and supporting documentation.": {
+    ru: "Доступ к справочным изображениям объектов недвижимости и сопроводительной документации.",
+    ka: "მიიღეთ წვდომა უძრავი ქონების საცნობარო სურათებსა და დამხმარე დოკუმენტაციაზე.",
+    tr: "Gayrimenkul referans görsellerine ve destekleyici belgelere erişin.",
+    ar: "اطّلع على الصور المرجعية للعقارات والوثائق الداعمة.",
+  },
 } satisfies LocaleFixSource;

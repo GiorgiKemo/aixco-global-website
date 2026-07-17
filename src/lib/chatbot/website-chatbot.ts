@@ -222,10 +222,9 @@ function buildWebsiteKnowledgeBase(content: SiteContent): KnowledgeEntry[] {
       title: "Download Materials",
       priority: 12,
       keywords: ["materials", "downloads", "download section", "assets", "files", "brochures", "catalog", "documents"],
-      answer: `The website has a Download Materials section at #materials. It includes ${materialDownloads
-        .filter((material) => material.format === "PDF")
+      answer: `The website has a Download Materials section at #materials. It currently includes ${materialDownloads
         .map((material) => material.title)
-        .join(" and ")} plus catalog sheets and Dubai legacy reference images. Clients, buyers, brokers, and partners can click Download on each card to save the files.`,
+        .join(" and ")}. Clients, buyers, brokers, and partners can click Download on each card to save the available files.`,
     }),
     entry({
       id: "batumi-market",

@@ -64,6 +64,272 @@ final result: passed
 
 ---
 
+# Dubai Portfolio Metric Affixes - Design QA
+
+- User-provided reference: `output/playwright/dubai-metrics/reference.png`
+- Corrected desktop evidence: `output/playwright/dubai-metrics/final-desktop.png`
+- Corrected mobile evidence: `output/playwright/dubai-metrics/final-mobile.png`
+- Reference-versus-final comparison: `output/playwright/dubai-metrics/reference-vs-final-desktop.jpg`
+
+## Fidelity findings
+
+- The Eden House units metric renders as `600+`; the plus sign now inherits the exact value typography instead of appearing as a reduced muted suffix.
+- The development value renders visually as `462M USD`; both `M` and `USD` inherit the number's AIXCO gold, bundled Gilroy face, 600 weight, size, line height, spacing, and baseline.
+- The existing card copy, hierarchy, borders, radii, spacing, and responsive structure remain unchanged.
+- Computed-style parity was verified in Chromium at 904 x 700 and 390 x 844 for color, font family, font size, font weight, font style, line height, letter spacing, and baseline alignment.
+
+## Regression verification
+
+- Focused motion/CSS unit suite: 48 tests passed.
+- Dubai natural-scroll smoke: passed.
+- Mobile experience smoke: eight homepage and five property-page viewport shapes passed.
+- TypeScript, ESLint, bundled Gilroy glyph validation, and production build: passed.
+
+final result: passed
+
+---
+
+# Unified Story Title Animation - Design QA
+
+- Scope: every story-section title on the homepage, across desktop and mobile layouts
+- Animation engine: one shared transform-and-opacity reveal
+- Duration and easing: 860 ms, `cubic-bezier(0.16, 1, 0.3, 1)`
+- Production evidence: `output/playwright/title-animation/`
+
+## Implementation
+
+- Removed the per-character title DOM, long-title wipe fallback, and separate tiny/mobile visual layers.
+- Removed the second Framer Motion opacity animation from title containers.
+- Titles now use one compositor-friendly `translate3d` plus opacity animation and play once when their chapter first becomes active.
+- Animation completion is driven by the browser's native `animationend` event, avoiding timer drift across engines.
+- Reduced-motion visitors receive the final visible title immediately with no active animation work.
+
+## Verification
+
+- Chromium: desktop, laptop, small laptop, tablet, phone, small phone, and phone landscape passed.
+- WebKit: desktop and phone passed.
+- Locales: English, German, Russian, Georgian, Arabic, and Polish passed.
+- Chromium frame pacing: 16.7-16.8 ms p95 across all tested viewport and locale cases (approximately 60 FPS); Arabic phone maximum was 33.4 ms with a 16.8 ms p95.
+- One animation start and one animation end per title; revisiting a section does not replay it.
+- No duplicate visual layers, per-character nodes, compact fallback, horizontal overflow, console errors, or remaining Web Animations work after completion.
+- Reduced motion: title is immediately visible with `animation: none`, no transform, and zero active animations in Chromium and WebKit.
+- Full unit suite: 83 files and 362 tests passed.
+- TypeScript, test TypeScript, ESLint, font validation, and production build passed.
+- Language layout: 84 viewport/language combinations passed.
+- Mobile experience: eight homepage and five property-page viewport shapes passed.
+- Navbar scale and Dubai natural-scroll smoke checks passed.
+
+final result: passed
+
+---
+
+# Dubai Two-Card Legacy Portfolio - Design QA
+
+- Source visual truth: `artifacts/dubai-two-card-option-1-reference.png` (the first user-selected ImageGen option)
+- Desktop implementation evidence: `artifacts/dubai-two-card-option-1-desktop.png`
+- Short-laptop implementation evidence: `artifacts/dubai-two-card-option-1-laptop-final.png`
+- Mobile implementation evidence: `output/playwright/dubai-option-1-mobile-viewport.png`
+- Full-view comparison: `artifacts/dubai-two-card-option-1-comparison-full.jpg`
+- Focused comparison: `artifacts/dubai-two-card-option-1-comparison-focused.jpg`
+- Viewports: 1440 x 900, 1366 x 768, and 390 x 844 CSS pixels
+- State: English Dubai section active, menus closed, Eden House and Dubai Healthcare City cards visible
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- The selected composition is implemented as one ivory editorial column beside the full-height Burj Khalifa image, with two compact stacked portfolio cards and no legacy image marquees.
+- Eden House - The Canal & The Park has been restored as the first card with status, 600+ units, and USD 462M development value.
+- Dubai Healthcare City remains the second card with status, development scope, and site progress.
+
+## Full-view comparison evidence
+
+The implementation reproduces the source hierarchy: restrained eyebrow, large Dubai title, concise explanatory copy, and two rounded white cards aligned in a single column beside the uninterrupted image. Existing AIXCO gold, ivory, onyx, typography, and card tokens are preserved so the new arrangement remains consistent with the rest of the site.
+
+## Focused comparison evidence
+
+The focused side-by-side comparison confirms the same two-card order, three-metric structure, compact header rows, generous but controlled card spacing, and balanced split-screen proportions. The implementation uses production content and the established AIXCO number treatment rather than copying mock-only styling artifacts.
+
+## Required fidelity surfaces
+
+- Fonts and typography: existing AIXCO display, body, and numeric systems are preserved; card titles and labels remain readable at every tested width.
+- Spacing and layout rhythm: two cards fit within 1440 x 900 and 1366 x 768 desktop viewports; mobile cards stack naturally without horizontal overflow.
+- Colors and visual tokens: brand ivory, translucent white, onyx, champagne-gold, border opacity, radius, and shadow tokens are reused.
+- Image quality and asset fidelity: the existing Burj Khalifa production image remains full-height and undistorted on desktop.
+- Copy and content: both portfolio names and all six metric labels/values are present and complete.
+
+## Comparison history
+
+1. Restored the Eden House card above Dubai Healthcare City and removed the obsolete single-card slice.
+2. Initial 1440 x 900 comparison matched the selected composition.
+3. Responsive QA found P2 bottom clipping at 1366 x 768.
+4. Added a short-laptop height treatment that compacts heading, copy, spacing, and card internals while preserving hierarchy.
+5. Final 1366 x 768 and 390 x 844 checks passed with both cards accessible and no horizontal overflow.
+
+## Interaction and browser checks
+
+- Dubai-specific Playwright smoke: passed with two cards, no galleries, natural image scroll, and exact Dubai/Batumi section boundary.
+- Measured desktop state: 741 px copy region, two 224 px cards, and 808 px media height.
+- Mobile Playwright smoke: passed.
+- Production build, TypeScript compilation, and bundled font validation: passed.
+
+final result: passed
+
+---
+
+# Dubai History Density Redesign - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-4a7a2569-a59b-48ae-b2b0-b14fdb12e016.png`, with the user direction to remove the excessive empty space and create a more balanced composition
+- Implementation screenshot: `tmp/design-qa/dubai-history/implementation-1562x703.png`
+- Responsive evidence: `tmp/design-qa/dubai-history/implementation-1366x768.png` and `tmp/design-qa/dubai-history/implementation-390x844.png`
+- Full-view comparison: `tmp/design-qa/dubai-history/comparison-1562x703.png`
+- Viewports: 1562 x 703 source comparison, 1366 x 768 laptop, and 390 x 844 mobile
+- State: English Dubai legacy section active, menus closed, Dubai skyline image visible
+
+## Findings
+
+- No actionable P0, P1, or P2 issues remain in the redesigned Dubai section.
+- The eyebrow, headline, and explanatory copy now form one compact editorial group instead of being distributed across four large vertical gaps.
+- The development header and three metrics now share one rounded portfolio card, replacing four visually disconnected white blocks.
+- The left-side composition is vertically centered with comparable top and bottom breathing room at both desktop viewports.
+
+## Full-view comparison evidence
+
+The paired before/after image shows the main density correction: the previous section spread the eyebrow, title, body, project header, and metrics across the full viewport height, while the redesign groups the introduction and portfolio snapshot into two clear regions. The image column and its crop remain unchanged, preserving the existing Dubai identity.
+
+## Focused region comparison evidence
+
+A separate focused crop was not needed because the 3124 x 747 comparison keeps the complete left panel, typography, integrated card, dividers, metric values, and image edge readable. The laptop and mobile screenshots provide the responsive detail that would otherwise be lost in a desktop-only crop.
+
+## Required fidelity surfaces
+
+- Fonts and typography: existing Gilroy families, weights, uppercase eyebrow tracking, display headline sizing, and gold metric values are preserved; no copy is clipped or truncated.
+- Spacing and layout rhythm: intro spacing is controlled as a single grid, the gap to the portfolio snapshot is deliberate, and the card aligns with the text column while maintaining balanced section margins.
+- Colors and visual tokens: existing ivory, white, onyx, gray, and AIXCO gold tokens remain unchanged.
+- Image quality and asset fidelity: the original Burj Khalifa image and responsive crop are preserved; no image, logo, icon, or decorative asset was recreated.
+- Copy and content: all Dubai legacy wording and metrics remain unchanged.
+
+## Comparison history
+
+1. Initial finding - P1: the left panel had excessive vertical separation, making related information feel disconnected and unfinished. Fix: grouped the eyebrow, title, and description and centered the complete content composition. Post-fix evidence: `implementation-1562x703.png` and `comparison-1562x703.png`.
+2. Initial finding - P2: the project header and metrics appeared as four separate floating cards. Fix: combined them into one bordered, rounded portfolio surface with internal dividers and a shared shadow. Post-fix evidence: `implementation-1562x703.png`.
+3. Responsive finding - P2: the denser card needed to remain readable when the metric grid collapses. Fix: retained the established two-plus-one mobile metric flow within the shared card. Post-fix evidence: `implementation-390x844.png` with no horizontal overflow or clipped copy.
+4. Final pass: the 1562 x 703 and 1366 x 768 layouts are visually balanced, the 390 x 844 layout remains readable, and the browser console reports zero errors.
+
+## Verification
+
+- TypeScript: passed.
+- ESLint for the changed component: passed.
+- Production build and bundled font validation: passed.
+- Browser console: zero errors.
+- Desktop and mobile visual checks: passed at all three tested viewports.
+
+final result: passed
+
+---
+
+# Contact Social Links Alignment - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-a60e0d02-4363-44a3-b946-676eec6ebf79.png`
+- Implementation screenshot: `output/playwright/contact-socials/implementation-desktop-full.png`
+- Focused implementation crop: `output/playwright/contact-socials/implementation-desktop.png`
+- Combined focused comparison: `output/playwright/contact-socials/comparison.png`
+- Mobile evidence: `output/playwright/contact-socials/implementation-mobile.png`
+- Viewports: 1440 x 900 desktop and 390 x 844 mobile
+- State: German contact section, email/address cards and social card visible, menus closed
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested social-card scope.
+- The four social controls now distribute across the full card width instead of clustering in the center-left area.
+- Each control is slightly larger, with a correspondingly larger original icon asset, while retaining clear card padding and 60 px minimum touch targets.
+- The social card's left and right edges remain aligned with the combined email/address grid above.
+
+## Full-view comparison evidence
+
+The desktop capture confirms that the social panel has the same 484 px width and horizontal origin as the email/address grid. The controls occupy the complete row with even outer alignment, rather than leaving a large unused area on the right.
+
+## Focused comparison evidence
+
+The paired focused image places the provided source on the left and the revised browser render on the right. It shows the intended change clearly: larger controls and icons, full-width distribution, preserved ivory/white/gold treatment, and equal vertical alignment.
+
+## Required fidelity surfaces
+
+- Fonts and typography: no text or typography changed in this icon-only card.
+- Spacing and layout rhythm: four equal logical positions use `space-between`; card padding, radius, height, and alignment with the detail cards are preserved.
+- Colors and visual tokens: existing white surfaces, ivory page background, gold icons/borders, and subtle shadows remain unchanged.
+- Image quality and asset fidelity: the existing AIXCO social icon image assets are reused at a larger rendered size; no icons were recreated.
+- Copy and content: accessible social-link names and destinations remain unchanged.
+
+## Comparison history
+
+1. Source finding - P2: the four controls occupied only the middle-left portion of the card and left a visibly empty right side. Fix: changed the social-link container to a four-column grid with full-width `space-between` distribution.
+2. Source finding - P2: the icon treatment was undersized relative to the available card height. Fix: increased link controls to `clamp(3.75rem, 4.5vw, 4.4rem)` and icon assets to `clamp(2.55rem, 3.1vw, 3.05rem)`.
+3. Post-fix evidence: desktop controls render at approximately 64.8 px square and mobile controls at 60 px square; the 390 px layout retains one row and has no horizontal overflow.
+
+## Verification
+
+- Desktop card and detail-grid widths: both 484.1 px.
+- Desktop link positions: evenly distributed across the full card.
+- Mobile: all four links remain on one row; no horizontal overflow.
+- Focused regression tests and TypeScript: passed.
+- Browser console: zero errors.
+
+final result: passed
+
+---
+
+# Dubai Legacy and Philosophy Card System - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-34c48296-b054-4c94-b283-21c010b4f935.png`
+- Implementation screenshots: `artifacts/dubai-cards-unified.png` and `artifacts/philosophy-rounded-cards.png`
+- Full-view comparison: `artifacts/dubai-before-after-comparison.png` (source above, implementation below)
+- Viewport: 1440 x 900 CSS pixels
+- State: English homepage with the Dubai and Philosophy sections active at their respective anchors
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain within the requested scope.
+- Eden House The Canal and Eden House The Park are no longer rendered in the Dubai section.
+- The Dubai infinite image marquees are no longer mounted.
+- The remaining Dubai Healthcare City metrics now use the same white card surface, Gilroy hierarchy, gold metric color, border, shadow, and 0.85rem radius as the Philosophy/Global Opportunities card family.
+- Philosophy statistic and principle cards now use the same 0.85rem rounded-corner language as Global Opportunities.
+
+## Full-view comparison evidence
+
+The paired image shows the previous Eden image strips and black/gold dashboard tiles above the revised page. The implementation below removes both Eden gallery groups, reduces the content to one clearly numbered Dubai Healthcare City card, and replaces the high-contrast tiles with three evenly spaced white information cards against the existing ivory page.
+
+## Focused region evidence
+
+- `artifacts/dubai-cards-unified.png` keeps the complete remaining Dubai card readable at the tested viewport.
+- `artifacts/philosophy-rounded-cards.png` confirms the four Philosophy metric cards use the requested rounded treatment without changing their content hierarchy.
+
+## Required fidelity surfaces
+
+- Fonts and typography: Dubai card labels and values now inherit the same shared story metric fonts, weights, sizes, line heights, and tracking used by Philosophy/Global Opportunities.
+- Spacing and layout rhythm: the remaining card uses a three-column grid with the same internal padding and inter-card gaps as the related card system; no empty gallery rows remain.
+- Colors and tokens: ivory page, translucent white cards, onyx labels, and brand-gold values use existing AIXCO tokens.
+- Image quality and assets: no new or recreated assets were introduced; the Eden gallery assets are simply not rendered.
+- Copy and content: only the requested Eden House card/gallery content was removed; the Dubai Healthcare City copy remains unchanged and is renumbered to 01.
+
+## Comparison history
+
+1. Source finding - P1: Eden House image marquees and labels remained visible despite the requested temporary removal. Fix: removed both Eden rendering and the Dubai marquee component from the scene. Post-fix evidence: `artifacts/dubai-cards-unified.png` contains zero Eden labels and zero marquee rows.
+2. Source finding - P2: the Dubai metrics used unrelated black/gold/ivory blocks with different type treatment. Fix: applied the existing Philosophy/Global Opportunities white-card system and shared story metric typography. Post-fix evidence: `artifacts/dubai-before-after-comparison.png`.
+3. Source finding - P2: Philosophy statistic/principle cards retained sharp corners while Global Opportunities used rounded cards. Fix: added the shared 0.85rem radius and subtle card surface treatment. Post-fix evidence: `artifacts/philosophy-rounded-cards.png` and computed 13.6px radii on all eight Philosophy cards.
+4. Final browser pass: zero console errors; the Dubai section contains zero marquee elements and no visible Eden House Canal/Park text.
+
+## Verification
+
+- `npm run typecheck`: passed.
+- `npm test`: 81 files and 355 tests passed.
+- `npm run smoke`: passed against `http://127.0.0.1:8081`.
+- `npm run smoke:mobile`: passed at eight viewport sizes from 280 x 653 through 844 x 390.
+- Browser console: zero errors on the Dubai and Philosophy captures.
+
+final result: passed
+
+---
+
 # AIXCO Brandbook Typography and Color QA
 
 - Source of truth: `C:/Users/Administrator/Desktop/AIXCO_Brandbook_new.pdf`
@@ -234,5 +500,336 @@ No actionable P0, P1, or P2 differences remain within the requested scope.
 ## Follow-up polish
 
 No P3 follow-up is required for this scoped adjustment.
+
+final result: passed
+
+---
+
+# Desktop Navbar Font Weight - Design QA
+
+- Source visual truth: user-provided desktop navbar screenshot (conversation attachment; not committed)
+- Implementation evidence: `artifacts/navbar-thinner-matched.png`
+- Full-view comparison: `artifacts/navbar-comparison.png` (reference above, implementation below)
+- Viewport: 1440 x 900 CSS pixels
+- State: homepage at the top of the page, transparent desktop navbar, English selected, menus closed
+
+## Scope and findings
+
+- Changed only desktop navigation label weight from `650` to the installed Gilroy Medium `500` face.
+- Preserved font size, letter spacing, layout spacing, active-state gold, and transparent-at-top behavior.
+- No actionable P0, P1, or P2 differences remain within the requested scope.
+
+## Verification
+
+- Computed navbar typography: Gilroy, `font-weight: 500`, `font-size: 11.36px` at the test viewport.
+- `npm run typecheck`: passed.
+- `npm run smoke:nav`: passed (92 px header, 181 px logo, 12 px labels).
+- Browser console errors: none.
+- Visual comparison: passed; labels are visibly thinner while remaining legible and aligned.
+
+final result: passed
+
+---
+
+# Selected Contact Social Rail - Design QA
+
+- Source visual truth: `artifacts/social-option-1-reference.png` (the first user-selected ImageGen option)
+- Implementation screenshot: `artifacts/social-implementation-desktop.png`
+- Mobile implementation evidence: `artifacts/social-implementation-mobile.png` and `artifacts/social-implementation-mobile-focused.png`
+- Full-view comparison: `artifacts/social-design-comparison-full.jpg`
+- Focused comparison: `artifacts/social-design-comparison-focused.jpg`
+- Viewports: 1440 x 900 desktop and 390 x 844 mobile
+- State: English contact section active, menus closed, email/address cards and social rail visible
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- The selected light editorial rail is reproduced with a visible SOCIAL MEDIA heading, four equally distributed destinations, thin champagne dividers, rounded icon tiles, and stable text labels.
+- The website destination now reads AIXCO Global website and resolves to `https://www.aixco.global/`; no AIXCO Group wording remains in the component.
+- P3: the generated source mock wraps the real email address after “glob”. The implementation intentionally keeps `info@aixco.global` intact because the generated wrap is a mock artifact, not valid product behavior.
+
+## Full-view comparison evidence
+
+The paired full comparison shows the source treatment on the left and the browser-rendered contact page on the right. The implementation preserves the source's ivory surround, translucent white cards, champagne labels, rounded surfaces, restrained shadows, and one-row desktop social hierarchy while fitting the existing contact-column proportions.
+
+## Focused comparison evidence
+
+The focused pair keeps the email/address row and complete social rail readable. Icon scale, equal four-column distribution, vertical dividers, label alignment, card radius, and gold/onyx balance follow the selected option. The implementation corrects the mock's broken email wrap and uses the existing official AIXCO icon assets.
+
+## Required fidelity surfaces
+
+- Fonts and typography: existing site type system preserved; labels use the Unicode-complete contact stack, stable weights, balanced wrapping, and no animated text treatment.
+- Spacing and layout rhythm: desktop uses four equal columns aligned to the detail cards above; mobile switches to a balanced 2 x 2 grid with consistent internal dividers and no horizontal overflow.
+- Colors and visual tokens: existing ivory, white, onyx, AIXCO gold, border opacity, radius, and shadow tokens are reused.
+- Image quality and asset fidelity: official website, LinkedIn, Instagram, Facebook, email, and location assets are reused; no icons or logos were recreated.
+- Copy and content: SOCIAL MEDIA, AIXCO Global website, LinkedIn, Instagram, Facebook, email, and address are complete and readable.
+
+## Comparison history
+
+1. Selected reference: the first light rail option with a four-column desktop layout and visible labels.
+2. Initial implementation pass: no actionable P0/P1/P2 mismatch was found in the full or focused side-by-side comparisons.
+3. Responsive pass: the desktop rail remains one row; the 390 px layout becomes a 2 x 2 grid so labels and touch targets stay legible without overflow.
+
+## Interaction and browser checks
+
+- Desktop and mobile rail visibility: passed.
+- Four destinations: present with non-empty accessible names, `target="_blank"`, and safe HTTPS URLs.
+- AIXCO website link: resolves to `https://www.aixco.global/`.
+- Horizontal overflow: none at 1440 x 900 or 390 x 844.
+- Browser console and page errors: none.
+- TypeScript, ESLint, bundled font validation, and production build: passed.
+
+final result: passed
+
+---
+
+# Objectives to Client Approach Transition - Design QA
+
+- User-provided issue evidence: `codex-clipboard-035b8589-beac-4827-bc65-47414d8c98a7.png` and `codex-clipboard-d2996524-316c-43f1-9f07-3ddc0ed7d3f5.png`
+- Selected seamless-transition reference: `codex-clipboard-e747c215-425c-4edf-8a80-b0e2a0b206d6.png`
+- Fresh Playwright baseline: `output/playwright/section-transitions/before-chromium-desktop.png`
+- Final implementation: `output/playwright/section-transitions/final-chromium-desktop.png`
+- Same-width reference-versus-final comparison: `output/playwright/section-transitions/reference-vs-final-desktop.jpg`
+- Mobile evidence: `output/playwright/section-transitions/final-chromium-phone.png`
+- Follow-up oversized baseline: `output/playwright/section-transitions/before-compact-chromium-desktop.png`
+- Follow-up compact implementation: `output/playwright/section-transitions/compact-final-chromium-desktop.png`
+- Follow-up same-state comparison: `output/playwright/section-transitions/compact-before-vs-final-desktop.jpg`
+- Follow-up mobile evidence: `output/playwright/section-transitions/compact-final-chromium-phone.png`
+- Right-seam issue evidence: `output/playwright/section-transitions/right-seam-reference.png`
+- Right-seam corrected crop: `output/playwright/section-transitions/right-seam/final.png`
+- Right-seam reference-versus-final comparison: `output/playwright/section-transitions/right-seam/reference-vs-final.jpg`
+- Automated verification: `scripts/verify-section-transitions.mjs`
+
+## Audit steps
+
+1. **Objectives exit - healthy after fix.** The light architectural scene reaches the section edge without a dark stripe, clipped image, or new overlay over its copy.
+2. **Boundary blend - healthy after fix.** The previous hard edge and pale strip are replaced with a true section overlap: the Client Approach photograph begins beneath the Objectives scene and fades in through a compact, low-opacity blurred mask. No solid colour band is present.
+3. **Client Approach entry - healthy after fix.** The photograph becomes visible gradually while the eyebrow, year, title, and body remain in the higher content layer and retain their original colors and layout.
+
+## Findings and implementation
+
+- Root cause: the rejected implementation painted an incoming gradient after the previous section ended. Because the scenes did not overlap, the surface colour read as a separate horizontal band.
+- The canonical handoff now mirrors the already-successful Client Approach-to-Journey technique: a responsive negative overlap plus a full incoming-section feather mask.
+- The decorative wash remains below copy at z-index 8; copy remains at z-index 10. The full-screen transition layer cannot intercept input, while the real content block retains pointer input.
+- The mask stays fully opaque after the feather, preventing the rest of the photo section from becoming transparent.
+- Short landscape viewports use a compact overlap and feather while retaining measured text clearance.
+- Follow-up P2: the first seamless version was visually too tall and its white wash extended too close to copy. The overlap and feather were reduced by roughly one third to one half, the surface wash opacity was cut, and current-section padding is now derived from the feather height so copy always begins below it.
+- Follow-up P2: the compact version still exposed the outgoing section edge on the right, where the source image contrast is strongest. The incoming mask now reaches full opacity before that boundary, removing the edge while preserving the already-smooth left-side blend and the compact transition dimensions.
+
+## Responsive and accessibility verification
+
+- Chromium: 1562 x 703, 1366 x 768, 768 x 1024, 390 x 844, 320 x 568, and 844 x 390 passed.
+- WebKit: 1562 x 703 and 390 x 844 passed.
+- Measured responsive overlap after the compact follow-up: 52-123 px; measured feather: 76-160 px.
+- Measured clearance between the end of the feather and first important Client Approach text: 44-214 px.
+- Previous-section text remains in the transparent portion of the overlap; both outgoing and incoming important elements pass transition-scoped hit testing.
+- No horizontal overflow, uncovered gaps, invalid section order, browser errors, or transition input interception.
+- Focused pixel check at 1583 px wide reduced the right-boundary row discontinuity from 11.999 to 1.543 average luminance points; the corrected crop contains no visible horizontal seam.
+- Reduced motion is unaffected because the blend is static and contains no animation.
+
+## Whole-site regression verification
+
+- Previous full unit suite: 83 files and 362 tests passed; focused post-follow-up CSS suite: 48 tests passed.
+- TypeScript, test TypeScript, ESLint, font validation, and production build passed.
+- Title-motion matrix: 14 browser/viewport/locale cases passed.
+- Language layout: 84 viewport/language combinations passed.
+- Mobile experience: eight homepage and five property-page viewport shapes passed.
+- General render, navbar scale, and Dubai natural-scroll smoke tests passed.
+
+## Evidence limits
+
+- Screenshot and browser automation verify rendering, responsive reflow, hit testing, and the tested interaction states. They do not by themselves establish full WCAG conformance.
+
+final result: passed
+
+---
+
+# Contact Content Typography Consistency - Design QA
+
+- Source visual truth: `output/playwright/contact-panel/font-size-reference.png`
+- Desktop implementation: `output/playwright/contact-panel/desktop-panel.png`
+- Mobile implementation: `output/playwright/contact-panel/mobile-panel.png`
+- Full and focused comparison: `output/playwright/contact-panel/font-size-reference-vs-final.jpg`
+- Viewports: 1364 x 599 desktop and 390 x 844 mobile
+- State: English contact section, menus closed, contact details and all four social destinations visible
+
+## Findings and comparison history
+
+1. Initial P2: the email and address used a visibly larger content size than the four social-link names, creating inconsistent card typography.
+2. Fix: one shared contact-content font-size token now controls the email, address, and every social destination. The same font family, weight, line height, letter spacing, and foreground color are applied to all six values.
+3. Post-fix evidence: the focused comparison shows equal-size contact and social text. Browser-computed styles confirm all six values render at 16px, weight 500, and 21.6px line height on both desktop and mobile.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; all comparable content values use the same Unicode-complete Segoe UI stack, 16px computed size, 500 weight, and 21.6px line height. The small gold EMAIL, ADDRESS, and SOCIAL MEDIA labels intentionally remain a separate information hierarchy.
+- Spacing and layout rhythm: passed; card dimensions, rounded surfaces, icon alignment, dividers, and responsive grid structure remain unchanged.
+- Colors and visual tokens: passed; existing ivory, white, onyx, and AIXCO gold tokens are unchanged.
+- Image quality and asset fidelity: passed; official AIXCO contact and social icons remain unchanged.
+- Copy and content: passed; email, address, AIXCO Global website, LinkedIn, Instagram, and Facebook remain complete and readable.
+
+## Browser and regression verification
+
+- Desktop: four social columns, one-line email, no horizontal overflow, and no console errors.
+- Mobile: two social columns, one-line email, no horizontal overflow, and no console errors.
+- Focused contact CSS suite: 48 tests passed.
+
+final result: passed
+
+---
+
+# Current Project Responsive Metric Alignment - Design QA
+
+- Route: `http://127.0.0.1:8081/aixco-global-op2/current-project`
+- Baseline evidence: `output/playwright/current-project-audit/baseline/`
+- Final Chromium and WebKit evidence: `output/playwright/current-project-audit/final/`
+- Baseline summary: `output/playwright/current-project-audit/baseline/summary.json`
+- Final summary: `output/playwright/current-project-audit/final/summary.json`
+- Focused before-and-after comparison: `output/playwright/current-project-audit/baseline-vs-final-metrics.jpg`
+- Tested viewports: 320 x 568, 360 x 800, 390 x 844, 430 x 932, 568 x 320, 844 x 390, 768 x 1024, 1024 x 768, 1180 x 720, 1280 x 720, 1366 x 768, 1440 x 900, 1536 x 864, and 1920 x 1080
+
+## Findings and comparison history
+
+1. Baseline P2: the two-line `Available apartments` label expanded its metric column, pushing its value and subtext 5.3-5.8px below adjacent metrics. This affected 320-390px phones and all four-column layouts from 1280px upward.
+2. Fix: increased the shared metric-label minimum row from 2.5em to 3.5em. Single- and two-line labels now occupy the same vertical track while preserving natural wrapping and existing typography.
+3. Post-fix: all 28 Chromium and WebKit viewport cases report zero value-top or subtext-top delta, equal column widths, equal row heights, one-line values, and no overflow.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; existing font families, sizes, weights, tracking, tabular numerals, and no-wrap values are preserved.
+- Spacing and layout rhythm: passed; all labels, values, and supporting text align symmetrically within each responsive row.
+- Colors and visual tokens: passed; existing ivory, onyx, gray, border, and gold tokens are unchanged.
+- Image quality and asset fidelity: passed; the property imagery and all existing assets are unchanged.
+- Copy and content: passed; Floors, Apartments, Completion, Available apartments, all values, and all subtexts remain complete and readable.
+
+## Browser and regression verification
+
+- Chromium: 14 viewport shapes passed.
+- WebKit: 14 viewport shapes passed.
+- Column behavior: two columns below 1280px and four columns at 1280px and above.
+- No horizontal overflow, wrapped metric values, unequal grid tracks, console errors, or page errors.
+- Focused responsive unit test: 2 tests passed.
+- TypeScript, ESLint, bundled-font validation, and production build passed.
+
+final result: passed
+
+---
+
+# Dubai Legacy Section Full-Viewport Height - Design QA
+
+- Source visual truth: `output/playwright/dubai-section-reference.png`
+- Implementation screenshot: `dubai-section-final-viewport-1564x704.png`
+- Full-view comparison: `output/playwright/dubai-height-comparison.jpg`
+- Viewport and state: English desktop, 1564 x 704, Dubai section aligned below the active navigation
+- Focused comparison: not required; the requested change concerns the complete scene boundary, both portfolio cards, and the full skyline column, all legible in the full-view comparison
+
+## Findings and comparison history
+
+1. Baseline P2: the desktop Dubai scene used `100svh - navigation height`, measuring only 612px in the 1564 x 704 reference viewport. The image and copy columns therefore ended early and read as a short panel.
+2. First fix P2: a strict 100svh height lengthened the scene, but the shorter viewport allowed the second card to extend 39px beyond the section boundary.
+3. Final fix: the scene now uses 100svh as a minimum and grows naturally when its content needs more room. At 1564 x 704 the section becomes 759.5px, both cards remain inside it, and the copy, grid, and skyline columns share the exact same height.
+4. Post-fix: 1366 x 768 and 1920 x 1080 remain exactly one viewport high; 390 x 844 and 768 x 1024 retain their existing responsive stacking without horizontal overflow.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; no font family, size, weight, line height, tracking, wrapping, or number styling changed.
+- Spacing and layout rhythm: passed; the section has full-viewport breathing room, vertically centered desktop content, equal desktop columns, and natural content-safe growth on short viewports.
+- Colors and visual tokens: passed; all existing ivory, white, gold, border, and foreground tokens are unchanged.
+- Image quality and asset fidelity: passed; the original Burj Khalifa sunset asset, crop, focus, and rendering behavior are unchanged.
+- Copy and content: passed; both legacy portfolio cards and all supporting copy remain complete and readable.
+
+## Browser and regression verification
+
+- Browser evidence: 390 x 844, 768 x 1024, 1366 x 768, 1564 x 704, and 1920 x 1080.
+- Geometry: no horizontal overflow; both cards remain inside the section; desktop image and copy columns have identical heights.
+- Interaction: language selector opened and English was selected successfully for the matching comparison state.
+- Console: zero errors during the final browser pass.
+- Automated checks: Dubai natural-scroll verification, TypeScript, ESLint, bundled-font validation, and production build passed.
+
+final result: passed
+
+---
+
+# Batumi Euro Glyph Exact Alignment - Design QA
+
+- Source visual truth: `output/playwright/batumi-currency-reference.png`
+- Baseline measurement: `output/playwright/batumi-currency-baseline-1366x768.png`
+- Final implementation screenshots: `output/playwright/batumi-currency-final-390x844.png`, `output/playwright/batumi-currency-final-1366x768.png`, and `output/playwright/batumi-currency-final-1920x1080.png`
+- Focused before-and-after comparison: `output/playwright/batumi-currency-comparison.jpg`
+- Automated verification: `scripts/verify-euro-glyph-alignment.mjs`
+- Tested viewports: 390 x 844, 768 x 1024, 1024 x 768, 1366 x 768, 1536 x 864, and 1920 x 1080
+
+## Findings and comparison history
+
+1. Baseline P2: the euro glyph rendered at 31.36px while the numeric value rendered at 38.25px. The euro used weight 100 and a positive vertical offset, so it was visibly smaller and sat on a different baseline.
+2. First optical correction: a 0.93em euro matched the digit ink at the 1366px reference viewport, but raster rounding still produced a 1px discrepancy at other breakpoints.
+3. Final correction: the euro and numeric value now inherit the exact same font size, weight, line height, and baseline. Both are inline-block elements, allowing Playwright to verify identical rendered top, bottom, and height geometry.
+4. Post-fix: both EUR 5k and EUR 45k report a maximum box delta of exactly 0px at all six tested viewport sizes.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; euro and digits share the AIXCO metric font, computed size, weight, line height, letter spacing, and baseline.
+- Spacing and layout rhythm: passed; icon tiles, metric spacing, labels, dividers, and responsive grid structure remain unchanged.
+- Colors and visual tokens: passed; existing AIXCO gold, ivory, foreground, and border colors remain unchanged.
+- Image quality and asset fidelity: passed; imagery and all non-metric assets remain unchanged.
+- Copy and content: passed; EUR 5k, EUR 45k, `60%+`, `12%`, and their supporting labels remain complete and readable.
+
+## Browser and regression verification
+
+- Playwright geometry: 0px top, bottom, and height delta for both euro metrics at all six viewports.
+- Computed typography: font size, weight, line height, and vertical alignment match exactly.
+- Responsive layout: 0px horizontal overflow at every tested viewport.
+- Visual review: the focused before-and-after comparison confirms the undersized euro glyph is corrected without changing the surrounding card composition.
+- TypeScript, ESLint, bundled-font validation, production build, and `git diff --check` passed.
+
+final result: passed
+
+---
+
+# Contact Website Label - Design QA
+
+- Source visual truth: `codex-clipboard-f344bdfc-ffd6-43df-90ec-3e05ebce2daa.png`
+- Final implementation screenshot: `output/playwright/contact-website-label-final.png`
+- Viewport and state: English contact section at 1440 x 900, social-media card visible
+
+## Findings and implementation
+
+1. Requested copy correction: remove `AIXCO Global` from the first social destination so the visible label reads only `Website`.
+2. The change is scoped to the shared social-link data; icon, layout, styling, destination URL, and the other three labels remain unchanged.
+
+## Browser and regression verification
+
+- Visible label: `Website`.
+- Accessible label: `Website`.
+- Destination: `https://www.aixco.global/`.
+- Horizontal overflow: 0px.
+- Visual review: four evenly spaced social destinations remain aligned within the existing rounded card.
+- TypeScript, ESLint, bundled-font validation, production build, and `git diff --check` passed.
+
+final result: passed
+
+---
+
+# Full Change Re-audit - Playwright QA
+
+- Local target: `http://127.0.0.1:8081/`
+- Homepage matrix: 320x568, 390x844, 844x390, 768x1024, 1366x768, and 1920x1080
+- Contact-form matrix: email and phone modes at 390x844, 844x390, 1024x768, 1366x768, and 1440x900
+- Current-project matrix: 14 viewports from 320x568 through 1920x1080
+- Language matrix: seven languages across seven viewports, plus 84 Chromium language/layout combinations
+
+## Issues found and fixed
+
+1. The contact email form's submit button could start below the dialog viewport at 1366x768. Short-height desktop rules now compact the heading, controls, and form rhythm so both email and phone submit actions are initially visible. The 844x390 landscape layout remains intentionally scrollable with a visible close button and no horizontal overflow.
+2. The mobile journey focus regression sampled the animation state before the focus style settled. The Playwright check now waits for the computed paused state, removing the timing race while continuing to verify the real interaction behavior.
+
+## Browser and production verification
+
+- Homepage: 17 sections, no duplicate IDs, no visible pause controls, no horizontal overflow, and no console or page errors across the six primary viewports.
+- Navigation and locale controls: desktop menus, mobile menu, section links, hash preservation, and English/German switching passed.
+- Contact forms: 10 viewport/mode cases passed; no unexpected vertical overflow, no horizontal overflow, close buttons remained visible, and non-landscape submit buttons were visible without scrolling.
+- Current project: all 14 responsive cases passed with aligned metric labels, values, and supporting text; the English brochure returned HTTP 200 with `application/pdf`.
+- Motion and transitions: title animation, reduced-motion behavior, section transitions, partner marquee, and background-video pause distance passed.
+- Content controls: FAQ open/close behavior passed; removed brochures and pause controls were absent.
+- Quality gates: 83 test files / 363 unit tests passed, TypeScript passed, ESLint passed, bundled-font validation passed, production build passed, and `git diff --check` passed.
 
 final result: passed

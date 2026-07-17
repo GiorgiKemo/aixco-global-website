@@ -4,7 +4,6 @@ import { cache } from "react";
 import {
   BadgeCheck,
   Diamond,
-  Download,
   FileCheck2,
   Globe2,
   KeyRound,
@@ -17,9 +16,8 @@ import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
 import { ClientShell } from "@/app/client-shell";
 import { JsonLd } from "@/components/JsonLd";
 import { Tx } from "@/components/i18n/Tx";
-import { PropertyChrome, PropertyContactLink } from "@/components/property/PropertyChrome";
+import { EnglishBrochureLink, PropertyChrome, PropertyContactLink } from "@/components/property/PropertyChrome";
 import {
-  batumiDocumentMap,
   batumiImageMap,
   batumiVideoMap,
   getBatumiMarketDetails,
@@ -118,12 +116,12 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
 function DetailMetric({ label, value, subtext }: { label: string; value: string; subtext?: string }) {
   return (
     <div className="property-detail-metric min-w-0 border-l border-[#9E9D9D]/45 pl-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#161616]">
+      <p className="property-detail-metric__label text-xs font-semibold uppercase tracking-[0.14em] text-[#161616]">
         <Tx>{label}</Tx>
       </p>
-      <p className="mt-2 text-[clamp(2rem,3vw,3.25rem)] font-medium leading-none tracking-[-0.025em] text-[#161616]"><Tx>{value}</Tx></p>
+      <p className="property-detail-metric__value font-medium tracking-[-0.025em] text-[#161616]"><Tx>{value}</Tx></p>
       {subtext ? (
-        <p className="mt-2 text-sm leading-relaxed text-[#5F5F5F]">
+        <p className="property-detail-metric__subtext mt-2 text-sm leading-relaxed text-[#5F5F5F]">
           <Tx>{subtext}</Tx>
         </p>
       ) : null}
@@ -133,7 +131,6 @@ function DetailMetric({ label, value, subtext }: { label: string; value: string;
 
 function PropertyPageContent({ property, batumiBenefits }: { property: BatumiProperty; batumiBenefits: string[] }) {
   const image = batumiImageMap[property.image];
-  const documentHref = batumiDocumentMap[property.id];
   const ownershipDetails = getBatumiMarketDetails(batumiBenefits);
   const heroImage = property.id === "current-project"
     ? "/aixco-global-op2/images/optimized/current-project-hero-towers.webp"
@@ -173,22 +170,23 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
             </p>
           </div>
 
-          <div className="property-hero__metrics mt-8 grid grid-cols-2 gap-y-6 border-y border-[#9E9D9D]/35 py-5 sm:grid-cols-4">
+          <div className="property-hero__metrics mt-8 grid grid-cols-2 gap-y-6 border-y border-[#9E9D9D]/35 py-5 xl:grid-cols-4">
             {heroMetrics.map((metric) => (
               <DetailMetric key={metric.label} label={metric.label} value={metric.value} subtext={metric.subtext} />
             ))}
           </div>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1.15fr_0.9fr]">
-            {documentHref ? (
-              <a href={documentHref} className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]" target="_blank" rel="noreferrer">
-                <Download className="h-4 w-4" aria-hidden />
-                <Tx>Download brochure</Tx>
-              </a>
-            ) : null}
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <PropertyContactLink className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
               <Tx>Contact AIXCO</Tx>
             </PropertyContactLink>
+            {property.id === "current-project" ? (
+              <EnglishBrochureLink
+                href="/aixco-global-op2/documents/reverance-by-otium-brochure-en.pdf"
+                fileName="Reverance-by-Otium-brochure-EN.pdf"
+                className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] px-3 text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#9A7425] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
+              />
+            ) : null}
           </div>
         </div>
 

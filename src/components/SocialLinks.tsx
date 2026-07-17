@@ -23,15 +23,16 @@ type SocialLinksProps = {
   className?: string;
   linkClassName?: string;
   theme?: "dark" | "light";
+  showLabels?: boolean;
   "aria-label"?: string;
 };
 
 const socialLinks: SocialLink[] = [
   {
     key: "website",
-    label: "AIXCO Group website",
-    fallback: "https://aixco.group/",
-    allowedHosts: ["aixco.group", "www.aixco.group"],
+    label: "Website",
+    fallback: "https://www.aixco.global/",
+    allowedHosts: ["aixco.global", "www.aixco.global"],
     allowedPath: "/",
     iconSrc: aixcoLiveIcons.website,
   },
@@ -67,15 +68,20 @@ const darkLinkClassName =
 const lightLinkClassName =
   "group relative inline-flex h-[3.35rem] w-[3.35rem] items-center justify-center overflow-hidden rounded-lg border border-primary/20 bg-white text-primary shadow-[0_14px_36px_-28px_hsl(220_28%_18%/0.16)] transition duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
+const labelledLinkClassName =
+  "group relative flex min-w-0 flex-col items-center justify-center gap-2.5 px-3 py-1 text-center text-foreground transition duration-300 hover:-translate-y-0.5 hover:text-primary focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-4 focus-visible:ring-offset-background";
+
 export function SocialLinks({
   socials,
   className,
   linkClassName,
   theme = "dark",
+  showLabels = false,
   "aria-label": ariaLabel = "AIXCO social media links",
 }: SocialLinksProps) {
   const { tx } = useI18n();
-  const resolvedLinkClassName = linkClassName ?? (theme === "light" ? lightLinkClassName : darkLinkClassName);
+  const resolvedLinkClassName =
+    linkClassName ?? (showLabels ? labelledLinkClassName : theme === "light" ? lightLinkClassName : darkLinkClassName);
 
   return (
     <div aria-label={ariaLabel} className={cn("flex items-center gap-2", className)}>
@@ -92,14 +98,40 @@ export function SocialLinks({
             rel="noreferrer"
             className={resolvedLinkClassName}
           >
-            <span
-              className={cn(
-                "absolute inset-0 bg-gradient-to-br via-transparent to-white/8 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
-                theme === "light" ? "from-primary/10" : "from-primary/18",
-              )}
-              aria-hidden
-            />
-            <Image src={iconSrc} alt="" aria-hidden="true" width={34} height={34} unoptimized className="social-link__icon relative h-[2.1rem] w-[2.1rem] object-contain" />
+            {showLabels ? (
+              <>
+                <span className="social-link__icon-tile" aria-hidden="true">
+                  <Image
+                    src={iconSrc}
+                    alt=""
+                    width={34}
+                    height={34}
+                    unoptimized
+                    className="social-link__icon h-[2.1rem] w-[2.1rem] object-contain"
+                  />
+                </span>
+                <span className="social-link__label">{tx(label)}</span>
+              </>
+            ) : (
+              <>
+                <span
+                  className={cn(
+                    "absolute inset-0 bg-gradient-to-br via-transparent to-white/8 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+                    theme === "light" ? "from-primary/10" : "from-primary/18",
+                  )}
+                  aria-hidden
+                />
+                <Image
+                  src={iconSrc}
+                  alt=""
+                  aria-hidden="true"
+                  width={34}
+                  height={34}
+                  unoptimized
+                  className="social-link__icon relative h-[2.1rem] w-[2.1rem] object-contain"
+                />
+              </>
+            )}
           </a>
         );
       })}

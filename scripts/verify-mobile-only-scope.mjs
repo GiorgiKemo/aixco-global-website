@@ -100,6 +100,10 @@ try {
   if (animatedJourney.duplicateAriaHidden !== "true") errors.push("390px: duplicate journey set is exposed to assistive technology");
 
   await animatedPage.locator('[data-journey-set="primary"] button').first().focus();
+  await animatedPage.waitForFunction(() => {
+    const track = document.querySelector(".story-journeys-track");
+    return track && getComputedStyle(track).animationPlayState === "paused";
+  });
   const focusedAnimationState = await animatedPage.locator(".story-journeys-track").evaluate((track) => getComputedStyle(track).animationPlayState);
   if (focusedAnimationState !== "paused") errors.push(`390px: focused journey animation is ${focusedAnimationState}`);
   await animatedContext.close();

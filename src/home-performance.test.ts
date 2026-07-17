@@ -142,44 +142,43 @@ describe("home page performance structure", () => {
     expect(desktopStorySource).not.toContain("const chapterHashDelays =");
   });
 
-  it("keeps story text reveal observation out of the scroll hot path", () => {
-    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
-    const revealHookStart = desktopStorySource.indexOf("function useStoryTextInView");
-    const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
-    const revealHookSource = desktopStorySource.slice(revealHookStart, revealComponentStart);
-
-    expect(revealHookStart).toBeGreaterThanOrEqual(0);
-    expect(revealComponentStart).toBeGreaterThan(revealHookStart);
-    expect(revealHookSource).toContain("IntersectionObserver");
-    expect(revealHookSource).not.toContain('window.addEventListener("scroll"');
-    expect(revealHookSource).not.toContain("glideScrollFrameEvent");
-    expect(revealHookSource).not.toContain('window.addEventListener("resize"');
-  });
-
-  it("pre-arms story text reveals at the viewport edge instead of halfway into view", () => {
-    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
-    const revealHookStart = desktopStorySource.indexOf("function useStoryTextInView");
-    const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
-    const revealHookSource = desktopStorySource.slice(revealHookStart, revealComponentStart);
-
-    expect(revealHookSource).toContain('"(max-width: 767px)"');
-    expect(revealHookSource).toContain('textRevealRootMargin = isPhoneViewport ? "0px" : "0px 0px 8% 0px"');
-    expect(revealHookSource).toContain("rootMargin: textRevealRootMargin");
-    expect(revealHookSource).toContain("threshold: 0");
-    expect(revealHookSource).not.toContain("-18%");
-    expect(revealHookSource).not.toContain("viewportHeight * 0.9");
-  });
-
-  it("replays story title animations whenever a chapter becomes active", () => {
+  it("drives title reveals from the existing chapter state without per-heading observers", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
-    const revealComponentEnd = desktopStorySource.indexOf("function useViewportHeight");
+    const revealComponentEnd = desktopStorySource.indexOf("function getMaterialIcon");
     const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
 
-    expect(revealComponentSource).toContain("active?: boolean;");
-    expect(revealComponentSource).toContain("const shouldAnimate = active ?? isInView;");
+    expect(revealComponentStart).toBeGreaterThanOrEqual(0);
+    expect(revealComponentSource).toContain("active: boolean;");
+    expect(revealComponentSource).toContain('data-text-reveal-engine="unified-transform"');
+    expect(desktopStorySource).not.toContain("function useStoryTextInView");
+    expect(revealComponentSource).not.toContain("IntersectionObserver");
+    expect(revealComponentSource).not.toContain('window.addEventListener("scroll"');
+  });
+
+  it("uses one whole-title animation instead of per-glyph or compact fallbacks", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
+    const revealComponentEnd = desktopStorySource.indexOf("function getMaterialIcon");
+    const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
+
+    expect(revealComponentSource).toContain('className="story-title-reveal__text"');
+    expect(revealComponentSource).not.toContain("story-letter-reveal__char");
+    expect(revealComponentSource).not.toContain("story-letter-reveal--compact");
+    expect(revealComponentSource).not.toContain("story-text-reveal__tiny-plain");
+    expect(revealComponentSource).not.toContain("story-text-reveal__mobile-plain");
+  });
+
+  it("plays each story title once when its chapter first becomes active", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
+    const revealComponentEnd = desktopStorySource.indexOf("function getMaterialIcon");
+    const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
+
+    expect(revealComponentSource).toContain("active: boolean;");
     expect(revealComponentSource).toContain('setAnimationState("idle");');
-    expect(revealComponentSource).toContain("if (!shouldAnimate) {");
+    expect(revealComponentSource).toContain('if (!active || animationState !== "idle") return;');
+    expect(revealComponentSource).not.toContain('if (!active) {\n      if (animationState === "played")');
     expect(desktopStorySource).toContain("<StoryTextReveal active={isActive}");
   });
 

@@ -1715,7 +1715,7 @@
     color: currentColor;
     font: inherit;
     font-size: clamp(0.64rem, 0.68vw, 0.78rem);
-    font-weight: 650;
+    font-weight: 500;
     line-height: 1;
     letter-spacing: 0.055em;
     text-transform: uppercase;
@@ -2151,6 +2151,41 @@
     .contact-request-modal .contact-request-input {
       min-height: 3rem;
       padding-block: 0.72rem;
+    }
+  }
+
+  @media (min-width: 481px) and (max-height: 820px) {
+    .contact-request-modal .heading-section {
+      font-size: clamp(2.2rem, 4vw, 2.75rem);
+      line-height: 1.02;
+    }
+
+    .contact-request-modal .mt-6 {
+      margin-top: 1rem;
+    }
+
+    .contact-request-modal .contact-request-option {
+      min-height: 3.75rem;
+      padding-block: 0.8rem;
+    }
+
+    .contact-request-modal .contact-request-form {
+      margin-top: 1rem;
+      gap: 0.75rem;
+    }
+
+    .contact-request-modal label {
+      gap: 0.4rem;
+    }
+
+    .contact-request-modal .contact-request-input {
+      min-height: 2.85rem;
+      padding-block: 0.7rem;
+    }
+
+    .contact-request-modal textarea.contact-request-input {
+      height: 6.5rem;
+      min-height: 6.5rem;
     }
   }
 
@@ -2922,11 +2957,6 @@
     will-change: transform;
   }
 
-  .partner-marquee:hover .partner-marquee-track,
-  .partner-marquee:focus-within .partner-marquee-track {
-    animation-play-state: paused;
-  }
-
   .partner-marquee-track-reverse {
     animation-direction: reverse;
   }
@@ -3239,10 +3269,22 @@
   }
 
   .story-batumi-benefit__icon {
-    width: clamp(1.45rem, 1.7vw, 1.95rem);
-    height: clamp(1.45rem, 1.7vw, 1.95rem);
+    width: clamp(1.25rem, 1.35vw, 1.5rem);
+    height: clamp(1.25rem, 1.35vw, 1.5rem);
     color: hsl(var(--primary));
-    stroke-width: 1.8;
+    stroke-width: 1.6;
+  }
+
+  .story-batumi-benefit__icon-tile {
+    display: inline-flex;
+    width: clamp(2.55rem, 2.9vw, 3rem);
+    height: clamp(2.55rem, 2.9vw, 3rem);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid hsl(var(--primary) / 0.24);
+    border-radius: 0.7rem;
+    background: hsl(var(--primary) / 0.055);
   }
 
   .story-batumi-benefit__metric {
@@ -3544,6 +3586,25 @@
     gap: clamp(0.72rem, 1vw, 0.95rem);
   }
 
+  /*
+   * Gilroy's bundled webfonts do not contain German umlaut glyphs. Use one
+   * Unicode-complete face for the entire value instead of allowing a darker,
+   * per-character fallback for characters such as ü.
+   */
+  [data-story-section='contact'] .story-contact-detail {
+    min-width: 0;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: clamp(0.98rem, 1.05vw, 1.08rem);
+    font-style: normal;
+    font-weight: 500;
+    font-synthesis: none;
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: hsl(var(--foreground) / 0.82);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+  }
+
   .story-contact-card__icon-tile {
     box-sizing: border-box;
     display: inline-flex;
@@ -3581,6 +3642,72 @@
   [data-layout='story-contact-socials'].story-contact-card {
     align-content: start;
     min-height: auto;
+    gap: clamp(0.8rem, 1.25svh, 1rem);
+    padding-inline: clamp(0.7rem, 1.2vw, 1rem);
+  }
+
+  [data-story-section='contact'] .story-contact-social-card > .story-metric-label {
+    padding-inline: clamp(0.35rem, 0.65vw, 0.55rem);
+  }
+
+  [data-story-section='contact'] .story-contact-social-links {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 0;
+  }
+
+  [data-story-section='contact'] .story-contact-social-links > a {
+    width: 100%;
+    min-height: clamp(5.7rem, 10svh, 6.6rem);
+    padding: clamp(0.35rem, 0.75svh, 0.6rem) clamp(0.55rem, 0.9vw, 0.8rem);
+    border-radius: 0;
+  }
+
+  [data-story-section='contact'] .story-contact-social-links > a + a {
+    border-left: 1px solid hsl(var(--primary) / 0.32);
+  }
+
+  [data-story-section='contact'] .story-contact-social-links .social-link__icon-tile {
+    display: inline-flex;
+    width: clamp(3.15rem, 3.9vw, 3.65rem);
+    height: clamp(3.15rem, 3.9vw, 3.65rem);
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid hsl(var(--primary) / 0.28);
+    border-radius: 0.72rem;
+    background: hsl(0 0% 100% / 0.92);
+    box-shadow: 0 12px 28px -24px hsl(var(--foreground) / 0.22);
+    transition:
+      border-color 220ms var(--ease-apple),
+      background-color 220ms var(--ease-apple),
+      box-shadow 220ms var(--ease-apple);
+  }
+
+  [data-story-section='contact'] .story-contact-social-links > a:hover .social-link__icon-tile,
+  [data-story-section='contact'] .story-contact-social-links > a:focus-visible .social-link__icon-tile {
+    border-color: hsl(var(--primary) / 0.62);
+    background: hsl(var(--primary) / 0.08);
+    box-shadow: 0 18px 34px -24px hsl(var(--primary) / 0.48);
+  }
+
+  [data-story-section='contact'] .story-contact-social-links .social-link__icon {
+    width: clamp(2.25rem, 2.85vw, 2.7rem);
+    height: clamp(2.25rem, 2.85vw, 2.7rem);
+  }
+
+  [data-story-section='contact'] .story-contact-social-links .social-link__label {
+    max-width: 100%;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: clamp(0.78rem, 0.88vw, 0.9rem);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0;
+    color: hsl(var(--foreground) / 0.86);
+    overflow-wrap: anywhere;
+    text-wrap: balance;
   }
 
   .story-philosophy-stat {
@@ -4026,8 +4153,7 @@
 
     .float-slow,
     .shimmer-text,
-    .hero-scroll-arrow,
-    .partner-marquee-track {
+    .hero-scroll-arrow {
       animation: none !important;
       transform: none !important;
       will-change: auto !important;
@@ -4036,12 +4162,6 @@
     .partner-marquee {
       mask-image: none;
       -webkit-mask-image: none;
-    }
-
-    .partner-marquee:not(.partner-marquee--story) .partner-marquee-track,
-    .partner-marquee--story .partner-marquee-track {
-      animation-play-state: paused !important;
-      will-change: auto !important;
     }
 
     .story-letter-reveal__text,
@@ -6855,9 +6975,14 @@ html[data-home-experience='story'] {
 }
 
 @media (min-width: 1280px) {
-  [data-story-section='faqs'] [data-layout='story-faq-list'],
   [data-story-section='contact'] [data-layout='story-contact-layout'] {
     padding-right: clamp(5.5rem, 7vw, 7rem);
+  }
+
+  [data-story-section='faqs'] [data-layout='story-faq-list'] {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 0;
   }
 
   [data-story-section='participate'] [data-layout='story-participation-routes'] button {
@@ -7294,6 +7419,17 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   gap: clamp(0.65rem, 1.2svh, 0.95rem);
 }
 
+.story-dubai-intro {
+  display: grid;
+  gap: clamp(0.9rem, 1.8svh, 1.35rem);
+  max-width: 54rem;
+}
+
+.story-dubai-intro .story-body {
+  max-width: 50rem;
+  text-wrap: pretty;
+}
+
 .story-dubai-portfolio-block {
   display: grid;
   gap: clamp(0.75rem, 1.4svh, 1rem);
@@ -7302,10 +7438,10 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
 [data-layout='story-dubai-funds'] .story-dubai-portfolio-card {
   overflow: hidden;
   padding: 0 !important;
-  border: 1px solid hsl(var(--foreground) / 0.12);
-  border-radius: 0.5rem;
-  background: hsl(0 0% 100% / 0.9);
-  box-shadow: 0 18px 42px -36px hsl(var(--foreground) / 0.28);
+  border: 1px solid hsl(36 26% 82% / 0.72);
+  border-radius: 1rem;
+  background: hsl(0 0% 100% / 0.86);
+  box-shadow: 0 24px 58px -44px hsl(220 28% 18% / 0.34);
 }
 
 [data-layout='story-dubai-funds']
@@ -7322,8 +7458,10 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   align-items: center;
   gap: clamp(0.6rem, 1vw, 0.85rem);
   padding: clamp(0.58rem, 1svh, 0.8rem) clamp(0.72rem, 1.2vw, 1rem);
-  border-bottom: 1px solid hsl(var(--foreground) / 0.1);
-  background: hsl(0 0% 100% / 0.94);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .story-dubai-portfolio-card__header .story-card-title {
@@ -7349,8 +7487,10 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
 .story-dubai-portfolio-card__metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
-  background: hsl(var(--foreground) / 0.12);
+  gap: 0;
+  margin-top: 0;
+  border-top: 1px solid hsl(var(--foreground) / 0.09);
+  background: transparent;
 }
 
 .story-dubai-portfolio-card__metric {
@@ -7360,49 +7500,47 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   flex-direction: column;
   justify-content: space-between;
   gap: 0.65rem;
+  border: 0;
+  border-inline-start: 1px solid hsl(var(--foreground) / 0.09);
+  border-radius: 0;
+  background: transparent;
+  color: hsl(var(--foreground));
+  box-shadow: none;
   padding: clamp(0.68rem, 1.25svh, 0.9rem) clamp(0.72rem, 1.1vw, 0.95rem);
 }
 
-.story-dubai-portfolio-card__metric[data-metric-tone='1'] {
-  background: hsl(var(--foreground));
-  color: white;
-}
-
-.story-dubai-portfolio-card__metric[data-metric-tone='2'] {
-  background: hsl(var(--primary));
-  color: white;
-}
-
-.story-dubai-portfolio-card__metric[data-metric-tone='3'] {
-  background: hsl(var(--surface));
-  color: hsl(var(--foreground));
-}
-
-.story-dubai-portfolio-card__metric[data-metric-tone='1'] .story-metric-label,
-.story-dubai-portfolio-card__metric[data-metric-tone='2'] .story-metric-label {
-  color: rgb(255 255 255 / 0.74);
-}
-
-.story-dubai-portfolio-card__metric[data-metric-tone='1'] .story-metric-value,
-.story-dubai-portfolio-card__metric[data-metric-tone='2'] .story-metric-value,
-.story-dubai-portfolio-card__metric[data-metric-tone='1'] .story-metric-value span,
-.story-dubai-portfolio-card__metric[data-metric-tone='2'] .story-metric-value span {
-  color: white;
+.story-dubai-portfolio-card__metric:first-child {
+  border-inline-start: 0;
 }
 
 .story-dubai-portfolio-card__metric .story-metric-label {
   min-height: 2.15em;
-  font-family: var(--font-legacy-ui);
-  letter-spacing: 0.08em;
+  color: hsl(var(--foreground) / 0.52);
 }
 
 .story-dubai-portfolio-card__metric .story-metric-value {
   margin-top: 0 !important;
-  font-family: var(--font-legacy-display);
-  font-size: clamp(1.12rem, 1.55vw, 1.5rem);
-  line-height: 1.08;
+  color: hsl(var(--primary));
+  font-family: var(--font-brand-display);
+  font-size: clamp(1.35rem, 1.85vw, 1.85rem);
+  font-weight: 600;
+  line-height: 0.92;
   letter-spacing: 0;
   overflow-wrap: anywhere;
+}
+
+.story-dubai-metric-affix {
+  display: inline;
+  margin: 0;
+  color: inherit;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: inherit;
+  font-style: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: uppercase;
+  vertical-align: baseline;
 }
 
 @media (min-width: 1280px) {
@@ -7444,7 +7582,7 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
     line-height: 1.08 !important;
   }
 }
-/* Dubai is a long-form split scene: copy scrolls while the skyline stays pinned. */
+/* Keep the Dubai snapshot as one balanced scene so both columns travel together. */
 @media (min-width: 900px) {
   [data-story-section='aboutAccess'] .story-scene-reveal {
     justify-content: center !important;
@@ -7455,7 +7593,7 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   [data-story-section='dubai'] {
     container-type: inline-size !important;
     height: auto !important;
-    min-height: 100svh !important;
+    min-height: calc(100svh - var(--story-dubai-sticky-top)) !important;
     max-height: none !important;
     overflow: visible !important;
     --story-dubai-sticky-top: var(--story-top-nav-height, 4.75rem);
@@ -7465,42 +7603,47 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   [data-story-section='dubai'] > div:not(.story-section-boundary) > div,
   [data-story-section='dubai'] [data-story-scene-grid] {
     height: auto !important;
-    min-height: 100svh !important;
+    min-height: calc(100svh - var(--story-dubai-sticky-top)) !important;
     max-height: none !important;
     overflow: visible !important;
   }
 
   [data-story-section='dubai'] [data-story-scene-grid] {
-    align-items: start;
+    align-items: stretch;
   }
 
   [data-story-section='dubai'] [data-story-scene-column] {
-    height: auto !important;
+    height: calc(100svh - var(--story-dubai-sticky-top)) !important;
     min-height: calc(100svh - var(--story-dubai-sticky-top)) !important;
     max-height: none !important;
-    align-self: start;
-    justify-content: flex-start;
+    align-self: stretch;
+    justify-content: stretch;
     overflow: visible !important;
-    padding-bottom: clamp(4rem, 8svh, 6rem) !important;
+    padding-block: clamp(1.5rem, 3.5svh, 2.75rem) clamp(1.75rem, 4svh, 3rem) !important;
   }
 
   [data-story-section='dubai'] [data-story-scene-copy],
   [data-story-section='dubai'] .story-scene-reveal {
-    flex: 0 0 auto !important;
+    flex: 1 1 auto !important;
     align-self: stretch;
-    height: auto !important;
+    height: 100% !important;
     min-height: 0 !important;
     max-height: none !important;
     overflow: visible !important;
   }
 
+  [data-story-section='dubai'] .story-scene-reveal {
+    justify-content: center !important;
+    gap: clamp(2rem, 4.5svh, 3.5rem) !important;
+  }
+
   [data-story-section='dubai'] [data-story-scene-media] {
-    position: sticky !important;
-    top: var(--story-dubai-sticky-top) !important;
+    position: relative !important;
+    top: auto !important;
     height: calc(100svh - var(--story-dubai-sticky-top)) !important;
     min-height: calc(100svh - var(--story-dubai-sticky-top)) !important;
-    max-height: calc(100svh - var(--story-dubai-sticky-top)) !important;
-    align-self: start;
+    max-height: none !important;
+    align-self: stretch;
     overflow: hidden !important;
   }
 
@@ -7524,19 +7667,64 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   }
 
   .story-dubai-portfolio-card__header {
-    min-height: 4.75rem;
+    min-height: 4.5rem;
     padding: clamp(0.9rem, 1.5svh, 1.15rem) clamp(1rem, 1.5vw, 1.3rem);
   }
 
   .story-dubai-portfolio-card__metric {
-    min-height: 8.5rem;
-    justify-content: flex-start;
-    gap: 1rem;
+    min-height: 7.25rem;
+    justify-content: space-between;
+    gap: 0.75rem;
     padding: clamp(1rem, 1.8svh, 1.3rem) clamp(1rem, 1.45vw, 1.3rem);
   }
 
   .story-dubai-portfolio-card__metric .story-metric-label {
     min-height: 2.5em;
+  }
+}
+
+/* Keep both Dubai legacy cards inside shorter laptop viewports now that the
+   galleries are intentionally removed. */
+@media (min-width: 900px) and (max-height: 820px) {
+  [data-story-section='dubai'] [data-story-scene-column] {
+    padding-block: 1rem !important;
+  }
+
+  [data-story-section='dubai'] .story-scene-reveal {
+    justify-content: flex-start !important;
+    gap: clamp(1rem, 2.2svh, 1.35rem) !important;
+  }
+
+  [data-story-section='dubai'] .story-dubai-intro {
+    gap: clamp(0.55rem, 1.2svh, 0.8rem);
+  }
+
+  [data-story-section='dubai'] .story-h2 {
+    font-size: clamp(2.8rem, 4vw, 3.7rem) !important;
+  }
+
+  [data-story-section='dubai'] .story-body {
+    font-size: clamp(0.86rem, 1vw, 0.96rem) !important;
+    line-height: 1.48;
+  }
+
+  [data-story-section='dubai'] [data-layout='story-dubai-funds'] {
+    gap: clamp(0.65rem, 1.6svh, 0.85rem);
+  }
+
+  [data-story-section='dubai'] .story-dubai-portfolio-card__header {
+    min-height: 3.65rem;
+    padding: 0.65rem 0.9rem;
+  }
+
+  [data-story-section='dubai'] .story-dubai-portfolio-card__metric {
+    min-height: 5.65rem;
+    gap: 0.55rem;
+    padding: 0.72rem 0.9rem;
+  }
+
+  [data-story-section='dubai'] .story-dubai-portfolio-card__metric .story-metric-label {
+    min-height: 2.15em;
   }
 }
 /* Refined hero tracking and a more substantial desktop navigation scale. */
@@ -8420,18 +8608,24 @@ html[data-home-experience='story'] {
 
   [data-story-section='batumi'] .story-batumi-benefit {
     min-height: 6.75rem;
-    grid-template-columns: minmax(0, 1fr);
-    align-content: start;
-    gap: 0.45rem;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.7rem;
     padding: 0.85rem;
     border: 1px solid hsl(var(--foreground) / 0.09);
     border-radius: 0.5rem;
     background: hsl(var(--background) / 0.74);
   }
 
+  [data-story-section='batumi'] .story-batumi-benefit__icon-tile {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.6rem;
+  }
+
   [data-story-section='batumi'] .story-batumi-benefit__icon {
-    width: 1.35rem;
-    height: 1.35rem;
+    width: 1.2rem;
+    height: 1.2rem;
   }
 
   [data-story-section='batumi'] .story-batumi-benefit__metric {
@@ -8754,6 +8948,28 @@ html[data-home-experience='story'] {
 
   [data-story-section='contact'] [data-layout='story-contact-socials'] {
     min-height: 6.25rem;
+  }
+
+  [data-story-section='contact'] .story-contact-social-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  [data-story-section='contact'] .story-contact-social-links > a {
+    min-height: 6.15rem;
+    padding: 0.6rem 0.4rem;
+    border-left: 0;
+  }
+
+  [data-story-section='contact'] .story-contact-social-links > a:nth-child(even) {
+    border-left: 1px solid hsl(var(--primary) / 0.28);
+  }
+
+  [data-story-section='contact'] .story-contact-social-links > a:nth-child(n + 3) {
+    border-top: 1px solid hsl(var(--primary) / 0.28);
+  }
+
+  [data-story-section='contact'] .story-contact-social-links .social-link__label {
+    font-size: 0.8rem;
   }
 
   [data-story-section='contact'] .story-contact-card__icon-tile {
@@ -9114,9 +9330,41 @@ body {
   border-radius: 2px !important;
 }
 
+[data-story-section='contact'] .story-contact-card {
+  border-radius: 0.85rem !important;
+}
+
+[data-story-section='contact'] .story-contact-social-links .social-link__icon-tile {
+  border-radius: 0.72rem !important;
+}
+
 [data-story-section] :is(.rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl),
 .modal-panel {
   border-radius: 2px !important;
+}
+
+/* Keep the core information-card language consistent across Philosophy,
+   Global Opportunities, and the Dubai legacy snapshot. */
+[data-story-section='philosophy'] .story-philosophy-card,
+[data-story-section='philosophyPlatform'] .story-philosophy-stat,
+[data-story-section='philosophyPlatform'] .story-philosophy-panel {
+  border-radius: 0.85rem !important;
+}
+
+[data-story-section='philosophy'] .story-philosophy-card {
+  border: 1px solid hsl(var(--foreground) / 0.08);
+  background: hsl(0 0% 100% / 0.82);
+  box-shadow: 0 14px 36px -30px hsl(220 28% 18% / 0.14);
+}
+
+[data-story-section='dubai'] .story-dubai-portfolio-card {
+  overflow: hidden;
+  border-radius: 0.85rem !important;
+}
+
+[data-story-section='dubai'] .story-dubai-portfolio-card__header,
+[data-story-section='dubai'] .story-dubai-portfolio-card__metric {
+  border-radius: 0 !important;
 }
 
 @media (max-width: 767px) {
@@ -9177,6 +9425,39 @@ html[dir='rtl'] {
 .property-detail-metric:first-child {
   border-inline-start: 0;
   padding-inline-start: 0;
+}
+
+.property-detail-metric__label {
+  display: flex;
+  min-height: 3.5em;
+  align-items: flex-end;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.property-detail-metric__value {
+  margin-top: 0.5rem;
+  font-size: clamp(1.85rem, 2.1vw, 2.5rem);
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 0.96;
+  white-space: nowrap;
+}
+
+.property-detail-metric__subtext {
+  min-height: 1.5em;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) and (max-width: 1279px) {
+  .property-hero__metrics .property-detail-metric:nth-child(odd) {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+
+  .property-hero__metrics .property-detail-metric:nth-child(even) {
+    border-inline-start: 1px solid rgb(158 157 157 / 0.35);
+    padding-inline-start: clamp(0.85rem, 2vw, 1.25rem);
+  }
 }
 
 @media (max-width: 639px) {
@@ -9695,5 +9976,479 @@ html[dir='rtl'] {
   [data-story-section='hero'] .story-hero-actions {
     width: 100%;
     margin-inline: 0;
+  }
+}
+
+/* One editorial number language across the site, sourced from AIXCO Philosophy. */
+.story-standard-number,
+.story-philosophy-stat .story-standard-number,
+.story-dubai-portfolio-card__metric .story-standard-number,
+[data-story-section='batumi'] .story-standard-number,
+[data-story-section='participate'] .story-standard-number {
+  color: hsl(var(--primary)) !important;
+  font-family: var(--font-legacy-ui) !important;
+  font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;
+  font-weight: 400 !important;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+}
+
+.story-standard-number .story-philosophy-stat__number,
+.story-standard-number .story-philosophy-stat__number-part,
+.story-standard-number .story-philosophy-stat__punctuation,
+.story-standard-number .story-philosophy-stat__affix {
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  transform: none;
+}
+
+/* Currency symbols share the metric's exact size and baseline. The lighter
+   weight corrects the naturally heavier euro/dollar glyphs in the brand font. */
+.story-standard-number .story-currency-symbol {
+  display: inline-block;
+  margin-inline-end: 0.025em;
+  color: inherit;
+  font-family: inherit !important;
+  /* Currency glyphs in Gilroy are optically larger than its lining numerals.
+     Scale them to the numeral cap-height instead of matching only the CSS em. */
+  font-size: 0.82em !important;
+  font-weight: 100 !important;
+  font-style: normal;
+  line-height: 1 !important;
+  letter-spacing: inherit;
+  vertical-align: 0.055em;
+  transform: none;
+}
+
+.story-standard-number .story-currency-symbol--euro {
+  font-size: 1em !important;
+  font-weight: inherit !important;
+  vertical-align: baseline;
+}
+
+.story-standard-number .story-currency-value {
+  display: inline-block;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  vertical-align: baseline;
+}
+
+/* The About metrics sit on photography, so use the brighter champagne tone
+   from the brand palette while keeping light-background metrics high contrast. */
+[data-story-section='about'] .story-standard-number {
+  color: hsl(var(--primary-glow)) !important;
+}
+
+/* Keep the Client approach marker readable over the sunset photography. */
+[data-story-section='aboutAccess'] .story-about-access-eyebrow {
+  color: hsl(var(--primary-glow)) !important;
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.42);
+}
+
+[data-story-section='aboutAccess'] .story-about-access-eyebrow::before {
+  background: hsl(var(--primary-glow)) !important;
+  box-shadow: 0 1px 8px rgb(0 0 0 / 0.34);
+}
+
+[data-story-section='legacy'] .story-legacy-number + .story-card-title {
+  margin-top: var(--story-section-gap);
+}
+
+/* Give the participation sequence a deliberate number column instead of
+   letting the large figures crowd the route copy. */
+@media (min-width: 768px) {
+  [data-story-section='participate'] [data-layout='story-participation-routes'] button {
+    grid-template-columns: clamp(4.75rem, 5.2vw, 5.5rem) minmax(0, 1fr) 1.25rem;
+    column-gap: clamp(1.1rem, 1.65vw, 1.55rem);
+    padding-block: clamp(0.95rem, 1.8svh, 1.25rem);
+  }
+
+  [data-story-section='participate']
+    [data-layout='story-participation-routes']
+    .story-standard-number {
+    width: 100%;
+    align-self: center;
+    font-size: clamp(3.25rem, 4.2vw, 4.1rem) !important;
+    text-align: start;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-story-section='participate'] [data-layout='story-participation-routes'] button {
+    grid-template-columns: 3.15rem minmax(0, 1fr) auto;
+    column-gap: 0.85rem;
+  }
+
+  [data-story-section='participate']
+    [data-layout='story-participation-routes']
+    .story-standard-number {
+    width: 100%;
+    align-self: start;
+    font-size: 2.15rem !important;
+    text-align: start;
+  }
+}
+
+/* One title reveal on every viewport and OS. The animation is intentionally
+   limited to opacity and a small translate3d so it stays on the compositor and
+   does not create per-letter layout, paint, or glyph-metric work. */
+.story-title-reveal {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: visible;
+  color: inherit;
+}
+
+.story-title-reveal__text {
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transform: translate3d(0, 0.18em, 0);
+  transform-origin: 50% 50%;
+  overflow: visible;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: manual;
+  backface-visibility: hidden;
+}
+
+.story-title-reveal--active .story-title-reveal__text {
+  visibility: visible;
+  animation: story-title-reveal var(--story-title-reveal-duration, 860ms)
+    cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+}
+
+.story-title-reveal--played .story-title-reveal__text {
+  visibility: visible;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  animation: none;
+  will-change: auto;
+}
+
+@keyframes story-title-reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.18em, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+html:is([lang='ka'], [lang='ar']) .story-title-reveal,
+html:is([lang='ka'], [lang='ar']) .story-title-reveal__text {
+  overflow: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-title-reveal__text,
+  .story-title-reveal--active .story-title-reveal__text,
+  .story-title-reveal--played .story-title-reveal__text {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    will-change: auto !important;
+  }
+}
+
+/* Canonical Objectives -> Client Approach handoff.
+   Match the proven Client Approach -> Journey transition: the next scene
+   starts underneath the outgoing scene and its entire surface is feathered
+   in. There is no opaque colour strip at the seam, and all copy stays above
+   the decorative transition layer. */
+[data-story-section='aboutAccess'] {
+  --story-access-entry-overlap: clamp(5.5rem, 12svh, 8rem);
+  --story-access-entry-feather: clamp(7rem, 16svh, 10rem);
+  margin-top: calc(var(--story-access-entry-overlap) * -1) !important;
+  background: transparent !important;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgb(0 0 0 / 0.08) calc(var(--story-access-entry-feather) * 0.14),
+    rgb(0 0 0 / 0.28) calc(var(--story-access-entry-feather) * 0.34),
+    rgb(0 0 0 / 0.62) calc(var(--story-access-entry-feather) * 0.56),
+    #000 calc(var(--story-access-entry-feather) * 0.76),
+    #000 100%
+  ) !important;
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgb(0 0 0 / 0.08) calc(var(--story-access-entry-feather) * 0.14),
+    rgb(0 0 0 / 0.28) calc(var(--story-access-entry-feather) * 0.34),
+    rgb(0 0 0 / 0.62) calc(var(--story-access-entry-feather) * 0.56),
+    #000 calc(var(--story-access-entry-feather) * 0.76),
+    #000 100%
+  ) !important;
+  -webkit-mask-size: 100% 100% !important;
+  mask-size: 100% 100% !important;
+  -webkit-mask-repeat: no-repeat !important;
+  mask-repeat: no-repeat !important;
+  pointer-events: none;
+}
+
+[data-story-section='aboutAccess'] > div:not(.story-section-boundary),
+[data-story-section='aboutAccess'] > div:not(.story-section-boundary) > div,
+[data-story-section='aboutAccess'] .story-about-access-stage,
+[data-story-section='aboutAccess'] .story-scene-reveal {
+  min-height: calc(100svh + var(--story-access-entry-overlap)) !important;
+}
+
+[data-story-section='aboutAccess'] > div:not(.story-section-boundary) {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+[data-story-section='aboutAccess'] .story-about-access-stage {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+[data-story-section='aboutAccess'] .story-about-access-stage::before {
+  content: "";
+  display: block !important;
+  position: absolute;
+  inset-inline: -4%;
+  top: calc(var(--story-access-entry-overlap) * -0.12);
+  z-index: 8;
+  height: var(--story-access-entry-feather) !important;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      92% 76% at 52% 8%,
+      hsl(var(--surface) / 0.2) 0%,
+      hsl(var(--surface) / 0.1) 34%,
+      hsl(var(--surface) / 0.025) 62%,
+      hsl(var(--surface) / 0) 86%
+    ),
+    linear-gradient(
+      180deg,
+      hsl(var(--surface) / 0.16) 0%,
+      hsl(var(--surface) / 0.08) 24%,
+      rgb(216 184 136 / 0.045) 46%,
+      rgb(17 16 14 / 0.02) 70%,
+      rgb(17 16 14 / 0) 100%
+    ) !important;
+  filter: blur(clamp(6px, 0.75vw, 12px)) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  transform: translate3d(0, -0.2rem, 0) scale(1.035);
+  transform-origin: top center;
+}
+
+[data-story-section='aboutAccess'] .story-scene-reveal {
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+  padding-top: max(
+    clamp(4rem, 8svh, 6rem),
+    calc(var(--story-access-entry-feather) + 0.75rem)
+  ) !important;
+}
+
+[data-story-section='aboutAccess'] [data-layout='story-about-access'] {
+  pointer-events: auto;
+}
+
+@media (max-width: 767px) {
+  [data-story-section='aboutAccess'] {
+    --story-access-entry-overlap: clamp(4rem, 9svh, 5rem);
+    --story-access-entry-feather: clamp(5.5rem, 14svh, 7rem);
+  }
+
+  [data-story-section='aboutAccess'] .story-scene-reveal {
+    padding-top: max(
+      5.5rem,
+      calc(var(--story-access-entry-feather) + 0.75rem)
+    ) !important;
+  }
+}
+
+@media (max-height: 520px) {
+  [data-story-section='aboutAccess'] {
+    --story-access-entry-overlap: clamp(3.25rem, 12svh, 4rem);
+    --story-access-entry-feather: clamp(4.75rem, 18svh, 6rem);
+  }
+}
+
+/* Selected contact-panel composition: generous white cards, large brand icons,
+   and readable one-line contact details matching the approved reference. */
+@media (min-width: 768px) {
+  [data-story-section='contact'] [data-layout='story-contact-panel'] {
+    gap: clamp(1rem, 2.2svh, 1.4rem);
+  }
+
+  [data-story-section='contact'] [data-layout='story-contact-details'] {
+    gap: clamp(1rem, 1.7vw, 1.4rem);
+  }
+
+  [data-story-section='contact'] .story-contact-card {
+    min-height: clamp(9.25rem, 18svh, 10.5rem);
+    align-content: center;
+    gap: clamp(0.9rem, 1.8svh, 1.2rem);
+    padding: clamp(1.3rem, 2.1vw, 1.8rem);
+    border: 1px solid hsl(var(--foreground) / 0.08);
+    border-radius: 1.25rem !important;
+    background:
+      radial-gradient(125% 150% at 50% -12%, hsl(40 50% 100%), transparent 72%),
+      linear-gradient(168deg, hsl(40 42% 99%), hsl(36 26% 96%));
+    box-shadow:
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 20px 50px -36px hsl(220 28% 18% / 0.2);
+  }
+
+  [data-story-section='contact'] .story-contact-card > .story-metric-label {
+    align-self: start;
+    padding-inline: 0;
+    font-size: clamp(0.76rem, 0.9vw, 0.86rem);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    line-height: 1;
+  }
+
+  [data-story-section='contact'] .story-contact-card__row {
+    gap: clamp(0.95rem, 1.45vw, 1.25rem);
+  }
+
+  [data-story-section='contact'] .story-contact-detail {
+    font-size: clamp(1.05rem, 1.35vw, 1.34rem);
+    font-weight: 500;
+    line-height: 1.35;
+    color: hsl(var(--foreground));
+  }
+
+  [data-story-section='contact']
+    .story-contact-card--email
+    .story-contact-detail {
+    overflow-wrap: normal !important;
+    word-break: keep-all;
+    white-space: nowrap;
+  }
+
+  [data-story-section='contact']
+    [data-layout='story-contact-details']
+    > a:nth-child(2)
+    .story-contact-detail {
+    max-width: 18ch;
+    overflow-wrap: normal !important;
+    word-break: normal;
+  }
+
+  [data-story-section='contact'] .story-contact-card__icon-tile {
+    width: clamp(3.8rem, 4.6vw, 4.35rem);
+    height: clamp(3.8rem, 4.6vw, 4.35rem);
+    padding: clamp(0.72rem, 1vw, 0.9rem);
+    border-radius: 0.82rem;
+  }
+
+  [data-story-section='contact']
+    [data-layout='story-contact-socials'].story-contact-card {
+    min-height: clamp(11.75rem, 24svh, 13.5rem);
+    align-content: start;
+    gap: clamp(1rem, 2.2svh, 1.45rem);
+    padding: clamp(1.3rem, 2.1vw, 1.8rem) clamp(0.8rem, 1.4vw, 1.15rem);
+  }
+
+  [data-story-section='contact'] .story-contact-social-links {
+    min-height: clamp(8.25rem, 16svh, 9.4rem);
+    align-items: stretch;
+  }
+
+  [data-story-section='contact'] .story-contact-social-links > a {
+    min-height: 100%;
+    gap: clamp(0.85rem, 1.7svh, 1.15rem);
+    padding: 0.35rem clamp(0.35rem, 0.65vw, 0.65rem);
+  }
+
+  [data-story-section='contact']
+    .story-contact-social-links
+    .social-link__icon-tile {
+    width: clamp(3.75rem, 4.5vw, 4.35rem);
+    height: clamp(3.75rem, 4.5vw, 4.35rem);
+    border: 0;
+    border-radius: 0 !important;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  [data-story-section='contact']
+    .story-contact-social-links
+    .social-link__icon {
+    width: clamp(3.25rem, 3.8vw, 3.75rem);
+    height: clamp(3.25rem, 3.8vw, 3.75rem);
+  }
+
+  [data-story-section='contact']
+    .story-contact-social-links
+    .social-link__label {
+    max-width: 100%;
+    font-size: clamp(0.82rem, 1vw, 0.95rem);
+    font-weight: 500;
+    line-height: 1.22;
+    overflow-wrap: normal;
+    word-break: normal;
+    text-wrap: balance;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-story-section='contact'] [data-layout='story-contact-layout'] {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    column-gap: clamp(2.4rem, 4vw, 4.5rem);
+  }
+}
+
+/* Keep every contact value and social destination on one shared typographic
+   scale. The small gold card labels remain a separate information hierarchy. */
+[data-story-section='contact'] {
+  --story-contact-content-font-size: clamp(1rem, 1.05vw, 1.08rem);
+}
+
+[data-story-section='contact']
+  :is(.story-contact-detail, .story-contact-social-links .social-link__label) {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--story-contact-content-font-size) !important;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0;
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+/* Give the Dubai legacy scene a complete viewport of breathing room on
+   desktop. The copy remains centered while the skyline keeps the same exact
+   height as the scene, so neither column ends before the other. */
+@media (min-width: 900px) {
+  [data-story-section='dubai'] {
+    --story-dubai-scene-height: 100svh;
+    min-height: var(--story-dubai-scene-height) !important;
+  }
+
+  [data-story-section='dubai'] > div:not(.story-section-boundary),
+  [data-story-section='dubai'] > div:not(.story-section-boundary) > div,
+  [data-story-section='dubai'] [data-story-scene-grid] {
+    min-height: var(--story-dubai-scene-height) !important;
+  }
+
+  [data-story-section='dubai'] [data-story-scene-column],
+  [data-story-section='dubai'] [data-story-scene-media] {
+    height: auto !important;
+    min-height: var(--story-dubai-scene-height) !important;
   }
 }

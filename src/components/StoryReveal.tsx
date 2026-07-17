@@ -2,40 +2,8 @@
 
 import { Children, type ReactNode } from "react";
 import { motion, type Variants } from "@/lib/framer-motion";
-import { imageSettleTransition, premiumEase, reducedMotionTransition, revealTransition } from "@/lib/motion";
+import { imageSettleTransition, premiumEase, reducedMotionTransition } from "@/lib/motion";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
-
-const storySceneContainer: Variants = {
-  hidden: {
-    opacity: 0,
-    transition: {
-      duration: 0.32,
-      ease: premiumEase,
-      when: "afterChildren",
-      staggerChildren: 0.04,
-      staggerDirection: -1,
-    },
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.64,
-      ease: premiumEase,
-      staggerChildren: 0.1,
-      delayChildren: 0.08,
-    },
-  },
-};
-
-const storySceneItem: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: revealTransition,
-  },
-};
 
 type StorySceneRevealProps = {
   children: ReactNode;
@@ -124,30 +92,14 @@ export function StoryMediaReveal({ children, isActive, reverse = false, classNam
 }
 
 export function StorySceneReveal({ children, isActive, className }: StorySceneRevealProps) {
-  const shouldReduceMotion = useHydratedReducedMotion();
-
   return (
-    <motion.div
+    <div
       className={["story-scene-reveal", className].filter(Boolean).join(" ")}
       data-story-scene-reveal-active={isActive ? "true" : "false"}
-      variants={storySceneContainer}
-      initial="hidden"
-      animate={isActive ? "visible" : "hidden"}
-      transition={
-        shouldReduceMotion
-          ? reducedMotionTransition
-          : {
-              staggerChildren: 0.1,
-              delayChildren: 0.08,
-              ease: premiumEase,
-            }
-      }
     >
       {Children.map(children, (child, index) => (
-        <motion.div key={index} variants={storySceneItem}>
-          {child}
-        </motion.div>
+        <div key={index}>{child}</div>
       ))}
-    </motion.div>
+    </div>
   );
 }

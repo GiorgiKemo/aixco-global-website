@@ -7,7 +7,7 @@ export const company = {
   founded: 2009,
   offices: ["Vienna", "Dubai", "Batumi"],
   socials: {
-    website: "https://aixco.group/",
+    website: "https://www.aixco.global/",
     linkedin: "https://www.linkedin.com/company/aixco-global",
     facebook: "https://www.facebook.com/profile.php?id=61589341472475",
     instagram: "https://www.instagram.com/aixco.global/",

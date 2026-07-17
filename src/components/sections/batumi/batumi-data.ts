@@ -1,6 +1,5 @@
 import type { SiteContent } from "@/lib/backend/site-content";
 import {
-  aixcoLiveDocuments,
   aixcoLiveImages,
   aixcoLiveVideoPreviews,
   aixcoLiveVideos,
@@ -16,10 +15,6 @@ export const batumiImageMap: Record<string, string> = {
 
 export const batumiVideoMap: Record<string, { src: string; previewSrc: string }> = {
   currentProject: { src: aixcoLiveVideos.currentProject, previewSrc: aixcoLiveVideoPreviews.currentProject },
-};
-
-export const batumiDocumentMap: Record<string, string> = {
-  "current-project": aixcoLiveDocuments.currentProject,
 };
 
 export function getBatumiMarketDetails(benefits: BatumiBenefits) {

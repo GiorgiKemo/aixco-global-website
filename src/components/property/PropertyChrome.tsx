@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronDown, Globe, Menu, X } from "lucide-react";
+import { ChevronDown, Download, Globe, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { useUI } from "@/components/ui-state";
 import { LANGS, useI18n } from "@/i18n/I18nProvider";
@@ -89,6 +89,27 @@ export function PropertyContactLink({ className, children }: { className?: strin
     <Link href="/?modal=contact" prefetch={false} onClick={handleClick} className={className}>
       {children}
     </Link>
+  );
+}
+
+export function EnglishBrochureLink({
+  href,
+  fileName,
+  className,
+}: {
+  href: string;
+  fileName: string;
+  className?: string;
+}) {
+  const { lang } = useI18n();
+
+  if (lang !== "en") return null;
+
+  return (
+    <a href={href} download={fileName} className={className}>
+      <Download className="h-4 w-4" aria-hidden />
+      Download brochure
+    </a>
   );
 }
 

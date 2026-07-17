@@ -22,7 +22,6 @@ describe("aixcoLiveImages", () => {
   it("publishes the downloadable source images", () => {
     expect(aixcoLiveAssetDetails.dubaiFundOne).toContain("/images/fund/fund1.jpeg");
     expect(aixcoLiveAssetDetails.dubaiFundTwo).toContain("/images/fund2.png");
-    expect(aixcoLiveAssetDetails.clientBrochurePdf).toContain("/documents/aixco-client-brochure.pdf");
   });
 
   it("publishes grouped Dubai asset galleries from the OP2 source files", () => {

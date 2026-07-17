@@ -10,7 +10,6 @@ const liveImageBase = aixcoLivePath("images");
 const optimizedImageBase = aixcoLivePath("images/optimized");
 const optimizedVideoBase = aixcoLivePath("media");
 const previewVideoBase = aixcoLivePath("media/previews");
-const documentBase = aixcoLivePath("documents");
 const iconBase = aixcoLivePath("icons");
 const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
 const batumiGalleryPreviewBase = `${batumiGalleryBase}/previews`;
@@ -98,11 +97,6 @@ export const aixcoDubaiHeroVideo = {
   title: "Dubai Burj Khalifa aerial",
 } as const;
 
-export const aixcoLiveDocuments = {
-  clientBrochure: `${documentBase}/aixco-client-brochure.pdf`,
-  currentProject: `${documentBase}/current-project.pdf`,
-} as const;
-
 export const aixcoLiveIcons = {
   website: `${iconBase}/AIXCO_icons-05.svg`,
   linkedin: `${iconBase}/AIXCO_icons-01.svg`,
@@ -114,8 +108,6 @@ export const aixcoLiveIcons = {
 export const aixcoLiveAssetDetails = {
   dubaiFundOne: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiFundTwo: `${liveImageBase}/fund2.png`,
-  clientBrochurePdf: aixcoLiveDocuments.clientBrochure,
-  currentProjectPdf: aixcoLiveDocuments.currentProject,
 } as const;
 
 export const aixcoDubaiEdenHouseCanalGallery = [

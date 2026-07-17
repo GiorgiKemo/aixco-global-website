@@ -24,6 +24,8 @@
     "smoke:nav": "node scripts/verify-nav-scale.mjs",
     "smoke:mobile": "node scripts/verify-mobile-experience.mjs",
     "smoke:mobile-scope": "node scripts/verify-mobile-only-scope.mjs",
+    "smoke:title-motion": "node scripts/verify-title-animations.mjs",
+    "smoke:transitions": "node scripts/verify-section-transitions.mjs",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:i18n": "node scripts/verify-localizations.mjs",

@@ -36,6 +36,9 @@ export const germanTranslationFixes = {
   "Access brochures, catalogs, property presentations, and supporting documentation.": {
     de: "Greifen Sie auf Broschüren, Kataloge, Immobilienpräsentationen und unterstützende Unterlagen zu.",
   },
+  "Access property reference images and supporting documentation.": {
+    de: "Greifen Sie auf Referenzbilder zu Immobilien und unterstützende Unterlagen zu.",
+  },
   "Batumi residential architecture and public realm": { de: "Wohnarchitektur und öffentlicher Raum in Batumi" },
   "Batumi city real estate district at sunset": { de: "Immobilienviertel in Batumi bei Sonnenuntergang" },
   "Batumi skyline at night": { de: "Skyline von Batumi bei Nacht" },
@@ -254,7 +257,7 @@ export const germanTranslationFixes = {
   },
   "Social media": { de: "Soziale Medien" },
   "AIXCO social media links": { de: "AIXCO-Links in sozialen Medien" },
-  "AIXCO Group website": { de: "Website der AIXCO Group" },
+  "AIXCO Global website": { de: "Website von AIXCO Global" },
   "Grüngasse 16, 1050 Wien, Austria": { de: "Grüngasse 16, 1050 Wien, Österreich" },
   "AIXCO.GLOBAL home": { de: "AIXCO.GLOBAL Startseite" },
   "Change language": { de: "Sprache ändern" },

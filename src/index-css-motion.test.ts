@@ -53,10 +53,13 @@ describe("index.css motion rules", () => {
     expect(partnerCard).toContain("box-shadow 260ms");
   });
 
-  it("stops continuous marquees when reduced motion is preferred", () => {
+  it("keeps partner marquees continuously looping without hover or focus stalls", () => {
     expect(css).toContain("--partner-marquee-duration: 58s;");
-    expect(css).toContain(".partner-marquee-track {\n      animation: none !important;");
-    expect(css).toContain(".partner-marquee--story .partner-marquee-track {\n      animation-play-state: paused !important;");
+    expect(css).toContain("animation: partner-marquee var(--partner-marquee-duration) linear infinite;");
+    expect(css).not.toContain(".partner-marquee:hover .partner-marquee-track");
+    expect(css).not.toContain(".partner-marquee:focus-within .partner-marquee-track");
+    expect(css).not.toContain(".partner-marquee-track {\n      animation: none !important;");
+    expect(partnerMarquee).toContain("{[0, 1].map((setIndex) => (");
     expect(desktopStoryHome).not.toContain('data-hero-motion-control="true"');
     expect(desktopStoryHome).not.toContain('aria-label={tx(isPaused ? "Play background video" : "Pause background video")}');
     expect(desktopStoryHome).not.toContain("aria-pressed={isPaused}");
@@ -82,27 +85,26 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('setAnimationState("played");');
     expect(desktopStoryHome).toContain('<span className="sr-only">{label}</span>');
     expect(desktopStoryHome).not.toContain("aria-label={label}");
-    expect(css).toContain(".story-letter-reveal--active .story-letter-reveal__char,");
+    expect(css).toContain(".story-title-reveal--active .story-title-reveal__text,");
     expect(css).toContain("animation: none !important;");
   });
 
-  it("uses the split-letter layer on phones so wrapped lines reveal in reading order", () => {
+  it("uses one compositor-only whole-title reveal on every viewport", () => {
+    const titleKeyframesStart = css.indexOf("@keyframes story-title-reveal");
+    const titleKeyframesEnd = css.indexOf("html:is([lang='ka'], [lang='ar']) .story-title-reveal", titleKeyframesStart);
+    const titleKeyframes = css.slice(titleKeyframesStart, titleKeyframesEnd);
+
     expect(desktopStoryHome).toContain("mobileLabel?: string");
     expect(desktopStoryHome).toContain('mobileLabel={tx("ACQUIRE.PARTNER.CREATE VALUE.").replace(/\\./g, ".\\u200B")}');
-    expect(desktopStoryHome).toContain(".split(/(\\s+|\\u200B)/u)");
-    expect(desktopStoryHome).toContain("characters.length <= 14");
-    expect(desktopStoryHome).toContain('"\\u200B"');
-    expect(desktopStoryHome).toContain("!/[\\s\\u200B]/u.test(character)");
-    expect(desktopStoryHome).toContain("Math.max(1900, letterCount * 30 + 980)");
-    expect(desktopStoryHome).toContain('"--story-mobile-title-duration": `${animationDurationMs}ms`');
-    expect(css).toContain("@media (max-width: 767px)");
-    expect(css).toContain(".story-text-reveal__mobile-plain");
-    expect(css).toContain("--story-char-step: 30ms;");
-    expect(css).toContain(".story-text-reveal__mobile-plain {\n      display: none !important;");
-    expect(css).toContain(".story-letter-reveal__text {\n      display: inline-block !important;");
-    expect(css).toContain("animation-delay: calc(var(--story-char-index) * var(--story-char-step));");
-    expect(css).not.toContain("animation: story-mobile-title-reveal");
-    expect(css).not.toContain("@keyframes story-mobile-title-reveal");
+    expect(desktopStoryHome).toContain('data-text-reveal-engine="unified-transform"');
+    expect(desktopStoryHome).toContain('className="story-title-reveal__text"');
+    expect(desktopStoryHome).not.toContain("story-letter-reveal__char");
+    expect(desktopStoryHome).not.toContain("story-letter-reveal--compact");
+    expect(css).toContain("@keyframes story-title-reveal");
+    expect(css).toContain("animation: story-title-reveal var(--story-title-reveal-duration, 860ms)");
+    expect(css).toContain("will-change: opacity, transform;");
+    expect(titleKeyframesStart).toBeGreaterThanOrEqual(0);
+    expect(titleKeyframes).not.toContain("filter:");
   });
 
   it("keeps phone story sections compact enough for smooth reveal entry", () => {
@@ -178,10 +180,46 @@ describe("index.css motion rules", () => {
   });
 
   it("keeps the email and address values on identical typography", () => {
-    const sharedContactValueClass =
-      'className="story-body story-glyph-safe min-w-0 text-foreground/82 [overflow-wrap:anywhere]"';
+    const sharedContactValueClass = 'className="story-contact-detail min-w-0 [overflow-wrap:anywhere]"';
 
     expect(desktopStoryHome.split(sharedContactValueClass)).toHaveLength(3);
+    expect(css).toContain("[data-story-section='contact'] .story-contact-detail");
+    expect(css).toContain('font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;');
+    expect(css).toContain("font-synthesis: none;");
+  });
+
+  it("uses the selected labeled social rail with rounded contact cards", () => {
+    const selectedContactStart = css.lastIndexOf(
+      "/* Selected contact-panel composition:",
+    );
+    const selectedContact = css.slice(selectedContactStart);
+
+    expect(desktopStoryHome).toContain('{tx("SOCIAL MEDIA")}');
+    expect(desktopStoryHome).toContain('className="story-contact-social-links"');
+    expect(css).toContain("[data-story-section='contact'] .story-contact-social-links > a");
+    expect(css).toContain("[data-story-section='contact'] .story-contact-social-links .social-link__icon");
+    expect(css).toContain("grid-template-columns: repeat(4, minmax(0, 1fr));");
+    expect(css).toContain(".social-link__label");
+    expect(selectedContactStart).toBeGreaterThanOrEqual(0);
+    expect(selectedContact).toContain("border-radius: 1.25rem !important;");
+    expect(selectedContact).toContain("white-space: nowrap;");
+    expect(selectedContact).toContain("border-radius: 0 !important;");
+    expect(selectedContact).toContain("background: transparent;");
+    expect(selectedContact).toContain(
+      "--story-contact-content-font-size: clamp(1rem, 1.05vw, 1.08rem);",
+    );
+    expect(selectedContact).toContain(
+      ":is(.story-contact-detail, .story-contact-social-links .social-link__label)",
+    );
+    expect(selectedContact).toContain(
+      "grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);",
+    );
+  });
+
+  it("keeps the FAQ heading left-aligned while spreading the question grid evenly", () => {
+    expect(css).not.toContain("[data-story-section='faqs'] [data-story-scene-copy] {\n    width: min(100%, 72rem);");
+    expect(css).toContain("[data-story-section='faqs'] [data-layout='story-faq-list'] {\n    width: 100%;\n    margin-inline: auto;\n    padding-inline: 0;");
+    expect(css).not.toContain("[data-story-section='faqs'] [data-layout='story-faq-list'],\n  [data-story-section='contact']");
   });
 
   it("starts the About video early and pauses it two chapters later", () => {
@@ -418,30 +456,53 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain("rgb(220 232 234 / 0.06)");
   });
 
-  it("softens the objectives-to-access handoff without letting prior text bleed through", () => {
-    const accessMask = cssBlock("[data-story-section='aboutAccess'] > div:not(.story-section-boundary)");
-    const objectivesPreview = cssBlock(".story-objectives-access-preview");
-    const accessVeil = cssBlock(".story-about-access-stage::before");
-    const objectivesBoundary = cssBlock("[data-story-section='aboutObjectives'] .story-section-boundary");
+  it("renders Dubai metric affixes with the exact same brand treatment as their values", () => {
+    const metricValueStart = css.indexOf(".story-dubai-portfolio-card__metric .story-metric-value {");
+    const metricAffixStart = css.indexOf(".story-dubai-metric-affix {");
+    const metricValue = css.slice(metricValueStart, css.indexOf("\n}", metricValueStart));
+    const metricAffix = css.slice(metricAffixStart, css.indexOf("\n}", metricAffixStart));
 
-    expect(css).toContain("[data-story-section='aboutAccess'] {\n    margin-top: calc(clamp(9rem, 18svh, 12rem) * -1);");
-    expect(accessMask).toContain("-webkit-mask-image: linear-gradient(");
-    expect(accessMask).toContain("transparent 0%");
-    expect(accessMask).toContain("rgb(0 0 0 / 0.68) clamp(6.25rem, 12svh, 8rem)");
-    expect(accessMask).toContain("#000 clamp(10rem, 18svh, 12rem)");
-    expect(objectivesPreview).toContain("display: none");
-    expect(objectivesPreview).toContain("height: clamp(16rem, 34svh, 25rem)");
-    expect(objectivesBoundary).toContain("display: block");
-    expect(objectivesBoundary).toContain("rgb(232 213 183 / 0.72) 34%");
-    expect(objectivesBoundary).toContain("rgb(44 33 25 / 0.42) 76%");
-    expect(objectivesBoundary).toContain("filter: blur(22px)");
-    expect(accessVeil).toContain("display: block");
-    expect(accessVeil).toContain("height: clamp(11rem, 26svh, 17rem)");
-    expect(accessVeil).toContain("hsl(var(--surface) / 0.22) 0%");
-    expect(accessVeil).toContain("rgb(206 139 52 / 0.2) 38%");
-    expect(accessVeil).toContain("backdrop-filter: none");
-    expect(accessVeil).toContain("filter: none");
-    expect(accessVeil).not.toContain("display: none");
+    expect(metricValueStart).toBeGreaterThanOrEqual(0);
+    expect(metricAffixStart).toBeGreaterThanOrEqual(0);
+    expect(desktopStoryHome).toContain('className="story-dubai-metric-affix"');
+    expect(desktopStoryHome).not.toContain("text-[0.58em]");
+    expect(metricValue).toContain("color: hsl(var(--primary))");
+    expect(metricValue).toContain("font-family: var(--font-brand-display)");
+    expect(metricValue).toContain("font-weight: 600");
+    expect(metricAffix).toContain("color: inherit");
+    expect(metricAffix).toContain("font-family: inherit");
+    expect(metricAffix).toContain("font-size: 1em");
+    expect(metricAffix).toContain("font-weight: inherit");
+    expect(metricAffix).toContain("line-height: inherit");
+    expect(metricAffix).toContain("letter-spacing: inherit");
+    expect(metricAffix).toContain("vertical-align: baseline");
+  });
+
+  it("softens the objectives-to-access handoff without letting prior text bleed through", () => {
+    const canonicalStart = css.lastIndexOf("/* Canonical Objectives -> Client Approach handoff.");
+    const canonical = css.slice(canonicalStart);
+
+    expect(canonicalStart).toBeGreaterThanOrEqual(0);
+    expect(canonical).toContain("--story-access-entry-overlap: clamp(5.5rem, 12svh, 8rem);");
+    expect(canonical).toContain("margin-top: calc(var(--story-access-entry-overlap) * -1) !important;");
+    expect(canonical).toContain("background: transparent !important;");
+    expect(canonical).toContain("-webkit-mask-image: linear-gradient(");
+    expect(canonical).toContain("rgb(0 0 0 / 0.62) calc(var(--story-access-entry-feather) * 0.56)");
+    expect(canonical).toContain("#000 calc(var(--story-access-entry-feather) * 0.76)");
+    expect(canonical).toContain("-webkit-mask-size: 100% 100% !important;");
+    expect(canonical).toContain("mask-repeat: no-repeat !important;\n  pointer-events: none;");
+    expect(canonical).toContain("-webkit-mask-image: none !important;");
+    expect(canonical).toContain("mask-image: none !important;");
+    expect(canonical).toContain("height: var(--story-access-entry-feather) !important;");
+    expect(canonical).toContain("hsl(var(--surface) / 0.2) 0%");
+    expect(canonical).toContain("hsl(var(--surface) / 0) 86%");
+    expect(canonical).toContain("pointer-events: none;");
+    expect(canonical).toContain("z-index: 8;");
+    expect(canonical).toContain(".story-scene-reveal {\n  position: relative;\n  z-index: 10;\n  pointer-events: none;");
+    expect(canonical).toContain("calc(var(--story-access-entry-feather) + 0.75rem)");
+    expect(canonical).toContain("[data-layout='story-about-access'] {\n  pointer-events: auto;");
+    expect(canonical).toContain("--story-access-entry-overlap: clamp(4rem, 9svh, 5rem);");
+    expect(canonical).toContain("--story-access-entry-feather: clamp(4.75rem, 18svh, 6rem);");
   });
 
   it("blends the access-to-legacy handoff with a real overlap and surface wash", () => {
@@ -572,6 +633,22 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-story-section='hero'] .story-hero-lockup {\n    width: 100%;");
     expect(css).toContain("[data-story-section='hero'] .story-hero-statement {\n    width: 100%;\n    align-items: flex-start;");
     expect(css).toContain("[data-story-section='hero'] .story-hero-statement__note {\n    max-width: 21rem;");
+  });
+
+  it("balances the Dubai snapshot and lets its skyline scroll with the page", () => {
+    expect(css).toContain("/* Keep the Dubai snapshot as one balanced scene so both columns travel together. */");
+    expect(css).toContain("[data-story-section='dubai'] .story-scene-reveal {\n    justify-content: center !important;");
+    expect(css).toContain("[data-story-section='dubai'] [data-story-scene-media] {\n    position: relative !important;\n    top: auto !important;");
+  });
+
+  it("uses the Philosophy number treatment across the requested metric sections", () => {
+    expect(desktopStoryHome).toContain("story-batumi-benefit__metric story-standard-number");
+    expect(desktopStoryHome).toContain("story-philosophy-stat__value story-standard-number");
+    expect(desktopStoryHome).toContain("story-standard-number story-legacy-number");
+    expect(css).toContain("/* One editorial number language across the site, sourced from AIXCO Philosophy. */");
+    expect(css).toContain("font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;");
+    expect(css).toContain("font-weight: 400 !important;");
+    expect(css).toContain("font-variant-numeric: lining-nums tabular-nums;");
   });
 
   it("uses the exact AIXCO brandbook palette and Gilroy across legacy components", () => {

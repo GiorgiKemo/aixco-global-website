@@ -5,16 +5,16 @@ import Link from "next/link";
 import { flushSync } from "react-dom";
 import {
   ArrowRight,
-  BadgeEuro,
   ChevronDown,
-  CirclePercent,
   Download,
+  Euro,
   FileText,
   Globe,
   Image as ImageIcon,
   KeyRound,
   Menu,
   MapPin,
+  Percent,
   ShieldCheck,
   TrendingUp,
   X,
@@ -59,13 +59,10 @@ import { AnimatePresence, motion } from "@/lib/framer-motion";
 import { premiumEase, revealTransition } from "@/lib/motion";
 import {
   formatMetricValue,
-  fundAssetGalleries,
-  hasAssetGallery,
   isHeadlineMetric,
   parseFundDetail,
   type DubaiFund,
 } from "./dubai/dubai-data";
-import { DubaiImageMarquee } from "./dubai/DubaiImageMarquee";
 import { heroIntroText, heroOpportunityFootnote, heroStoryStatementLines } from "./hero/hero-ui";
 
 type StoryChapterKey =
@@ -221,7 +218,7 @@ type StorySectionMetric = {
 
 const storyTeamSwitchIntervalMs = 6800;
 const storyTeamResumeDelayMs = 9000;
-const maxAnimatedStoryLetters = 96;
+const storyTitleRevealDurationMs = 860;
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
 const philosophyPlatformStats = [
@@ -359,194 +356,63 @@ function formatChapterNumber(index: number) {
   return String(index).padStart(2, "0");
 }
 
-function useStoryTextInView(rootRef: React.RefObject<HTMLElement | null>) {
-  const [isInView, setIsInView] = useState(false);
-
-  useLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root || typeof IntersectionObserver === "undefined") {
-      setIsInView(true);
-      return undefined;
-    }
-
-    const isPhoneViewport = window.matchMedia("(max-width: 767px)").matches;
-    const textRevealRootMargin = isPhoneViewport ? "0px" : "0px 0px 8% 0px";
-
-    const syncCurrentVisibility = () => {
-      const rect = root.getBoundingClientRect();
-      const viewportHeight = Math.max(1, window.innerHeight);
-      setIsInView(
-        isPhoneViewport
-          ? rect.top < viewportHeight && rect.bottom > 0
-          : rect.top < viewportHeight * 1.08 && rect.bottom > -viewportHeight * 0.04,
-      );
-    };
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
-      },
-      { rootMargin: textRevealRootMargin, threshold: 0 },
-    );
-
-    syncCurrentVisibility();
-    observer.observe(root);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [rootRef]);
-
-  return isInView;
-}
-
 function StoryTextReveal({
   active,
   label,
   mobileLabel,
 }: {
-  active?: boolean;
-  children?: React.ReactNode;
+  active: boolean;
   label: string;
   mobileLabel?: string;
 }) {
-  const rootRef = useRef<HTMLSpanElement>(null);
-  const isInView = useStoryTextInView(rootRef);
-  const shouldAnimate = active ?? isInView;
   const shouldReduceMotion = useHydratedReducedMotion();
   const visualLabel = mobileLabel ?? label;
-  const tokens = useMemo(
-    () => visualLabel
-      .split(/(\s+|\u200B)/u)
-      .flatMap((token) => {
-        const characters = Array.from(token);
-        if (!token.trim() || characters.length <= 14) return [token];
-
-        const breakAt = Math.ceil(characters.length / 2);
-        return [
-          characters.slice(0, breakAt).join(""),
-          "\u200B",
-          characters.slice(breakAt).join(""),
-        ];
-      }),
-    [visualLabel],
-  );
-  const letterCount = useMemo(
-    () => Array.from(visualLabel).filter((character) => !/[\s\u200B]/u.test(character)).length,
-    [visualLabel],
-  );
-  const stableMobileLabel = mobileLabel ?? label;
-  // Linux and Windows fallback fonts expose materially different Cyrillic
-  // glyph metrics. The chunk reveal preserves the title animation while
-  // allowing native line wrapping instead of positioning every glyph in its
-  // own inline box, which can push Russian titles beyond the viewport.
-  const useCompactReveal = letterCount > maxAnimatedStoryLetters
-    || /[\u0400-\u04ff]/u.test(visualLabel);
-  const animationDurationMs = useMemo(
-    () => useCompactReveal ? 1700 : Math.min(4200, Math.max(1900, letterCount * 30 + 980)),
-    [letterCount, useCompactReveal],
-  );
   const [animationState, setAnimationState] = useState<"idle" | "animating" | "played">("idle");
-  const [animationRun, setAnimationRun] = useState(0);
 
   useLayoutEffect(() => {
     setAnimationState("idle");
-    setAnimationRun(0);
   }, [label, mobileLabel]);
 
   useLayoutEffect(() => {
-    if (!shouldAnimate) {
-      // Let an in-flight reveal finish even if a short viewport scroll moves
-      // the heading past the observer boundary. Once it has completed, reset
-      // it off-screen so the next visit can replay from the beginning.
-      if (animationState === "played") setAnimationState("idle");
-      return;
-    }
-
-    if (animationState !== "idle") return;
-
     if (shouldReduceMotion) {
-      setAnimationState("played");
+      if (animationState !== "played") setAnimationState("played");
       return;
     }
 
-    setAnimationRun((current) => current + 1);
+    if (!active || animationState !== "idle") return;
+
     setAnimationState("animating");
-  }, [animationState, shouldAnimate, shouldReduceMotion]);
+  }, [active, animationState, shouldReduceMotion]);
 
-  useEffect(() => {
-    if (animationState !== "animating") return undefined;
-
-    const timer = window.setTimeout(() => setAnimationState("played"), animationDurationMs);
-    return () => window.clearTimeout(timer);
-  }, [animationDurationMs, animationState]);
-
-  let revealIndex = 0;
   const isAnimating = animationState === "animating";
   const hasPlayed = animationState === "played";
 
   return (
-    <>
-      <span
-        ref={rootRef}
+    <span
       className={cn(
-        "story-text-reveal story-letter-reveal",
-        useCompactReveal && "story-letter-reveal--compact",
-        isAnimating && "story-letter-reveal--active",
-        hasPlayed && "story-letter-reveal--played",
+        "story-text-reveal story-title-reveal",
+        isAnimating && "story-title-reveal--active",
+        hasPlayed && "story-title-reveal--played",
       )}
       data-text-reveal-active={isAnimating ? "true" : "false"}
+      data-text-reveal-engine="unified-transform"
       data-text-reveal-label={label}
       data-text-reveal-state={animationState}
       style={{
-        "--story-letter-count": letterCount,
-        "--story-mobile-title-duration": `${animationDurationMs}ms`,
+        "--story-title-reveal-duration": `${storyTitleRevealDurationMs}ms`,
       } as CSSProperties}
     >
       <span className="sr-only">{label}</span>
-      <span className="story-text-reveal__mobile-plain" aria-hidden="true">{stableMobileLabel}</span>
-      <span key={animationRun} className="story-letter-reveal__text" aria-hidden="true">
-        {useCompactReveal ? (
-          <span className="story-letter-reveal__chunk">{label}</span>
-        ) : (
-          tokens.map((token, tokenIndex) => (
-            token === "\u200B" ? (
-              <wbr key={`break-${tokenIndex}`} />
-            ) : token.trim() ? (
-              <span
-                key={`${token}-${tokenIndex}`}
-                className={cn(
-                  "story-letter-reveal__word",
-                  Array.from(token).length > 14 && "story-letter-reveal__word--long",
-                )}
-              >
-                {Array.from(token).map((character, characterIndex) => {
-                  const characterRevealIndex = revealIndex;
-                  revealIndex += 1;
-
-                  return (
-                    <span
-                      key={`${character}-${tokenIndex}-${characterIndex}`}
-                      className="story-letter-reveal__char"
-                      data-char={character}
-                      style={{ "--story-char-index": characterRevealIndex } as CSSProperties}
-                    >
-                      {character}
-                    </span>
-                  );
-                })}
-              </span>
-            ) : (
-              <span key={`${token}-${tokenIndex}`} className="story-letter-reveal__space">
-                {token}
-              </span>
-            )
-          ))
-        )}
+      <span
+        className="story-title-reveal__text"
+        aria-hidden="true"
+        onAnimationEnd={(event) => {
+          if (event.animationName === "story-title-reveal") setAnimationState("played");
+        }}
+      >
+        {visualLabel}
       </span>
-      </span>
-      <span className="story-text-reveal__tiny-plain">{stableMobileLabel}</span>
-    </>
+    </span>
   );
 }
 
@@ -1523,7 +1389,7 @@ function StoryDubaiFundRow({
                     {metric.prefix ? `${tx(metric.prefix)} ` : ""}
                     {tx(metric.value)}
                     {metric.subtext ? (
-                      <span className="ml-0.5 text-[0.58em] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                      <span className="story-dubai-metric-affix">
                         {tx(metric.subtext)}
                       </span>
                     ) : null}
@@ -1614,6 +1480,23 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
   );
 }
 
+function StoryMetricText({ value }: { value: string }) {
+  const currencyMetric = value.match(/^([$€])(.*)$/u);
+
+  if (!currencyMetric) return <>{value}</>;
+
+  return (
+    <>
+      <span className={`story-currency-symbol ${currencyMetric[1] === "€" ? "story-currency-symbol--euro" : "story-currency-symbol--dollar"}`} aria-hidden="true">
+        {currencyMetric[1]}
+      </span>
+      <span className="story-currency-value" aria-hidden="true">
+        {currencyMetric[2]}
+      </span>
+    </>
+  );
+}
+
 function BatumiBenefitIconGrid({
   benefits,
   tx,
@@ -1622,19 +1505,23 @@ function BatumiBenefitIconGrid({
   tx: (copy: string) => string;
 }) {
   const items = [
-    { icon: BadgeEuro, metric: "€5k", label: "Secure your position from €5,000" },
+    { icon: Euro, metric: "€5k", label: "Secure your position from €5,000" },
     { icon: KeyRound, metric: "€45k", label: "Entry from €45,000" },
     { icon: TrendingUp, metric: "60%+", label: benefits[4] ?? "Bank financing minimum 60%" },
-    { icon: CirclePercent, metric: "12%", label: "Approx. 12% net rental yields" },
+    { icon: Percent, metric: "12%", label: "Approx. 12% net rental yields" },
   ];
 
   return (
     <div data-layout="story-batumi-benefits" className="story-batumi-benefit-grid">
       {items.map(({ icon: Icon, label, metric }) => (
         <div key={label} className="story-batumi-benefit">
-          <Icon className="story-batumi-benefit__icon" aria-hidden />
+          <span className="story-batumi-benefit__icon-tile" aria-hidden="true">
+            <Icon className="story-batumi-benefit__icon" />
+          </span>
           <div className="min-w-0">
-            <span className="story-batumi-benefit__metric">{metric}</span>
+            <span className="story-batumi-benefit__metric story-standard-number" aria-label={metric}>
+              <StoryMetricText value={metric} />
+            </span>
             <span className="story-batumi-benefit__label">{tx(label)}</span>
           </div>
         </div>
@@ -1804,8 +1691,8 @@ function AboutScene({
             <dl className="mt-[clamp(1.7rem,3.4svh,2.6rem)] grid max-w-[48rem] grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
               {metrics.slice(0, 4).map((metric) => (
                 <div key={metric.label} className="border-s border-white/28 ps-4">
-                  <dt className="story-glyph-safe tabular-nums text-[clamp(1.55rem,2.45vw,2.7rem)] font-normal leading-none text-primary-glow">
-                    {metric.value}
+                  <dt className="story-glyph-safe story-standard-number tabular-nums" aria-label={metric.value}>
+                    <StoryMetricText value={metric.value} />
                   </dt>
                   <dd className="mt-2 text-[clamp(0.7rem,2.45vw,0.82rem)] font-semibold uppercase leading-relaxed tracking-[0.04em] text-white/70 [overflow-wrap:anywhere]">
                     {tx(metric.label)}
@@ -1853,7 +1740,7 @@ function PhilosophyScene({
       </h2>
       <p className="story-body text-foreground/76">{tx(philosophyHero.summary)}</p>
 
-      <dl data-layout="story-philosophy-stats" className="grid w-full grid-cols-2 gap-px overflow-hidden border border-foreground/10 bg-foreground/10">
+      <dl data-layout="story-philosophy-stats" className="grid w-full grid-cols-2 gap-2">
         {philosophyStats.map((stat) => {
           const mobileLabel =
             stat.label === "Current gross development value"
@@ -1863,12 +1750,14 @@ function PhilosophyScene({
                 : stat.label;
 
           return (
-            <div key={stat.label} className="bg-white px-4 py-4">
+            <div key={stat.label} className="story-philosophy-card bg-white px-4 py-4">
               <dt className="story-metric-label text-foreground/58">
                 <span className="hidden sm:inline">{tx(stat.label)}</span>
                 <span className="sm:hidden">{tx(mobileLabel)}</span>
               </dt>
-              <dd className="story-glyph-safe tabular-nums text-[clamp(1.8rem,2.8vw,3.2rem)] leading-none text-primary">{stat.value}</dd>
+              <dd className="story-glyph-safe story-standard-number tabular-nums" aria-label={stat.value}>
+                <StoryMetricText value={stat.value} />
+              </dd>
             </div>
           );
         })}
@@ -1876,7 +1765,7 @@ function PhilosophyScene({
 
       <div data-layout="story-philosophy-principles" className="grid w-full gap-2 sm:grid-cols-2">
         {philosophyPrinciples.map((principle) => (
-          <div key={principle} className="flex min-h-12 items-center gap-3 border border-foreground/10 bg-white px-4 py-3 text-sm font-semibold text-foreground/84">
+          <div key={principle} className="story-philosophy-card flex min-h-12 items-center gap-3 border border-foreground/10 bg-white px-4 py-3 text-sm font-semibold text-foreground/84">
             <ShieldCheck className="h-4 w-4 shrink-0 text-primary" aria-hidden />
             <span className="min-w-0 break-words">{tx(principle)}</span>
           </div>
@@ -1930,8 +1819,8 @@ function PhilosophyPlatformScene({
           return (
             <div key={stat.label} className="story-philosophy-stat">
               <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
-              <dd className="story-metric-value story-philosophy-stat__value text-primary" aria-label={stat.value}>
-                {prefix ? <span className="story-philosophy-stat__affix story-philosophy-stat__affix--prefix">{prefix}</span> : null}
+              <dd className="story-metric-value story-philosophy-stat__value story-standard-number" aria-label={stat.value}>
+                {prefix ? <span className="story-philosophy-stat__affix story-philosophy-stat__affix--prefix story-currency-symbol story-currency-symbol--dollar" aria-hidden="true">{prefix}</span> : null}
                 <span className="story-philosophy-stat__number">
                   {numericSegments.map((segment, segmentIndex) => (
                     <span
@@ -2245,7 +2134,7 @@ function LegacyScene({
             key={chapter.id}
             className="rounded-lg border border-primary/20 border-l-[3px] border-l-primary/50 bg-primary/[0.06] px-5 py-4 shadow-[0_14px_34px_-30px_hsl(var(--primary)/0.5)]"
           >
-            <p className="story-metric-label text-primary/80">{formatChapterNumber(index + 1)}</p>
+            <p className="story-metric-value story-standard-number story-legacy-number">{formatChapterNumber(index + 1)}</p>
             <h3 className="story-card-title">{tx(chapter.title)}</h3>
             <p className="story-body story-glyph-safe text-foreground/72">{tx(chapter.highlight)}</p>
           </div>
@@ -2265,9 +2154,7 @@ function DubaiScene({
   tx: (copy: string) => string;
 }) {
   const { dubaiFunds } = useSiteContent();
-  const shouldReduceMotion = useHydratedReducedMotion();
-  const [landingFund, secondFund] = dubaiFunds;
-  const galleryGroups = hasAssetGallery(landingFund.id) ? fundAssetGalleries[landingFund.id].groups : [];
+  const visibleFunds = dubaiFunds.slice(0, 2);
 
   return (
     <SceneShell
@@ -2282,35 +2169,19 @@ function DubaiScene({
         sizes: "(min-width: 1280px) 82vw, 100vw",
       }}
     >
-      <p className="eyebrow story-eyebrow">{tx("Dubai - Legacy portfolio")}</p>
-      <h2 className="story-h2">
-        <StoryTextReveal active={isActive} label={tx("Our history in Dubai")} />
-      </h2>
-      <p className="story-body text-foreground/78">
-        {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
-      </p>
+      <div className="story-dubai-intro">
+        <p className="eyebrow story-eyebrow">{tx("Dubai - Legacy portfolio")}</p>
+        <h2 className="story-h2">
+          <StoryTextReveal active={isActive} label={tx("Our history in Dubai")} />
+        </h2>
+        <p className="story-body text-foreground/78">
+          {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
+        </p>
+      </div>
       <div data-layout="story-dubai-funds" className="w-full">
-        {[landingFund, secondFund].filter(Boolean).map((fund, index) => {
-          const galleryGroup = galleryGroups[index];
-
-          return (
-            <div key={fund.id} className="story-dubai-portfolio-block min-w-0">
-              <StoryDubaiFundRow fund={fund} index={index} tx={tx} />
-              {galleryGroup ? (
-                <div data-layout="story-dubai-marquee" className="w-full min-w-0">
-                  <p className="story-dubai-gallery-title">{tx(galleryGroup.title)}</p>
-                  <DubaiImageMarquee
-                    group={galleryGroup}
-                    reverse={index % 2 === 1}
-                    shouldReduceMotion={shouldReduceMotion}
-                    speed="slow"
-                    tx={tx}
-                  />
-                </div>
-              ) : null}
-            </div>
-          );
-        })}
+        {visibleFunds.map((fund, index) => (
+          <StoryDubaiFundRow key={fund.id} fund={fund} index={index} tx={tx} />
+        ))}
       </div>
     </SceneShell>
   );
@@ -2397,7 +2268,7 @@ function MaterialsScene({
       <p className="eyebrow story-eyebrow">{tx("Download Materials")}</p>
       <h2 className="story-mobile-materials-title hidden">{tx("Download Materials")}</h2>
       <p className="story-body text-foreground/74">
-        {tx("Access brochures, catalogs, property presentations, and supporting documentation.")}
+        {tx("Access property reference images and supporting documentation.")}
       </p>
       <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
         {materialDownloads.map((material) => {
@@ -2480,7 +2351,7 @@ function ParticipateScene({
             onClick={onRegister}
             className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-start transition-colors hover:text-primary"
           >
-            <span className="story-metric-value text-primary/45">{formatChapterNumber(index + 1)}</span>
+            <span className="story-metric-value story-standard-number">{formatChapterNumber(index + 1)}</span>
             <span className="min-w-0">
               <span className="story-card-title block">{tx(route.title)}</span>
               <span className="story-body block text-foreground/64">{tx(route.body)}</span>
@@ -2952,7 +2823,7 @@ function ContactScene({
                       <span className="story-contact-card__icon-tile" aria-hidden="true">
                         <Image src={aixcoLiveIcons.email} alt="" width={28} height={28} unoptimized className="story-contact-card__svg-icon" />
                       </span>
-                      <span className="story-body story-glyph-safe min-w-0 text-foreground/82 [overflow-wrap:anywhere]">
+                      <span className="story-contact-detail min-w-0 [overflow-wrap:anywhere]">
                         {company.email}
                       </span>
                     </span>
@@ -2968,21 +2839,20 @@ function ContactScene({
                       <span className="story-contact-card__icon-tile" aria-hidden="true">
                         <MapPin />
                       </span>
-                      <span className="story-body story-glyph-safe min-w-0 text-foreground/82 [overflow-wrap:anywhere]">{tx(company.address)}</span>
+                      <span className="story-contact-detail min-w-0 [overflow-wrap:anywhere]">{tx(company.address)}</span>
                     </span>
                   </a>
                 </div>
 
-                <div data-layout="story-contact-socials" className="story-contact-card min-w-0">
-                  <span className="story-metric-label text-primary/75">{tx("Social media")}</span>
-                  <div className="mt-3 flex flex-wrap items-center gap-3">
-                    <SocialLinks
-                      socials={company.socials}
-                      theme="light"
-                      className="gap-2.5"
-                      aria-label={tx("AIXCO social media links")}
-                    />
-                  </div>
+                <div data-layout="story-contact-socials" className="story-contact-card story-contact-social-card min-w-0">
+                  <span className="story-metric-label text-primary/75">{tx("SOCIAL MEDIA")}</span>
+                  <SocialLinks
+                    socials={company.socials}
+                    theme="light"
+                    showLabels
+                    className="story-contact-social-links"
+                    aria-label={tx("AIXCO social media links")}
+                  />
                 </div>
               </div>
             </div>

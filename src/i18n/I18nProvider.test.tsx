@@ -48,7 +48,7 @@ const visibleStoryProbeTexts = [
   "Legacy portfolio — in progress",
   "Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.",
   "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for June 2028.",
-  "Access brochures, catalogs, property presentations, and supporting documentation.",
+  "Access property reference images and supporting documentation.",
   "Customer Real Estate Buyer",
   "For clients buying apartments or reserving units in selected emerging markets through a guided digital process.",
   "Property Owner Administration",
@@ -69,7 +69,6 @@ const visibleStoryProbeTexts = [
   "ACQUIRE.PARTNER.CREATE VALUE.",
   "Buy an Apartment with AIXCO",
   "Download Materials",
-  "Current project brochure",
   "Frequently asked questions",
   "Rental income is not guaranteed and depends on occupancy, market conditions, and property management.",
 ] as const;
