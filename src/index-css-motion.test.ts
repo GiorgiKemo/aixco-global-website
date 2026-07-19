@@ -682,6 +682,8 @@ describe("index.css motion rules", () => {
     expect(css).toContain(".story-standard-number.story-dubai-metric-number {");
     expect(css).toContain("grid-template-columns: max-content minmax(0, 1fr);");
     expect(css).toContain("@media (min-width: 768px) and (max-width: 1279px)");
+    expect(css).toContain(".story-dubai-portfolio-card__metric[data-metric-layout='progress']");
+    expect(css).toContain("overflow-wrap: anywhere;");
   });
 
   it("keeps the current project reachable only from the hero CTA", () => {

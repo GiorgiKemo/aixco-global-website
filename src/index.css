@@ -10136,6 +10136,15 @@ html[dir='rtl'] {
 }
 
 @media (max-width: 479px) {
+  .story-dubai-portfolio-card__metric[data-metric-layout='progress']
+    .story-metric-value {
+    display: block;
+  }
+
+  .story-dubai-portfolio-card__metric .story-dubai-metric-copy {
+    overflow-wrap: anywhere;
+  }
+
   .story-dubai-portfolio-card__metric[data-metric-layout='scope']
     .story-metric-value {
     gap: 0.45rem 0.25rem;
