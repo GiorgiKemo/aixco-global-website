@@ -27,6 +27,7 @@ describe("ScrollToTopButton", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
+    delete document.documentElement.dataset.homeExperience;
     setPageScrollY(0);
   });
 
@@ -48,5 +49,17 @@ describe("ScrollToTopButton", () => {
     fireEvent.click(button);
 
     expect(scrollToPageTop).toHaveBeenCalledTimes(1);
+  });
+
+  it("uses the same scroll-to-top control on the main story page", () => {
+    document.documentElement.dataset.homeExperience = "story";
+    setPageScrollY(720);
+
+    renderScrollToTopButton();
+
+    expect(screen.getByRole("button", { name: /scroll to top/i })).toHaveAttribute(
+      "data-scroll-to-top-button",
+      "true",
+    );
   });
 });

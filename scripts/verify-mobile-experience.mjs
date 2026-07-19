@@ -124,7 +124,7 @@ try {
         if (heroMetrics.controls.length !== 3) {
           errors.push(`${label}: expected 3 hero actions, found ${heroMetrics.controls.length}`);
         }
-        const missingActionLabels = ["EXPLORE OPPORTUNITIES", "REGISTER", "CONTACT ME"].filter(
+        const missingActionLabels = ["Current project", "REGISTER", "CONTACT ME"].filter(
           (expectedLabel) => !heroMetrics.controls.some(({ text }) => text.includes(expectedLabel)),
         );
         if (missingActionLabels.length) {

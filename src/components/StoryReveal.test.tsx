@@ -1,9 +1,12 @@
 import { render } from "@testing-library/react";
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { StoryMediaReveal, StorySceneReveal } from "./StoryReveal";
 
+const storyRevealSource = readFileSync("src/components/StoryReveal.tsx", "utf8");
+
 describe("StoryReveal", () => {
-  it("renders staggered story scene children", () => {
+  it("renders scene children without a competing whole-copy animation", () => {
     const { container, getByText, rerender } = render(
       <StorySceneReveal isActive className="flex flex-col gap-4">
         <p>Eyebrow</p>
@@ -23,6 +26,12 @@ describe("StoryReveal", () => {
     );
 
     expect(container.querySelector("[data-story-scene-reveal-active='false']")).toBeInTheDocument();
+    const sceneRevealStart = storyRevealSource.indexOf("export function StorySceneReveal");
+    const sceneRevealSource = storyRevealSource.slice(sceneRevealStart);
+    expect(sceneRevealSource).toContain("<div");
+    expect(sceneRevealSource).toContain("<div key={index}>{child}</div>");
+    expect(sceneRevealSource).not.toContain("staggerChildren");
+    expect(sceneRevealSource).not.toContain("variants={storySceneItem}");
   });
 
   it("renders cinematic story media reveal wrapper", () => {

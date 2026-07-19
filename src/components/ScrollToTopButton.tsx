@@ -7,28 +7,19 @@ import { useI18n } from "@/i18n/I18nProvider";
 
 const SCROLL_TO_TOP_VISIBILITY_OFFSET = 520;
 
-function isDesktopStoryExperience() {
-  if (typeof document === "undefined") return false;
-  return document.documentElement.dataset.homeExperience === "story";
-}
-
 export function ScrollToTopButton() {
   const { tx } = useI18n();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const updateVisibility = () => {
-      setIsVisible(!isDesktopStoryExperience() && window.scrollY > SCROLL_TO_TOP_VISIBILITY_OFFSET);
+      setIsVisible(window.scrollY > SCROLL_TO_TOP_VISIBILITY_OFFSET);
     };
 
     updateVisibility();
     window.addEventListener("scroll", updateVisibility, { passive: true });
 
-    const observer = new MutationObserver(updateVisibility);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-home-experience"] });
-
     return () => {
-      observer.disconnect();
       window.removeEventListener("scroll", updateVisibility);
     };
   }, []);

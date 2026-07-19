@@ -142,7 +142,7 @@ describe("home page performance structure", () => {
     expect(desktopStorySource).not.toContain("const chapterHashDelays =");
   });
 
-  it("drives title reveals from the existing chapter state without per-heading observers", () => {
+  it("uses native scroll timelines with one shared observer fallback", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
     const revealComponentEnd = desktopStorySource.indexOf("function getMaterialIcon");
@@ -150,9 +150,14 @@ describe("home page performance structure", () => {
 
     expect(revealComponentStart).toBeGreaterThanOrEqual(0);
     expect(revealComponentSource).toContain("active: boolean;");
-    expect(revealComponentSource).toContain('data-text-reveal-engine="unified-transform"');
+    expect(revealComponentSource).toContain('data-text-reveal-engine="scroll-linked-with-observer-fallback"');
+    expect(revealComponentSource).toContain("supportsStoryTitleScrollTimeline()");
+    expect(desktopStorySource.match(/new window\.IntersectionObserver/g)).toHaveLength(1);
+    expect(desktopStorySource).toContain("storyTitleRevealListeners");
+    expect(desktopStorySource).toContain('rootMargin: "0px 0px -20% 0px"');
+    expect(desktopStorySource).toContain("threshold: [0, 0.2]");
+    expect(revealComponentSource).toContain("observeStoryTitle(element, handleRevealZoneChange)");
     expect(desktopStorySource).not.toContain("function useStoryTextInView");
-    expect(revealComponentSource).not.toContain("IntersectionObserver");
     expect(revealComponentSource).not.toContain('window.addEventListener("scroll"');
   });
 
@@ -169,16 +174,22 @@ describe("home page performance structure", () => {
     expect(revealComponentSource).not.toContain("story-text-reveal__mobile-plain");
   });
 
-  it("plays each story title once when its chapter first becomes active", () => {
+  it("replays each story title when its section becomes active again", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
     const revealComponentEnd = desktopStorySource.indexOf("function getMaterialIcon");
     const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
 
     expect(revealComponentSource).toContain("active: boolean;");
-    expect(revealComponentSource).toContain('setAnimationState("idle");');
-    expect(revealComponentSource).toContain('if (!active || animationState !== "idle") return;');
-    expect(revealComponentSource).not.toContain('if (!active) {\n      if (animationState === "played")');
+    expect(revealComponentSource).toContain('"idle" | "animating" | "played" | "scroll-linked"');
+    expect(revealComponentSource).toContain('setAnimationState("scroll-linked")');
+    expect(revealComponentSource).toContain('isPending && "story-title-reveal--pending"');
+    expect(revealComponentSource).toContain("storyTitleRevealDurationMs + storyTitleRevealFallbackBufferMs");
+    expect(revealComponentSource).toContain('addEventListener("animationcancel", handleAnimationCancel)');
+    expect(revealComponentSource).toContain("const isInRevealZoneRef = useRef(false);");
+    expect(revealComponentSource).toContain("isInRevealZone && !isInRevealZoneRef.current");
+    expect(revealComponentSource).toContain("isInRevealZoneRef.current = isInRevealZone;");
+    expect(revealComponentSource).not.toContain("}, [label, mobileLabel]);");
     expect(desktopStorySource).toContain("<StoryTextReveal active={isActive}");
   });
 

@@ -161,6 +161,8 @@ const storyChapters: StoryChapter[] = [
   { key: "contact", id: "contact", label: "Contact" },
 ];
 
+const currentProjectHref = "/aixco-global-op2/current-project";
+
 function getStoryChapterByKey(key: StoryChapterKey) {
   const chapter = storyChapters.find((item) => item.key === key);
 
@@ -218,7 +220,9 @@ type StorySectionMetric = {
 
 const storyTeamSwitchIntervalMs = 6800;
 const storyTeamResumeDelayMs = 9000;
-const storyTitleRevealDurationMs = 860;
+const storyTitleRevealDurationMs = 1700;
+const storyTitleRevealFallbackBufferMs = 240;
+const storyTitleScrollAnimationRange = "entry 0% cover 42%";
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
 const philosophyPlatformStats = [
@@ -356,6 +360,63 @@ function formatChapterNumber(index: number) {
   return String(index).padStart(2, "0");
 }
 
+type StoryTitleRevealListener = (isInRevealZone: boolean) => void;
+
+const storyTitleRevealListeners = new Map<Element, StoryTitleRevealListener>();
+let storyTitleRevealObserver: IntersectionObserver | null = null;
+
+function stopObservingStoryTitle(element: Element) {
+  storyTitleRevealObserver?.unobserve(element);
+  storyTitleRevealListeners.delete(element);
+
+  if (storyTitleRevealListeners.size === 0) {
+    storyTitleRevealObserver?.disconnect();
+    storyTitleRevealObserver = null;
+  }
+}
+
+function observeStoryTitle(element: HTMLElement, listener: StoryTitleRevealListener) {
+  if (typeof window === "undefined" || typeof window.IntersectionObserver !== "function") {
+    return undefined;
+  }
+
+  storyTitleRevealListeners.set(element, listener);
+
+  storyTitleRevealObserver ??= new window.IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        storyTitleRevealListeners.get(entry.target)?.(
+          entry.isIntersecting && entry.intersectionRatio >= 0.2,
+        );
+      }
+    },
+    {
+      rootMargin: "0px 0px -20% 0px",
+      threshold: [0, 0.2],
+    },
+  );
+
+  storyTitleRevealObserver.observe(element);
+  return () => stopObservingStoryTitle(element);
+}
+
+function supportsStoryTitleScrollTimeline() {
+  if (typeof window === "undefined" || typeof window.CSS?.supports !== "function") {
+    return false;
+  }
+
+  // Safari currently advertises view-timeline support but resolves the range
+  // incorrectly for several of our nested scenes. Use the proven observer
+  // fallback there; Chromium gets the native scroll-linked path.
+  const isChromiumEngine = /(?:Chrome|Chromium|Edg|OPR)\//u.test(window.navigator.userAgent);
+
+  return (
+    isChromiumEngine &&
+    window.CSS.supports("animation-timeline: view()") &&
+    window.CSS.supports(`animation-range: ${storyTitleScrollAnimationRange}`)
+  );
+}
+
 function StoryTextReveal({
   active,
   label,
@@ -367,35 +428,125 @@ function StoryTextReveal({
 }) {
   const shouldReduceMotion = useHydratedReducedMotion();
   const visualLabel = mobileLabel ?? label;
-  const [animationState, setAnimationState] = useState<"idle" | "animating" | "played">("idle");
+  const revealRef = useRef<HTMLSpanElement | null>(null);
+  const animatedTextRef = useRef<HTMLSpanElement | null>(null);
+  const initializedRef = useRef(false);
+  const isInRevealZoneRef = useRef(false);
+  // Start visible so an interrupted hydration or unsupported browser can never
+  // leave important copy hidden. The layout effect arms the scroll reveal
+  // before paint after hydration.
+  const [animationState, setAnimationState] = useState<
+    "idle" | "animating" | "played" | "scroll-linked"
+  >("played");
 
-  useLayoutEffect(() => {
-    setAnimationState("idle");
-  }, [label, mobileLabel]);
+  const finishReveal = useCallback(() => {
+    setAnimationState("played");
+  }, []);
 
   useLayoutEffect(() => {
     if (shouldReduceMotion) {
-      if (animationState !== "played") setAnimationState("played");
+      setAnimationState("played");
+      isInRevealZoneRef.current = false;
       return;
     }
 
-    if (!active || animationState !== "idle") return;
+    if (supportsStoryTitleScrollTimeline()) {
+      initializedRef.current = true;
+      setAnimationState("scroll-linked");
+      return;
+    }
 
-    setAnimationState("animating");
-  }, [active, animationState, shouldReduceMotion]);
+    if (!initializedRef.current) {
+      initializedRef.current = true;
+      setAnimationState("idle");
+    }
+  }, [shouldReduceMotion]);
 
+  const handleRevealZoneChange = useCallback((isInRevealZone: boolean) => {
+    if (isInRevealZone && !isInRevealZoneRef.current) {
+      setAnimationState("animating");
+    }
+
+    isInRevealZoneRef.current = isInRevealZone;
+  }, []);
+
+  useEffect(() => {
+    if (shouldReduceMotion) return undefined;
+
+    // Chrome and other modern engines tie the reveal directly to scroll
+    // progress in CSS. The observer below remains the reliable fallback for
+    // engines without view timelines.
+    if (supportsStoryTitleScrollTimeline()) return undefined;
+
+    const element = revealRef.current;
+    if (!element) return undefined;
+
+    const cleanup = observeStoryTitle(element, handleRevealZoneChange);
+    if (cleanup) return cleanup;
+
+    // Progressive fallback for engines without IntersectionObserver.
+    if (active) handleRevealZoneChange(true);
+    return undefined;
+  }, [active, handleRevealZoneChange, shouldReduceMotion]);
+
+  // Hash navigation and some WebKit builds can delay the observer's first
+  // delivery. Never leave an active, visible section title waiting on it.
+  useEffect(() => {
+    if (
+      shouldReduceMotion ||
+      supportsStoryTitleScrollTimeline() ||
+      !active ||
+      animationState !== "idle"
+    ) return;
+
+    const element = revealRef.current;
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+    if (rect.bottom > 0 && rect.top < window.innerHeight) {
+      handleRevealZoneChange(true);
+    }
+  }, [active, animationState, handleRevealZoneChange, shouldReduceMotion]);
+
+  // animationcancel is not delivered in every interruption scenario (for
+  // example, background tabs), so also settle visibly after one duration.
+  useEffect(() => {
+    if (animationState !== "animating") return undefined;
+
+    const timeoutId = window.setTimeout(
+      finishReveal,
+      storyTitleRevealDurationMs + storyTitleRevealFallbackBufferMs,
+    );
+    return () => window.clearTimeout(timeoutId);
+  }, [animationState, finishReveal]);
+
+  useEffect(() => {
+    const animatedText = animatedTextRef.current;
+    if (!animatedText) return undefined;
+
+    const handleAnimationCancel = (event: AnimationEvent) => {
+      if (event.animationName === "story-title-reveal") finishReveal();
+    };
+
+    animatedText.addEventListener("animationcancel", handleAnimationCancel);
+    return () => animatedText.removeEventListener("animationcancel", handleAnimationCancel);
+  }, [finishReveal]);
+
+  const isPending = animationState === "idle";
   const isAnimating = animationState === "animating";
   const hasPlayed = animationState === "played";
 
   return (
     <span
+      ref={revealRef}
       className={cn(
         "story-text-reveal story-title-reveal",
+        isPending && "story-title-reveal--pending",
         isAnimating && "story-title-reveal--active",
         hasPlayed && "story-title-reveal--played",
       )}
       data-text-reveal-active={isAnimating ? "true" : "false"}
-      data-text-reveal-engine="unified-transform"
+      data-text-reveal-engine="scroll-linked-with-observer-fallback"
       data-text-reveal-label={label}
       data-text-reveal-state={animationState}
       style={{
@@ -404,10 +555,11 @@ function StoryTextReveal({
     >
       <span className="sr-only">{label}</span>
       <span
+        ref={animatedTextRef}
         className="story-title-reveal__text"
         aria-hidden="true"
         onAnimationEnd={(event) => {
-          if (event.animationName === "story-title-reveal") setAnimationState("played");
+          if (event.target === event.currentTarget && event.animationName === "story-title-reveal") finishReveal();
         }}
       >
         {visualLabel}
@@ -1120,12 +1272,12 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
 function StorySceneBody({
   children,
   density = "default",
-  isRevealed,
+  isActive,
   fitContent = true,
 }: {
   children: React.ReactNode;
   density?: "default" | "compact" | "dense";
-  isRevealed: boolean;
+  isActive: boolean;
   fitContent?: boolean;
 }) {
   const densityClass =
@@ -1142,7 +1294,7 @@ function StorySceneBody({
       className="flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center overflow-visible"
     >
       <StorySceneReveal
-        isActive={isRevealed}
+        isActive={isActive}
         className={`flex min-h-0 w-full min-w-0 max-w-none flex-1 flex-col items-stretch self-stretch justify-center ${densityClass}`}
       >
         {children}
@@ -1209,7 +1361,7 @@ function SceneShell({
               reverse ? `xl:order-2 ${copyColumnSpan}` : `xl:order-1 ${copyColumnSpan}`
             }`}
           >
-            <StorySceneBody density={density} fitContent={fitContent} isRevealed={isRevealed}>
+            <StorySceneBody density={density} fitContent={fitContent} isActive={isActive}>
               {children}
             </StorySceneBody>
           </div>
@@ -1323,19 +1475,15 @@ function HeroScene({
 
             <div className="story-hero-actions">
               <Link
-                href="#batumi"
-                onClick={(event) => {
-                  event.preventDefault();
-                  replaceLocationHash("#batumi");
-                  scrollToHash("#batumi");
-                }}
-                className="btn-ghost-gold story-hero-actions__ghost"
+                href={currentProjectHref}
+                prefetch={false}
+                className="btn-gold"
               >
-                {tx("EXPLORE OPPORTUNITIES")}
-              </Link>
-              <button type="button" onClick={onRegister} className="btn-gold">
-                {tx("REGISTER")}
+                {tx("Current project")}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
+              </Link>
+              <button type="button" onClick={onRegister} className="btn-ghost-gold story-hero-actions__ghost">
+                {tx("REGISTER")}
               </button>
               <button type="button" onClick={onContact} className="btn-ghost-gold story-hero-actions__ghost">
                 {tx("CONTACT ME")}
@@ -1345,6 +1493,39 @@ function HeroScene({
         </div>
       </div>
     </div>
+  );
+}
+
+const DUBAI_METRIC_NUMBER_PATTERN = /(~?\d[\d,.]*(?:\s*%|\+|[mMbBkK])?)/gu;
+
+function StoryDubaiMetricNumbers({ value }: { value: string }) {
+  return value.split(DUBAI_METRIC_NUMBER_PATTERN).map((part, partIndex) =>
+    /\d/u.test(part) ? (
+      <span
+        key={`${part}:${partIndex}`}
+        className="story-standard-number story-dubai-metric-number"
+      >
+        {part}
+      </span>
+    ) : (
+      part ? (
+        <span key={`${part}:${partIndex}`} className="story-dubai-metric-copy">
+          {part}
+        </span>
+      ) : null
+    ),
+  );
+}
+
+function StoryDubaiStatus({ value }: { value: string }) {
+  const [portfolio, ...statusParts] = value.split(/\s+[—–-]\s+/u);
+  const status = statusParts.join(" — ");
+
+  return (
+    <>
+      <span className="story-dubai-status__portfolio">{portfolio}</span>
+      {status ? <span className="story-dubai-status__state">{status}</span> : null}
+    </>
   );
 }
 
@@ -1374,22 +1555,35 @@ function StoryDubaiFundRow({
           const translatedFullValue = tx(detail.value);
           const useTranslatedFullValue =
             translatedFullValue !== detail.value && (Boolean(metric.prefix) || Boolean(metric.subtext));
+          const metricLayout =
+            detail.label === "Status"
+              ? "status"
+              : detail.label === "Development scope"
+                ? "scope"
+                : detail.label === "Site progress"
+                  ? "progress"
+                  : "number";
           return (
             <div
               key={`${detail.label}:${detail.value}`}
               className="story-dubai-portfolio-card__metric"
+              data-metric-layout={metricLayout}
               data-metric-tone={(metricIndex % 3) + 1}
             >
               <p className="story-metric-label">{tx(detail.label)}</p>
               <p className="story-metric-value">
-                {useTranslatedFullValue ? (
-                  translatedFullValue
+                {metricLayout === "status" ? (
+                  <StoryDubaiStatus value={translatedFullValue} />
+                ) : useTranslatedFullValue ? (
+                  <StoryDubaiMetricNumbers value={translatedFullValue} />
                 ) : (
                   <>
-                    {metric.prefix ? `${tx(metric.prefix)} ` : ""}
-                    {tx(metric.value)}
+                    {metric.prefix ? (
+                      <span className="story-dubai-metric-prefix">{tx(metric.prefix)}</span>
+                    ) : null}
+                    <StoryDubaiMetricNumbers value={tx(metric.value)} />
                     {metric.subtext ? (
-                      <span className="story-dubai-metric-affix">
+                      <span className="story-standard-number story-dubai-metric-number story-dubai-metric-affix">
                         {tx(metric.subtext)}
                       </span>
                     ) : null}
@@ -1532,10 +1726,12 @@ function BatumiBenefitIconGrid({
 
 
 function AboutScene({
+  isActive,
   isRevealed,
   shouldPlayVideo,
   tx,
 }: {
+  isActive: boolean;
   isRevealed: boolean;
   shouldPlayVideo: boolean;
   tx: (copy: string) => string;
@@ -1661,7 +1857,7 @@ function AboutScene({
             className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.22),transparent_34%),linear-gradient(90deg,rgba(17,16,14,0.62),rgba(17,16,14,0.26)_46%,rgba(17,16,14,0.70)),linear-gradient(180deg,rgba(17,16,14,0.14),rgba(17,16,14,0.62))]"
           />
           <StorySceneReveal
-            isActive={isRevealed}
+            isActive={isActive}
             className="story-about-cinematic-copy relative z-10 flex h-full min-h-0 flex-col justify-end px-[clamp(2rem,5vw,5.5rem)] pb-[clamp(2.8rem,7svh,5.6rem)] pt-[clamp(4rem,8svh,6rem)]"
           >
             <div data-layout="story-about-cinematic" className="max-w-[52rem]">
@@ -1897,7 +2093,7 @@ function PhilosophyDetailScene({
           data-story-media-active={isActive ? "true" : "false"}
           className="story-philosophy-detail-stage relative z-10 flex min-h-[100svh] flex-col"
         >
-          <StorySceneReveal isActive={isRevealed} className="story-philosophy-detail-copy relative z-10 w-full">
+          <StorySceneReveal isActive={isActive} className="story-philosophy-detail-copy relative z-10 w-full">
             <div className="story-philosophy-detail-intro">
               <p className="eyebrow story-eyebrow">{tx(eyebrow)}</p>
               <h2 className="story-philosophy-detail-title">
@@ -1943,7 +2139,7 @@ function AboutObjectivesScene({
         className="grid min-h-[100svh] grid-cols-1"
       >
         <div aria-hidden className="hidden" />
-        <div className="story-objectives-stage relative flex min-h-[100svh] items-center overflow-hidden px-[clamp(1.5rem,5vw,6rem)] py-[clamp(3rem,8svh,6rem)]">
+        <div className="story-objectives-stage relative flex min-h-[100svh] items-center overflow-clip px-[clamp(1.5rem,5vw,6rem)] py-[clamp(3rem,8svh,6rem)]">
           <div aria-hidden className="story-objectives-media absolute inset-0 overflow-hidden">
             <Image
               src={aixcoLiveImages.aboutArchitecture}
@@ -1982,7 +2178,7 @@ function AboutObjectivesScene({
               style={{ objectPosition: "center 58%" }}
             />
           </div>
-          <StorySceneReveal isActive={isRevealed} className="story-objectives-copy relative z-10 w-full">
+          <StorySceneReveal isActive={isActive} className="story-objectives-copy relative z-10 w-full">
             <p className="eyebrow story-eyebrow text-primary/80">{tx("Client objectives")}</p>
             <div data-layout="story-about-objectives" className="story-objectives-grid mt-[clamp(1.4rem,3svh,2.4rem)] grid w-full gap-[clamp(1.4rem,4vw,4.5rem)]">
               <h2 className="story-objectives-title font-light tracking-normal text-foreground">
@@ -2019,7 +2215,7 @@ function AboutAccessScene({
         className="grid min-h-[100svh] grid-cols-1"
       >
         <div aria-hidden className="hidden" />
-        <div className="story-about-access-stage relative min-h-[100svh] overflow-hidden">
+        <div className="story-about-access-stage relative min-h-[100svh] overflow-clip">
           <StoryMediaReveal isActive className="story-about-access-media absolute inset-0">
             <div className="story-about-access-image relative h-full w-full">
               <Image
@@ -2064,7 +2260,7 @@ function AboutAccessScene({
             />
           </div>
           <StorySceneReveal
-            isActive={isRevealed}
+            isActive={isActive}
             className="relative z-10 flex min-h-[100svh] flex-col justify-end px-[clamp(2rem,5.4vw,6rem)] pb-[clamp(3rem,7.2svh,5.5rem)] pt-[clamp(4rem,8svh,6rem)]"
           >
             <p className="eyebrow story-eyebrow story-about-access-eyebrow">{tx("Client approach")}</p>
@@ -2785,7 +2981,7 @@ function ContactScene({
     >
       <div className="container-x flex min-h-[100svh] w-full flex-col py-5 md:py-6 lg:py-7">
         <div className="min-h-0 flex-1">
-          <StorySceneBody density="compact" fitContent={false} isRevealed={isRevealed}>
+          <StorySceneBody density="compact" fitContent={false} isActive={isActive}>
           <div className="flex w-full flex-col gap-4 md:gap-5">
             <Logo ariaLabel={tx("AIXCO.GLOBAL home")} />
 
@@ -3124,6 +3320,7 @@ export function DesktopStoryHome() {
       <HeroScene key="hero" isActive={activeIndex === 0} tx={tx} onContact={openContact} onRegister={openRegister} />,
       <AboutScene
         key="about"
+        isActive={activeIndex === 1}
         isRevealed={isRevealed(1)}
         shouldPlayVideo={activeIndex < 3}
         tx={tx}

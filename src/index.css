@@ -2402,7 +2402,10 @@
   }
 
   [data-story-section='aboutAccess'] .story-about-access-stage {
-    overflow: hidden;
+    /* Clip the artwork without creating a scroll container. A hidden overflow
+       ancestor becomes the view-timeline source and prematurely completes the
+       title's scroll-linked reveal. */
+    overflow: clip;
     background: hsl(var(--surface));
     box-shadow:
       0 -6rem 8rem -3.5rem rgb(232 216 188 / 0.18),
@@ -4240,10 +4243,6 @@
       visibility: hidden !important;
     }
 
-    html[data-home-experience='story'] [data-scroll-to-top-button='true'] {
-      display: none !important;
-    }
-
     [data-story-section] {
       container-type: size;
       container-name: story-section;
@@ -5403,15 +5402,6 @@
 
     [data-story-scene-copy] [data-layout='story-batumi-properties'] a {
       padding: clamp(0.85rem, 1.5svh, 1.1rem) clamp(0.95rem, 1.5vw, 1.15rem);
-    }
-
-    [data-story-scene-copy]
-      [data-layout='story-dubai-funds']
-      .story-fund-row
-      + .story-fund-row {
-      border-top: 1px solid hsl(var(--foreground) / 0.3);
-      margin-top: var(--story-metric-gap);
-      padding-top: var(--story-metric-gap);
     }
 
     [data-story-scene-copy] .story-metric-value + .story-metric-label,
@@ -7444,20 +7434,13 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   box-shadow: 0 24px 58px -44px hsl(220 28% 18% / 0.34);
 }
 
-[data-layout='story-dubai-funds']
-  .story-dubai-portfolio-card
-  + .story-dubai-portfolio-card {
-  margin-top: 0;
-  padding-top: 0 !important;
-  border-top: 1px solid hsl(var(--foreground) / 0.12);
-}
-
 .story-dubai-portfolio-card__header {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: clamp(0.6rem, 1vw, 0.85rem);
-  padding: clamp(0.58rem, 1svh, 0.8rem) clamp(0.72rem, 1.2vw, 1rem);
+  min-height: 4.25rem;
+  padding: clamp(0.8rem, 1.35svh, 1rem) clamp(0.9rem, 1.35vw, 1.15rem);
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -7465,8 +7448,8 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
 }
 
 .story-dubai-portfolio-card__header .story-card-title {
-  font-size: clamp(0.96rem, 1.2vw, 1.18rem);
-  line-height: 1.16;
+  font-size: clamp(1.05rem, 1.18vw, 1.28rem);
+  line-height: 1.12;
 }
 
 .story-dubai-portfolio-card__index {
@@ -7479,8 +7462,8 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   border-radius: 0.35rem;
   color: hsl(var(--primary));
   font-family: var(--font-legacy-ui);
-  font-size: 0.72rem;
-  font-weight: 750;
+  font-size: clamp(0.72rem, 0.74vw, 0.8rem);
+  font-weight: 600;
   line-height: 1;
 }
 
@@ -7496,17 +7479,18 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
 .story-dubai-portfolio-card__metric {
   display: flex;
   min-width: 0;
-  min-height: clamp(5.3rem, 9svh, 6.5rem);
+  min-height: clamp(9.5rem, 20svh, 11rem);
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.65rem;
+  gap: 1.2rem;
   border: 0;
   border-inline-start: 1px solid hsl(var(--foreground) / 0.09);
   border-radius: 0;
   background: transparent;
   color: hsl(var(--foreground));
   box-shadow: none;
-  padding: clamp(0.68rem, 1.25svh, 0.9rem) clamp(0.72rem, 1.1vw, 0.95rem);
+  padding: clamp(1.05rem, 1.8svh, 1.3rem) clamp(1rem, 1.35vw, 1.25rem)
+    clamp(1.2rem, 2.1svh, 1.5rem);
 }
 
 .story-dubai-portfolio-card__metric:first-child {
@@ -7514,19 +7498,25 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
 }
 
 .story-dubai-portfolio-card__metric .story-metric-label {
-  min-height: 2.15em;
+  min-height: 0;
   color: hsl(var(--foreground) / 0.52);
+  font-size: clamp(0.82rem, 0.9vw, 0.94rem);
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: 0.09em;
 }
 
 .story-dubai-portfolio-card__metric .story-metric-value {
   margin-top: 0 !important;
   color: hsl(var(--primary));
   font-family: var(--font-brand-display);
-  font-size: clamp(1.35rem, 1.85vw, 1.85rem);
-  font-weight: 600;
-  line-height: 0.92;
+  font-size: clamp(1.15rem, 1.25vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.22;
   letter-spacing: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+  text-wrap: balance;
 }
 
 .story-dubai-metric-affix {
@@ -7541,6 +7531,67 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   letter-spacing: inherit;
   text-transform: uppercase;
   vertical-align: baseline;
+}
+
+.story-dubai-metric-number {
+  display: inline-block;
+  overflow-wrap: normal;
+  vertical-align: baseline;
+}
+
+.story-dubai-metric-copy {
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: -0.01em;
+  overflow-wrap: normal;
+  word-break: normal;
+  text-wrap: balance;
+}
+
+.story-dubai-metric-prefix {
+  color: hsl(var(--primary) / 0.84);
+  font-family: var(--font-legacy-ui);
+  font-size: clamp(0.72rem, 0.74vw, 0.8rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.story-dubai-portfolio-card__metric[data-metric-layout='number']
+  .story-metric-value {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.story-dubai-portfolio-card__metric[data-metric-layout='status']
+  .story-metric-value {
+  max-width: 18rem;
+}
+
+.story-dubai-portfolio-card__metric[data-metric-layout='scope']
+  .story-metric-value {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  justify-content: start;
+  gap: 0.55rem 0.38rem;
+}
+
+.story-dubai-portfolio-card__metric[data-metric-layout='scope']
+  .story-dubai-metric-copy {
+  grid-column: 1 / -1;
+  display: block;
+}
+
+.story-dubai-portfolio-card__metric[data-metric-layout='progress']
+  .story-metric-value {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.42rem 0.45rem;
 }
 
 @media (min-width: 1280px) {
@@ -8581,8 +8632,8 @@ html[data-home-experience='story'] {
   }
 
   .story-dubai-portfolio-card__metric {
-    min-height: 7.5rem;
-    padding: 0.85rem;
+    min-height: 9rem;
+    padding: 1rem;
   }
 
   .story-dubai-portfolio-card__metric:last-child:nth-child(odd) {
@@ -9995,6 +10046,102 @@ html[dir='rtl'] {
   letter-spacing: 0 !important;
 }
 
+/* Match the Dubai card hierarchy to the rendered AIXCO Philosophy cards:
+   shared label, supporting-copy, title, and editorial-number scales. */
+.story-dubai-portfolio-card__metric {
+  min-height: clamp(10.5rem, 22svh, 11.5rem) !important;
+  justify-content: center !important;
+  gap: clamp(0.68rem, 1.2svh, 0.88rem) !important;
+  padding: clamp(1rem, 1.6svh, 1.2rem) clamp(1rem, 1.25vw, 1.2rem)
+    clamp(1.15rem, 1.9svh, 1.35rem) !important;
+}
+
+.story-dubai-portfolio-card__metric[data-metric-layout='progress'] {
+  padding-inline: 0.65rem !important;
+}
+
+.story-dubai-portfolio-card__metric[data-metric-layout='progress']
+  .story-metric-value {
+  column-gap: 0.25rem;
+}
+
+.story-dubai-portfolio-card__metric .story-metric-label {
+  min-height: 0 !important;
+  margin: 0 !important;
+  font-size: clamp(0.72rem, 0.74vw, 0.8rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.16em !important;
+}
+
+.story-dubai-portfolio-card__metric .story-metric-value {
+  margin: 0 !important;
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+.story-dubai-portfolio-card__metric .story-dubai-metric-copy {
+  font-size: clamp(0.95rem, 0.98vw, 1.06rem) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  letter-spacing: normal !important;
+}
+
+.story-dubai-portfolio-card__metric[data-metric-layout='status']
+  .story-metric-value {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.55rem;
+  font-size: 1.05rem !important;
+  letter-spacing: 0 !important;
+}
+
+.story-dubai-status__portfolio {
+  color: hsl(var(--primary));
+  line-height: 1.2;
+}
+
+.story-dubai-status__state {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.65rem;
+  border: 1px solid hsl(var(--primary) / 0.28);
+  border-radius: 999px;
+  padding: 0.27rem 0.58rem 0.24rem;
+  background: hsl(var(--primary) / 0.07);
+  color: hsl(var(--primary));
+  font-family: var(--font-legacy-ui);
+  font-size: clamp(0.72rem, 0.74vw, 0.8rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.story-dubai-portfolio-card__metric
+  .story-standard-number.story-dubai-metric-number {
+  font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .story-dubai-portfolio-card__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .story-dubai-portfolio-card__metric:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 479px) {
+  .story-dubai-portfolio-card__metric[data-metric-layout='scope']
+    .story-metric-value {
+    gap: 0.45rem 0.25rem;
+  }
+}
+
 .story-standard-number .story-philosophy-stat__number,
 .story-standard-number .story-philosophy-stat__number-part,
 .story-standard-number .story-philosophy-stat__punctuation,
@@ -10112,9 +10259,9 @@ html[dir='rtl'] {
   display: inline-block;
   width: 100%;
   max-width: 100%;
-  visibility: hidden;
-  opacity: 0;
-  transform: translate3d(0, 0.18em, 0);
+  visibility: visible;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
   transform-origin: 50% 50%;
   overflow: visible;
   overflow-wrap: normal;
@@ -10123,10 +10270,16 @@ html[dir='rtl'] {
   backface-visibility: hidden;
 }
 
+.story-title-reveal--pending .story-title-reveal__text {
+  visibility: hidden;
+  opacity: 0;
+  transform: translate3d(0, 0.36em, 0);
+}
+
 .story-title-reveal--active .story-title-reveal__text {
   visibility: visible;
-  animation: story-title-reveal var(--story-title-reveal-duration, 860ms)
-    cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: story-title-reveal var(--story-title-reveal-duration, 1700ms)
+    cubic-bezier(0.4, 0, 0.2, 1) both;
   will-change: opacity, transform;
 }
 
@@ -10141,10 +10294,53 @@ html[dir='rtl'] {
 @keyframes story-title-reveal {
   from {
     opacity: 0;
-    transform: translate3d(0, 0.18em, 0);
+    transform: translate3d(0, 0.36em, 0);
   }
 
   to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* In browsers with view timelines, the title's opacity and lift are driven by
+   actual scroll distance. This prevents a long duration from being visually
+   compressed by an aggressive ease-out curve and makes every title reveal at
+   the pace of the user's scroll. */
+@supports (animation-timeline: view()) and
+  (animation-range: entry 0% cover 42%) {
+  .story-title-reveal[data-text-reveal-state='scroll-linked']
+    .story-title-reveal__text {
+    visibility: visible;
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    animation-name: story-title-scroll-reveal;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: view(block);
+    animation-range: entry 0% cover 42%;
+    will-change: auto;
+  }
+}
+
+@keyframes story-title-scroll-reveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0.42em, 0);
+  }
+
+  18% {
+    opacity: 0.08;
+    transform: translate3d(0, 0.36em, 0);
+  }
+
+  58% {
+    opacity: 0.58;
+    transform: translate3d(0, 0.16em, 0);
+  }
+
+  100% {
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
@@ -10157,6 +10353,7 @@ html:is([lang='ka'], [lang='ar']) .story-title-reveal__text {
 
 @media (prefers-reduced-motion: reduce) {
   .story-title-reveal__text,
+  .story-title-reveal--pending .story-title-reveal__text,
   .story-title-reveal--active .story-title-reveal__text,
   .story-title-reveal--played .story-title-reveal__text {
     visibility: visible !important;

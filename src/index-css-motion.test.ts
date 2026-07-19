@@ -85,6 +85,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('setAnimationState("played");');
     expect(desktopStoryHome).toContain('<span className="sr-only">{label}</span>');
     expect(desktopStoryHome).not.toContain("aria-label={label}");
+    expect(css).toContain(".story-title-reveal--pending .story-title-reveal__text,");
     expect(css).toContain(".story-title-reveal--active .story-title-reveal__text,");
     expect(css).toContain("animation: none !important;");
   });
@@ -96,12 +97,22 @@ describe("index.css motion rules", () => {
 
     expect(desktopStoryHome).toContain("mobileLabel?: string");
     expect(desktopStoryHome).toContain('mobileLabel={tx("ACQUIRE.PARTNER.CREATE VALUE.").replace(/\\./g, ".\\u200B")}');
-    expect(desktopStoryHome).toContain('data-text-reveal-engine="unified-transform"');
+    expect(desktopStoryHome).toContain('data-text-reveal-engine="scroll-linked-with-observer-fallback"');
     expect(desktopStoryHome).toContain('className="story-title-reveal__text"');
     expect(desktopStoryHome).not.toContain("story-letter-reveal__char");
     expect(desktopStoryHome).not.toContain("story-letter-reveal--compact");
     expect(css).toContain("@keyframes story-title-reveal");
-    expect(css).toContain("animation: story-title-reveal var(--story-title-reveal-duration, 860ms)");
+    expect(css).toContain("animation: story-title-reveal var(--story-title-reveal-duration, 1700ms)");
+    expect(css).toContain("cubic-bezier(0.4, 0, 0.2, 1) both;");
+    expect(css).toContain(".story-title-reveal--pending .story-title-reveal__text {");
+    expect(css).toContain("transform: translate3d(0, 0.36em, 0);");
+    expect(css).toContain("animation-timeline: view(block);");
+    expect(css).toContain("animation-range: entry 0% cover 42%;");
+    expect(css).toContain(".story-title-reveal[data-text-reveal-state='scroll-linked']");
+    expect(css).toContain("@keyframes story-title-scroll-reveal");
+    expect(desktopStoryHome).toContain("story-objectives-stage relative flex min-h-[100svh] items-center overflow-clip");
+    expect(desktopStoryHome).toContain("story-about-access-stage relative min-h-[100svh] overflow-clip");
+    expect(css).toContain("overflow: clip;");
     expect(css).toContain("will-change: opacity, transform;");
     expect(titleKeyframesStart).toBeGreaterThanOrEqual(0);
     expect(titleKeyframes).not.toContain("filter:");
@@ -464,11 +475,11 @@ describe("index.css motion rules", () => {
 
     expect(metricValueStart).toBeGreaterThanOrEqual(0);
     expect(metricAffixStart).toBeGreaterThanOrEqual(0);
-    expect(desktopStoryHome).toContain('className="story-dubai-metric-affix"');
+    expect(desktopStoryHome).toContain("story-dubai-metric-number story-dubai-metric-affix");
     expect(desktopStoryHome).not.toContain("text-[0.58em]");
     expect(metricValue).toContain("color: hsl(var(--primary))");
     expect(metricValue).toContain("font-family: var(--font-brand-display)");
-    expect(metricValue).toContain("font-weight: 600");
+    expect(metricValue).toContain("font-weight: 500");
     expect(metricAffix).toContain("color: inherit");
     expect(metricAffix).toContain("font-family: inherit");
     expect(metricAffix).toContain("font-size: 1em");
@@ -644,11 +655,49 @@ describe("index.css motion rules", () => {
   it("uses the Philosophy number treatment across the requested metric sections", () => {
     expect(desktopStoryHome).toContain("story-batumi-benefit__metric story-standard-number");
     expect(desktopStoryHome).toContain("story-philosophy-stat__value story-standard-number");
+    expect(desktopStoryHome).toContain('className="story-standard-number story-dubai-metric-number"');
+    expect(desktopStoryHome).toContain('className="story-metric-value"');
+    expect(desktopStoryHome).not.toContain('<p className="story-metric-value story-standard-number">');
     expect(desktopStoryHome).toContain("story-standard-number story-legacy-number");
     expect(css).toContain("/* One editorial number language across the site, sourced from AIXCO Philosophy. */");
     expect(css).toContain("font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;");
     expect(css).toContain("font-weight: 400 !important;");
     expect(css).toContain("font-variant-numeric: lining-nums tabular-nums;");
+  });
+
+  it("matches Dubai card typography to the Philosophy card scale", () => {
+    expect(desktopStoryHome).toContain('data-metric-layout={metricLayout}');
+    expect(desktopStoryHome).toContain('className="story-dubai-metric-copy"');
+    expect(desktopStoryHome).toContain('className="story-dubai-metric-prefix"');
+    expect(desktopStoryHome).toContain('className="story-dubai-status__state"');
+    expect(css).toContain("min-height: clamp(10.5rem, 22svh, 11.5rem) !important;");
+    expect(css).toContain("justify-content: center !important;");
+    expect(css).toContain("gap: clamp(0.68rem, 1.2svh, 0.88rem) !important;");
+    expect(css).toContain("font-size: clamp(0.72rem, 0.74vw, 0.8rem) !important;");
+    expect(css).toContain("font-size: clamp(0.95rem, 0.98vw, 1.06rem) !important;");
+    expect(css).toContain("font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;");
+    expect(css).toContain("font-weight: 500 !important;");
+    expect(css).toContain("font-weight: 400 !important;");
+    expect(css).toContain("line-height: 1.5 !important;");
+    expect(css).toContain(".story-standard-number.story-dubai-metric-number {");
+    expect(css).toContain("grid-template-columns: max-content minmax(0, 1fr);");
+    expect(css).toContain("@media (min-width: 768px) and (max-width: 1279px)");
+  });
+
+  it("keeps the current project reachable only from the hero CTA", () => {
+    expect(desktopStoryHome).toContain('const currentProjectHref = "/aixco-global-op2/current-project";');
+    expect(desktopStoryHome.match(/href=\{currentProjectHref\}/g)).toHaveLength(1);
+    expect(desktopStoryHome).toContain('className="btn-gold"');
+    expect(desktopStoryHome).toContain('{tx("Current project")}');
+    expect(desktopStoryHome).not.toContain("story-desktop-current-project-link");
+    expect(desktopStoryHome).not.toContain("story-mobile-current-project-link");
+    expect(desktopStoryHome).not.toContain("story-desktop-nav-menu-link--featured");
+    expect(css).not.toContain(".story-desktop-current-project-link");
+    expect(css).not.toContain(".story-mobile-current-project-link");
+  });
+
+  it("keeps the shared scroll-to-top arrow available on the main story page", () => {
+    expect(css).not.toContain("html[data-home-experience='story'] [data-scroll-to-top-button='true']");
   });
 
   it("uses the exact AIXCO brandbook palette and Gilroy across legacy components", () => {
