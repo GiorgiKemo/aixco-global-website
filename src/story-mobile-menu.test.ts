@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 const css = readFileSync("src/story-mobile-menu.css", "utf8");
 const layout = readFileSync("src/app/layout.tsx", "utf8");
+const storyHome = readFileSync("src/components/sections/DesktopStoryHome.tsx", "utf8");
 
 describe("mobile story menu", () => {
   it("uses one full-width surface on phones and a contained drawer on tablets", () => {
@@ -11,6 +12,7 @@ describe("mobile story menu", () => {
     expect(css).toContain("top: var(--story-mobile-header-height) !important");
     expect(css).toContain("width: 100vw !important");
     expect(css).toContain("width: min(24rem, 90vw) !important");
+    expect(storyHome).toContain('className="fixed inset-0 w-screen z-[70] xl:hidden"');
   });
 
   it("keeps the navigation compact and readable", () => {

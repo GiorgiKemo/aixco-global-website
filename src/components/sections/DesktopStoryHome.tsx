@@ -987,7 +987,7 @@ function StoryChrome({
           aria-modal="true"
           aria-label={tx("Story navigation")}
           tabIndex={-1}
-          className="fixed inset-0 z-[70] xl:hidden"
+          className="fixed inset-0 w-screen z-[70] xl:hidden"
         >
           <div
             aria-hidden="true"

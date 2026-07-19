@@ -9117,6 +9117,12 @@ html[lang='ar'] [data-story-section] h3 {
 
 /* Use the plain sibling title only where the animated subtree is too dense. */
 @media (max-width: 329px) {
+  body
+    [data-story-section='philosophyPlatform']
+    h2.story-h2.story-h2.story-philosophy-platform-title {
+    font-size: clamp(1.9rem, 10vw, 2.05rem) !important;
+  }
+
   .story-letter-reveal {
     display: none !important;
   }
