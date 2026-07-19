@@ -40,7 +40,7 @@ export default function AdminAuthCompletePage() {
   }, [router]);
 
   return (
-    <main className="grid min-h-screen place-items-center bg-background px-5 text-foreground">
+    <main className="admin-safe-page grid min-h-screen place-items-center bg-background px-5 text-foreground">
       <section className="w-full max-w-md rounded-lg border border-border/70 bg-surface-elevated p-6 text-center shadow-elegant">
         <p className="eyebrow">AIXCO Admin</p>
         <h1 className="mt-3 font-display text-2xl">

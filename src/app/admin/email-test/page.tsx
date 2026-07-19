@@ -53,7 +53,7 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
   const errorMessage = getErrorMessage(errorCode, detail);
 
   return (
-    <main data-admin-scrollbar="true" className="min-h-screen bg-[#f6f4ef] px-4 py-4 text-[#161616] sm:px-6 sm:py-8">
+    <main data-admin-scrollbar="true" className="admin-safe-page admin-safe-page--dashboard min-h-screen bg-[#f6f4ef] px-4 py-4 text-[#161616] sm:px-6 sm:py-8">
       <div className="mx-auto w-full max-w-3xl">
         <header className="mb-6 border border-[#161616]/10 bg-[#161616] px-5 py-4 text-white">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -63,7 +63,7 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
             </div>
             <Link
               href="/admin/leads"
-              className="inline-flex h-9 w-fit items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
+              className="inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
             >
               <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
               Lead dashboard
@@ -135,7 +135,7 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
                 maxLength={255}
                 autoComplete="email"
                 placeholder="Optional"
-                className="h-11 rounded-md border border-[#161616]/15 bg-white px-3 text-sm outline-none transition-colors placeholder:text-[#9e9d9d] focus:border-[#8b6a18]"
+                className="h-11 rounded-md border border-[#161616]/15 bg-white px-3 text-base outline-none transition-colors placeholder:text-[#9e9d9d] focus:border-[#8b6a18]"
               />
             </label>
 
@@ -148,7 +148,7 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
                 maxLength={1500}
                 rows={6}
                 defaultValue={DEFAULT_TEST_MESSAGE}
-                className="min-h-36 resize-y rounded-md border border-[#161616]/15 bg-white px-3 py-3 text-sm leading-6 outline-none transition-colors focus:border-[#8b6a18]"
+                className="min-h-36 resize-y rounded-md border border-[#161616]/15 bg-white px-3 py-3 text-base leading-6 outline-none transition-colors focus:border-[#8b6a18]"
               />
             </label>
 
@@ -157,7 +157,7 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
               <button
                 type="submit"
                 disabled={!ready}
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#161616] px-4 text-sm font-semibold text-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:bg-[#c7c5bf]"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#161616] px-4 text-sm font-semibold text-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:bg-[#c7c5bf]"
               >
                 <Send className="h-4 w-4" aria-hidden="true" />
                 Send test email

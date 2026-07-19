@@ -21,7 +21,7 @@ export default async function AdminLoginPage() {
   const config = getAdminAuthConfig();
 
   return (
-    <main className="min-h-screen bg-background px-5 py-16 text-foreground">
+    <main className="admin-safe-page admin-safe-page--login min-h-screen bg-background px-5 py-16 text-foreground">
       <section className="mx-auto w-full max-w-md">
         <p className="eyebrow">AIXCO Admin</p>
         <h1 className="mt-4 font-display text-4xl leading-tight">Lead dashboard</h1>

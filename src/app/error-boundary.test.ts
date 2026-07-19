@@ -33,4 +33,16 @@ describe("client recovery surfaces", () => {
     expect(notFound).toContain('tx("This page is not available.")');
     expect(notFound).toContain('tx("Return to Home")');
   });
+
+  it("keeps public recovery surfaces clear of device cutouts and resilient to text zoom", () => {
+    for (const source of [routeError, globalError, notFound]) {
+      for (const edge of ["top", "right", "bottom", "left"]) {
+        expect(source).toContain(`safe-area-inset-${edge}`);
+      }
+    }
+
+    expect(routeError).toContain("[overflow-wrap:anywhere]");
+    expect(globalError).toContain('overflowWrap: "anywhere"');
+    expect(notFound).toContain("[overflow-wrap:anywhere]");
+  });
 });

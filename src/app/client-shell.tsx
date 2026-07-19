@@ -4,7 +4,6 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { I18nProvider, useI18n } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
 import { SiteContentProvider } from "@/data/SiteContentProvider";
-import { DevRuntimeRefresh } from "@/components/DevRuntimeRefresh";
 import { ScrollManager } from "@/components/ScrollManager";
 import { useDelayedIdleReady } from "@/hooks/use-idle-ready";
 import type { SiteContent, SiteContentResult } from "@/lib/backend/site-content";
@@ -70,7 +69,6 @@ export function ClientShell({
     <I18nProvider>
       <SiteContentProvider initialContent={initialSiteContent} initialSource={initialSiteContentSource}>
         <UIProvider>
-          <DevRuntimeRefresh />
           <ScrollManager />
           <SkipToContentLink />
           {children}

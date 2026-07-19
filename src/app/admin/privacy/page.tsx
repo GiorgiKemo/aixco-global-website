@@ -19,9 +19,9 @@ export default async function AdminPrivacyPage({ searchParams }: PrivacyPageProp
   const params = searchParams ? await searchParams : {};
 
   return (
-    <main className="min-h-screen bg-[#f6f4ef] px-4 py-8 text-[#161616] sm:px-6">
+    <main className="admin-safe-page admin-safe-page--roomy min-h-screen bg-[#f6f4ef] px-4 py-8 text-[#161616] sm:px-6">
       <div className="mx-auto max-w-3xl">
-        <Link href="/admin/leads" className="text-sm font-semibold text-[#6f5112] underline-offset-4 hover:underline">
+        <Link href="/admin/leads" className="inline-flex min-h-11 items-center text-sm font-semibold text-[#6f5112] underline-offset-4 hover:underline">
           Back to lead center
         </Link>
         <header className="mt-5 border border-[#161616]/10 bg-[#161616] px-6 py-6 text-white">
@@ -52,9 +52,9 @@ export default async function AdminPrivacyPage({ searchParams }: PrivacyPageProp
             <p className="mt-2 text-sm leading-6 text-[#6f6e6a]">Creates a paginated JSON export of matching forms, delivery events, short-lived abuse-control records, and chats containing the verified address.</p>
             <label className="mt-5 grid gap-2 text-sm font-semibold">
               Verified email address
-              <input name="email" type="email" required maxLength={255} className="h-11 border border-[#161616]/20 px-3 font-normal" />
+              <input name="email" type="email" required maxLength={255} className="h-11 border border-[#161616]/20 px-3 text-base font-normal" />
             </label>
-            <button type="submit" className="mt-5 inline-flex h-10 items-center justify-center bg-[#161616] px-4 text-sm font-semibold text-white">
+            <button type="submit" className="mt-5 inline-flex min-h-11 items-center justify-center bg-[#161616] px-4 text-sm font-semibold text-white">
               Download export
             </button>
           </form>
@@ -65,13 +65,13 @@ export default async function AdminPrivacyPage({ searchParams }: PrivacyPageProp
             <p className="mt-2 text-sm leading-6 text-[#6f6e6a]">Permanently deletes matching submissions, delivery records, abuse-control records, and chats containing the verified address.</p>
             <label className="mt-5 grid gap-2 text-sm font-semibold">
               Verified email address
-              <input name="email" type="email" required maxLength={255} className="h-11 border border-[#161616]/20 px-3 font-normal" />
+              <input name="email" type="email" required maxLength={255} className="h-11 border border-[#161616]/20 px-3 text-base font-normal" />
             </label>
             <label className="mt-4 grid gap-2 text-sm font-semibold">
               Type DELETE to confirm
-              <input name="confirmation" required pattern="DELETE" className="h-11 border border-[#161616]/20 px-3 font-normal" />
+              <input name="confirmation" required pattern="DELETE" className="h-11 border border-[#161616]/20 px-3 text-base font-normal" />
             </label>
-            <button type="submit" className="mt-5 inline-flex h-10 items-center justify-center bg-red-900 px-4 text-sm font-semibold text-white">
+            <button type="submit" className="mt-5 inline-flex min-h-11 items-center justify-center bg-red-900 px-4 text-sm font-semibold text-white">
               Permanently erase data
             </button>
           </form>

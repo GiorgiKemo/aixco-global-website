@@ -50,16 +50,16 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
   const copy = recoveryCopy[lang];
 
   return (
-    <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#F3EDE1] px-5 py-16 text-[#161616]">
-      <section className="w-full max-w-2xl border border-[#161616]/15 bg-white px-7 py-10 sm:px-12 sm:py-14">
+    <main id="main-content" tabIndex={-1} className="flex min-h-screen min-h-[100dvh] items-center justify-center bg-[#F3EDE1] pb-[max(4rem,env(safe-area-inset-bottom,0px))] pl-[max(1.25rem,env(safe-area-inset-left,0px))] pr-[max(1.25rem,env(safe-area-inset-right,0px))] pt-[max(4rem,env(safe-area-inset-top,0px))] text-[#161616]">
+      <section className="w-full max-w-2xl break-words border border-[#161616]/15 bg-white px-7 py-10 [overflow-wrap:anywhere] sm:px-12 sm:py-14">
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#8b6a18]">AIXCO.Global</p>
         <h1 className="mt-5 font-display text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-none">{copy.title}</h1>
         <p className="mt-5 max-w-xl text-base leading-7 text-[#55534f]">{copy.body}</p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <button type="button" onClick={reset} className="inline-flex min-h-11 items-center justify-center bg-[#161616] px-6 text-sm font-bold text-white">
+          <button type="button" onClick={reset} className="inline-flex min-h-11 max-w-full items-center justify-center whitespace-normal bg-[#161616] px-4 text-center text-sm font-bold text-white sm:px-6">
             {copy.retry}
           </button>
-          <Link href="/" className="inline-flex min-h-11 items-center justify-center border border-[#161616] px-6 text-sm font-bold text-[#161616]">
+          <Link href="/" className="inline-flex min-h-11 max-w-full items-center justify-center whitespace-normal border border-[#161616] px-4 text-center text-sm font-bold text-[#161616] sm:px-6">
             {copy.home}
           </Link>
         </div>

@@ -62,7 +62,7 @@ function LeadAction({
         type="button"
         disabled={isPending}
         onClick={() => onStatusChange(lead, action.nextStatus)}
-        className="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-md bg-[#161616] px-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md bg-[#161616] px-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" /> : <Icon className="h-3.5 w-3.5" aria-hidden="true" />}
         {action.label}
@@ -72,7 +72,7 @@ function LeadAction({
           type="button"
           disabled={isPending}
           onClick={() => onStatusChange(lead, "archived")}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-[#161616]/10 bg-white text-[#6f6e6a] transition-colors hover:border-[#161616]/40 hover:text-[#161616] disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-[#161616]/10 bg-white text-[#6f6e6a] transition-colors hover:border-[#161616]/40 hover:text-[#161616] disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Archive lead"
           title="Archive lead"
         >
@@ -113,7 +113,7 @@ export function PipelineLeadCard({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
       onMouseDown={(event) => onMouseDown(event, lead)}
-      className={`group select-none rounded-lg border bg-white p-3 shadow-[0_18px_44px_-38px_rgb(22_22_22_/_0.5)] transition-[border-color,box-shadow,opacity,transform] duration-200 ${
+      className={`group select-none [touch-action:pan-y_pinch-zoom] rounded-lg border bg-white p-3 shadow-[0_18px_44px_-38px_rgb(22_22_22_/_0.5)] transition-[border-color,box-shadow,opacity,transform] duration-200 ${
         isDragging ? "scale-[0.99] border-[#e6c767] opacity-30" : "cursor-grab border-[#161616]/10 active:cursor-grabbing"
       } ${isPending ? "pointer-events-none opacity-70" : ""}`}
     >
@@ -137,7 +137,7 @@ export function PipelineLeadCard({
 
           <div className="mt-3 grid gap-2 text-xs text-[#6f6e6a]">
             {lead.contactHref ? (
-              <a href={lead.contactHref} className="truncate font-medium text-[#161616] underline-offset-4 hover:underline">
+              <a href={lead.contactHref} className="inline-flex min-h-11 max-w-full items-center truncate font-medium text-[#161616] underline-offset-4 hover:underline">
                 {lead.contactLabel}
               </a>
             ) : (
@@ -147,7 +147,7 @@ export function PipelineLeadCard({
             {lead.resource === "contact" ? (
               <div className="grid gap-1 rounded-md bg-[#f8f7f3] px-2.5 py-2 text-[11px]">
                 <p className="font-semibold capitalize text-[#161616]">{lead.requestType ?? "message"} request</p>
-                {lead.phone ? <a href={`tel:${lead.phone}`} className="font-medium text-[#161616] underline-offset-4 hover:underline">{lead.phone}</a> : null}
+                {lead.phone ? <a href={`tel:${lead.phone}`} className="inline-flex min-h-11 items-center font-medium text-[#161616] underline-offset-4 hover:underline">{lead.phone}</a> : null}
                 {lead.preferredCallAt ? (
                   <p>Requested call: {formatDate(lead.preferredCallAt)}{lead.preferredCallTimezone ? ` (${lead.preferredCallTimezone})` : ""}</p>
                 ) : null}

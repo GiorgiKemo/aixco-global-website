@@ -425,7 +425,7 @@ export function PropertyChrome() {
               type="button"
               aria-label={tx("Close menu")}
               onClick={() => setMobileOpen(false)}
-              className="absolute end-5 top-5 inline-flex h-11 w-11 items-center justify-center rounded-sm border border-foreground/15 bg-[#F3EDE1] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
+              className="property-mobile-menu__close absolute end-5 top-5 inline-flex h-11 w-11 items-center justify-center rounded-sm border border-foreground/15 bg-[#F3EDE1] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
             >
               <X className="h-5 w-5" aria-hidden />
             </button>

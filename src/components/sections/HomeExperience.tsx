@@ -24,6 +24,7 @@ function StoryBootSurface() {
         fill
         preload
         fetchPriority="high"
+        quality={78}
         sizes="100vw"
         className="-z-20 object-cover"
       />

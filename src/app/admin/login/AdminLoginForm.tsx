@@ -298,7 +298,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
               )}
               {totpSecret && (
                 <details className="rounded-md border border-border/70 bg-background/60 px-3 py-2 text-sm">
-                  <summary className="cursor-pointer font-medium">Cannot scan the QR code?</summary>
+                  <summary className="flex min-h-11 cursor-pointer items-center font-medium">Cannot scan the QR code?</summary>
                   <p className="mt-2 text-xs text-muted-foreground">Enter this setup key manually:</p>
                   <code className="mt-1 block break-all font-mono text-xs">{totpSecret}</code>
                 </details>
@@ -334,7 +334,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
                 <input id="admin-confirm-password" type="password" autoComplete="new-password" minLength={12} required value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="form-control" />
               </div>
               <button type="submit" disabled={working} className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60">{working ? "Saving…" : "Save password and continue"}</button>
-              <button type="button" disabled={working} onClick={resetIdentity} className="text-sm text-muted-foreground underline-offset-4 hover:underline">Cancel setup</button>
+              <button type="button" disabled={working} onClick={resetIdentity} className="inline-flex min-h-11 items-center justify-center text-sm text-muted-foreground underline-offset-4 hover:underline">Cancel setup</button>
             </form>
           )}
 
@@ -443,7 +443,7 @@ function MfaCodeForm({
       <button type="submit" disabled={working || code.length !== 6} className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60">
         {working ? "Verifying…" : submitLabel}
       </button>
-      <button type="button" disabled={working} onClick={onReset} className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+      <button type="button" disabled={working} onClick={onReset} className="inline-flex min-h-11 items-center justify-center text-sm text-muted-foreground underline-offset-4 hover:underline">
         Use another account
       </button>
     </form>

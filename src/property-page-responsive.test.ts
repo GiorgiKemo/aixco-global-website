@@ -12,11 +12,23 @@ describe("current-project responsive metrics", () => {
     expect(pageSource).not.toContain("sm:grid-cols-4");
   });
 
-  it("keeps metric values aligned, readable, and non-wrapping", () => {
+  it("keeps metric values aligned and lets them reflow under text zoom", () => {
     expect(pageSource).toContain("property-detail-metric__label");
     expect(pageSource).toContain("property-detail-metric__value");
     expect(css).toContain(".property-detail-metric__label {\n  display: flex;\n  min-height: 3.5em;");
     expect(css).toContain("font-variant-numeric: lining-nums tabular-nums;");
-    expect(css).toContain("white-space: nowrap;");
+    expect(css).toContain("overflow-wrap: anywhere;\n  white-space: normal;");
+  });
+
+  it("serves the current-project panorama without a smaller re-encoded candidate", () => {
+    expect(pageSource).toContain('"(max-width: 639px) 773px, (max-width: 1023px) 1075px, 1344px"');
+    expect(pageSource).toContain('unoptimized={property.id === "current-project"}');
+  });
+
+  it("marks every property content band for safe-area-aware gutters", () => {
+    expect(pageSource.match(/property-content-section/g)).toHaveLength(2);
+    expect(css).toContain(".property-hero__content,\n.property-content-section {");
+    expect(css).toContain("padding-inline-start: max(1.25rem, var(--safe-inline-start)) !important;");
+    expect(css).toContain("padding-inline-end: max(1.25rem, var(--safe-inline-end)) !important;");
   });
 });

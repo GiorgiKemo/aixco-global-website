@@ -276,7 +276,7 @@ export function LiveVideo({
               aria-modal="true"
               aria-label={`${tx("Expanded video")}: ${tx(title)}`}
               tabIndex={-1}
-              className="relative z-10 max-h-[calc(100dvh-5rem)] max-w-[calc(100vw-1.5rem)] animate-scale-in md:max-h-[calc(100dvh-6.5rem)] md:max-w-6xl"
+              className="live-video-modal-dialog relative z-10 max-h-[calc(100dvh-5rem)] max-w-[calc(100vw-1.5rem)] animate-scale-in md:max-h-[calc(100dvh-6.5rem)] md:max-w-6xl"
             >
               <button
                 ref={closeButtonRef}
@@ -295,7 +295,7 @@ export function LiveVideo({
                   poster={poster}
                   aria-label={`${tx(title)} ${tx("expanded player")}`}
                   title={tx(title)}
-                  className="block h-auto max-h-[calc(100dvh-5rem)] w-auto max-w-[calc(100vw-1.5rem)] bg-black object-contain md:max-h-[calc(100dvh-6.5rem)] md:max-w-[calc(100vw-3rem)]"
+                  className="live-video-modal-media block h-auto max-h-[calc(100dvh-5rem)] w-auto max-w-[calc(100vw-1.5rem)] bg-black object-contain md:max-h-[calc(100dvh-6.5rem)] md:max-w-[calc(100vw-3rem)]"
                   autoPlay
                   controls
                   playsInline
@@ -339,7 +339,6 @@ export function LiveVideo({
         <video
           ref={videoRef}
           src={shouldAttachVideo ? inlineSrc : undefined}
-          poster={poster}
           aria-label={title}
           title={tx(title)}
           className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} ${videoClassName}`}

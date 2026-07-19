@@ -64,6 +64,106 @@ final result: passed
 
 ---
 
+# Dubai Portfolio Card Typography Redesign - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-1cb210ec-76e0-4613-88e7-b7db892397bb.png`, together with the explicit direction to preserve the existing card shells, increase their height, and redesign the internal text hierarchy
+- Implementation screenshot: `artifacts/dubai-cards-redesign-final.jpg`
+- Responsive evidence: `artifacts/dubai-cards-redesign-phone.jpg`
+- Full-view and focused comparison: `artifacts/dubai-cards-before-after.png`
+- Viewports: 1600 x 723 desktop, 877 x 700 tablet, and 390 x 844 phone
+- State: English Dubai legacy section, both portfolio cards rendered, menus closed
+
+## Findings
+
+- No actionable P0, P1, or P2 issues remain.
+- The existing white rounded card shells, titles, borders, indices, three-metric desktop grid, palette, and production copy remain intact.
+- Metric rows are now 140px minimum on desktop, giving every label and value a deliberate top/bottom rhythm instead of compressing them into the shortest available height.
+- Supporting copy is readable and controlled, while numeric expressions remain prominent without dominating the cards.
+- Development scope now reads as a structured `USD 350m` value line above `mixed-use program`; site progress uses two intentional number/qualifier rows.
+
+## Full-view comparison evidence
+
+The paired before/after comparison shows the requested redesign clearly. The previous version used large inline figures with undersized qualifiers and arbitrary wraps. The final version keeps the same card surfaces but adds vertical breathing room, smaller and more consistent figures, aligned labels, a dedicated scope hierarchy, and a two-row progress composition. Both cards read as one coherent premium system.
+
+## Focused region comparison evidence
+
+A separate micro-crop was unnecessary because the 1758 x 503 comparison keeps every card title, metric label, status, number, qualifier, divider, and card edge legible at native scale. The implementation crop is the exact portfolio block captured from the browser-rendered desktop page.
+
+## Comparison history
+
+1. Baseline P1: numeric values overpowered supporting copy, compound values wrapped unpredictably, and the card interiors felt vertically compressed. Fix: introduced semantic number, prefix, and copy spans plus dedicated status, scope, progress, and simple-number layouts.
+2. First implementation P2: a later cascade still held metric rows near their old compact height. Fix: moved the final card spacing and 140px minimum-height rules to the same winning cascade level as the Dubai typography overrides.
+3. Responsive P2: the 390px scope cell exceeded its card by 11px because two max-content columns could not shrink. Fix: changed the scope grid to `max-content minmax(0, 1fr)` and added a compact phone-scale scope number. Post-fix evidence reports card `scrollWidth` equal to `clientWidth` and zero page overflow.
+4. Final comparison: no actionable P0/P1/P2 difference remains; the requested taller, cleaner, more beautiful card hierarchy is visible in the final side-by-side evidence.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; existing Gilroy stacks are preserved, labels use a restrained uppercase hierarchy, status copy remains readable, figures are compact, and no words split inside a token.
+- Spacing and layout rhythm: passed; desktop cards measure approximately 201px and 227px tall, values align to the lower card rhythm, and responsive grids reflow without clipping.
+- Colors and visual tokens: passed; existing ivory, white, onyx, gray, AIXCO gold, border opacity, radius, and shadow tokens are unchanged.
+- Image quality and asset fidelity: passed; the redesign changes no imagery, logo, icon, or decorative asset.
+- Copy and content: passed; both portfolio names and all six labels and values remain complete and unchanged.
+
+## Browser and regression verification
+
+- Desktop, tablet, and phone browser rendering: passed.
+- Tablet: two-column metric grid with no horizontal overflow.
+- Phone: both cards report `scrollWidth` equal to `clientWidth`; page horizontal overflow is false.
+- Browser console errors: zero.
+- Focused CSS suite: 51 tests passed.
+- TypeScript, ESLint, and `git diff --check`: passed.
+
+final result: passed
+
+---
+
+# Contact Email and Address Typography Parity - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-c4b554ba-b147-4df8-b732-c4b2ca36700e.png`
+- Desktop implementation screenshot: `output/design-qa/contact-typography-desktop.png`
+- Mobile implementation screenshot: `output/design-qa/contact-typography-mobile.png`
+- Focused source-versus-implementation comparison: `output/design-qa/contact-typography-comparison.png`
+- Viewports: 1280 x 720 desktop and 390 x 844 mobile
+- State: English contact section, menus closed, email, address, and social cards visible
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested typography scope.
+- Email and address now use one fixed shared value size rather than a viewport-dependent scale. Browser-computed styles are identical: Segoe UI stack, 16.8px size, 500 weight, 22.68px line height, normal letter spacing, and the same onyx color.
+- The Unicode-complete shared font keeps the German `ü` visually consistent with the rest of the address instead of allowing a darker per-character fallback.
+
+## Full-view and focused comparison evidence
+
+- The desktop full view confirms the two contact cards retain equal proportions, aligned icon rows, matching labels, and the approved white/ivory/gold composition.
+- The focused side-by-side comparison keeps both value lines readable and confirms that the email and address have the same optical scale and weight while preserving the address's natural two-line desktop wrap.
+- The 390 x 844 mobile view keeps both values at the same 16.8px scale, fits them without clipping, and has no positive horizontal overflow.
+
+## Comparison history
+
+1. Initial P2 perception: the responsive type token could change scale by viewport, making the single-line email and wrapped address feel optically inconsistent even though they shared a selector.
+2. Fix: replaced the responsive clamp with one exact 1.05rem token and applied the same non-synthesized font settings to every contact value.
+3. Post-fix evidence: desktop and mobile computed-style checks report exact parity for family, size, weight, line height, spacing, and color; the combined visual comparison shows no remaining mismatch.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; exact shared value typography, complete umlaut coverage, readable wrapping, and no clipping.
+- Spacing and layout rhythm: passed; card sizes, padding, icon alignment, dividers, radii, and responsive stacking remain unchanged.
+- Colors and visual tokens: passed; existing ivory, white, onyx, and AIXCO gold tokens are unchanged.
+- Image quality and asset fidelity: passed; official email, location, and social assets remain unchanged and no replacement assets were introduced.
+- Copy and content: passed; `info@aixco.global`, `Grüngasse 16, 1050 Wien, Austria`, and all social destinations remain complete.
+
+## Browser and production verification
+
+- Desktop and 390 x 844 mobile rendering: passed.
+- Browser console errors: zero.
+- Horizontal overflow: zero.
+- Focused CSS suite: 48 tests passed.
+- TypeScript, ESLint, bundled-font validation, and production build: passed.
+
+final result: passed
+
+---
+
 # Dubai Portfolio Metric Affixes - Design QA
 
 - User-provided reference: `output/playwright/dubai-metrics/reference.png`
@@ -831,5 +931,107 @@ final result: passed
 - Motion and transitions: title animation, reduced-motion behavior, section transitions, partner marquee, and background-video pause distance passed.
 - Content controls: FAQ open/close behavior passed; removed brochures and pause controls were absent.
 - Quality gates: 83 test files / 363 unit tests passed, TypeScript passed, ESLint passed, bundled-font validation passed, production build passed, and `git diff --check` passed.
+
+final result: passed
+
+---
+
+# Dubai Card Top-Seam Removal - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-3f7951a0-a990-44d6-9461-eb70c346dd2a.png`
+- Implementation screenshot path: `artifacts/dubai-card-seam-fixed-full.png`
+- Viewport: 1600 x 723 CSS pixels; focused comparison uses the 890 x 91 source crop and an 882 x 92 implementation crop
+- State: English homepage at `http://127.0.0.1:8081/#dubai`, Dubai cards visible, card 02 centered, navigation menus closed
+- Primary interactions tested: navigated to the Dubai hash, scrolled card 02 into view, and verified both card outlines plus page/card horizontal overflow
+- Console errors checked: zero errors; two pre-existing Next.js image-optimization warnings remain unrelated to this CSS fix
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested card-edge region.
+- The reported dark seam was an obsolete adjacent-row divider applied only to the second `.story-fund-row`. It overrode the shared warm card outline because its selector had higher specificity.
+- Both cards now compute the same top and side border color: `rgba(221, 211, 197, 0.72)`. Card 02 no longer receives the dark `rgba(22, 22, 22, 0.3)` top border or the stale extra top margin.
+
+## Full-view comparison evidence
+
+- Browser-rendered final view: `artifacts/dubai-card-seam-fixed-full.png`
+- The complete Dubai card column remains intact beside the existing Burj Khalifa image, with both cards fully readable and no horizontal overflow.
+
+## Focused region comparison evidence
+
+- Side-by-side source and corrected implementation: `artifacts/dubai-card-seam-comparison.png`
+- Corrected implementation crop: `artifacts/dubai-card-seam-fixed-crop.png`
+- The comparison isolates the second card's rounded top edge and confirms that the black separator is gone while the intended subtle warm outline remains continuous.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; card index and title family, weight, size, line height, wrapping, and antialiasing are unchanged.
+- Spacing and layout rhythm: passed; the obsolete extra margin is removed, leaving the portfolio grid's intentional gap and consistent rounded-card geometry.
+- Colors and visual tokens: passed; card 02 now uses the same warm outline token as card 01 instead of the dark foreground divider.
+- Image quality and asset fidelity: passed; no image, crop, compression, mask, icon, or logo was changed.
+- Copy and content: passed; all titles, labels, values, and statuses are unchanged.
+
+## Comparison history
+
+1. Initial P2 finding: source evidence showed a dark horizontal line across card 02's rounded top edge. Chrome computed its top border as `rgba(22, 22, 22, 0.3)`, while the other edges and card 01 used `rgba(221, 211, 197, 0.72)`.
+2. Fix: removed the obsolete adjacent `.story-fund-row` divider and its conflicting adjacent-card override so both cards inherit the same uniform base outline.
+3. Post-fix evidence: `artifacts/dubai-card-seam-comparison.png` shows the corrected edge; Chrome reports matching top/right border colors, zero card overflow, and zero page horizontal overflow.
+
+## Verification
+
+- `npm run smoke:dubai` passed.
+- 68 targeted Vitest checks passed.
+- Bundled-font validation and the production Next.js build passed.
+
+final result: passed
+
+---
+
+# Dubai and Philosophy Typography Parity - Design QA
+
+- Source visual truth paths: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-03834adb-c730-4ff2-a82c-5b958a1b56ee.png` and `artifacts/philosophy-typography-source-card.jpg`
+- Implementation screenshot path: `artifacts/dubai-typography-final-cards.jpg`
+- Viewport: 1600 x 723 CSS pixels
+- State: English homepage, Philosophy and Dubai sections measured at the same Chrome viewport; Dubai card group centered with menus closed
+- Primary interactions tested: navigated between `#philosophy` and `#dubai`, scrolled both card groups into view, and inspected the final Dubai labels, numbers, supporting copy, card fit, and page overflow
+- Console errors checked: zero errors; existing Next.js image optimization/LCP development warnings are unrelated to this typography change
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested typography scope.
+- Dubai metric labels now match Philosophy exactly at 11.84px, weight 600, 15.984px line height, and 1.8944px letter spacing.
+- Dubai editorial numbers now match Philosophy exactly at 44.8px, weight 400, and 44.8px line height.
+- Dubai supporting metric copy now matches Philosophy panel copy exactly at 15.68px, weight 400, and 23.52px line height.
+- Both Dubai cards have equal 227px client heights, their client and scroll dimensions match, and the page has zero horizontal overflow.
+
+## Full-view comparison evidence
+
+- Source-versus-implementation card comparison: `artifacts/dubai-typography-before-after-comparison.png`
+- The updated view preserves the existing two-card structure, content, borders, radius, palette, and metric columns while replacing the smaller Dubai-only type scale with the established Philosophy hierarchy.
+
+## Focused region comparison evidence
+
+- Philosophy source card versus Dubai metric: `artifacts/dubai-typography-philosophy-focused-comparison.png`
+- At the same browser scale, the focused comparison confirms matching label and editorial-number proportions, weight, line height, color, and optical hierarchy.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; both sections use the same Gilroy stack and exact rendered label, number, and supporting-copy scales. Card titles, wrapping, and status hierarchy remain readable.
+- Spacing and layout rhythm: passed; both Dubai cards remain equal in height, the progress qualifiers fit on one line in English, and no content clips or overflows.
+- Colors and visual tokens: passed; existing AIXCO gold, ivory, onyx, border, badge, radius, and shadow tokens are unchanged.
+- Image quality and asset fidelity: passed; no image, logo, icon, crop, compression, or decorative asset changed.
+- Copy and content: passed; both portfolio names and all labels, statuses, values, and qualifiers remain complete.
+
+## Comparison history
+
+1. Initial P2 finding: Dubai labels rendered at 13.12px/700 and numbers at 26.4px, while the measured Philosophy source rendered labels at 11.84px/600 and numbers at 44.8px/400. Supporting copy also used a separate 17.28px/500 scale.
+2. First implementation: labels and numbers matched Philosophy, but the larger number column caused `under construction` to wrap and made the second card approximately 13px taller.
+3. Final fix: supporting copy was mapped to the Philosophy panel-body scale and the progress column spacing was rebalanced. Post-fix evidence shows the qualifier on one line, equal card heights, matching client/scroll dimensions, and zero page overflow.
+
+## Verification
+
+- Chrome computed-style comparison passed for all three typography tiers.
+- 68 targeted Vitest checks passed.
+- Bundled-font validation and the production Next.js build passed.
+- `git diff --check` passed.
 
 final result: passed

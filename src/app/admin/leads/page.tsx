@@ -150,9 +150,9 @@ function Pagination({
 }) {
   const { page, total, totalPages, start, end } = pagination;
   const buttonClass =
-    "inline-flex h-9 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-white px-3 text-sm font-medium text-[#161616] transition-colors hover:bg-[#f6f4ef] sm:flex-none";
+    "inline-flex min-h-11 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-white px-3 text-sm font-medium text-[#161616] transition-colors hover:bg-[#f6f4ef] sm:flex-none";
   const disabledClass =
-    "inline-flex h-9 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-[#f1efe8] px-3 text-sm font-medium text-[#9e9d9d] sm:flex-none";
+    "inline-flex min-h-11 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-[#f1efe8] px-3 text-sm font-medium text-[#9e9d9d] sm:flex-none";
 
   return (
     <div className="mt-4 flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
@@ -203,7 +203,7 @@ function AdminTabs({
           <Link
             key={view.value}
             href={tabHref(view.value)}
-            className={`shrink-0 border-b-2 px-3 py-2.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm ${
+            className={`inline-flex min-h-11 shrink-0 items-center border-b-2 px-3 py-2.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm ${
               active
                 ? "border-[#8b6a18] text-[#8b6a18]"
                 : "border-transparent text-[#6f6e6a] hover:border-[#161616]/20 hover:text-[#161616]"
@@ -258,8 +258,8 @@ function StatusActionForm({
         type="submit"
         className={
           variant === "primary"
-            ? "inline-flex h-8 w-full items-center justify-center gap-1.5 rounded-md bg-[#161616] px-3 text-xs font-semibold text-white transition-colors hover:bg-black"
-            : "inline-flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-[#161616]/10 bg-white px-3 text-xs font-semibold text-[#6f6e6a] transition-colors hover:bg-[#f6f4ef] hover:text-[#161616]"
+            ? "inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-md bg-[#161616] px-3 text-xs font-semibold text-white transition-colors hover:bg-black"
+            : "inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-md border border-[#161616]/10 bg-white px-3 text-xs font-semibold text-[#6f6e6a] transition-colors hover:bg-[#f6f4ef] hover:text-[#161616]"
         }
       >
         {variant === "primary" ? <CheckCircle2 className="h-3 w-3" aria-hidden="true" /> : <Archive className="h-3 w-3" aria-hidden="true" />}
@@ -307,7 +307,7 @@ function LeadRows({
             <p className="mt-2 line-clamp-2 whitespace-pre-line break-words text-sm leading-6 text-[#55534f]">{lead.body}</p>
             <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-[#6f6e6a]">
               {lead.contactHref ? (
-                <a href={lead.contactHref} className="font-medium text-[#161616] underline-offset-4 hover:underline">
+                <a href={lead.contactHref} className="inline-flex min-h-11 items-center font-medium text-[#161616] underline-offset-4 hover:underline">
                   {lead.contactLabel}
                 </a>
               ) : (
@@ -359,7 +359,7 @@ function PortalRows({ events, limit }: { events: PortalEvent[]; limit?: number }
             href={event.portal_url}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-8 shrink-0 items-center justify-center rounded-md border border-[#161616]/10 px-3 text-xs font-semibold text-[#161616] transition-colors hover:bg-[#f6f4ef]"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-md border border-[#161616]/10 px-3 text-xs font-semibold text-[#161616] transition-colors hover:bg-[#f6f4ef]"
           >
             Open
           </a>
@@ -432,7 +432,7 @@ function OverviewSection({
             title="Newest Leads"
             count={Math.min(leads.length, 5)}
             action={
-              <Link href="/admin/leads?tab=records" className="text-xs font-semibold text-[#8b6a18] underline-offset-4 hover:underline">
+              <Link href="/admin/leads?tab=records" className="inline-flex min-h-11 items-center text-xs font-semibold text-[#8b6a18] underline-offset-4 hover:underline">
                 View records
               </Link>
             }
@@ -445,7 +445,7 @@ function OverviewSection({
             title="Portal Activity"
             count={Math.min(portalEvents.length, 5)}
             action={
-              <Link href="/admin/leads?tab=portal" className="text-xs font-semibold text-[#8b6a18] underline-offset-4 hover:underline">
+              <Link href="/admin/leads?tab=portal" className="inline-flex min-h-11 items-center text-xs font-semibold text-[#8b6a18] underline-offset-4 hover:underline">
                 View portal
               </Link>
             }
@@ -520,7 +520,7 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
   });
 
   return (
-    <main data-admin-scrollbar="true" className="min-h-screen bg-[#f6f4ef] px-4 py-4 text-[#161616] sm:px-6 sm:py-8">
+    <main data-admin-scrollbar="true" className="admin-safe-page admin-safe-page--dashboard min-h-screen bg-[#f6f4ef] px-4 py-4 text-[#161616] sm:px-6 sm:py-8">
       <div className="mx-auto max-w-[1400px]">
         <section className="mb-6 border border-[#161616]/10 bg-[#161616] px-5 py-4 text-white">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -533,21 +533,21 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 href="/admin/email-test"
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
               >
                 <MailCheck className="h-3.5 w-3.5" aria-hidden="true" />
                 Test email
               </Link>
               <Link
                 href="/admin/privacy"
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
               >
                 <UserCheck className="h-3.5 w-3.5" aria-hidden="true" />
                 Privacy requests
               </Link>
               <Link
                 href="/admin/identity-migration"
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
               >
                 <UserPlus className="h-3.5 w-3.5" aria-hidden="true" />
                 Admin identities
@@ -555,7 +555,7 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
               <form action="/admin/logout" method="post">
                 <button
                   type="submit"
-                  className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
                 >
                   <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
                   Sign out

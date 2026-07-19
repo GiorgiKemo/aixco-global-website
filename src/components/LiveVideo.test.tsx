@@ -199,7 +199,7 @@ describe("LiveVideo", () => {
       expect.stringContaining("%2Fposter.jpg"),
     );
     expect(screen.getByLabelText("Batumi overview")).not.toHaveAttribute("src");
-    expect(screen.getByLabelText("Batumi overview")).toHaveAttribute("poster", "/poster.jpg");
+    expect(screen.getByLabelText("Batumi overview")).not.toHaveAttribute("poster");
 
     act(() => {
       MockIntersectionObserver.instances[0].trigger({ isIntersecting: true, intersectionRatio: 1 });

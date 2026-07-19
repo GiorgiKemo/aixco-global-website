@@ -1,0 +1,28 @@
+.admin-safe-page {
+  --admin-inline-padding: 1rem;
+  --admin-block-padding: 1rem;
+  min-height: 100dvh;
+  padding-top: max(var(--admin-block-padding), env(safe-area-inset-top, 0px)) !important;
+  padding-right: max(var(--admin-inline-padding), env(safe-area-inset-right, 0px)) !important;
+  padding-bottom: max(var(--admin-block-padding), env(safe-area-inset-bottom, 0px)) !important;
+  padding-left: max(var(--admin-inline-padding), env(safe-area-inset-left, 0px)) !important;
+}
+
+.admin-safe-page--roomy {
+  --admin-block-padding: 2rem;
+}
+
+.admin-safe-page--login {
+  --admin-inline-padding: 1.25rem;
+  --admin-block-padding: 4rem;
+}
+
+@media (min-width: 640px) {
+  .admin-safe-page {
+    --admin-inline-padding: 1.5rem;
+  }
+
+  .admin-safe-page--dashboard {
+    --admin-block-padding: 2rem;
+  }
+}

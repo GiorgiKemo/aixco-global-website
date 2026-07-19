@@ -79,6 +79,7 @@ export function createPortalWrapperHtml(role: PortalRole) {
         position: relative;
         z-index: 10;
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
@@ -92,17 +93,21 @@ export function createPortalWrapperHtml(role: PortalRole) {
 
       .back-link {
         display: inline-flex;
+        flex: 0 1 auto;
         align-items: center;
         justify-content: center;
         gap: 0.55rem;
         min-height: 44px;
+        max-width: 100%;
         padding: 0.65rem 1rem;
         color: #fff;
         font-size: 0.875rem;
         font-weight: 700;
-        line-height: 1;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+        text-align: center;
         text-decoration: none;
-        white-space: nowrap;
+        white-space: normal;
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid #c0a166;
         border-radius: 999px;
@@ -130,13 +135,19 @@ export function createPortalWrapperHtml(role: PortalRole) {
         flex: none;
       }
 
+      .back-link span {
+        min-width: 0;
+      }
+
       .portal-context {
+        flex: 1 1 10rem;
         min-width: 0;
         color: #d6bb86;
         font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.14em;
         line-height: 1.2;
+        overflow-wrap: anywhere;
         text-align: right;
         text-transform: uppercase;
       }
@@ -152,6 +163,7 @@ export function createPortalWrapperHtml(role: PortalRole) {
 
       @media (max-width: 420px) {
         .portal-toolbar {
+          gap: 0.5rem;
           min-height: 58px;
           padding-right: max(10px, env(safe-area-inset-right));
           padding-left: max(10px, env(safe-area-inset-left));

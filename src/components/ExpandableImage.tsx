@@ -208,9 +208,10 @@ export function ExpandableImage({ src, title, className = "", children, style, t
   const expandedImageAspectRatio = expandedImageSize
     ? `${expandedImageSize.width} / ${expandedImageSize.height}`
     : "16 / 10";
+  const expandedImageViewportWidth = "calc(100vw - max(1.5rem, calc(var(--safe-inline-start) + var(--safe-inline-end) + 1rem)))";
   const expandedImageWidth = expandedImageSize
-    ? `min(${expandedImageSize.width}px, 92vw, 72rem, calc(70svh * ${expandedImageSize.width / expandedImageSize.height}))`
-    : "min(92vw, 72rem)";
+    ? `min(${expandedImageSize.width}px, ${expandedImageViewportWidth}, 72rem, calc(70svh * ${expandedImageSize.width / expandedImageSize.height}))`
+    : `min(${expandedImageViewportWidth}, 72rem)`;
 
   const expandedImage =
     isExpanded && typeof document !== "undefined"

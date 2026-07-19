@@ -41,9 +41,9 @@ describe("ScrollToTopButton", () => {
 
     const button = screen.getByRole("button", { name: /scroll to top/i });
     expect(button).toHaveAttribute("data-scroll-to-top-button", "true");
-    expect(button).toHaveClass("fixed", "z-[94]", "icon-button-glass");
+    expect(button).toHaveClass("fixed", "z-[94]", "icon-button-glass", "scroll-to-top-button");
     expect(button.className).toContain("safe-area-inset-bottom");
-    expect(button.className).toContain("safe-area-inset-left");
+    expect(button.className).not.toContain("safe-area-inset-left");
     expect(button).not.toHaveClass("bg-primary", "text-primary-foreground");
 
     fireEvent.click(button);

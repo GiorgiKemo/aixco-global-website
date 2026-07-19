@@ -217,7 +217,7 @@ describe("index.css motion rules", () => {
     expect(selectedContact).toContain("border-radius: 0 !important;");
     expect(selectedContact).toContain("background: transparent;");
     expect(selectedContact).toContain(
-      "--story-contact-content-font-size: clamp(1rem, 1.05vw, 1.08rem);",
+      "--story-contact-content-font-size: 1.05rem;",
     );
     expect(selectedContact).toContain(
       ":is(.story-contact-detail, .story-contact-social-links .social-link__label)",
@@ -233,26 +233,31 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain("[data-story-section='faqs'] [data-layout='story-faq-list'],\n  [data-story-section='contact']");
   });
 
-  it("starts the About video early and pauses it two chapters later", () => {
+  it("starts the About video on demand and keeps playback continuous after activation", () => {
     expect(desktopStoryHome).toContain("const shouldLoadVideo = motionPreferenceResolved && shouldReduceMotion !== true;");
-    expect(desktopStoryHome).toContain("const shouldPrimeVideo = shouldLoadVideo && shouldPlayVideo;");
-    expect(desktopStoryHome).toContain("src={shouldLoadVideo ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(desktopStoryHome).toContain('preload={shouldLoadVideo ? "auto" : "none"}');
-    expect(desktopStoryHome).toContain("autoPlay={shouldPrimeVideo}");
+    expect(desktopStoryHome).toContain("const [videoRequested, setVideoRequested] = useState(false);");
+    expect(desktopStoryHome).toContain("const shouldAttachVideo = shouldLoadVideo && videoRequested;");
+    expect(desktopStoryHome).toContain("if (shouldLoadVideo && shouldStartVideo)");
+    expect(desktopStoryHome).toContain("src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain('preload={shouldAttachVideo ? "auto" : "none"}');
+    expect(desktopStoryHome).toContain("autoPlay={shouldAttachVideo}");
     expect(desktopStoryHome).toContain("loop");
-    expect(desktopStoryHome).toContain("shouldPlayVideo={activeIndex < 3}");
+    expect(desktopStoryHome).toContain("shouldStartVideo={activeIndex >= 1}");
     expect(desktopStoryHome).toContain("storyChapters.map((_, index) => index <= 1)");
-    expect(desktopStoryHome).not.toContain("const shouldPrimeVideo = isRevealed || isActive;");
-    expect(desktopStoryHome).toContain("if (!shouldPrimeVideo) {");
+    expect(desktopStoryHome).not.toContain("if (!shouldPrimeVideo)");
     expect(desktopStoryHome).toContain("setVideoStarted(false);");
-    expect(desktopStoryHome).toContain("if (shouldPrimeVideo) {\n                    void event.currentTarget.play().catch(() => undefined);");
+    expect(desktopStoryHome).toContain("if (shouldAttachVideo) {\n                    void event.currentTarget.play().catch(() => undefined);");
     expect(desktopStoryHome).toContain("onPlaying={markVideoStarted}");
     expect(desktopStoryHome).toContain('data-about-video-poster=""');
-    expect(desktopStoryHome).toContain('data-video-started={videoStarted ? "true" : "false"}');
+    expect(desktopStoryHome).toContain('data-video-started={videoStarted && shouldExposeVideo ? "true" : "false"}');
+    expect(desktopStoryHome).toContain('style={{ visibility: shouldExposeVideo ? "visible" : "hidden" }}');
+    expect(desktopStoryHome).toContain("shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}");
+    expect(desktopStoryHome).not.toContain("poster={aixcoDubaiHeroVideo.poster}");
     expect(desktopStoryHome).toContain('fetchPriority="high"');
     expect(css).toContain("[data-story-section='about'] .story-about-cinematic-poster");
     expect(css).toContain(".story-about-cinematic-poster[data-video-started='true']");
     expect(css).toContain("transition: opacity 900ms var(--ease-apple)");
+    expect(desktopStoryHome).toContain("if (shouldReduceMotion === true)");
     expect(desktopStoryHome).toContain('video.removeAttribute("src");');
     expect(desktopStoryHome).toContain("function useHeroBackdropVideoSrc()");
     expect(desktopStoryHome).toContain("mediaQuery.matches ? aixcoHeroBackgroundVideo.mobileSrc : aixcoHeroBackgroundVideo.src");
@@ -269,7 +274,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('alt: tx("Burj Khalifa and Dubai skyline at sunset")');
     expect(desktopStoryHome).toContain('sizes: "(min-width: 1280px) 82vw, 100vw"');
     expect(desktopStoryHome).not.toContain('title: tx("Dubai legacy portfolio video")');
-    expect(desktopStoryHome).toContain("src={shouldLoadVideo ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain("src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}");
   });
 
   it("requests high-density images for tall cropped story panels", () => {

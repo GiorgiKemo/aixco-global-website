@@ -128,14 +128,33 @@ export function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
     if (event.pointerType === "mouse") return;
     if (event.button !== 0 || pendingLeadKey || !canStartCardDrag(event.target)) return;
 
-    event.preventDefault();
-    event.currentTarget.setPointerCapture(event.pointerId);
     startManualDrag(lead, event.clientX, event.clientY, event.currentTarget.getBoundingClientRect(), event.pointerId);
   }
 
   function handlePointerMove(event: PointerEvent<HTMLElement>) {
     const drag = pointerDragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
+
+    if (!drag.active) {
+      const deltaX = event.clientX - drag.startX;
+      const deltaY = event.clientY - drag.startY;
+      const absoluteX = Math.abs(deltaX);
+      const absoluteY = Math.abs(deltaY);
+
+      // Leave vertical gestures entirely to the browser so the pipeline remains
+      // naturally scrollable on touch screens. A drag only takes ownership once
+      // the gesture has moved decisively in the board's horizontal direction.
+      if (absoluteY > 8 && absoluteY > absoluteX) {
+        pointerDragRef.current = null;
+        return;
+      }
+
+      if (absoluteX <= 8 || absoluteX <= absoluteY) return;
+
+      if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      }
+    }
 
     event.preventDefault();
     updateManualDrag(event.clientX, event.clientY);

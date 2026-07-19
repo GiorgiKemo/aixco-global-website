@@ -136,7 +136,8 @@ describe("ChatWidget", () => {
     const indicator = container.querySelector('[data-chat-online-indicator="true"]');
 
     expect(indicator).toBeInTheDocument();
-    expect(indicator).toHaveClass("right-1", "top-1");
+    expect(indicator).toHaveClass("end-1", "top-1");
+    expect(indicator).not.toHaveClass("right-1");
   });
 
   it("bounds the open chat panel to short mobile viewports", () => {

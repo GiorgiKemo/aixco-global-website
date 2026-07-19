@@ -1208,6 +1208,7 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
   // Fail closed until the hydrated motion preference has been evaluated. This
   // prevents an autoplay frame for visitors who request reduced motion.
   const [shouldRenderVideo, setShouldRenderVideo] = useState(false);
+  const [shouldExposeBackdrop, setShouldExposeBackdrop] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -1215,22 +1216,26 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
     if (!canAnimate) {
       video?.pause();
       setShouldRenderVideo(false);
+      setShouldExposeBackdrop(false);
       return undefined;
     }
 
     if (visible) {
       setShouldRenderVideo(true);
+      setShouldExposeBackdrop(true);
       void video?.play().catch(() => undefined);
 
       return undefined;
     }
 
-    video?.pause();
-    const cleanupTimer = window.setTimeout(() => {
-      setShouldRenderVideo(false);
+    // Keep the full-quality backdrop playing after its first activation. Once
+    // the opacity transition completes, visibility removes only the inactive
+    // compositor layer; decoding/playback continues without a pause.
+    const visibilityTimer = window.setTimeout(() => {
+      setShouldExposeBackdrop(false);
     }, 760);
 
-    return () => window.clearTimeout(cleanupTimer);
+    return () => window.clearTimeout(visibilityTimer);
   }, [canAnimate, videoSrc, visible]);
 
   return (
@@ -1239,7 +1244,10 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
         className={`pointer-events-none fixed bottom-0 end-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 [transition-timing-function:var(--ease-apple)] ${
           visible ? "opacity-100" : "opacity-0"
         }`}
-        style={{ insetInlineStart: "var(--story-fixed-backdrop-left, 0px)" }}
+        style={{
+          insetInlineStart: "var(--story-fixed-backdrop-left, 0px)",
+          visibility: visible || shouldExposeBackdrop ? "visible" : "hidden",
+        }}
       >
         <Image
           src={aixcoHeroBackgroundVideo.poster}
@@ -1255,13 +1263,13 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
           <video
             ref={videoRef}
             src={videoSrc}
-            poster={aixcoHeroBackgroundVideo.poster}
-            autoPlay={visible}
+            autoPlay
             muted
             loop
             playsInline
             preload="metadata"
             className="absolute inset-0 h-full w-full object-cover brightness-[1.08] saturate-[1.08]"
+            style={{ visibility: visible ? "visible" : "hidden" }}
           />
         ) : null}
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,16,14,0.64),rgba(17,16,14,0.20)_44%,rgba(17,16,14,0.54)),linear-gradient(180deg,rgba(17,16,14,0.16),rgba(17,16,14,0.58))]" />
@@ -1343,7 +1351,7 @@ function SceneShell({
 
   const resolvedOverlay: StoryMediaOverlay =
     mediaOverlay === "light" && tone === "dark" ? "contact" : mediaOverlay;
-  const copyColumnSpan = fullWidth ? "xl:col-span-12" : mediaWeight === "gallery" ? "xl:col-span-5" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-7";
+  const copyColumnSpan = fullWidth ? "md:col-span-2 xl:col-span-12" : mediaWeight === "gallery" ? "xl:col-span-5" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-7";
   const mediaColumnSpan = mediaWeight === "gallery" ? "xl:col-span-7" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-5";
   const shouldRenderMedia = Boolean(isRevealed || isActive || preloadMedia);
 
@@ -1728,20 +1736,23 @@ function BatumiBenefitIconGrid({
 function AboutScene({
   isActive,
   isRevealed,
-  shouldPlayVideo,
+  shouldExposeVideo,
+  shouldStartVideo,
   tx,
 }: {
   isActive: boolean;
   isRevealed: boolean;
-  shouldPlayVideo: boolean;
+  shouldExposeVideo: boolean;
+  shouldStartVideo: boolean;
   tx: (copy: string) => string;
 }) {
   const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
   const shouldReduceMotion = useHydratedReducedMotion();
   const [motionPreferenceResolved, setMotionPreferenceResolved] = useState(false);
+  const [videoRequested, setVideoRequested] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
   const shouldLoadVideo = motionPreferenceResolved && shouldReduceMotion !== true;
-  const shouldPrimeVideo = shouldLoadVideo && shouldPlayVideo;
+  const shouldAttachVideo = shouldLoadVideo && videoRequested;
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
@@ -1754,12 +1765,18 @@ function AboutScene({
   }, []);
 
   useEffect(() => {
+    if (shouldLoadVideo && shouldStartVideo) {
+      setVideoRequested(true);
+    }
+  }, [shouldLoadVideo, shouldStartVideo]);
+
+  useEffect(() => {
     const video = dubaiVideoRef.current;
     if (!video) return undefined;
 
     video.playbackRate = 0.82;
 
-    if (!shouldLoadVideo) {
+    if (shouldReduceMotion === true) {
       setVideoStarted(false);
       video.pause();
       video.removeAttribute("src");
@@ -1767,8 +1784,7 @@ function AboutScene({
       return undefined;
     }
 
-    if (!shouldPrimeVideo) {
-      video.pause();
+    if (!shouldAttachVideo) {
       return undefined;
     }
 
@@ -1795,7 +1811,7 @@ function AboutScene({
       video.removeEventListener("loadeddata", playVideo);
       video.removeEventListener("canplay", playVideo);
     };
-  }, [shouldLoadVideo, shouldPrimeVideo]);
+  }, [shouldAttachVideo, shouldReduceMotion]);
 
   const markVideoStarted = () => {
     setVideoStarted(true);
@@ -1812,21 +1828,21 @@ function AboutScene({
             <div className="story-about-cinematic-image relative h-full w-full">
               <video
                 ref={dubaiVideoRef}
-                src={shouldLoadVideo ? aixcoDubaiHeroVideo.src : undefined}
+                src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}
                 className="h-full w-full object-cover"
-                poster={aixcoDubaiHeroVideo.poster}
-                autoPlay={shouldPrimeVideo}
+                style={{ visibility: shouldExposeVideo ? "visible" : "hidden" }}
+                autoPlay={shouldAttachVideo}
                 muted
                 playsInline
                 loop
-                preload={shouldLoadVideo ? "auto" : "none"}
+                preload={shouldAttachVideo ? "auto" : "none"}
                 aria-label={tx(aixcoDubaiHeroVideo.title)}
                 onLoadedData={(event) => {
                   event.currentTarget.playbackRate = 0.82;
                 }}
                 onCanPlay={(event) => {
                   event.currentTarget.playbackRate = 0.82;
-                  if (shouldPrimeVideo) {
+                  if (shouldAttachVideo) {
                     void event.currentTarget.play().catch(() => undefined);
                   }
                 }}
@@ -1843,7 +1859,7 @@ function AboutScene({
                 aria-hidden="true"
                 fill
                 data-about-video-poster=""
-                data-video-started={videoStarted ? "true" : "false"}
+                data-video-started={videoStarted && shouldExposeVideo ? "true" : "false"}
                 className="story-about-cinematic-poster object-cover"
                 loading="eager"
                 fetchPriority="high"
@@ -3322,7 +3338,8 @@ export function DesktopStoryHome() {
         key="about"
         isActive={activeIndex === 1}
         isRevealed={isRevealed(1)}
-        shouldPlayVideo={activeIndex < 3}
+        shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}
+        shouldStartVideo={activeIndex >= 1}
         tx={tx}
       />,
       <PhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
@@ -3358,7 +3375,7 @@ export function DesktopStoryHome() {
       <ContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
-    [activeIndex, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
+    [activeIndex, heroBackdropVisible, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
   );
 
   return (

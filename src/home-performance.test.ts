@@ -69,7 +69,7 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).not.toContain("rgba(17,16,14,0.78)");
   });
 
-  it("primes the about video before its section and pauses it two chapters later", () => {
+  it("starts the about video on demand and keeps playback continuous after activation", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const aboutSceneStart = desktopStorySource.indexOf("function AboutScene");
     const philosophySceneStart = desktopStorySource.indexOf("function PhilosophyScene");
@@ -78,16 +78,23 @@ describe("home page performance structure", () => {
     expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
     expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
     expect(aboutSceneSource).toContain("const [motionPreferenceResolved, setMotionPreferenceResolved] = useState(false);");
+    expect(aboutSceneSource).toContain("const [videoRequested, setVideoRequested] = useState(false);");
     expect(aboutSceneSource).toContain("const shouldLoadVideo = motionPreferenceResolved && shouldReduceMotion !== true;");
-    expect(aboutSceneSource).toContain("const shouldPrimeVideo = shouldLoadVideo && shouldPlayVideo;");
-    expect(aboutSceneSource).toContain("src={shouldLoadVideo ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(aboutSceneSource).toContain("autoPlay={shouldPrimeVideo}");
+    expect(aboutSceneSource).toContain("const shouldAttachVideo = shouldLoadVideo && videoRequested;");
+    expect(aboutSceneSource).toContain("if (shouldLoadVideo && shouldStartVideo)");
+    expect(aboutSceneSource).toContain("src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(aboutSceneSource).toContain("autoPlay={shouldAttachVideo}");
     expect(aboutSceneSource).toContain("loop");
-    expect(aboutSceneSource).toContain('preload={shouldLoadVideo ? "auto" : "none"}');
-    expect(desktopStorySource).toContain("shouldPlayVideo={activeIndex < 3}");
+    expect(aboutSceneSource).toContain('preload={shouldAttachVideo ? "auto" : "none"}');
+    expect(aboutSceneSource).toContain('style={{ visibility: shouldExposeVideo ? "visible" : "hidden" }}');
+    expect(aboutSceneSource).toContain('data-video-started={videoStarted && shouldExposeVideo ? "true" : "false"}');
+    expect(aboutSceneSource).not.toContain("poster={aixcoDubaiHeroVideo.poster}");
+    expect(desktopStorySource).toContain("shouldStartVideo={activeIndex >= 1}");
+    expect(desktopStorySource).toContain("shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}");
     expect(desktopStorySource).toContain("storyChapters.map((_, index) => index <= 1)");
-    expect(aboutSceneSource).toContain("if (!shouldPrimeVideo) {");
-    expect(aboutSceneSource).toContain("video.pause();");
+    expect(aboutSceneSource).not.toContain("if (!shouldPrimeVideo)");
+    expect(aboutSceneSource).toContain("if (shouldReduceMotion === true)");
+    expect(aboutSceneSource.match(/video\.pause\(\);/gu)).toHaveLength(1);
   });
 
   it("does not mount heavy story media before its section is revealed", () => {

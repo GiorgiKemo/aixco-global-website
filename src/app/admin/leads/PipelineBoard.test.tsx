@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { createEvent, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PipelineBoard, type DashboardLead } from "./PipelineBoard";
 
@@ -48,14 +48,18 @@ describe("PipelineBoard", () => {
     expect(boardGrid).toHaveClass("grid-cols-1", "md:grid-cols-2", "xl:grid-cols-4");
     expect(boardGrid).not.toHaveClass("min-w-[980px]", "overflow-x-auto");
     expect(screen.getByText("AIX-2026-000001")).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Mark contacted" })[0]).toHaveClass("min-h-11");
+    expect(screen.getAllByRole("button", { name: "Archive lead" })[0]).toHaveClass("h-11", "w-11");
+    expect(screen.getByRole("link", { name: "codex@example.com" })).toHaveClass("min-h-11");
   });
 
   it("moves a lead with pointer dragging from the card surface", async () => {
-    const setPointerCapture = vi.fn();
-    const releasePointerCapture = vi.fn();
+    let pointerCaptured = false;
+    const setPointerCapture = vi.fn(() => { pointerCaptured = true; });
+    const releasePointerCapture = vi.fn(() => { pointerCaptured = false; });
     Object.defineProperty(HTMLElement.prototype, "setPointerCapture", { configurable: true, value: setPointerCapture });
     Object.defineProperty(HTMLElement.prototype, "releasePointerCapture", { configurable: true, value: releasePointerCapture });
-    Object.defineProperty(HTMLElement.prototype, "hasPointerCapture", { configurable: true, value: () => true });
+    Object.defineProperty(HTMLElement.prototype, "hasPointerCapture", { configurable: true, value: () => pointerCaptured });
 
     render(<PipelineBoard leads={leads} />);
 
@@ -65,8 +69,14 @@ describe("PipelineBoard", () => {
     const elementFromPoint = vi.fn(() => qualifiedStage);
     Object.defineProperty(document, "elementFromPoint", { configurable: true, value: elementFromPoint });
 
-    fireEvent.pointerDown(leadCard, { button: 0, clientX: 10, clientY: 10, pointerId: 1 });
-    fireEvent.pointerMove(leadCard, { clientX: 24, clientY: 10, pointerId: 1 });
+    const pointerDown = createEvent.pointerDown(leadCard, { button: 0, clientX: 10, clientY: 10, pointerId: 1 });
+    fireEvent(leadCard, pointerDown);
+    expect(pointerDown.defaultPrevented).toBe(false);
+    expect(setPointerCapture).not.toHaveBeenCalled();
+    const horizontalMove = createEvent.pointerMove(leadCard, { clientX: 24, clientY: 10, pointerId: 1 });
+    fireEvent(leadCard, horizontalMove);
+    expect(horizontalMove.defaultPrevented).toBe(true);
+    expect(setPointerCapture).toHaveBeenCalledWith(1);
     expect(screen.getByTestId("pipeline-drag-overlay")).toBeInTheDocument();
     fireEvent.pointerUp(leadCard, { clientX: 24, clientY: 10, pointerId: 1 });
 
@@ -88,6 +98,29 @@ describe("PipelineBoard", () => {
     expect(screen.getByRole("status")).toHaveClass("fixed", "pointer-events-none");
 
     Object.defineProperty(document, "elementFromPoint", { configurable: true, value: originalElementFromPoint });
+  });
+
+  it("leaves vertical touch gestures to native page scrolling", () => {
+    const setPointerCapture = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, "setPointerCapture", { configurable: true, value: setPointerCapture });
+    Object.defineProperty(HTMLElement.prototype, "releasePointerCapture", { configurable: true, value: vi.fn() });
+    Object.defineProperty(HTMLElement.prototype, "hasPointerCapture", { configurable: true, value: () => false });
+
+    render(<PipelineBoard leads={leads} />);
+
+    const leadCard = screen.getByTestId("pipeline-card-chat:11111111-1111-4111-8111-111111111111");
+    const pointerDown = createEvent.pointerDown(leadCard, { button: 0, clientX: 20, clientY: 20, pointerId: 2, pointerType: "touch" });
+    const verticalMove = createEvent.pointerMove(leadCard, { clientX: 22, clientY: 42, pointerId: 2, pointerType: "touch" });
+    fireEvent(leadCard, pointerDown);
+    fireEvent(leadCard, verticalMove);
+    fireEvent.pointerUp(leadCard, { clientX: 22, clientY: 42, pointerId: 2, pointerType: "touch" });
+
+    expect(pointerDown.defaultPrevented).toBe(false);
+    expect(verticalMove.defaultPrevented).toBe(false);
+    expect(setPointerCapture).not.toHaveBeenCalled();
+    expect(screen.queryByTestId("pipeline-drag-overlay")).not.toBeInTheDocument();
+    expect(globalThis.fetch).not.toHaveBeenCalled();
+    expect(leadCard).toHaveClass("[touch-action:pan-y_pinch-zoom]");
   });
 
   it("moves a lead with mouse dragging from the card surface on desktop", async () => {

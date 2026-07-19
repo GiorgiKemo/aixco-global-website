@@ -135,6 +135,9 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
   const heroImage = property.id === "current-project"
     ? "/aixco-global-op2/images/optimized/current-project-hero-towers.webp"
     : image;
+  const heroSizes = property.id === "current-project"
+    ? "(max-width: 639px) 773px, (max-width: 1023px) 1075px, 1344px"
+    : "(min-width: 1024px) 44vw, 100vw";
   const heroMetrics = [
     ...property.metrics,
     { label: "Available apartments", value: "28", subtext: "13th and 14th floors" },
@@ -195,7 +198,8 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
             src={heroImage}
             alt={property.name}
             fill
-            sizes="(min-width: 1024px) 44vw, 100vw"
+            sizes={heroSizes}
+            unoptimized={property.id === "current-project"}
             className="object-cover object-[62%_center]"
             preload
             fetchPriority="high"
@@ -204,7 +208,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
         </aside>
       </section>
 
-      <section className="border-b border-[#9E9D9D]/35 bg-white px-5 py-12 sm:px-8 lg:px-10 lg:py-14">
+      <section className="property-content-section border-b border-[#9E9D9D]/35 bg-white px-5 py-12 sm:px-8 lg:px-10 lg:py-14">
         <div className="mx-auto max-w-[88rem]">
           <div className="text-center">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#161616]"><Tx>The investment case</Tx></p>
@@ -222,7 +226,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
         </div>
       </section>
 
-      <section className="bg-[#161616] px-5 py-14 text-white sm:px-8 lg:px-10 lg:py-20">
+      <section className="property-content-section bg-[#161616] px-5 py-14 text-white sm:px-8 lg:px-10 lg:py-20">
         <div className="mx-auto grid max-w-[82rem] gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
           <div>
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[#E6C767]"><Tx>Project highlights</Tx></p>

@@ -74,9 +74,9 @@ function Pagination({
 }) {
   const { page, total, totalPages, start, end } = pagination;
   const buttonClass =
-    "inline-flex h-9 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-white px-3 text-sm font-medium text-[#161616] transition-colors hover:bg-[#f6f4ef] sm:flex-none";
+    "inline-flex min-h-11 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-white px-3 text-sm font-medium text-[#161616] transition-colors hover:bg-[#f6f4ef] sm:flex-none";
   const disabledClass =
-    "inline-flex h-9 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-[#f1efe8] px-3 text-sm font-medium text-[#9e9d9d] sm:flex-none";
+    "inline-flex min-h-11 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-[#f1efe8] px-3 text-sm font-medium text-[#9e9d9d] sm:flex-none";
 
   return (
     <div className="mt-4 flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
@@ -138,7 +138,7 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
 
             <div className="min-w-0 text-xs font-medium text-[#161616]">
               {lead.contactHref ? (
-                <a href={lead.contactHref} className="truncate underline-offset-4 hover:underline">
+                <a href={lead.contactHref} className="inline-flex min-h-11 max-w-full items-center truncate underline-offset-4 hover:underline">
                   {lead.contactLabel}
                 </a>
               ) : (
@@ -150,7 +150,7 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
                   <p>
                     Request: <span className="font-semibold capitalize text-[#161616]">{lead.requestType ?? "message"}</span>
                   </p>
-                  {lead.phone ? <a href={`tel:${lead.phone}`} className="font-semibold text-[#161616] underline-offset-4 hover:underline">{lead.phone}</a> : null}
+                  {lead.phone ? <a href={`tel:${lead.phone}`} className="inline-flex min-h-11 items-center font-semibold text-[#161616] underline-offset-4 hover:underline">{lead.phone}</a> : null}
                   {lead.preferredCallAt ? (
                     <p>
                       Call: {formatDate(lead.preferredCallAt)}{lead.preferredCallTimezone ? ` (${lead.preferredCallTimezone})` : ""}
@@ -162,7 +162,7 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
                   {lead.emailDeliveryStatus === "failed" || lead.emailDeliveryStatus === "delivery_issue" ? (
                     <form action="/admin/leads/requeue-email" method="post" className="pt-1">
                       <input type="hidden" name="contactId" value={lead.id} />
-                      <button type="submit" className="rounded border border-[#8b6a18]/30 bg-[#e6c767]/15 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6f5112] hover:bg-[#e6c767]/25">
+                      <button type="submit" className="inline-flex min-h-11 items-center rounded border border-[#8b6a18]/30 bg-[#e6c767]/15 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6f5112] hover:bg-[#e6c767]/25">
                         Retry failed email
                       </button>
                     </form>
@@ -242,7 +242,7 @@ function PortalActivity({ events, total }: { events: PortalEvent[]; total: numbe
                   href={event.portal_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[#161616]/10 text-[#161616] transition-colors hover:border-[#e6c767] hover:bg-[#e6c767]/15"
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-[#161616]/10 text-[#161616] transition-colors hover:border-[#e6c767] hover:bg-[#e6c767]/15"
                   aria-label={event.action}
                   title={event.action}
                 >
@@ -337,7 +337,7 @@ export function AdminLeadDetails({
                       <Link
                         key={tab.label}
                         href={tab.value ? `${filterBaseHref}${requestedTab ? "&" : "?"}status=${tab.value}` : filterBaseHref}
-                        className={`rounded-md border px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors ${
+                        className={`inline-flex min-h-11 items-center rounded-md border px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors ${
                           active ? "border-[#161616] bg-[#161616] text-white" : "border-[#161616]/10 bg-white text-[#6f6e6a] hover:border-[#e6c767] hover:text-[#161616]"
                         }`}
                       >

@@ -232,7 +232,7 @@ export function ChatWidget() {
                       </span>
                     )}
                     <div
-                      className={`max-w-[78%] rounded-lg px-4 py-3 text-sm leading-relaxed ${
+                      className={`max-w-[78%] break-words rounded-lg px-4 py-3 text-sm leading-relaxed [overflow-wrap:anywhere] ${
                         visitor
                           ? "bg-primary text-primary-foreground"
                           : "border border-border/60 bg-background/70 text-foreground/85"
@@ -250,7 +250,7 @@ export function ChatWidget() {
               })}
               {showQuickReplies && (
                 <div className="flex justify-start" data-chat-quick-replies>
-                  <div className="ml-11 flex max-w-[78%] flex-wrap gap-1.5 rounded-lg border border-border/50 bg-background/55 p-2">
+                  <div className="ms-11 flex max-w-[78%] flex-wrap gap-1.5 rounded-lg border border-border/50 bg-background/55 p-2">
                     {quickReplies.map((reply) => (
                       <button
                         key={reply}
@@ -363,7 +363,7 @@ export function ChatWidget() {
         {!isOpen && (
           <span
             data-chat-online-indicator="true"
-            className="absolute right-1 top-1 h-3 w-3 rounded-full border-2 border-background bg-success"
+            className="absolute end-1 top-1 h-3 w-3 rounded-full border-2 border-background bg-success"
             aria-hidden
           />
         )}

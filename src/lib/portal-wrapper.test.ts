@@ -19,6 +19,9 @@ describe("portal wrapper", () => {
     expect(html).toContain("min-height: 44px");
     expect(html).toContain("height: 100dvh");
     expect(html).toContain("padding-bottom: env(safe-area-inset-bottom)");
+    expect(html).toContain("flex-wrap: wrap");
+    expect(html).toContain("overflow-wrap: anywhere");
+    expect(html).toContain("white-space: normal");
   });
 
   it("rejects unsupported portal roles", () => {

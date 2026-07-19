@@ -63,7 +63,7 @@ const nextConfig = {
     webVitalsAttribution: ["CLS", "LCP", "INP"],
   },
   images: {
-    qualities: [62, 75],
+    qualities: [62, 75, 78],
     localPatterns: [
       {
         pathname: "/aixco-global-op2/images/**",

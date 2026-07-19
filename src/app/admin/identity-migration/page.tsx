@@ -15,9 +15,9 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
   const params = searchParams ? await searchParams : {};
 
   return (
-    <main className="min-h-screen bg-[#f6f4ef] px-4 py-8 text-[#161616] sm:px-6">
+    <main className="admin-safe-page admin-safe-page--roomy min-h-screen bg-[#f6f4ef] px-4 py-8 text-[#161616] sm:px-6">
       <div className="mx-auto max-w-3xl">
-        <Link href="/admin/leads" className="text-sm font-semibold text-[#6f5112] underline-offset-4 hover:underline">Back to lead center</Link>
+        <Link href="/admin/leads" className="inline-flex min-h-11 items-center text-sm font-semibold text-[#6f5112] underline-offset-4 hover:underline">Back to lead center</Link>
         <header className="mt-5 bg-[#161616] px-6 py-6 text-white">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#e6c767]">Secure migration</p>
           <h1 className="mt-2 font-display text-2xl font-bold">Individual admin identities</h1>
@@ -38,7 +38,7 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
           <form action="/admin/identity-migration/invite" method="post" className="mt-6 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
             <label className="grid gap-2 text-sm font-semibold">
               Administrator email
-              <input name="email" type="email" required maxLength={255} className="h-11 border border-[#161616]/20 px-3 font-normal" />
+              <input name="email" type="email" required maxLength={255} className="h-11 border border-[#161616]/20 px-3 text-base font-normal" />
             </label>
             <button type="submit" className="h-11 bg-[#161616] px-5 text-sm font-semibold text-white">Send secure invite</button>
           </form>

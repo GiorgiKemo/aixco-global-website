@@ -46,11 +46,14 @@ describe("admin lead details", () => {
     );
 
     expect(screen.getByText("call", { exact: true })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "+995 555 123 456" })).toHaveAttribute("href", "tel:+995 555 123 456");
+    const phoneLink = screen.getByRole("link", { name: "+995 555 123 456" });
+    expect(phoneLink).toHaveAttribute("href", "tel:+995 555 123 456");
+    expect(phoneLink).toHaveClass("min-h-11");
     expect(screen.getByText(/Asia\/Tbilisi/)).toBeInTheDocument();
     expect(screen.getByText("delivery issue")).toBeInTheDocument();
     const retry = screen.getByRole("button", { name: "Retry failed email" });
     expect(retry.closest("form")).toHaveAttribute("action", "/admin/leads/requeue-email");
+    expect(retry).toHaveClass("min-h-11");
     expect(screen.getByText("Showing 1-1 of 1")).toBeInTheDocument();
     expect(screen.getByText("Showing 0 of 0")).toBeInTheDocument();
   });
@@ -70,6 +73,8 @@ describe("admin lead details", () => {
 
     expect(screen.getByText("Showing 1-15 of 16")).toBeInTheDocument();
     expect(screen.getByText("1 / 2")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Next" })).toHaveAttribute("href", "/admin/leads?contactPage=2");
+    const nextLink = screen.getByRole("link", { name: "Next" });
+    expect(nextLink).toHaveAttribute("href", "/admin/leads?contactPage=2");
+    expect(nextLink).toHaveClass("min-h-11");
   });
 });
