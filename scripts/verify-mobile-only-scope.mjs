@@ -13,6 +13,7 @@ try {
     await page.waitForFunction(() => {
       const hero = document.querySelector('[data-story-section="hero"]');
       return document.querySelectorAll("[data-story-section]").length === 17
+        && document.querySelectorAll("[data-story-section][data-story-in-viewport]").length === 17
         && (hero?.getBoundingClientRect().height ?? 0) > 0
         && document.body.innerText.trim().length >= 1_500;
     });
@@ -80,7 +81,10 @@ try {
   });
   const animatedPage = await animatedContext.newPage();
   await animatedPage.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
-  await animatedPage.waitForFunction(() => document.querySelectorAll("[data-story-section]").length === 17);
+  await animatedPage.waitForFunction(() => (
+    document.querySelectorAll("[data-story-section]").length === 17
+    && document.querySelectorAll("[data-story-section][data-story-in-viewport]").length === 17
+  ));
   const animatedJourney = await animatedPage.evaluate(() => {
     const journeys = document.querySelector('[data-layout="story-journeys"]');
     const track = document.querySelector(".story-journeys-track");
