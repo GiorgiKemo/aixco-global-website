@@ -2657,8 +2657,15 @@
     hyphens: auto;
   }
 
+  [data-layout='story-philosophy-stats'] > .story-philosophy-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
   [data-layout='story-philosophy-stats'] .story-metric-label + dd {
-    margin-top: clamp(0.65rem, 1.35svh, 0.9rem);
+    margin-top: auto;
+    padding-top: clamp(0.65rem, 1.35svh, 0.9rem);
   }
 
   /* Desktop story sidebar — chapter links (Land of Tomorrow–style hover) */
@@ -8724,6 +8731,19 @@ html[data-home-experience='story'] {
     border: 1px solid hsl(var(--primary) / 0.3);
     border-radius: 0.5rem;
     background: hsl(var(--primary) / 0.07);
+  }
+
+  [data-story-section='batumi'] .story-batumi-property-link {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  [data-story-section='batumi'] .story-batumi-property__explore {
+    width: 100%;
+    min-height: 3.2rem;
+    justify-content: center;
+    border-radius: 0.5rem;
   }
 
   [data-story-section='materials'] [data-story-scene-copy] .divide-y {

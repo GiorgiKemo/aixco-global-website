@@ -65,6 +65,9 @@ try {
           const brokenImages = [...document.images]
             .filter((image) => image.complete && image.currentSrc && image.naturalWidth === 0)
             .map((image) => image.alt || image.currentSrc);
+          const philosophyMetricValueTops = [...document.querySelectorAll(
+            "[data-story-section=\"philosophy\"] [data-layout=\"story-philosophy-stats\"] dd",
+          )].map((value) => value.getBoundingClientRect().top);
 
           return {
             lang: root.lang,
@@ -74,6 +77,7 @@ try {
             headingCount: sectionHeadings.length,
             clippedHeadings,
             brokenImages,
+            philosophyMetricValueTops,
             hasReplacementGlyph: /�|Ã|â‚¬|â€”|Ð|Ñ|áƒ|Ø|Ù/.test(document.body.innerText),
             bodyTextLength: document.body.innerText.trim().length,
             dubaiCardOverflows: [...document.querySelectorAll("[data-story-section=\"dubai\"] .story-dubai-portfolio-card")].filter((card) => card.scrollHeight - card.clientHeight > 3).map((card) => card.textContent?.trim().slice(0, 80)),
@@ -91,6 +95,14 @@ try {
         if (metrics.hasReplacementGlyph) errors.push(`${label}: mojibake or replacement glyph detected`);
         if (metrics.bodyTextLength < 1_500) errors.push(`${label}: unexpectedly little rendered content (${metrics.bodyTextLength})`);
         if (metrics.dubaiCardOverflows.length) errors.push(`${label}: Dubai card content overflow ${metrics.dubaiCardOverflows.join(" | ")}`);
+        if (metrics.philosophyMetricValueTops.length !== 4) {
+          errors.push(`${label}: rendered ${metrics.philosophyMetricValueTops.length} Philosophy metric values`);
+        } else {
+          for (let index = 0; index < metrics.philosophyMetricValueTops.length; index += 2) {
+            const pairOffset = Math.abs(metrics.philosophyMetricValueTops[index] - metrics.philosophyMetricValueTops[index + 1]);
+            if (pairOffset > 1) errors.push(`${label}: Philosophy metric row ${index / 2 + 1} values differ by ${pairOffset.toFixed(2)}px`);
+          }
+        }
         if (consoleErrors.length) errors.push(`${label}: console errors ${consoleErrors.join(" | ")}`);
       } catch (error) {
         errors.push(`${viewport.name}/${locale}: ${error.message}`);

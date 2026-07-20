@@ -41,4 +41,11 @@ describe("cross-device responsive resilience", () => {
     expect(css).toContain("@media (hover: none) and (pointer: coarse) and (min-width: 1280px)");
     expect(css).toContain("min-height: 2.75rem !important;");
   });
+
+  it("keeps paired Philosophy metric values aligned when labels wrap", () => {
+    expect(css).toContain("[data-layout='story-philosophy-stats'] > .story-philosophy-card {\n    display: flex;");
+    expect(css).toContain("flex-direction: column;");
+    expect(css).toContain("[data-layout='story-philosophy-stats'] .story-metric-label + dd {\n    margin-top: auto;");
+    expect(css).toContain("padding-top: clamp(0.65rem, 1.35svh, 0.9rem);");
+  });
 });

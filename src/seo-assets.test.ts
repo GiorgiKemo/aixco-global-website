@@ -74,13 +74,22 @@ describe("SEO static assets", () => {
     ]));
   });
 
+  it("exposes the project brochure through the clean Reverance URL", async () => {
+    const rewrites = await nextConfig.rewrites?.();
+
+    expect(rewrites).toContainEqual({
+      source: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
+      destination: "/aixco-global-op2/documents/reverance-by-otium-brochure-en.pdf",
+    });
+  });
+
   it("serves complete canonical and social metadata for property pages", async () => {
     const metadata = await generatePropertyMetadata({
       params: Promise.resolve({ slug: "current-project" }),
     });
 
     expect(metadata).toMatchObject({
-      title: "Reverance by Otium | AIXCO.Global",
+      title: "Our current project | AIXCO.Global",
       alternates: {
         canonical: "/aixco-global-op2/current-project",
       },

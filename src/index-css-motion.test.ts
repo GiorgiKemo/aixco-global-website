@@ -703,6 +703,14 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain(".story-mobile-current-project-link");
   });
 
+  it("makes the Batumi project card explicit and removes the old circular arrow CTA", () => {
+    expect(desktopStoryHome).toContain('data-batumi-project-cta="explore"');
+    expect(desktopStoryHome).toContain('className="btn-gold story-batumi-property__explore w-fit shrink-0"');
+    expect(desktopStoryHome).toContain('{tx("Explore")}');
+    expect(desktopStoryHome).not.toContain('className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full');
+    expect(css).toContain("[data-story-section='batumi'] .story-batumi-property__explore {");
+  });
+
   it("keeps the shared scroll-to-top arrow available on the main story page", () => {
     expect(css).not.toContain("html[data-home-experience='story'] [data-scroll-to-top-button='true']");
   });

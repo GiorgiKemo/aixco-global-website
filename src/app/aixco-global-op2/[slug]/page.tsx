@@ -31,6 +31,12 @@ type PropertyPageProps = {
   }>;
 };
 
+const currentProjectPageTitle = "Our current project";
+
+function getPropertyPageTitle(property: BatumiProperty) {
+  return property.id === "current-project" ? currentProjectPageTitle : property.name;
+}
+
 function normalizeSlug(slug: string) {
   let decodedSlug = slug;
 
@@ -71,7 +77,7 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
     };
   }
 
-  const title = `${property.name} | AIXCO.Global`;
+  const title = `${getPropertyPageTitle(property)} | AIXCO.Global`;
   const canonicalPath = `/aixco-global-op2/${property.url}`;
   const socialImage = property.id === "current-project"
     ? {
@@ -131,6 +137,7 @@ function DetailMetric({ label, value, subtext }: { label: string; value: string;
 
 function PropertyPageContent({ property, batumiBenefits }: { property: BatumiProperty; batumiBenefits: string[] }) {
   const image = batumiImageMap[property.image];
+  const pageTitle = getPropertyPageTitle(property);
   const ownershipDetails = getBatumiMarketDetails(batumiBenefits);
   const heroImage = property.id === "current-project"
     ? "/aixco-global-op2/images/optimized/current-project-hero-towers.webp"
@@ -163,7 +170,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
               <Tx>Batumi property profile</Tx>
             </p>
             <h1 className="property-hero__title mt-5 max-w-4xl text-[clamp(3.5rem,5.6vw,5.5rem)] font-semibold leading-[0.96] tracking-[-0.035em] text-[#161616]">
-              <Tx>{property.name}</Tx>
+              <Tx>{pageTitle}</Tx>
             </h1>
             <p className="property-hero__subtitle mt-2 text-[clamp(1.55rem,2.5vw,2.7rem)] font-medium leading-[1.08] tracking-[-0.02em] text-[#161616]">
               <Tx>private residences</Tx>
@@ -185,8 +192,8 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
             </PropertyContactLink>
             {property.id === "current-project" ? (
               <EnglishBrochureLink
-                href="/aixco-global-op2/documents/reverance-by-otium-brochure-en.pdf"
-                fileName="Reverance-by-Otium-brochure-EN.pdf"
+                href="/aixco-global-op2/documents/reverance-brochure-en.pdf"
+                fileName="Reverance-brochure-EN.pdf"
                 className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] px-3 text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#9A7425] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
               />
             ) : null}

@@ -133,7 +133,7 @@ describe("I18nProvider", () => {
 
   it("preserves route-specific metadata when the language changes", async () => {
     localStorage.setItem("aixco-lang", "de");
-    document.title = "Reverance by Otium | AIXCO.Global";
+    document.title = "Our current project | AIXCO.Global";
     const description = document.createElement("meta");
     description.name = "description";
     description.content = "Reverance route description";
@@ -149,7 +149,7 @@ describe("I18nProvider", () => {
       expect(document.documentElement.lang).toBe("de");
     });
 
-    expect(document.title).toBe("Reverance by Otium | AIXCO.Global");
+    expect(document.title).toBe("Our current project | AIXCO.Global");
     expect(description.content).toBe("Reverance route description");
     description.remove();
   });

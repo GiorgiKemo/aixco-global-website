@@ -62,8 +62,6 @@ The full implementation image was assembled from browser-rendered viewport segme
 
 final result: passed
 
----
-
 # Dubai Portfolio Card Typography Redesign - Design QA
 
 - Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-1cb210ec-76e0-4613-88e7-b7db892397bb.png`, together with the explicit direction to preserve the existing card shells, increase their height, and redesign the internal text hierarchy
@@ -1033,5 +1031,171 @@ final result: passed
 - 68 targeted Vitest checks passed.
 - Bundled-font validation and the production Next.js build passed.
 - `git diff --check` passed.
+
+final result: passed
+
+---
+
+# Philosophy Metric Row Alignment - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-5db7b4c7-ef04-4700-a924-7815394582de.png`
+- Implementation screenshot path: `output/design-qa/philosophy-metrics-after.jpg`
+- Full-view comparison: `output/design-qa/philosophy-metrics-full-comparison.png`
+- Focused comparison: `output/design-qa/philosophy-metrics-comparison.png`
+- Viewport and state: English homepage at `#philosophy`, 1280 x 900 CSS pixels, navigation menus closed
+- Responsive evidence: Chrome at 1440 x 900, 820 x 1180, and 430 x 932 CSS pixels
+- Console errors checked: zero
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested metric-card alignment scope.
+- Both values in the first row now share the exact same top and bottom coordinates: `2009` and `$400M+` have a 0px offset.
+- Both values in the second row now share the exact same top and bottom coordinates: `2,000+` and `$4.2B+` have a 0px offset.
+- Wrapped and translated labels can no longer push a value downward because every metric card uses the same flex-column bottom alignment.
+
+## Full-view comparison evidence
+
+- The full comparison preserves the existing split-screen Philosophy composition, city image, heading, summary, four metric cards, principle cards, palette, typography, and spacing.
+- The source is a photographed laptop screen rather than a direct browser capture, so the full views have different perspective and crop. The focused normalized comparison is the authoritative evidence for the requested number-row alignment.
+
+## Focused region comparison evidence
+
+- `output/design-qa/philosophy-metrics-comparison.png` places the user-annotated metric block and the corrected browser-rendered metric block in one comparison image.
+- The corrected implementation shows one continuous horizontal baseline for each number pair while keeping label wrapping and card dimensions intact.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; existing Gilroy family, sizes, weights, line heights, tracking, tabular numerals, and gold value color are unchanged.
+- Spacing and layout rhythm: passed; number pairs now align exactly, while card padding, row gaps, radii, shadows, and principle-card spacing remain unchanged.
+- Colors and visual tokens: passed; the existing ivory, white, onyx, muted gray, border, and AIXCO gold tokens are unchanged.
+- Image quality and asset fidelity: passed; the existing city image, crop, logo, and shield icons are unchanged.
+- Copy and content: passed; all four labels, values, and four Philosophy principles remain complete and unchanged.
+
+## Comparison history
+
+1. Initial P2 finding: the two-line right labels pushed `$400M+` and `$4.2B+` 15.53125px below the corresponding left-hand values on desktop and tablet layouts.
+2. Fix: applied the existing mobile flex-column and auto-margin alignment pattern to Philosophy metric cards at every breakpoint, retaining the established vertical gap as value padding.
+3. Post-fix evidence: Chrome reports 0px top and bottom offset for both rows at 1280px, plus 0px row offsets at 1440px, 820px, and 430px with no horizontal overflow.
+
+## Verification
+
+- Production Next.js build and bundled-font validation: passed.
+- Focused responsive suite: 6 tests passed.
+- TypeScript, ESLint, and `git diff --check`: passed.
+- Production-build Chrome geometry: both rows have exact 0px top and bottom deltas.
+- Browser console: zero errors.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Batumi Reverance Explore CTA - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-b03310d5-ae49-4484-983b-588055060eaa.png`
+- Implementation screenshot path: `output/design-qa/batumi-explore-after-desktop.png`
+- Full-view comparison: `output/design-qa/batumi-explore-full-comparison.png`
+- Focused comparison: `output/design-qa/batumi-explore-focused-comparison.png`
+- Viewport and state: English homepage at `#batumi`, 1600 x 779 CSS pixels, navigation menus closed
+- Primary interaction tested: the redesigned project link was clicked and opened `/aixco-global-op2/current-project`
+- Console errors checked: zero
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested project-card scope.
+- The visible project name is now `Reverance` on the homepage, property page, document title, metadata, chatbot content, structured data, and every localized title/description path.
+- The circular arrow has been removed from the Batumi project card and replaced by an explicit `EXPLORE` call to action.
+- Chrome computed styles confirm that `EXPLORE` uses the same gold gradient, white text, 12.48px size, 600 weight, 1.4976px tracking, uppercase treatment, 2px radius, and 48px minimum height as the `REGISTER` button in How AIXCO Works.
+- The card contains zero SVG arrow icons, the link resolves correctly, and the page has zero horizontal overflow.
+
+## Full-view comparison evidence
+
+- `output/design-qa/batumi-explore-full-comparison.png` places the supplied photographed reference and the updated Chrome-rendered Batumi section together.
+- The existing split-screen composition, Batumi mosaic, benefit metrics, card outline, typography, palette, and surrounding content remain intact.
+
+## Focused region comparison evidence
+
+- `output/design-qa/batumi-explore-focused-comparison.png` normalizes the source and updated project cards to the same visual scale.
+- The comparison confirms that both `by Otium` text instances and the small circular arrow are gone, while the new gold `EXPLORE` control is substantially clearer and visually consistent with the established registration CTA.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; existing Gilroy family, heading/body scale, weight, line height, and dark-on-ivory hierarchy remain unchanged.
+- Spacing and layout rhythm: passed; desktop copy and CTA fit without clipping, and the existing mobile breakpoint stacks the CTA at full card width with a 3.2rem minimum height.
+- Colors and visual tokens: passed; the new CTA reuses the shared AIXCO gold gradient, white foreground, focus treatment, shadow, and branded 2px radius.
+- Image quality and asset fidelity: passed; no image, video, gallery crop, compression setting, logo, or media quality changed.
+- Copy and content: passed; only the requested developer suffix was removed. The full project description, availability, floors, completion date, and route remain complete.
+
+## Comparison history
+
+1. Initial source: the project title and first description sentence both included `by Otium`, and the only visual affordance was a low-emphasis circular arrow.
+2. Implementation: removed the suffix from source data, locale translations, metadata expectations, future database seed content, and the clean public brochure filename/URL; replaced the arrow with the shared gold CTA style.
+3. Post-fix evidence: Chrome shows `Reverance`, no visible `by Otium`, a working `EXPLORE` CTA, exact style parity with `REGISTER`, clean project metadata, and zero browser-console errors.
+
+## Verification
+
+- Production Next.js build and bundled-font validation: passed.
+- Full Vitest suite: 85 files and 386 tests passed.
+- Localization coverage: 444 public strings across German, Russian, Georgian, Turkish, Arabic, and Polish passed.
+- TypeScript, ESLint, and `git diff --check`: passed.
+- Clean brochure URL returned HTTP 200 with `application/pdf` and the original 40,405,151-byte file intact.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Current Project Detail Heading - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-114b1032-e85d-466e-8b99-f9f74d956ba8.png`
+- Implementation screenshot path: `output/design-qa/current-project-heading-after.png`
+- Full-view comparison: `output/design-qa/current-project-heading-full-comparison.png`
+- Focused comparison: `output/design-qa/current-project-heading-focused-comparison.png`
+- Viewport and state: English current-project detail page, 1600 x 779 CSS pixels, navigation menus closed
+- Related state checked: English homepage project card
+- Console errors checked: zero
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested title-and-copy scope.
+- The detail-page H1 and document title now read `Our current project`.
+- The summary now starts `Reverance is a premium residential complex` and contains no visible `by Otium` text.
+- The homepage card correctly remains named `Reverance`; the detail-only heading does not overwrite the canonical project name.
+- The project JSON-LD also remains named `Reverance`, preserving accurate structured data while the editorial H1 uses the requested wording.
+- The clean brochure URL and download filename remain intact, and the page has no horizontal overflow.
+
+## Full-view comparison evidence
+
+- `output/design-qa/current-project-heading-full-comparison.png` places the supplied photographed reference and the updated Chrome-rendered detail page in one image.
+- The existing split layout, property image, eyebrow, subtitle, summary, four statistics, contact button, brochure button, palette, and typography remain intact.
+
+## Focused region comparison evidence
+
+- `output/design-qa/current-project-heading-focused-comparison.png` places the reference title-and-summary region beside the updated implementation at a comparable visual scale.
+- The comparison confirms the exact requested H1 and the suffix-free description while retaining the established hierarchy and spacing.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; existing Gilroy family, large editorial heading scale, subtitle treatment, body size, weight, and line height remain unchanged.
+- Spacing and layout rhythm: passed; the new heading fits the desktop content column without clipping, collision, or overflow, and all downstream sections stay aligned.
+- Colors and visual tokens: passed; the ivory background, onyx text, gold accent rule and diamond, borders, and button treatments are unchanged.
+- Image quality and asset fidelity: passed; the project image, crop, resolution, brochure asset, logo, and all media quality settings are unchanged.
+- Copy and content: passed; only the requested detail heading and developer suffix were changed. Property figures, availability, completion date, subtitle, and route remain complete.
+
+## Comparison history
+
+1. Initial source: the detail H1 read `Reverance by Otium`, and the first summary sentence repeated the same developer suffix.
+2. Implementation: introduced a detail-only `Our current project` title for the H1 and metadata while keeping the canonical project data name `Reverance`; removed `by Otium` from the visible summary.
+3. Post-fix evidence: Chrome reports the requested H1 and document title, the clean summary, no visible `by Otium`, canonical JSON-LD name `Reverance`, no horizontal overflow, and zero console errors.
+
+## Verification
+
+- Production Next.js build and bundled-font validation: passed.
+- Focused Vitest suite: 4 files and 19 tests passed.
+- Full Vitest suite: 85 files and 387 tests passed.
+- Localization suite: passed for all supported languages.
+- TypeScript, ESLint, and `git diff --check`: passed.
+- Chrome detail-page and homepage checks: passed.
+- Nothing was pushed or deployed during this design pass.
 
 final result: passed

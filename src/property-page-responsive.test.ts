@@ -6,6 +6,11 @@ const pageSource = readFileSync(resolve(process.cwd(), "src/app/aixco-global-op2
 const css = readFileSync(resolve(process.cwd(), "src/index.css"), "utf8").replace(/\r\n/g, "\n");
 
 describe("current-project responsive metrics", () => {
+  it("uses the requested current-project heading without changing the project data name", () => {
+    expect(pageSource).toContain('const currentProjectPageTitle = "Our current project";');
+    expect(pageSource).toContain("<Tx>{pageTitle}</Tx>");
+  });
+
   it("uses a 2x2 constrained layout and only expands to four columns at desktop width", () => {
     expect(pageSource).toContain("grid-cols-2");
     expect(pageSource).toContain("xl:grid-cols-4");

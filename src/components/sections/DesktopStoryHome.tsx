@@ -2436,16 +2436,16 @@ function BatumiScene({
             key={property.id}
             href={`/aixco-global-op2/${property.url}`}
             prefetch={false}
-            className="flex w-full items-center justify-between gap-4 rounded-lg border border-primary/30 bg-primary/[0.07] px-5 py-4 shadow-[0_14px_36px_-28px_hsl(var(--primary)/0.55)] transition-[background-color,border-color,box-shadow] duration-200 hover:border-primary/50 hover:bg-primary/[0.11] hover:shadow-[0_18px_42px_-26px_hsl(var(--primary)/0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            className="story-batumi-property-link flex w-full items-center justify-between gap-4 rounded-lg border border-primary/30 bg-primary/[0.07] px-5 py-4 shadow-[0_14px_36px_-28px_hsl(var(--primary)/0.55)] transition-[background-color,border-color,box-shadow] duration-200 hover:border-primary/50 hover:bg-primary/[0.11] hover:shadow-[0_18px_42px_-26px_hsl(var(--primary)/0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
           >
-            <span className="min-w-0 flex-1">
+            <span className="story-batumi-property-copy min-w-0 flex-1">
               <span className="story-card-title block transition-none">{tx(property.name)}</span>
               <span className="story-body block hyphens-none text-foreground/62 transition-none">
                 {tx(property.summary)}
               </span>
             </span>
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-background/70 text-primary shadow-sm" aria-hidden>
-              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            <span className="btn-gold story-batumi-property__explore w-fit shrink-0" data-batumi-project-cta="explore">
+              {tx("Explore")}
             </span>
           </Link>
         ))}
