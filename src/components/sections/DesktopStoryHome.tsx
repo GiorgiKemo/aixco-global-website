@@ -19,7 +19,7 @@ import {
   TrendingUp,
   X,
 } from "lucide-react";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
 import { LiveVideo } from "@/components/LiveVideo";
 import { ExpandableImage } from "@/components/ExpandableImage";
 import { FooterLegalBar } from "@/components/Footer";
@@ -824,11 +824,17 @@ function StoryChrome({
   }, [menuOpen]);
 
   useEffect(() => {
+    let wasScrolledFromTop = window.scrollY > 10;
+
     const syncScrolledState = () => {
-      setHasScrolledFromTop(window.scrollY > 10);
+      const nextScrolledFromTop = window.scrollY > 10;
+      if (nextScrolledFromTop === wasScrolledFromTop) return;
+
+      wasScrolledFromTop = nextScrolledFromTop;
+      setHasScrolledFromTop(nextScrolledFromTop);
     };
 
-    syncScrolledState();
+    setHasScrolledFromTop(wasScrolledFromTop);
     window.addEventListener("scroll", syncScrolledState, { passive: true });
     return () => window.removeEventListener("scroll", syncScrolledState);
   }, []);
@@ -1190,12 +1196,6 @@ function StoryChrome({
         </div>
       </header>
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-px bg-foreground/10">
-        <div
-          className="h-px origin-left bg-primary transition-transform duration-150"
-          style={{ transform: "scaleX(var(--story-page-progress-scale, 0))" }}
-        />
-      </div>
     </>
   );
 }
@@ -2293,13 +2293,13 @@ function AboutAccessScene({
                 <h2 className="text-[clamp(2.1rem,3.6vw,4.3rem)] font-semibold leading-[1.04] tracking-normal text-white">
                   <StoryTextReveal active={isActive} label={tx("Ownership or flexible participation")} />
                 </h2>
-                <p className="mt-5 text-[clamp(1rem,1.12vw,1.18rem)] leading-[1.65] text-white/80">
+                <p className="mt-5 text-[clamp(1rem,1.12vw,1.18rem)] leading-[1.65] text-white">
                   {tx("For many clients, this leads to direct ownership of carefully selected properties in emerging, profitable, sustainable markets.")}
                 </p>
-                <p className="mt-4 text-[clamp(0.98rem,1.05vw,1.1rem)] leading-[1.65] text-white/72">
+                <p className="mt-4 text-[clamp(0.98rem,1.05vw,1.1rem)] leading-[1.65] text-white">
                   {tx("For others, AIXCO offers an alternative participation program for clients who would like exposure to the market without the commitments that come with owning and managing property themselves.")}
                 </p>
-                <p className="mt-4 text-[clamp(0.98rem,1.05vw,1.1rem)] leading-[1.65] text-white/72">
+                <p className="mt-4 text-[clamp(0.98rem,1.05vw,1.1rem)] leading-[1.65] text-white">
                   {tx("Our commitment remains the same: transparent guidance, long-term support, and access to opportunities that align with your personal goals.")}
                 </p>
               </div>
@@ -3078,8 +3078,27 @@ function ContactScene({
   );
 }
 
+const MemoizedHeroScene = memo(HeroScene);
+const MemoizedAboutScene = memo(AboutScene);
+const MemoizedPhilosophyScene = memo(PhilosophyScene);
+const MemoizedPhilosophyDetailScene = memo(PhilosophyDetailScene);
+const MemoizedPhilosophyPlatformScene = memo(PhilosophyPlatformScene);
+const MemoizedAboutObjectivesScene = memo(AboutObjectivesScene);
+const MemoizedAboutAccessScene = memo(AboutAccessScene);
+const MemoizedLegacyScene = memo(LegacyScene);
+const MemoizedDubaiScene = memo(DubaiScene);
+const MemoizedBatumiScene = memo(BatumiScene);
+const MemoizedMaterialsScene = memo(MaterialsScene);
+const MemoizedParticipateScene = memo(ParticipateScene);
+const MemoizedHowScene = memo(HowScene);
+const MemoizedTeamScene = memo(TeamScene);
+const MemoizedPartnersScene = memo(PartnersScene);
+const MemoizedFaqScene = memo(FaqScene);
+const MemoizedContactScene = memo(ContactScene);
+
 export function DesktopStoryHome() {
   const storyRef = useRef<HTMLDivElement | null>(null);
+  const pageProgressBarRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<Array<HTMLElement | null>>([]);
   const sectionMetricsRef = useRef<Array<StorySectionMetric | null>>([]);
   const sectionProgressValuesRef = useRef<Record<string, string>>({});
@@ -3155,12 +3174,14 @@ export function DesktopStoryHome() {
     const scrollableDistance = Math.max(1, documentHeight - viewportHeight);
     const nextProgress = clamp(scrollY / scrollableDistance, 0, 1);
     if (
-      Math.abs(nextProgress - pageProgressRef.current) >= 0.006 ||
+      Math.abs(nextProgress - pageProgressRef.current) >= 0.0005 ||
       nextProgress === 0 ||
       nextProgress === 1
     ) {
       pageProgressRef.current = nextProgress;
-      storyRef.current?.style.setProperty("--story-page-progress-scale", nextProgress.toFixed(4));
+      if (pageProgressBarRef.current) {
+        pageProgressBarRef.current.style.transform = `scaleX(${nextProgress.toFixed(5)})`;
+      }
     }
 
     const viewportCenter = viewportHeight * 0.5;
@@ -3207,7 +3228,14 @@ export function DesktopStoryHome() {
     for (let index = 0; index < sectionRects.length; index += 1) {
       const section = sectionRefs.current[index];
       const rect = sectionRects[index];
-      if (!section || !rect || (!nextSectionPresence[index] && Math.abs(index - nextActiveIndex) > 1)) continue;
+      if (!section || !rect) continue;
+
+      const nextInViewport = rect.top < viewportHeight && rect.bottom > 0 ? "true" : "false";
+      if (section.dataset.storyInViewport !== nextInViewport) {
+        section.dataset.storyInViewport = nextInViewport;
+      }
+
+      if (!nextSectionPresence[index] && Math.abs(index - nextActiveIndex) > 1) continue;
 
       const top = rect.top;
       const bottom = rect.bottom;
@@ -3333,8 +3361,8 @@ export function DesktopStoryHome() {
       const isRevealed = (index: number) => Boolean(sectionPresence[index] ?? index === 0);
 
       return [
-      <HeroScene key="hero" isActive={activeIndex === 0} tx={tx} onContact={openContact} onRegister={openRegister} />,
-      <AboutScene
+      <MemoizedHeroScene key="hero" isActive={activeIndex === 0} tx={tx} onContact={openContact} onRegister={openRegister} />,
+      <MemoizedAboutScene
         key="about"
         isActive={activeIndex === 1}
         isRevealed={isRevealed(1)}
@@ -3342,8 +3370,8 @@ export function DesktopStoryHome() {
         shouldStartVideo={activeIndex >= 1}
         tx={tx}
       />,
-      <PhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
-      <PhilosophyDetailScene
+      <MemoizedPhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
+      <MemoizedPhilosophyDetailScene
         key="philosophy-origins"
         isActive={activeIndex === 3}
         isRevealed={isRevealed(3)}
@@ -3360,26 +3388,26 @@ export function DesktopStoryHome() {
           sizes: "(max-width: 767px) 170vw, 100vw",
         }}
       />,
-      <PhilosophyPlatformScene key="philosophy-platform" isActive={activeIndex === 4} isRevealed={isRevealed(4)} tx={tx} />,
-      <AboutObjectivesScene key="about-objectives" isActive={activeIndex === 5} isRevealed={isRevealed(5)} tx={tx} />,
-      <AboutAccessScene key="about-access" isActive={activeIndex === 6} isRevealed={isRevealed(6)} tx={tx} />,
-      <LegacyScene key="legacy" isActive={activeIndex === 7} isRevealed={isRevealed(7)} tx={tx} />,
-      <DubaiScene key="dubai" isActive={activeIndex === 8} isRevealed={isRevealed(8)} tx={tx} />,
-      <BatumiScene key="batumi" isActive={activeIndex === 9} isRevealed={isRevealed(9)} tx={tx} />,
-      <MaterialsScene key="materials" isActive={activeIndex === 10} isRevealed={isRevealed(10)} tx={tx} />,
-      <ParticipateScene key="participate" isActive={activeIndex === 11} isRevealed={isRevealed(11)} tx={tx} onRegister={openRegister} />,
-      <HowScene key="how" isActive={activeIndex === 12} isRevealed={isRevealed(12)} tx={tx} onJourney={openJourney} onRegister={openRegister} />,
-      <TeamScene key="team" isActive={activeIndex === 13} isRevealed={isRevealed(13)} tx={tx} />,
-      <PartnersScene key="partners" isActive={activeIndex === 14} isRevealed={isRevealed(14)} tx={tx} onPartnerClick={openPartner} />,
-      <FaqScene key="faqs" isActive={activeIndex === 15} isRevealed={isRevealed(15)} tx={tx} />,
-      <ContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
+      <MemoizedPhilosophyPlatformScene key="philosophy-platform" isActive={activeIndex === 4} isRevealed={isRevealed(4)} tx={tx} />,
+      <MemoizedAboutObjectivesScene key="about-objectives" isActive={activeIndex === 5} isRevealed={isRevealed(5)} tx={tx} />,
+      <MemoizedAboutAccessScene key="about-access" isActive={activeIndex === 6} isRevealed={isRevealed(6)} tx={tx} />,
+      <MemoizedLegacyScene key="legacy" isActive={activeIndex === 7} isRevealed={isRevealed(7)} tx={tx} />,
+      <MemoizedDubaiScene key="dubai" isActive={activeIndex === 8} isRevealed={isRevealed(8)} tx={tx} />,
+      <MemoizedBatumiScene key="batumi" isActive={activeIndex === 9} isRevealed={isRevealed(9)} tx={tx} />,
+      <MemoizedMaterialsScene key="materials" isActive={activeIndex === 10} isRevealed={isRevealed(10)} tx={tx} />,
+      <MemoizedParticipateScene key="participate" isActive={activeIndex === 11} isRevealed={isRevealed(11)} tx={tx} onRegister={openRegister} />,
+      <MemoizedHowScene key="how" isActive={activeIndex === 12} isRevealed={isRevealed(12)} tx={tx} onJourney={openJourney} onRegister={openRegister} />,
+      <MemoizedTeamScene key="team" isActive={activeIndex === 13} isRevealed={isRevealed(13)} tx={tx} />,
+      <MemoizedPartnersScene key="partners" isActive={activeIndex === 14} isRevealed={isRevealed(14)} tx={tx} onPartnerClick={openPartner} />,
+      <MemoizedFaqScene key="faqs" isActive={activeIndex === 15} isRevealed={isRevealed(15)} tx={tx} />,
+      <MemoizedContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
     [activeIndex, heroBackdropVisible, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
   );
 
   return (
-    <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background" style={{ "--story-page-progress-scale": 0 } as CSSProperties}>
+    <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background">
       <FixedHeroBackdrop visible={heroBackdropVisible} />
       <StoryChrome
         activeIndex={activeIndex}
@@ -3390,6 +3418,13 @@ export function DesktopStoryHome() {
         tx={tx}
         onChapterClick={handleChapterClick}
       />
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-px bg-foreground/10">
+        <div
+          ref={pageProgressBarRef}
+          className="h-px origin-left bg-primary will-change-transform"
+          style={{ transform: "scaleX(0)" }}
+        />
+      </div>
       <div id="main-content" tabIndex={-1} className="relative z-10">
         {scenes.map((scene, index) => {
           const chapter = storyChapters[index];

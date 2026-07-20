@@ -3432,7 +3432,11 @@
   }
 
   [data-story-revealed='false'] .story-batumi-gallery__track,
-  [data-story-revealed='false'] .partner-marquee-track {
+  [data-story-revealed='false'] .partner-marquee-track,
+  [data-story-revealed='false'] .story-journeys-track,
+  [data-story-in-viewport='false'] .story-batumi-gallery__track,
+  [data-story-in-viewport='false'] .partner-marquee-track,
+  [data-story-in-viewport='false'] .story-journeys-track {
     animation-play-state: paused;
     will-change: auto;
   }
@@ -5244,6 +5248,11 @@
 
     .story-media-panel__ken-burns {
       transform-origin: center center;
+      will-change: auto;
+    }
+
+    [data-story-section][data-story-active='true']
+      .story-media-panel__ken-burns {
       will-change: transform;
     }
 
@@ -5279,14 +5288,14 @@
         )
         scale(calc(1.035 + (var(--story-section-exit-progress, 0) * 0.035)));
       transform-origin: center center;
-      will-change: transform;
+      will-change: auto;
     }
 
     [data-story-section='about'] .story-about-cinematic-poster {
       pointer-events: none;
       opacity: 1;
       transition: opacity 900ms var(--ease-apple);
-      will-change: opacity;
+      will-change: auto;
     }
 
     [data-story-section='about']
@@ -5302,6 +5311,21 @@
         calc(var(--story-section-exit-progress, 0) * -10svh),
         0
       );
+      will-change: auto;
+    }
+
+    [data-story-section='about'][data-story-active='true']
+      .story-about-cinematic-image {
+      will-change: transform;
+    }
+
+    [data-story-section='about'][data-story-active='true']
+      .story-about-cinematic-poster {
+      will-change: opacity;
+    }
+
+    [data-story-section='about'][data-story-active='true']
+      .story-about-cinematic-copy {
       will-change: transform, opacity;
     }
 
@@ -10418,7 +10442,12 @@ html[dir='rtl'] {
    the pace of the user's scroll. */
 @supports (animation-timeline: view()) and
   (animation-range: entry 0% cover 42%) {
-  .story-title-reveal[data-text-reveal-state='scroll-linked']
+  :is(
+      [data-story-section][data-story-revealed='true'],
+      [data-story-section][data-story-active='true'],
+      [data-story-section]:target
+    )
+    .story-title-reveal[data-text-reveal-state='scroll-linked']
     .story-title-reveal__text {
     visibility: visible;
     opacity: 1;

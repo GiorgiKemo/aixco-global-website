@@ -13,11 +13,9 @@ import { useCallback, useEffect, useRef } from 'react';
 const glideScrollOptions = {
   easing: 0.18,
   multiplier: 1,
-  storyEasing: 0.14,
-  storyMultiplier: 0.86,
-  storyMomentum: 0.04,
-  storyWheelCarry: 0.1,
-  storyWheelCarryWindowMs: 260,
+  storyEasing: 0.22,
+  storyMultiplier: 0.9,
+  storyWheelCarry: 0,
 } as const;
 
 const glideScrollConfigSignature = [
@@ -25,9 +23,7 @@ const glideScrollConfigSignature = [
   glideScrollOptions.multiplier,
   glideScrollOptions.storyEasing,
   glideScrollOptions.storyMultiplier,
-  glideScrollOptions.storyMomentum,
   glideScrollOptions.storyWheelCarry,
-  glideScrollOptions.storyWheelCarryWindowMs,
 ].join(':');
 
 const PENDING_HASH_SCROLL_KEY = 'aixco-pending-hash-scroll';

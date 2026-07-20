@@ -12,11 +12,17 @@ export function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    let wasVisible = window.scrollY > SCROLL_TO_TOP_VISIBILITY_OFFSET;
+
     const updateVisibility = () => {
-      setIsVisible(window.scrollY > SCROLL_TO_TOP_VISIBILITY_OFFSET);
+      const nextVisible = window.scrollY > SCROLL_TO_TOP_VISIBILITY_OFFSET;
+      if (nextVisible === wasVisible) return;
+
+      wasVisible = nextVisible;
+      setIsVisible(nextVisible);
     };
 
-    updateVisibility();
+    setIsVisible(wasVisible);
     window.addEventListener("scroll", updateVisibility, { passive: true });
 
     return () => {

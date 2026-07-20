@@ -227,6 +227,21 @@ describe("installGlideScroll", () => {
     cleanup();
   });
 
+  it("keeps wheel smoothing available on hybrid devices with a fine pointer", () => {
+    mockMatchMedia((query) =>
+      query.includes("pointer: coarse") || query.includes("any-pointer: fine"),
+    );
+    mockViewport();
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation(() => 1);
+    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => undefined);
+
+    const cleanup = installGlideScroll();
+
+    expect(lenisMockState.Constructor).toHaveBeenCalledTimes(1);
+    expect(document.documentElement).toHaveAttribute("data-glide-scroll", "enabled");
+    cleanup();
+  });
+
   it("keeps nested scroll containers native instead of hijacking their wheel events", () => {
     mockMatchMedia(() => false);
     mockViewport();
@@ -241,6 +256,7 @@ describe("installGlideScroll", () => {
 
     const cleanup = installGlideScroll();
     const wheel = new WheelEvent("wheel", { deltaY: 80, cancelable: true, bubbles: true });
+    const getComputedStyle = vi.spyOn(window, "getComputedStyle");
 
     content.dispatchEvent(wheel);
     const virtualScroll = lenisMockState.instances[0]?.options.virtualScroll as
@@ -249,6 +265,9 @@ describe("installGlideScroll", () => {
 
     expect(wheel.defaultPrevented).toBe(false);
     expect(virtualScroll?.({ event: wheel, deltaX: 0, deltaY: 80 })).toBe(false);
+    const styleReadsAfterFirstWheel = getComputedStyle.mock.calls.length;
+    expect(virtualScroll?.({ event: wheel, deltaX: 0, deltaY: 80 })).toBe(false);
+    expect(getComputedStyle).toHaveBeenCalledTimes(styleReadsAfterFirstWheel);
     cleanup();
   });
 
