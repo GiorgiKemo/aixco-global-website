@@ -3,21 +3,29 @@ import type { Lang } from "./languages";
 type PropertyLocaleText = Partial<Record<Exclude<Lang, "en">, string>>;
 
 export const propertyPageTranslations = {
-  "Reverance by Otium": {
-    de: "Reverance by Otium",
-    ru: "Reverance by Otium",
-    ka: "Reverance by Otium",
-    tr: "Reverance by Otium",
-    ar: "Reverance by Otium",
-    pl: "Reverance by Otium",
+  "Our current project": {
+    de: "Unser aktuelles Projekt",
+    ru: "Наш текущий проект",
+    ka: "ჩვენი მიმდინარე პროექტი",
+    tr: "Güncel projemiz",
+    ar: "مشروعنا الحالي",
+    pl: "Nasz aktualny projekt",
   },
-  "Reverance by Otium is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for June 2028.": {
-    de: "Reverance by Otium ist ein Premium-Wohnkomplex am New Boulevard in Batumi. AIXCO bietet derzeit 28 ausgewählte Wohnungen im 13. und 14. Stock an; die Fertigstellung ist für Juni 2028 geplant.",
-    ru: "Reverance by Otium — жилой комплекс премиум-класса на Новом бульваре Батуми. Сейчас AIXCO предлагает 28 выбранных квартир на 13-м и 14-м этажах; завершение строительства запланировано на июнь 2028 года.",
-    ka: "Reverance by Otium არის პრემიუმ საცხოვრებელი კომპლექსი ბათუმის ახალ ბულვარზე. AIXCO ამჟამად გთავაზობთ 28 შერჩეულ ბინას მე-13 და მე-14 სართულებზე; დასრულება დაგეგმილია 2028 წლის ივნისისთვის.",
-    tr: "Reverance by Otium, Batum Yeni Bulvarı'nda yer alan premium bir konut kompleksidir. AIXCO şu anda 13. ve 14. katlarda seçili 28 daire sunmaktadır; tamamlanma Haziran 2028 olarak planlanmaktadır.",
-    ar: "Reverance by Otium مجمع سكني فاخر في البوليفارد الجديد في باتومي. تقدم AIXCO حاليا 28 شقة مختارة في الطابقين الثالث عشر والرابع عشر، ومن المقرر اكتمال المشروع في يونيو 2028.",
-    pl: "Reverance by Otium to kompleks mieszkaniowy klasy premium przy Nowym Bulwarze w Batumi. AIXCO oferuje obecnie 28 wybranych apartamentów na 13. i 14. piętrze; zakończenie budowy planowane jest na czerwiec 2028 r.",
+  Reverance: {
+    de: "Reverance",
+    ru: "Reverance",
+    ka: "Reverance",
+    tr: "Reverance",
+    ar: "Reverance",
+    pl: "Reverance",
+  },
+  "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for June 2028.": {
+    de: "Reverance ist ein Premium-Wohnkomplex am New Boulevard in Batumi. AIXCO bietet derzeit 28 ausgewählte Wohnungen im 13. und 14. Stock an; die Fertigstellung ist für Juni 2028 geplant.",
+    ru: "Reverance — жилой комплекс премиум-класса на Новом бульваре Батуми. Сейчас AIXCO предлагает 28 выбранных квартир на 13-м и 14-м этажах; завершение строительства запланировано на июнь 2028 года.",
+    ka: "Reverance არის პრემიუმ საცხოვრებელი კომპლექსი ბათუმის ახალ ბულვარზე. AIXCO ამჟამად გთავაზობთ 28 შერჩეულ ბინას მე-13 და მე-14 სართულებზე; დასრულება დაგეგმილია 2028 წლის ივნისისთვის.",
+    tr: "Reverance, Batum Yeni Bulvarı'nda yer alan premium bir konut kompleksidir. AIXCO şu anda 13. ve 14. katlarda seçili 28 daire sunmaktadır; tamamlanma Haziran 2028 olarak planlanmaktadır.",
+    ar: "Reverance مجمع سكني فاخر في البوليفارد الجديد في باتومي. تقدم AIXCO حاليا 28 شقة مختارة في الطابقين الثالث عشر والرابع عشر، ومن المقرر اكتمال المشروع في يونيو 2028.",
+    pl: "Reverance to kompleks mieszkaniowy klasy premium przy Nowym Bulwarze w Batumi. AIXCO oferuje obecnie 28 wybranych apartamentów na 13. i 14. piętrze; zakończenie budowy planowane jest na czerwiec 2028 r.",
   },
   "Available apartments": {
     de: "Verfügbare Wohnungen",

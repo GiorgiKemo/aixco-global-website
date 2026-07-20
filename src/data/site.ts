@@ -87,11 +87,11 @@ export const batumiBenefits = rawBatumiBenefits.map((benefit) => benefit.replace
 export const batumiProperties = [
   {
     id: "current-project",
-    name: "Reverance by Otium",
+    name: "Reverance",
     url: "current-project",
     image: "batumi-current-project",
     video: "currentProject",
-    summary: "Reverance by Otium is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for June 2028.",
+    summary: "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for June 2028.",
     metrics: [
       { label: "Floors", value: "17", subtext: "per building" },
       { label: "Apartments", value: "408", subtext: "total units" },
