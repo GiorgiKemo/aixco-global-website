@@ -44,7 +44,11 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function usesCoarsePointer() {
-  return typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+  if (typeof window === "undefined") return false;
+
+  const hasCoarsePrimaryPointer = window.matchMedia("(pointer: coarse)").matches;
+  const hasAnyFinePointer = window.matchMedia("(any-pointer: fine)").matches;
+  return hasCoarsePrimaryPointer && !hasAnyFinePointer;
 }
 
 function cancelActiveScroll() {
@@ -85,9 +89,18 @@ export function cancelGlideScroll() {
   }
 }
 
-function canElementScrollInDirection(element: HTMLElement, deltaY: number) {
-  const overflowY = window.getComputedStyle(element).overflowY;
-  if (!/(auto|scroll|overlay)/.test(overflowY)) return false;
+function canElementScrollInDirection(
+  element: HTMLElement,
+  deltaY: number,
+  verticalOverflowCache: WeakMap<HTMLElement, boolean>,
+) {
+  let allowsVerticalScroll = verticalOverflowCache.get(element);
+  if (allowsVerticalScroll === undefined) {
+    allowsVerticalScroll = /(auto|scroll|overlay)/.test(window.getComputedStyle(element).overflowY);
+    verticalOverflowCache.set(element, allowsVerticalScroll);
+  }
+
+  if (!allowsVerticalScroll) return false;
 
   const maxScrollTop = element.scrollHeight - element.clientHeight;
   if (maxScrollTop <= 1) return false;
@@ -95,7 +108,10 @@ function canElementScrollInDirection(element: HTMLElement, deltaY: number) {
   return deltaY < 0 ? element.scrollTop > 0 : element.scrollTop < maxScrollTop;
 }
 
-function shouldUseNativeWheelScroll(event: WheelEvent) {
+function shouldUseNativeWheelScroll(
+  event: WheelEvent,
+  verticalOverflowCache: WeakMap<HTMLElement, boolean>,
+) {
   const deltaY = event.deltaY;
   if (!event.cancelable || event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return true;
   if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return true;
@@ -105,7 +121,7 @@ function shouldUseNativeWheelScroll(event: WheelEvent) {
   while (node && node !== document.documentElement) {
     if (node instanceof HTMLElement) {
       if (node.matches(nativeScrollSelector)) return true;
-      if (canElementScrollInDirection(node, deltaY)) return true;
+      if (canElementScrollInDirection(node, deltaY, verticalOverflowCache)) return true;
     }
     node = node.parentElement;
   }
@@ -175,6 +191,7 @@ export function installGlideScroll({
   const activeWheelMultiplier = Number(activeMultiplier.toFixed(3));
   const activeWheelCarry = isStoryExperience ? resolvedStoryWheelCarry : resolvedWheelCarry;
   const activeWheelCarryWindowMs = isStoryExperience ? resolvedStoryWheelCarryWindowMs : resolvedWheelCarryWindowMs;
+  const verticalOverflowCache = new WeakMap<HTMLElement, boolean>();
   let previousWheelTime = 0;
   let previousWheelDeltaY = 0;
 
@@ -191,7 +208,7 @@ export function installGlideScroll({
       const { event } = data;
       cancelActiveScroll();
       if (event instanceof WheelEvent) {
-        if (shouldUseNativeWheelScroll(event)) return false;
+        if (shouldUseNativeWheelScroll(event, verticalOverflowCache)) return false;
 
         if (activeWheelCarry > 0 && Math.abs(data.deltaY) >= 1) {
           const now = event.timeStamp || window.performance.now();

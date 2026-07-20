@@ -7,6 +7,15 @@ function readSource(path: string) {
 }
 
 describe("home page performance structure", () => {
+  it("keeps the measured continuous-scroll profile for the story page", () => {
+    const scrollManagerSource = readSource("src/components/ScrollManager.tsx");
+
+    expect(scrollManagerSource).toContain("storyEasing: 0.22");
+    expect(scrollManagerSource).toContain("storyMultiplier: 0.9");
+    expect(scrollManagerSource).toContain("storyWheelCarry: 0");
+    expect(scrollManagerSource).not.toContain("storyWheelCarry: 0.1");
+  });
+
   it("keeps the legacy native section stack out of the home module", () => {
     const homeSource = readSource("src/views/HomePage.tsx");
 
@@ -31,8 +40,8 @@ describe("home page performance structure", () => {
     expect(desktopStorySource).toContain('{ key: "philosophy", id: "philosophy", label: "Philosophy" }');
     expect(desktopStorySource).toContain('{ key: "philosophyOrigins", id: "philosophy-origins", label: "Origins" }');
     expect(desktopStorySource).toContain('{ key: "philosophyPlatform", id: "philosophy-platform", label: "Principles" }');
-    expect(desktopStorySource).toContain("<PhilosophyScene");
-    expect(desktopStorySource).toContain("<PhilosophyDetailScene");
+    expect(desktopStorySource).toContain("<MemoizedPhilosophyScene");
+    expect(desktopStorySource).toContain("<MemoizedPhilosophyDetailScene");
     expect(desktopStorySource).toContain('id: "philosophy"');
     expect(sitemapSource).not.toContain("/aixco-philosophy");
   });
@@ -67,6 +76,17 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).toContain("rgba(17,16,14,0.70))");
     expect(aboutSceneSource).toContain("rgba(17,16,14,0.14),rgba(17,16,14,0.62))");
     expect(aboutSceneSource).not.toContain("rgba(17,16,14,0.78)");
+  });
+
+  it("keeps client-approach body copy at one consistent contrast", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const sectionStart = desktopStorySource.indexOf("function AboutAccessScene");
+    const sectionEnd = desktopStorySource.indexOf("function LegacyScene");
+    const sectionSource = desktopStorySource.slice(sectionStart, sectionEnd);
+
+    expect(sectionSource).not.toContain("text-white/80");
+    expect(sectionSource).not.toContain("text-white/72");
+    expect(sectionSource.match(/leading-\[1\.65\] text-white/g)).toHaveLength(3);
   });
 
   it("starts the about video on demand and keeps playback continuous after activation", () => {
@@ -203,9 +223,29 @@ describe("home page performance structure", () => {
   it("keeps scroll progress on compositor-friendly transforms", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
 
-    expect(desktopStorySource).toContain("--story-page-progress-scale");
-    expect(desktopStorySource).toContain("scaleX(var(--story-page-progress-scale, 0))");
+    expect(desktopStorySource).toContain("pageProgressBarRef.current.style.transform");
+    expect(desktopStorySource).toContain('style={{ transform: "scaleX(0)" }}');
+    expect(desktopStorySource).not.toContain("--story-page-progress-scale");
     expect(desktopStorySource).not.toContain('style={{ width: "var(--story-page-progress, 0%)" }}');
+  });
+
+  it("stops offscreen decorative rails from consuming scroll frames", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const globalStyles = readSource("src/index.css");
+
+    expect(desktopStorySource).toContain("section.dataset.storyInViewport = nextInViewport");
+    expect(globalStyles).toContain("[data-story-in-viewport='false'] .story-batumi-gallery__track");
+    expect(globalStyles).toContain("[data-story-in-viewport='false'] .partner-marquee-track");
+    expect(globalStyles).toContain("[data-story-in-viewport='false'] .story-journeys-track");
+  });
+
+  it("memoizes story scenes so a chapter boundary does not rerender the full page", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+
+    expect(desktopStorySource).toContain("const MemoizedHeroScene = memo(HeroScene)");
+    expect(desktopStorySource).toContain("const MemoizedDubaiScene = memo(DubaiScene)");
+    expect(desktopStorySource).toContain("const MemoizedContactScene = memo(ContactScene)");
+    expect(desktopStorySource).toContain("<MemoizedDubaiScene");
   });
 
   it("does not dispatch duplicate custom frame events during scroll", () => {
