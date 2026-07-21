@@ -11111,9 +11111,12 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
     :is(
       .story-philosophy-detail-copy,
       .story-philosophy-detail-intro,
-      .story-philosophy-detail-grid
+      .story-philosophy-detail-grid,
+      .story-philosophy-detail-summary
     ) {
-    width: 100%;
+    width: min(100%, calc(100vw - 4rem));
+    max-width: calc(100vw - 4rem) !important;
+    box-sizing: border-box;
   }
 
   [data-story-section='philosophyOrigins'] .story-philosophy-detail-grid {
