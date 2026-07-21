@@ -796,8 +796,9 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('className="story-batumi-property-link grid w-full justify-items-start');
     expect(desktopStoryHome).toContain('className="story-batumi-property-copy block w-full');
     expect(desktopStoryHome).not.toContain('story-batumi-property-link flex w-full items-center justify-between');
-    expect(desktopStoryHome).toContain('{tx("Our current project").toUpperCase()}');
-    expect(desktopStoryHome).not.toContain('{tx(property.name)}</span>');
+    expect(desktopStoryHome).toContain('property.id === "current-project"');
+    expect(desktopStoryHome).toContain('? tx("Our current project").toUpperCase()');
+    expect(desktopStoryHome).toContain(': tx(property.name)');
     expect(desktopStoryHome).toContain('{tx("Explore")}');
     expect(desktopStoryHome).not.toContain('className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full');
     expect(css).toContain(".story-batumi-property-link:hover .story-batumi-property-copy {");

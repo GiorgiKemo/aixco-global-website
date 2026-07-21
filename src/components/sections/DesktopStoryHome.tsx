@@ -2487,7 +2487,9 @@ function BatumiScene({
           >
             <span className="story-batumi-property-copy block w-full min-w-0 rounded-lg border border-primary/30 bg-primary/[0.07] px-5 py-4 shadow-[0_14px_36px_-28px_hsl(var(--primary)/0.55)] transition-[background-color,border-color,box-shadow] duration-200">
               <span className="story-card-title block transition-none">
-                {tx("Our current project").toUpperCase()}
+                {property.id === "current-project"
+                  ? tx("Our current project").toUpperCase()
+                  : tx(property.name)}
               </span>
               <span className="story-body block hyphens-none text-foreground/62 transition-none">
                 {tx(property.summary)}

@@ -88,4 +88,9 @@ for (const [key, values] of slovenian) {
   if (/Ã|Â|â‚¬|â€”|�/.test(value ?? "")) errors.push(`Slovenian mojibake: ${key}`);
 }
 
+if (errors.length) {
+  console.error(errors.join("\n"));
+  process.exit(1);
+}
+
 console.log(`Localization coverage passed for ${requiredKeys.size} public strings across German, Polish, Slovenian, and Russian.`);
