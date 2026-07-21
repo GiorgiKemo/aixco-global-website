@@ -205,17 +205,26 @@ describe("lead notification email", () => {
       requestType: "message",
       locale: "de-DE",
     });
-    const arabic = buildContactConfirmationEmail({
+    const slovenian = buildContactConfirmationEmail({
       ...notification,
       requestType: "call",
-      locale: "ar",
+      locale: "sl-SI",
     });
 
     expect(german.subject).toContain("Wir haben Ihre Nachricht erhalten");
     expect(german.text).toContain("Anfragereferenz: AIX-2026-000001");
     expect(german.html).toContain('<html lang="de" dir="ltr">');
-    expect(arabic.subject).toContain("تم استلام طلب مكالمتك");
-    expect(arabic.html).toContain('<html lang="ar" dir="rtl">');
+    expect(slovenian.subject).toContain("Prejeli smo vašo zahtevo za klic z AIXCO");
+    expect(slovenian.text).toContain("Referenca zahtevka: AIX-2026-000001");
+    expect(slovenian.html).toContain('<html lang="sl" dir="ltr">');
+
+    const retiredLocale = buildContactConfirmationEmail({
+      ...notification,
+      requestType: "message",
+      locale: "ar",
+    });
+    expect(retiredLocale.subject).toContain("We Have Received Your Message");
+    expect(retiredLocale.html).toContain('<html lang="en" dir="ltr">');
   });
 
   it("sends the confirmation to the requester without requiring or exposing the internal inbox", async () => {

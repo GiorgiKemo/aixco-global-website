@@ -46,31 +46,54 @@ export function isHeadlineMetric(label: string) {
 export function formatMetricValue(value: string) {
   const trimmed = value.trim();
   const unitsValue = trimmed.match(/^([\d,.]+)\+$/);
-  const usdMillions = trimmed.match(/^USD\s+([\d,.]+)m$/i);
+  const usdMillions = trimmed.match(/^USD\s+([\d,.]+)m(?:\s+(.+))?$/i);
   const projectedValue = trimmed.match(/^Projected\s+(.+)$/i);
 
   if (unitsValue) {
-    return { prefix: "", value: unitsValue[1], subtext: "+" };
+    return {
+      prefix: "",
+      value: unitsValue[1],
+      subtext: "+",
+      preserveLocalizedValue: false,
+    };
   }
 
   if (usdMillions) {
-    return { prefix: "", value: usdMillions[1], subtext: "m USD" };
+    const supportingCopy = usdMillions[2] ? ` ${usdMillions[2]}` : "";
+
+    return {
+      prefix: "",
+      value: `$${usdMillions[1]}M${supportingCopy}`,
+      subtext: "",
+      preserveLocalizedValue: true,
+    };
   }
 
   if (projectedValue) {
-    return { prefix: "", value: projectedValue[1], subtext: "Projected" };
+    return {
+      prefix: "",
+      value: projectedValue[1],
+      subtext: "Projected",
+      preserveLocalizedValue: false,
+    };
   }
 
   const prefixedValue = trimmed.match(/^(USD|Projected)\s+(.+)$/i);
 
   if (!prefixedValue) {
-    return { prefix: "", value: trimmed, subtext: "" };
+    return {
+      prefix: "",
+      value: trimmed,
+      subtext: "",
+      preserveLocalizedValue: false,
+    };
   }
 
   return {
     prefix: prefixedValue[1],
     value: prefixedValue[2],
     subtext: "",
+    preserveLocalizedValue: false,
   };
 }
 

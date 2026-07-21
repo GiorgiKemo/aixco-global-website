@@ -16,7 +16,7 @@ import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
 import { ClientShell } from "@/app/client-shell";
 import { JsonLd } from "@/components/JsonLd";
 import { Tx } from "@/components/i18n/Tx";
-import { EnglishBrochureLink, PropertyChrome, PropertyContactLink } from "@/components/property/PropertyChrome";
+import { CurrentProjectBrochureLink, PropertyChrome, PropertyContactLink } from "@/components/property/PropertyChrome";
 import {
   batumiImageMap,
   batumiVideoMap,
@@ -191,9 +191,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
               <Tx>Contact AIXCO</Tx>
             </PropertyContactLink>
             {property.id === "current-project" ? (
-              <EnglishBrochureLink
-                href="/aixco-global-op2/documents/reverance-brochure-en.pdf"
-                fileName="Reverance-brochure-EN.pdf"
+              <CurrentProjectBrochureLink
                 className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] px-3 text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#9A7425] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
               />
             ) : null}
@@ -237,7 +235,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
         <div className="mx-auto grid max-w-[82rem] gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
           <div>
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[#E6C767]"><Tx>Project highlights</Tx></p>
-            <h2 className="mt-5 max-w-[12ch] text-[clamp(2.8rem,5vw,5rem)] font-semibold leading-[0.98] tracking-[-0.03em]">
+            <h2 className="property-highlights__title mt-5 max-w-[12ch] text-[clamp(2.8rem,5vw,5rem)] font-semibold leading-[0.98] tracking-[-0.03em]">
               <Tx>Selected access, structured for ownership.</Tx>
             </h2>
             <p className="mt-5 max-w-[34rem] border-l-[3px] border-[#E6C767] pl-4 text-lg font-normal leading-8 text-white">

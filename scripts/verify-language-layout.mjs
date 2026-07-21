@@ -5,7 +5,7 @@ const browserName = process.env.SMOKE_BROWSER ?? "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;
 const macSafariUserAgent =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15";
-const locales = ["en", "de", "ru", "ka", "tr", "ar", "pl"];
+const locales = ["en", "de", "pl", "sl", "ru"];
 const viewports = [
   { name: "foldable", width: 280, height: 653 },
   { name: "small-phone", width: 320, height: 568 },
@@ -37,7 +37,7 @@ try {
           ? { deviceScaleFactor: 2, userAgent: macSafariUserAgent }
           : {}),
         reducedMotion: "reduce",
-        locale: locale === "ka" ? "ka-GE" : locale,
+        locale: locale === "sl" ? "sl-SI" : locale,
       });
       await context.addInitScript((selectedLocale) => {
         localStorage.setItem("aixco-lang", selectedLocale);

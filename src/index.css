@@ -2659,11 +2659,15 @@
 
   [data-layout='story-philosophy-stats'] > .story-philosophy-card {
     display: flex;
+    height: 100%;
     min-width: 0;
     flex-direction: column;
   }
 
-  [data-layout='story-philosophy-stats'] .story-metric-label + dd {
+  [data-layout='story-philosophy-stats']
+    > .story-philosophy-card
+    > .story-metric-label
+    + dd {
     margin-top: auto;
     padding-top: clamp(0.65rem, 1.35svh, 0.9rem);
   }
@@ -3312,6 +3316,29 @@
     font-size: clamp(0.78rem, 0.84vw, 0.94rem);
     font-weight: 650;
     line-height: 1.2;
+  }
+
+  .story-batumi-property-link {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(0.72rem, 1.25svh, 0.95rem);
+    border-radius: 0.5rem;
+  }
+
+  .story-batumi-property-copy {
+    transition:
+      border-color 200ms var(--ease-apple),
+      background-color 200ms var(--ease-apple),
+      box-shadow 200ms var(--ease-apple);
+  }
+
+  .story-batumi-property-link:hover .story-batumi-property-copy {
+    border-color: hsl(var(--primary) / 0.5);
+    background: hsl(var(--primary) / 0.11);
+    box-shadow: 0 18px 42px -26px hsl(var(--primary) / 0.65);
+  }
+
+  .story-batumi-property__explore {
+    min-width: clamp(9.5rem, 12vw, 11rem);
   }
 
   .story-batumi-gallery {
@@ -5431,7 +5458,9 @@
       font-weight: 500;
     }
 
-    [data-story-scene-copy] [data-layout='story-batumi-properties'] a {
+    [data-story-scene-copy]
+      [data-layout='story-batumi-properties']
+      .story-batumi-property-copy {
       padding: clamp(0.85rem, 1.5svh, 1.1rem) clamp(0.95rem, 1.5vw, 1.15rem);
     }
 
@@ -8382,6 +8411,7 @@ html[data-home-experience='story'] {
 
   [data-story-section='philosophy'] [data-layout='story-philosophy-stats'] > div {
     display: flex;
+    height: 100%;
     flex-direction: column;
     min-height: 6.5rem;
     padding: 0.85rem;
@@ -8391,7 +8421,10 @@ html[data-home-experience='story'] {
     box-shadow: 0 18px 42px -36px rgb(17 16 14 / 0.28);
   }
 
-  [data-story-section='philosophy'] [data-layout='story-philosophy-stats'] dd {
+  [data-story-section='philosophy']
+    [data-layout='story-philosophy-stats']
+    > div
+    > dd {
     margin-top: auto;
     padding-top: 0.8rem;
     font-size: clamp(1.6rem, 7.5vw, 2rem) !important;
@@ -8726,7 +8759,7 @@ html[data-home-experience='story'] {
     border: 0;
   }
 
-  [data-story-section='batumi'] [data-layout='story-batumi-properties'] a {
+  [data-story-section='batumi'] .story-batumi-property-copy {
     padding: 0.9rem !important;
     border: 1px solid hsl(var(--primary) / 0.3);
     border-radius: 0.5rem;
@@ -8734,8 +8767,6 @@ html[data-home-experience='story'] {
   }
 
   [data-story-section='batumi'] .story-batumi-property-link {
-    flex-direction: column;
-    align-items: stretch;
     gap: 0.85rem;
   }
 
@@ -9091,7 +9122,56 @@ html[data-home-experience='story'] {
 
 
 
-/* Cross-language glyph coverage and long-word safety. */
+/* Cross-language glyph coverage and long-word safety.
+ * Every currently supported translated locale contains characters that are
+ * absent from the bundled Gilroy subset. Start with the platform's complete UI
+ * face for the whole locale so Chrome never swaps only an accented/Cyrillic
+ * character for a darker fallback. `system-ui` resolves to SF Pro on macOS,
+ * Segoe UI on Windows, and Roboto on Android, keeping each word internally
+ * consistent on every device. */
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru']) {
+  --font-brand-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif;
+  --font-brand-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif;
+  --font-legacy-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif;
+  --font-legacy-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif;
+  --font-sans: var(--font-brand-sans);
+  --font-display: var(--font-brand-display);
+  font-synthesis: none;
+}
+
+/* Native controls do not reliably inherit the document face. Keep their
+   localized text in the same complete locale stack as the surrounding page. */
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+  :is(button, input, textarea, select, option) {
+  font-family: var(--font-brand-sans);
+  font-synthesis: none;
+}
+
+/* Reveal layers must inherit the exact surrounding localized face. This covers
+   uppercase/lowercase diacritics and Cyrillic titles without introducing a
+   per-character fallback, synthetic weight, or mismatched line box. */
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+  [data-story-section]
+  :is(
+    .story-title-reveal,
+    .story-title-reveal__text,
+    .story-letter-reveal,
+    .story-letter-reveal__text,
+    .story-letter-reveal__word,
+    .story-letter-reveal__char
+  ) {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  font-synthesis: none;
+  line-height: inherit;
+}
+
 html[lang='ka'] {
   --font-brand-sans: Sylfaen, 'Noto Sans Georgian', 'Arial Unicode MS',
     'Segoe UI', system-ui, sans-serif;
@@ -10188,6 +10268,7 @@ html[dir='rtl'] {
   font-feature-settings: "lnum" 1, "tnum" 1;
   line-height: 1 !important;
   letter-spacing: 0 !important;
+  white-space: nowrap;
 }
 
 /* Match the Dubai card hierarchy to the rendered AIXCO Philosophy cards:
@@ -10206,7 +10287,15 @@ html[dir='rtl'] {
 
 .story-dubai-portfolio-card__metric[data-metric-layout='progress']
   .story-metric-value {
+  align-items: start;
   column-gap: 0.25rem;
+}
+
+.story-dubai-portfolio-card__metric[data-metric-layout='progress']
+  .story-dubai-metric-copy {
+  align-self: start;
+  padding-top: clamp(0.18rem, 0.32vw, 0.28rem);
+  line-height: 1.34 !important;
 }
 
 .story-dubai-portfolio-card__metric .story-metric-label {
@@ -10269,6 +10358,47 @@ html[dir='rtl'] {
   font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;
 }
 
+/* German laptop cards use the same compact international value language as
+   the English cards. Keep amounts intact, put the scope description beneath
+   its value, and align each progress qualifier with its own percentage. */
+html[lang='de']
+  .story-dubai-portfolio-card__metric[data-metric-layout='number']
+  .story-metric-value {
+  flex-wrap: nowrap;
+}
+
+html[lang='de']
+  .story-dubai-portfolio-card__metric[data-metric-layout='scope']
+  .story-metric-value {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: clamp(0.42rem, 0.7svh, 0.58rem);
+}
+
+html[lang='de']
+  .story-dubai-portfolio-card__metric[data-metric-layout='scope']
+  .story-dubai-metric-copy {
+  display: block;
+}
+
+html[lang='de']
+  .story-dubai-portfolio-card__metric[data-metric-layout='progress']
+  .story-metric-value {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: clamp(0.34rem, 0.65svh, 0.48rem) clamp(0.48rem, 0.72vw, 0.68rem);
+}
+
+html[lang='de']
+  .story-dubai-portfolio-card__metric[data-metric-layout='progress']
+  .story-dubai-metric-copy {
+  align-self: baseline;
+  padding-top: 0;
+  line-height: 1.24 !important;
+}
+
 @media (min-width: 768px) and (max-width: 1279px) {
   .story-dubai-portfolio-card__metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -10282,7 +10412,7 @@ html[dir='rtl'] {
 @media (max-width: 479px) {
   .story-dubai-portfolio-card__metric[data-metric-layout='progress']
     .story-metric-value {
-    display: block;
+    display: grid;
   }
 
   .story-dubai-portfolio-card__metric .story-dubai-metric-copy {
@@ -10306,28 +10436,34 @@ html[dir='rtl'] {
   transform: none;
 }
 
-/* Currency symbols share the metric's exact size and baseline. The lighter
-   weight corrects the naturally heavier euro/dollar glyphs in the brand font. */
+/* Currency symbols use the metric's exact typography so their boxes and
+   baselines stay aligned with the figures in both inline and flex metrics. */
 .story-standard-number .story-currency-symbol {
   display: inline-block;
   margin-inline-end: 0.025em;
   color: inherit;
   font-family: inherit !important;
-  /* Currency glyphs in Gilroy are optically larger than its lining numerals.
-     Scale them to the numeral cap-height instead of matching only the CSS em. */
-  font-size: 0.82em !important;
-  font-weight: 100 !important;
+  font-size: 1em !important;
+  font-weight: inherit !important;
   font-style: normal;
-  line-height: 1 !important;
+  line-height: inherit !important;
   letter-spacing: inherit;
-  vertical-align: 0.055em;
+  vertical-align: baseline;
   transform: none;
 }
 
+/* Gilroy's bundled files do not contain U+20AC. Give only the Euro glyph a
+   light system face so Chrome cannot synthesize the visibly heavier fallback. */
 .story-standard-number .story-currency-symbol--euro {
+  font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 1em !important;
-  font-weight: inherit !important;
+  font-weight: 300 !important;
+  font-synthesis: none;
+  line-height: inherit !important;
+  position: relative;
+  top: 0.055em;
   vertical-align: baseline;
+  transform: none;
 }
 
 .story-standard-number .story-currency-value {
@@ -10337,6 +10473,39 @@ html[dir='rtl'] {
   line-height: inherit;
   letter-spacing: inherit;
   vertical-align: baseline;
+}
+
+.story-inline-currency-token {
+  display: inline-block;
+  font: inherit;
+  line-height: inherit;
+  white-space: nowrap;
+}
+
+.story-inline-currency-symbol,
+.story-inline-currency-value {
+  display: inline-block;
+  color: inherit;
+  font-size: 1em;
+  font-style: normal;
+  line-height: inherit;
+  letter-spacing: inherit;
+  vertical-align: baseline;
+  transform: none;
+}
+
+.story-inline-currency-symbol {
+  margin-inline-end: 0.015em;
+}
+
+.story-inline-currency-symbol--euro {
+  font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 1em !important;
+  font-weight: 300 !important;
+  font-synthesis: none;
+  line-height: inherit !important;
+  position: relative;
+  top: 0.055em;
 }
 
 /* The About metrics sit on photography, so use the brighter champagne tone
@@ -10807,5 +10976,59 @@ html:is([lang='ka'], [lang='ar']) .story-title-reveal__text {
   [data-story-section='dubai'] [data-story-scene-media] {
     height: auto !important;
     min-height: var(--story-dubai-scene-height) !important;
+  }
+}
+
+/* Complete-font locales use platform font metrics rather than the compact
+   Gilroy metrics used by English. Give every wrapping display title enough
+   leading for descenders, ascenders, umlauts, and other diacritics so adjacent
+   lines never touch on laptop, tablet, or phone layouts. Keep this final so it
+   wins over the height-specific hero and section-title fitting rules above. */
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+  [data-story-section='hero']
+  .story-hero-statement__line {
+  line-height: 1.08 !important;
+}
+
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+  [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
+  .story-h2,
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+  [data-story-section='philosophyOrigins']
+  .story-philosophy-detail-title,
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+  [data-story-section='aboutObjectives']
+  .story-objectives-title,
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+  [data-story-section='aboutAccess']
+  [data-layout='story-about-access']
+  h2,
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+  .story-mobile-materials-title {
+  line-height: 1.08 !important;
+}
+
+html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+  :is(.property-hero__title, .property-highlights__title) {
+  line-height: 1.08 !important;
+}
+
+@media (max-width: 767px) {
+  html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+    [data-story-section]:not([data-story-section='hero']):not([data-story-section='about'])
+    .story-h2,
+  html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+    [data-story-section='philosophyOrigins']
+    .story-philosophy-detail-title,
+  html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+    [data-story-section='aboutObjectives']
+    .story-objectives-title,
+  html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+    [data-story-section='aboutAccess']
+    [data-layout='story-about-access']
+    h2,
+  html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
+    .story-mobile-materials-title {
+    line-height: 1.12 !important;
   }
 }

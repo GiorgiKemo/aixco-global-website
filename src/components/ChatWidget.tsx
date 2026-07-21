@@ -82,7 +82,7 @@ function loadStoredMessages() {
 }
 
 export function ChatWidget() {
-  const { dir, tx } = useI18n();
+  const { dir, lang, tx } = useI18n();
   const { openRegister } = useUI();
   const { company } = useSiteContent();
   const [hasMounted, setHasMounted] = useState(false);
@@ -136,10 +136,11 @@ export function ChatWidget() {
       const result = await recordChatTranscript(nextMessages, {
         reason,
         sessionId: activeSessionId,
+        locale: lang,
       });
       setSyncState(result.ok ? "saved" : "error");
     },
-    [sessionId],
+    [lang, sessionId],
   );
 
   const resolveChatbotReply = useCallback(
@@ -148,7 +149,7 @@ export function ChatWidget() {
       replyRequestIdRef.current = requestId;
       setIsAnswering(true);
 
-      const reply = await requestWebsiteChatbotReply(nextMessages);
+      const reply = await requestWebsiteChatbotReply(nextMessages, lang);
       if (replyRequestIdRef.current !== requestId) return;
 
       const replyMessage = createMessage("aixco", reply.answer);
@@ -163,7 +164,7 @@ export function ChatWidget() {
       });
       setIsAnswering(false);
     },
-    [saveTranscript],
+    [lang, saveTranscript],
   );
 
   const sendMessage = (text: string) => {

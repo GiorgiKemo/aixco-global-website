@@ -1,4 +1,4 @@
-import type { Lang } from "./languages";
+import type { CatalogLang as Lang } from "./languages";
 
 type LocaleFixSource = Partial<Record<string, Partial<Record<Lang, string>>>>;
 

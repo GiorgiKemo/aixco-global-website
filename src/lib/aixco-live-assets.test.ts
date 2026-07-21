@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+  aixcoCurrentProjectBrochureDownloads,
   aixcoDubaiEdenHouseCanalGallery,
   aixcoDubaiEdenHouseParkGallery,
   aixcoDubaiHealthcareGallery,
   aixcoLiveAssetDetails,
   aixcoLiveImages,
   aixcoLiveVideoPreviews,
+  getCurrentProjectBrochureDownload,
 } from "./aixco-live-assets";
 
 describe("aixcoLiveImages", () => {
@@ -22,6 +24,24 @@ describe("aixcoLiveImages", () => {
   it("publishes the downloadable source images", () => {
     expect(aixcoLiveAssetDetails.dubaiFundOne).toContain("/images/fund/fund1.jpeg");
     expect(aixcoLiveAssetDetails.dubaiFundTwo).toContain("/images/fund2.png");
+  });
+
+  it("publishes locale-specific current-project brochure assets", () => {
+    expect(aixcoCurrentProjectBrochureDownloads.en).toEqual({
+      href: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
+      fileName: "Reverance-brochure-EN.pdf",
+    });
+    expect(aixcoCurrentProjectBrochureDownloads.de).toEqual({
+      href: "/aixco-global-op2/documents/reverance-brochure-de.pdf",
+      fileName: "Reverance-brochure-DE.pdf",
+    });
+    expect(getCurrentProjectBrochureDownload("de")).toEqual(
+      aixcoCurrentProjectBrochureDownloads.de,
+    );
+    expect(getCurrentProjectBrochureDownload("pl")).toEqual(
+      aixcoCurrentProjectBrochureDownloads.en,
+    );
+    expect(getCurrentProjectBrochureDownload("pl", { fallbackToEnglish: false })).toBeNull();
   });
 
   it("publishes grouped Dubai asset galleries from the OP2 source files", () => {

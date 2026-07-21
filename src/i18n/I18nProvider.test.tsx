@@ -33,6 +33,35 @@ function MarketAccessProbe() {
   );
 }
 
+function GermanDubaiMetricProbe() {
+  const { tx } = useI18n();
+
+  return (
+    <div>
+      <p>{tx("USD 462m")}</p>
+      <p>{tx("USD 350m mixed-use program")}</p>
+      <p>{tx("USD 800m+ development volume")}</p>
+      <p>{tx("Development value: USD 462m")}</p>
+      <p>{tx("Development scope: USD 350m mixed-use program")}</p>
+      <p>{tx("~20% developed, ~20% under construction")}</p>
+    </div>
+  );
+}
+
+const currentProjectSummary =
+  "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for July 2028.";
+
+function CurrentProjectCompletionProbe() {
+  const { tx } = useI18n();
+
+  return (
+    <div>
+      <p data-testid="current-project-summary">{tx(currentProjectSummary)}</p>
+      <p data-testid="current-project-completion">{tx("Jul 2028")}</p>
+    </div>
+  );
+}
+
 const visibleStoryProbeTexts = [
   "Global Real Estate",
   "Emerging Market Opportunities with AIXCO",
@@ -47,7 +76,7 @@ const visibleStoryProbeTexts = [
   "Legacy portfolio — realized",
   "Legacy portfolio — in progress",
   "Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.",
-  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for June 2028.",
+  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for July 2028.",
   "Access property reference images and supporting documentation.",
   "Customer Real Estate Buyer",
   "For clients buying apartments or reserving units in selected emerging markets through a guided digital process.",
@@ -69,6 +98,7 @@ const visibleStoryProbeTexts = [
   "ACQUIRE.PARTNER.CREATE VALUE.",
   "Buy an Apartment with AIXCO",
   "Download Materials",
+  "Current project brochure",
   "Frequently asked questions",
   "Rental income is not guaranteed and depends on occupancy, market conditions, and property management.",
 ] as const;
@@ -131,6 +161,98 @@ describe("I18nProvider", () => {
     });
   });
 
+  it("keeps German Dubai metrics compact and number-first", async () => {
+    localStorage.setItem("aixco-lang", "de");
+
+    render(
+      <I18nProvider>
+        <GermanDubaiMetricProbe />
+      </I18nProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("$462M")).toBeInTheDocument();
+      expect(screen.getByText("$350M Mischnutzungsprogramm")).toBeInTheDocument();
+      expect(screen.getByText("$800M+ Entwicklungsvolumen")).toBeInTheDocument();
+      expect(screen.getByText("Entwicklungswert: $462M")).toBeInTheDocument();
+      expect(screen.getByText("Entwicklungsumfang: $350M Mischnutzungsprogramm")).toBeInTheDocument();
+      expect(screen.getByText("~20% entwickelt, ~20% im Bau")).toBeInTheDocument();
+    });
+  });
+
+  it.each([
+    [
+      "en",
+      currentProjectSummary,
+      "Jul 2028",
+    ],
+    [
+      "de",
+      "Reverance ist ein Premium-Wohnkomplex am New Boulevard in Batumi. AIXCO bietet derzeit 28 ausgewählte Wohnungen im 13. und 14. Stock an; die Fertigstellung ist für Juli 2028 geplant.",
+      "Juli 2028",
+    ],
+    [
+      "pl",
+      "Reverance to kompleks mieszkaniowy klasy premium przy Nowym Bulwarze w Batumi. AIXCO oferuje obecnie 28 wybranych apartamentów na 13. i 14. piętrze; zakończenie budowy planowane jest na lipiec 2028 r.",
+      "lipiec 2028",
+    ],
+    [
+      "sl",
+      "Reverance je vrhunski stanovanjski kompleks na Novem bulvarju v Batumiju. AIXCO trenutno ponuja 28 izbranih stanovanj v 13. in 14. nadstropju, dokončanje pa je predvideno za julij 2028.",
+      "julij 2028",
+    ],
+    [
+      "ru",
+      "Reverance — жилой комплекс премиум-класса на Новом бульваре Батуми. Сейчас AIXCO предлагает 28 выбранных квартир на 13-м и 14-м этажах; завершение строительства запланировано на июль 2028 года.",
+      "Июль 2028",
+    ],
+  ] as const)("uses the brochure-backed July 2028 date in %s", async (locale, summary, completion) => {
+    localStorage.setItem("aixco-lang", locale);
+
+    render(
+      <I18nProvider>
+        <CurrentProjectCompletionProbe />
+      </I18nProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("current-project-summary")).toHaveTextContent(summary);
+      expect(screen.getByTestId("current-project-completion")).toHaveTextContent(completion);
+    });
+  });
+
+  it("loads Slovenian copy and keeps the document left-to-right", async () => {
+    localStorage.setItem("aixco-lang", "sl");
+
+    render(
+      <I18nProvider>
+        <TranslationProbe />
+      </I18nProvider>,
+    );
+
+    await waitFor(() => {
+      expect(document.documentElement).toHaveAttribute("lang", "sl");
+      expect(document.documentElement).toHaveAttribute("dir", "ltr");
+      expect(screen.getByText(/Raziščite.*Batumi/i)).toBeInTheDocument();
+      expect(screen.getByText("Prihodki od najemnin")).toBeInTheDocument();
+    });
+  });
+
+  it.each(["ka", "tr", "ar"])("falls back to English for retired stored locale %s", async (retiredLocale) => {
+    localStorage.setItem("aixco-lang", retiredLocale);
+
+    render(
+      <I18nProvider>
+        <TranslationProbe />
+      </I18nProvider>,
+    );
+
+    await waitFor(() => {
+      expect(document.documentElement).toHaveAttribute("lang", "en");
+      expect(screen.getByText("Explore Batumi real estate")).toBeInTheDocument();
+    });
+  });
+
   it("preserves route-specific metadata when the language changes", async () => {
     localStorage.setItem("aixco-lang", "de");
     document.title = "Our current project | AIXCO.Global";
@@ -175,7 +297,7 @@ describe("I18nProvider", () => {
   });
 
   it("has hero intro and tagline translations for every non-English locale", async () => {
-    const heroLocales = ["de", "ru", "ka", "tr", "ar", "pl"] as const;
+    const heroLocales = ["de", "pl", "sl", "ru"] as const;
 
     for (const locale of heroLocales) {
       if (heroIntroText) {
@@ -199,20 +321,18 @@ describe("I18nProvider", () => {
   });
 
   it("keeps language labels readable", () => {
-    expect(languageOptions).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ code: "ru", label: "Русский" }),
-        expect.objectContaining({ code: "ka", label: "ქართული" }),
-        expect.objectContaining({ code: "tr", label: "Türkçe" }),
-        expect.objectContaining({ code: "ar", label: "العربية" }),
-        expect.objectContaining({ code: "pl", label: "Polski" }),
-      ]),
-    );
+    expect(languageOptions).toEqual([
+      { code: "en", label: "English", native: "EN", flag: "GB" },
+      { code: "de", label: "Deutsch", native: "DE", flag: "DE" },
+      { code: "pl", label: "Polski", native: "PL", flag: "PL" },
+      { code: "sl", label: "Slovenščina", native: "SL", flag: "SI" },
+      { code: "ru", label: "Русский", native: "RU", flag: "RU" },
+    ]);
     expect(languageOptions.map((option) => option.label).join(" ")).not.toMatch(/Ã|Ð|Ñ|áƒ|Ø|Ù/);
   });
 
   it("does not pass visible story copy through as English for selected languages", async () => {
-    const locales = ["de", "ru", "ka", "tr", "ar", "pl"] as const satisfies readonly Lang[];
+    const locales = ["de", "pl", "sl", "ru"] as const satisfies readonly Lang[];
 
     for (const locale of locales) {
       localStorage.setItem("aixco-lang", locale);

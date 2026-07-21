@@ -42,7 +42,7 @@ npm run build && node scripts/verify-production-budgets.mjs
 
 CI additionally replays every Supabase migration against an isolated Postgres
 instance, lints the resulting schema, starts the production build, and runs
-every Chromium browser gate: general rendering, seven locales,
+every Chromium browser gate: general rendering, five locales,
 language/viewport combinations, Dubai layout, navigation scaling, full mobile
 experience, and mobile-only scope.
 The same job enforces measured homepage JavaScript/CSS, largest-chunk, and total

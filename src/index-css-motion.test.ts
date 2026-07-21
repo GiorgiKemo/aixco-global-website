@@ -14,6 +14,9 @@ const partnerMarquee = readSource("src/components/partners/PartnerMarquee.tsx");
 const dubaiImageMarquee = readSource("src/components/sections/dubai/DubaiImageMarquee.tsx");
 const socialLinks = readSource("src/components/SocialLinks.tsx");
 const liveAssets = readSource("src/lib/aixco-live-assets.ts");
+const tailwindConfig = readSource("tailwind.config.ts");
+const germanTranslationFixes = readSource("src/i18n/german-translation-fixes.ts");
+const propertyPage = readSource("src/app/aixco-global-op2/[slug]/page.tsx");
 
 function cssBlock(selector: string) {
   const start = css.indexOf(`  ${selector} {`);
@@ -668,6 +671,58 @@ describe("index.css motion rules", () => {
     expect(css).toContain("font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;");
     expect(css).toContain("font-weight: 400 !important;");
     expect(css).toContain("font-variant-numeric: lining-nums tabular-nums;");
+    expect(css).toContain("white-space: nowrap;");
+  });
+
+  it("keeps currency symbols on the exact same typographic line as their figures", () => {
+    const currencyStart = css.indexOf(
+      ".story-standard-number .story-currency-symbol {",
+    );
+    const currencyBlock = css.slice(
+      currencyStart,
+      css.indexOf("\n}", currencyStart),
+    );
+
+    expect(currencyStart).toBeGreaterThanOrEqual(0);
+    expect(currencyBlock).toContain("font-size: 1em !important;");
+    expect(currencyBlock).toContain("font-weight: inherit !important;");
+    expect(currencyBlock).toContain("line-height: inherit !important;");
+    expect(currencyBlock).toContain("vertical-align: baseline;");
+    expect(currencyBlock).not.toContain("font-size: 0.82em");
+    expect(currencyBlock).not.toContain("vertical-align: 0.055em");
+    expect(desktopStoryHome).toContain("story-currency-symbol--dollar");
+    expect(desktopStoryHome).toContain("story-philosophy-stat__number");
+
+    const euroStart = css.indexOf(
+      ".story-standard-number .story-currency-symbol--euro {",
+    );
+    const euroBlock = css.slice(euroStart, css.indexOf("\n}", euroStart));
+
+    expect(euroStart).toBeGreaterThanOrEqual(0);
+    expect(euroBlock).toContain(
+      'font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;',
+    );
+    expect(euroBlock).toContain("font-size: 1em !important;");
+    expect(euroBlock).toContain("font-weight: 300 !important;");
+    expect(euroBlock).toContain("font-synthesis: none;");
+    expect(euroBlock).toContain("line-height: inherit !important;");
+    expect(euroBlock).toContain("top: 0.055em;");
+    expect(euroBlock).toContain("vertical-align: baseline;");
+  });
+
+  it("normalizes inline Batumi euro tokens without changing their copy", () => {
+    expect(desktopStoryHome).toContain("function StoryInlineCurrencyText");
+    expect(desktopStoryHome).toContain('data-inline-currency-token="euro"');
+    expect(desktopStoryHome).toContain('data-batumi-intro-copy="true"');
+    expect(desktopStoryHome).toContain(
+      "<StoryInlineCurrencyText value={tx(label)} />",
+    );
+    expect(css).toContain(".story-inline-currency-token {");
+    expect(css).toContain("white-space: nowrap;");
+    expect(css).toContain(".story-inline-currency-symbol--euro {");
+    expect(css).toContain("font-weight: 300 !important;");
+    expect(css).toContain("font-synthesis: none;");
+    expect(css).toContain("top: 0.055em;");
   });
 
   it("matches Dubai card typography to the Philosophy card scale", () => {
@@ -675,6 +730,12 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('className="story-dubai-metric-copy"');
     expect(desktopStoryHome).toContain('className="story-dubai-metric-prefix"');
     expect(desktopStoryHome).toContain('className="story-dubai-status__state"');
+    expect(desktopStoryHome).toContain('/^[$€]/u.test(part) ? (');
+    expect(desktopStoryHome).toContain(
+      '<StoryMetricText value={part} ariaHidden={false} />',
+    );
+    expect(desktopStoryHome).toContain("aria-hidden={ariaHidden || undefined}");
+    expect(desktopStoryHome).toContain("data-metric-label={detail.label}");
     expect(css).toContain("min-height: clamp(10.5rem, 22svh, 11.5rem) !important;");
     expect(css).toContain("justify-content: center !important;");
     expect(css).toContain("gap: clamp(0.68rem, 1.2svh, 0.88rem) !important;");
@@ -688,7 +749,33 @@ describe("index.css motion rules", () => {
     expect(css).toContain("grid-template-columns: max-content minmax(0, 1fr);");
     expect(css).toContain("@media (min-width: 768px) and (max-width: 1279px)");
     expect(css).toContain(".story-dubai-portfolio-card__metric[data-metric-layout='progress']");
+    expect(css).toContain("align-items: start;\n  column-gap: 0.25rem;");
+    expect(css).toContain("padding-top: clamp(0.18rem, 0.32vw, 0.28rem);");
+    expect(css).toContain("line-height: 1.34 !important;");
+    expect(css).toContain("@media (max-width: 479px)");
+    expect(css).toContain("display: grid;");
     expect(css).toContain("overflow-wrap: anywhere;");
+  });
+
+  it("keeps German Dubai metrics compact and aligned on laptop screens", () => {
+    expect(germanTranslationFixes).toContain('"USD 462m": { de: "$462M" }');
+    expect(germanTranslationFixes).toContain(
+      '"USD 350m mixed-use program": { de: "$350M Mischnutzungsprogramm" }',
+    );
+    expect(germanTranslationFixes).toContain(
+      '"USD 800m+ development volume": { de: "$800M+ Entwicklungsvolumen" }',
+    );
+    expect(germanTranslationFixes).toContain(
+      '"~20% developed, ~20% under construction": { de: "~20% entwickelt, ~20% im Bau" }',
+    );
+    expect(css).toContain("/* German laptop cards use the same compact international value language");
+    expect(css).toContain("html[lang='de']\n  .story-dubai-portfolio-card__metric[data-metric-layout='number']");
+    expect(css).toContain("flex-wrap: nowrap;");
+    expect(css).toContain("html[lang='de']\n  .story-dubai-portfolio-card__metric[data-metric-layout='scope']");
+    expect(css).toContain("flex-direction: column;");
+    expect(css).toContain("html[lang='de']\n  .story-dubai-portfolio-card__metric[data-metric-layout='progress']");
+    expect(css).toContain("align-items: baseline;");
+    expect(css).toContain("padding-top: 0;");
   });
 
   it("keeps the current project reachable only from the hero CTA", () => {
@@ -706,8 +793,14 @@ describe("index.css motion rules", () => {
   it("makes the Batumi project card explicit and removes the old circular arrow CTA", () => {
     expect(desktopStoryHome).toContain('data-batumi-project-cta="explore"');
     expect(desktopStoryHome).toContain('className="btn-gold story-batumi-property__explore w-fit shrink-0"');
+    expect(desktopStoryHome).toContain('className="story-batumi-property-link grid w-full justify-items-start');
+    expect(desktopStoryHome).toContain('className="story-batumi-property-copy block w-full');
+    expect(desktopStoryHome).not.toContain('story-batumi-property-link flex w-full items-center justify-between');
+    expect(desktopStoryHome).toContain('{tx("Our current project").toUpperCase()}');
+    expect(desktopStoryHome).not.toContain('{tx(property.name)}</span>');
     expect(desktopStoryHome).toContain('{tx("Explore")}');
     expect(desktopStoryHome).not.toContain('className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full');
+    expect(css).toContain(".story-batumi-property-link:hover .story-batumi-property-copy {");
     expect(css).toContain("[data-story-section='batumi'] .story-batumi-property__explore {");
   });
 
@@ -728,5 +821,66 @@ describe("index.css motion rules", () => {
     expect(css).toContain("hsl(var(--primary)) 58%");
     expect(css).toContain("[data-brand-lockup='story-hero'] {\n  width: min(100%, 44rem);\n  filter: none;");
     expect(css).toContain("[data-story-hero-title-mark='true'] {\n  filter: none;");
+  });
+
+  it("renders every supported localized glyph with one complete platform stack", () => {
+    const localeSelector =
+      "html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])";
+    const localeOverrideStart = css.indexOf(`${localeSelector} {`);
+    const localeOverride = css.slice(
+      localeOverrideStart,
+      css.indexOf("\n}", localeOverrideStart),
+    );
+
+    expect(localeOverrideStart).toBeGreaterThanOrEqual(0);
+    expect(localeOverride).toContain("--font-brand-sans:");
+    expect(localeOverride).toContain("--font-brand-display:");
+    expect(localeOverride).toContain("--font-legacy-ui:");
+    expect(localeOverride).toContain("--font-legacy-display:");
+    expect(localeOverride).toContain("--font-sans: var(--font-brand-sans);");
+    expect(localeOverride).toContain("--font-display: var(--font-brand-display);");
+    expect(localeOverride).toContain(
+      "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI'",
+    );
+    expect(localeOverride).toContain("font-synthesis: none;");
+    expect(localeOverride).not.toMatch(/font-gilroy/i);
+    expect(localeOverride).not.toMatch(/avenir/i);
+    expect(tailwindConfig).toContain('"var(--font-brand-display)"');
+    expect(tailwindConfig).toContain('"var(--font-brand-sans)"');
+    expect(tailwindConfig).not.toContain('"var(--font-gilroy)"');
+  });
+
+  it("keeps localized controls and animated letters on identical typography", () => {
+    expect(css).toContain(
+      "html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])\n  :is(button, input, textarea, select, option)",
+    );
+    expect(css).toContain(
+      "html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])\n  [data-story-section]\n  :is(",
+    );
+    expect(css).toContain(".story-title-reveal__text,");
+    expect(css).toContain(".story-letter-reveal__word,");
+    expect(css).toContain(".story-letter-reveal__char");
+    expect(css).toContain("font-family: inherit;");
+    expect(css).toContain("font-size: inherit;");
+    expect(css).toContain("font-weight: inherit;");
+    expect(css).toContain("font-synthesis: none;");
+  });
+
+  it("keeps multiline localized display headings from colliding", () => {
+    const safeLeadingStart = css.indexOf(
+      "/* Complete-font locales use platform font metrics",
+    );
+    const safeLeadingRules = css.slice(safeLeadingStart);
+
+    expect(safeLeadingStart).toBeGreaterThanOrEqual(0);
+    expect(safeLeadingRules).toContain(".story-hero-statement__line {");
+    expect(safeLeadingRules).toContain("line-height: 1.08 !important;");
+    expect(safeLeadingRules).toContain(".story-philosophy-detail-title");
+    expect(safeLeadingRules).toContain(".story-objectives-title");
+    expect(safeLeadingRules).toContain(".story-mobile-materials-title");
+    expect(safeLeadingRules).toContain(":is(.property-hero__title, .property-highlights__title)");
+    expect(safeLeadingRules).toContain("@media (max-width: 767px)");
+    expect(safeLeadingRules).toContain("line-height: 1.12 !important;");
+    expect(propertyPage).toContain('className="property-highlights__title ');
   });
 });

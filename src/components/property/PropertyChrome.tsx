@@ -6,7 +6,7 @@ import { ChevronDown, Download, Globe, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { useUI } from "@/components/ui-state";
 import { LANGS, useI18n } from "@/i18n/I18nProvider";
-import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { aixcoLiveLogos, getCurrentProjectBrochureDownload } from "@/lib/aixco-live-assets";
 import { cn } from "@/lib/utils";
 
 type PropertyNavItem = {
@@ -92,23 +92,25 @@ export function PropertyContactLink({ className, children }: { className?: strin
   );
 }
 
-export function EnglishBrochureLink({
-  href,
-  fileName,
+export function CurrentProjectBrochureLink({
   className,
 }: {
-  href: string;
-  fileName: string;
   className?: string;
 }) {
-  const { lang } = useI18n();
+  const { lang, tx } = useI18n();
+  const brochure = getCurrentProjectBrochureDownload(lang, { fallbackToEnglish: false });
 
-  if (lang !== "en") return null;
+  if (!brochure) return null;
 
   return (
-    <a href={href} download={fileName} className={className}>
+    <a
+      href={brochure.href}
+      download={brochure.fileName}
+      data-current-project-brochure={lang}
+      className={className}
+    >
       <Download className="h-4 w-4" aria-hidden />
-      Download brochure
+      {tx("Download brochure")}
     </a>
   );
 }

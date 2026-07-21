@@ -33,7 +33,7 @@ import {
   philosophySections,
   philosophyStats,
 } from "@/data/aixco-philosophy";
-import { materialDownloads } from "@/data/materials";
+import { materialDownloads, resolveMaterialDownload } from "@/data/materials";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { LANGS, useI18n } from "@/i18n/I18nProvider";
@@ -1504,7 +1504,7 @@ function HeroScene({
   );
 }
 
-const DUBAI_METRIC_NUMBER_PATTERN = /(~?\d[\d,.]*(?:\s*%|\+|[mMbBkK])?)/gu;
+const DUBAI_METRIC_NUMBER_PATTERN = /([$€]?~?\d[\d,.]*(?:\s*%|\+|[mMbBkK])?)/gu;
 
 function StoryDubaiMetricNumbers({ value }: { value: string }) {
   return value.split(DUBAI_METRIC_NUMBER_PATTERN).map((part, partIndex) =>
@@ -1513,7 +1513,11 @@ function StoryDubaiMetricNumbers({ value }: { value: string }) {
         key={`${part}:${partIndex}`}
         className="story-standard-number story-dubai-metric-number"
       >
-        {part}
+        {/^[$€]/u.test(part) ? (
+          <StoryMetricText value={part} ariaHidden={false} />
+        ) : (
+          part
+        )}
       </span>
     ) : (
       part ? (
@@ -1562,7 +1566,10 @@ function StoryDubaiFundRow({
           const metric = formatMetricValue(detail.value);
           const translatedFullValue = tx(detail.value);
           const useTranslatedFullValue =
-            translatedFullValue !== detail.value && (Boolean(metric.prefix) || Boolean(metric.subtext));
+            translatedFullValue !== detail.value &&
+            (Boolean(metric.prefix) ||
+              Boolean(metric.subtext) ||
+              metric.preserveLocalizedValue);
           const metricLayout =
             detail.label === "Status"
               ? "status"
@@ -1575,6 +1582,7 @@ function StoryDubaiFundRow({
             <div
               key={`${detail.label}:${detail.value}`}
               className="story-dubai-portfolio-card__metric"
+              data-metric-label={detail.label}
               data-metric-layout={metricLayout}
               data-metric-tone={(metricIndex % 3) + 1}
             >
@@ -1682,21 +1690,53 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
   );
 }
 
-function StoryMetricText({ value }: { value: string }) {
+function StoryMetricText({
+  value,
+  ariaHidden = true,
+}: {
+  value: string;
+  ariaHidden?: boolean;
+}) {
   const currencyMetric = value.match(/^([$€])(.*)$/u);
 
   if (!currencyMetric) return <>{value}</>;
 
   return (
     <>
-      <span className={`story-currency-symbol ${currencyMetric[1] === "€" ? "story-currency-symbol--euro" : "story-currency-symbol--dollar"}`} aria-hidden="true">
+      <span
+        className={`story-currency-symbol ${currencyMetric[1] === "€" ? "story-currency-symbol--euro" : "story-currency-symbol--dollar"}`}
+        aria-hidden={ariaHidden || undefined}
+      >
         {currencyMetric[1]}
       </span>
-      <span className="story-currency-value" aria-hidden="true">
+      <span className="story-currency-value" aria-hidden={ariaHidden || undefined}>
         {currencyMetric[2]}
       </span>
     </>
   );
+}
+
+const INLINE_EURO_TOKEN_PATTERN = /(€\d+(?:[.,]\d+)*(?:[kKmMbB])?)/gu;
+
+function StoryInlineCurrencyText({ value }: { value: string }) {
+  return value.split(INLINE_EURO_TOKEN_PATTERN).map((part, partIndex) => {
+    const euroToken = part.match(/^€(.+)$/u);
+
+    if (!euroToken) return part;
+
+    return (
+      <span
+        key={`${part}:${partIndex}`}
+        className="story-inline-currency-token"
+        data-inline-currency-token="euro"
+      >
+        <span className="story-inline-currency-symbol story-inline-currency-symbol--euro">
+          €
+        </span>
+        <span className="story-inline-currency-value">{euroToken[1]}</span>
+      </span>
+    );
+  });
 }
 
 function BatumiBenefitIconGrid({
@@ -1724,7 +1764,9 @@ function BatumiBenefitIconGrid({
             <span className="story-batumi-benefit__metric story-standard-number" aria-label={metric}>
               <StoryMetricText value={metric} />
             </span>
-            <span className="story-batumi-benefit__label">{tx(label)}</span>
+            <span className="story-batumi-benefit__label">
+              <StoryInlineCurrencyText value={tx(label)} />
+            </span>
           </div>
         </div>
       ))}
@@ -2426,8 +2468,13 @@ function BatumiScene({
       <h2 className="story-h2">
         <StoryTextReveal active={isActive} label={tx("Batumi")} />
       </h2>
-      <p className="story-body story-glyph-safe text-foreground/78">
-        {tx("Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.")}
+      <p
+        className="story-body story-glyph-safe text-foreground/78"
+        data-batumi-intro-copy="true"
+      >
+        <StoryInlineCurrencyText
+          value={tx("Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.")}
+        />
       </p>
       <BatumiBenefitIconGrid benefits={batumiBenefits} tx={tx} />
       <div data-layout="story-batumi-properties" className="grid w-full gap-3">
@@ -2436,10 +2483,12 @@ function BatumiScene({
             key={property.id}
             href={`/aixco-global-op2/${property.url}`}
             prefetch={false}
-            className="story-batumi-property-link flex w-full items-center justify-between gap-4 rounded-lg border border-primary/30 bg-primary/[0.07] px-5 py-4 shadow-[0_14px_36px_-28px_hsl(var(--primary)/0.55)] transition-[background-color,border-color,box-shadow] duration-200 hover:border-primary/50 hover:bg-primary/[0.11] hover:shadow-[0_18px_42px_-26px_hsl(var(--primary)/0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            className="story-batumi-property-link grid w-full justify-items-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
           >
-            <span className="story-batumi-property-copy min-w-0 flex-1">
-              <span className="story-card-title block transition-none">{tx(property.name)}</span>
+            <span className="story-batumi-property-copy block w-full min-w-0 rounded-lg border border-primary/30 bg-primary/[0.07] px-5 py-4 shadow-[0_14px_36px_-28px_hsl(var(--primary)/0.55)] transition-[background-color,border-color,box-shadow] duration-200">
+              <span className="story-card-title block transition-none">
+                {tx("Our current project").toUpperCase()}
+              </span>
               <span className="story-body block hyphens-none text-foreground/62 transition-none">
                 {tx(property.summary)}
               </span>
@@ -2457,10 +2506,12 @@ function BatumiScene({
 function MaterialsScene({
   isActive,
   isRevealed,
+  lang,
   tx,
 }: {
   isActive: boolean;
   isRevealed: boolean;
+  lang: Lang;
   tx: (copy: string) => string;
 }) {
   return (
@@ -2485,13 +2536,15 @@ function MaterialsScene({
       <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
         {materialDownloads.map((material) => {
           const Icon = getMaterialIcon(material.format);
-          const href = getSafePublicAssetHref(material.href, "#materials");
+          const localizedDownload = resolveMaterialDownload(material, lang);
+          const href = getSafePublicAssetHref(localizedDownload.href, "#materials");
 
           return (
             <a
               key={material.id}
+              data-material-id={material.id}
               href={href}
-              download={material.fileName}
+              download={localizedDownload.fileName}
               className="group grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3 py-3.5 transition-colors duration-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2"
               aria-label={`${tx("Download")} ${tx(material.title)}`}
             >
@@ -3394,7 +3447,7 @@ export function DesktopStoryHome() {
       <MemoizedLegacyScene key="legacy" isActive={activeIndex === 7} isRevealed={isRevealed(7)} tx={tx} />,
       <MemoizedDubaiScene key="dubai" isActive={activeIndex === 8} isRevealed={isRevealed(8)} tx={tx} />,
       <MemoizedBatumiScene key="batumi" isActive={activeIndex === 9} isRevealed={isRevealed(9)} tx={tx} />,
-      <MemoizedMaterialsScene key="materials" isActive={activeIndex === 10} isRevealed={isRevealed(10)} tx={tx} />,
+      <MemoizedMaterialsScene key="materials" isActive={activeIndex === 10} isRevealed={isRevealed(10)} lang={lang} tx={tx} />,
       <MemoizedParticipateScene key="participate" isActive={activeIndex === 11} isRevealed={isRevealed(11)} tx={tx} onRegister={openRegister} />,
       <MemoizedHowScene key="how" isActive={activeIndex === 12} isRevealed={isRevealed(12)} tx={tx} onJourney={openJourney} onRegister={openRegister} />,
       <MemoizedTeamScene key="team" isActive={activeIndex === 13} isRevealed={isRevealed(13)} tx={tx} />,
@@ -3403,7 +3456,7 @@ export function DesktopStoryHome() {
       <MemoizedContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
-    [activeIndex, heroBackdropVisible, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
+    [activeIndex, heroBackdropVisible, lang, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
   );
 
   return (

@@ -1,4 +1,4 @@
-import type { Lang } from "./languages";
+import type { CatalogLang as Lang } from "./languages";
 
 type LocaleText = Partial<Record<Exclude<Lang, "en">, string>>;
 
@@ -1014,7 +1014,7 @@ export const curatedVisibleTranslations = {
     ar: "المحفظة السابقة - قيد التنفيذ",
   },
   "USD 350m mixed-use program": {
-    de: "350 Mio. USD Mixed-Use-Programm",
+    de: "$350M Mischnutzungsprogramm",
     ru: "Многофункциональная программа на 350 млн долларов США",
     ka: "350 მილიონი აშშ დოლარის შერეული გამოყენების პროგრამა",
     tr: "350 milyon USD karma kullanım programı",
@@ -1027,12 +1027,12 @@ export const curatedVisibleTranslations = {
     tr: "yaklaşık %20 geliştirildi, yaklaşık %20 inşaat halinde",
     ar: "نحو 20% مطور، ونحو 20% قيد الإنشاء",
   },
-  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for June 2028.": {
-    de: "Unser Bestand: ein aktuelles AIXCO-Wohnprojekt mit ausgewählten Apartments, strukturierter Käuferbegleitung und geplanter Fertigstellung im Juni 2028.",
-    ru: "Наш объект: текущий жилой проект AIXCO с отобранными квартирами, структурированным сопровождением покупателей и планируемым завершением в июне 2028 года.",
-    ka: "ჩვენი პროექტი: მიმდინარე AIXCO-ს საცხოვრებელი პროექტი შერჩეული ბინებით, სტრუქტურირებული მყიდველის მხარდაჭერით და დასრულების მიზნობრივი თარიღით 2028 წლის ივნისი.",
-    tr: "Bizim projemiz: seçilmiş daireler, yapılandırılmış alıcı rehberliği ve Haziran 2028 hedefli tamamlanma tarihi olan güncel AIXCO konut projesi.",
-    ar: "مشروعنا: مشروع سكني حالي من AIXCO يضم شققا مختارة وإرشادا منظما للمشترين مع استهداف الإنجاز في يونيو 2028.",
+  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for July 2028.": {
+    de: "Unser Bestand: ein aktuelles AIXCO-Wohnprojekt mit ausgewählten Apartments, strukturierter Käuferbegleitung und geplanter Fertigstellung im Juli 2028.",
+    ru: "Наш объект: текущий жилой проект AIXCO с отобранными квартирами, структурированным сопровождением покупателей и планируемым завершением в июле 2028 года.",
+    ka: "ჩვენი პროექტი: მიმდინარე AIXCO-ს საცხოვრებელი პროექტი შერჩეული ბინებით, სტრუქტურირებული მყიდველის მხარდაჭერით და დასრულების მიზნობრივი თარიღით 2028 წლის ივლისი.",
+    tr: "Bizim projemiz: seçilmiş daireler, yapılandırılmış alıcı rehberliği ve Temmuz 2028 hedefli tamamlanma tarihi olan güncel AIXCO konut projesi.",
+    ar: "مشروعنا: مشروع سكني حالي من AIXCO يضم شققا مختارة وإرشادا منظما للمشترين مع استهداف الإنجاز في يوليو 2028.",
   },
   "ON REQUEST": {
     de: "AUF ANFRAGE",

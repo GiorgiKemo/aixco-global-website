@@ -16,7 +16,7 @@ const pairs = [
   ["Mixed-use masterplan combining Build-to-Rent and Build-to-Sell for an underserved millennial market", "Wielofunkcyjny plan łączący mieszkania na wynajem i sprzedaż dla niedostatecznie obsługiwanego rynku młodych nabywców"],
   ["Connectivity", "Dostępność komunikacyjna"],
   ["Near DIFC, Downtown Dubai, Business Bay, Ras Al Khor Wildlife Sanctuary, and Dubai Creek Golf Club", "W pobliżu DIFC, Downtown Dubai, Business Bay, rezerwatu Ras Al Khor i Dubai Creek Golf Club"],
-  ["USD", "USD"], ["m USD", "mln USD"], ["Projected", "Planowane"], ["Jun 2028", "czerwiec 2028"],
+  ["USD", "USD"], ["m USD", "mln USD"], ["Projected", "Planowane"], ["Jul 2028", "lipiec 2028"],
   ["Create your account", "Utwórz konto"], ["Register and access your secure client portal.", "Zarejestruj się i uzyskaj dostęp do bezpiecznego portalu klienta."],
   ["Complete Profile", "Uzupełnij profil"], ["Fill out the registration form to create your profile and access dashboard", "Wypełnij formularz, aby utworzyć profil i uzyskać dostęp do panelu"],
   ["Review opportunities", "Przejrzyj możliwości"], ["Browse available real estate projects, pricing, and supporting materials.", "Przeglądaj dostępne projekty, ceny i materiały pomocnicze."],

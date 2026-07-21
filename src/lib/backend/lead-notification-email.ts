@@ -213,7 +213,9 @@ function buildBrandedEmailShell(input: {
 </html>`;
 }
 
-type ConfirmationLanguage = "en" | "de" | "ru" | "ka" | "tr" | "ar" | "pl";
+type ConfirmationLanguage = "en" | "de" | "pl" | "sl" | "ru";
+
+const supportedConfirmationLanguages: readonly ConfirmationLanguage[] = ["en", "de", "pl", "sl", "ru"];
 
 type ConfirmationCopy = {
   salutation: string;
@@ -226,7 +228,7 @@ type ConfirmationCopy = {
   message: { title: string; opening: string; response: string; closing: string | null };
 };
 
-const contactConfirmationCopy: Record<ConfirmationLanguage, ConfirmationCopy> = {
+const contactConfirmationCopy: Record<string, ConfirmationCopy> = {
   en: {
     salutation: "Dear Sir or Madam,",
     automatedNotice: "Please note that this is an automated confirmation email. Please do not reply to this message, as replies are not monitored.",
@@ -307,11 +309,33 @@ const contactConfirmationCopy: Record<ConfirmationLanguage, ConfirmationCopy> = 
     call: { title: "Otrzymaliśmy prośbę o rozmowę z AIXCO", opening: "Dziękujemy za umówienie rozmowy z AIXCO.", response: "Otrzymaliśmy Państwa zgłoszenie. Członek naszego zespołu przejrzy je i wkrótce skontaktuje się, aby potwierdzić termin oraz odpowiedzieć na pytania.", closing: null },
     message: { title: "Otrzymaliśmy Państwa wiadomość", opening: "Dziękujemy za kontakt z AIXCO.", response: "Otrzymaliśmy Państwa wiadomość. Członek naszego zespołu przejrzy zapytanie i odpowie tak szybko, jak to możliwe.", closing: "Dziękujemy za zainteresowanie AIXCO. Z przyjemnością Państwu pomożemy." },
   },
+  sl: {
+    salutation: "Spoštovani,",
+    automatedNotice: "To je samodejno potrditveno e-poštno sporočilo. Na to sporočilo ne odgovarjajte, saj odgovorov ne spremljamo.",
+    requestReference: "Referenca zahtevka",
+    eyebrow: "Potrditev zahtevka",
+    signoff: "Lep pozdrav,",
+    team: "Ekipa AIXCO",
+    call: {
+      title: "Prejeli smo vašo zahtevo za klic z AIXCO",
+      opening: "Hvala, ker ste se dogovorili za klic z AIXCO.",
+      response: "Vašo zahtevo smo uspešno prejeli. Član naše ekipe jo bo pregledal in vas kmalu kontaktiral, da potrdi termin ter odgovori na morebitna vprašanja.",
+      closing: null,
+    },
+    message: {
+      title: "Prejeli smo vaše sporočilo",
+      opening: "Hvala, ker ste stopili v stik z AIXCO.",
+      response: "Vaše sporočilo smo uspešno prejeli. Član naše ekipe bo pregledal vaše povpraševanje in vam odgovoril v najkrajšem možnem času.",
+      closing: "Hvala za vaše zanimanje za AIXCO. Veselimo se, da vam bomo lahko pomagali.",
+    },
+  },
 };
 
 function getConfirmationLanguage(locale: string | null): ConfirmationLanguage {
   const base = locale?.trim().toLowerCase().split(/[-_]/)[0];
-  return base && base in contactConfirmationCopy ? (base as ConfirmationLanguage) : "en";
+  return base && supportedConfirmationLanguages.includes(base as ConfirmationLanguage)
+    ? base as ConfirmationLanguage
+    : "en";
 }
 
 function getContactConfirmationType(notification: ContactLeadNotification): ContactConfirmationType {
@@ -322,7 +346,7 @@ function getContactConfirmationType(notification: ContactLeadNotification): Cont
 export function buildContactConfirmationEmail(notification: ContactLeadNotification): ContactConfirmationEmail {
   const requestType = getContactConfirmationType(notification);
   const language = getConfirmationLanguage(notification.locale);
-  const localeCopy = contactConfirmationCopy[language];
+  const localeCopy = contactConfirmationCopy[language]!;
   const copy = localeCopy[requestType];
   const automatedNotice = localeCopy.automatedNotice;
   const text = [
@@ -352,7 +376,7 @@ export function buildContactConfirmationEmail(notification: ContactLeadNotificat
     eyebrow: localeCopy.eyebrow,
     title: copy.title,
     lang: language,
-    dir: language === "ar" ? "rtl" : "ltr",
+    dir: "ltr",
     content: `
       <tr>
         <td class="aixco-shell-padding" style="padding: 0 46px 42px; background: ${emailBrand.white};">

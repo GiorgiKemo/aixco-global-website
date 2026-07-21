@@ -30,8 +30,8 @@ export const germanTranslationFixes = {
   "Selected emerging-market projects and apartments through AIXCO, with Batumi as the current focus, entry from €45,000, 100% foreign ownership, bank financing minimum 60%, and a transparent ISO-certified process.": {
     de: "Ausgewählte Projekte und Apartments in aufstrebenden Märkten über AIXCO, mit Batumi als aktuellem Fokus, Einstieg ab 45.000 EUR, 100 % ausländischem Eigentum, Bankfinanzierung mindestens 60 % und einem transparenten ISO-zertifizierten Prozess.",
   },
-  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for June 2028.": {
-    de: "Unser aktuelles AIXCO-Wohnprojekt mit ausgewählten Apartments, strukturierter Käuferbegleitung und geplanter Fertigstellung im Juni 2028.",
+  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for July 2028.": {
+    de: "Unser aktuelles AIXCO-Wohnprojekt mit ausgewählten Apartments, strukturierter Käuferbegleitung und geplanter Fertigstellung im Juli 2028.",
   },
   "Access brochures, catalogs, property presentations, and supporting documentation.": {
     de: "Greifen Sie auf Broschüren, Kataloge, Immobilienpräsentationen und unterstützende Unterlagen zu.",
@@ -351,13 +351,22 @@ export const germanTranslationFixes = {
   },
   "Units": { de: "Einheiten" },
   "Development value": { de: "Entwicklungswert" },
+  "Development value: USD 462m": { de: "Entwicklungswert: $462M" },
+  "m USD": { de: "M" },
+  "USD 462m": { de: "$462M" },
   "Canal-front residential sold and handed over": {
     de: "Wohnimmobilien am Kanal, verkauft und übergeben",
   },
   "Dubai Water Canal district": { de: "Viertel am Dubai Water Canal" },
   "Development scope": { de: "Entwicklungsumfang" },
-  "USD 350m mixed-use program": { de: "Mischnutzungsprogramm mit einem Volumen von 350 Mio. USD" },
+  "Development scope: USD 350m mixed-use program": {
+    de: "Entwicklungsumfang: $350M Mischnutzungsprogramm",
+  },
+  "USD 350m": { de: "$350M" },
+  "USD 350m mixed-use program": { de: "$350M Mischnutzungsprogramm" },
+  "USD 800m+ development volume": { de: "$800M+ Entwicklungsvolumen" },
   "Site progress": { de: "Baufortschritt" },
+  "~20% developed, ~20% under construction": { de: "~20% entwickelt, ~20% im Bau" },
   "Mixed-use masterplan combining Build-to-Rent and Build-to-Sell for an underserved millennial market": {
     de: "Mischnutzungs-Masterplan mit Miet- und Verkaufsobjekten für einen bislang unterversorgten Markt junger Erwachsener",
   },
@@ -396,8 +405,8 @@ export const germanTranslationFixes = {
   "View catalog": { de: "Katalog ansehen" },
   "Download brochure": { de: "Broschüre herunterladen" },
   "Premium residential complex": { de: "Hochwertige Wohnanlage" },
-  "Our current AIXCO residential project includes selected apartments, structured buyer guidance, and completion targeted for June 2028.": {
-    de: "Unser aktuelles AIXCO-Wohnprojekt umfasst ausgewählte Apartments, eine strukturierte Käuferberatung und die geplante Fertigstellung im Juni 2028.",
+  "Our current AIXCO residential project includes selected apartments, structured buyer guidance, and completion targeted for July 2028.": {
+    de: "Unser aktuelles AIXCO-Wohnprojekt umfasst ausgewählte Apartments, eine strukturierte Käuferberatung und die geplante Fertigstellung im Juli 2028.",
   },
   "Selected projects and apartments available exclusively through AIXCO Entry from €45,000 Prime apartments from our own stock at the best available prices": {
     de: "Ausgewählte Projekte und Apartments exklusiv über AIXCO. Einstieg ab 45.000 €. Hochwertige Apartments aus unserem eigenen Bestand zu den besten verfügbaren Preisen.",

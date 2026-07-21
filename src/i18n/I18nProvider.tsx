@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { curatedVisibleTranslations } from "./curated-visible-translations";
+import { normalizeGermanCompactMetricTranslation } from "./german-metric-notation";
 import { germanTranslationFixes } from "./german-translation-fixes";
-import { languageOptions, type Lang } from "./languages";
+import { languageOptions, type CatalogLang, type Lang } from "./languages";
 import { localePassthroughFixes } from "./locale-passthrough-fixes";
 import { localeTranslationFixes } from "./locale-translation-fixes";
 import { polishTranslations } from "./polish-translations";
@@ -10,6 +11,7 @@ import { polishTranslationsFinal } from "./polish-translations-final";
 import { polishContentTranslations } from "./polish-content-translations";
 import { polishRuntimeTranslations } from "./polish-runtime-translations";
 import { propertyPageTranslations } from "./property-page-translations";
+import { slovenianTranslationFixes } from "./slovenian-translation-fixes";
 
 export const LANGS = languageOptions;
 const DEFAULT_LANG: Lang = "en";
@@ -49,7 +51,7 @@ const keyedText: Record<string, string> = {
   "cta.start": "Explore opportunities",
   "cta.contact": "Contact AIXCO",
 };
-const supplementalTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> = {
+const supplementalTranslations: Partial<Record<string, Partial<Record<CatalogLang, string>>>> = {
   "Skip to main content": {
     de: "Zum Hauptinhalt springen",
     ru: "Перейти к основному содержанию",
@@ -1251,7 +1253,7 @@ const clientBriefPassthroughCopy = [
   "As AIXCO continues to grow internationally, its vision remains unchanged: to build a resilient real estate services - buy, broker, and manage property - rooted in Swiss heritage, disciplined execution, and enduring long-term value.",
 ] as const;
 
-function sameCopyInAllLanguages(text: string): Partial<Record<Lang, string>> {
+function sameCopyInAllLanguages(text: string): Partial<Record<CatalogLang, string>> {
   return {
     de: text,
     ru: text,
@@ -1261,10 +1263,10 @@ function sameCopyInAllLanguages(text: string): Partial<Record<Lang, string>> {
   };
 }
 
-const clientBriefPassthroughTranslations: Partial<Record<string, Partial<Record<Lang, string>>>> =
+const clientBriefPassthroughTranslations: Partial<Record<string, Partial<Record<CatalogLang, string>>>> =
   Object.fromEntries(clientBriefPassthroughCopy.map((text) => [text, sameCopyInAllLanguages(text)]));
 
-type TranslationSource = Partial<Record<string, Partial<Record<Lang, string>>>>;
+type TranslationSource = Partial<Record<string, Partial<Record<CatalogLang, string>>>>;
 type AttributeTranslationCatalog = {
   placeholder: TranslationSource;
   content: TranslationSource;
@@ -1433,8 +1435,8 @@ const germanQualityTranslations: TranslationSource = {
   "Approx. 10-12% net rental yields": { de: "Ca. 10-12% Nettomietrendite" },
   "Bank financing minimum": { de: "Bankfinanzierung mindestens" },
   "Current project": { de: "Aktuelles Projekt" },
-  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for June 2028.": {
-    de: "Unser aktuelles AIXCO-Wohnprojekt mit ausgewählten Apartments, strukturierter Käuferbegleitung und geplanter Fertigstellung im Juni 2028.",
+  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for July 2028.": {
+    de: "Unser aktuelles AIXCO-Wohnprojekt mit ausgewählten Apartments, strukturierter Käuferbegleitung und geplanter Fertigstellung im Juli 2028.",
   },
   "Access": { de: "Zugang" },
   "AIXCO-managed buyer guidance, project information, and supporting materials available through the client route.": {
@@ -1599,8 +1601,8 @@ const germanQualityTranslations: TranslationSource = {
   "Exclusive access": { de: "Exklusiver Zugang" },
   Financing: { de: "Finanzierung" },
   "Tax & transparency": { de: "Steuern & Transparenz" },
-  "Our current AIXCO residential project includes selected apartments, structured buyer guidance, and completion targeted for June 2028.": {
-    de: "Unser aktuelles AIXCO-Wohnprojekt umfasst ausgewählte Apartments, strukturierte Käuferbegleitung und eine geplante Fertigstellung im Juni 2028.",
+  "Our current AIXCO residential project includes selected apartments, structured buyer guidance, and completion targeted for July 2028.": {
+    de: "Unser aktuelles AIXCO-Wohnprojekt umfasst ausgewählte Apartments, strukturierte Käuferbegleitung und eine geplante Fertigstellung im Juli 2028.",
   },
   "25,000 sqm of comfort and community infrastructure across a 45,000 sqm planned site.": {
     de: "25.000 m2 Komfort- und Gemeinschaftsinfrastruktur auf einem geplanten Areal von 45.000 m2.",
@@ -1642,6 +1644,7 @@ const germanQualityTranslations: TranslationSource = {
 };
 
 const baseCatalogSources: TranslationSource[] = [
+  slovenianTranslationFixes,
   germanTranslationFixes,
   localeTranslationFixes,
   localePassthroughFixes,
@@ -1664,12 +1667,15 @@ function loadTranslationCatalogs() {
     import("./translations"),
     import("./asset-translations"),
     import("./site-content-translations"),
-  ]).then(([translations, assets, siteContent]) => {
+    import("./slovenian-translations"),
+  ]).then(([translations, assets, siteContent, slovenian]) => {
     const attributes = translations.attributeTranslations as AttributeTranslationCatalog;
 
     return {
       attributes,
       sources: [
+        slovenianTranslationFixes,
+        slovenian.slovenianTranslations,
         germanTranslationFixes,
         localeTranslationFixes,
         localePassthroughFixes,
@@ -1745,7 +1751,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>(DEFAULT_LANG);
   const [hasLoadedStoredLang, setHasLoadedStoredLang] = useState(false);
   const [translationCatalogs, setTranslationCatalogs] = useState<LoadedTranslationCatalogs | null>(null);
-  const dir = lang === "ar" ? "rtl" : "ltr";
+  const dir = "ltr" as const;
   const activeCatalogSources = translationCatalogs?.sources ?? baseCatalogSources;
   const translationLookupCache = useMemo(() => ({
     lang,
@@ -1793,7 +1799,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       const cached = translationLookupCache.entries.get(text);
       if (cached !== undefined) return cached;
 
-      const translated = lookupTranslation(text, lang, activeCatalogSources) ?? text;
+      const localized = lookupTranslation(text, lang, activeCatalogSources) ?? text;
+      const translated = lang === "de"
+        ? normalizeGermanCompactMetricTranslation(text, localized)
+        : localized;
       translationLookupCache.entries.set(text, translated);
       return translated;
     },
@@ -1805,7 +1814,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       const cached = translationLookupCache.entries.get(cacheKey);
       if (cached !== undefined) return cached;
 
-      const translated = lookupTranslation(text, lang, activeCatalogSources) ?? text;
+      const localized = lookupTranslation(text, lang, activeCatalogSources) ?? text;
+      const translated = lang === "de"
+        ? normalizeGermanCompactMetricTranslation(text, localized)
+        : localized;
       translationLookupCache.entries.set(cacheKey, translated);
       return translated;
     },

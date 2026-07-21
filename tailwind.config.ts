@@ -14,22 +14,12 @@ export default {
     extend: {
       fontFamily: {
         display: [
-          "var(--font-gilroy)",
-          "Gilroy",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          '"SF Pro Display"',
-          '"SF Pro Text"',
+          "var(--font-brand-display)",
           "system-ui",
           "sans-serif",
         ],
         sans: [
-          "var(--font-gilroy)",
-          "Gilroy",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          '"SF Pro Text"',
-          '"SF Pro Display"',
+          "var(--font-brand-sans)",
           "system-ui",
           "sans-serif",
         ],

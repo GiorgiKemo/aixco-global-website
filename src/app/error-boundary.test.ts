@@ -21,9 +21,15 @@ describe("client recovery surfaces", () => {
   });
 
   it("provides localized recovery copy for every supported language", () => {
-    for (const lang of ["en", "de", "ru", "ka", "tr", "ar", "pl"]) {
+    for (const lang of ["en", "de", "pl", "sl", "ru"]) {
       expect(routeError).toContain(`${lang}: {`);
       expect(globalError).toContain(`${lang}: {`);
+    }
+    expect(routeError).toContain('supportedRecoveryLanguages: readonly RecoveryLang[] = ["en", "de", "pl", "sl", "ru"]');
+    expect(globalError).toContain('supportedRecoveryLanguages: readonly RecoveryLang[] = ["en", "de", "pl", "sl", "ru"]');
+    for (const retiredLang of ["ka", "tr", "ar"]) {
+      expect(routeError).not.toContain(`  ${retiredLang}: {`);
+      expect(globalError).not.toContain(`  ${retiredLang}: {`);
     }
   });
 

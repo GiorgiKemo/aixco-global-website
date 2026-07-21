@@ -341,23 +341,35 @@ try {
         await page.getByRole("button", { name: /Close live chat/i }).click();
 
         await page.locator('.story-mobile-header button[aria-label$="Change language"]').click();
-        await page.locator('.story-mobile-header ul[aria-label="Change language"] [data-lang="ar"]').click();
-        await page.waitForFunction(() => document.documentElement.dir === "rtl", undefined, { timeout: 5_000 });
-        const rtlMetrics = await page.evaluate(() => {
+        const languageList = page.locator('.story-mobile-header ul[aria-label="Change language"]');
+        const visibleLanguageCodes = await languageList.locator("[data-lang]").evaluateAll((options) =>
+          options.map((option) => option.getAttribute("data-lang")),
+        );
+        if (visibleLanguageCodes.join(",") !== "en,de,pl,sl,ru") {
+          errors.push(`phone/language: unexpected options ${visibleLanguageCodes.join(",")}`);
+        }
+        await languageList.locator('[data-lang="sl"]').click();
+        await page.waitForFunction(
+          () => document.documentElement.lang === "sl" && document.documentElement.dir === "ltr",
+          undefined,
+          { timeout: 5_000 },
+        );
+        const slovenianMetrics = await page.evaluate(() => {
           const root = document.documentElement;
           const floating = document.querySelector('[data-chat-floating-container="true"]');
           const rect = floating?.getBoundingClientRect();
           return {
+            language: root.lang,
             direction: root.dir,
-            floatingAtInlineEnd: Boolean(rect && rect.left <= 32 && rect.right < root.clientWidth - 40),
+            floatingAtInlineEnd: Boolean(rect && rect.right >= root.clientWidth - 32 && rect.left > 40),
             horizontalOverflow: root.scrollWidth - root.clientWidth,
           };
         });
 
-        if (rtlMetrics.direction !== "rtl" || !rtlMetrics.floatingAtInlineEnd) {
-          errors.push("phone/rtl: chat launcher is not anchored to the logical inline end");
+        if (slovenianMetrics.language !== "sl" || slovenianMetrics.direction !== "ltr" || !slovenianMetrics.floatingAtInlineEnd) {
+          errors.push("phone/slovenian: language switch or logical inline-end positioning failed");
         }
-        if (rtlMetrics.horizontalOverflow > 4) errors.push("phone/rtl: horizontal overflow after switching to Arabic");
+        if (slovenianMetrics.horizontalOverflow > 4) errors.push("phone/slovenian: horizontal overflow after switching language");
       }
 
       if (consoleErrors.length) errors.push(`${viewport.name}: console errors ${consoleErrors.join(" | ")}`);

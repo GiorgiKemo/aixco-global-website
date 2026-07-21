@@ -2,7 +2,11 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import { beforeEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
-import { PropertyChrome, PropertyContactLink } from "./PropertyChrome";
+import {
+  CurrentProjectBrochureLink,
+  PropertyChrome,
+  PropertyContactLink,
+} from "./PropertyChrome";
 
 function ModalProbe() {
   const { modal } = useUI();
@@ -46,13 +50,25 @@ describe("PropertyChrome", () => {
 
     const languageButton = screen.getAllByRole("button", { name: /change language/i })[0];
     fireEvent.click(languageButton);
-    fireEvent.click(screen.getAllByRole("button", { name: /العربية/i })[0]);
+    expect([...new Set([...document.querySelectorAll("[data-lang]")].map((option) => option.getAttribute("data-lang")))]).toEqual([
+      "en",
+      "de",
+      "pl",
+      "sl",
+      "ru",
+    ]);
+    fireEvent.click(screen.getAllByRole("button", { name: /Slovenščina/i })[0]);
 
     await waitFor(() => {
-      expect(document.documentElement).toHaveAttribute("lang", "ar");
-      expect(document.documentElement).toHaveAttribute("dir", "rtl");
+      expect(document.documentElement).toHaveAttribute("lang", "sl");
+      expect(document.documentElement).toHaveAttribute("dir", "ltr");
     });
-    expect(screen.getAllByRole("button", { name: /تغيير اللغة/i })[0]).toHaveTextContent("AR");
+    await waitFor(() => {
+      const translatedTriggers = [...document.querySelectorAll("[data-language-trigger='true']")]
+        .filter((trigger) => /jezik/i.test(trigger.getAttribute("aria-label") ?? ""));
+      expect(translatedTriggers.length).toBeGreaterThan(0);
+      expect(translatedTriggers[0]).toHaveTextContent("SL");
+    });
   });
 
   it("closes the language menu from outside and restores its opener", async () => {
@@ -113,4 +129,41 @@ describe("PropertyChrome", () => {
     fireEvent.click(link);
     expect(screen.getByLabelText("active modal")).toHaveTextContent("contact");
   });
+
+  it.each([
+    ["en", "Download brochure", "/aixco-global-op2/documents/reverance-brochure-en.pdf", "Reverance-brochure-EN.pdf"],
+    ["de", "Broschüre herunterladen", "/aixco-global-op2/documents/reverance-brochure-de.pdf", "Reverance-brochure-DE.pdf"],
+  ] as const)(
+    "serves the %s current-project brochure from the project page",
+    async (lang, label, href, fileName) => {
+      localStorage.setItem("aixco-lang", lang);
+      render(
+        <I18nProvider>
+          <CurrentProjectBrochureLink />
+        </I18nProvider>,
+      );
+
+      const link = await screen.findByRole("link", { name: label });
+      expect(link).toHaveAttribute("href", href);
+      expect(link).toHaveAttribute("download", fileName);
+      expect(link).toHaveAttribute("data-current-project-brochure", lang);
+    },
+  );
+
+  it.each(["pl", "sl", "ru"])(
+    "keeps the current-project brochure hidden for %s until a localized file exists",
+    async (lang) => {
+      localStorage.setItem("aixco-lang", lang);
+      const { container } = render(
+        <I18nProvider>
+          <CurrentProjectBrochureLink />
+        </I18nProvider>,
+      );
+
+      await waitFor(() => {
+        expect(document.documentElement).toHaveAttribute("lang", lang);
+      });
+      expect(container.querySelector("[data-current-project-brochure]")).not.toBeInTheDocument();
+    },
+  );
 });

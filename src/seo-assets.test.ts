@@ -81,6 +81,9 @@ describe("SEO static assets", () => {
       source: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
       destination: "/aixco-global-op2/documents/reverance-by-otium-brochure-en.pdf",
     });
+    expect(
+      existsSync(resolve(root, "public/aixco-global-op2/documents/reverance-brochure-de.pdf")),
+    ).toBe(true);
   });
 
   it("serves complete canonical and social metadata for property pages", async () => {

@@ -51,7 +51,10 @@ async function readChatbotResponse(response: Response): Promise<ChatbotReplyResu
   }
 }
 
-export async function requestWebsiteChatbotReply(messages: ChatMessageInput[]): Promise<ChatbotReplyResult> {
+export async function requestWebsiteChatbotReply(
+  messages: ChatMessageInput[],
+  locale?: string,
+): Promise<ChatbotReplyResult> {
   if (typeof window === "undefined") {
     return fallbackReply("Chatbot API is not available during server rendering.");
   }
@@ -65,7 +68,7 @@ export async function requestWebsiteChatbotReply(messages: ChatMessageInput[]): 
           role: message.role,
           text: message.text,
         })),
-        locale: getBrowserLocale(),
+        locale: locale?.trim() || getBrowserLocale(),
       }),
     });
 
