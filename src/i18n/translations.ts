@@ -1,14 +1,5 @@
-export type Lang = "en" | "de" | "ru" | "ka" | "tr" | "ar" | "pl";
-
-export const languageOptions: { code: Lang; label: string; native: string; flag: string }[] = [
-  { code: "en", label: "English", native: "EN", flag: "GB" },
-  { code: "de", label: "Deutsch", native: "DE", flag: "DE" },
-  { code: "ru", label: "Русский", native: "RU", flag: "RU" },
-  { code: "ka", label: "ქართული", native: "KA", flag: "GE" },
-  { code: "tr", label: "Türkçe", native: "TR", flag: "TR" },
-  { code: "ar", label: "العربية", native: "AR", flag: "SA" },
-  { code: "pl", label: "Polski", native: "PL", flag: "PL" },
-];
+export { languageOptions } from "./languages";
+export type { Lang } from "./languages";
 
 export const textTranslations = {
   "Home": {
@@ -1360,14 +1351,14 @@ export const textTranslations = {
     "ar": "الحالة: محفظة إرث — منجزة"
   },
   "Development value: USD 462m": {
-    "de": "Entwicklungswert: 462 Mio. USD",
+    "de": "Entwicklungswert: $462M",
     "ru": "Стоимость проекта: 462 млн USD",
     "ka": "განვითარების ღირებულება: 462 მლნ USD",
     "tr": "Geliştirme değeri: 462 milyon USD",
     "ar": "قيمة التطوير: 462 مليون دولار"
   },
   "Development scope: USD 350m mixed-use program": {
-    "de": "Entwicklungsumfang: 350 Mio. USD Mixed-Use",
+    "de": "Entwicklungsumfang: $350M Mischnutzungsprogramm",
     "ru": "Масштаб: программа 350 млн USD",
     "ka": "მასშტაბი: 350 მლნ USD",
     "tr": "Kapsam: 350 milyon USD karma kullanım",
@@ -1472,7 +1463,7 @@ export const textTranslations = {
     "ar": "600+"
   },
   "USD 462m": {
-    "de": "462 Mio. USD",
+    "de": "$462M",
     "ru": "462 млн USD",
     "ka": "462 მლნ USD",
     "tr": "462 milyon USD",
@@ -1521,7 +1512,7 @@ export const textTranslations = {
     "ar": "مشاريع الخليج المنجزة"
   },
   "USD 800m+ development volume": {
-    "de": "800+ Mio. USD Entwicklungsvolumen",
+    "de": "$800M+ Entwicklungsvolumen",
     "ru": "800+ млн USD объём",
     "ka": "800+ მლნ USD",
     "tr": "800+ milyon USD hacim",
@@ -1871,7 +1862,7 @@ export const textTranslations = {
     "ar": "Dubai Creek - دبي، الإمارات"
   },
   "USD 350m mixed-use program": {
-    "de": "350 Mio. USD Mixed-Use-Programm",
+    "de": "$350M Mischnutzungsprogramm",
     "ru": "Программа mixed-use на 350 млн USD",
     "ka": "350 მლნ USD mixed-use პროგრამა",
     "tr": "350 milyon USD karma kullanım programı",

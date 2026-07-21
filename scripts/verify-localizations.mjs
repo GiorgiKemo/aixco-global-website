@@ -45,6 +45,8 @@ const polishSources = [
   readCatalog("src/i18n/polish-translations-extra.ts", "polishTranslationsExtra"),
   readCatalog("src/i18n/polish-translations-final.ts", "polishTranslationsFinal"),
 ];
+const slovenian = readCatalog("src/i18n/slovenian-translations.ts", "slovenianTranslations");
+const slovenianFixes = readCatalog("src/i18n/slovenian-translation-fixes.ts", "slovenianTranslationFixes");
 
 const requiredKeys = new Set([...curated.keys(), ...supplemental.keys(), ...germanQuality.keys()]);
 const intentionalGermanMatches = new Set([
@@ -61,15 +63,13 @@ for (const key of requiredKeys) {
   if (!polish) errors.push(`Missing Polish: ${key}`);
 }
 
-const sharedSources = [germanFixes, localeFixes, passthroughFixes, curated, germanQuality, supplemental, textTranslations, assetTranslations, siteContentTranslations];
+const sharedSources = [slovenianFixes, germanFixes, localeFixes, passthroughFixes, curated, germanQuality, supplemental, textTranslations, assetTranslations, siteContentTranslations, slovenian];
 const intentionalMatchesByLocale = {
   de: new Set(["AIXCO.Global", "Batumi", "Dubai"]),
   ru: new Set(["AIXCO.Global"]),
-  ka: new Set(["AIXCO.Global"]),
-  tr: new Set(["AIXCO.Global", "Risk", "Platform", "Dubai"]),
-  ar: new Set(["AIXCO.Global"]),
+  sl: new Set(["AIXCO", "AIXCO.Global", "Batumi", "Dubai", "Eden House — The Canal & The Park (Dubai)", "Email", "FAQs", "Partner", "Risk", "Status", "Team", "USD"]),
 };
-for (const locale of ["de", "ru", "ka", "tr", "ar"]) {
+for (const locale of ["de", "ru", "sl"]) {
   for (const key of requiredKeys) {
     const value = sharedSources.reduce((match, source) => match ?? source.get(key)?.[locale], undefined);
     if (!value) errors.push(`Missing ${locale}: ${key}`);
@@ -82,4 +82,15 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Localization coverage passed for ${requiredKeys.size} public strings across German, Russian, Georgian, Turkish, Arabic, and Polish.`);
+for (const [key, values] of slovenian) {
+  const value = values.sl;
+  if (/ZXQ\d+QXZ/i.test(value ?? "")) errors.push(`Slovenian placeholder leak: ${key}`);
+  if (/Ã|Â|â‚¬|â€”|�/.test(value ?? "")) errors.push(`Slovenian mojibake: ${key}`);
+}
+
+if (errors.length) {
+  console.error(errors.join("\n"));
+  process.exit(1);
+}
+
+console.log(`Localization coverage passed for ${requiredKeys.size} public strings across German, Polish, Slovenian, and Russian.`);

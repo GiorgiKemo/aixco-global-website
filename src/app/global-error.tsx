@@ -2,22 +2,22 @@
 
 import { useEffect, useState } from "react";
 
-type RecoveryLang = "en" | "de" | "ru" | "ka" | "tr" | "ar" | "pl";
+type RecoveryLang = "en" | "de" | "pl" | "sl" | "ru";
+
+const supportedRecoveryLanguages: readonly RecoveryLang[] = ["en", "de", "pl", "sl", "ru"];
 
 const recoveryCopy: Record<RecoveryLang, { title: string; body: string; retry: string }> = {
   en: { title: "Something went wrong.", body: "Please try again. If the problem continues, contact info@aixco.global.", retry: "Try again" },
   de: { title: "Etwas ist schiefgelaufen.", body: "Bitte versuchen Sie es erneut. Wenn das Problem weiterhin besteht, kontaktieren Sie info@aixco.global.", retry: "Erneut versuchen" },
   ru: { title: "Произошла ошибка.", body: "Повторите попытку. Если проблема не исчезнет, напишите на info@aixco.global.", retry: "Повторить" },
-  ka: { title: "დაფიქსირდა შეცდომა.", body: "გთხოვთ, სცადოთ ხელახლა. თუ პრობლემა გაგრძელდება, დაგვიკავშირდით: info@aixco.global.", retry: "ხელახლა ცდა" },
-  tr: { title: "Bir sorun oluştu.", body: "Lütfen tekrar deneyin. Sorun devam ederse info@aixco.global adresinden bize ulaşın.", retry: "Tekrar dene" },
-  ar: { title: "حدث خطأ ما.", body: "يُرجى المحاولة مرة أخرى. إذا استمرت المشكلة، تواصل معنا عبر info@aixco.global.", retry: "حاول مرة أخرى" },
   pl: { title: "Coś poszło nie tak.", body: "Spróbuj ponownie. Jeśli problem będzie się powtarzał, skontaktuj się z nami: info@aixco.global.", retry: "Spróbuj ponownie" },
+  sl: { title: "Prišlo je do napake.", body: "Poskusite znova. Če se težava ponavlja, nam pišite na info@aixco.global.", retry: "Poskusi znova" },
 };
 
 function readRecoveryLang(): RecoveryLang {
   try {
     const value = window.localStorage.getItem("aixco-lang");
-    return value && value in recoveryCopy ? value as RecoveryLang : "en";
+    return value && supportedRecoveryLanguages.includes(value as RecoveryLang) ? value as RecoveryLang : "en";
   } catch {
     return "en";
   }
@@ -31,7 +31,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
     const safeDigest = error.digest && /^[a-zA-Z0-9._-]{1,128}$/.test(error.digest) ? error.digest : undefined;
     setLang(storedLang);
     document.documentElement.lang = storedLang;
-    document.documentElement.dir = storedLang === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir = "ltr";
     console.error("AIXCO root render failed.", { digest: safeDigest });
     void fetch("/api/client-errors", {
       method: "POST",
@@ -45,7 +45,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
   const copy = recoveryCopy[lang];
 
   return (
-    <html lang={lang} dir={lang === "ar" ? "rtl" : "ltr"}>
+    <html lang={lang} dir="ltr">
       <body style={{ margin: 0, background: "#F3EDE1", color: "#161616", fontFamily: "Arial, sans-serif" }}>
         <main style={{ boxSizing: "border-box", minHeight: "100dvh", display: "grid", placeItems: "center", paddingTop: "max(24px, env(safe-area-inset-top, 0px))", paddingRight: "max(16px, env(safe-area-inset-right, 0px))", paddingBottom: "max(24px, env(safe-area-inset-bottom, 0px))", paddingLeft: "max(16px, env(safe-area-inset-left, 0px))" }}>
           <section style={{ width: "min(620px, 100%)", boxSizing: "border-box", border: "1px solid rgba(22,22,22,.16)", background: "#fff", padding: "clamp(28px, 8vw, 48px) clamp(18px, 6vw, 40px)", overflowWrap: "anywhere" }}>

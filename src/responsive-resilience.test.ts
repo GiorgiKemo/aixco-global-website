@@ -44,8 +44,9 @@ describe("cross-device responsive resilience", () => {
 
   it("keeps paired Philosophy metric values aligned when labels wrap", () => {
     expect(css).toContain("[data-layout='story-philosophy-stats'] > .story-philosophy-card {\n    display: flex;");
+    expect(css).toContain("height: 100%;");
     expect(css).toContain("flex-direction: column;");
-    expect(css).toContain("[data-layout='story-philosophy-stats'] .story-metric-label + dd {\n    margin-top: auto;");
+    expect(css).toContain("> .story-philosophy-card\n    > .story-metric-label\n    + dd {\n    margin-top: auto;");
     expect(css).toContain("padding-top: clamp(0.65rem, 1.35svh, 0.9rem);");
   });
 });

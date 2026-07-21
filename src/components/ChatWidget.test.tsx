@@ -68,6 +68,7 @@ describe("ChatWidget", () => {
       expect.arrayContaining([
         expect.objectContaining({ role: "visitor", text: "I want to explore emerging market opportunities." }),
       ]),
+      "en",
     );
 
     const emailTranscript = screen.getByRole("link", { name: /email transcript/i });
@@ -99,6 +100,7 @@ describe("ChatWidget", () => {
         expect.objectContaining({
           reason: "auto_sync",
           sessionId: expect.stringMatching(/^chat_/),
+          locale: "en",
         }),
       );
     });
@@ -121,6 +123,7 @@ describe("ChatWidget", () => {
       expect.arrayContaining([
         expect.objectContaining({ role: "visitor", text: "Developer partnership" }),
       ]),
+      "en",
     );
   });
 

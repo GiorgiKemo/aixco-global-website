@@ -575,7 +575,7 @@ for (const browserCase of browserCases) {
     }
 
     if (browserCase.name === "chromium") {
-      for (const locale of ["de", "ru", "ka", "ar", "pl"]) {
+      for (const locale of ["de", "pl", "sl", "ru"]) {
         await inspectTitleCase(browser, browserCase.name, viewportCases[4], locale);
       }
 

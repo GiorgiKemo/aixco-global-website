@@ -1,4 +1,9 @@
-import { aixcoLiveAssetDetails } from "@/lib/aixco-live-assets";
+import type { Lang } from "@/i18n/languages";
+import {
+  aixcoLiveAssetDetails,
+  getCurrentProjectBrochureDownload,
+  type CurrentProjectBrochureDownload,
+} from "@/lib/aixco-live-assets";
 
 export type MaterialDownload = {
   id: string;
@@ -12,6 +17,16 @@ export type MaterialDownload = {
 };
 
 export const materialDownloads: MaterialDownload[] = [
+  {
+    id: "current-project-brochure",
+    title: "Current project brochure",
+    category: "Current project",
+    description: "Current project PDF for clients comparing selected apartment options.",
+    audience: "Clients and partners",
+    format: "PDF",
+    href: aixcoLiveAssetDetails.currentProjectBrochure,
+    fileName: "Reverance-brochure-EN.pdf",
+  },
   {
     id: "eden-house-reference",
     title: "Eden House legacy image",
@@ -33,3 +48,20 @@ export const materialDownloads: MaterialDownload[] = [
     fileName: "aixco-dubai-healthcare-city-legacy.png",
   },
 ];
+
+export function resolveMaterialDownload(
+  material: MaterialDownload,
+  lang: Lang,
+): CurrentProjectBrochureDownload {
+  if (material.id === "current-project-brochure") {
+    return getCurrentProjectBrochureDownload(lang) ?? {
+      href: material.href,
+      fileName: material.fileName,
+    };
+  }
+
+  return {
+    href: material.href,
+    fileName: material.fileName,
+  };
+}

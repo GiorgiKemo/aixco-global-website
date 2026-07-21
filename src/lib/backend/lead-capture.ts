@@ -10,7 +10,7 @@ import {
 import { isSafePortalUrl } from "@/lib/security/urls";
 
 type CaptureEndpoint = "contact" | "chat" | "portal-event";
-type ChatTranscriptOptions = Pick<ChatTranscriptInput, "reason" | "sessionId">;
+type ChatTranscriptOptions = Pick<ChatTranscriptInput, "reason" | "sessionId"> & { locale?: string };
 type ContactSubmissionOptions = { antiAbuse?: LeadCaptureAntiAbuseInput; locale?: string };
 
 const contactExperienceStartedAt = Date.now();
@@ -121,7 +121,8 @@ export async function recordChatTranscript(
     text: message.text,
   }));
 
-  return postCapture("chat", { ...options, messages: normalizedMessages });
+  const { locale, ...transcript } = options;
+  return postCapture("chat", { ...transcript, messages: normalizedMessages }, undefined, locale);
 }
 
 export async function recordContactSubmission(

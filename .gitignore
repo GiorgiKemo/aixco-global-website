@@ -29,6 +29,7 @@ test-results/
 .playwright-cli/
 .playwright-mcp/
 .artifacts/
+/artifacts/
 
 # Editor directories and files
 .vscode/*

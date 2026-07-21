@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { openSync } from "fontkit";
@@ -11,6 +11,19 @@ const fontFiles = readdirSync(fontDirectory)
 
 const requiredBaseCharacters =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const localizedCharacterSets = {
+  de: "äÄöÖüÜßẞ\u0308",
+  pl: "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ",
+  sl: "čČšŠžŽ",
+  ru: "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ" +
+    "абвгдеёжзийклмнопрстуфхцчшщъыьэюя",
+};
+const localeNames = {
+  de: "German",
+  pl: "Polish",
+  sl: "Slovenian",
+  ru: "Russian",
+};
 const intentionallyBlankCodePoints = new Set([
   0x0020, // space
   0x00a0, // no-break space
@@ -31,6 +44,9 @@ const intentionallyBlankCodePoints = new Set([
 ]);
 
 const failures = [];
+const bundledFontsCoverLocale = Object.fromEntries(
+  Object.keys(localizedCharacterSets).map((locale) => [locale, true]),
+);
 
 for (const fileName of fontFiles) {
   const filePath = path.join(fontDirectory, fileName);
@@ -46,6 +62,16 @@ for (const fileName of fontFiles) {
     }
   }
 
+  for (const [locale, requiredCharacters] of Object.entries(localizedCharacterSets)) {
+    for (const character of requiredCharacters) {
+      const codePoint = character.codePointAt(0);
+      const glyph = font.glyphForCodePoint(codePoint);
+      if (!mappedCodePoints.has(codePoint) || glyph.path.commands.length === 0) {
+        bundledFontsCoverLocale[locale] = false;
+      }
+    }
+  }
+
   for (const codePoint of mappedCodePoints) {
     if (intentionallyBlankCodePoints.has(codePoint)) continue;
 
@@ -58,6 +84,65 @@ for (const fileName of fontFiles) {
   }
 }
 
+const incompleteLocales = Object.entries(bundledFontsCoverLocale)
+  .filter(([, isComplete]) => !isComplete)
+  .map(([locale]) => locale);
+
+if (incompleteLocales.length > 0) {
+  const stylesheet = readFileSync(path.join(projectRoot, "src", "index.css"), "utf8");
+  const tailwindConfig = readFileSync(path.join(projectRoot, "tailwind.config.ts"), "utf8");
+  const localeSelector =
+    "html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])";
+  const localeOverrideStart = stylesheet.indexOf(`${localeSelector} {`);
+  const localeOverride = stylesheet.slice(
+    localeOverrideStart,
+    stylesheet.indexOf("\n}", localeOverrideStart),
+  );
+  const localeFontVariables = [
+    "--font-brand-sans",
+    "--font-brand-display",
+    "--font-legacy-ui",
+    "--font-legacy-display",
+    "--font-sans",
+    "--font-display",
+  ];
+
+  if (localeOverrideStart < 0) {
+    failures.push("Complete translated-locale font override is missing");
+  }
+
+  for (const locale of incompleteLocales) {
+    if (!localeSelector.includes(`[lang='${locale}']`)) {
+      failures.push(`${localeNames[locale]} is missing from the complete locale selector`);
+    }
+  }
+
+  for (const variable of localeFontVariables) {
+    if (!localeOverride.includes(variable)) {
+      failures.push(`Translated-locale fallback is missing ${variable}`);
+    }
+  }
+  if (!localeOverride.includes("system-ui, -apple-system, BlinkMacSystemFont")) {
+    failures.push("Translated locales must start with the device's complete system UI face");
+  }
+  if (!localeOverride.includes("font-synthesis: none")) {
+    failures.push("Translated locales must disable synthetic font styles");
+  }
+  if (/font-gilroy/i.test(localeOverride)) {
+    failures.push("Translated locales must not mix incomplete Gilroy into localized words");
+  }
+  if (/avenir/i.test(localeOverride)) {
+    failures.push("Translated locales must avoid Avenir's optically heavier fallback glyphs");
+  }
+  if (
+    !tailwindConfig.includes('"var(--font-brand-display)"') ||
+    !tailwindConfig.includes('"var(--font-brand-sans)"') ||
+    tailwindConfig.includes('"var(--font-gilroy)"')
+  ) {
+    failures.push("Tailwind font utilities must inherit locale-aware brand font variables");
+  }
+}
+
 if (failures.length > 0) {
   console.error("Font validation failed:");
   for (const failure of failures) console.error(`- ${failure}`);
@@ -65,5 +150,5 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `Font validation passed: ${fontFiles.length} bundled Gilroy weights contain no visible character mapped to an empty glyph.`,
+  `Font validation passed: ${fontFiles.length} bundled Gilroy weights are valid, and German, Polish, Slovenian, and Russian use one complete locale stack when their glyphs are absent.`,
 );

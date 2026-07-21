@@ -138,9 +138,11 @@ jobs:
           npm run smoke:locales
           npm run smoke:languages
           npm run smoke:dubai
+          npm run smoke:dubai-metrics
           npm run smoke:nav
           npm run smoke:mobile
           npm run smoke:mobile-scope
+          npm run smoke:currency
 
       - name: Upload preview logs on failure
         if: failure()

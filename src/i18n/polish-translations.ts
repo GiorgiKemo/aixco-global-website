@@ -147,7 +147,7 @@ export const polishTranslations = {
   "Legacy portfolio — in progress": { pl: "Portfel historyczny — w realizacji" },
   "USD 350m mixed-use program": { pl: "Program wielofunkcyjny o wartości 350 mln USD" },
   "~20% developed, ~20% under construction": { pl: "około 20% ukończono, około 20% jest w budowie" },
-  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for June 2028.": { pl: "Nasz aktualny projekt mieszkaniowy AIXCO obejmuje wybrane apartamenty, uporządkowane wsparcie kupujących i planowane ukończenie w czerwcu 2028 roku." },
+  "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for July 2028.": { pl: "Nasz aktualny projekt mieszkaniowy AIXCO obejmuje wybrane apartamenty, uporządkowane wsparcie kupujących i planowane ukończenie w lipcu 2028 roku." },
   "ON REQUEST": { pl: "NA ZAPYTANIE" },
   "Eden House legacy image": { pl: "Obraz historycznego projektu Eden House" },
   "Dubai Healthcare City image": { pl: "Obraz Dubai Healthcare City" },

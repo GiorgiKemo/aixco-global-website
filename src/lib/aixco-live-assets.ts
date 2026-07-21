@@ -1,3 +1,5 @@
+import type { Lang } from "@/i18n/languages";
+
 const withBaseUrl = (path: string) => {
   const baseUrl = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/$/, "");
   const normalizedPath = path.replace(/^\//, "");
@@ -106,9 +108,35 @@ export const aixcoLiveIcons = {
 } as const;
 
 export const aixcoLiveAssetDetails = {
+  currentProjectBrochure: aixcoLivePath("documents/reverance-brochure-en.pdf"),
+  currentProjectBrochureGerman: aixcoLivePath("documents/reverance-brochure-de.pdf"),
   dubaiFundOne: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiFundTwo: `${liveImageBase}/fund2.png`,
 } as const;
+
+export type CurrentProjectBrochureDownload = {
+  href: string;
+  fileName: string;
+};
+
+export const aixcoCurrentProjectBrochureDownloads: Partial<Record<Lang, CurrentProjectBrochureDownload>> = {
+  en: {
+    href: aixcoLiveAssetDetails.currentProjectBrochure,
+    fileName: "Reverance-brochure-EN.pdf",
+  },
+  de: {
+    href: aixcoLiveAssetDetails.currentProjectBrochureGerman,
+    fileName: "Reverance-brochure-DE.pdf",
+  },
+};
+
+export function getCurrentProjectBrochureDownload(
+  lang: Lang,
+  { fallbackToEnglish = true }: { fallbackToEnglish?: boolean } = {},
+): CurrentProjectBrochureDownload | null {
+  return aixcoCurrentProjectBrochureDownloads[lang]
+    ?? (fallbackToEnglish ? aixcoCurrentProjectBrochureDownloads.en ?? null : null);
+}
 
 export const aixcoDubaiEdenHouseCanalGallery = [
   { src: `${optimizedImageBase}/fund1-upscaled.webp`, title: "Eden House The Canal aerial overview" },

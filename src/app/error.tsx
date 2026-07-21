@@ -3,22 +3,22 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-type RecoveryLang = "en" | "de" | "ru" | "ka" | "tr" | "ar" | "pl";
+type RecoveryLang = "en" | "de" | "pl" | "sl" | "ru";
+
+const supportedRecoveryLanguages: readonly RecoveryLang[] = ["en", "de", "pl", "sl", "ru"];
 
 const recoveryCopy: Record<RecoveryLang, { title: string; body: string; retry: string; home: string }> = {
   en: { title: "This page could not be loaded.", body: "Please try again. If the problem continues, contact info@aixco.global.", retry: "Try again", home: "Return to Home" },
   de: { title: "Diese Seite konnte nicht geladen werden.", body: "Bitte versuchen Sie es erneut. Wenn das Problem weiterhin besteht, kontaktieren Sie info@aixco.global.", retry: "Erneut versuchen", home: "Zur Startseite" },
   ru: { title: "Не удалось загрузить эту страницу.", body: "Повторите попытку. Если проблема не исчезнет, напишите на info@aixco.global.", retry: "Повторить", home: "Вернуться на главную" },
-  ka: { title: "ამ გვერდის ჩატვირთვა ვერ მოხერხდა.", body: "გთხოვთ, სცადოთ ხელახლა. თუ პრობლემა გაგრძელდება, დაგვიკავშირდით: info@aixco.global.", retry: "ხელახლა ცდა", home: "მთავარ გვერდზე დაბრუნება" },
-  tr: { title: "Bu sayfa yüklenemedi.", body: "Lütfen tekrar deneyin. Sorun devam ederse info@aixco.global adresinden bize ulaşın.", retry: "Tekrar dene", home: "Ana sayfaya dön" },
-  ar: { title: "تعذر تحميل هذه الصفحة.", body: "يُرجى المحاولة مرة أخرى. إذا استمرت المشكلة، تواصل معنا عبر info@aixco.global.", retry: "حاول مرة أخرى", home: "العودة إلى الرئيسية" },
   pl: { title: "Nie udało się wczytać tej strony.", body: "Spróbuj ponownie. Jeśli problem będzie się powtarzał, skontaktuj się z nami: info@aixco.global.", retry: "Spróbuj ponownie", home: "Wróć na stronę główną" },
+  sl: { title: "Te strani ni bilo mogoče naložiti.", body: "Poskusite znova. Če se težava ponavlja, nam pišite na info@aixco.global.", retry: "Poskusi znova", home: "Nazaj na domačo stran" },
 };
 
 function readRecoveryLang(): RecoveryLang {
   try {
     const value = window.localStorage.getItem("aixco-lang");
-    return value && value in recoveryCopy ? value as RecoveryLang : "en";
+    return value && supportedRecoveryLanguages.includes(value as RecoveryLang) ? value as RecoveryLang : "en";
   } catch {
     return "en";
   }
@@ -42,7 +42,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
     const storedLang = readRecoveryLang();
     setLang(storedLang);
     document.documentElement.lang = storedLang;
-    document.documentElement.dir = storedLang === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir = "ltr";
     console.error("AIXCO route render failed.", { digest: error.digest });
     reportClientError("route-render", error.digest, storedLang);
   }, [error]);

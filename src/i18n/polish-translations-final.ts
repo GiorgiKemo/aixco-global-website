@@ -125,7 +125,7 @@ export const polishTranslationsFinal = {
   "Rental case": { pl: "Scenariusz najmu" },
   "Exclusive access": { pl: "Wyłączny dostęp" },
   "Tax & transparency": { pl: "Podatki i przejrzystość" },
-  "Our current AIXCO residential project includes selected apartments, structured buyer guidance, and completion targeted for June 2028.": { pl: "Nasz aktualny projekt mieszkaniowy AIXCO obejmuje wybrane apartamenty, uporządkowane wsparcie kupujących i planowane ukończenie w czerwcu 2028 roku." },
+  "Our current AIXCO residential project includes selected apartments, structured buyer guidance, and completion targeted for July 2028.": { pl: "Nasz aktualny projekt mieszkaniowy AIXCO obejmuje wybrane apartamenty, uporządkowane wsparcie kupujących i planowane ukończenie w lipcu 2028 roku." },
   "25,000 sqm of comfort and community infrastructure across a 45,000 sqm planned site.": { pl: "25 000 m² infrastruktury rekreacyjnej i społecznej na planowanym terenie o powierzchni 45 000 m²." },
   "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away.": { pl: "Ulica Adlia 59: 5 minut do Nowego Bulwaru, 7 minut do sklepów i lotniska oraz 8 minut do Batumi Medical Center." },
   "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck.": { pl: "Średni najem długoterminowy 600 USD miesięcznie, średni najem krótkoterminowy 80 USD za noc i potencjalne obłożenie 90% według prezentacji projektu." },

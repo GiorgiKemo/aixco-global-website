@@ -5,7 +5,7 @@ import { chromium } from "playwright";
 const baseUrl = process.env.LANGUAGE_QA_URL ?? "http://127.0.0.1:4173/";
 const outDir = path.resolve("output/playwright/language-qa");
 
-const defaultLanguages = ["en", "de", "ru", "ka", "tr", "ar", "pl"];
+const defaultLanguages = ["en", "de", "pl", "sl", "ru"];
 const defaultViewports = [
   { name: "desktop", width: 1365, height: 768, isMobile: false },
   { name: "ipad", width: 820, height: 1180, isMobile: false },
@@ -276,7 +276,7 @@ async function runCase(browser, lang, viewport) {
     deviceScaleFactor: viewport.isMobile ? 2 : 1,
     isMobile: viewport.isMobile,
     hasTouch: viewport.isMobile || viewport.name === "ipad",
-    locale: lang === "ar" ? "ar-SA" : lang,
+    locale: lang === "sl" ? "sl-SI" : lang,
     reducedMotion: "no-preference",
   });
 
@@ -330,8 +330,7 @@ async function runCase(browser, lang, viewport) {
       title: document.title,
     }));
     if (docInfo.lang !== lang) result.errors.push(`html lang is ${docInfo.lang}, expected ${lang}`);
-    if (lang === "ar" && docInfo.dir !== "rtl") result.errors.push(`Arabic dir is ${docInfo.dir}, expected rtl`);
-    if (lang !== "ar" && docInfo.dir === "rtl") result.errors.push(`${lang} unexpectedly rendered rtl`);
+    if (docInfo.dir !== "ltr") result.errors.push(`${lang} rendered ${docInfo.dir}, expected ltr`);
     if (!/AIXCO/i.test(docInfo.title)) result.errors.push(`unexpected document title: ${docInfo.title}`);
 
     const heroShot = path.join(outDir, `${lang}-${viewport.name}-hero.png`);
