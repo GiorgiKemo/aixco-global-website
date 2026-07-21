@@ -19,7 +19,7 @@ export type MaterialDownload = {
 export const materialDownloads: MaterialDownload[] = [
   {
     id: "current-project-brochure",
-    title: "Current project brochure",
+    title: "Reverance Brochure",
     category: "Current project",
     description: "Current project PDF for clients comparing selected apartment options.",
     audience: "Clients and partners",

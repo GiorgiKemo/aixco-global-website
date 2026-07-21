@@ -1174,4 +1174,34 @@ export const curatedVisibleTranslations = {
     tr: "Sosyal medya",
     ar: "وسائل التواصل",
   },
+  "Personal contact": {
+    de: "Persönlicher Kontakt",
+    pl: "Osobisty kontakt",
+    sl: "Osebni stik",
+    ru: "Персональная консультация",
+  },
+  "Would you like us to contact you?": {
+    de: "Dürfen wir Sie kontaktieren?",
+    pl: "Czy możemy się z Państwem skontaktować?",
+    sl: "Vas lahko kontaktiramo?",
+    ru: "Связаться с вами?",
+  },
+  "Share your details and our team will get back to you.": {
+    de: "Hinterlassen Sie Ihre Kontaktdaten. Unser Team meldet sich bei Ihnen.",
+    pl: "Zostaw dane kontaktowe, a nasz zespół skontaktuje się z Państwem.",
+    sl: "Pustite svoje kontaktne podatke in naša ekipa vas bo kontaktirala.",
+    ru: "Оставьте свои контакты, и наша команда свяжется с вами.",
+  },
+  "Contact me": {
+    de: "Kontaktieren Sie mich",
+    pl: "Proszę o kontakt",
+    sl: "Kontaktirajte me",
+    ru: "Связаться со мной",
+  },
+  "Dismiss contact prompt": {
+    de: "Kontaktfenster schließen",
+    pl: "Zamknij okno kontaktowe",
+    sl: "Zapri poziv za stik",
+    ru: "Закрыть предложение связи",
+  },
 } satisfies CuratedTranslationSource;

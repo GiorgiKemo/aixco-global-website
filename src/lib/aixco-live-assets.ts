@@ -15,6 +15,8 @@ const previewVideoBase = aixcoLivePath("media/previews");
 const iconBase = aixcoLivePath("icons");
 const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
 const batumiGalleryPreviewBase = `${batumiGalleryBase}/previews`;
+const projectGalleryBase = `${liveImageBase}/project-gallery`;
+const currentProjectGalleryBase = `${liveImageBase}/project-gallery-2026`;
 const healthcareGalleryVersion = "healthcare-gallery-20260506";
 const heroVideoVersion = "hero-batumi-web-20260715-p1";
 
@@ -59,10 +61,49 @@ export const aixcoLiveImages = {
   batumiMosaicThumbNatureAerial: `${liveImageBase}/batumi-mosaic-thumbs/batumi-nature-aerial.webp`,
   batumiMosaicThumbBlueTower: `${liveImageBase}/batumi-mosaic-thumbs/batumi-blue-tower.webp`,
   batumiCurrentProject: `${optimizedImageBase}/current-project-reverance.webp`,
+  currentProjectTowers: `${projectGalleryBase}/reverance-towers.webp`,
+  currentProjectExterior: `${projectGalleryBase}/reverance-exterior.webp`,
+  currentProjectCourtyard: `${projectGalleryBase}/reverance-courtyard.webp`,
+  currentProjectArrival: `${projectGalleryBase}/reverance-arrival.webp`,
   teamBenjamin: `${optimizedImageBase}/benjamin.webp`,
   teamOwais: `${optimizedImageBase}/owais-20260624-crop.webp`,
   teamWalter: `${optimizedImageBase}/walter.webp`,
 } as const;
+
+const currentProjectGalleryFiles = [
+  ["project-01", "01-hero-exterior", "Reverance exterior project render"],
+  ["project-02", "02-sunset-exterior", "Reverance exterior project render"],
+  ["project-03", "03-night-exterior", "Reverance exterior project render"],
+  ["project-04", "04-aerial-exterior", "Reverance exterior project render"],
+  ["project-05", "05-front-facade", "Reverance residential towers project render"],
+  ["project-06", "06-entrance", "Reverance arrival and landscaped exterior project render"],
+  ["project-07", "07-balcony-detail", "Reverance residential towers project render"],
+  ["project-08", "08-rooftop-sunset", "Reverance residential towers project render"],
+  ["project-09", "09-pool-terrace", "Reverance courtyard and pool project render"],
+  ["project-10", "10-low-angle-facade", "Reverance residential towers project render"],
+  ["project-11", "11-night-arrival", "Reverance arrival and landscaped exterior project render"],
+  ["project-12", "12-reception", "Reverance residential towers project render"],
+  ["project-13", "13-lobby-lounge", "Reverance residential towers project render"],
+  ["project-14", "14-private-lounge", "Reverance residential towers project render"],
+  ["project-15", "15-business-lounge", "Reverance residential towers project render"],
+  ["project-16", "16-gym", "Reverance residential towers project render"],
+  ["project-17", "17-indoor-pool", "Reverance courtyard and pool project render"],
+  ["project-18", "18-indoor-pool-wide", "Reverance courtyard and pool project render"],
+  ["project-19", "19-garden-pool", "Reverance courtyard and pool project render"],
+  ["project-20", "20-sauna", "Reverance residential towers project render"],
+] as const;
+
+export const aixcoCurrentProjectGalleryImages = currentProjectGalleryFiles.map(
+  ([key, fileName, alt]) => ({
+    key,
+    src: `${currentProjectGalleryBase}/${fileName}.webp`,
+    thumbnailSrc: `${currentProjectGalleryBase}/thumbs/${fileName}.webp`,
+    alt,
+    width: 4096,
+    height: 4096,
+    objectPosition: "50% 50%",
+  }),
+);
 
 export const aixcoLiveVideos = {
   batumiOverview: `${batumiGalleryBase}/batumi2.mp4`,

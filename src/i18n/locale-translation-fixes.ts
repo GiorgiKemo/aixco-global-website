@@ -55,4 +55,15 @@ export const localeTranslationFixes = {
     ar: "تغيير اللغة",
     pl: "Zmień język",
   },
+  "Grüngasse 16, 1050 Wien, Austria": {
+    ru: "Grüngasse 16, 1050 Вена, Австрия",
+  },
+  "Opportunities": { ru: "Возможности" },
+  "Company": { ru: "Компания" },
+  "Website": {
+    de: "Webseite",
+    pl: "Strona internetowa",
+    sl: "Spletna stran",
+    ru: "Сайт",
+  },
 } satisfies LocaleFixSource;

@@ -117,7 +117,7 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<CatalogLan
     pl: "Wznów ruch galerii",
   },
   "Global Real Estate": {
-    de: "Globale Immobilien",
+    de: "Wachstumsimmobilien",
     ru: "Глобальная недвижимость",
     ka: "გლობალური უძრავი ქონება",
     tr: "Global gayrimenkul",
@@ -223,6 +223,34 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<CatalogLan
     ka: "როგორ გსურთ დაგიკავშირდეთ?",
     tr: "Sizinle nasil iletisime gecelim?",
     ar: "كيف تريد أن نتواصل معك؟",
+  },
+  "Reverance Brochure": {
+    de: "Reverance Broschüre",
+    ru: "Брошюра Reverance",
+  },
+  "Projects": { de: "Projekte", ru: "Проекты" },
+  "CURRENT PROJECT IN BATUMI": { de: "AKTUELLES PROJEKT IN BATUMI", ru: "ТЕКУЩИЙ ПРОЕКТ В БАТУМИ" },
+  "Current project image gallery": { de: "Bildergalerie des aktuellen Projekts", ru: "Галерея текущего проекта" },
+  "Select current project image": { de: "Bild des aktuellen Projekts auswählen", ru: "Выберите изображение текущего проекта" },
+  "Reverance exterior project render": { de: "Außenansicht des Reverance-Projekts", ru: "Визуализация экстерьера проекта Reverance" },
+  "Reverance residential towers project render": { de: "Visualisierung der Reverance-Wohntürme", ru: "Визуализация жилых башен Reverance" },
+  "Reverance courtyard and pool project render": { de: "Visualisierung des Reverance-Innenhofs mit Pool", ru: "Визуализация двора и бассейна Reverance" },
+  "Reverance arrival and landscaped exterior project render": { de: "Visualisierung der Reverance-Vorfahrt und Außenanlage", ru: "Визуализация подъезда и благоустройства Reverance" },
+  "Enter your contact details to download the brochure.": {
+    de: "Geben Sie Ihre Kontaktdaten ein, um die Broschüre herunterzuladen.",
+    ru: "Введите контактные данные, чтобы скачать брошюру.",
+  },
+  "Country code": {
+    de: "Ländervorwahl",
+    ru: "Код страны",
+  },
+  "Your brochure is ready.": {
+    de: "Ihre Broschüre ist bereit.",
+    ru: "Ваша брошюра готова.",
+  },
+  "Your download should begin automatically. You can also use the button below.": {
+    de: "Ihr Download sollte automatisch starten. Sie können auch die Schaltfläche unten verwenden.",
+    ru: "Загрузка должна начаться автоматически. Также можно нажать кнопку ниже.",
   },
   "Schedule a Call": {
     de: "Anruf planen",

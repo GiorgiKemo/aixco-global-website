@@ -11,7 +11,7 @@ describe("public material downloads", () => {
     expect(materialDownloads).toContainEqual(
       expect.objectContaining({
         id: "current-project-brochure",
-        title: "Current project brochure",
+        title: "Reverance Brochure",
         format: "PDF",
         href: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
         fileName: "Reverance-brochure-EN.pdf",

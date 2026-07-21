@@ -10,6 +10,9 @@ import type { SiteContent, SiteContentResult } from "@/lib/backend/site-content"
 
 const Modals = lazy(() => import("@/components/Modals").then((module) => ({ default: module.Modals })));
 const ChatWidget = lazy(() => import("@/components/ChatWidget").then((module) => ({ default: module.ChatWidget })));
+const ContactNudge = lazy(() =>
+  import("@/components/ContactNudge").then((module) => ({ default: module.ContactNudge })),
+);
 const ScrollToTopButton = lazy(() =>
   import("@/components/ScrollToTopButton").then((module) => ({ default: module.ScrollToTopButton })),
 );
@@ -42,6 +45,7 @@ function DeferredShellUi() {
       {nonCriticalUiReady && (
         <Suspense fallback={null}>
           <ScrollToTopButton />
+          <ContactNudge />
           <ChatWidget />
         </Suspense>
       )}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   aixcoCurrentProjectBrochureDownloads,
+  aixcoCurrentProjectGalleryImages,
   aixcoDubaiEdenHouseCanalGallery,
   aixcoDubaiEdenHouseParkGallery,
   aixcoDubaiHealthcareGallery,
@@ -19,11 +20,28 @@ describe("aixcoLiveImages", () => {
     expect(aixcoLiveImages.batumiMosaicEveningWaterfront).toContain("batumi-evening-waterfront.webp");
     expect(aixcoLiveImages.batumiMosaicThumbNightSkyline).toContain("/batumi-mosaic-thumbs/batumi-night-skyline.webp");
     expect(aixcoLiveImages.batumiMosaicThumbBlueTower).toContain("/batumi-mosaic-thumbs/batumi-blue-tower.webp");
+    expect(aixcoLiveImages.currentProjectExterior).toContain("/images/project-gallery/reverance-exterior.webp");
+    expect(aixcoLiveImages.currentProjectTowers).toContain("/images/project-gallery/reverance-towers.webp");
+    expect(aixcoLiveImages.currentProjectCourtyard).toContain("/images/project-gallery/reverance-courtyard.webp");
+    expect(aixcoLiveImages.currentProjectArrival).toContain("/images/project-gallery/reverance-arrival.webp");
   });
 
   it("publishes the downloadable source images", () => {
     expect(aixcoLiveAssetDetails.dubaiFundOne).toContain("/images/fund/fund1.jpeg");
     expect(aixcoLiveAssetDetails.dubaiFundTwo).toContain("/images/fund2.png");
+  });
+
+  it("publishes the complete lossless current-project gallery and thumbnails", () => {
+    expect(aixcoCurrentProjectGalleryImages).toHaveLength(20);
+    expect(aixcoCurrentProjectGalleryImages[0].src).toContain(
+      "/images/project-gallery-2026/01-hero-exterior.webp",
+    );
+    expect(aixcoCurrentProjectGalleryImages[0].thumbnailSrc).toContain(
+      "/images/project-gallery-2026/thumbs/01-hero-exterior.webp",
+    );
+    expect(aixcoCurrentProjectGalleryImages.at(-1)?.src).toContain(
+      "/images/project-gallery-2026/20-sauna.webp",
+    );
   });
 
   it("publishes locale-specific current-project brochure assets", () => {

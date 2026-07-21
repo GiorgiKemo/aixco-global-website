@@ -1,13 +1,21 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
-import { useUI } from "./ui-state";
+import { useUI, type BrochureContactData, type ContactPromptData } from "./ui-state";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveImages, aixcoLiveLogos, aixcoLivePartnerPeople } from "@/lib/aixco-live-assets";
 import { recordContactSubmission, recordPortalEvent } from "@/lib/backend/lead-capture";
 import { getSafePortalUrl } from "@/lib/security/urls";
 import { useI18n } from "@/i18n/I18nProvider";
+import { getCurrentProjectBrochureDownload } from "@/lib/aixco-live-assets";
+import {
+  composeInternationalPhone,
+  getPhoneCountryFallback,
+  getPhoneCountryOptions,
+  toSupportedPhoneCountry,
+} from "@/lib/phone-country";
+import { getCountryCallingCode, type CountryCode } from "libphonenumber-js";
 
 const teamImageMap: Record<string, string> = {
   "team-benjamin": aixcoLiveImages.teamBenjamin,
@@ -360,10 +368,28 @@ const legalCopy: Record<LegalTitle, LegalSection[]> = {
   ],
 };
 
+function isBrochureContactData(value: unknown): value is BrochureContactData {
+  if (!value || typeof value !== "object") return false;
+  const data = value as Partial<BrochureContactData>;
+  return (
+    data.kind === "brochure" &&
+    typeof data.brochureHref === "string" &&
+    data.brochureHref.startsWith("/aixco-global-op2/documents/") &&
+    typeof data.brochureFileName === "string" &&
+    data.brochureFileName.toLowerCase().endsWith(".pdf")
+  );
+}
+
+function isContactPromptData(value: unknown): value is ContactPromptData {
+  if (!value || typeof value !== "object") return false;
+  const data = value as Partial<ContactPromptData>;
+  return data.kind === "contact-prompt";
+}
+
 function getModalAccessibleName(modal: NonNullable<ReturnType<typeof useUI>["modal"]>, modalData: unknown) {
   if (modal === "login") return "Login to your AIXCO portal";
   if (modal === "register") return "Register with AIXCO";
-  if (modal === "contact") return "Contact AIXCO";
+  if (modal === "contact") return isBrochureContactData(modalData) ? "Download brochure" : "Contact AIXCO";
   if (modal === "terms") return "Terms & Conditions";
   if (modal === "privacy") return "Privacy Policy";
   if (modal === "journey") return (modalData as JourneyDetailData).role;
@@ -386,7 +412,7 @@ export function Modals() {
     const openContactFromUrl = () => {
       const url = new URL(window.location.href);
       const signature = `${url.pathname}${url.search}${url.hash}`;
-      const requestsContact = url.pathname === "/" && url.searchParams.get("modal") === "contact";
+      const requestsContact = url.searchParams.get("modal") === "contact";
 
       if (!requestsContact) {
         handledContactUrlRef.current = null;
@@ -395,13 +421,24 @@ export function Modals() {
 
       if (handledContactUrlRef.current === signature) return;
       handledContactUrlRef.current = signature;
-      openContact();
+      const brochure = url.searchParams.get("intent") === "brochure"
+        ? getCurrentProjectBrochureDownload(lang, { fallbackToEnglish: false })
+        : null;
+      openContact(
+        brochure
+          ? {
+              kind: "brochure",
+              brochureHref: brochure.href,
+              brochureFileName: brochure.fileName,
+            }
+          : undefined,
+      );
     };
 
     openContactFromUrl();
     window.addEventListener("popstate", openContactFromUrl);
     return () => window.removeEventListener("popstate", openContactFromUrl);
-  }, [openContact]);
+  }, [lang, openContact]);
 
   useEffect(() => {
     if (!modal) return;
@@ -454,7 +491,14 @@ export function Modals() {
         <div className="p-5 sm:p-7 md:p-10">
           {modal === "login" && <AccessModal mode="login" tx={tx} />}
           {modal === "register" && <AccessModal mode="register" tx={tx} />}
-          {modal === "contact" && <ContactRequestModal tx={tx} locale={lang} />}
+          {modal === "contact" && (
+            <ContactRequestModal
+              tx={tx}
+              locale={lang}
+              brochureRequest={isBrochureContactData(modalData) ? modalData : null}
+              promptRequest={isContactPromptData(modalData) ? modalData : null}
+            />
+          )}
           {modal === "terms" && <Legal title="Terms & Conditions" tx={tx} />}
           {modal === "privacy" && <Legal title="Privacy Policy" tx={tx} />}
           {modal === "journey" && <JourneyDetail data={modalData as JourneyDetailData} tx={tx} />}
@@ -497,14 +541,67 @@ function formatPreferredCallTime(value: string) {
   }).format(parsed);
 }
 
-function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; locale: string }) {
-  const [mode, setMode] = useState<ContactMode | null>(null);
+function ContactRequestModal({
+  tx,
+  locale,
+  brochureRequest,
+  promptRequest,
+}: {
+  tx: (text: string) => string;
+  locale: string;
+  brochureRequest: BrochureContactData | null;
+  promptRequest: ContactPromptData | null;
+}) {
+  const isBrochureRequest = brochureRequest !== null;
+  const promptPhoneCountry = toSupportedPhoneCountry(promptRequest?.phoneCountry);
+  const [mode, setMode] = useState<ContactMode | null>(
+    isBrochureRequest ? "email" : promptRequest ? "call" : null,
+  );
   const [submitted, setSubmitted] = useState(false);
   const [requestReference, setRequestReference] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [minimumCallTime, setMinimumCallTime] = useState("");
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>(() =>
+    promptPhoneCountry ?? getPhoneCountryFallback(locale),
+  );
   const formStartedAtRef = useRef(Date.now());
+  const brochureDownloadRef = useRef<HTMLAnchorElement | null>(null);
+  const phoneCountries = useMemo(() => getPhoneCountryOptions(locale), [locale]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setPhoneCountry(
+      promptPhoneCountry ?? getPhoneCountryFallback(window.navigator.language, timezone),
+    );
+    if (process.env.NODE_ENV === "test") return;
+
+    const controller = new AbortController();
+    void fetch("/api/location/country", {
+      cache: "no-store",
+      signal: controller.signal,
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((payload: unknown) => {
+        const country = toSupportedPhoneCountry(
+          payload && typeof payload === "object" && "country" in payload
+            ? String((payload as { country?: unknown }).country ?? "")
+            : null,
+        );
+        if (country) setPhoneCountry(country);
+      })
+      .catch(() => undefined);
+
+    return () => controller.abort();
+  }, [promptPhoneCountry]);
+
+  useEffect(() => {
+    if (!submitted || !brochureRequest) return;
+    const frame = window.requestAnimationFrame(() => brochureDownloadRef.current?.click());
+    return () => window.cancelAnimationFrame(frame);
+  }, [brochureRequest, submitted]);
 
   useEffect(() => {
     if (mode === "call") {
@@ -517,7 +614,12 @@ function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; loc
     const form = new FormData(event.currentTarget);
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
-    const phone = String(form.get("phone") ?? "").trim();
+    const phone = isBrochureRequest || mode === "call"
+      ? composeInternationalPhone(
+          toSupportedPhoneCountry(String(form.get("phoneCountry") ?? "")) ?? phoneCountry,
+          String(form.get("phoneNational") ?? ""),
+        )
+      : String(form.get("phone") ?? "").trim();
     const preferredTime = String(form.get("preferredTime") ?? "").trim();
     const message = String(form.get("message") ?? "").trim();
     const website = String(form.get("website") ?? "").trim();
@@ -534,7 +636,16 @@ function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; loc
     const preferredCallAt = preferredDate?.toISOString();
     const preferredCallTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     const payload =
-      mode === "call"
+      isBrochureRequest
+        ? {
+            name,
+            email,
+            interest: "Brochure download",
+            message: `Brochure download request for ${brochureRequest.brochureFileName}. Phone number: ${phone}`,
+            requestType: "message" as const,
+            phone,
+          }
+        : mode === "call"
         ? {
             name,
             email,
@@ -569,6 +680,26 @@ function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; loc
   };
 
   if (submitted) {
+    if (brochureRequest) {
+      return (
+        <div className="contact-request-modal max-w-2xl" role="status" aria-live="polite" aria-atomic="true">
+          <p className="eyebrow mb-3">{tx("Download brochure")}</p>
+          <h3 className="heading-section">{tx("Your brochure is ready.")}</h3>
+          <p className="story-body mt-4 text-foreground/70">
+            {tx("Your download should begin automatically. You can also use the button below.")}
+          </p>
+          <a
+            ref={brochureDownloadRef}
+            href={brochureRequest.brochureHref}
+            download={brochureRequest.brochureFileName}
+            className="btn-gold mt-6 w-fit"
+          >
+            {tx("Download brochure")}
+          </a>
+        </div>
+      );
+    }
+
     return (
       <div className="contact-request-modal max-w-2xl" role="status" aria-live="polite" aria-atomic="true">
         <p className="eyebrow mb-3">{tx("Contact AIXCO")}</p>
@@ -584,9 +715,15 @@ function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; loc
 
   return (
     <div className="contact-request-modal max-w-3xl">
-      <p className="eyebrow mb-3">{tx("Contact AIXCO")}</p>
-      <h3 className="heading-section">{tx("How would you like us to contact you?")}</h3>
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+      <p className="eyebrow mb-3">{tx(isBrochureRequest ? "Download brochure" : "Contact AIXCO")}</p>
+      <h3 className="heading-section">
+        {tx(
+          isBrochureRequest
+            ? "Enter your contact details to download the brochure."
+            : "How would you like us to contact you?",
+        )}
+      </h3>
+      {!isBrochureRequest ? <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <button
           type="button"
           onClick={() => {
@@ -609,7 +746,7 @@ function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; loc
         >
           <span>{tx("Send an Email")}</span>
         </button>
-      </div>
+      </div> : null}
 
       {mode ? (
         <form onSubmit={handleSubmit} className="contact-request-form mt-6 grid gap-4">
@@ -631,21 +768,49 @@ function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; loc
             />
           </label>
 
-          {mode === "call" ? (
-            <>
-              <label className="grid gap-2">
-                <span className="story-metric-label text-foreground/60">{tx("Phone Number")}</span>
-                <input
-                  name="phone"
-                  type="tel"
-                  inputMode="tel"
-                  required
-                  minLength={5}
-                  maxLength={40}
-                  autoComplete="tel"
-                  className="contact-request-input"
-                />
+          {isBrochureRequest || mode === "call" ? (
+            <div className="grid gap-4 sm:grid-cols-[minmax(11rem,0.9fr)_minmax(0,1.4fr)]">
+              <label htmlFor="contact-phone-country" className="grid min-w-0 gap-2">
+                <span className="story-metric-label text-foreground/60">{tx("Country code")}</span>
+                <select
+                  id="contact-phone-country"
+                  name="phoneCountry"
+                  value={phoneCountry}
+                  onChange={(event) => setPhoneCountry(event.target.value as CountryCode)}
+                  autoComplete="country"
+                  className="contact-request-input min-w-0"
+                >
+                  {phoneCountries.map((option) => (
+                    <option key={option.country} value={option.country}>
+                      {option.label} (+{option.callingCode})
+                    </option>
+                  ))}
+                </select>
               </label>
+              <div className="grid min-w-0 gap-2">
+                <label htmlFor="contact-phone-number" className="story-metric-label text-foreground/60">
+                  {tx("Phone Number")}
+                </label>
+                <div className="contact-request-phone flex min-h-12 min-w-0 items-center rounded-[var(--radius-sm)] border border-border bg-background px-4">
+                  <span className="shrink-0 text-foreground/65">+{getCountryCallingCode(phoneCountry)}</span>
+                  <input
+                    id="contact-phone-number"
+                    name="phoneNational"
+                    type="tel"
+                    inputMode="tel"
+                    required
+                    minLength={5}
+                    maxLength={40}
+                    autoComplete="tel-national"
+                    className="min-w-0 flex-1 bg-transparent ps-2 text-foreground outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {mode === "call" && !isBrochureRequest ? (
+            <>
               <label className="grid gap-2">
                 <span className="story-metric-label text-foreground/60">{tx("Preferred Time for a Call")}</span>
                 <input
@@ -673,7 +838,7 @@ function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; loc
             />
           </label>
 
-          {mode === "email" ? (
+          {mode === "email" && !isBrochureRequest ? (
             <label className="grid gap-2">
               <span className="story-metric-label text-foreground/60">{tx("Message")}</span>
               <textarea
@@ -694,7 +859,7 @@ function ContactRequestModal({ tx, locale }: { tx: (text: string) => string; loc
           ) : null}
 
           <button type="submit" disabled={isSubmitting} className="btn-gold w-fit">
-            {tx(isSubmitting ? "Sending..." : "Submit")}
+            {tx(isSubmitting ? "Sending..." : isBrochureRequest ? "Download brochure" : "Submit")}
           </button>
         </form>
       ) : null}

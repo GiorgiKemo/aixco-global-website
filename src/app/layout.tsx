@@ -19,6 +19,19 @@ const gilroy = localFont({
   variable: "--font-gilroy",
 });
 
+const gilroyGerman = localFont({
+  src: [
+    { path: "../assets/fonts/gilroy/german/Gilroy-Thin-German.woff2", weight: "100", style: "normal" },
+    { path: "../assets/fonts/gilroy/german/Gilroy-Regular-German.woff2", weight: "400", style: "normal" },
+    { path: "../assets/fonts/gilroy/german/Gilroy-Medium-German.woff2", weight: "500", style: "normal" },
+    { path: "../assets/fonts/gilroy/german/Gilroy-SemiBold-German.woff2", weight: "600", style: "normal" },
+    { path: "../assets/fonts/gilroy/german/Gilroy-ExtraBold-German.woff2", weight: "800", style: "normal" },
+    { path: "../assets/fonts/gilroy/german/Gilroy-Black-German.woff2", weight: "900", style: "normal" },
+  ],
+  display: "swap",
+  variable: "--font-gilroy-german",
+});
+
 const metadataTitle = "AIXCO.Global | Real Estate Investment";
 const metadataDescription =
   "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
@@ -67,7 +80,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className={gilroy.variable} suppressHydrationWarning>
+    <html lang="en" dir="ltr" className={`${gilroy.variable} ${gilroyGerman.variable}`} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <WebVitals />
         {children}

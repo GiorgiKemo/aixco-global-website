@@ -75,12 +75,10 @@ describe("SEO static assets", () => {
   });
 
   it("exposes the project brochure through the clean Reverance URL", async () => {
-    const rewrites = await nextConfig.rewrites?.();
-
-    expect(rewrites).toContainEqual({
-      source: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
-      destination: "/aixco-global-op2/documents/reverance-by-otium-brochure-en.pdf",
-    });
+    expect(nextConfig.rewrites).toBeUndefined();
+    expect(
+      existsSync(resolve(root, "public/aixco-global-op2/documents/reverance-brochure-en.pdf")),
+    ).toBe(true);
     expect(
       existsSync(resolve(root, "public/aixco-global-op2/documents/reverance-brochure-de.pdf")),
     ).toBe(true);
@@ -92,7 +90,7 @@ describe("SEO static assets", () => {
     });
 
     expect(metadata).toMatchObject({
-      title: "Our current project | AIXCO.Global",
+      title: "Project Reverance | AIXCO.Global",
       alternates: {
         canonical: "/aixco-global-op2/current-project",
       },
@@ -112,14 +110,14 @@ describe("SEO static assets", () => {
     });
     expect(metadata.openGraph?.images).toEqual([
       expect.objectContaining({
-        url: "/aixco-global-op2/images/optimized/current-project-hero-towers.webp",
-        width: 1280,
-        height: 610,
+        url: "/aixco-global-op2/images/project-gallery-2026/01-hero-exterior.webp",
+        width: 4096,
+        height: 4096,
       }),
     ]);
     expect(metadata.twitter?.images).toEqual([
       expect.objectContaining({
-        url: "/aixco-global-op2/images/optimized/current-project-hero-towers.webp",
+        url: "/aixco-global-op2/images/project-gallery-2026/01-hero-exterior.webp",
       }),
     ]);
   });

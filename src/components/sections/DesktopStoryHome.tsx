@@ -40,6 +40,7 @@ import { LANGS, useI18n } from "@/i18n/I18nProvider";
 import type { Lang } from "@/i18n/languages";
 import {
   aixcoDubaiHeroVideo,
+  aixcoCurrentProjectGalleryImages,
   aixcoHeroBackgroundVideo,
   aixcoLiveIcons,
   aixcoLiveImages,
@@ -88,6 +89,7 @@ type StoryChapter = {
   key: StoryChapterKey;
   id?: string;
   label: string;
+  href?: string;
 };
 
 type DesktopStoryNavGroup = {
@@ -151,7 +153,7 @@ const storyChapters: StoryChapter[] = [
   { key: "aboutAccess", id: "about-access", label: "Access" },
   { key: "legacy", id: "legacy", label: "Legacy" },
   { key: "dubai", id: "dubai", label: "Dubai" },
-  { key: "batumi", id: "batumi", label: "Batumi" },
+  { key: "batumi", id: "batumi", label: "Current project" },
   { key: "materials", id: "materials", label: "Download Materials" },
   { key: "participate", id: "participate", label: "How to work" },
   { key: "how", id: "how", label: "Journeys" },
@@ -192,9 +194,14 @@ const desktopStoryNavGroups: DesktopStoryNavGroup[] = [
     chapters: (["legacy"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
   },
   {
+    key: "projects",
+    label: "Projects",
+    chapters: (["batumi"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
+  },
+  {
     key: "opportunities",
     label: "Opportunities",
-    chapters: (["batumi", "dubai", "materials", "participate", "how"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
+    chapters: (["dubai", "materials", "participate", "how"] satisfies StoryChapterKey[]).map(getStoryChapterByKey),
   },
   {
     key: "company",
@@ -257,98 +264,7 @@ const teamImageMap = {
   "team-walter": aixcoLiveImages.teamWalter,
 } as const;
 
-const batumiVisualMosaicImages = [
-  {
-    key: "dusk-central",
-    src: aixcoLiveImages.batumiMosaicDuskAerialCentral,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbDuskAerialCentral,
-    alt: "Batumi dusk aerial skyline and waterfront",
-    width: 3840,
-    height: 2160,
-    objectPosition: "50% 50%",
-  },
-  {
-    key: "dusk-coastline",
-    src: aixcoLiveImages.batumiMosaicDuskAerialCoastline,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbDuskAerialCoastline,
-    alt: "Batumi illuminated coastline at dusk from above",
-    width: 3840,
-    height: 2160,
-    objectPosition: "50% 50%",
-  },
-  {
-    key: "sunset-panorama",
-    src: aixcoLiveImages.batumiMosaicSunsetPanorama,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbSunsetPanorama,
-    alt: "Batumi sunset panorama over the Black Sea",
-    width: 3840,
-    height: 2160,
-    objectPosition: "50% 50%",
-  },
-  {
-    key: "golden-hour",
-    src: aixcoLiveImages.batumiMosaicGoldenHourCoastline,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbGoldenHourCoastline,
-    alt: "Batumi golden hour coastline and city lights",
-    width: 3840,
-    height: 2160,
-    objectPosition: "50% 50%",
-  },
-  {
-    key: "evening-waterfront",
-    src: aixcoLiveImages.batumiMosaicEveningWaterfront,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbEveningWaterfront,
-    alt: "Batumi evening waterfront and mountain skyline",
-    width: 3840,
-    height: 1946,
-    objectPosition: "50% 50%",
-  },
-  {
-    key: "day",
-    src: aixcoLiveImages.batumiMosaicDayAerial,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbDayAerial,
-    alt: "Batumi daytime aerial skyline and Black Sea",
-    width: 7360,
-    height: 4912,
-    objectPosition: "50% 48%",
-  },
-  {
-    key: "sunset",
-    src: aixcoLiveImages.batumiMosaicSunsetCoastline,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbSunsetCoastline,
-    alt: "Batumi sunset city and coastline view",
-    width: 6000,
-    height: 4000,
-    objectPosition: "50% 52%",
-  },
-  {
-    key: "night",
-    src: aixcoLiveImages.batumiMosaicNightSkyline,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbNightSkyline,
-    alt: "Batumi night skyline from the Black Sea",
-    width: 7360,
-    height: 4912,
-    objectPosition: "50% 50%",
-  },
-  {
-    key: "nature",
-    src: aixcoLiveImages.batumiMosaicNatureAerial,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbNatureAerial,
-    alt: "Batumi coastal nature and Black Sea view",
-    width: 3981,
-    height: 5971,
-    objectPosition: "50% 50%",
-  },
-  {
-    key: "tower",
-    src: aixcoLiveImages.batumiMosaicBlueTower,
-    thumbnailSrc: aixcoLiveImages.batumiMosaicThumbBlueTower,
-    alt: "Batumi tower and daytime city view",
-    width: 3903,
-    height: 5854,
-    objectPosition: "58% 50%",
-  },
-] as const;
+const batumiVisualMosaicImages = aixcoCurrentProjectGalleryImages;
 
 type BatumiVisualMosaicImageKey = (typeof batumiVisualMosaicImages)[number]["key"];
 
@@ -1017,7 +933,7 @@ function StoryChrome({
             <nav aria-label={tx("Story navigation")} className="grid gap-1">
               {storyChapters.map((chapter, index) => {
                 const isActive = activeIndex === index;
-                const href = chapter.id ? `#${chapter.id}` : "/";
+                const href = chapter.href ?? (chapter.id ? `#${chapter.id}` : "/");
 
                 return (
                   <Link
@@ -1025,7 +941,11 @@ function StoryChrome({
                     href={href}
                     aria-current={isActive ? "true" : undefined}
                     data-active={isActive ? "true" : "false"}
-                    onClick={(event) => handleChapterLink(event, chapter)}
+                    onClick={chapter.href ? () => {
+                      setLangOpen(false);
+                      setMenuOpen(false);
+                      setDesktopGroupOpen(null);
+                    } : (event) => handleChapterLink(event, chapter)}
                     className={cn(
                       "group/story-chapter story-chapter-link text-foreground/78 hover:text-primary focus-visible:text-primary",
                       isActive && "story-chapter-link--active text-primary font-semibold",
@@ -1121,7 +1041,7 @@ function StoryChrome({
                     <div id={menuId} className="story-desktop-nav-menu">
                       {group.chapters.map((chapter) => {
                         const isChapterActive = activeChapterKey === chapter.key;
-                        const href = chapter.id ? `#${chapter.id}` : "/";
+                        const href = chapter.href ?? (chapter.id ? `#${chapter.id}` : "/");
 
                         return (
                           <Link
@@ -1129,7 +1049,11 @@ function StoryChrome({
                             href={href}
                             aria-current={isChapterActive ? "true" : undefined}
                             data-active={isChapterActive ? "true" : "false"}
-                            onClick={(event) => handleChapterLink(event, chapter)}
+                            onClick={chapter.href ? () => {
+                              setLangOpen(false);
+                              setMenuOpen(false);
+                              setDesktopGroupOpen(null);
+                            } : (event) => handleChapterLink(event, chapter)}
                             className="story-desktop-nav-menu-link"
                           >
                             {tx(chapter.label)}
@@ -1635,7 +1559,7 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
   }, [selectImage]);
 
   return (
-    <div className="story-batumi-gallery" aria-label={tx("Batumi project image gallery")}>
+    <div className="story-batumi-gallery" aria-label={tx("Current project image gallery")}>
       <div className="story-batumi-gallery__wash" aria-hidden />
       <ExpandableImage
         src={selectedImage.src}
@@ -1647,7 +1571,7 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
           alt={selectedImage.alt}
           fill
           sizes="(min-width: 1280px) 100vw, 100vw"
-          quality={75}
+          unoptimized
           loading="lazy"
           data-batumi-hero-image={selectedImage.key}
           className="story-batumi-gallery__hero-image"
@@ -1655,7 +1579,7 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
         />
       </ExpandableImage>
 
-      <div className="story-batumi-gallery__carousel" aria-label={tx("Select Batumi gallery image")}>
+      <div className="story-batumi-gallery__carousel" aria-label={tx("Select current project image")}>
         <div className="story-batumi-gallery__track">
         {carouselImages.map((image, index) => (
           <button
@@ -1676,7 +1600,7 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
               width={192}
               height={128}
               sizes="(min-width: 1280px) 144px, 34vw"
-              quality={75}
+              unoptimized
               loading="eager"
               decoding="async"
               className="story-batumi-gallery__thumb-image"
@@ -2466,7 +2390,7 @@ function BatumiScene({
     >
       <p className="eyebrow story-eyebrow">{tx("Emerging market opportunity")}</p>
       <h2 className="story-h2">
-        <StoryTextReveal active={isActive} label={tx("Batumi")} />
+        <StoryTextReveal active={isActive} label={tx("CURRENT PROJECT IN BATUMI")} />
       </h2>
       <p
         className="story-body story-glyph-safe text-foreground/78"
@@ -2488,7 +2412,7 @@ function BatumiScene({
             <span className="story-batumi-property-copy block w-full min-w-0 rounded-lg border border-primary/30 bg-primary/[0.07] px-5 py-4 shadow-[0_14px_36px_-28px_hsl(var(--primary)/0.55)] transition-[background-color,border-color,box-shadow] duration-200">
               <span className="story-card-title block transition-none">
                 {property.id === "current-project"
-                  ? tx("Our current project").toUpperCase()
+                  ? tx("Project Reverance").toUpperCase()
                   : tx(property.name)}
               </span>
               <span className="story-body block hyphens-none text-foreground/62 transition-none">

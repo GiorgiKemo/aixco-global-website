@@ -173,12 +173,10 @@ try {
         metric.symbolStyle.lineHeight === metric.valueStyle.lineHeight &&
         metric.symbolStyle.verticalAlign === "baseline" &&
         metric.symbolStyle.transform === "none";
-      const correctWeight = metric.isEuro
-        ? metric.symbolStyle.fontWeight === "300"
-        : metric.symbolStyle.fontWeight === metric.valueStyle.fontWeight;
-      const correctFamily = metric.isEuro
-        ? metric.symbolStyle.fontFamily.startsWith('"Segoe UI"')
-        : metric.symbolStyle.fontFamily === metric.valueStyle.fontFamily;
+      const correctWeight =
+        metric.symbolStyle.fontWeight === metric.valueStyle.fontWeight;
+      const correctFamily =
+        metric.symbolStyle.fontFamily === metric.valueStyle.fontFamily;
       const euroIsNormal =
         !metric.isEuro ||
         (metric.symbolStyle.fontStyle === "normal" &&
@@ -226,9 +224,10 @@ try {
         Math.abs(token.heightDelta),
       );
       const exactInlineTreatment =
-        token.symbolStyle.fontFamily.startsWith('"Segoe UI"') &&
+        token.symbolStyle.fontFamily.startsWith("Arial") &&
+        token.symbolStyle.fontFamily === token.valueStyle.fontFamily &&
         token.symbolStyle.fontSize === token.valueStyle.fontSize &&
-        token.symbolStyle.fontWeight === "300" &&
+        token.symbolStyle.fontWeight === token.valueStyle.fontWeight &&
         token.symbolStyle.fontStyle === "normal" &&
         token.symbolStyle.fontSynthesis === "none" &&
         token.symbolStyle.lineHeight === token.valueStyle.lineHeight &&

@@ -62,6 +62,388 @@ The full implementation image was assembled from browser-rendered viewport segme
 
 final result: passed
 
+---
+
+# German Mobile Brochure Modal Header - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-a8bd7919-bfee-4375-8e77-eea92966b541.png`
+- Browser-rendered implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/artifacts/localization-audit/project-de-brochure-form-mobile-eyebrow-fixed.png`
+- Viewport: 390 x 844 CSS pixels
+- State: German current-project page, brochure contact modal open
+- Primary interaction tested: switch to German and open `Broschüre herunterladen`
+- Browser-console errors and warnings: zero
+
+## Full-view comparison evidence
+
+- The source screenshot and final browser capture were opened together in the same comparison input.
+- The original modal allowed the absolute close control to cover the final letters of the eyebrow. The final render reserves a dedicated top row and keeps the complete eyebrow below the close control.
+- The modal frame, heading hierarchy, form fields, cream palette, gold CTA, and mobile single-column structure remain consistent.
+
+## Focused region comparison evidence
+
+- The header was measured in-browser: the close control ends at `y=116.42px`; the eyebrow begins at `y=135.25px`, leaving an 18.83px vertical gap.
+- Bounding-box collision result: `overlap: false`.
+- The complete eyebrow text `Broschüre herunterladen` is inside the viewport; the page has no horizontal overflow.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- Fonts and typography: passed; the eyebrow and heading retain the existing German brand treatment with no clipping or forced word breaks.
+- Spacing and layout rhythm: passed; the mobile header now has clear separation from the close control while all fields remain comfortably spaced.
+- Colors and visual tokens: passed; no color, border, shadow, or button token changed.
+- Image quality and asset fidelity: passed; this modal state contains no changed raster or vector assets.
+- Copy and content: passed; the full German eyebrow and heading are visible and unchanged.
+
+## Comparison history
+
+1. Earlier P1 finding: the close control overlapped and hid the ending of `BROSCHÜRE HERUNTERLADEN` on mobile.
+2. Fix made: added mobile-only top clearance to `.contact-request-modal`, keeping the content below the absolute close control.
+3. Post-fix visual evidence: final 390 x 844 browser capture shows the entire eyebrow; measured overlap is false and console warnings/errors are zero.
+
+## Verification
+
+- ESLint: passed.
+- Production build, TypeScript, and bundled-font validation: passed.
+- Nothing was pushed or deployed during this fix.
+
+final result: passed
+
+---
+
+# Five-Language Localization Audit - Design QA
+
+- Source visual truth: `artifacts/localization-audit/project-en-source-laptop.png`
+- Localized implementation evidence: `artifacts/localization-audit/project-de-laptop.png`, `artifacts/localization-audit/home-pl-journey-laptop.png`, `artifacts/localization-audit/project-sl-laptop.png`, and `artifacts/localization-audit/home-ru-contact-laptop.png`
+- Responsive form evidence: `artifacts/localization-audit/project-de-brochure-form-mobile-fixed.png`
+- Viewports and states: 1440 x 900 laptop homepage/project scenes and 390 x 844 mobile brochure form
+- Locales verified in the browser: English, German, Polish, Slovenian, and Russian
+- Primary interactions tested: language switching, project navigation, contact dialog, brochure form, and country-code field presentation
+- Browser-console errors and warnings: zero
+
+## Full-view comparison evidence
+
+- The English source route and German localized route were opened together at the same 1440 x 900 viewport. Their grid, image crop, metrics, CTAs, spacing, and section transition remain visually equivalent while the copy is localized.
+- Polish Journey, Slovenian project, Russian contact, and German brochure-form captures were inspected at full size. No clipped controls, horizontal page overflow, or untranslated generic labels remain.
+
+## Focused region comparison evidence
+
+- The Polish Journey cards now show localized titles and highlights, including `Szwajcarskie dziedzictwo nieruchomości`, `Zrealizowane projekty w Zatoce`, and `Wybrane apartamenty od 45 000 €`.
+- The Russian contact card now shows the localized Vienna address and `Сайт`; social-network and company names remain unchanged as proper names.
+- The German mobile brochure heading was compared before and after the responsive fix in the same visual input. The previous single-letter final line is gone, and `herunterzuladen` now remains intact.
+
+## Findings
+
+- No actionable P0, P1, or P2 issues remain.
+- Fonts and typography: passed; locale-specific type stacks render diacritics and Cyrillic consistently, and the German mobile modal no longer breaks a word internally.
+- Spacing and layout rhythm: passed; localized headings, metrics, buttons, project copy, and form fields remain within their established grids at laptop and mobile widths.
+- Colors and visual tokens: passed; localization changes did not alter brand colors, surfaces, borders, radii, shadows, or button treatments.
+- Image quality and asset fidelity: passed; all current-project renders retain the same source assets, crops, resolution, and presentation.
+- Copy and content: passed; rendered English leakage was removed from German, Polish, Slovenian, and Russian while brand names, people, project names, social platforms, currency codes, and legal company names remain intentionally unchanged.
+
+## Comparison history
+
+1. Initial rendered audit found five English Polish Journey strings, an English Vienna address in Polish and Russian, English `Opportunities` and `Company` navigation labels in Polish and Russian, and the generic `Website` label in every non-English locale.
+2. Catalog fixes localized every affected string and expanded the automated public-copy gate from 457 to 494 strings, including the dedicated current-project catalog.
+3. Mobile visual QA then found a German brochure heading breaking its final word onto a single-letter line. The modal wrapping rules were corrected.
+4. Post-fix captures at the same states show complete localized copy, intact layouts, zero horizontal overflow in the tested views, and zero console warnings or errors.
+
+## Verification
+
+- Localization coverage: 494 public strings passed across German, Polish, Slovenian, and Russian.
+- Vitest: 91 files and 441 tests passed.
+- ESLint, TypeScript, bundled-font validation, and production Next.js build: passed.
+- Nothing was pushed or deployed during this audit.
+
+final result: passed
+
+---
+
+# German Brand Glyphs and Current-Project Gallery - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-b5226c8e-e672-4141-9ba8-a071bd3c42ea.png`
+- Source project imagery: `artifacts/design-qa/new-current-project-images-contact-sheet.png`
+- Browser-rendered implementation screenshots: `artifacts/design-qa/german-brand-font-laptop.png`, `artifacts/design-qa/current-project-gallery-scroller-desktop.png`, `artifacts/design-qa/current-project-gallery-mobile.png`, `artifacts/design-qa/current-project-gallery-mobile-images.png`, and `artifacts/design-qa/current-project-route-desktop.png`
+- Viewports and state: German homepage project section at 1512 x 982 and 390 x 844 CSS pixels; German dedicated current-project route at 1512 x 982
+- Browser-console errors and warnings: zero
+
+## Full-view comparison evidence
+
+- The supplied project-image contact sheet and browser-rendered desktop/mobile gallery captures were opened together in the same comparison input.
+- The homepage retains the existing split composition and brand styling while the current-project hero now uses the supplied exterior visualization.
+- The continuous scroller uses the supplied exterior, amenity, and interior visualizations without introducing placeholder or reconstructed assets.
+- The dedicated current-project route uses the same supplied exterior visualization and retains the established content hierarchy.
+
+## Focused region comparison evidence
+
+- The supplied German lowercase `a` reference and the rendered German page were inspected together. German text now resolves to `gilroyGerman` at every sampled display, body, navigation, and control weight; `document.fonts.check()` confirmed the extended brand font is loaded.
+- Umlaut-bearing samples including `Märkte`, `Über`, `Ursprünge`, `sorgfältig`, and `ausgewählte` all returned the same German Gilroy family instead of mixed system-font fallback.
+- The desktop scroller and mobile image strip were inspected at readable scale. Crops remain sharp, proportional, and free of compression artifacts.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- Fonts and typography: passed; German umlauts are constructed from the matching Gilroy base glyph and brand dot contour, and the browser uses one consistent family throughout German content.
+- Spacing and layout rhythm: passed; the new 20-image gallery preserves the existing hero/scroller geometry at laptop and phone widths with zero horizontal page overflow.
+- Colors and visual tokens: passed; cream, charcoal, gold, borders, buttons, and surfaces remain unchanged.
+- Image quality and asset fidelity: passed; all 20 supplied source renders were imported as lossless WebP, with separate lossless display-sized thumbnails for smooth scrolling and no Next.js recompression on the gallery.
+- Copy and content: passed; existing localized project copy remains intact.
+- Interactions and accessibility: passed; selecting a thumbnail changed the hero from `project-01` to `project-19`, and all gallery images retain meaningful localized alternative text.
+
+## Comparison history
+
+1. Source state: German diacritics fell back to visually heavier system glyphs, and the current-project gallery used the previous eight images.
+2. Implementation: a browser-compatible German Gilroy extension was added, and the supplied 20-image project set replaced the homepage gallery and dedicated route hero.
+3. Post-change visual pass: the first comparable browser pass found no P0/P1/P2 mismatch; laptop and mobile captures showed consistent glyphs, sharp source imagery, balanced crops, and no layout overflow.
+
+## Verification
+
+- Focused Vitest suite: 69 tests passed.
+- TypeScript and production Next.js build: passed.
+- Bundled-font validation: all six German Gilroy weights passed native umlaut checks.
+- Browser runtime: 20 unique images rendered as 40 continuously looping thumbnail items, the gallery interaction worked, the German font loaded, and console warnings/errors were empty.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Batumi Project Card and Carousel Alignment - Design QA
+
+- Source visual truth:
+  - `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-1d3c782d-573d-43b4-83b7-2d66461e2ffd.png`
+  - `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-38bf4220-686b-4d14-ba41-106feb790a7f.png`
+- Browser-rendered implementation screenshot: `artifacts/design-qa/batumi-project-boundary-aligned-de-1686x673.png`
+- Primary viewport and state: German homepage at `#batumi`, 1686 x 673 CSS pixels, project section active, navigation closed
+- Additional responsive viewport: 1512 x 982 CSS pixels
+- Primary interaction checked: continuously scrolling project thumbnail strip remains active
+- Browser-console errors and warnings: zero
+
+## Full-view comparison evidence
+
+- The two user screenshots and the German implementation capture were opened together in one comparison input.
+- The existing split layout, project render, thumbnail strip, cream content surface, project card, and gold CTA styling remain unchanged.
+- The project copy card now terminates at the same visual boundary as the main project image, while the CTA starts at the same boundary as the scrolling thumbnail strip.
+
+## Focused region comparison evidence
+
+- At 1686 x 673, the German card bottom differs from the main-image bottom by 1.55 px and the `ENTDECKEN` top differs from the carousel top by 1.84 px.
+- At 1512 x 982, the English card/image boundary differs by 0.17 px and the CTA/carousel boundary differs by 0.18 px.
+- These sub-2-pixel differences are visually imperceptible and remain within browser fractional-pixel rounding.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- Fonts and typography: passed; the existing German locale-safe type stack, CTA weight, tracking, and card hierarchy are unchanged.
+- Spacing and layout rhythm: passed; both requested horizontal boundaries align across short and tall laptop viewports.
+- Colors and visual tokens: passed; no gold, cream, border, shadow, or opacity token changed.
+- Image quality and asset fidelity: passed; project renders, crops, thumbnail imagery, animation, and compression are unchanged.
+- Copy and content: passed; `UNSER AKTUELLES PROJEKT` and `ENTDECKEN` remain unchanged.
+
+## Comparison history
+
+1. Reported state: the CTA sat visibly above the thumbnail-strip boundary, and the project card sat above the main-image boundary.
+2. Initial layout iteration: a fixed downward offset aligned the short laptop viewport but drifted at a taller laptop viewport because the fluid type scale changed the card height.
+3. Final fix: the desktop-only offset now scales inversely with viewport height, and the card-to-CTA gap reuses the exact gallery gap token.
+4. Post-fix evidence: both requested boundaries are within 2 px at 1686 x 673 and within 0.2 px at 1512 x 982.
+
+## Verification
+
+- Focused Vitest suite: 59 tests passed.
+- Production Next.js build and bundled-font validation: passed.
+- Runtime German and English browser checks: passed with zero console errors or warnings.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Projects Navigation and Batumi Project Gallery - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-5782344e-948e-47ff-93bc-329d04449e32.png`
+- Browser-rendered implementation screenshots:
+  - `artifacts/design-qa/projects-heading-1686x673.png`
+  - `artifacts/design-qa/projects-home-1686x673.png`
+  - `artifacts/design-qa/projects-mobile-menu-390x844.png`
+- Primary viewport and state: English and German homepage at `#batumi`, 1686 x 673 CSS pixels, Projects navigation closed and open
+- Responsive viewport and state: English current-project route, 390 x 844 CSS pixels, mobile navigation open
+- Browser-console errors and warnings: zero
+
+## Full-view comparison evidence
+
+- The reference and the rendered laptop capture were opened together at the same 1686 x 673 viewport.
+- The established split layout, cream content surface, typography hierarchy, metric grid, gold accents, and sticky navigation remain unchanged.
+- The requested content changes are visible: the city aerial is replaced by a real Reverance render, `Batumi` becomes `Current project in Batumi`, and `Projects` sits directly after `Legacy`.
+
+## Focused region comparison evidence
+
+- The project media region was inspected separately: the main render is sharp, fills the existing image slot without stretching, and the horizontal scroller contains four real Reverance project renders rather than city photographs.
+- The navigation region was inspected in desktop and mobile states. `Projects` appears directly after `Legacy`, and its `Current project` item points to `/aixco-global-op2/current-project`.
+- The gallery interaction was exercised by selecting the residential-towers thumbnail; the main image changed to the matching render.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- Typography: passed; the new heading uses the existing display family, weight, line height, and locale-safe fallback behavior.
+- Spacing and layout rhythm: passed; the longer German heading wraps cleanly within the existing content column and no page-level horizontal overflow was found.
+- Colors and visual tokens: passed; no palette, border, card, button, or brand-token drift was introduced.
+- Image quality and asset fidelity: passed; all four carousel assets are clean 1600 x 900 WebP project renders sourced from the existing Reverance media, with no visible caption bar or Otium naming.
+- Copy and content: passed; the section and navigation consistently identify the Batumi property as the current project.
+- Accessibility and interactions: passed; menu buttons expose expanded state, the project destination is a real link, gallery buttons retain descriptive names and selected state, and the mobile menu remains scrollable.
+
+## Comparison history
+
+1. Reference state: the section used a Batumi city aerial, a generic `Batumi` heading, and no dedicated Projects navigation group.
+2. Implemented state: the existing layout was preserved while the requested project-specific heading, route, image, and scroller content were introduced.
+3. Post-change browser pass: desktop menu order, direct navigation, gallery image switching, mobile menu placement, and both laptop and phone overflow were verified; no P0/P1/P2 follow-up fix was required.
+
+## Verification
+
+- Production Next.js build: passed.
+- Full Vitest suite: 90 files and 438 tests passed.
+- TypeScript, ESLint, localization coverage, and bundled-font validation: passed.
+- Primary interactions tested: Projects menu open/close, Current project navigation, gallery thumbnail selection, mobile menu open.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Euro Metric Optical Alignment - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-3b3b841a-f1e0-451e-96c1-ca78edfba78d.png`
+- Implementation screenshot path: `C:/Users/Administrator/AppData/Local/Temp/aixco-euro-alignment-after.png`
+- Combined full-view and focused comparison: `C:/Users/Administrator/AppData/Local/Temp/aixco-euro-alignment-comparison.png`
+- Viewport and state: German homepage at `#batumi`, 1440 x 900 CSS pixels, navigation closed
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested currency-metric scope.
+- The earlier Euro glyph used Segoe UI/Helvetica metrics whose visible ink began 4-5 px below the adjacent digits even though the DOM line boxes shared a baseline.
+- Both `€5k` and `€45k` now use one complete Arial run with identical 400 weight, font size, line height, and baseline for the Euro and every adjacent figure.
+- Pixel inspection confirms identical visible top and bottom edges for `€5k`; `€45k` is within 1 px at the top and exact at the bottom.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; Euro symbols and figures share one family, size, weight, line box, and optical height without synthetic styling.
+- Spacing and layout rhythm: passed; card grids, icon tiles, gaps, padding, and label positions are unchanged.
+- Colors and visual tokens: passed; the existing champagne-gold metric color and ivory surface remain unchanged.
+- Image quality and asset fidelity: passed; no image, video, crop, compression, playback, or asset changed.
+- Copy and content: passed; all values and translated labels remain unchanged.
+
+## Comparison history
+
+1. Initial source - P2: both Euro signs sat visibly lower and shorter than `5k` and `45k`.
+2. Implementation: replaced the mismatched Euro/value face with one cross-platform Arial run and removed the separate light-weight treatment.
+3. Post-fix evidence: the combined comparison shows both currency signs optically level with their figures and consistent with the lower metric row.
+
+## Verification
+
+- Focused Vitest suite: 59 tests passed.
+- Production Next.js build and bundled-font validation: passed.
+- Currency typography smoke: passed at 10 phone, tablet, laptop, desktop, and wide-screen viewports with 0 px overflow.
+- Language layout audit: passed for 60 viewport/language combinations.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+# German Site-wide Umlaut Typography - Design QA
+
+- Source visual truth paths:
+  - `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-5737dcaf-1045-49b3-915e-c4857361bcff.png`
+  - `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-2b1924bb-b199-4f2f-99da-e94ce4161b4f.png`
+  - `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-2e9978d1-314e-481d-a454-dbbb72bc8eeb.png`
+  - `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-178663f7-790a-4d78-80d9-a98c006ce567.png`
+  - `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-c86b6e49-92cc-4b6e-a261-c4750cb8b354.png`
+  - `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-53e81fe2-6d9d-4204-9177-0bb32ff1004e.png`
+- Implementation screenshots:
+  - `artifacts/design-qa/german-umlaut-principles-after.png`
+  - `artifacts/design-qa/german-umlaut-platform-after.png`
+  - `artifacts/design-qa/german-umlaut-objectives-after.png`
+  - `artifacts/design-qa/german-umlaut-access-after.png`
+  - `artifacts/design-qa/german-umlaut-legacy-title-after.png`
+  - `artifacts/design-qa/german-umlaut-legacy-card-after.png`
+- Combined comparisons:
+  - `artifacts/design-qa/german-umlaut-sitewide-comparison.png`
+  - `artifacts/design-qa/german-umlaut-secondary-comparison.png`
+- Viewport and state: German homepage at the marked Philosophy, Principles, Objectives, Client Approach, and Journey sections in the in-app browser's desktop viewport.
+- Responsive states checked: 7 phone, tablet, laptop, desktop, and wide-screen viewports across all 5 supported languages.
+- Console errors checked: zero in the locale and responsive smoke matrix.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested German typography scope.
+- Root cause confirmed: all six bundled Gilroy WOFF2 subsets omit German umlauts, so Chrome mixed Gilroy for plain letters with a different fallback face for `ä`, `ö`, `ü`, `Ä`, `Ö`, and `Ü` inside the same words.
+- German pages now use one complete platform font family for every character instead of per-glyph fallback, so umlauts share the surrounding letters' exact size, weight, line height, and spacing.
+- The fix is locale-wide and covers ordinary copy, headings, cards, metric labels, animated title wrappers, and Tailwind font utilities.
+- Synthetic bold and italic generation is disabled for German text to prevent accented glyphs from becoming darker than neighboring letters.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; German glyphs remain in one family and no marked umlaut is visibly oversized, darker, or vertically mismatched.
+- Spacing and layout rhythm: passed; existing section geometry, line breaks, card dimensions, and animation wrappers remain unchanged.
+- Colors and visual tokens: passed; all established AIXCO colors, borders, shadows, and transparency treatments are unchanged.
+- Image and video fidelity: passed; no media asset, crop, format, compression, playback behavior, or quality was changed.
+- Copy and localization: passed; German wording and all other supported-language copy remain unchanged.
+
+## Comparison history
+
+1. Initial source: German words mixed the ASCII-only Gilroy subset with a heavier fallback used only for umlauts.
+2. Implementation: routed the complete German locale through a single complete typeface and made every animated reveal wrapper inherit its parent's exact typography.
+3. Post-fix evidence: both combined reference/implementation comparisons show consistent `ä`, `ö`, `ü`, `Ä`, `Ö`, and `Ü` across every one of the six supplied problem areas.
+
+## Verification
+
+- Full Vitest suite: 87 files and 401 tests passed.
+- TypeScript and test TypeScript: passed.
+- Bundled-font validation: passed with explicit German fallback and Tailwind routing checks.
+- Localized responsive smoke: passed for 7 viewports × 5 supported languages, including computed-font checks for every German umlaut text run.
+- Production Next.js build and ESLint: passed.
+- `git diff --check`: passed.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# German Philosophy Metric Row Alignment - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-b18b74ff-fbf8-4b3e-9eed-abe60396a4a3.png`
+- Implementation screenshot path: `artifacts/design-qa/german-philosophy-metrics-aligned-centered.png`
+- Full-view and focused comparison evidence: `artifacts/design-qa/german-philosophy-metric-alignment-comparison.png`
+- Viewport: 1265 x 712 CSS pixels; the photographed reference was normalized to the same card region because its browser viewport and camera perspective are not recoverable exactly
+- State: German homepage, Philosophy section, all four metrics and both principle rows visible, navigation closed
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested metric scope.
+- The two values in each card row now share the same top, bottom, and line-box height even when the German label on one card wraps to two lines.
+- Every metric card explicitly fills its grid track, and the value is pinned to the bottom of that equal-height card through a direct-child flex rule. This prevents future translations from pushing a paired value down.
+- The source photograph shows the right-side values displaced downward; the corrected preview shows `2009` aligned with `$400M+` and `2,000+` aligned with `$4.2B+`.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; the existing German typeface, weights, sizes, line heights, letter spacing, currency treatment, and numeric styling are unchanged.
+- Spacing and layout rhythm: passed; only the internal metric alignment was hardened, while card sizes, gaps, padding, radii, grid columns, and principle rows remain unchanged.
+- Colors and visual tokens: passed; the ivory, white, champagne-gold, border, and shadow tokens are unchanged.
+- Image quality and asset fidelity: passed; the architecture image, crop, resolution, and loading behavior are unchanged.
+- Copy and content: passed; all German labels and values remain exactly as supplied.
+
+## Comparison history
+
+1. Initial source - P2: wrapped German labels allowed `$400M+` and `$4.2B+` to sit lower than the value beside each one.
+2. Implementation: made every metric card fill the complete grid row, retained the value's automatic bottom placement, and scoped the rule to direct label/value children.
+3. Post-fix evidence: the focused side-by-side comparison shows both number rows level, with no card, typography, or copy drift.
+
+## Verification
+
+- Localized browser geometry gate: passed at seven phone, tablet, laptop, and desktop viewports across English, German, Polish, Slovenian, and Russian; paired value tops, bottoms, and heights remain within 1px.
+- Browser console gate: zero errors across the 35 locale/viewport combinations.
+- Focused responsive regression: 6/6 tests passed.
+- Production Next.js build, bundled-font validation, TypeScript, test TypeScript, and ESLint: passed.
+- No horizontal overflow, clipped metric copy, media change, deployment, or push was introduced.
+
+final result: passed
+
 # Dubai Portfolio Card Typography Redesign - Design QA
 
 - Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-1cb210ec-76e0-4613-88e7-b7db892397bb.png`, together with the explicit direction to preserve the existing card shells, increase their height, and redesign the internal text hierarchy
@@ -1090,6 +1472,58 @@ final result: passed
 
 ---
 
+# Currency Symbol Baseline Alignment - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-fab77a36-47db-4ee5-af6a-dcaa6b7af448.png`
+- Implementation screenshot path: `C:/Users/Administrator/AppData/Local/Temp/aixco-currency-baseline-production.png`
+- Full-view comparison: `C:/Users/Administrator/AppData/Local/Temp/aixco-currency-baseline-comparison-final.png`
+- Viewport: 2048 x 1152 CSS pixels
+- State: English homepage at `#philosophy-platform`, navigation menus closed, production build preview
+- Console errors checked: zero
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested currency-alignment scope.
+- The dollar signs in `$400M+` and `$4.2B+` now use the exact same font family, size, weight, line height, and baseline as their figures.
+- Both browser-measured currency glyph boxes have 0px top, bottom, and height deltas from the adjacent number boxes.
+- Shared metric values are kept on one line, preventing a currency symbol from separating from its figure at responsive widths.
+
+## Full-view comparison evidence
+
+- The combined source-versus-production-preview image preserves the existing heading, copy, five-card row, content panels, city image, palette, and spacing.
+- The corrected implementation removes the visibly undersized and lowered dollar treatment while leaving the card shells and surrounding layout unchanged.
+
+## Focused region comparison evidence
+
+- A separate crop was unnecessary because the supplied 2048 x 1152 source and same-size implementation are placed together at native resolution, with both currency metrics legible in the comparison image.
+- The paired view clearly shows the source's smaller dollar signs and the implementation's corrected same-height, same-line treatment.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; the bundled Gilroy stack, 400 weight, responsive metric scale, lining/tabular numerals, line height, and gold color are shared exactly by symbols and values.
+- Spacing and layout rhythm: passed; cards, padding, gaps, radii, panels, and section proportions are unchanged, with zero page or card overflow.
+- Colors and visual tokens: passed; AIXCO ivory, onyx, muted gray, white-card, border, and gold tokens are unchanged.
+- Image quality and asset fidelity: passed; no image, video, crop, compression, logo, icon, or media setting changed.
+- Copy and content: passed; all labels and values remain unchanged.
+
+## Comparison history
+
+1. Initial P2 finding: dollar signs rendered at 82% of the figure size and weight 100, while figures rendered at full size and weight 400. In the flex metric row, the attempted `vertical-align` adjustment had no effect.
+2. Fix: currency symbols now inherit the figure's exact size, weight, and line height, use the shared baseline, and remain joined to their figures with `white-space: nowrap`.
+3. Post-fix evidence: the production build reports exact 0px top, bottom, and height deltas for `$400M+` and `$4.2B+`, matching typography, and zero horizontal overflow.
+
+## Verification
+
+- Currency browser gate: passed at 360, 390, 768, 1024, 1280, 1366, 1536, and 1920 pixel widths.
+- Full Vitest suite: 85 files and 388 tests passed.
+- Production Next.js build and bundled-font validation: passed.
+- TypeScript, test TypeScript, ESLint, and browser console checks: passed.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
 # Batumi Reverance Explore CTA - Design QA
 
 - Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-b03310d5-ae49-4484-983b-588055060eaa.png`
@@ -1143,8 +1577,6 @@ final result: passed
 
 final result: passed
 
----
-
 # Current Project Detail Heading - Design QA
 
 - Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-114b1032-e85d-466e-8b99-f9f74d956ba8.png`
@@ -1197,5 +1629,419 @@ final result: passed
 - TypeScript, ESLint, and `git diff --check`: passed.
 - Chrome detail-page and homepage checks: passed.
 - Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Dubai Currency and Progress Alignment - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-1381e7a1-9357-44ff-80e5-c0ef12781623.png`
+- Production implementation screenshot: `output/design-qa/dubai-metrics-after.png`
+- Full-view comparison: `output/design-qa/dubai-metrics-full-comparison.png`
+- Focused comparison: `output/design-qa/dubai-metrics-focused-comparison.png`
+- Viewport and state: English homepage at `#dubai`, 1366 x 900 CSS pixels, navigation menus closed
+- Responsive states checked: 360 x 800, 390 x 844, 768 x 1024, 1024 x 768, 1366 x 900, and 1600 x 900
+- Console errors checked: zero
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested metric scope.
+- Development value now renders as `$462M`; development scope now renders as `$350M` with `mixed-use program` retained as supporting copy.
+- Both currency symbols share the figures' exact font size, weight, line height, and baseline, and both million suffixes use uppercase `M`.
+- `developed,` and `under construction` are top-aligned with their respective `~20%` values instead of sitting on the large-number baseline.
+- The final `construction` line stays inside the metric and card at every tested width, including the 390px mobile layout.
+- The presentation normalization runs after CMS content is loaded, so production's existing `USD 462m` and `USD 350m mixed-use program` values cannot reintroduce the old English formatting.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; the established Philosophy number treatment is reused without changing the surrounding Dubai card hierarchy.
+- Spacing and layout rhythm: passed; the card shells, borders, heights, columns, labels, status treatments, and responsive grid remain intact.
+- Colors and visual tokens: passed; existing AIXCO gold, ivory, onyx, border, and shadow tokens are unchanged.
+- Image and video fidelity: passed; no media asset, crop, playback behavior, compression setting, or quality was changed.
+- Accessibility: passed; the visible currency symbol and amount remain exposed to assistive technology.
+
+## Comparison history
+
+1. Initial source: `462M USD` used a trailing currency label, `USD 350m` split the currency into a small prefix and used lowercase `m`, and the progress qualifiers sat too low.
+2. Implementation: normalized the two English USD-million metrics to `$462M` and `$350M`, reused the shared full-size currency component, and changed progress rows from baseline to top alignment.
+3. Post-fix evidence: the focused side-by-side comparison shows both corrected currency values and the raised qualifiers, with `under construction` contained inside the card.
+
+## Verification
+
+- Production Next.js build and bundled-font validation: passed.
+- Full Vitest suite: 86 files and 390 tests passed.
+- TypeScript, test TypeScript, ESLint, and `git diff --check`: passed.
+- New Dubai metric browser gate: passed at six phone, tablet, laptop, and desktop viewports with exact English values, accessible currency text, aligned qualifiers, and zero overflow.
+- Existing Dubai natural-scroll, shared currency-alignment, and 49-state locale/responsive browser gates: passed.
+- Production browser geometry and console audit: passed with zero horizontal overflow and zero console errors.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# German Dubai MacBook Metric Layout - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-8c59e6e2-6d56-46c0-9068-b6a602819f45.png`
+- Reproduced issue screenshot: `artifacts/design-qa/german-dubai-macbook-before.png`
+- Corrected implementation screenshot: `artifacts/design-qa/german-dubai-macbook-after.png`
+- Full and focused comparison: `artifacts/design-qa/german-dubai-macbook-comparison.png`
+- Viewport and state: German homepage at `#dubai`, 1512 x 982 CSS pixels, matching the 14-inch MacBook viewport class with menus closed.
+- Responsive states checked: 8 viewports across English, German, Polish, Slovenian, and Russian, including 1512 x 982 and 1440 x 900 laptop states.
+- Console errors checked: zero in the 40-state locale and responsive matrix.
+
+## Findings
+
+- The supplied layout failure was reproduced locally at 1512 x 982 before implementation.
+- Initial P1 cause: localized German value strings were fed into an English-oriented number splitter. `Mio. USD`, the sentence-first scope copy, and the leading `ca.` tokens became separate grid items, destroying the metric hierarchy even though the card did not technically overflow.
+- Development value now renders as one uninterrupted `$462M` metric with a full-size dollar sign and uppercase `M`.
+- Development scope now renders as `$350M` with `Mischnutzungsprogramm` on a deliberate supporting line.
+- Site progress now renders as two stable number-first rows: `~20% entwickelt` and `~20% im Bau`.
+- The three-column card structure, card heights, status treatments, borders, and surrounding Dubai composition remain unchanged.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; currency symbols, values, uppercase suffixes, and progress numbers share the established editorial-number treatment, while supporting copy retains its smaller hierarchy.
+- Spacing and layout rhythm: passed; values are grouped deliberately, both progress rows align on a shared baseline, and every child remains inside its metric at laptop and smaller widths.
+- Colors and visual tokens: passed; the existing champagne, ivory, onyx, border, radius, and shadow system is unchanged.
+- Image and video fidelity: passed; no media asset, crop, format, compression, playback behavior, or quality was changed.
+- Copy and content: passed; the German presentation is concise and preserves the same amounts, program type, and progress meaning.
+
+## Comparison history
+
+1. Initial source and reproduced state: `462` was detached from `Mio. USD`; `350` was separated from a sentence and currency suffix; `ca.` shifted the two progress percentages into the wrong grid columns.
+2. Implementation: restored the requested international `$…M` value convention, made German scope copy number-first, removed the leading progress tokens that broke alternation, and added German-specific scope/progress alignment rules.
+3. Post-fix evidence: the combined three-panel comparison shows the supplied MacBook reference, the exact local reproduction, and the corrected 1512 x 982 card layout with no remaining P0, P1, or P2 mismatch in the requested metric scope.
+
+## Verification
+
+- Production Next.js build, TypeScript, test TypeScript, ESLint, and bundled-font validation: passed.
+- Full Vitest suite: 87 files and 403 tests passed.
+- Localized responsive smoke: passed for 8 viewports × 5 supported languages.
+- Dubai metric browser gate: passed at 6 additional phone, tablet, laptop, and desktop viewports with exact currency structure, accessible symbols, aligned progress qualifiers, and zero overflow.
+- `git diff --check`: passed.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Batumi Euro Typography - Design QA
+
+- Source visual truth path: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-39bc5500-6be8-402e-b7f8-625cbd2551b4.png`
+- Production implementation screenshot: `output/design-qa/batumi-euro-after.png`
+- Phone implementation screenshot: `output/design-qa/batumi-euro-mobile-after.png`
+- Focused comparison: `output/design-qa/batumi-euro-focused-comparison.png`
+- Viewport and state: English homepage at `#batumi`, 1366 x 900 CSS pixels, navigation menus closed
+- Responsive states checked: 280 x 653 through 1920 x 1080
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested Euro typography scope.
+- Root cause confirmed: every bundled Gilroy weight omits U+20AC, so Chrome substituted a visually heavier fallback only for the Euro character.
+- The Batumi paragraph, `€5k`, `€45k`, `€5,000`, and `€45,000` labels now render the Euro through an explicit light system face with `font-synthesis: none`.
+- Every Euro keeps the exact adjacent number's inherited `1em` font size and line height; a small optical baseline correction removes the fallback face's ascent mismatch.
+- Currency tokens are non-breaking, preserve all original copy and punctuation, and introduce no horizontal overflow.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; only the missing Euro glyph uses the explicit system fallback, while every digit, letter, and surrounding label remains in the established Gilroy treatment.
+- Spacing and layout rhythm: passed; the Batumi split layout, benefit grid, property card, gaps, and responsive wrapping remain unchanged.
+- Colors and visual tokens: passed; existing champagne, ivory, onyx, border, and button tokens are unchanged.
+- Image and video fidelity: passed; no media asset, crop, format, playback behavior, compression setting, or quality was changed.
+- Copy and content: passed; all wording and values remain unchanged.
+
+## Comparison history
+
+1. Initial source: Chrome's automatic per-glyph fallback made the Euro visibly larger and heavier than the adjacent Gilroy numbers.
+2. Implementation: isolated only Euro-prefixed amounts, assigned a deliberately lighter system Euro glyph at the inherited `1em` size, disabled synthetic weight, and corrected its optical baseline.
+3. Post-fix evidence: the combined reference/implementation image shows the Euro matching the neighboring number scale and stroke weight in both paragraph and benefit metrics.
+
+## Verification
+
+- Production Next.js build and bundled-font validation: passed.
+- Full Vitest suite: 86 files and 391 tests passed.
+- TypeScript, test TypeScript, and ESLint: passed.
+- Currency browser gate: passed at 10 phone, tablet, laptop, and desktop viewports with exact size/line-height parity, aligned glyph boxes, nowrap tokens, and zero overflow.
+- Production render, 49-state localization/responsive, and mobile experience browser gates: passed with zero console errors.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# German Batumi Bottom Explore CTA - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-5d542cda-e09e-4b72-8d7e-d1f9ab61ab06.png`
+- Before screenshot: `artifacts/design-qa/german-batumi-explore-before.png`
+- Updated screenshot: `artifacts/design-qa/german-batumi-explore-after.png`
+- Focused comparison: `artifacts/design-qa/german-batumi-explore-comparison.png`
+- Primary viewport and state: German homepage at `#batumi`, 1512 x 982 CSS pixels, navigation menus closed
+- Responsive matrix: 1280 x 800, 1366 x 768, 1440 x 900, 1512 x 982, and 390 x 844
+- Primary interaction tested: the project link was clicked and opened `/aixco-global-op2/current-project`
+- Browser-console errors: zero
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested project-card scope.
+- The former inline CTA has been moved beneath the bordered project copy and is aligned precisely with the panel's left edge.
+- The CTA reuses the shared `btn-gold` treatment: AIXCO gold gradient, white uppercase label, shared font family and weight, tracking, shadow, focus treatment, and minimum control height.
+- The project title is the localized `OUR CURRENT PROJECT`; neither the title nor description contains `by Otium`.
+- The old circular arrow is absent and the project link contains no SVG icons.
+- The bordered copy now receives the full available laptop width instead of competing with a fixed-width inline CTA.
+
+## Required fidelity surfaces
+
+- Layout and spacing: passed; CTA-to-panel gap is 11.52-12.27 px across MacBook widths and both left edges match exactly.
+- Typography: passed; the localized German copy remains in the complete German font stack with no synthetic or mismatched glyphs.
+- Color and control styling: passed; the CTA uses the existing branded gold button class rather than a new approximation.
+- Responsive behavior: passed; MacBook widths retain a compact 48 px-high CTA, while the phone breakpoint expands it to the full 337.5 px content width.
+- Overflow: passed; project-link overflow is zero at every tested width and no horizontal page overflow is introduced.
+- Media quality: passed; no image, video, compression, crop, playback, or quality settings changed.
+- Copy: passed; `by Otium` is absent from the rendered page and the current-project destination remains intact.
+
+## Comparison history
+
+1. Reference: `Reverance by Otium` appeared twice, a low-emphasis circular arrow sat inside the bordered card, and the requested CTA area beneath the card was empty.
+2. Intermediate local state: the copy was already clean and the arrow had become a gold button, but the button was still squeezed inside the bordered card.
+3. Final state: clean localized project title and description in a full-width bordered panel, followed by a visible left-aligned gold Explore CTA in the requested bottom area.
+
+## Verification
+
+- Production Next.js build: passed.
+- Full Vitest suite: 87 files and 403 tests passed.
+- TypeScript and ESLint: passed.
+- Focused project-card tests: 63 tests passed.
+- `git diff --check`: passed with line-ending warnings only.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Site-wide Localized Glyph Consistency - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-93e1febe-f171-49a1-b5e7-b05f2526aaec.png`
+- Pre-fix local screenshot: `artifacts/design-qa/german-type-consistency-current.png`
+- Updated screenshot: `artifacts/design-qa/german-type-consistency-after.png`
+- Focused comparison: `artifacts/design-qa/german-type-consistency-comparison.png`
+- Primary viewport and state: German homepage Team scene, 1512 x 982 CSS pixels, navigation menus closed
+- MacBook-class matrix: 1280 x 650, 1366 x 768, 1440 x 900, and 1512 x 982
+- Additional locale coverage: Polish, Slovenian, and Russian homepage; German current-project route
+- Browser-console errors: zero
+
+## Findings
+
+- Root cause confirmed: all six bundled Gilroy files omit German umlauts, Polish and Slovenian diacritics, and Cyrillic. Chrome therefore had to substitute only the missing character, which made glyphs such as `ä`, `ö`, and `ü` look darker or larger than adjacent letters.
+- German, Polish, Slovenian, and Russian now each use one complete platform UI face for the entire localized page. The stack starts with `system-ui`, resolving to SF Pro on macOS, Segoe UI on Windows, and Roboto on Android instead of mixing fonts inside a word.
+- Synthetic font styling is disabled for the full localized document, native controls, and animated title layers.
+- Animated title wrappers inherit the exact surrounding family, size, style, weight, and line height, so reveal animation cannot introduce a second font or mismatched umlaut box.
+- English typography remains unchanged and continues to use the established brand font.
+
+## Required fidelity surfaces
+
+- Typography: passed; `AIXCO-FÜHRUNG`, `Kapitalmärkte`, and every audited localized leaf run use the same complete family with `font-synthesis: none`.
+- Layout: passed; the Team heading, reveal layer, summaries, cards, and section have zero horizontal overflow across all four MacBook-class viewports.
+- Diacritic safety: passed; no Team ancestor clips the title glyph boxes, preserving the dots above uppercase and lowercase umlauts.
+- Route coverage: passed; all 15 German-diacritic runs on the current-project route use the same complete locale stack with zero overflow.
+- Locale coverage: passed; 153 Polish, 142 Slovenian, and 233 Russian localized leaf runs produced zero Gilroy/Avenir leaks or synthetic-font runs.
+- Media and brand tokens: passed; no image, video, crop, playback, compression, color, spacing, or quality setting changed.
+
+## Comparison history
+
+1. Reported state: accented German characters were visibly heavier because the incomplete Gilroy subset forced Chrome into per-character fallback.
+2. Intermediate protection: German used a complete fallback stack, but macOS reached Helvetica Neue before its native UI face and the guard did not cover Polish or Russian.
+3. Final state: every currently supported non-English locale starts with its native complete system face, all reveal layers inherit it exactly, and the focused comparison shows uniform stroke weight in both `FÜHRUNG` and `Kapitalmärkte`.
+
+## Verification
+
+- Production Next.js build: passed.
+- Full Vitest suite: 87 files and 403 tests passed.
+- Focused CSS typography suite: 57 tests passed.
+- TypeScript, test TypeScript, ESLint, bundled-font validation, and `git diff --check`: passed.
+- Localized responsive smoke: passed for 8 viewports x 5 supported languages.
+- Title-animation and language-layout browser gates: passed.
+- Runtime Chrome checks: German homepage, German current-project route, Polish, Slovenian, and Russian passed with zero page overflow and zero console errors.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# German Compact Million Metrics - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-a9dc68c6-55bb-4878-9283-ceb73081cf45.png`
+- Updated screenshot: `artifacts/german-million-metric-final.png`
+- Combined source/implementation comparison: `artifacts/design-qa/german-million-metric-comparison.png`
+- Primary viewport and state: German homepage at `#dubai`, 1512 x 982 CSS pixels, navigation menus closed
+- Additional responsive viewport: 390 x 844 CSS pixels
+- Browser-console errors: zero
+
+## Findings
+
+- All compact German USD-million values now use the same international notation as English: `$462M`, `$350M`, and `$800M+`.
+- `M` is part of the same numeric token as the amount, so it inherits the exact same 41.916 px size, 400 weight, line height, family, and baseline on the audited laptop viewport.
+- The smaller `Mio. USD` suffix has been removed from every German translation catalog that could feed the cards.
+- The runtime fallback is scoped to source strings explicitly authored as compact USD-million metrics, preventing automatic or stale translations from restoring the old suffix while leaving written German prose unchanged.
+- Intentional prose such as `400 Millionen US-Dollar` remains written out; billion values are not altered.
+
+## Required fidelity surfaces
+
+- Typography: passed; the uppercase `M` and adjacent digits share one full-size number run with no synthetic styling.
+- Layout: passed; both Dubai cards remain within their containers with zero horizontal overflow at laptop and phone widths.
+- Responsive behavior: passed; `$462M` and `$350M` stay compact and readable at 1512 x 982 and 390 x 844.
+- Copy consistency: passed; no rendered German `Mio.` or legacy `USD <number>m` compact notation remains, and the Journey highlight is `$800M+ Entwicklungsvolumen`.
+- Media and visual tokens: passed; no image, video, quality, crop, playback, spacing, color, border, or card-style settings changed.
+
+## Comparison history
+
+1. Reference: `462 Mio. USD` and `350 Mio. USD` split the amount from a visibly smaller suffix and created inconsistent visual hierarchy.
+2. Final: `$462M` and `$350M` render as single full-size numeric tokens, matching the English notation and preserving the established card design.
+
+## Verification
+
+- Focused Vitest suite: 4 files and 80 tests passed.
+- TypeScript, ESLint, bundled-font validation, and production Next.js build: passed.
+- Runtime laptop audit: no `Mio.`, no legacy compact USD notation, no metric overflow, and identical computed size/weight for the full numeric tokens.
+- Runtime phone audit: no page overflow and no overflow in any of the six Dubai metric cells.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Current Project in Batumi Heading - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-3f7358e7-1aeb-4ced-9931-fd8cd637a498.png`
+- Browser-rendered implementation screenshot: `artifacts/design-qa/current-project-heading-de-1686x673.png`
+- Viewport and state: homepage at `#batumi`, 1686 x 673 CSS pixels, project section active, navigation closed
+- Locales verified in the browser: English, German, Polish, Slovenian, and Russian
+- Browser-console errors and warnings: zero
+
+## Full-view comparison evidence
+
+- The source and implementation screenshots were opened together at the same viewport.
+- The existing split composition, content column, metric grid, cream background, gold eyebrow, and project render remain unchanged.
+- The single-word heading is replaced by the requested descriptive label while preserving the established uppercase display treatment.
+
+## Focused region comparison evidence
+
+- The heading region was inspected at full size. The new German phrase wraps into three balanced lines with consistent line height, weight, tracking, and left alignment.
+- Each localized heading was rendered and queried directly in the browser; every language returned one exact level-two heading and zero horizontal page overflow.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- Typography: passed; all five translations use the existing locale-safe display stack and the requested uppercase presentation.
+- Spacing and layout rhythm: passed; the longer heading remains inside the established content column without colliding with the eyebrow or body copy.
+- Colors and visual tokens: passed; no brand color, opacity, border, or surface token changed.
+- Image quality and asset fidelity: passed; the Reverance project render and its crop are unchanged.
+- Copy and content: passed; the heading clearly identifies Batumi as the current project in every supported language.
+
+## Comparison history
+
+1. Reference state: the section heading read only `BATUMI`, which did not communicate that this is the active project.
+2. Final state: the heading uses the concise descriptor `CURRENT PROJECT IN BATUMI`, with complete German, Polish, Slovenian, and Russian equivalents.
+3. Post-change browser pass: all five headings rendered exactly once, retained the existing hierarchy, and produced no horizontal overflow or console errors.
+
+## Verification
+
+- Production Next.js build: passed.
+- TypeScript, localization coverage, focused Vitest suite, and bundled-font validation: passed.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# Project Reverance Label - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-008d5a66-869f-44ca-b5c9-7dc902e854fd.png`
+- Browser-rendered implementation screenshot: `artifacts/design-qa/project-reverance-label-mobile.png`
+- Viewport and state: homepage `#batumi`, 390 x 844 CSS pixels, project card visible; dedicated current-project route also inspected
+- Locales verified in the browser: English, German, Polish, Slovenian, and Russian
+- Browser-console errors and warnings: zero
+
+## Full-view comparison evidence
+
+- The source crop and rendered mobile project section were opened together in the same comparison input.
+- The project card keeps the existing border, cream surface, padding, typography, body copy, and Explore button; only the requested title changed.
+
+## Focused region comparison evidence
+
+- The focused title region renders `PROJECT REVERANCE` in the same weight, size, line height, and left alignment as the prior `OUR CURRENT PROJECT` label.
+- All five language versions fit on one line at laptop width and remain inside the project card at 390 px with zero horizontal overflow.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- Fonts and typography: passed; the existing locale-specific brand stacks and uppercase card treatment are preserved.
+- Spacing and layout rhythm: passed; the shorter label improves fit without changing padding, borders, card height, or neighboring content.
+- Colors and visual tokens: passed; no color, border, background, or button token changed.
+- Image quality and asset fidelity: passed; project imagery and crops are unchanged.
+- Copy and content: passed; English uses `PROJECT REVERANCE`, German/Polish/Slovenian use `PROJEKT REVERANCE`, and Russian uses `ПРОЕКТ REVERANCE`.
+
+## Comparison history
+
+1. Reference state: the label read `OUR CURRENT PROJECT`.
+2. Final state: the label reads `PROJECT REVERANCE` and has explicit translations in every supported language.
+3. Post-change browser pass: all five localized labels rendered without wrapping or overflow; the dedicated page heading and metadata title also read `Project Reverance`.
+
+## Verification
+
+- Focused Vitest suite: 72 tests passed.
+- TypeScript, ESLint, bundled-font validation, and production Next.js build: passed.
+- Browser runtime: all five translations verified, dedicated route title verified, mobile overflow zero, and console warnings/errors empty.
+- Nothing was pushed or deployed during this design pass.
+
+final result: passed
+
+---
+
+# About Logo Laptop Breakpoint - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-5bc6ade1-96c5-4224-9154-deb2c54935c3.png`
+- Browser-rendered implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/artifacts/localization-audit/about-logo-laptop-1194x912-fixed.png`
+- Additional responsive screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/artifacts/localization-audit/about-logo-laptop-1024x768-fixed.png`
+- Viewports: 1194 x 912 and 1024 x 768 CSS pixels
+- State: Russian homepage, About AIXCO section active
+- Source pixels: 1166 x 966 including browser chrome; implementation pixels: 1194 x 912 content-only at device scale 1
+- Density normalization: comparison used the visible page content region because the source includes browser chrome; both captures are effectively 1x CSS-density laptop renders
+- Primary interaction tested: direct navigation to the About section at both laptop breakpoints
+- Browser-console errors and warnings: zero
+
+## Full-view comparison evidence
+
+- The source screenshot and final browser capture were opened together in the same comparison input.
+- The source showed the official horizontal logo reduced to a 68 x 68 square, making its wordmark unreadable. The final render restores the original horizontal aspect ratio and a clear visual hierarchy without altering the surrounding content.
+- The background image, overlay, copy column, metrics, header controls, and brand palette remain unchanged.
+
+## Focused region comparison evidence
+
+- At 1194 x 912, the logo now measures 512 x 106.66 CSS pixels instead of 68 x 68.
+- At 1024 x 768, it remains 512 x 106.66 CSS pixels and stays inside the copy column.
+- Both verified breakpoints report zero horizontal overflow.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- Fonts and typography: passed; the official wordmark asset is legible and the Russian copy retains its established hierarchy and wrapping.
+- Spacing and layout rhythm: passed; the enlarged lockup fits the content column and retains separation from the eyebrow, body copy, and metrics.
+- Colors and visual tokens: passed; no overlay, foreground, accent, or surface token changed.
+- Image quality and asset fidelity: passed; the supplied official horizontal AIXCO logo remains the source asset and is no longer distorted into a square.
+- Copy and content: passed; no localized content changed.
+
+## Comparison history
+
+1. Earlier P1 finding: the 768–1279px responsive rule treated the horizontal logo like a square icon, forcing it to 68 x 68 and hiding most of the wordmark.
+2. Fix made: replaced the square icon dimensions with a responsive horizontal lockup width capped at 32rem and automatic height.
+3. Post-fix evidence: the logo is 512 x 106.66 at both tested laptop widths, retains its native aspect ratio, causes no overflow, and produces no browser warnings or errors.
+
+## Verification
+
+- ESLint: passed.
+- Production build, TypeScript, and bundled-font validation: passed.
+- Nothing was pushed or deployed during this fix.
 
 final result: passed

@@ -15,4 +15,11 @@ export const polishRuntimeTranslations = {
   "FAQs": { pl: "Najczęstsze pytania" },
   "FAQ essentials": { pl: "Najważniejsze pytania i odpowiedzi" },
   "Click a question to read the answer.": { pl: "Kliknij pytanie, aby przeczytać odpowiedź." },
+  "Personal contact": { pl: "Osobisty kontakt" },
+  "Would you like us to contact you?": { pl: "Czy możemy się z Państwem skontaktować?" },
+  "Share your details and our team will get back to you.": {
+    pl: "Zostaw dane kontaktowe, a nasz zespół skontaktuje się z Państwem.",
+  },
+  "Contact me": { pl: "Proszę o kontakt" },
+  "Dismiss contact prompt": { pl: "Zamknij okno kontaktowe" },
 } satisfies PolishTranslationSource;

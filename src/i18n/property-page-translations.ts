@@ -3,6 +3,12 @@ import type { CatalogLang as Lang } from "./languages";
 type PropertyLocaleText = Partial<Record<Exclude<Lang, "en">, string>>;
 
 export const propertyPageTranslations = {
+  "Project Reverance": {
+    de: "Projekt Reverance",
+    ru: "Проект Reverance",
+    pl: "Projekt Reverance",
+    sl: "Projekt Reverance",
+  },
   "Our current project": {
     de: "Unser aktuelles Projekt",
     ru: "Наш текущий проект",

@@ -24,6 +24,7 @@ import {
   type BatumiProperty,
 } from "@/components/sections/batumi/batumi-data";
 import { getSiteUrl } from "@/lib/site-url";
+import { aixcoCurrentProjectGalleryImages } from "@/lib/aixco-live-assets";
 
 type PropertyPageProps = {
   params: Promise<{
@@ -31,7 +32,7 @@ type PropertyPageProps = {
   }>;
 };
 
-const currentProjectPageTitle = "Our current project";
+const currentProjectPageTitle = "Project Reverance";
 
 function getPropertyPageTitle(property: BatumiProperty) {
   return property.id === "current-project" ? currentProjectPageTitle : property.name;
@@ -81,9 +82,9 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
   const canonicalPath = `/aixco-global-op2/${property.url}`;
   const socialImage = property.id === "current-project"
     ? {
-        url: "/aixco-global-op2/images/optimized/current-project-hero-towers.webp",
-        width: 1280,
-        height: 610,
+        url: aixcoCurrentProjectGalleryImages[0].src,
+        width: aixcoCurrentProjectGalleryImages[0].width,
+        height: aixcoCurrentProjectGalleryImages[0].height,
         alt: `${property.name} private residences in Batumi`,
       }
     : {
@@ -140,7 +141,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
   const pageTitle = getPropertyPageTitle(property);
   const ownershipDetails = getBatumiMarketDetails(batumiBenefits);
   const heroImage = property.id === "current-project"
-    ? "/aixco-global-op2/images/optimized/current-project-hero-towers.webp"
+    ? aixcoCurrentProjectGalleryImages[0].src
     : image;
   const heroSizes = property.id === "current-project"
     ? "(max-width: 639px) 773px, (max-width: 1023px) 1075px, 1344px"
@@ -287,7 +288,7 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
   const siteUrl = getSiteUrl();
   const canonicalUrl = `${siteUrl}/aixco-global-op2/${property.url}`;
   const propertyImage = property.id === "current-project"
-    ? "/aixco-global-op2/images/optimized/current-project-hero-towers.webp"
+    ? aixcoCurrentProjectGalleryImages[0].src
     : batumiImageMap[property.image];
   const structuredData = {
     "@context": "https://schema.org",

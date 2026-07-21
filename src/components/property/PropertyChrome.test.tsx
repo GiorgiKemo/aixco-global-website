@@ -9,8 +9,13 @@ import {
 } from "./PropertyChrome";
 
 function ModalProbe() {
-  const { modal } = useUI();
-  return <output aria-label="active modal">{modal ?? "none"}</output>;
+  const { modal, modalData } = useUI();
+  return (
+    <>
+      <output aria-label="active modal">{modal ?? "none"}</output>
+      <output aria-label="active modal data">{modalData ? JSON.stringify(modalData) : "none"}</output>
+    </>
+  );
 }
 
 function renderChrome() {
@@ -43,6 +48,21 @@ describe("PropertyChrome", () => {
     fireEvent.keyDown(window, { key: "Escape" });
     expect(aboutButton).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("link", { name: "Origins" })).not.toBeInTheDocument();
+  });
+
+  it("places Projects after Legacy and links to the Batumi section", () => {
+    renderChrome();
+
+    const desktopNav = screen.getByRole("navigation", { name: /story navigation/i });
+    const triggers = within(desktopNav).getAllByRole("button").map((button) => button.textContent?.trim());
+    expect(triggers.indexOf("Projects")).toBe(triggers.indexOf("Legacy") + 1);
+
+    const projectsButton = within(desktopNav).getByRole("button", { name: "Projects" });
+    fireEvent.click(projectsButton);
+    expect(within(desktopNav).getByRole("link", { name: "Current project" })).toHaveAttribute(
+      "href",
+      "/#batumi",
+    );
   });
 
   it("switches language and updates the document direction", async () => {
@@ -99,7 +119,7 @@ describe("PropertyChrome", () => {
     expect(document.body).toHaveClass("overflow-hidden");
     const closeButton = screen.getByRole("button", { name: /close menu/i });
     expect(closeButton).toHaveFocus();
-    expect(within(mobileMenu as HTMLElement).getByRole("link", { name: "Batumi" })).toHaveAttribute(
+    expect(within(mobileMenu as HTMLElement).getByRole("link", { name: "Current project" })).toHaveAttribute(
       "href",
       "/#batumi",
     );
@@ -134,19 +154,27 @@ describe("PropertyChrome", () => {
     ["en", "Download brochure", "/aixco-global-op2/documents/reverance-brochure-en.pdf", "Reverance-brochure-EN.pdf"],
     ["de", "Broschüre herunterladen", "/aixco-global-op2/documents/reverance-brochure-de.pdf", "Reverance-brochure-DE.pdf"],
   ] as const)(
-    "serves the %s current-project brochure from the project page",
+    "gates the %s current-project brochure behind the contact flow",
     async (lang, label, href, fileName) => {
       localStorage.setItem("aixco-lang", lang);
       render(
         <I18nProvider>
-          <CurrentProjectBrochureLink />
+          <UIProvider>
+            <CurrentProjectBrochureLink />
+            <ModalProbe />
+          </UIProvider>
         </I18nProvider>,
       );
 
       const link = await screen.findByRole("link", { name: label });
-      expect(link).toHaveAttribute("href", href);
-      expect(link).toHaveAttribute("download", fileName);
+      expect(link).toHaveAttribute("href", "?modal=contact&intent=brochure");
+      expect(link).not.toHaveAttribute("download");
       expect(link).toHaveAttribute("data-current-project-brochure", lang);
+
+      fireEvent.click(link);
+      expect(screen.getByLabelText("active modal")).toHaveTextContent("contact");
+      expect(screen.getByLabelText("active modal data")).toHaveTextContent(href);
+      expect(screen.getByLabelText("active modal data")).toHaveTextContent(fileName);
     },
   );
 
@@ -156,7 +184,9 @@ describe("PropertyChrome", () => {
       localStorage.setItem("aixco-lang", lang);
       const { container } = render(
         <I18nProvider>
-          <CurrentProjectBrochureLink />
+          <UIProvider>
+            <CurrentProjectBrochureLink />
+          </UIProvider>
         </I18nProvider>,
       );
 

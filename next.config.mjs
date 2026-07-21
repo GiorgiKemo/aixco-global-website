@@ -131,14 +131,6 @@ const nextConfig = {
       },
     ];
   },
-  async rewrites() {
-    return [
-      {
-        source: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
-        destination: "/aixco-global-op2/documents/reverance-by-otium-brochure-en.pdf",
-      },
-    ];
-  },
   async headers() {
     return [
       {

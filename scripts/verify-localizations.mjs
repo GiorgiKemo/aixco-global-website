@@ -40,6 +40,7 @@ const passthroughFixes = readCatalog("src/i18n/locale-passthrough-fixes.ts", "lo
 const textTranslations = readCatalog("src/i18n/translations.ts", "textTranslations");
 const assetTranslations = readCatalog("src/i18n/asset-translations.ts", "assetTranslations");
 const siteContentTranslations = readCatalog("src/i18n/site-content-translations.ts", "siteContentTranslations");
+const propertyPageTranslations = readCatalog("src/i18n/property-page-translations.ts", "propertyPageTranslations");
 const polishSources = [
   readCatalog("src/i18n/polish-translations.ts", "polishTranslations"),
   readCatalog("src/i18n/polish-translations-extra.ts", "polishTranslationsExtra"),
@@ -48,26 +49,45 @@ const polishSources = [
 const slovenian = readCatalog("src/i18n/slovenian-translations.ts", "slovenianTranslations");
 const slovenianFixes = readCatalog("src/i18n/slovenian-translation-fixes.ts", "slovenianTranslationFixes");
 
-const requiredKeys = new Set([...curated.keys(), ...supplemental.keys(), ...germanQuality.keys()]);
+const renderedDataKeys = [
+  "Swiss real estate heritage",
+  "CHF 1.1 billion",
+  "Gulf developments delivered",
+  "USD 800m+ development volume",
+  "Selected apartments from €45,000",
+  "Grüngasse 16, 1050 Wien, Austria",
+  "Opportunities",
+  "Company",
+  "Website",
+  "Broker",
+];
+const requiredKeys = new Set([
+  ...curated.keys(),
+  ...supplemental.keys(),
+  ...germanQuality.keys(),
+  ...propertyPageTranslations.keys(),
+  ...renderedDataKeys,
+]);
 const intentionalGermanMatches = new Set([
-  "AIXCO.Global", "Batumi", "Broker", "Dubai", "Email", "Partner", "Risk", "Status", "Team",
+  "AIXCO.Global", "Batumi", "Broker", "Dubai", "Email", "Partner", "Reverance", "Risk", "Status", "Team",
 ]);
 const errors = [];
 
 for (const key of requiredKeys) {
-  const german = germanFixes.get(key)?.de ?? curated.get(key)?.de ?? germanQuality.get(key)?.de ?? supplemental.get(key)?.de;
+  const german = [germanFixes, localeFixes, propertyPageTranslations, curated, germanQuality, supplemental, textTranslations, assetTranslations, siteContentTranslations]
+    .reduce((value, source) => value ?? source.get(key)?.de, undefined);
   if (!german) errors.push(`Missing German: ${key}`);
   if (german === key && !intentionalGermanMatches.has(key)) errors.push(`German passthrough: ${key}`);
 
-  const polish = polishSources.reduce((value, source) => value ?? source.get(key)?.pl, undefined);
+  const polish = [...polishSources, localeFixes, propertyPageTranslations].reduce((value, source) => value ?? source.get(key)?.pl, undefined);
   if (!polish) errors.push(`Missing Polish: ${key}`);
 }
 
-const sharedSources = [slovenianFixes, germanFixes, localeFixes, passthroughFixes, curated, germanQuality, supplemental, textTranslations, assetTranslations, siteContentTranslations, slovenian];
+const sharedSources = [slovenianFixes, germanFixes, localeFixes, passthroughFixes, curated, propertyPageTranslations, germanQuality, supplemental, textTranslations, assetTranslations, siteContentTranslations, slovenian];
 const intentionalMatchesByLocale = {
-  de: new Set(["AIXCO.Global", "Batumi", "Dubai"]),
-  ru: new Set(["AIXCO.Global"]),
-  sl: new Set(["AIXCO", "AIXCO.Global", "Batumi", "Dubai", "Eden House — The Canal & The Park (Dubai)", "Email", "FAQs", "Partner", "Risk", "Status", "Team", "USD"]),
+  de: new Set(["AIXCO.Global", "Batumi", "Dubai", "Reverance"]),
+  ru: new Set(["AIXCO.Global", "Reverance"]),
+  sl: new Set(["AIXCO", "AIXCO.Global", "Batumi", "Dubai", "Eden House — The Canal & The Park (Dubai)", "Email", "FAQs", "Partner", "Reverance", "Risk", "Status", "Team", "USD"]),
 };
 for (const locale of ["de", "ru", "sl"]) {
   for (const key of requiredKeys) {

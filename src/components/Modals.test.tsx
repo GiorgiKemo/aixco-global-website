@@ -42,6 +42,25 @@ function ContactTrigger() {
   );
 }
 
+function BrochureTrigger() {
+  const { openContact } = useUI();
+
+  return (
+    <button
+      type="button"
+      onClick={() =>
+        openContact({
+          kind: "brochure",
+          brochureHref: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
+          brochureFileName: "Reverance-brochure-EN.pdf",
+        })
+      }
+    >
+      Open brochure form
+    </button>
+  );
+}
+
 describe("Modals", () => {
   beforeEach(() => {
     window.history.replaceState({}, "", "/");
@@ -243,6 +262,49 @@ describe("Modals", () => {
     expect(screen.queryByLabelText("Message")).not.toBeInTheDocument();
   });
 
+  it("collects contact details and an international phone number before downloading a brochure", async () => {
+    const downloadClick = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <BrochureTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Open brochure form" }));
+
+    expect(screen.getByRole("dialog", { name: "Download brochure" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Schedule a Call" })).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Country code")).toBeInTheDocument();
+    expect(screen.getByLabelText("Phone Number")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText("Name & Surname"), { target: { value: "Jane Client" } });
+    fireEvent.change(screen.getByLabelText("Country code"), { target: { value: "GE" } });
+    fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "555 123 456" } });
+    fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "jane@example.com" } });
+    fireEvent.submit(screen.getByRole("button", { name: "Download brochure" }).closest("form") as HTMLFormElement);
+
+    await waitFor(() => {
+      expect(screen.getByText("Your brochure is ready.")).toBeInTheDocument();
+    });
+    expect(recordContactSubmission).toHaveBeenCalledWith(
+      expect.objectContaining({
+        interest: "Brochure download",
+        phone: "+995555123456",
+        message: expect.stringContaining("Reverance-brochure-EN.pdf"),
+      }),
+      expect.objectContaining({ locale: "en" }),
+    );
+    const downloadLink = screen.getByRole("link", { name: "Download brochure" });
+    expect(downloadLink).toHaveAttribute("href", "/aixco-global-op2/documents/reverance-brochure-en.pdf");
+    expect(downloadLink).toHaveAttribute("download", "Reverance-brochure-EN.pdf");
+    await waitFor(() => expect(downloadClick).toHaveBeenCalled());
+    downloadClick.mockRestore();
+  });
+
   it("submits the schedule-call request and shows confirmation", async () => {
     render(
       <I18nProvider>
@@ -255,12 +317,14 @@ describe("Modals", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /open contact/i }));
     fireEvent.click(screen.getByRole("button", { name: "Schedule a Call" }));
+    expect(screen.getByLabelText("Country code")).toBeInTheDocument();
     const preferredTimeField = screen.getByLabelText("Preferred Time for a Call");
     expect(preferredTimeField).toHaveAttribute("type", "datetime-local");
     expect(preferredTimeField).toHaveAttribute("step", "900");
     expect(preferredTimeField.getAttribute("min")).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/);
     fireEvent.change(screen.getByLabelText("Name & Surname"), { target: { value: "Jane Client" } });
-    fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "+995 555 010101" } });
+    fireEvent.change(screen.getByLabelText("Country code"), { target: { value: "GE" } });
+    fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "555 010101" } });
     fireEvent.change(preferredTimeField, { target: { value: "2099-06-25T10:30" } });
     fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "jane@example.com" } });
     fireEvent.submit(screen.getByRole("button", { name: "Submit" }).closest("form") as HTMLFormElement);
@@ -270,7 +334,7 @@ describe("Modals", () => {
     });
     expect(screen.getByRole("status")).toHaveTextContent("Request reference: AIX-2026-000018");
     expect(recordContactSubmission).toHaveBeenCalledWith(
-      expect.objectContaining({ interest: "Schedule a Call" }),
+      expect.objectContaining({ interest: "Schedule a Call", phone: "+995555010101" }),
       expect.objectContaining({
         antiAbuse: {
           website: "",

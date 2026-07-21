@@ -7,7 +7,7 @@ const css = readFileSync(resolve(process.cwd(), "src/index.css"), "utf8").replac
 
 describe("current-project responsive metrics", () => {
   it("uses the requested current-project heading without changing the project data name", () => {
-    expect(pageSource).toContain('const currentProjectPageTitle = "Our current project";');
+    expect(pageSource).toContain('const currentProjectPageTitle = "Project Reverance";');
     expect(pageSource).toContain("<Tx>{pageTitle}</Tx>");
   });
 

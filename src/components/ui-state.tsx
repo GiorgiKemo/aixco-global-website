@@ -3,12 +3,23 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 type Modal = null | "login" | "register" | "contact" | "terms" | "privacy" | "journey" | "team" | "partner";
 type ModalData = unknown;
 
+export type BrochureContactData = {
+  kind: "brochure";
+  brochureHref: string;
+  brochureFileName: string;
+};
+
+export type ContactPromptData = {
+  kind: "contact-prompt";
+  phoneCountry?: string;
+};
+
 type UIState = {
   modal: Modal;
   modalData: ModalData;
   openLogin: () => void;
   openRegister: () => void;
-  openContact: () => void;
+  openContact: (data?: ModalData) => void;
   openTerms: () => void;
   openPrivacy: () => void;
   openJourney: (data: ModalData) => void;
@@ -39,7 +50,7 @@ export function UIProvider({ children }: { children: ReactNode }) {
       modalData,
       openLogin: () => open("login"),
       openRegister: () => open("register"),
-      openContact: () => open("contact"),
+      openContact: (data = null) => open("contact", data),
       openTerms: () => open("terms"),
       openPrivacy: () => open("privacy"),
       openJourney: (data) => open("journey", data),

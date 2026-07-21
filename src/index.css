@@ -2122,10 +2122,50 @@
     box-shadow: 0 0 0 3px hsl(var(--primary) / 0.14);
   }
 
+  .contact-request-phone {
+    transition:
+      border-color 180ms var(--ease-apple),
+      box-shadow 180ms var(--ease-apple);
+  }
+
+  .contact-request-phone:focus-within {
+    border-color: hsl(var(--primary) / 0.72);
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.14);
+  }
+
+  .contact-nudge {
+    animation: contact-nudge-in 420ms var(--ease-apple) both;
+  }
+
+  @keyframes contact-nudge-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-nudge {
+      animation: none;
+    }
+  }
+
   @media (max-width: 480px) {
+    .contact-request-modal {
+      padding-top: 3rem;
+    }
+
     .contact-request-modal .heading-section {
       font-size: clamp(2rem, 10vw, 2.7rem);
       line-height: 1.04;
+      padding-inline-end: 0;
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: none;
     }
 
     .contact-request-modal .eyebrow {
@@ -3341,6 +3381,18 @@
     min-width: clamp(9.5rem, 12vw, 11rem);
   }
 
+  @media (min-width: 1280px) {
+    [data-story-section='batumi'] [data-layout='story-batumi-properties'] {
+      transform: translateY(
+        clamp(1rem, calc(2.375rem - 2.14svh), 1.5rem)
+      );
+    }
+
+    [data-story-section='batumi'] .story-batumi-property-link {
+      gap: clamp(0.45rem, 0.9svh, 0.72rem);
+    }
+  }
+
   .story-batumi-gallery {
     position: absolute;
     inset: 0;
@@ -3628,13 +3680,12 @@
   }
 
   /*
-   * Gilroy's bundled webfonts do not contain German umlaut glyphs. Use one
-   * Unicode-complete face for the entire value instead of allowing a darker,
-   * per-character fallback for characters such as ü.
+   * Keep contact details on the same locale-aware brand face as the rest of
+   * the page so German umlauts never trigger a mismatched system fallback.
    */
   [data-story-section='contact'] .story-contact-detail {
     min-width: 0;
-    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font-brand-sans);
     font-size: clamp(0.98rem, 1.05vw, 1.08rem);
     font-style: normal;
     font-weight: 500;
@@ -3741,7 +3792,7 @@
 
   [data-story-section='contact'] .story-contact-social-links .social-link__label {
     max-width: 100%;
-    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font-brand-sans);
     font-size: clamp(0.78rem, 0.88vw, 0.9rem);
     font-weight: 600;
     line-height: 1.25;
@@ -5841,9 +5892,11 @@
       gap: clamp(0.45rem, 2.4vw, 0.8rem);
     }
 
-    [data-story-section='about'] [data-brand-lockup='story-about'] img {
-      width: clamp(3rem, 16vw, 4.25rem) !important;
-      height: clamp(3rem, 16vw, 4.25rem) !important;
+    [data-story-section='about']
+      [data-brand-lockup='story-about']
+      .story-about-official-logo {
+      width: min(100%, 32rem) !important;
+      height: auto !important;
     }
 
     [data-story-section='about'] .story-about-brand-mark {
@@ -9122,14 +9175,22 @@ html[data-home-experience='story'] {
 
 
 
-/* Cross-language glyph coverage and long-word safety.
- * Every currently supported translated locale contains characters that are
- * absent from the bundled Gilroy subset. Start with the platform's complete UI
- * face for the whole locale so Chrome never swaps only an accented/Cyrillic
- * character for a darker fallback. `system-ui` resolves to SF Pro on macOS,
- * Segoe UI on Windows, and Roboto on Android, keeping each word internally
- * consistent on every device. */
-html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru']) {
+/* German uses a brand-font build with native Gilroy umlauts. The accented
+ * letters are constructed from the same a/o/u outlines and the same Gilroy
+ * dot contour, so every German word keeps one optical weight and x-height. */
+html[lang='de'] {
+  --font-brand-sans: var(--font-gilroy-german), sans-serif;
+  --font-brand-display: var(--font-gilroy-german), sans-serif;
+  --font-legacy-ui: var(--font-gilroy-german), sans-serif;
+  --font-legacy-display: var(--font-gilroy-german), sans-serif;
+  --font-sans: var(--font-brand-sans);
+  --font-display: var(--font-brand-display);
+  font-synthesis: none;
+}
+
+/* Polish, Slovenian, and Russian still use one complete platform face because
+ * those alphabets are not present in the supplied Gilroy brand files. */
+html:is([lang='pl'], [lang='sl'], [lang='ru']) {
   --font-brand-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     'Helvetica Neue', Arial, sans-serif;
   --font-brand-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -10452,13 +10513,13 @@ html[lang='de']
   transform: none;
 }
 
-/* Gilroy's bundled files do not contain U+20AC. Keep the Euro glyph and its
-   adjacent value in one complete system face so their line boxes remain exact
-   across Windows and Linux, while the symbol keeps the requested light weight. */
+/* Gilroy's bundled files do not contain U+20AC. Arial gives the Euro glyph the
+   same visible cap height and baseline as its adjacent figures on both macOS
+   and Windows; Segoe UI/Helvetica rendered the symbol visibly lower. */
 .story-standard-number .story-currency-symbol--euro {
-  font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-family: Arial, sans-serif !important;
   font-size: 1em !important;
-  font-weight: 300 !important;
+  font-weight: inherit !important;
   font-synthesis: none;
   line-height: inherit !important;
   position: relative;
@@ -10468,7 +10529,7 @@ html[lang='de']
 }
 
 .story-standard-number .story-currency-symbol--euro + .story-currency-value {
-  font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-family: Arial, sans-serif !important;
 }
 
 .story-standard-number .story-currency-value {
@@ -10480,9 +10541,31 @@ html[lang='de']
   vertical-align: baseline;
 }
 
+/* Batumi's four headline figures share one complete face so the euro glyph,
+   numerals, percentages, and suffixes have the same optical weight. */
+[data-story-section='batumi']
+  .story-batumi-benefit__metric.story-standard-number,
+[data-story-section='batumi']
+  .story-batumi-benefit__metric.story-standard-number
+  :is(.story-currency-symbol, .story-currency-value) {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif !important;
+  font-weight: 400 !important;
+  font-synthesis: none;
+}
+
+[data-story-section='batumi'] .story-batumi-benefit__label {
+  margin-top: 0.42rem;
+  color: hsl(var(--foreground) / 0.8);
+  font-size: clamp(0.9rem, 0.96vw, 1.02rem);
+  font-weight: 600;
+  line-height: 1.28;
+}
+
 .story-inline-currency-token {
   display: inline-block;
   font: inherit;
+  font-family: Arial, sans-serif !important;
   line-height: inherit;
   white-space: nowrap;
 }
@@ -10504,13 +10587,13 @@ html[lang='de']
 }
 
 .story-inline-currency-symbol--euro {
-  font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-family: Arial, sans-serif !important;
   font-size: 1em !important;
-  font-weight: 300 !important;
+  font-weight: inherit !important;
   font-synthesis: none;
   line-height: inherit !important;
   position: relative;
-  top: 0.055em;
+  top: 0;
 }
 
 /* The About metrics sit on photography, so use the brighter champagne tone
@@ -10951,7 +11034,7 @@ html:is([lang='ka'], [lang='ar']) .story-title-reveal__text {
 
 [data-story-section='contact']
   :is(.story-contact-detail, .story-contact-social-links .social-link__label) {
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-brand-sans);
   font-size: var(--story-contact-content-font-size) !important;
   font-weight: 500;
   font-synthesis: none;
@@ -11131,5 +11214,22 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   [data-story-section='philosophyOrigins']
     :is(.story-philosophy-detail-summary, .story-body) {
     overflow-wrap: anywhere;
+  }
+}
+
+/* German philosophy copy wraps onto additional lines on shorter laptop
+   viewports. Size containment kept the section locked to one viewport even
+   when its content was taller, so the next transition started over the final
+   paragraph. Let this scene grow in the block axis and preserve a comfortable
+   clear area below the copy without reducing the typography. */
+@media (min-width: 1024px) and (max-height: 48rem) {
+  html[lang='de'] [data-story-section='philosophyOrigins'] {
+    container-type: inline-size;
+  }
+
+  html[lang='de']
+    [data-story-section='philosophyOrigins']
+    .story-philosophy-detail-stage {
+    padding-bottom: clamp(3.5rem, 8svh, 4.5rem);
   }
 }

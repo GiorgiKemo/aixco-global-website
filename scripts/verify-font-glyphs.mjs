@@ -5,6 +5,7 @@ import { openSync } from "fontkit";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const fontDirectory = path.join(projectRoot, "src", "assets", "fonts", "gilroy");
+const germanFontDirectory = path.join(fontDirectory, "german");
 const fontFiles = readdirSync(fontDirectory)
   .filter((fileName) => /\.(?:otf|ttf|woff2?)$/i.test(fileName))
   .sort();
@@ -48,6 +49,23 @@ const bundledFontsCoverLocale = Object.fromEntries(
   Object.keys(localizedCharacterSets).map((locale) => [locale, true]),
 );
 
+const germanFontFiles = readdirSync(germanFontDirectory)
+  .filter((fileName) => /-German\.(?:otf|ttf|woff2?)$/i.test(fileName))
+  .sort();
+
+for (const fileName of germanFontFiles) {
+  const font = openSync(path.join(germanFontDirectory, fileName));
+  const mappedCodePoints = new Set(font.characterSet);
+
+  for (const character of requiredBaseCharacters + localizedCharacterSets.de) {
+    const codePoint = character.codePointAt(0);
+    const glyph = font.glyphForCodePoint(codePoint);
+    if (!mappedCodePoints.has(codePoint) || glyph.path.commands.length === 0) {
+      failures.push(`${fileName}: required German brand glyph ${character} is missing or empty`);
+    }
+  }
+}
+
 for (const fileName of fontFiles) {
   const filePath = path.join(fontDirectory, fileName);
   const font = openSync(filePath);
@@ -85,14 +103,14 @@ for (const fileName of fontFiles) {
 }
 
 const incompleteLocales = Object.entries(bundledFontsCoverLocale)
-  .filter(([, isComplete]) => !isComplete)
+  .filter(([locale, isComplete]) => locale !== "de" && !isComplete)
   .map(([locale]) => locale);
 
 if (incompleteLocales.length > 0) {
   const stylesheet = readFileSync(path.join(projectRoot, "src", "index.css"), "utf8");
   const tailwindConfig = readFileSync(path.join(projectRoot, "tailwind.config.ts"), "utf8");
   const localeSelector =
-    "html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])";
+    "html:is([lang='pl'], [lang='sl'], [lang='ru'])";
   const localeOverrideStart = stylesheet.indexOf(`${localeSelector} {`);
   const localeOverride = stylesheet.slice(
     localeOverrideStart,
@@ -150,5 +168,5 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `Font validation passed: ${fontFiles.length} bundled Gilroy weights are valid, and German, Polish, Slovenian, and Russian use one complete locale stack when their glyphs are absent.`,
+  `Font validation passed: ${germanFontFiles.length} German Gilroy weights include native umlauts, while Polish, Slovenian, and Russian use one complete locale stack.`,
 );

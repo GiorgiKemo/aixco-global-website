@@ -98,14 +98,26 @@ export function CurrentProjectBrochureLink({
   className?: string;
 }) {
   const { lang, tx } = useI18n();
+  const { openContact } = useUI();
   const brochure = getCurrentProjectBrochureDownload(lang, { fallbackToEnglish: false });
 
   if (!brochure) return null;
 
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    openContact({
+      kind: "brochure",
+      brochureHref: brochure.href,
+      brochureFileName: brochure.fileName,
+    });
+  };
+
   return (
     <a
-      href={brochure.href}
-      download={brochure.fileName}
+      href="?modal=contact&intent=brochure"
+      onClick={handleClick}
+      aria-haspopup="dialog"
       data-current-project-brochure={lang}
       className={className}
     >
@@ -134,12 +146,16 @@ const navGroups: PropertyNavGroup[] = [
     items: [{ label: "Legacy", href: "/#legacy" }],
   },
   {
+    key: "projects",
+    label: "Projects",
+    active: true,
+    items: [{ label: "Current project", href: "/#batumi" }],
+  },
+  {
     key: "opportunities",
     label: "Opportunities",
-    active: true,
     items: [
       { label: "Dubai", href: "/#dubai" },
-      { label: "Batumi", href: "/#batumi" },
       { label: "Download Materials", href: "/#materials" },
       { label: "How to work", href: "/#participate" },
       { label: "Journeys", href: "/#how" },

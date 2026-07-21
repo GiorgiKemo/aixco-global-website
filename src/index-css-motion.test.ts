@@ -198,7 +198,7 @@ describe("index.css motion rules", () => {
 
     expect(desktopStoryHome.split(sharedContactValueClass)).toHaveLength(3);
     expect(css).toContain("[data-story-section='contact'] .story-contact-detail");
-    expect(css).toContain('font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;');
+    expect(css).toContain("font-family: var(--font-brand-sans);");
     expect(css).toContain("font-synthesis: none;");
   });
 
@@ -700,10 +700,10 @@ describe("index.css motion rules", () => {
 
     expect(euroStart).toBeGreaterThanOrEqual(0);
     expect(euroBlock).toContain(
-      'font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;',
+      "font-family: Arial, sans-serif !important;",
     );
     expect(euroBlock).toContain("font-size: 1em !important;");
-    expect(euroBlock).toContain("font-weight: 300 !important;");
+    expect(euroBlock).toContain("font-weight: inherit !important;");
     expect(euroBlock).toContain("font-synthesis: none;");
     expect(euroBlock).toContain("line-height: inherit !important;");
     expect(euroBlock).toContain("top: 0;");
@@ -712,7 +712,7 @@ describe("index.css motion rules", () => {
       ".story-standard-number .story-currency-symbol--euro + .story-currency-value {",
     );
     expect(css).toContain(
-      'font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;',
+      "font-family: Arial, sans-serif !important;",
     );
   });
 
@@ -724,11 +724,12 @@ describe("index.css motion rules", () => {
       "<StoryInlineCurrencyText value={tx(label)} />",
     );
     expect(css).toContain(".story-inline-currency-token {");
+    expect(css).toContain("font-family: Arial, sans-serif !important;");
     expect(css).toContain("white-space: nowrap;");
     expect(css).toContain(".story-inline-currency-symbol--euro {");
-    expect(css).toContain("font-weight: 300 !important;");
+    expect(css).toContain("font-weight: inherit !important;");
     expect(css).toContain("font-synthesis: none;");
-    expect(css).toContain("top: 0.055em;");
+    expect(css).toContain("top: 0;");
   });
 
   it("matches Dubai card typography to the Philosophy card scale", () => {
@@ -787,6 +788,7 @@ describe("index.css motion rules", () => {
   it("keeps the current project reachable only from the hero CTA", () => {
     expect(desktopStoryHome).toContain('const currentProjectHref = "/aixco-global-op2/current-project";');
     expect(desktopStoryHome.match(/href=\{currentProjectHref\}/g)).toHaveLength(1);
+    expect(desktopStoryHome).toContain('{ key: "batumi", id: "batumi", label: "Current project" }');
     expect(desktopStoryHome).toContain('className="btn-gold"');
     expect(desktopStoryHome).toContain('{tx("Current project")}');
     expect(desktopStoryHome).not.toContain("story-desktop-current-project-link");
@@ -803,12 +805,15 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('className="story-batumi-property-copy block w-full');
     expect(desktopStoryHome).not.toContain('story-batumi-property-link flex w-full items-center justify-between');
     expect(desktopStoryHome).toContain('property.id === "current-project"');
-    expect(desktopStoryHome).toContain('? tx("Our current project").toUpperCase()');
+    expect(desktopStoryHome).toContain('? tx("Project Reverance").toUpperCase()');
     expect(desktopStoryHome).toContain(': tx(property.name)');
     expect(desktopStoryHome).toContain('{tx("Explore")}');
     expect(desktopStoryHome).not.toContain('className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full');
     expect(css).toContain(".story-batumi-property-link:hover .story-batumi-property-copy {");
     expect(css).toContain("[data-story-section='batumi'] .story-batumi-property__explore {");
+    expect(css).toContain("[data-story-section='batumi'] [data-layout='story-batumi-properties'] {");
+    expect(css).toContain("clamp(1rem, calc(2.375rem - 2.14svh), 1.5rem)");
+    expect(css).toContain("gap: clamp(0.45rem, 0.9svh, 0.72rem);");
   });
 
   it("keeps the shared scroll-to-top arrow available on the main story page", () => {
@@ -830,9 +835,25 @@ describe("index.css motion rules", () => {
     expect(css).toContain("[data-story-hero-title-mark='true'] {\n  filter: none;");
   });
 
-  it("renders every supported localized glyph with one complete platform stack", () => {
+  it("uses the complete Gilroy brand build for every German glyph", () => {
+    const germanSelector = "html[lang='de']";
+    const germanOverrideStart = css.indexOf(`${germanSelector} {`);
+    const germanOverride = css.slice(
+      germanOverrideStart,
+      css.indexOf("\n}", germanOverrideStart),
+    );
+
+    expect(germanOverrideStart).toBeGreaterThanOrEqual(0);
+    expect(germanOverride).toContain("var(--font-gilroy-german)");
+    expect(germanOverride).toContain("font-synthesis: none;");
+    expect(appLayout).toContain('variable: "--font-gilroy-german"');
+    expect(appLayout).toContain("Gilroy-Regular-German.woff2");
+    expect(appLayout).toContain("Gilroy-Black-German.woff2");
+  });
+
+  it("renders other supported localized glyphs with one complete platform stack", () => {
     const localeSelector =
-      "html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])";
+      "html:is([lang='pl'], [lang='sl'], [lang='ru'])";
     const localeOverrideStart = css.indexOf(`${localeSelector} {`);
     const localeOverride = css.slice(
       localeOverrideStart,
@@ -889,5 +910,24 @@ describe("index.css motion rules", () => {
     expect(safeLeadingRules).toContain("@media (max-width: 767px)");
     expect(safeLeadingRules).toContain("line-height: 1.12 !important;");
     expect(propertyPage).toContain('className="property-highlights__title ');
+  });
+
+  it("keeps German philosophy copy clear of the transition on short laptops", () => {
+    const shortLaptopStart = css.indexOf(
+      "/* German philosophy copy wraps onto additional lines",
+    );
+    const shortLaptopRules = css.slice(shortLaptopStart);
+
+    expect(shortLaptopStart).toBeGreaterThanOrEqual(0);
+    expect(shortLaptopRules).toContain(
+      "@media (min-width: 1024px) and (max-height: 48rem)",
+    );
+    expect(shortLaptopRules).toContain(
+      "html[lang='de'] [data-story-section='philosophyOrigins']",
+    );
+    expect(shortLaptopRules).toContain("container-type: inline-size;");
+    expect(shortLaptopRules).toContain(
+      "padding-bottom: clamp(3.5rem, 8svh, 4.5rem);",
+    );
   });
 });
