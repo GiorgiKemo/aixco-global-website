@@ -706,8 +706,14 @@ describe("index.css motion rules", () => {
     expect(euroBlock).toContain("font-weight: 300 !important;");
     expect(euroBlock).toContain("font-synthesis: none;");
     expect(euroBlock).toContain("line-height: inherit !important;");
-    expect(euroBlock).toContain("top: 0.055em;");
+    expect(euroBlock).toContain("top: 0;");
     expect(euroBlock).toContain("vertical-align: baseline;");
+    expect(css).toContain(
+      ".story-standard-number .story-currency-symbol--euro + .story-currency-value {",
+    );
+    expect(css).toContain(
+      'font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;',
+    );
   });
 
   it("normalizes inline Batumi euro tokens without changing their copy", () => {

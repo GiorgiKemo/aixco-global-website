@@ -10452,8 +10452,9 @@ html[lang='de']
   transform: none;
 }
 
-/* Gilroy's bundled files do not contain U+20AC. Give only the Euro glyph a
-   light system face so Chrome cannot synthesize the visibly heavier fallback. */
+/* Gilroy's bundled files do not contain U+20AC. Keep the Euro glyph and its
+   adjacent value in one complete system face so their line boxes remain exact
+   across Windows and Linux, while the symbol keeps the requested light weight. */
 .story-standard-number .story-currency-symbol--euro {
   font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 1em !important;
@@ -10461,9 +10462,13 @@ html[lang='de']
   font-synthesis: none;
   line-height: inherit !important;
   position: relative;
-  top: 0.055em;
+  top: 0;
   vertical-align: baseline;
   transform: none;
+}
+
+.story-standard-number .story-currency-symbol--euro + .story-currency-value {
+  font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
 .story-standard-number .story-currency-value {
