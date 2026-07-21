@@ -39,7 +39,7 @@ where entry.section = 'batumi_properties'
   and entry.locale = 'en'
   and jsonb_typeof(entry.payload) = 'array';
 
-do $$
+do $verify$
 begin
   if not exists (
     select 1
@@ -64,4 +64,4 @@ begin
     raise exception 'Current-project completion date update did not apply cleanly';
   end if;
 end
-$$;
+$verify$;
