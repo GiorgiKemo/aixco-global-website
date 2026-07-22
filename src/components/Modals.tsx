@@ -7,6 +7,10 @@ import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveImages, aixcoLiveLogos, aixcoLivePartnerPeople } from "@/lib/aixco-live-assets";
 import { recordContactSubmission, recordPortalEvent } from "@/lib/backend/lead-capture";
 import { getSafePortalUrl } from "@/lib/security/urls";
+import {
+  markContactNudgeConverted,
+  markContactNudgeOpenedThisSession,
+} from "@/lib/contact-nudge-preferences";
 import { useI18n } from "@/i18n/I18nProvider";
 import { getCurrentProjectBrochureDownload } from "@/lib/aixco-live-assets";
 import {
@@ -568,6 +572,10 @@ function ContactRequestModal({
     promptPhoneCountry ?? getPhoneCountryFallback(locale),
   );
   const formStartedAtRef = useRef(Date.now());
+
+  useEffect(() => {
+    markContactNudgeOpenedThisSession();
+  }, []);
   const brochureDownloadRef = useRef<HTMLAnchorElement | null>(null);
   const phoneCountries = useMemo(() => getPhoneCountryOptions(locale), [locale]);
 
@@ -673,6 +681,7 @@ function ContactRequestModal({
     setIsSubmitting(false);
 
     if (result.ok) {
+      markContactNudgeConverted();
       setRequestReference(result.reference ?? null);
       setSubmitted(true);
       return;

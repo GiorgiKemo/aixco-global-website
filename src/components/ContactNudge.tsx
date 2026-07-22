@@ -8,11 +8,14 @@ import {
   getPhoneCountryFallback,
   toSupportedPhoneCountry,
 } from "@/lib/phone-country";
+import {
+  getContactNudgeDelay,
+  markContactNudgeOpenedThisSession,
+  recordContactNudgeDismissal,
+} from "@/lib/contact-nudge-preferences";
 import { useUI } from "./ui-state";
 
-const CONTACT_NUDGE_DELAY_MS = 20_000;
 const CONTACT_NUDGE_SCROLL_OFFSET = 120;
-const CONTACT_NUDGE_SESSION_KEY = "aixco-contact-nudge-dismissed";
 
 function getDetectedCountry(value: unknown) {
   if (!value || typeof value !== "object" || !("country" in value)) return null;
@@ -52,18 +55,15 @@ export function ContactNudge() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    try {
-      if (window.sessionStorage.getItem(CONTACT_NUDGE_SESSION_KEY) === "true") return;
-    } catch {
-      // Session storage is an enhancement; the prompt still works without it.
-    }
-
     const startTimerAfterScroll = () => {
       if (timerRef.current !== null || window.scrollY < CONTACT_NUDGE_SCROLL_OFFSET) return;
+      const delay = getContactNudgeDelay();
+      if (delay === null) return;
+
       timerRef.current = window.setTimeout(() => {
-        setVisible(true);
+        if (getContactNudgeDelay() !== null) setVisible(true);
         timerRef.current = null;
-      }, CONTACT_NUDGE_DELAY_MS);
+      }, delay);
     };
 
     window.addEventListener("scroll", startTimerAfterScroll, { passive: true });
@@ -77,11 +77,25 @@ export function ContactNudge() {
 
   const dismiss = () => {
     setVisible(false);
-    try {
-      window.sessionStorage.setItem(CONTACT_NUDGE_SESSION_KEY, "true");
-    } catch {
-      // Dismissal still applies for the current component lifecycle.
+    const result = recordContactNudgeDismissal();
+
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+    timerRef.current = null;
+
+    if (result.shouldRemind && result.delayMs !== null) {
+      timerRef.current = window.setTimeout(() => {
+        if (getContactNudgeDelay() !== null) setVisible(true);
+        timerRef.current = null;
+      }, result.delayMs);
     }
+  };
+
+  const openContactForm = () => {
+    setVisible(false);
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+    timerRef.current = null;
+    markContactNudgeOpenedThisSession();
+    openContact({ kind: "contact-prompt", phoneCountry });
   };
 
   if (!visible || modal !== null) return null;
@@ -121,10 +135,7 @@ export function ContactNudge() {
       <div className="mt-4">
         <button
           type="button"
-          onClick={() => {
-            dismiss();
-            openContact({ kind: "contact-prompt", phoneCountry });
-          }}
+          onClick={openContactForm}
           className="btn-gold min-h-10 w-full px-4 py-2 text-xs"
         >
           {tx("Contact me")}

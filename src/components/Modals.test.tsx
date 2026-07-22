@@ -4,6 +4,11 @@ import { I18nProvider } from "@/i18n/I18nProvider";
 import { SiteContentContext } from "@/data/site-content-context";
 import { siteContentDefaults } from "@/lib/backend/site-content";
 import { recordContactSubmission } from "@/lib/backend/lead-capture";
+import {
+  CONTACT_NUDGE_CONVERSION_SUPPRESSION_MS,
+  getContactNudgePreferences,
+  resetContactNudgePreferencesForTests,
+} from "@/lib/contact-nudge-preferences";
 import { Modals } from "./Modals";
 import { UIProvider, useUI } from "./ui-state";
 
@@ -64,6 +69,7 @@ function BrochureTrigger() {
 describe("Modals", () => {
   beforeEach(() => {
     window.history.replaceState({}, "", "/");
+    resetContactNudgePreferencesForTests();
     vi.mocked(recordContactSubmission).mockResolvedValue({ ok: true, reference: "AIX-2026-000018" });
   });
 
@@ -71,6 +77,7 @@ describe("Modals", () => {
     document.body.style.overflow = "";
     document.documentElement.style.overflow = "";
     window.history.replaceState({}, "", "/");
+    resetContactNudgePreferencesForTests();
     vi.clearAllMocks();
   });
 
@@ -209,6 +216,7 @@ describe("Modals", () => {
     expect(dialog).not.toHaveClass("max-w-5xl");
     expect(contactContent).toHaveClass("w-full");
     expect(contactContent).not.toHaveClass("max-w-3xl");
+    expect(getContactNudgePreferences().openedThisSession).toBe(true);
   });
 
   it("restores the previous body overflow value after closing", () => {
@@ -363,6 +371,10 @@ describe("Modals", () => {
         },
         locale: "en",
       }),
+    );
+    const nudgePreferences = getContactNudgePreferences();
+    expect(nudgePreferences.convertedUntil).toBeGreaterThanOrEqual(
+      Date.now() + CONTACT_NUDGE_CONVERSION_SUPPRESSION_MS - 1_000,
     );
   });
 
