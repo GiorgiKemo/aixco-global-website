@@ -11,6 +11,7 @@ import { polishTranslationsFinal } from "./polish-translations-final";
 import { polishContentTranslations } from "./polish-content-translations";
 import { polishRuntimeTranslations } from "./polish-runtime-translations";
 import { propertyPageTranslations } from "./property-page-translations";
+import { russianTranslationFixes } from "./russian-translation-fixes";
 import { slovenianTranslationFixes } from "./slovenian-translation-fixes";
 
 export const LANGS = languageOptions;
@@ -1672,6 +1673,7 @@ const germanQualityTranslations: TranslationSource = {
 };
 
 const baseCatalogSources: TranslationSource[] = [
+  russianTranslationFixes,
   slovenianTranslationFixes,
   germanTranslationFixes,
   localeTranslationFixes,
@@ -1702,6 +1704,7 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
+        russianTranslationFixes,
         slovenianTranslationFixes,
         slovenian.slovenianTranslations,
         germanTranslationFixes,

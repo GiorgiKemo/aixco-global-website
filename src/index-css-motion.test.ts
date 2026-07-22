@@ -71,6 +71,42 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).not.toContain("fixed bottom-20 end-4 z-30 inline-flex min-h-11 items-center gap-2");
   });
 
+  it("keeps the current-project gallery slow, seamless, and draggable in both pointer modes", () => {
+    const projectCarousel = cssBlock(".story-batumi-gallery__carousel");
+
+    expect(projectCarousel).toContain("cursor: grab;");
+    expect(projectCarousel).toContain("touch-action: pan-y pinch-zoom;");
+    expect(projectCarousel).toContain("contain: layout paint style;");
+    expect(cssBlock(".story-batumi-gallery__track")).toContain("will-change: transform;");
+    expect(cssBlock(".story-batumi-gallery__track")).toContain("backface-visibility: hidden;");
+    expect(css).not.toContain("animation: story-batumi-gallery-loop");
+    expect(desktopStoryHome).toContain("elapsed * 0.014");
+    expect(desktopStoryHome).toContain("[...galleryImages, ...galleryImages, ...galleryImages]");
+    expect(desktopStoryHome).toContain("track.style.transform = `translate3d(${-position}px, 0, 0)`;");
+    expect(desktopStoryHome).toContain("onPointerDown={handleCarouselPointerDown}");
+    expect(desktopStoryHome).toContain("onPointerMove={handleCarouselPointerMove}");
+    expect(desktopStoryHome).toContain("onPointerUp={finishCarouselDrag}");
+    expect(desktopStoryHome).toContain("performance.now() + 1600");
+    expect(desktopStoryHome).toContain("if (!dragState.moved) return;");
+    expect(desktopStoryHome).toContain("onPointerEnter={pauseCarouselInteraction}");
+    expect(desktopStoryHome).toContain("onPointerLeave={resumeCarouselInteraction}");
+    expect(desktopStoryHome).toContain("onFocus={pauseCarouselInteraction}");
+    expect(desktopStoryHome).toContain("performance.now() + 600");
+    expect(desktopStoryHome).toContain('data-gallery-image-key={image.key}');
+    expect(desktopStoryHome).toContain('data-gallery-copy={isMirroredImage ? "mirrored" : "primary"}');
+
+    const pointerDownBlock = desktopStoryHome.slice(
+      desktopStoryHome.indexOf("const handleCarouselPointerDown"),
+      desktopStoryHome.indexOf("const handleCarouselPointerMove"),
+    );
+    const pointerMoveBlock = desktopStoryHome.slice(
+      desktopStoryHome.indexOf("const handleCarouselPointerMove"),
+      desktopStoryHome.indexOf("const finishCarouselDrag"),
+    );
+    expect(pointerDownBlock).not.toContain("setPointerCapture");
+    expect(pointerMoveBlock).toContain("setPointerCapture");
+  });
+
   it("does not render pause or resume controls for automatic website motion", () => {
     expect(desktopStoryHome).not.toContain('data-hero-motion-control="true"');
     expect(partnerMarquee).not.toContain("partner-marquee-motion-toggle");
@@ -675,6 +711,14 @@ describe("index.css motion rules", () => {
     expect(css).toContain("white-space: nowrap;");
   });
 
+  it("top-aligns paired Batumi metrics when one supporting label wraps", () => {
+    expect(desktopStoryHome).toContain(
+      'className="story-batumi-benefit__copy min-w-0"',
+    );
+    expect(css).toContain(".story-batumi-benefit__copy {");
+    expect(css).toContain("align-self: start;");
+  });
+
   it("keeps currency symbols on the exact same typographic line as their figures", () => {
     const currencyStart = css.indexOf(
       ".story-standard-number .story-currency-symbol {",
@@ -694,6 +738,24 @@ describe("index.css motion rules", () => {
     expect(currencyBlock).not.toContain("vertical-align: 0.055em");
     expect(desktopStoryHome).toContain("story-currency-symbol--dollar");
     expect(desktopStoryHome).toContain("story-philosophy-stat__number");
+
+    const dollarStart = css.indexOf(
+      ".story-standard-number .story-currency-symbol--dollar {",
+    );
+    const dollarBlock = css.slice(dollarStart, css.indexOf("\n}", dollarStart));
+
+    expect(dollarStart).toBeGreaterThanOrEqual(0);
+    expect(dollarBlock).toContain(
+      'font-family: "Segoe UI Light", "Segoe UI", Arial, sans-serif !important;',
+    );
+    expect(dollarBlock).toContain("font-size: 1em !important;");
+    expect(dollarBlock).toContain("font-weight: 300 !important;");
+    expect(dollarBlock).toContain("font-synthesis: none;");
+    expect(dollarBlock).toContain("line-height: inherit !important;");
+    expect(dollarBlock).toContain("top: -0.004364rem;");
+    expect(dollarBlock).toContain("transform: scaleX(1.125683) scaleY(0.898305);");
+    expect(dollarBlock).toContain("transform-origin: left center;");
+    expect(dollarBlock).toContain("opacity: 1;");
 
     const euroStart = css.indexOf(
       ".story-standard-number .story-currency-symbol--euro {",
@@ -716,6 +778,27 @@ describe("index.css motion rules", () => {
     expect(css).toContain(
       "font-family: Arial, sans-serif !important;",
     );
+  });
+
+  it("aligns the wrapped construction qualifier with the scope copy on English laptops", () => {
+    const constructionAlignmentStart = css.indexOf(
+      "html[lang='en']\n    .story-dubai-portfolio-card__metric[data-metric-layout='progress']\n    .story-dubai-metric-copy--construction {",
+    );
+    const constructionAlignmentBlock = css.slice(
+      constructionAlignmentStart,
+      css.indexOf("\n  }", constructionAlignmentStart),
+    );
+
+    expect(constructionAlignmentStart).toBeGreaterThanOrEqual(0);
+    expect(constructionAlignmentBlock).toContain("position: relative;");
+    expect(constructionAlignmentBlock).toContain("top: -0.3rem;");
+    expect(constructionAlignmentBlock).toContain("line-height: 1 !important;");
+    expect(desktopStoryHome).toContain(
+      'className="story-dubai-metric-copy story-dubai-metric-copy--construction"',
+    );
+    expect(desktopStoryHome).toContain('aria-label="under construction"');
+    expect(desktopStoryHome).toContain('<span aria-hidden="true">under</span>');
+    expect(desktopStoryHome).toContain('<span aria-hidden="true">construction</span>');
   });
 
   it("normalizes inline Batumi euro tokens without changing their copy", () => {

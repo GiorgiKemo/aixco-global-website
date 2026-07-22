@@ -1,3 +1,160 @@
+# Dollar Equal-Size Correction - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-a68bba54-64b8-4213-ba51-b4a4b1758a4e.png`
+- Implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-dollar-equal-size.png`
+- Verified state: English Dubai legacy development-value card in the user's narrow in-app browser viewport.
+
+## Findings
+
+- The prior 0.7em optical treatment made `$` visibly smaller than `462M`; that treatment did not match the user's intended equal-size typography.
+- `$` now inherits the exact same Gilroy family, 28.8 px font size, 400 weight, line-height, baseline, and color as `462M`.
+- Browser geometry confirms the dollar and the numeric value share the exact same 28.796875 px line-box height and 1008.328125 px top edge.
+- The special upward offset and lighter Thin font have been removed everywhere the shared metric renderer is used.
+
+## Verification
+
+- Same-state browser visual check: passed.
+- Computed font and line-box geometry audit: passed.
+- Targeted CSS tests (63), ESLint, TypeScript, and diff validation: passed.
+- Nothing was pushed or deployed during this correction.
+
+final result: passed
+
+---
+
+# Unfinished Priority Fixes - Design QA
+
+- Dubai source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-c8e33592-5825-459d-bb9c-31c6cb6102ca.png`
+- Dubai implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-construction-wrap.png`
+- Gallery source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-58fed794-58d3-4bbb-be55-cc701122d3bc.png`
+- Gallery implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-gallery-interaction.png`
+- Russian content source: `C:/Users/Administrator/Desktop/AIXCO_RU_Website_Fixes.docx`
+- Verified viewport: 1440 x 900 laptop.
+
+## Findings
+
+- Dubai progress copy now deliberately renders `under` and `construction` on separate lines. The final `construction` baseline finishes within 2.31 px of the neighboring `mixed-use program` baseline.
+- The Batumi thumbnail rail uses subpixel `translate3d` movement at a reduced 0.014 px/ms rate. Hover/focus pauses the motion, drag changes the transform continuously, and a click on a visible thumbnail updates the hero image.
+- Browser interaction verification selected `project-07`, updated the hero to `project-07`, then dragged the rail from `-6287.57px` to `-6540.94px` without losing the selected image.
+- The four Russian terminology corrections from the client document are active: `СОТРУДНИЧАТЬ`, `Валовая стоимость развития (GDV)`, `Швейцарское наследие в сфере недвижимости`, and `Стоимость девелопмента`.
+- No actionable P0, P1, or P2 visual differences remain in these targeted surfaces.
+
+## Verification
+
+- Browser-rendered Dubai geometry: passed.
+- Gallery click and pointer-drag interaction: passed.
+- Russian client-brief terminology in the rendered accessibility tree: passed.
+- Localization coverage for 499 public strings across German, Polish, Slovenian, and Russian: passed.
+- Nothing was pushed or deployed during this continuation.
+
+final result: passed
+
+---
+
+# Batumi Euro Metric Row Alignment - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-0e0a9d3f-a072-49d1-9a8b-330240702c28.png`
+- Implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-euro-row-alignment.png`
+- Combined comparison: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-euro-row-comparison.png`
+- Verified state: English Batumi project section at a 1440 x 900 laptop viewport.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- The €45k value previously sat 9.22 px below €5k because its one-line supporting label was vertically centered against the taller two-line €5k label.
+- Both value wrappers now align to the top of their shared grid row. Browser measurements report an exact 0 px difference between the €5k and €45k top and bottom edges.
+- Icon tiles remain centered as a matched pair, and the lower 60% / 12% row is unchanged.
+
+## Verification
+
+- Same-state source/implementation comparison: passed.
+- Laptop browser-rendered geometry audit: passed.
+- No console errors, horizontal overflow, copy changes, or image changes.
+- Targeted test (63 tests), TypeScript, ESLint, bundled-font validation, and production build: passed.
+- Nothing was pushed or deployed during this fix.
+
+final result: passed
+
+---
+
+# Dubai Construction Copy Alignment - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-46f50151-1978-4ab8-ad83-22cab7d8567a.png`
+- Implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-construction-alignment.png`
+- Combined comparison: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-construction-comparison.png`
+- Verified state: English Dubai legacy cards at a 1440 x 900 laptop viewport.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- Before correction, the wrapped `construction` line finished 10.16 px below the neighboring `mixed-use program` copy.
+- The final English progress qualifier now uses a tighter line-height and a 0.3rem upward optical adjustment at laptop widths only. Neither percentage nor the first `developed` row moves.
+- Browser measurement places the corrected construction line within 2.31 px of the scope-copy bottom edge, which is optically aligned at the rendered font size.
+- Mobile and non-English layouts retain their existing rules, preventing short translated qualifiers from being shifted unnecessarily.
+
+## Verification
+
+- Same-state source/implementation comparison: passed.
+- Laptop browser-rendered alignment measurement: passed.
+- Card dimensions, borders, typography, values, and copy remain unchanged.
+- Targeted CSS test (62 tests), TypeScript, ESLint, bundled-font validation, and the production build: passed.
+- Nothing was pushed or deployed during this fix.
+
+final result: passed
+
+---
+
+# Dollar Metric Optical Alignment - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-640a7c3e-1334-4748-8d1f-4b4e027c8e36.png`
+- Implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-currency-implementation.png`
+- Combined comparison: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-currency-comparison.png`
+- Source pixels: 1152 x 2048; implementation pixels: 627 x 762; combined focused comparison: 1260 x 490.
+- CSS viewport: 642 x 780 at device pixel ratio 1; browser content capture: 627 x 762.
+- State: English AIXCO Philosophy cards with both dollar metrics visible.
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain.
+- The source confirms that Gilroy's dollar glyph was optically taller and darker than its adjacent figures even though the former CSS declared the same `1em` size.
+- The bundled font inspection identified the cause: Gilroy's dollar spans 1000 font units (`-200` to `800`), while its lining numerals span roughly 700 units (`0` to `700`).
+- The corrected symbol uses the actual bundled Gilroy Thin cut at weight 100, a 0.7 optical scale, and a calculated -0.2em offset. Its visible top and bottom now align with the lining numerals without a descender hanging below them.
+- All seven rendered dollar metrics use the same normalized rule. Browser-computed symbol weights are 100 versus 400 for the adjacent figures, so the dollar is no longer bold or darker.
+
+## Full-view comparison evidence
+
+The final browser capture preserves the Philosophy card grid, labels, number scale, spacing, colors, and responsive layout. No horizontal overflow or card reflow was introduced.
+
+## Focused region comparison evidence
+
+The combined crop directly compares the two supplied dollar cards with the corrected implementation. In the implementation, each dollar has the same optical height and baseline as `400M+` and `4.2B+`, while its Thin strokes are visibly lighter than the Regular numerals.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; dollar uses the real Gilroy Thin file at weight 100 and numerals retain Gilroy Regular at weight 400.
+- Spacing and layout rhythm: passed; only glyph optical metrics changed, with no card, grid, or line-box movement.
+- Colors and visual tokens: passed; the existing primary-gold color is unchanged and no opacity workaround is used.
+- Image quality and asset fidelity: passed; no imagery or assets changed.
+- Copy and content: passed; all metric labels and values remain unchanged.
+
+## Comparison history
+
+1. Earlier P2 finding: the dollar shared the number's CSS size but its font outline extended 20% below and 10% above the lining numeral box, making it look longer and heavier.
+2. Fix: measured the bundled Gilroy Thin and Regular glyph bounds, selected the real Thin weight, scaled the 1000-unit dollar to the 700-unit numeral height, and corrected its baseline mathematically.
+3. Post-fix evidence: seven dollar symbols audited in-browser; each computes to weight 100, 70% of its neighboring value size, and the calculated vertical offset. The comparison image shows equal optical height without a dark or bold symbol.
+
+## Verification
+
+- Browser-rendered visual inspection: passed.
+- Seven-sitewide-dollar computed-style audit: passed.
+- No Next.js error dialog, error overlay, horizontal overflow, or layout regression.
+- TypeScript, targeted ESLint, 82 targeted tests, bundled-font validation, and production build: passed.
+- Nothing was pushed or deployed during this fix.
+
+final result: passed
+
+---
+
 # AIXCO Contact Emails - Design QA
 
 - Source visual truth: user-approved AIXCO contact-request mock (conversation attachment; not committed)
@@ -59,6 +216,58 @@ The full implementation image was assembled from browser-rendered viewport segme
 ## Follow-up polish
 
 - P3: after deployment, run one real-message rendering check in Gmail and Outlook because browser rendering cannot reproduce every proprietary inbox engine.
+
+final result: passed
+
+---
+
+# Current Project Gallery Motion and Drag - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-2d639904-4e20-42cc-938f-b0d1930cc918.png`
+- Implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-gallery-implementation.png`
+- Combined comparison: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/design-qa-gallery-comparison.png`
+- Source pixels: 397 x 425; implementation pixels: 627 x 762; combined comparison: 1360 x 560.
+- CSS viewport: 642 x 780 at device pixel ratio 1. The implementation screenshot captures the browser's 627 x 762 content area without density scaling.
+- State: English, `#batumi`, current-project gallery visible after manual two-way drag.
+
+## Findings
+
+- No actionable P0, P1, or P2 visual or interaction differences remain.
+- The user's source is a cropped moving-screen capture rather than a fixed full-page viewport, so fidelity was judged on the focused gallery region rather than falsely comparing unrelated browser framing.
+- The existing gallery layout, project renders, thumbnail crop, ivory spacing, and gold project treatment remain unchanged.
+- The fast 34-second transform animation was replaced with a measured 14 px/second native scroll loop. Browser timing measured approximately 15.5 px/second including sampling overhead.
+- Desktop mouse dragging works in both directions: the measured right drag changed the strip by -229 px and the measured left drag changed it by +240 px.
+- Dragging suppresses accidental thumbnail activation, pauses automatic motion during manipulation, and resumes after a 1.6-second settling delay. A normal thumbnail click still changed the hero from `project-01` to `project-03`.
+- Mobile horizontal gestures are supported through Pointer Events and `touch-action: pan-y pinch-zoom`, preserving native vertical page scrolling.
+
+## Full-view comparison evidence
+
+The combined comparison confirms that the current-project hero and thumbnail strip retain the same visual hierarchy, imagery, crop behavior, neutral background, and tight image-to-image rhythm shown in the supplied reference. The implementation intentionally shows more of the page because the source is a narrow crop.
+
+## Focused region comparison evidence
+
+The thumbnail rail remains a single compact strip beneath the large project image, uses the original high-resolution project imagery, and keeps the soft edge mask. The new grab/grabbing cursor and direct manipulation do not add controls, overlays, or visual clutter.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; no type family, weight, scale, line-height, or localized copy changed.
+- Spacing and layout rhythm: passed; hero height, thumbnail height, gaps, masks, and surrounding section spacing remain intact.
+- Colors and visual tokens: passed; the ivory, border, gold, opacity, and shadow tokens are unchanged.
+- Image quality and asset fidelity: passed; all existing Reverance renders remain source assets with their established crops and no recompression or placeholders.
+- Copy and content: passed; gallery labels and project copy are unchanged.
+
+## Comparison history
+
+1. Initial interaction finding - P1: the 34-second CSS loop was visibly too fast and offered no direct mouse manipulation. Fix: moved the loop to slow requestAnimationFrame-driven native scrolling and added pointer capture with bidirectional drag handling.
+2. Runtime finding - P1: fractional movement was rounded away when the scroll position was synchronized every frame, causing the first implementation to appear stationary. Fix: retained a floating-point accumulator and only resynchronized after a seamless-loop boundary correction.
+3. Post-fix evidence: measured continuous motion, successful -229 px and +240 px drags, normal thumbnail selection, delayed auto-resume, no Next.js error dialog, and no error overlay.
+
+## Verification
+
+- Browser interactions: slow continuous motion, drag left, drag right, click selection, click suppression after dragging, and auto-resume passed.
+- Browser-visible runtime: no Next.js error dialog or error overlay after interaction testing.
+- TypeScript, targeted ESLint, motion tests, and home-performance tests passed.
+- Nothing was pushed or deployed during this change.
 
 final result: passed
 

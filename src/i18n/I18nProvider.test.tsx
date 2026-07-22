@@ -48,6 +48,20 @@ function GermanDubaiMetricProbe() {
   );
 }
 
+function RussianBriefFixProbe() {
+  const { tx } = useI18n();
+
+  return (
+    <div>
+      <p>{tx("ACQUIRE.PARTNER.CREATE VALUE.")}</p>
+      <p>{tx("Gross Development Value (GDV)")}</p>
+      <p>{tx("Swiss real estate heritage")}</p>
+      <p>{tx("Development value")}</p>
+      <p>{tx("Development value: USD 462m")}</p>
+    </div>
+  );
+}
+
 const currentProjectSummary =
   "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for July 2028.";
 
@@ -177,6 +191,24 @@ describe("I18nProvider", () => {
       expect(screen.getByText("Entwicklungswert: $462M")).toBeInTheDocument();
       expect(screen.getByText("Entwicklungsumfang: $350M Mischnutzungsprogramm")).toBeInTheDocument();
       expect(screen.getByText("~20% entwickelt, ~20% im Bau")).toBeInTheDocument();
+    });
+  });
+
+  it("uses the approved Russian client-brief terminology", async () => {
+    localStorage.setItem("aixco-lang", "ru");
+
+    render(
+      <I18nProvider>
+        <RussianBriefFixProbe />
+      </I18nProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("ПРИОБРЕСТИ.СОТРУДНИЧАТЬ.СОЗДАТЬ ЦЕННОСТЬ.")).toBeInTheDocument();
+      expect(screen.getByText("Валовая стоимость развития (GDV)")).toBeInTheDocument();
+      expect(screen.getByText("Швейцарское наследие в сфере недвижимости")).toBeInTheDocument();
+      expect(screen.getByText("Стоимость девелопмента")).toBeInTheDocument();
+      expect(screen.getByText("Стоимость девелопмента: 462 млн USD")).toBeInTheDocument();
     });
   });
 

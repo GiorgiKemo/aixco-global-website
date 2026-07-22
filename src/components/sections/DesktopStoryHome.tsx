@@ -1445,9 +1445,20 @@ function StoryDubaiMetricNumbers({ value }: { value: string }) {
       </span>
     ) : (
       part ? (
-        <span key={`${part}:${partIndex}`} className="story-dubai-metric-copy">
-          {part}
-        </span>
+        /^\s*under construction\s*$/iu.test(part) ? (
+          <span
+            key={`${part}:${partIndex}`}
+            className="story-dubai-metric-copy story-dubai-metric-copy--construction"
+            aria-label="under construction"
+          >
+            <span aria-hidden="true">under</span>
+            <span aria-hidden="true">construction</span>
+          </span>
+        ) : (
+          <span key={`${part}:${partIndex}`} className="story-dubai-metric-copy">
+            {part}
+          </span>
+        )
       ) : null
     ),
   );
@@ -1538,13 +1549,25 @@ function StoryDubaiFundRow({
   );
 }
 function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const carouselTrackRef = useRef<HTMLDivElement>(null);
+  const dragStateRef = useRef({
+    pointerId: null as number | null,
+    startX: 0,
+    startScrollLeft: 0,
+    moved: false,
+  });
+  const pauseUntilRef = useRef(0);
+  const scrollPositionRef = useRef(0);
+  const suppressClickRef = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
   const galleryImages = useMemo(
     () => batumiVisualMosaicImages.map((image) => ({ ...image, alt: tx(image.alt) })),
     [tx],
   );
   const [selectedImageKey, setSelectedImageKey] = useState<BatumiVisualMosaicImageKey>(batumiVisualMosaicImages[0].key);
   const selectedImage = galleryImages.find((image) => image.key === selectedImageKey) ?? galleryImages[0];
-  const carouselImages = [...galleryImages, ...galleryImages];
+  const carouselImages = [...galleryImages, ...galleryImages, ...galleryImages];
   const selectImage = useCallback((imageKey: BatumiVisualMosaicImageKey) => {
     if (imageKey === selectedImageKey) return;
 
@@ -1552,11 +1575,138 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
       setSelectedImageKey(imageKey);
     });
   }, [selectedImageKey]);
-  const handleThumbnailPointerDown = useCallback((event: PointerEvent<HTMLButtonElement>, imageKey: BatumiVisualMosaicImageKey) => {
-    if (event.pointerType === "mouse" && event.button !== 0) return;
+  const applyCarouselPosition = useCallback((position: number) => {
+    const track = carouselTrackRef.current;
+    if (!track) return;
 
-    selectImage(imageKey);
-  }, [selectImage]);
+    scrollPositionRef.current = position;
+    track.style.transform = `translate3d(${-position}px, 0, 0)`;
+  }, []);
+  const normalizeCarouselPosition = useCallback(() => {
+    const track = carouselTrackRef.current;
+    if (!track) return;
+
+    const loopWidth = track.scrollWidth / 3;
+    if (!Number.isFinite(loopWidth) || loopWidth <= 0) return;
+
+    let position = scrollPositionRef.current;
+    if (position < loopWidth * 0.5) {
+      position += loopWidth;
+      dragStateRef.current.startScrollLeft += loopWidth;
+    } else if (position > loopWidth * 2.5) {
+      position -= loopWidth;
+      dragStateRef.current.startScrollLeft -= loopWidth;
+    }
+    applyCarouselPosition(position);
+  }, [applyCarouselPosition]);
+
+  useLayoutEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const initializePosition = () => {
+      const loopWidth = (carouselTrackRef.current?.scrollWidth ?? 0) / 3;
+      if (loopWidth > 0) {
+        applyCarouselPosition(loopWidth);
+      }
+    };
+
+    initializePosition();
+    const frameId = window.requestAnimationFrame(initializePosition);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [applyCarouselPosition, galleryImages.length]);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const storyScene = carousel.closest<HTMLElement>("[data-story-in-viewport]");
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frameId = 0;
+    let previousTime = performance.now();
+
+    const tick = (time: number) => {
+      const elapsed = Math.min(time - previousTime, 64);
+      previousTime = time;
+
+      if (
+        dragStateRef.current.pointerId === null
+        && time >= pauseUntilRef.current
+        && document.visibilityState === "visible"
+        && storyScene?.dataset.storyInViewport !== "false"
+        && storyScene?.dataset.storyRevealed !== "false"
+        && !reducedMotionQuery.matches
+      ) {
+        scrollPositionRef.current += elapsed * 0.014;
+        normalizeCarouselPosition();
+      }
+
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [normalizeCarouselPosition]);
+
+  const pauseCarouselInteraction = useCallback(() => {
+    pauseUntilRef.current = Number.POSITIVE_INFINITY;
+  }, []);
+
+  const resumeCarouselInteraction = useCallback(() => {
+    if (dragStateRef.current.pointerId !== null) return;
+    pauseUntilRef.current = performance.now() + 600;
+  }, []);
+
+  const handleCarouselPointerDown = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
+
+    dragStateRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startScrollLeft: scrollPositionRef.current,
+      moved: false,
+    };
+    pauseUntilRef.current = Number.POSITIVE_INFINITY;
+  }, []);
+
+  const handleCarouselPointerMove = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    const dragState = dragStateRef.current;
+    if (dragState.pointerId !== event.pointerId) return;
+
+    const distance = event.clientX - dragState.startX;
+    if (!dragState.moved && Math.abs(distance) > 5) {
+      dragState.moved = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+      setIsDragging(true);
+    }
+    if (!dragState.moved) return;
+
+    scrollPositionRef.current = dragState.startScrollLeft - distance;
+    normalizeCarouselPosition();
+  }, [normalizeCarouselPosition]);
+
+  const finishCarouselDrag = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    const dragState = dragStateRef.current;
+    if (dragState.pointerId !== event.pointerId) return;
+
+    suppressClickRef.current = dragState.moved;
+    dragState.pointerId = null;
+    pauseUntilRef.current = performance.now() + 1600;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    if (dragState.moved) setIsDragging(false);
+
+    window.setTimeout(() => {
+      suppressClickRef.current = false;
+    }, 0);
+  }, []);
+
+  const handleCarouselClickCapture = useCallback((event: MouseEvent<HTMLDivElement>) => {
+    if (!suppressClickRef.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+  }, []);
 
   return (
     <div className="story-batumi-gallery" aria-label={tx("Current project image gallery")}>
@@ -1579,19 +1729,39 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
         />
       </ExpandableImage>
 
-      <div className="story-batumi-gallery__carousel" aria-label={tx("Select current project image")}>
-        <div className="story-batumi-gallery__track">
-        {carouselImages.map((image, index) => (
+      <div
+        ref={carouselRef}
+        className="story-batumi-gallery__carousel"
+        aria-label={tx("Select current project image")}
+        data-dragging={isDragging ? "true" : "false"}
+        onPointerDown={handleCarouselPointerDown}
+        onPointerMove={handleCarouselPointerMove}
+        onPointerUp={finishCarouselDrag}
+        onPointerCancel={finishCarouselDrag}
+        onPointerEnter={pauseCarouselInteraction}
+        onPointerLeave={resumeCarouselInteraction}
+        onFocus={pauseCarouselInteraction}
+        onBlur={resumeCarouselInteraction}
+        onClickCapture={handleCarouselClickCapture}
+      >
+        <div ref={carouselTrackRef} className="story-batumi-gallery__track">
+        {carouselImages.map((image, index) => {
+          const isMirroredImage = index < galleryImages.length || index >= galleryImages.length * 2;
+
+          return (
           <button
             key={`${image.key}-${index}`}
             type="button"
+            data-gallery-image-key={image.key}
+            data-gallery-copy={isMirroredImage ? "mirrored" : "primary"}
             aria-label={`${tx("Show image")}: ${image.alt}`}
             aria-pressed={image.key === selectedImage.key}
+            aria-hidden={isMirroredImage || undefined}
+            tabIndex={isMirroredImage ? -1 : 0}
             className={cn(
               "story-batumi-gallery__thumb",
               image.key === selectedImage.key && "story-batumi-gallery__thumb--active",
             )}
-            onPointerDown={(event) => handleThumbnailPointerDown(event, image.key)}
             onClick={() => selectImage(image.key)}
           >
             <Image
@@ -1603,11 +1773,13 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
               unoptimized
               loading="eager"
               decoding="async"
+              draggable={false}
               className="story-batumi-gallery__thumb-image"
               style={{ objectPosition: image.objectPosition }}
             />
           </button>
-        ))}
+          );
+        })}
         </div>
       </div>
     </div>
@@ -1684,7 +1856,7 @@ function BatumiBenefitIconGrid({
           <span className="story-batumi-benefit__icon-tile" aria-hidden="true">
             <Icon className="story-batumi-benefit__icon" />
           </span>
-          <div className="min-w-0">
+          <div className="story-batumi-benefit__copy min-w-0">
             <span className="story-batumi-benefit__metric story-standard-number" aria-label={metric}>
               <StoryMetricText value={metric} />
             </span>
