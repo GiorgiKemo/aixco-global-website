@@ -64,6 +64,36 @@ final result: passed
 
 ---
 
+# Contact Modal Width Balance - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-d77fd91a-bfa6-48aa-92bc-c5c5fe558758.png`
+- Implementation screenshot: `output/design-qa/contact-modal-after.png`
+- Combined comparison: `output/design-qa/contact-modal-comparison.png`
+- Mobile verification: `output/design-qa/contact-modal-mobile.png`
+- Desktop viewport: 1096 x 805 CSS pixels at 1x density
+- Mobile viewport: 390 x 844 CSS pixels at 1x density
+- State: English contact dialog with Schedule a Call selected
+
+## Findings
+
+- The reference used a `max-w-5xl` dialog around a narrower `max-w-3xl` form, leaving a visibly empty column on the right.
+- The contact dialog now fits to `max-w-4xl`, while its form uses the complete inner width.
+- Header, mode buttons, full-width fields, the country/phone grid, and submit action now share consistent content edges.
+- Desktop left and right whitespace is visually balanced.
+- Mobile remains a single-column, internally scrollable dialog with no horizontal overflow.
+
+## Verification
+
+- Focused modal tests: 14 passed.
+- Production build: passed.
+- Desktop screenshot comparison: passed.
+- Mobile document width: 375 px within a 390 px viewport.
+- Nothing was pushed or deployed during this fix.
+
+final result: passed
+
+---
+
 # German Mobile Brochure Modal Header - Design QA
 
 - Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-a8bd7919-bfee-4375-8e77-eea92966b541.png`

@@ -10497,18 +10497,19 @@ html[lang='de']
   transform: none;
 }
 
-/* Currency symbols use the metric's exact typography so their boxes and
-   baselines stay aligned with the figures in both inline and flex metrics. */
+/* Currency symbols keep the metric's exact size and baseline, but use a
+   lighter optical weight so $ and € do not render darker than the figures. */
 .story-standard-number .story-currency-symbol {
   display: inline-block;
   margin-inline-end: 0.025em;
   color: inherit;
   font-family: inherit !important;
   font-size: 1em !important;
-  font-weight: inherit !important;
+  font-weight: 300 !important;
   font-style: normal;
   line-height: inherit !important;
   letter-spacing: inherit;
+  opacity: 0.92;
   vertical-align: baseline;
   transform: none;
 }
@@ -10519,7 +10520,7 @@ html[lang='de']
 .story-standard-number .story-currency-symbol--euro {
   font-family: Arial, sans-serif !important;
   font-size: 1em !important;
-  font-weight: inherit !important;
+  font-weight: 300 !important;
   font-synthesis: none;
   line-height: inherit !important;
   position: relative;
@@ -10544,14 +10545,23 @@ html[lang='de']
 /* Batumi's four headline figures share one complete face so the euro glyph,
    numerals, percentages, and suffixes have the same optical weight. */
 [data-story-section='batumi']
-  .story-batumi-benefit__metric.story-standard-number,
-[data-story-section='batumi']
   .story-batumi-benefit__metric.story-standard-number
-  :is(.story-currency-symbol, .story-currency-value) {
+  .story-currency-value,
+[data-story-section='batumi']
+  .story-batumi-benefit__metric.story-standard-number {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     'Helvetica Neue', Arial, sans-serif !important;
   font-weight: 400 !important;
   font-synthesis: none;
+}
+
+[data-story-section='batumi']
+  .story-batumi-benefit__metric.story-standard-number
+  .story-currency-symbol {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif !important;
+  font-weight: 300 !important;
+  opacity: 0.92;
 }
 
 [data-story-section='batumi'] .story-batumi-benefit__label {
@@ -10589,9 +10599,10 @@ html[lang='de']
 .story-inline-currency-symbol--euro {
   font-family: Arial, sans-serif !important;
   font-size: 1em !important;
-  font-weight: inherit !important;
+  font-weight: 300 !important;
   font-synthesis: none;
   line-height: inherit !important;
+  opacity: 0.92;
   position: relative;
   top: 0;
 }

@@ -483,7 +483,9 @@ export function Modals() {
         aria-modal="true"
         aria-label={dialogLabel}
         tabIndex={-1}
-        className="modal-panel relative max-h-[calc(100dvh-2rem)] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-lg border border-border/70 bg-surface-elevated shadow-elegant [overflow-wrap:anywhere] md:max-h-[88dvh]"
+        className={`modal-panel relative max-h-[calc(100dvh-2rem)] w-full overflow-y-auto overscroll-contain rounded-lg border border-border/70 bg-surface-elevated shadow-elegant [overflow-wrap:anywhere] md:max-h-[88dvh] ${
+          modal === "contact" ? "max-w-4xl" : "max-w-5xl"
+        }`}
       >
         <button ref={closeButtonRef} aria-label={tx("Close")} onClick={close} className="icon-button-glass absolute end-3 top-3 z-10 h-11 w-11">
           <X className="h-4 w-4" />
@@ -714,7 +716,7 @@ function ContactRequestModal({
   }
 
   return (
-    <div className="contact-request-modal max-w-3xl">
+    <div className="contact-request-modal w-full">
       <p className="eyebrow mb-3">{tx(isBrochureRequest ? "Download brochure" : "Contact AIXCO")}</p>
       <h3 className="heading-section">
         {tx(

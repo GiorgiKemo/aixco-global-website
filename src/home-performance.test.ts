@@ -97,11 +97,9 @@ describe("home page performance structure", () => {
 
     expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
     expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
-    expect(aboutSceneSource).toContain("const [motionPreferenceResolved, setMotionPreferenceResolved] = useState(false);");
     expect(aboutSceneSource).toContain("const [videoRequested, setVideoRequested] = useState(false);");
-    expect(aboutSceneSource).toContain("const shouldLoadVideo = motionPreferenceResolved && shouldReduceMotion !== true;");
-    expect(aboutSceneSource).toContain("const shouldAttachVideo = shouldLoadVideo && videoRequested;");
-    expect(aboutSceneSource).toContain("if (shouldLoadVideo && shouldStartVideo)");
+    expect(aboutSceneSource).toContain("const shouldAttachVideo = videoRequested;");
+    expect(aboutSceneSource).toContain("if (shouldStartVideo)");
     expect(aboutSceneSource).toContain("src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}");
     expect(aboutSceneSource).toContain("autoPlay={shouldAttachVideo}");
     expect(aboutSceneSource).toContain("loop");
@@ -110,11 +108,15 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).toContain('data-video-started={videoStarted && shouldExposeVideo ? "true" : "false"}');
     expect(aboutSceneSource).not.toContain("poster={aixcoDubaiHeroVideo.poster}");
     expect(desktopStorySource).toContain("shouldStartVideo={activeIndex >= 1}");
-    expect(desktopStorySource).toContain("shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}");
+    expect(desktopStorySource).toContain("shouldExposeVideo={activeIndex === 1}");
+    expect(desktopStorySource).not.toContain("shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}");
     expect(desktopStorySource).toContain("storyChapters.map((_, index) => index <= 1)");
     expect(aboutSceneSource).not.toContain("if (!shouldPrimeVideo)");
-    expect(aboutSceneSource).toContain("if (shouldReduceMotion === true)");
-    expect(aboutSceneSource.match(/video\.pause\(\);/gu)).toHaveLength(1);
+    expect(aboutSceneSource).not.toContain("shouldReduceMotion");
+    expect(aboutSceneSource).not.toContain("video.pause();");
+    expect(aboutSceneSource).toContain('document.addEventListener("visibilitychange", recoverPlayback);');
+    expect(aboutSceneSource).toContain('window.addEventListener("focus", recoverPlayback);');
+    expect(aboutSceneSource).toContain("onPause={(event) => {");
   });
 
   it("does not mount heavy story media before its section is revealed", () => {

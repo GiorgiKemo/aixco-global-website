@@ -237,10 +237,9 @@ describe("index.css motion rules", () => {
   });
 
   it("starts the About video on demand and keeps playback continuous after activation", () => {
-    expect(desktopStoryHome).toContain("const shouldLoadVideo = motionPreferenceResolved && shouldReduceMotion !== true;");
     expect(desktopStoryHome).toContain("const [videoRequested, setVideoRequested] = useState(false);");
-    expect(desktopStoryHome).toContain("const shouldAttachVideo = shouldLoadVideo && videoRequested;");
-    expect(desktopStoryHome).toContain("if (shouldLoadVideo && shouldStartVideo)");
+    expect(desktopStoryHome).toContain("const shouldAttachVideo = videoRequested;");
+    expect(desktopStoryHome).toContain("if (shouldStartVideo)");
     expect(desktopStoryHome).toContain("src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}");
     expect(desktopStoryHome).toContain('preload={shouldAttachVideo ? "auto" : "none"}');
     expect(desktopStoryHome).toContain("autoPlay={shouldAttachVideo}");
@@ -248,20 +247,22 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("shouldStartVideo={activeIndex >= 1}");
     expect(desktopStoryHome).toContain("storyChapters.map((_, index) => index <= 1)");
     expect(desktopStoryHome).not.toContain("if (!shouldPrimeVideo)");
-    expect(desktopStoryHome).toContain("setVideoStarted(false);");
+    expect(desktopStoryHome).not.toContain("setVideoStarted(false);");
     expect(desktopStoryHome).toContain("if (shouldAttachVideo) {\n                    void event.currentTarget.play().catch(() => undefined);");
     expect(desktopStoryHome).toContain("onPlaying={markVideoStarted}");
     expect(desktopStoryHome).toContain('data-about-video-poster=""');
     expect(desktopStoryHome).toContain('data-video-started={videoStarted && shouldExposeVideo ? "true" : "false"}');
     expect(desktopStoryHome).toContain('style={{ visibility: shouldExposeVideo ? "visible" : "hidden" }}');
-    expect(desktopStoryHome).toContain("shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}");
+    expect(desktopStoryHome).toContain("shouldExposeVideo={activeIndex === 1}");
+    expect(desktopStoryHome).not.toContain("shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}");
     expect(desktopStoryHome).not.toContain("poster={aixcoDubaiHeroVideo.poster}");
     expect(desktopStoryHome).toContain('fetchPriority="high"');
     expect(css).toContain("[data-story-section='about'] .story-about-cinematic-poster");
     expect(css).toContain(".story-about-cinematic-poster[data-video-started='true']");
     expect(css).toContain("transition: opacity 900ms var(--ease-apple)");
-    expect(desktopStoryHome).toContain("if (shouldReduceMotion === true)");
-    expect(desktopStoryHome).toContain('video.removeAttribute("src");');
+    expect(desktopStoryHome).toContain('document.addEventListener("visibilitychange", recoverPlayback);');
+    expect(desktopStoryHome).toContain('window.addEventListener("focus", recoverPlayback);');
+    expect(desktopStoryHome).toContain("onPause={(event) => {");
     expect(desktopStoryHome).toContain("function useHeroBackdropVideoSrc()");
     expect(desktopStoryHome).toContain("mediaQuery.matches ? aixcoHeroBackgroundVideo.mobileSrc : aixcoHeroBackgroundVideo.src");
     expect(desktopStoryHome).toContain("src={videoSrc}");
@@ -685,7 +686,8 @@ describe("index.css motion rules", () => {
 
     expect(currencyStart).toBeGreaterThanOrEqual(0);
     expect(currencyBlock).toContain("font-size: 1em !important;");
-    expect(currencyBlock).toContain("font-weight: inherit !important;");
+    expect(currencyBlock).toContain("font-weight: 300 !important;");
+    expect(currencyBlock).toContain("opacity: 0.92;");
     expect(currencyBlock).toContain("line-height: inherit !important;");
     expect(currencyBlock).toContain("vertical-align: baseline;");
     expect(currencyBlock).not.toContain("font-size: 0.82em");
@@ -703,7 +705,7 @@ describe("index.css motion rules", () => {
       "font-family: Arial, sans-serif !important;",
     );
     expect(euroBlock).toContain("font-size: 1em !important;");
-    expect(euroBlock).toContain("font-weight: inherit !important;");
+    expect(euroBlock).toContain("font-weight: 300 !important;");
     expect(euroBlock).toContain("font-synthesis: none;");
     expect(euroBlock).toContain("line-height: inherit !important;");
     expect(euroBlock).toContain("top: 0;");
@@ -727,7 +729,7 @@ describe("index.css motion rules", () => {
     expect(css).toContain("font-family: Arial, sans-serif !important;");
     expect(css).toContain("white-space: nowrap;");
     expect(css).toContain(".story-inline-currency-symbol--euro {");
-    expect(css).toContain("font-weight: inherit !important;");
+    expect(css).toContain("font-weight: 300 !important;");
     expect(css).toContain("font-synthesis: none;");
     expect(css).toContain("top: 0;");
   });

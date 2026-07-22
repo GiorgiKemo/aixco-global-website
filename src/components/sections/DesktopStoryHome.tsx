@@ -1713,12 +1713,9 @@ function AboutScene({
   tx: (copy: string) => string;
 }) {
   const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
-  const shouldReduceMotion = useHydratedReducedMotion();
-  const [motionPreferenceResolved, setMotionPreferenceResolved] = useState(false);
   const [videoRequested, setVideoRequested] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
-  const shouldLoadVideo = motionPreferenceResolved && shouldReduceMotion !== true;
-  const shouldAttachVideo = shouldLoadVideo && videoRequested;
+  const shouldAttachVideo = videoRequested;
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
@@ -1727,28 +1724,16 @@ function AboutScene({
   ];
 
   useEffect(() => {
-    setMotionPreferenceResolved(true);
-  }, []);
-
-  useEffect(() => {
-    if (shouldLoadVideo && shouldStartVideo) {
+    if (shouldStartVideo) {
       setVideoRequested(true);
     }
-  }, [shouldLoadVideo, shouldStartVideo]);
+  }, [shouldStartVideo]);
 
   useEffect(() => {
     const video = dubaiVideoRef.current;
     if (!video) return undefined;
 
     video.playbackRate = 0.82;
-
-    if (shouldReduceMotion === true) {
-      setVideoStarted(false);
-      video.pause();
-      video.removeAttribute("src");
-      video.load();
-      return undefined;
-    }
 
     if (!shouldAttachVideo) {
       return undefined;
@@ -1761,23 +1746,30 @@ function AboutScene({
       void video.play().catch(() => undefined);
     };
 
-    if (video.readyState >= 2) {
-      playVideo();
-      return () => {
-        cancelled = true;
-      };
-    }
+    const recoverPlayback = () => {
+      if (document.visibilityState === "visible") playVideo();
+    };
 
     video.addEventListener("loadeddata", playVideo);
     video.addEventListener("canplay", playVideo);
-    video.load();
+    video.addEventListener("stalled", recoverPlayback);
+    document.addEventListener("visibilitychange", recoverPlayback);
+    window.addEventListener("focus", recoverPlayback);
+    window.addEventListener("pageshow", recoverPlayback);
+
+    if (video.readyState >= 2) playVideo();
+    else video.load();
 
     return () => {
       cancelled = true;
       video.removeEventListener("loadeddata", playVideo);
       video.removeEventListener("canplay", playVideo);
+      video.removeEventListener("stalled", recoverPlayback);
+      document.removeEventListener("visibilitychange", recoverPlayback);
+      window.removeEventListener("focus", recoverPlayback);
+      window.removeEventListener("pageshow", recoverPlayback);
     };
-  }, [shouldAttachVideo, shouldReduceMotion]);
+  }, [shouldAttachVideo]);
 
   const markVideoStarted = () => {
     setVideoStarted(true);
@@ -1813,6 +1805,11 @@ function AboutScene({
                   }
                 }}
                 onPlaying={markVideoStarted}
+                onPause={(event) => {
+                  if (shouldAttachVideo && document.visibilityState === "visible") {
+                    void event.currentTarget.play().catch(() => undefined);
+                  }
+                }}
                 onTimeUpdate={(event) => {
                   if (event.currentTarget.currentTime > 0.04) {
                     markVideoStarted();
@@ -3345,7 +3342,7 @@ export function DesktopStoryHome() {
         key="about"
         isActive={activeIndex === 1}
         isRevealed={isRevealed(1)}
-        shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}
+        shouldExposeVideo={activeIndex === 1}
         shouldStartVideo={activeIndex >= 1}
         tx={tx}
       />,
@@ -3382,7 +3379,7 @@ export function DesktopStoryHome() {
       <MemoizedContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
-    [activeIndex, heroBackdropVisible, lang, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
+    [activeIndex, lang, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx],
   );
 
   return (

@@ -190,6 +190,27 @@ describe("Modals", () => {
     expect(dialog.className).not.toContain("animate-scale-in");
   });
 
+  it("fits the contact dialog to its form instead of leaving an empty side column", () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <ContactTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open contact/i }));
+
+    const dialog = screen.getByRole("dialog");
+    const contactContent = dialog.querySelector(".contact-request-modal");
+
+    expect(dialog).toHaveClass("max-w-4xl");
+    expect(dialog).not.toHaveClass("max-w-5xl");
+    expect(contactContent).toHaveClass("w-full");
+    expect(contactContent).not.toHaveClass("max-w-3xl");
+  });
+
   it("restores the previous body overflow value after closing", () => {
     document.body.style.overflow = "clip";
 
