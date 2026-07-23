@@ -62,6 +62,22 @@ function RussianBriefFixProbe() {
   );
 }
 
+function SlovenianClientRevisionProbe() {
+  const { tx } = useI18n();
+
+  return (
+    <div>
+      <p>{tx("Global Real Estate")}</p>
+      <p>{tx("Gross Development Value (GDV)")}</p>
+      <p>{tx("Total Transactions")}</p>
+      <p>{tx("In Business Since")}</p>
+      <p>{tx("From Switzerland to Dubai to Batumi")}</p>
+      <p>{tx("USD 350m mixed-use program")}</p>
+      <p>{tx("ACQUIRE.PARTNER.CREATE VALUE.")}</p>
+    </div>
+  );
+}
+
 const currentProjectSummary =
   "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for July 2028.";
 
@@ -116,6 +132,8 @@ const visibleStoryProbeTexts = [
   "Frequently asked questions",
   "Rental income is not guaranteed and depends on occupancy, market conditions, and property management.",
 ] as const;
+
+const approvedSlovenianPassthrough = new Set(["Global Real Estate"]);
 
 const asciiGermanUmlautPattern = /\b(?:sorgfaeltig\w*|ausgewaehl\w*|widerstandsfaeh\w*|stabilitaet\w*|ertraeg\w*|gepraeg\w*|maerkt\w*|ursprueng\w*|grundsaetz\w*|risikopruef\w*|persoenlich\w*|broschuer\w*|immobilienpraesent\w*|projektpraesenz\w*|unterstuetz\w*|verfuegbar\w*|haeufig\w*|loesch\w*|einheitsloes\w*|aender\w*|eroeffn\w*|moechten\w*|moeglich\w*|vermoeg\w*|koennen\w*|muessen\w*|wuensch\w*|zurueck\w*|schliess\w*|abschliess\w*|fuehr\w*|kaeufer\w*|verkaeuf\w*|eigentuemer\w*|uebergab\w*|staerk\w*|fuer|ueber|waehrend)\b/i;
 
@@ -270,6 +288,26 @@ describe("I18nProvider", () => {
     });
   });
 
+  it("gives the client-reviewed Slovenian document priority over older catalogs", async () => {
+    localStorage.setItem("aixco-lang", "sl");
+
+    render(
+      <I18nProvider>
+        <SlovenianClientRevisionProbe />
+      </I18nProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Global Real Estate")).toBeInTheDocument();
+      expect(screen.getByText("Skupna razvojna vrednost (GDV)")).toBeInTheDocument();
+      expect(screen.getByText("Skupno število transakcij")).toBeInTheDocument();
+      expect(screen.getByText("Poslujemo od leta")).toBeInTheDocument();
+      expect(screen.getByText("Od Švice do Dubaja do Batumija")).toBeInTheDocument();
+      expect(screen.getByText("$350M, večnamenski program")).toBeInTheDocument();
+      expect(screen.getByText("KUPITE. SODELUJTE. USTVARITE VREDNOST.")).toBeInTheDocument();
+    });
+  });
+
   it.each(["ka", "tr", "ar"])("falls back to English for retired stored locale %s", async (retiredLocale) => {
     localStorage.setItem("aixco-lang", retiredLocale);
 
@@ -378,7 +416,9 @@ describe("I18nProvider", () => {
       await waitFor(() => {
         visibleStoryProbeTexts.forEach((original, index) => {
           const rendered = screen.getByTestId(`visible-copy-${index}`).textContent ?? "";
-          expect(rendered).not.toBe(original);
+          if (locale !== "sl" || !approvedSlovenianPassthrough.has(original)) {
+            expect(rendered).not.toBe(original);
+          }
           expect(rendered).not.toMatch(/Ã|Ð|Ñ|áƒ|Ø|Ù|â‚¬/);
           if (locale === "de") {
             expect(rendered).not.toMatch(asciiGermanUmlautPattern);

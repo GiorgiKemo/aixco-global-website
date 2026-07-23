@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ChevronDown, Download, Globe, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { useUI } from "@/components/ui-state";
+import { DownloadGateLink } from "@/components/downloads/DownloadGateLink";
 import { LANGS, useI18n } from "@/i18n/I18nProvider";
 import { aixcoLiveLogos, getCurrentProjectBrochureDownload } from "@/lib/aixco-live-assets";
 import { cn } from "@/lib/utils";
@@ -98,32 +99,21 @@ export function CurrentProjectBrochureLink({
   className?: string;
 }) {
   const { lang, tx } = useI18n();
-  const { openContact } = useUI();
   const brochure = getCurrentProjectBrochureDownload(lang, { fallbackToEnglish: false });
 
   if (!brochure) return null;
 
-  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    openContact({
-      kind: "brochure",
-      brochureHref: brochure.href,
-      brochureFileName: brochure.fileName,
-    });
-  };
-
   return (
-    <a
-      href="?modal=contact&intent=brochure"
-      onClick={handleClick}
-      aria-haspopup="dialog"
-      data-current-project-brochure={lang}
+    <DownloadGateLink
+      href={brochure.href}
+      fileName={brochure.fileName}
+      lockedHref="?modal=contact&intent=brochure"
+      dataAttributes={{ "data-current-project-brochure": lang }}
       className={className}
     >
       <Download className="h-4 w-4" aria-hidden />
       {tx("Download brochure")}
-    </a>
+    </DownloadGateLink>
   );
 }
 

@@ -9,6 +9,10 @@ import {
   getContactNudgePreferences,
   resetContactNudgePreferencesForTests,
 } from "@/lib/contact-nudge-preferences";
+import {
+  hasDownloadAccess,
+  resetDownloadAccessForTests,
+} from "@/lib/download-access";
 import { Modals } from "./Modals";
 import { UIProvider, useUI } from "./ui-state";
 
@@ -55,9 +59,9 @@ function BrochureTrigger() {
       type="button"
       onClick={() =>
         openContact({
-          kind: "brochure",
-          brochureHref: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
-          brochureFileName: "Reverance-brochure-EN.pdf",
+          kind: "download",
+          downloadHref: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
+          downloadFileName: "Reverance-brochure-EN.pdf",
         })
       }
     >
@@ -70,6 +74,7 @@ describe("Modals", () => {
   beforeEach(() => {
     window.history.replaceState({}, "", "/");
     resetContactNudgePreferencesForTests();
+    resetDownloadAccessForTests();
     vi.mocked(recordContactSubmission).mockResolvedValue({ ok: true, reference: "AIX-2026-000018" });
   });
 
@@ -78,6 +83,7 @@ describe("Modals", () => {
     document.documentElement.style.overflow = "";
     window.history.replaceState({}, "", "/");
     resetContactNudgePreferencesForTests();
+    resetDownloadAccessForTests();
     vi.clearAllMocks();
   });
 
@@ -291,7 +297,7 @@ describe("Modals", () => {
     expect(screen.queryByLabelText("Message")).not.toBeInTheDocument();
   });
 
-  it("collects contact details and an international phone number before downloading a brochure", async () => {
+  it("collects contact details once, unlocks every download, and starts the requested file", async () => {
     const downloadClick = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
 
     render(
@@ -305,7 +311,7 @@ describe("Modals", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Open brochure form" }));
 
-    expect(screen.getByRole("dialog", { name: "Download brochure" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Unlock downloads" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Schedule a Call" })).not.toBeInTheDocument();
     expect(screen.getByLabelText("Country code")).toBeInTheDocument();
     expect(screen.getByLabelText("Phone Number")).toBeInTheDocument();
@@ -314,24 +320,52 @@ describe("Modals", () => {
     fireEvent.change(screen.getByLabelText("Country code"), { target: { value: "GE" } });
     fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "555 123 456" } });
     fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "jane@example.com" } });
-    fireEvent.submit(screen.getByRole("button", { name: "Download brochure" }).closest("form") as HTMLFormElement);
+    fireEvent.submit(screen.getByRole("button", { name: "Unlock and download" }).closest("form") as HTMLFormElement);
 
     await waitFor(() => {
-      expect(screen.getByText("Your brochure is ready.")).toBeInTheDocument();
+      expect(screen.getByText("All downloads are now unlocked.")).toBeInTheDocument();
     });
     expect(recordContactSubmission).toHaveBeenCalledWith(
       expect.objectContaining({
-        interest: "Brochure download",
+        interest: "Download access",
         phone: "+995555123456",
         message: expect.stringContaining("Reverance-brochure-EN.pdf"),
       }),
       expect.objectContaining({ locale: "en" }),
     );
-    const downloadLink = screen.getByRole("link", { name: "Download brochure" });
+    expect(hasDownloadAccess()).toBe(true);
+    const downloadLink = screen.getByRole("link", { name: "Download file" });
     expect(downloadLink).toHaveAttribute("href", "/aixco-global-op2/documents/reverance-brochure-en.pdf");
     expect(downloadLink).toHaveAttribute("download", "Reverance-brochure-EN.pdf");
     await waitFor(() => expect(downloadClick).toHaveBeenCalled());
     downloadClick.mockRestore();
+  });
+
+  it("does not unlock downloads when the contact submission fails", async () => {
+    vi.mocked(recordContactSubmission).mockResolvedValueOnce({
+      ok: false,
+      reason: "Lead capture is unavailable.",
+    });
+
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <BrochureTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Open brochure form" }));
+    fireEvent.change(screen.getByLabelText("Name & Surname"), { target: { value: "Jane Client" } });
+    fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "555 123 456" } });
+    fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "jane@example.com" } });
+    fireEvent.submit(screen.getByRole("button", { name: "Unlock and download" }).closest("form") as HTMLFormElement);
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent("We could not send your request.");
+    });
+    expect(hasDownloadAccess()).toBe(false);
   });
 
   it("submits the schedule-call request and shows confirmation", async () => {

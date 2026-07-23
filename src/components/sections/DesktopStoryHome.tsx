@@ -23,6 +23,7 @@ import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import { LiveVideo } from "@/components/LiveVideo";
 import { ExpandableImage } from "@/components/ExpandableImage";
 import { FooterLegalBar } from "@/components/Footer";
+import { DownloadGateLink } from "@/components/downloads/DownloadGateLink";
 import { Logo } from "@/components/Logo";
 import { SocialLinks } from "@/components/SocialLinks";
 import { useUI } from "@/components/ui-state";
@@ -2635,13 +2636,14 @@ function MaterialsScene({
           const href = getSafePublicAssetHref(localizedDownload.href, "#materials");
 
           return (
-            <a
+            <DownloadGateLink
               key={material.id}
-              data-material-id={material.id}
               href={href}
-              download={localizedDownload.fileName}
+              fileName={localizedDownload.fileName}
+              lockedHref="#materials"
+              dataAttributes={{ "data-material-id": material.id }}
               className="group grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3 py-3.5 transition-colors duration-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2"
-              aria-label={`${tx("Download")} ${tx(material.title)}`}
+              ariaLabel={`${tx("Download")} ${tx(material.title)}`}
             >
               <span className="flex size-12 shrink-0 items-center justify-center text-primary">
                 <Icon size={22} aria-hidden />
@@ -2651,7 +2653,7 @@ function MaterialsScene({
                 <span className="story-body mt-0.5 block text-foreground/62 [overflow-wrap:anywhere]">{material.format} / {tx(material.audience)}</span>
               </span>
               <Download className="h-4 w-4 text-primary transition-transform group-hover:translate-y-0.5" aria-hidden />
-            </a>
+            </DownloadGateLink>
           );
         })}
       </div>

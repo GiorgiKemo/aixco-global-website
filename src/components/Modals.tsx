@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
-import { useUI, type BrochureContactData, type ContactPromptData } from "./ui-state";
+import { useUI, type ContactPromptData, type DownloadContactData } from "./ui-state";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveImages, aixcoLiveLogos, aixcoLivePartnerPeople } from "@/lib/aixco-live-assets";
@@ -11,6 +11,7 @@ import {
   markContactNudgeConverted,
   markContactNudgeOpenedThisSession,
 } from "@/lib/contact-nudge-preferences";
+import { grantDownloadAccess } from "@/lib/download-access";
 import { useI18n } from "@/i18n/I18nProvider";
 import { getCurrentProjectBrochureDownload } from "@/lib/aixco-live-assets";
 import {
@@ -372,15 +373,20 @@ const legalCopy: Record<LegalTitle, LegalSection[]> = {
   ],
 };
 
-function isBrochureContactData(value: unknown): value is BrochureContactData {
+function isDownloadContactData(value: unknown): value is DownloadContactData {
   if (!value || typeof value !== "object") return false;
-  const data = value as Partial<BrochureContactData>;
+  const data = value as Partial<DownloadContactData>;
+  const safeExtension = /\.(?:pdf|jpe?g|png)$/i;
   return (
-    data.kind === "brochure" &&
-    typeof data.brochureHref === "string" &&
-    data.brochureHref.startsWith("/aixco-global-op2/documents/") &&
-    typeof data.brochureFileName === "string" &&
-    data.brochureFileName.toLowerCase().endsWith(".pdf")
+    data.kind === "download" &&
+    typeof data.downloadHref === "string" &&
+    data.downloadHref.startsWith("/aixco-global-op2/") &&
+    !data.downloadHref.includes("..") &&
+    safeExtension.test(data.downloadHref) &&
+    typeof data.downloadFileName === "string" &&
+    !data.downloadFileName.includes("/") &&
+    !data.downloadFileName.includes("\\") &&
+    safeExtension.test(data.downloadFileName)
   );
 }
 
@@ -393,7 +399,7 @@ function isContactPromptData(value: unknown): value is ContactPromptData {
 function getModalAccessibleName(modal: NonNullable<ReturnType<typeof useUI>["modal"]>, modalData: unknown) {
   if (modal === "login") return "Login to your AIXCO portal";
   if (modal === "register") return "Register with AIXCO";
-  if (modal === "contact") return isBrochureContactData(modalData) ? "Download brochure" : "Contact AIXCO";
+  if (modal === "contact") return isDownloadContactData(modalData) ? "Unlock downloads" : "Contact AIXCO";
   if (modal === "terms") return "Terms & Conditions";
   if (modal === "privacy") return "Privacy Policy";
   if (modal === "journey") return (modalData as JourneyDetailData).role;
@@ -431,9 +437,9 @@ export function Modals() {
       openContact(
         brochure
           ? {
-              kind: "brochure",
-              brochureHref: brochure.href,
-              brochureFileName: brochure.fileName,
+              kind: "download",
+              downloadHref: brochure.href,
+              downloadFileName: brochure.fileName,
             }
           : undefined,
       );
@@ -501,7 +507,7 @@ export function Modals() {
             <ContactRequestModal
               tx={tx}
               locale={lang}
-              brochureRequest={isBrochureContactData(modalData) ? modalData : null}
+              downloadRequest={isDownloadContactData(modalData) ? modalData : null}
               promptRequest={isContactPromptData(modalData) ? modalData : null}
             />
           )}
@@ -550,18 +556,18 @@ function formatPreferredCallTime(value: string) {
 function ContactRequestModal({
   tx,
   locale,
-  brochureRequest,
+  downloadRequest,
   promptRequest,
 }: {
   tx: (text: string) => string;
   locale: string;
-  brochureRequest: BrochureContactData | null;
+  downloadRequest: DownloadContactData | null;
   promptRequest: ContactPromptData | null;
 }) {
-  const isBrochureRequest = brochureRequest !== null;
+  const isDownloadRequest = downloadRequest !== null;
   const promptPhoneCountry = toSupportedPhoneCountry(promptRequest?.phoneCountry);
   const [mode, setMode] = useState<ContactMode | null>(
-    isBrochureRequest ? "email" : promptRequest ? "call" : null,
+    isDownloadRequest ? "email" : promptRequest ? "call" : null,
   );
   const [submitted, setSubmitted] = useState(false);
   const [requestReference, setRequestReference] = useState<string | null>(null);
@@ -576,7 +582,7 @@ function ContactRequestModal({
   useEffect(() => {
     markContactNudgeOpenedThisSession();
   }, []);
-  const brochureDownloadRef = useRef<HTMLAnchorElement | null>(null);
+  const requestedDownloadRef = useRef<HTMLAnchorElement | null>(null);
   const phoneCountries = useMemo(() => getPhoneCountryOptions(locale), [locale]);
 
   useEffect(() => {
@@ -608,10 +614,10 @@ function ContactRequestModal({
   }, [promptPhoneCountry]);
 
   useEffect(() => {
-    if (!submitted || !brochureRequest) return;
-    const frame = window.requestAnimationFrame(() => brochureDownloadRef.current?.click());
+    if (!submitted || !downloadRequest) return;
+    const frame = window.requestAnimationFrame(() => requestedDownloadRef.current?.click());
     return () => window.cancelAnimationFrame(frame);
-  }, [brochureRequest, submitted]);
+  }, [downloadRequest, submitted]);
 
   useEffect(() => {
     if (mode === "call") {
@@ -624,7 +630,7 @@ function ContactRequestModal({
     const form = new FormData(event.currentTarget);
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
-    const phone = isBrochureRequest || mode === "call"
+    const phone = isDownloadRequest || mode === "call"
       ? composeInternationalPhone(
           toSupportedPhoneCountry(String(form.get("phoneCountry") ?? "")) ?? phoneCountry,
           String(form.get("phoneNational") ?? ""),
@@ -646,12 +652,12 @@ function ContactRequestModal({
     const preferredCallAt = preferredDate?.toISOString();
     const preferredCallTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     const payload =
-      isBrochureRequest
+      isDownloadRequest
         ? {
             name,
             email,
-            interest: "Brochure download",
-            message: `Brochure download request for ${brochureRequest.brochureFileName}. Phone number: ${phone}`,
+            interest: "Download access",
+            message: `Download access request for ${downloadRequest.downloadFileName}. Phone number: ${phone}`,
             requestType: "message" as const,
             phone,
           }
@@ -682,6 +688,7 @@ function ContactRequestModal({
 
     if (result.ok) {
       markContactNudgeConverted();
+      if (isDownloadRequest) grantDownloadAccess();
       setRequestReference(result.reference ?? null);
       setSubmitted(true);
       return;
@@ -691,21 +698,21 @@ function ContactRequestModal({
   };
 
   if (submitted) {
-    if (brochureRequest) {
+    if (downloadRequest) {
       return (
         <div className="contact-request-modal max-w-2xl" role="status" aria-live="polite" aria-atomic="true">
-          <p className="eyebrow mb-3">{tx("Download brochure")}</p>
-          <h3 className="heading-section">{tx("Your brochure is ready.")}</h3>
+          <p className="eyebrow mb-3">{tx("Unlock downloads")}</p>
+          <h3 className="heading-section">{tx("All downloads are now unlocked.")}</h3>
           <p className="story-body mt-4 text-foreground/70">
             {tx("Your download should begin automatically. You can also use the button below.")}
           </p>
           <a
-            ref={brochureDownloadRef}
-            href={brochureRequest.brochureHref}
-            download={brochureRequest.brochureFileName}
+            ref={requestedDownloadRef}
+            href={downloadRequest.downloadHref}
+            download={downloadRequest.downloadFileName}
             className="btn-gold mt-6 w-fit"
           >
-            {tx("Download brochure")}
+            {tx("Download file")}
           </a>
         </div>
       );
@@ -726,15 +733,15 @@ function ContactRequestModal({
 
   return (
     <div className="contact-request-modal w-full">
-      <p className="eyebrow mb-3">{tx(isBrochureRequest ? "Download brochure" : "Contact AIXCO")}</p>
+      <p className="eyebrow mb-3">{tx(isDownloadRequest ? "Unlock downloads" : "Contact AIXCO")}</p>
       <h3 className="heading-section">
         {tx(
-          isBrochureRequest
-            ? "Enter your contact details to download the brochure."
+          isDownloadRequest
+            ? "Enter your contact details once to unlock all downloads."
             : "How would you like us to contact you?",
         )}
       </h3>
-      {!isBrochureRequest ? <div className="mt-6 grid gap-3 sm:grid-cols-2">
+      {!isDownloadRequest ? <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <button
           type="button"
           onClick={() => {
@@ -779,7 +786,7 @@ function ContactRequestModal({
             />
           </label>
 
-          {isBrochureRequest || mode === "call" ? (
+          {isDownloadRequest || mode === "call" ? (
             <div className="grid gap-4 sm:grid-cols-[minmax(11rem,0.9fr)_minmax(0,1.4fr)]">
               <label htmlFor="contact-phone-country" className="grid min-w-0 gap-2">
                 <span className="story-metric-label text-foreground/60">{tx("Country code")}</span>
@@ -820,7 +827,7 @@ function ContactRequestModal({
             </div>
           ) : null}
 
-          {mode === "call" && !isBrochureRequest ? (
+          {mode === "call" && !isDownloadRequest ? (
             <>
               <label className="grid gap-2">
                 <span className="story-metric-label text-foreground/60">{tx("Preferred Time for a Call")}</span>
@@ -849,7 +856,7 @@ function ContactRequestModal({
             />
           </label>
 
-          {mode === "email" && !isBrochureRequest ? (
+          {mode === "email" && !isDownloadRequest ? (
             <label className="grid gap-2">
               <span className="story-metric-label text-foreground/60">{tx("Message")}</span>
               <textarea
@@ -870,7 +877,7 @@ function ContactRequestModal({
           ) : null}
 
           <button type="submit" disabled={isSubmitting} className="btn-gold w-fit">
-            {tx(isSubmitting ? "Sending..." : isBrochureRequest ? "Download brochure" : "Submit")}
+            {tx(isSubmitting ? "Sending..." : isDownloadRequest ? "Unlock and download" : "Submit")}
           </button>
         </form>
       ) : null}

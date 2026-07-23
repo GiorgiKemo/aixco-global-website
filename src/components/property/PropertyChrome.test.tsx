@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import { beforeEach, describe, expect, it } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
+import { grantDownloadAccess } from "@/lib/download-access";
 import {
   CurrentProjectBrochureLink,
   PropertyChrome,
@@ -177,6 +178,28 @@ describe("PropertyChrome", () => {
       expect(screen.getByLabelText("active modal data")).toHaveTextContent(fileName);
     },
   );
+
+  it("links directly to the localized brochure after downloads have been unlocked", async () => {
+    localStorage.setItem("aixco-lang", "de");
+    grantDownloadAccess();
+
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <CurrentProjectBrochureLink />
+          <ModalProbe />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    const link = await screen.findByRole("link", { name: "Broschüre herunterladen" });
+    await waitFor(() => {
+      expect(link).toHaveAttribute("href", "/aixco-global-op2/documents/reverance-brochure-de.pdf");
+    });
+    expect(link).toHaveAttribute("download", "Reverance-brochure-DE.pdf");
+    expect(link).not.toHaveAttribute("aria-haspopup");
+    expect(screen.getByLabelText("active modal")).toHaveTextContent("none");
+  });
 
   it.each(["pl", "sl", "ru"])(
     "keeps the current-project brochure hidden for %s until a localized file exists",

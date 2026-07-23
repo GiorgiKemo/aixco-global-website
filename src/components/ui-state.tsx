@@ -3,10 +3,10 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 type Modal = null | "login" | "register" | "contact" | "terms" | "privacy" | "journey" | "team" | "partner";
 type ModalData = unknown;
 
-export type BrochureContactData = {
-  kind: "brochure";
-  brochureHref: string;
-  brochureFileName: string;
+export type DownloadContactData = {
+  kind: "download";
+  downloadHref: string;
+  downloadFileName: string;
 };
 
 export type ContactPromptData = {

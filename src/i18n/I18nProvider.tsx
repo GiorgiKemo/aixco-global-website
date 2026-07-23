@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { curatedVisibleTranslations } from "./curated-visible-translations";
+import { downloadGateTranslations } from "./download-gate-translations";
 import { normalizeGermanCompactMetricTranslation } from "./german-metric-notation";
 import { germanTranslationFixes } from "./german-translation-fixes";
 import { languageOptions, type CatalogLang, type Lang } from "./languages";
@@ -12,6 +13,7 @@ import { polishContentTranslations } from "./polish-content-translations";
 import { polishRuntimeTranslations } from "./polish-runtime-translations";
 import { propertyPageTranslations } from "./property-page-translations";
 import { russianTranslationFixes } from "./russian-translation-fixes";
+import { slovenianClientRevisions } from "./slovenian-client-revisions";
 import { slovenianTranslationFixes } from "./slovenian-translation-fixes";
 
 export const LANGS = languageOptions;
@@ -1673,6 +1675,8 @@ const germanQualityTranslations: TranslationSource = {
 };
 
 const baseCatalogSources: TranslationSource[] = [
+  slovenianClientRevisions,
+  downloadGateTranslations,
   russianTranslationFixes,
   slovenianTranslationFixes,
   germanTranslationFixes,
@@ -1704,6 +1708,8 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
+        slovenianClientRevisions,
+        downloadGateTranslations,
         russianTranslationFixes,
         slovenianTranslationFixes,
         slovenian.slovenianTranslations,
