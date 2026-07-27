@@ -10570,7 +10570,7 @@ html[lang='de']
   font-style: normal;
   line-height: inherit !important;
   letter-spacing: inherit;
-  opacity: 0.92;
+  opacity: 1;
   vertical-align: baseline;
   transform: none;
 }
@@ -10681,7 +10681,7 @@ html[lang='de']
   font-weight: 300 !important;
   font-synthesis: none;
   line-height: inherit !important;
-  opacity: 0.92;
+  opacity: 1;
   position: relative;
   top: 0;
 }

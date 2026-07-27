@@ -166,10 +166,11 @@ try {
         normalizedText !== normalizedLabel ||
         !details.nowrap ||
         details.overflow > 0 ||
+        symbolColor !== valueColor ||
         !visuallyAligned
       ) {
         failures.push(
-          `${size} ${normalizedLabel}: visible=${normalizedText}, painted height delta=${heightDelta}px, painted center delta=${centerDelta}px, painted gap=${gap}px, nowrap=${details.nowrap}, overflow=${details.overflow}px`,
+          `${size} ${normalizedLabel}: visible=${normalizedText}, symbol color=${symbolColor}, value color=${valueColor}, painted height delta=${heightDelta}px, painted center delta=${centerDelta}px, painted gap=${gap}px, nowrap=${details.nowrap}, overflow=${details.overflow}px`,
         );
       }
     }
@@ -194,6 +195,8 @@ try {
           missing: false,
           sizeMatches: symbolStyle.fontSize === valueStyle.fontSize,
           lineMatches: symbolStyle.lineHeight === valueStyle.lineHeight,
+          colorMatches: symbolStyle.color === valueStyle.color,
+          fullOpacity: symbolStyle.opacity === "1",
           centerDelta:
             symbolRect.top +
             symbolRect.height / 2 -
@@ -206,6 +209,8 @@ try {
         treatment.missing ||
         !treatment.sizeMatches ||
         !treatment.lineMatches ||
+        !treatment.colorMatches ||
+        !treatment.fullOpacity ||
         Math.abs(treatment.centerDelta ?? 99) > 2 ||
         !treatment.nowrap
       ) {
@@ -217,6 +222,43 @@ try {
 
     if (inlineText.sort().join("|") !== "€45,000|€45,000|€5,000") {
       failures.push(`${size}: inline Euro tokens are ${inlineText.join("|")}`);
+    }
+  }
+
+  for (const locale of ["en", "de", "pl", "sl", "ru"]) {
+    await page.evaluate((nextLocale) => {
+      window.localStorage.setItem("aixco-lang", nextLocale);
+    }, locale);
+    await page.reload({ waitUntil: "networkidle" });
+    await page.evaluate(() => document.fonts.ready);
+
+    const localeTreatments = await page.evaluate(() =>
+      Array.from(
+        document.querySelectorAll(
+          ".story-currency-symbol--euro, .story-inline-currency-symbol--euro",
+        ),
+      )
+        .filter((symbol) => symbol.getClientRects().length > 0)
+        .map((symbol) => {
+          const value = symbol.nextElementSibling;
+          const symbolStyle = getComputedStyle(symbol);
+          const valueStyle = value ? getComputedStyle(value) : null;
+          return {
+            text: `${symbol.textContent ?? ""}${value?.textContent ?? ""}`,
+            colorMatches: valueStyle
+              ? symbolStyle.color === valueStyle.color
+              : false,
+            fullOpacity: symbolStyle.opacity === "1",
+          };
+        }),
+    );
+
+    for (const treatment of localeTreatments) {
+      if (!treatment.colorMatches || !treatment.fullOpacity) {
+        failures.push(
+          `${locale} ${treatment.text}: euro color match=${treatment.colorMatches}, full opacity=${treatment.fullOpacity}`,
+        );
+      }
     }
   }
 

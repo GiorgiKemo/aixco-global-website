@@ -731,7 +731,7 @@ describe("index.css motion rules", () => {
     expect(currencyStart).toBeGreaterThanOrEqual(0);
     expect(currencyBlock).toContain("font-size: 1em !important;");
     expect(currencyBlock).toContain("font-weight: 300 !important;");
-    expect(currencyBlock).toContain("opacity: 0.92;");
+    expect(currencyBlock).toContain("opacity: 1;");
     expect(currencyBlock).toContain("line-height: inherit !important;");
     expect(currencyBlock).toContain("vertical-align: baseline;");
     expect(currencyBlock).not.toContain("font-size: 0.82em");
