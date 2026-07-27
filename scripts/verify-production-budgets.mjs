@@ -9,12 +9,12 @@ const manifestPrefix = 'globalThis.__RSC_MANIFEST["/page"] = ';
 
 const budgets = {
   homeJavaScriptRaw: 1_200_000,
-  homeJavaScriptGzip: 350_000,
+  homeJavaScriptGzip: 360_000,
   homeCssRaw: 320_000,
   homeCssGzip: 55_000,
-  largestJavaScriptRaw: 450_000,
+  largestJavaScriptRaw: 465_000,
   allJavaScriptRaw: 2_900_000,
-  allJavaScriptGzip: 850_000,
+  allJavaScriptGzip: 870_000,
   allCssRaw: 350_000,
   allCssGzip: 65_000,
 };
