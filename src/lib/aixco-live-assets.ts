@@ -169,6 +169,10 @@ export const aixcoCurrentProjectBrochureDownloads: Partial<Record<Lang, CurrentP
     href: aixcoLiveAssetDetails.currentProjectBrochureGerman,
     fileName: "Reverance-brochure-DE.pdf",
   },
+  sl: {
+    href: aixcoLiveAssetDetails.currentProjectBrochure,
+    fileName: "Reverance-brochure-EN.pdf",
+  },
 };
 
 export function getCurrentProjectBrochureDownload(

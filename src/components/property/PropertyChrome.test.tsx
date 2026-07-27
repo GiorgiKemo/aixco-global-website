@@ -154,6 +154,7 @@ describe("PropertyChrome", () => {
   it.each([
     ["en", "Download brochure", "/aixco-global-op2/documents/reverance-brochure-en.pdf", "Reverance-brochure-EN.pdf"],
     ["de", "Broschüre herunterladen", "/aixco-global-op2/documents/reverance-brochure-de.pdf", "Reverance-brochure-DE.pdf"],
+    ["sl", "Prenesite brošuro", "/aixco-global-op2/documents/reverance-brochure-en.pdf", "Reverance-brochure-EN.pdf"],
   ] as const)(
     "gates the %s current-project brochure behind the contact flow",
     async (lang, label, href, fileName) => {
@@ -201,7 +202,7 @@ describe("PropertyChrome", () => {
     expect(screen.getByLabelText("active modal")).toHaveTextContent("none");
   });
 
-  it.each(["pl", "sl", "ru"])(
+  it.each(["pl", "ru"])(
     "keeps the current-project brochure hidden for %s until a localized file exists",
     async (lang) => {
       localStorage.setItem("aixco-lang", lang);
