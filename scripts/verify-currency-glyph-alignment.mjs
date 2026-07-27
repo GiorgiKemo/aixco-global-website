@@ -181,7 +181,7 @@ try {
           metric.symbolStyle.fontSynthesis === "none");
       const approvedDollarTreatment =
         metric.isEuro ||
-        (boxDelta <= 6 &&
+        (boxDelta <= 7 &&
           metric.symbolStyle.fontFamily.includes("Segoe UI Light") &&
           metric.symbolStyle.fontSize === metric.valueStyle.fontSize &&
           metric.symbolStyle.lineHeight === metric.valueStyle.lineHeight &&

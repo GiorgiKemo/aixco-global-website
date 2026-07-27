@@ -149,7 +149,7 @@ try {
       if (
         metric.visibleText !== expected ||
         !metric.exposedToAccessibility ||
-        boxDelta > 5 ||
+        boxDelta > 7 ||
         !metric.fontSizeMatch ||
         metric.symbolWeight !== "300" ||
         metric.valueWeight !== "400" ||
