@@ -9227,7 +9227,7 @@ html button[data-lang] {
 /* Keep the client-approved Slovenian long-form currency abbreviations intact
    on the narrowest phones. Only the affected cards span both grid columns; the
    remaining compact metrics retain the established two-column rhythm. */
-@media (max-width: 360px) {
+@media (max-width: 430px) {
   html[lang='sl']
     [data-story-section='philosophy']
     [data-layout='story-philosophy-stats'] {
@@ -9246,6 +9246,17 @@ html button[data-lang] {
     [data-layout='story-philosophy-platform-stats']
     > .story-philosophy-stat:has(> dd[aria-label='400 mio EUR+']) {
     grid-column: 1 / -1;
+  }
+}
+
+/* Linux and Windows resolve the Slovenian About metric a few pixels
+   differently at foldable width. Removing tracking from this single long
+   value keeps the approved copy intact without shrinking the type. */
+@media (max-width: 320px) {
+  html[lang='sl']
+    [data-story-section='about']
+    dt[aria-label='400 mio EUR'] {
+    letter-spacing: 0 !important;
   }
 }
 
