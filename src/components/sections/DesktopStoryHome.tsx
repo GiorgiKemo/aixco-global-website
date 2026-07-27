@@ -1453,6 +1453,7 @@ function StoryDubaiMetricNumbers({ value }: { value: string }) {
             aria-label="under construction"
           >
             <span aria-hidden="true">under</span>
+            {" "}
             <span aria-hidden="true">construction</span>
           </span>
         ) : (

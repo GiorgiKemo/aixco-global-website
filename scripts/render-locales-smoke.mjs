@@ -131,7 +131,7 @@ try {
         if (metrics.dubaiCardOverflows.length) errors.push(`${label}: Dubai card content overflow ${metrics.dubaiCardOverflows.join(" | ")}`);
         if (locale === "de") {
           const mixedGermanRuns = metrics.germanUmlautRuns.filter(
-            ({ fontFamily, fontSynthesis }) => /gilroy|avenir/i.test(fontFamily)
+            ({ fontFamily, fontSynthesis }) => !/gilroyGerman/i.test(fontFamily)
               || fontSynthesis !== "none",
           );
           if (mixedGermanRuns.length) {
@@ -157,17 +157,27 @@ try {
         if (metrics.philosophyMetricValueRects.length !== 4) {
           errors.push(`${label}: rendered ${metrics.philosophyMetricValueRects.length} Philosophy metric values`);
         } else {
-          for (let index = 0; index < metrics.philosophyMetricValueRects.length; index += 2) {
-            const first = metrics.philosophyMetricValueRects[index];
-            const second = metrics.philosophyMetricValueRects[index + 1];
-            const topOffset = Math.abs(first.top - second.top);
-            const bottomOffset = Math.abs(first.bottom - second.bottom);
-            const heightOffset = Math.abs(first.height - second.height);
-            if (topOffset > 1 || bottomOffset > 1 || heightOffset > 1) {
-              errors.push(
-                `${label}: Philosophy metric row ${index / 2 + 1} line boxes differ `
-                  + `(top ${topOffset.toFixed(2)}px, bottom ${bottomOffset.toFixed(2)}px, height ${heightOffset.toFixed(2)}px)`,
-              );
+          const metricRows = [];
+          for (const rect of metrics.philosophyMetricValueRects) {
+            const row = metricRows.find((candidate) => Math.abs(candidate[0].top - rect.top) <= 8);
+            if (row) row.push(rect);
+            else metricRows.push([rect]);
+          }
+          metricRows.sort((first, second) => first[0].top - second[0].top);
+          for (let rowIndex = 0; rowIndex < metricRows.length; rowIndex += 1) {
+            const row = metricRows[rowIndex];
+            if (row.length < 2) continue;
+            const first = row[0];
+            for (const second of row.slice(1)) {
+              const topOffset = Math.abs(first.top - second.top);
+              const bottomOffset = Math.abs(first.bottom - second.bottom);
+              const heightOffset = Math.abs(first.height - second.height);
+              if (topOffset > 1 || bottomOffset > 1 || heightOffset > 1) {
+                errors.push(
+                  `${label}: Philosophy metric row ${rowIndex + 1} line boxes differ `
+                    + `(top ${topOffset.toFixed(2)}px, bottom ${bottomOffset.toFixed(2)}px, height ${heightOffset.toFixed(2)}px)`,
+                );
+              }
             }
           }
         }

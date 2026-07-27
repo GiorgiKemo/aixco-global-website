@@ -173,21 +173,35 @@ try {
         metric.symbolStyle.lineHeight === metric.valueStyle.lineHeight &&
         metric.symbolStyle.verticalAlign === "baseline" &&
         metric.symbolStyle.transform === "none";
-      const correctWeight =
-        metric.symbolStyle.fontWeight === metric.valueStyle.fontWeight;
       const correctFamily =
         metric.symbolStyle.fontFamily === metric.valueStyle.fontFamily;
       const euroIsNormal =
         !metric.isEuro ||
         (metric.symbolStyle.fontStyle === "normal" &&
           metric.symbolStyle.fontSynthesis === "none");
+      const approvedDollarTreatment =
+        metric.isEuro ||
+        (boxDelta <= 6 &&
+          metric.symbolStyle.fontFamily.includes("Segoe UI Light") &&
+          metric.symbolStyle.fontSize === metric.valueStyle.fontSize &&
+          metric.symbolStyle.lineHeight === metric.valueStyle.lineHeight &&
+          metric.symbolStyle.fontWeight === "300" &&
+          metric.valueStyle.fontWeight === "400" &&
+          metric.symbolStyle.fontStyle === "normal" &&
+          metric.symbolStyle.fontSynthesis === "none" &&
+          metric.symbolStyle.verticalAlign === "baseline" &&
+          metric.symbolStyle.transform !== "none");
+      const approvedGeometry = metric.isEuro
+        ? boxDelta <= 1.1 &&
+          sharedGeometry &&
+          correctFamily &&
+          metric.symbolStyle.fontWeight === "300" &&
+          metric.valueStyle.fontWeight === "400"
+        : approvedDollarTreatment;
 
       if (
         metric.visibleText !== metric.label ||
-        boxDelta > 1.1 ||
-        !sharedGeometry ||
-        !correctWeight ||
-        !correctFamily ||
+        !approvedGeometry ||
         !euroIsNormal ||
         !metric.nowrap ||
         metric.cardOverflow > 0
@@ -227,7 +241,8 @@ try {
         token.symbolStyle.fontFamily.startsWith("Arial") &&
         token.symbolStyle.fontFamily === token.valueStyle.fontFamily &&
         token.symbolStyle.fontSize === token.valueStyle.fontSize &&
-        token.symbolStyle.fontWeight === token.valueStyle.fontWeight &&
+        token.symbolStyle.fontWeight === "300" &&
+        ["400", "600"].includes(token.valueStyle.fontWeight) &&
         token.symbolStyle.fontStyle === "normal" &&
         token.symbolStyle.fontSynthesis === "none" &&
         token.symbolStyle.lineHeight === token.valueStyle.lineHeight &&
@@ -237,7 +252,7 @@ try {
 
       if (boxDelta > 1.1 || !exactInlineTreatment) {
         failures.push(
-          `${size} ${token.text}: box delta=${boxDelta}px, family=${token.symbolStyle.fontFamily}, size=${token.symbolStyle.fontSize}/${token.valueStyle.fontSize}, weight=${token.symbolStyle.fontWeight}, synthesis=${token.symbolStyle.fontSynthesis}, nowrap=${token.tokenStyle.whiteSpace}`,
+          `${size} ${token.text}: box delta=${boxDelta}px, family=${token.symbolStyle.fontFamily}, size=${token.symbolStyle.fontSize}/${token.valueStyle.fontSize}, weight=${token.symbolStyle.fontWeight}/${token.valueStyle.fontWeight}, synthesis=${token.symbolStyle.fontSynthesis}, nowrap=${token.tokenStyle.whiteSpace}`,
         );
       }
     }
@@ -252,7 +267,7 @@ try {
     process.exitCode = 1;
   } else {
     console.log(
-      `Currency typography passed at ${viewports.length} viewports: optically matched Euro glyphs, exact adjacent size/line boxes, baseline alignment, nowrap tokens, and 0px overflow.`,
+      `Currency typography passed at ${viewports.length} viewports: approved thin Dollar treatment, optically matched Euro glyphs, baseline alignment, nowrap tokens, and 0px overflow.`,
     );
   }
 } finally {

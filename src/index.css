@@ -9224,6 +9224,31 @@ html button[data-lang] {
   font-synthesis: none;
 }
 
+/* Keep the client-approved Slovenian long-form currency abbreviations intact
+   on the narrowest phones. Only the affected cards span both grid columns; the
+   remaining compact metrics retain the established two-column rhythm. */
+@media (max-width: 360px) {
+  html[lang='sl']
+    [data-story-section='philosophy']
+    [data-layout='story-philosophy-stats'] {
+    grid-auto-flow: dense;
+  }
+
+  html[lang='sl']
+    [data-story-section='philosophy']
+    [data-layout='story-philosophy-stats']
+    > .story-philosophy-card:has(
+      > dd[aria-label='400 mio EUR+'],
+      > dd[aria-label='4,2 mrd EUR+']
+    ),
+  html[lang='sl']
+    [data-story-section='philosophyPlatform']
+    [data-layout='story-philosophy-platform-stats']
+    > .story-philosophy-stat:has(> dd[aria-label='400 mio EUR+']) {
+    grid-column: 1 / -1;
+  }
+}
+
 /* Reveal layers must inherit the exact surrounding localized face. This covers
    uppercase/lowercase diacritics and Cyrillic titles without introducing a
    per-character fallback, synthetic weight, or mismatched line box. */
@@ -10342,6 +10367,19 @@ html[dir='rtl'] {
   line-height: 1 !important;
   letter-spacing: 0 !important;
   white-space: nowrap;
+}
+
+/* Currency and non-currency values must reserve the same physical line box.
+   Inline fallback glyph metrics otherwise make neighboring Philosophy cards
+   differ by a few pixels even when their declared font size and leading match. */
+[data-story-section='philosophy']
+  [data-layout='story-philosophy-stats']
+  dd.story-standard-number {
+  box-sizing: content-box;
+  display: flex;
+  height: 1em;
+  min-height: 1em;
+  align-items: baseline;
 }
 
 /* Match the Dubai card hierarchy to the rendered AIXCO Philosophy cards:
