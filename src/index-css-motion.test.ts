@@ -791,7 +791,7 @@ describe("index.css motion rules", () => {
 
     expect(constructionAlignmentStart).toBeGreaterThanOrEqual(0);
     expect(constructionAlignmentBlock).toContain("position: relative;");
-    expect(constructionAlignmentBlock).toContain("top: -0.3rem;");
+    expect(constructionAlignmentBlock).toContain("top: -0.5rem;");
     expect(constructionAlignmentBlock).toContain("line-height: 1 !important;");
     expect(desktopStoryHome).toContain(
       'className="story-dubai-metric-copy story-dubai-metric-copy--construction"',
@@ -829,7 +829,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("aria-hidden={ariaHidden || undefined}");
     expect(desktopStoryHome).toContain("data-metric-label={detail.label}");
     expect(css).toContain("min-height: clamp(10.5rem, 22svh, 11.5rem) !important;");
-    expect(css).toContain("justify-content: center !important;");
+    expect(css).toContain("justify-content: flex-start !important;");
     expect(css).toContain("gap: clamp(0.68rem, 1.2svh, 0.88rem) !important;");
     expect(css).toContain("font-size: clamp(0.72rem, 0.74vw, 0.8rem) !important;");
     expect(css).toContain("font-size: clamp(0.95rem, 0.98vw, 1.06rem) !important;");
@@ -858,7 +858,7 @@ describe("index.css motion rules", () => {
       '"USD 800m+ development volume": { de: "$800M+ Entwicklungsvolumen" }',
     );
     expect(germanTranslationFixes).toContain(
-      '"~20% developed, ~20% under construction": { de: "~20% entwickelt, ~20% im Bau" }',
+      '"~20% developed, ~80% under construction": { de: "~20% entwickelt, ~80% im Bau" }',
     );
     expect(css).toContain("/* German laptop cards use the same compact international value language");
     expect(css).toContain("html[lang='de']\n  .story-dubai-portfolio-card__metric[data-metric-layout='number']");
@@ -977,6 +977,20 @@ describe("index.css motion rules", () => {
     expect(css).toContain("font-size: inherit;");
     expect(css).toContain("font-weight: inherit;");
     expect(css).toContain("font-synthesis: none;");
+  });
+
+  it("uses one complete Gilroy face for every language name", () => {
+    const languageOptionStart = css.indexOf("html button[data-lang] {");
+    const languageOptionRule = css.slice(
+      languageOptionStart,
+      css.indexOf("\n}", languageOptionStart),
+    );
+
+    expect(languageOptionStart).toBeGreaterThanOrEqual(0);
+    expect(languageOptionRule).toContain(
+      "font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI'",
+    );
+    expect(languageOptionRule).toContain("font-synthesis: none;");
   });
 
   it("keeps multiline localized display headings from colliding", () => {

@@ -146,7 +146,7 @@ export const polishTranslations = {
   "Legacy portfolio — realized": { pl: "Portfel historyczny — zrealizowany" },
   "Legacy portfolio — in progress": { pl: "Portfel historyczny — w realizacji" },
   "USD 350m mixed-use program": { pl: "Program wielofunkcyjny o wartości 350 mln USD" },
-  "~20% developed, ~20% under construction": { pl: "około 20% ukończono, około 20% jest w budowie" },
+  "~20% developed, ~80% under construction": { pl: "około 20% ukończono, około 80% jest w budowie" },
   "Ours: a current AIXCO residential project with selected apartments, structured buyer guidance, and completion targeted for July 2028.": { pl: "Nasz aktualny projekt mieszkaniowy AIXCO obejmuje wybrane apartamenty, uporządkowane wsparcie kupujących i planowane ukończenie w lipcu 2028 roku." },
   "ON REQUEST": { pl: "NA ZAPYTANIE" },
   "Eden House legacy image": { pl: "Obraz historycznego projektu Eden House" },
@@ -168,6 +168,9 @@ export const polishTranslations = {
   "Can I ask about AIXCO company financing?": { pl: "Czy mogę zapytać o finansowanie spółki AIXCO?" },
   "Official systems certified": { pl: "Oficjalnie certyfikowane systemy" },
   "Social media": { pl: "Media społecznościowe" },
+  "~20% developed, ~20% under construction": {
+    pl: "około 20% ukończono, około 80% jest w budowie",
+  },
   "Access property reference images and supporting documentation.": {
     pl: "Uzyskaj dostęp do referencyjnych zdjęć nieruchomości i dokumentacji pomocniczej.",
   },

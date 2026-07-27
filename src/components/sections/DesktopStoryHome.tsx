@@ -1852,21 +1852,25 @@ function BatumiBenefitIconGrid({
 
   return (
     <div data-layout="story-batumi-benefits" className="story-batumi-benefit-grid">
-      {items.map(({ icon: Icon, label, metric }) => (
-        <div key={label} className="story-batumi-benefit">
-          <span className="story-batumi-benefit__icon-tile" aria-hidden="true">
-            <Icon className="story-batumi-benefit__icon" />
-          </span>
-          <div className="story-batumi-benefit__copy min-w-0">
-            <span className="story-batumi-benefit__metric story-standard-number" aria-label={metric}>
-              <StoryMetricText value={metric} />
+      {items.map(({ icon: Icon, label, metric }) => {
+        const localizedMetric = tx(metric);
+
+        return (
+          <div key={label} className="story-batumi-benefit">
+            <span className="story-batumi-benefit__icon-tile" aria-hidden="true">
+              <Icon className="story-batumi-benefit__icon" />
             </span>
-            <span className="story-batumi-benefit__label">
-              <StoryInlineCurrencyText value={tx(label)} />
-            </span>
+            <div className="story-batumi-benefit__copy min-w-0">
+              <span className="story-batumi-benefit__metric story-standard-number" aria-label={localizedMetric}>
+                <StoryMetricText value={localizedMetric} />
+              </span>
+              <span className="story-batumi-benefit__label">
+                <StoryInlineCurrencyText value={tx(label)} />
+              </span>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -2037,16 +2041,20 @@ function AboutScene({
               </p>
             </div>
             <dl className="mt-[clamp(1.7rem,3.4svh,2.6rem)] grid max-w-[48rem] grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
-              {metrics.slice(0, 4).map((metric) => (
-                <div key={metric.label} className="border-s border-white/28 ps-4">
-                  <dt className="story-glyph-safe story-standard-number tabular-nums" aria-label={metric.value}>
-                    <StoryMetricText value={metric.value} />
-                  </dt>
-                  <dd className="mt-2 text-[clamp(0.7rem,2.45vw,0.82rem)] font-semibold uppercase leading-relaxed tracking-[0.04em] text-white/70 [overflow-wrap:anywhere]">
-                    {tx(metric.label)}
-                  </dd>
-                </div>
-              ))}
+              {metrics.slice(0, 4).map((metric) => {
+                const localizedValue = tx(metric.value);
+
+                return (
+                  <div key={metric.label} className="border-s border-white/28 ps-4">
+                    <dt className="story-glyph-safe story-standard-number tabular-nums" aria-label={localizedValue}>
+                      <StoryMetricText value={localizedValue} />
+                    </dt>
+                    <dd className="mt-2 text-[clamp(0.7rem,2.45vw,0.82rem)] font-semibold uppercase leading-relaxed tracking-[0.04em] text-white/70 [overflow-wrap:anywhere]">
+                      {tx(metric.label)}
+                    </dd>
+                  </div>
+                );
+              })}
             </dl>
           </StorySceneReveal>
         </div>
@@ -2096,6 +2104,7 @@ function PhilosophyScene({
               : stat.label === "Real estate transacted across markets"
                 ? "Value transacted"
                 : stat.label;
+          const localizedValue = tx(stat.value);
 
           return (
             <div key={stat.label} className="story-philosophy-card bg-white px-4 py-4">
@@ -2103,8 +2112,8 @@ function PhilosophyScene({
                 <span className="hidden sm:inline">{tx(stat.label)}</span>
                 <span className="sm:hidden">{tx(mobileLabel)}</span>
               </dt>
-              <dd className="story-glyph-safe story-standard-number tabular-nums" aria-label={stat.value}>
-                <StoryMetricText value={stat.value} />
+              <dd className="story-glyph-safe story-standard-number tabular-nums" aria-label={localizedValue}>
+                <StoryMetricText value={localizedValue} />
               </dd>
             </div>
           );
@@ -2159,15 +2168,16 @@ function PhilosophyPlatformScene({
 
       <dl data-layout="story-philosophy-platform-stats" className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
         {philosophyPlatformStats.map((stat) => {
-          const prefix = stat.value.startsWith("$") ? "$" : "";
-          const suffix = stat.value.endsWith("+") ? "+" : "";
-          const numericValue = stat.value.slice(prefix.length, suffix ? -1 : undefined);
+          const localizedValue = tx(stat.value);
+          const prefix = localizedValue.startsWith("$") ? "$" : "";
+          const suffix = localizedValue.endsWith("+") ? "+" : "";
+          const numericValue = localizedValue.slice(prefix.length, suffix ? -1 : undefined);
           const numericSegments = numericValue.split(/([.,])/u).filter(Boolean);
 
           return (
             <div key={stat.label} className="story-philosophy-stat">
               <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
-              <dd className="story-metric-value story-philosophy-stat__value story-standard-number" aria-label={stat.value}>
+              <dd className="story-metric-value story-philosophy-stat__value story-standard-number" aria-label={localizedValue}>
                 {prefix ? <span className="story-philosophy-stat__affix story-philosophy-stat__affix--prefix story-currency-symbol story-currency-symbol--dollar" aria-hidden="true">{prefix}</span> : null}
                 <span className="story-philosophy-stat__number">
                   {numericSegments.map((segment, segmentIndex) => (

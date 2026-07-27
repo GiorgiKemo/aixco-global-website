@@ -143,7 +143,7 @@ try {
           const expectedGermanDubaiMetrics = {
             "Development value": "$462M",
             "Development scope": "$350M Mischnutzungsprogramm",
-            "Site progress": "~20% entwickelt, ~20% im Bau",
+            "Site progress": "~20% entwickelt, ~80% im Bau",
           };
           for (const [metricLabel, expectedValue] of Object.entries(expectedGermanDubaiMetrics)) {
             if (germanDubaiMetricMap[metricLabel] !== expectedValue) {

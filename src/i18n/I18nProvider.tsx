@@ -18,6 +18,9 @@ import { slovenianTranslationFixes } from "./slovenian-translation-fixes";
 
 export const LANGS = languageOptions;
 const DEFAULT_LANG: Lang = "en";
+const HOME_METADATA_TITLE = "AIXCO.Global | Real Estate Investment";
+const HOME_METADATA_DESCRIPTION =
+  "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
 
 function isLang(value: string | null): value is Lang {
   return LANGS.some((option) => option.code === value);
@@ -696,7 +699,7 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<CatalogLan
     ar: "Approx. 10-12% net rental yields",
   },
   "Secure your position from €5,000": {
-    de: "Sichern Sie Ihre Position ab 5.000 EUR",
+    de: "Sichern Sie Ihre Position ab 5.000 €",
     ru: "Зафиксируйте позицию от 5 000 евро",
     ka: "დაიკავეთ პოზიცია 5,000 ევროდან",
     tr: "Pozisyonunuzu 5.000 EUR'dan guvenceye alin",
@@ -1674,7 +1677,35 @@ const germanQualityTranslations: TranslationSource = {
   "Ongoing coordination": { de: "Laufende Koordination" },
 };
 
+const siteProgressTranslations: TranslationSource = {
+  "~20% developed, ~20% under construction": {
+    de: "~20% entwickelt, ~80% im Bau",
+    pl: "około 20% ukończono, około 80% jest w budowie",
+    sl: "~20 % zgrajeno, ~80 % v gradnji",
+    ru: "~20% освоено, ~80% строится",
+  },
+  "~20% developed, ~80% under construction": {
+    de: "~20% entwickelt, ~80% im Bau",
+    pl: "około 20% ukończono, około 80% jest w budowie",
+    sl: "~20 % zgrajeno, ~80 % v gradnji",
+    ru: "~20% освоено, ~80% строится",
+  },
+  "Site progress: ~20% developed, ~20% under construction": {
+    de: "Baufortschritt: ~20% entwickelt, ~80% im Bau",
+    pl: "Postęp budowy: około 20% ukończono, około 80% jest w budowie",
+    sl: "Napredek gradnje: ~20 % zgrajeno, ~80 % v gradnji",
+    ru: "Ход работ: ~20% освоено, ~80% строится",
+  },
+  "Site progress: ~20% developed, ~80% under construction": {
+    de: "Baufortschritt: ~20% entwickelt, ~80% im Bau",
+    pl: "Postęp budowy: około 20% ukończono, około 80% jest w budowie",
+    sl: "Napredek gradnje: ~20 % zgrajeno, ~80 % v gradnji",
+    ru: "Ход работ: ~20% освоено, ~80% строится",
+  },
+};
+
 const baseCatalogSources: TranslationSource[] = [
+  siteProgressTranslations,
   slovenianClientRevisions,
   downloadGateTranslations,
   russianTranslationFixes,
@@ -1708,6 +1739,7 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
+        siteProgressTranslations,
         slovenianClientRevisions,
         downloadGateTranslations,
         russianTranslationFixes,
@@ -1826,6 +1858,37 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       }
     }
   }, [lang, dir, hasLoadedStoredLang]);
+
+  useEffect(() => {
+    if (window.location.pathname !== "/") return;
+
+    const knownHomeTitles = new Set<string>([HOME_METADATA_TITLE]);
+    const knownHomeDescriptions = new Set<string>([HOME_METADATA_DESCRIPTION]);
+    for (const source of activeCatalogSources) {
+      for (const translatedTitle of Object.values(source[HOME_METADATA_TITLE] ?? {})) {
+        if (translatedTitle) knownHomeTitles.add(translatedTitle);
+      }
+      for (const translatedDescription of Object.values(source[HOME_METADATA_DESCRIPTION] ?? {})) {
+        if (translatedDescription) knownHomeDescriptions.add(translatedDescription);
+      }
+    }
+
+    if (knownHomeTitles.has(document.title)) {
+      document.title =
+        lang === "en"
+          ? HOME_METADATA_TITLE
+          : lookupTranslation(HOME_METADATA_TITLE, lang, activeCatalogSources) ?? HOME_METADATA_TITLE;
+    }
+
+    const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    if (description && knownHomeDescriptions.has(description.content)) {
+      description.content =
+        lang === "en"
+          ? HOME_METADATA_DESCRIPTION
+          : lookupTranslation(HOME_METADATA_DESCRIPTION, lang, activeCatalogSources) ??
+            HOME_METADATA_DESCRIPTION;
+    }
+  }, [activeCatalogSources, lang]);
 
   const value = useMemo<Ctx>(() => ({
     lang,

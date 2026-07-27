@@ -366,7 +366,7 @@ export const germanTranslationFixes = {
   "USD 350m mixed-use program": { de: "$350M Mischnutzungsprogramm" },
   "USD 800m+ development volume": { de: "$800M+ Entwicklungsvolumen" },
   "Site progress": { de: "Baufortschritt" },
-  "~20% developed, ~20% under construction": { de: "~20% entwickelt, ~20% im Bau" },
+  "~20% developed, ~80% under construction": { de: "~20% entwickelt, ~80% im Bau" },
   "Mixed-use masterplan combining Build-to-Rent and Build-to-Sell for an underserved millennial market": {
     de: "Mischnutzungs-Masterplan mit Miet- und Verkaufsobjekten für einen bislang unterversorgten Markt junger Erwachsener",
   },

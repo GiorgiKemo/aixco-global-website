@@ -1,3 +1,204 @@
+# Slovenian Language-Menu Diacritics - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-89b096f5-ef4c-43e9-a1e8-6ad1b2f5a914.png`
+- Implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/design-qa-slovenian-language-menu-fixed.png`
+- Combined focused comparison: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/design-qa-slovenian-language-menu-comparison.png`
+- Viewport: 1280 x 720 CSS pixels at device pixel ratio 1
+- Source pixels: 1152 x 2048 photographed browser view; implementation pixels: 1265 x 712 direct browser capture. The comparison normalizes the focused language-row crops to the same 300 px height.
+- State: German homepage with the desktop language menu open
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested language-menu scope.
+- The supplied screenshot showed `Š` and `č` falling back individually from the incomplete German Gilroy subset, which made those two glyphs look darker than the surrounding letters.
+- Every language name now renders through one complete system UI face at 14 px and weight 400, with font synthesis disabled. `Slovenščina`, Polish accents, German umlauts, and Cyrillic therefore keep one optical weight.
+
+## Full-view comparison evidence
+
+The source photograph and browser-rendered implementation were opened together. The language menu preserves its original size, placement, background, active row, language codes, spacing, and interaction; only the typeface assignment for language-name rows changed.
+
+## Focused region comparison evidence
+
+The combined focused comparison places the source `Slovenščina` row beside the corrected browser capture. In the implementation, the base letters, `š`, and `č` share the same stroke weight, x-height, antialiasing, and baseline.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; one complete face renders the whole label at 14 px / 400 without synthetic styling or per-glyph fallback.
+- Spacing and layout rhythm: passed; row height, padding, label/code alignment, and menu width are unchanged.
+- Colors and visual tokens: passed; active gold, white surface, foreground opacity, border, and shadow remain unchanged.
+- Image quality and asset fidelity: passed; no logo, background image, video, crop, format, compression, or playback behavior changed.
+- Copy and content: passed; `Slovenščina` remains correctly spelled and all five language options remain present.
+
+## Comparison history
+
+1. Initial P2 typography mismatch: `Š` and `č` were rendered by a glyph-level fallback while the rest of the word used the German Gilroy subset.
+2. A candidate bundled Gilroy file exposed Unicode mappings with empty outlines; the browser capture immediately showed missing Slovenian and Cyrillic letters, so that approach was rejected.
+3. Final fix: the complete platform UI stack is applied to every `button[data-lang]`, with sufficient selector specificity to override the active locale font and `font-synthesis: none`.
+4. Post-fix evidence: the focused comparison shows consistent Slovenian stroke weight, the computed family is the complete system UI stack, and the browser console has zero errors.
+
+## Verification
+
+- Same-state source/implementation comparison: passed.
+- Language-menu interaction: passed.
+- Computed typography check: passed (`14px`, weight `400`, complete system UI stack).
+- Browser console errors: none.
+- Font validation, targeted CSS tests (64), and TypeScript: passed.
+- Nothing was pushed or deployed during this correction.
+
+final result: passed
+
+---
+
+# German Euro-Symbol Consistency - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-8e5e5e97-b149-42d8-a0ba-2972e312959d.png`
+- Implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/design-qa-german-euro-consistency.png`
+- Viewport: 1280 x 720 CSS pixels at device pixel ratio 1
+- Source pixels: 1152 x 2048 photographed browser crop; implementation pixels: 1265 x 712 direct browser capture. The source was used as the copy-consistency target rather than for pixel-scale comparison.
+- State: German homepage at `#batumi`, navigation and language menu closed
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested currency-label scope.
+- Both supporting labels now use the same euro-symbol format: `5.000 €` and `45.000 €`.
+- The replacement remains on the intended line and introduces no clipping, overlap, or card-height regression.
+
+## Full-view comparison evidence
+
+The supplied source photograph and corrected browser capture were opened together in one comparison input. The existing current-project composition, project imagery, metric typography, icons, spacing, colors, and borders remain unchanged; only the inconsistent `EUR` suffix was replaced.
+
+## Focused region comparison evidence
+
+The supplied screenshot clearly highlights the two affected supporting labels. The implementation capture keeps both labels legible in the same card grid, so an additional crop was unnecessary.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; the replacement uses the existing supporting-label font, weight, size, and line height.
+- Spacing and layout rhythm: passed; both labels wrap cleanly inside their original columns.
+- Colors and visual tokens: passed; the existing gold, ivory, border, and foreground tokens are unchanged.
+- Image quality and asset fidelity: passed; no image, video, crop, compression, format, or playback behavior changed.
+- Copy and content: passed; German now consistently displays `€` rather than mixing `EUR` and `€`.
+
+## Comparison history
+
+1. Initial P2 consistency issue: the left label ended with `5.000 EUR` while the right label ended with `45.000 €`.
+2. Fix: changed the German translation of `Secure your position from €5,000` to `Sichern Sie Ihre Position ab 5.000 €` and added a regression assertion.
+3. Post-fix evidence: browser-rendered DOM and screenshot show both German supporting labels ending with `€`.
+
+## Verification
+
+- Same-state source/implementation comparison: passed.
+- Browser-rendered content check: passed.
+- Primary interaction tested: language menu selection from English to German and direct navigation to `#batumi`.
+- Browser console: zero errors; only unrelated pre-existing Next.js LCP advisories were present.
+- German i18n test: 20 tests passed.
+- TypeScript and ESLint: passed.
+- Nothing was pushed or deployed during this correction.
+
+final result: passed
+
+---
+
+# Dubai Site Progress 80% - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-08627ba2-c4fa-4efc-ab6a-c6fbd36030bd.png`
+- Implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/design-qa-dubai-progress-80-implementation.png`
+- Viewport: 2048 x 1150 CSS pixels at device pixel ratio 1
+- Source pixels: 1152 x 2048 photographed browser crop; implementation pixels: 2048 x 1150 direct browser capture. The source was used as the content target rather than for pixel-scale comparison.
+- State: English homepage at `#dubai`, navigation closed, both legacy portfolio cards visible
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested progress-value scope.
+- The lower site-progress value now reads `~80%` while the upper value remains `~20% developed`.
+- The `under construction` copy remains grouped beside the lower value and fits inside the card without clipping or overlap.
+
+## Full-view comparison evidence
+
+The supplied source photograph and the corrected browser capture were opened together in one comparison input. The implementation preserves the existing card layout, typography, spacing, colors, borders, and Dubai imagery while applying the requested 80% content correction.
+
+## Focused region comparison evidence
+
+The source photograph clearly isolates the requested lower percentage, while the implementation screenshot keeps the full two-card context readable. No additional crop was necessary.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; the percentage uses the same family, weight, size, and line height as the neighboring 20% value.
+- Spacing and layout rhythm: passed; the 80% value and `under construction` supporting copy fit within the established grid and card height.
+- Colors and visual tokens: passed; existing gold text, ivory background, borders, and shadows are unchanged.
+- Image quality and asset fidelity: passed; no image, video, crop, compression, format, or playback behavior changed.
+- Copy and content: passed; the requested value is now `~80% under construction`, with matching approved translations for German, Polish, Slovenian, and Russian.
+
+## Comparison history
+
+1. Initial P1 content mismatch: the lower progress value displayed `~20%` instead of the requested `~80%`.
+2. Fix: updated the canonical site data, translation overrides, and locale regression expectations to use 80% for the under-construction value.
+3. Post-fix evidence: the live browser capture visibly renders `~20% developed, ~80% under construction` with no layout regression.
+
+## Verification
+
+- Same-state source/implementation comparison: passed.
+- Browser-rendered content check: passed.
+- Primary interaction tested: direct hash navigation to the Dubai section.
+- Browser console: zero errors; only unrelated pre-existing Next.js LCP advisories were present.
+- Targeted i18n and CSS regression suite: passed.
+- Nothing was pushed or deployed during this correction.
+
+final result: passed
+
+---
+
+# Dubai Legacy Card Row Alignment - Design QA
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-f8169cf2-90f1-42a0-96bc-a058d0c90f61.png`
+- Implementation screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/design-qa-dubai-alignment-implementation.png`
+- Viewport: 2048 x 1150 CSS pixels at device pixel ratio 1
+- Source pixels: 2048 x 1150; implementation pixels: 2048 x 1150; no density normalization required
+- State: English homepage at `#dubai`, navigation closed, both legacy portfolio cards visible
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the requested card-alignment scope.
+- The source showed each metric column vertically centering its complete content block. Because the blocks have different heights, `Status`, `Units`, `Development value`, `Development scope`, and `Site progress` landed on visibly different horizontal lines.
+- Every metric column is now anchored to the same top edge. Browser geometry reports identical label tops within each card: 9459.81 px for all three first-card labels and 9753.31 px for all three second-card labels.
+- The final `construction` line now finishes within 0.13 px of the neighboring `mixed-use program` baseline.
+
+## Full-view comparison evidence
+
+The source screenshot and corrected browser capture were opened together at the same pixel dimensions. The card structure, column widths, borders, radii, background, values, status pills, typography, and right-side Dubai image remain unchanged; only vertical content alignment was corrected.
+
+## Focused region comparison evidence
+
+The supplied screenshot already isolates the affected two-card region clearly enough to judge label and supporting-copy baselines. Browser DOM geometry supplied subpixel confirmation, so no additional crop was required.
+
+## Required fidelity surfaces
+
+- Fonts and typography: passed; family, weights, sizes, tracking, line heights, and copy are unchanged.
+- Spacing and layout rhythm: passed; all metric headings share one exact horizontal line, and the supporting construction line matches the adjacent scope-copy baseline.
+- Colors and visual tokens: passed; existing ivory, white, gold, border, shadow, and opacity tokens are unchanged.
+- Image quality and asset fidelity: passed; no image, video, crop, format, compression, or playback behavior changed.
+- Copy and content: passed; all English labels and values are unchanged.
+
+## Comparison history
+
+1. Initial P2 finding: centered content blocks placed equal-level metric headings at different vertical positions and left the final construction line slightly below its neighboring supporting copy.
+2. Fix: top-anchored every metric column and increased the existing English construction optical offset from -0.3rem to -0.5rem.
+3. Post-fix evidence: all six headings have exact matching top coordinates within their respective cards; `construction` and `mixed-use program` differ by only 0.13 px at the bottom edge.
+
+## Verification
+
+- Same-state source/implementation comparison: passed.
+- Browser-rendered geometry audit: passed.
+- Primary interaction tested: direct hash navigation to the Dubai section.
+- Browser console: zero errors; one unrelated pre-existing Next.js LCP advisory for the Dubai image.
+- Targeted CSS suite: 63 tests passed.
+- TypeScript, ESLint, bundled-font validation, and production build: passed.
+- Nothing was pushed or deployed during this correction.
+
+final result: passed
+
+---
+
 # Dollar Equal-Size Correction - Design QA
 
 - Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-a68bba54-64b8-4213-ba51-b4a4b1758a4e.png`

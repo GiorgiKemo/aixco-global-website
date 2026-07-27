@@ -58,7 +58,7 @@ export const dubaiFunds = [
     details: [
       "Status: Legacy portfolio — in progress",
       "Development scope: USD 350m mixed-use program",
-      "Site progress: ~20% developed, ~20% under construction",
+      "Site progress: ~20% developed, ~80% under construction",
       "Location: Dubai Creek - Dubai, UAE",
       "Classification: Residential buildings, offices, retail, gastronomy, healthcare",
       "Access: Al Khail Rd, 2nd Za'abeel Rd, Metro Green Line, Bus",

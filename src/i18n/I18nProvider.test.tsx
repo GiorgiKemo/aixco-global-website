@@ -43,7 +43,8 @@ function GermanDubaiMetricProbe() {
       <p>{tx("USD 800m+ development volume")}</p>
       <p>{tx("Development value: USD 462m")}</p>
       <p>{tx("Development scope: USD 350m mixed-use program")}</p>
-      <p>{tx("~20% developed, ~20% under construction")}</p>
+      <p>{tx("~20% developed, ~80% under construction")}</p>
+      <p>{tx("Secure your position from €5,000")}</p>
     </div>
   );
 }
@@ -74,6 +75,12 @@ function SlovenianClientRevisionProbe() {
       <p>{tx("From Switzerland to Dubai to Batumi")}</p>
       <p>{tx("USD 350m mixed-use program")}</p>
       <p>{tx("ACQUIRE.PARTNER.CREATE VALUE.")}</p>
+      <p>{tx("$400M")}</p>
+      <p>{tx("$4.2B+")}</p>
+      <p>{tx("€45k")}</p>
+      <p>{tx("Download Materials")}</p>
+      <p>{tx("FAQ essentials")}</p>
+      <p>{tx("Terms & Conditions")}</p>
     </div>
   );
 }
@@ -208,7 +215,8 @@ describe("I18nProvider", () => {
       expect(screen.getByText("$800M+ Entwicklungsvolumen")).toBeInTheDocument();
       expect(screen.getByText("Entwicklungswert: $462M")).toBeInTheDocument();
       expect(screen.getByText("Entwicklungsumfang: $350M Mischnutzungsprogramm")).toBeInTheDocument();
-      expect(screen.getByText("~20% entwickelt, ~20% im Bau")).toBeInTheDocument();
+      expect(screen.getByText("~20% entwickelt, ~80% im Bau")).toBeInTheDocument();
+      expect(screen.getByText("Sichern Sie Ihre Position ab 5.000 €")).toBeInTheDocument();
     });
   });
 
@@ -248,7 +256,7 @@ describe("I18nProvider", () => {
     ],
     [
       "sl",
-      "Reverance je vrhunski stanovanjski kompleks na Novem bulvarju v Batumiju. AIXCO trenutno ponuja 28 izbranih stanovanj v 13. in 14. nadstropju, dokončanje pa je predvideno za julij 2028.",
+      "Reverance je vrhunski stanovanjski kompleks na Novem bulvarju v Batumiju. AIXCO trenutno ponuja 28 izbranih stanovanj v 13. in 14. nadstropju, z dokončanjem, predvidenim za julij 2028.",
       "julij 2028",
     ],
     [
@@ -305,6 +313,12 @@ describe("I18nProvider", () => {
       expect(screen.getByText("Od Švice do Dubaja do Batumija")).toBeInTheDocument();
       expect(screen.getByText("$350M, večnamenski program")).toBeInTheDocument();
       expect(screen.getByText("KUPITE. SODELUJTE. USTVARITE VREDNOST.")).toBeInTheDocument();
+      expect(screen.getByText("400 mio EUR")).toBeInTheDocument();
+      expect(screen.getByText("4,2 mrd EUR+")).toBeInTheDocument();
+      expect(screen.getByText("45.000 EUR")).toBeInTheDocument();
+      expect(screen.getByText("Prenos gradiv")).toBeInTheDocument();
+      expect(screen.getByText("Osnovna pogosta vprašanja")).toBeInTheDocument();
+      expect(screen.getByText("Splošni pogoji poslovanja")).toBeInTheDocument();
     });
   });
 
@@ -321,6 +335,31 @@ describe("I18nProvider", () => {
       expect(document.documentElement).toHaveAttribute("lang", "en");
       expect(screen.getByText("Explore Batumi real estate")).toBeInTheDocument();
     });
+  });
+
+  it("uses the client-approved Slovenian home metadata", async () => {
+    localStorage.setItem("aixco-lang", "sl");
+    document.title = "AIXCO.Global | Real Estate Investment";
+    const description = document.createElement("meta");
+    description.name = "description";
+    description.content =
+      "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
+    document.head.append(description);
+
+    render(
+      <I18nProvider>
+        <TranslationProbe />
+      </I18nProvider>,
+    );
+
+    await waitFor(() => {
+      expect(document.title).toBe("AIXCO.Global | Naložbe v nepremičnine");
+      expect(description.content).toBe(
+        "Odkrijte izbrane nepremičninske priložnosti s pregledno oblikovanimi cenami v evrih že od 45.000 EUR, posredovanjem in upravljanjem nepremičnin prek podjetja AIXCO.",
+      );
+    });
+
+    description.remove();
   });
 
   it("preserves route-specific metadata when the language changes", async () => {
