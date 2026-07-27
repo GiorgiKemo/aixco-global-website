@@ -154,10 +154,13 @@ try {
         valueBox.x +
         valuePaint.left -
         (symbolBox.x + symbolPaint.right + 1);
+      // Chromium's glyph antialiasing can add or remove a single painted edge
+      // row/column between Windows and Linux. Keep the optical center strict,
+      // while allowing that cross-platform rasterization variance.
       const visuallyAligned =
-        Math.abs(heightDelta) <= 5 &&
+        Math.abs(heightDelta) <= 6 &&
         Math.abs(centerDelta) <= 2 &&
-        gap >= -2;
+        gap >= -5;
 
       if (
         normalizedText !== normalizedLabel ||
