@@ -78,6 +78,18 @@ describe("PropertyChrome", () => {
       "sl",
       "ru",
     ]);
+    const sloveneLabel = document.querySelector(
+      "[data-lang='sl'] .language-option-label",
+    );
+    const russianLabel = document.querySelector(
+      "[data-lang='ru'] .language-option-label",
+    );
+    expect(sloveneLabel).toHaveAttribute("lang", "sl");
+    expect(sloveneLabel).toHaveAttribute("translate", "no");
+    expect(sloveneLabel).toHaveClass("notranslate");
+    expect(russianLabel).toHaveAttribute("lang", "ru");
+    expect(russianLabel).toHaveAttribute("translate", "no");
+    expect(russianLabel).toHaveClass("notranslate");
     fireEvent.click(screen.getAllByRole("button", { name: /Slovenščina/i })[0]);
 
     await waitFor(() => {

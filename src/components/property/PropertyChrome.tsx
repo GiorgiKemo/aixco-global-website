@@ -278,6 +278,7 @@ export function PropertyChrome() {
             type="button"
             data-lang={option.code}
             aria-current={option.code === lang ? "true" : undefined}
+            translate="no"
             onClick={() => {
               setLang(option.code);
               setLangOpen(false);
@@ -288,7 +289,13 @@ export function PropertyChrome() {
               option.code === lang ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted/70",
             )}
           >
-            <span>{option.label}</span>
+            <span
+              lang={option.code}
+              translate="no"
+              className="language-option-label notranslate"
+            >
+              {option.label}
+            </span>
             <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] opacity-65">{option.native}</span>
           </button>
         </li>

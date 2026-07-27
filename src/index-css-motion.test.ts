@@ -746,14 +746,14 @@ describe("index.css motion rules", () => {
 
     expect(dollarStart).toBeGreaterThanOrEqual(0);
     expect(dollarBlock).toContain(
-      'font-family: "Segoe UI Light", "Segoe UI", Arial, sans-serif !important;',
+      'font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;',
     );
     expect(dollarBlock).toContain("font-size: 1em !important;");
     expect(dollarBlock).toContain("font-weight: 300 !important;");
     expect(dollarBlock).toContain("font-synthesis: none;");
     expect(dollarBlock).toContain("line-height: inherit !important;");
     expect(dollarBlock).toContain("top: -0.004364rem;");
-    expect(dollarBlock).toContain("transform: scaleX(1.125683) scaleY(0.898305);");
+    expect(dollarBlock).toContain("transform: scaleX(1.45) scaleY(0.8085);");
     expect(dollarBlock).toContain("transform-origin: left center;");
     expect(dollarBlock).toContain("opacity: 1;");
 
@@ -764,7 +764,7 @@ describe("index.css motion rules", () => {
 
     expect(euroStart).toBeGreaterThanOrEqual(0);
     expect(euroBlock).toContain(
-      "font-family: Arial, sans-serif !important;",
+      'font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;',
     );
     expect(euroBlock).toContain("font-size: 1em !important;");
     expect(euroBlock).toContain("font-weight: 300 !important;");
@@ -778,6 +778,20 @@ describe("index.css motion rules", () => {
     expect(css).toContain(
       "font-family: Arial, sans-serif !important;",
     );
+    const batumiCurrencyStart = css.indexOf(
+      "[data-story-section='batumi']\n  .story-batumi-benefit__metric.story-standard-number\n  .story-currency-symbol {",
+    );
+    const batumiCurrencyBlock = css.slice(
+      batumiCurrencyStart,
+      css.indexOf("\n}", batumiCurrencyStart),
+    );
+    expect(batumiCurrencyStart).toBeGreaterThanOrEqual(0);
+    expect(batumiCurrencyBlock).toContain(
+      'font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;',
+    );
+    expect(batumiCurrencyBlock).toContain("font-weight: 300 !important;");
+    expect(batumiCurrencyBlock).toContain("font-synthesis: none;");
+    expect(batumiCurrencyBlock).toContain("opacity: 1;");
   });
 
   it("aligns the wrapped construction qualifier with the scope copy on English laptops", () => {
@@ -812,6 +826,9 @@ describe("index.css motion rules", () => {
     expect(css).toContain("font-family: Arial, sans-serif !important;");
     expect(css).toContain("white-space: nowrap;");
     expect(css).toContain(".story-inline-currency-symbol--euro {");
+    expect(css).toContain(
+      'font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;',
+    );
     expect(css).toContain("font-weight: 300 !important;");
     expect(css).toContain("font-synthesis: none;");
     expect(css).toContain("top: 0;");
@@ -979,18 +996,40 @@ describe("index.css motion rules", () => {
     expect(css).toContain("font-synthesis: none;");
   });
 
-  it("uses one complete Gilroy face for every language name", () => {
+  it("uses one complete face for every language name", () => {
     const languageOptionStart = css.indexOf("html button[data-lang] {");
     const languageOptionRule = css.slice(
       languageOptionStart,
       css.indexOf("\n}", languageOptionStart),
     );
+    const languageLabelStart = css.indexOf(
+      "html button[data-lang] .language-option-label {",
+    );
+    const languageLabelRule = css.slice(
+      languageLabelStart,
+      css.indexOf("\n}", languageLabelStart),
+    );
 
     expect(languageOptionStart).toBeGreaterThanOrEqual(0);
     expect(languageOptionRule).toContain(
-      "font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI'",
+      "font-family: 'Segoe UI', Arial, system-ui, sans-serif",
     );
     expect(languageOptionRule).toContain("font-synthesis: none;");
+    expect(languageLabelStart).toBeGreaterThanOrEqual(0);
+    expect(languageLabelRule).toContain(
+      "font-family: 'Segoe UI', Arial, system-ui, sans-serif !important;",
+    );
+    expect(languageLabelRule).toContain("unicode-bidi: isolate;");
+    expect(languageLabelRule).toContain("white-space: nowrap;");
+    expect(
+      desktopStoryHome.match(
+        /className="language-option-label notranslate"/g,
+      ),
+    ).toHaveLength(2);
+    expect(
+      desktopStoryHome.match(/\n\s+lang=\{option\.code\}/g),
+    ).toHaveLength(2);
+    expect(desktopStoryHome.match(/translate="no"/g)).toHaveLength(4);
   });
 
   it("keeps multiline localized display headings from colliding", () => {

@@ -142,7 +142,7 @@ export const propertyPageTranslations = {
   "Project highlights": { de: "Projekt-Highlights", ru: "Ключевые особенности проекта", ka: "პროექტის მთავარი უპირატესობები", tr: "Projenin öne çıkanları", ar: "أبرز مزايا المشروع", pl: "Najważniejsze cechy projektu" },
   "Selected access, structured for ownership.": {
     de: "Ausgewählter Zugang, strukturiert für Eigentum.",
-    ru: "Отобранный доступ, выстроенный для приобретения собственности.",
+    ru: "Отобранный доступ, выстроенный для приобретения собственности",
     ka: "შერჩეული წვდომა, სტრუქტურირებული საკუთრებისთვის.",
     tr: "Seçili erişim, mülkiyet için yapılandırıldı.",
     ar: "وصول مختار ومهيأ للتملك.",

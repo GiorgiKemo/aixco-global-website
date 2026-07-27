@@ -881,6 +881,7 @@ function StoryChrome({
                 <button
                   data-lang={option.code}
                   aria-current={option.code === lang ? "true" : undefined}
+                  translate="no"
                   onClick={() => {
                     setLang(option.code);
                     setLangOpen(false);
@@ -891,7 +892,13 @@ function StoryChrome({
                     option.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70",
                   )}
                 >
-                  <span>{option.label}</span>
+                  <span
+                    lang={option.code}
+                    translate="no"
+                    className="language-option-label notranslate"
+                  >
+                    {option.label}
+                  </span>
                   <span className="text-[12px] uppercase tracking-widest opacity-70">{option.native}</span>
                 </button>
               </li>
@@ -1101,6 +1108,7 @@ function StoryChrome({
                   <button
                     data-lang={option.code}
                     aria-current={option.code === lang ? "true" : undefined}
+                    translate="no"
                     onClick={() => {
                       setLang(option.code);
                       setLangOpen(false);
@@ -1111,7 +1119,13 @@ function StoryChrome({
                       option.code === lang ? "bg-primary/10 text-primary" : "hover:bg-muted/70",
                     )}
                   >
-                    <span>{option.label}</span>
+                    <span
+                      lang={option.code}
+                      translate="no"
+                      className="language-option-label notranslate"
+                    >
+                      {option.label}
+                    </span>
                     <span className="text-[12px] uppercase tracking-widest opacity-70">{option.native}</span>
                   </button>
                 </li>
