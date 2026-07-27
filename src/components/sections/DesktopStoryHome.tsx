@@ -2170,7 +2170,12 @@ function PhilosophyPlatformScene({
       <dl data-layout="story-philosophy-platform-stats" className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
         {philosophyPlatformStats.map((stat) => {
           const localizedValue = tx(stat.value);
-          const prefix = localizedValue.startsWith("$") ? "$" : "";
+          const prefix =
+            localizedValue.startsWith("$")
+              ? "$"
+              : localizedValue.startsWith("€")
+                ? "€"
+                : "";
           const suffix = localizedValue.endsWith("+") ? "+" : "";
           const numericValue = localizedValue.slice(prefix.length, suffix ? -1 : undefined);
           const numericSegments = numericValue.split(/([.,])/u).filter(Boolean);
@@ -2179,7 +2184,19 @@ function PhilosophyPlatformScene({
             <div key={stat.label} className="story-philosophy-stat">
               <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
               <dd className="story-metric-value story-philosophy-stat__value story-standard-number" aria-label={localizedValue}>
-                {prefix ? <span className="story-philosophy-stat__affix story-philosophy-stat__affix--prefix story-currency-symbol story-currency-symbol--dollar" aria-hidden="true">{prefix}</span> : null}
+                {prefix ? (
+                  <span
+                    className={cn(
+                      "story-philosophy-stat__affix story-philosophy-stat__affix--prefix story-currency-symbol",
+                      prefix === "€"
+                        ? "story-currency-symbol--euro"
+                        : "story-currency-symbol--dollar",
+                    )}
+                    aria-hidden="true"
+                  >
+                    {prefix}
+                  </span>
+                ) : null}
                 <span className="story-philosophy-stat__number">
                   {numericSegments.map((segment, segmentIndex) => (
                     <span

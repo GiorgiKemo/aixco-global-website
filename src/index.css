@@ -9224,42 +9224,6 @@ html button[data-lang] {
   font-synthesis: none;
 }
 
-/* Keep the client-approved Slovenian long-form currency abbreviations intact
-   on the narrowest phones. Only the affected cards span both grid columns; the
-   remaining compact metrics retain the established two-column rhythm. */
-@media (max-width: 430px) {
-  html[lang='sl']
-    [data-story-section='philosophy']
-    [data-layout='story-philosophy-stats'] {
-    grid-auto-flow: dense;
-  }
-
-  html[lang='sl']
-    [data-story-section='philosophy']
-    [data-layout='story-philosophy-stats']
-    > .story-philosophy-card:has(
-      > dd[aria-label='400 mio EUR+'],
-      > dd[aria-label='4,2 mrd EUR+']
-    ),
-  html[lang='sl']
-    [data-story-section='philosophyPlatform']
-    [data-layout='story-philosophy-platform-stats']
-    > .story-philosophy-stat:has(> dd[aria-label='400 mio EUR+']) {
-    grid-column: 1 / -1;
-  }
-}
-
-/* Linux and Windows resolve the Slovenian About metric a few pixels
-   differently at foldable width. Removing tracking from this single long
-   value keeps the approved copy intact without shrinking the type. */
-@media (max-width: 320px) {
-  html[lang='sl']
-    [data-story-section='about']
-    dt[aria-label='400 mio EUR'] {
-    letter-spacing: 0 !important;
-  }
-}
-
 /* Reveal layers must inherit the exact surrounding localized face. This covers
    uppercase/lowercase diacritics and Cyrillic titles without introducing a
    per-character fallback, synthetic weight, or mismatched line box. */

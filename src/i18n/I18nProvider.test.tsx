@@ -313,9 +313,9 @@ describe("I18nProvider", () => {
       expect(screen.getByText("Od Švice do Dubaja do Batumija")).toBeInTheDocument();
       expect(screen.getByText("$350M, večnamenski program")).toBeInTheDocument();
       expect(screen.getByText("KUPITE. SODELUJTE. USTVARITE VREDNOST.")).toBeInTheDocument();
-      expect(screen.getByText("400 mio EUR")).toBeInTheDocument();
-      expect(screen.getByText("4,2 mrd EUR+")).toBeInTheDocument();
-      expect(screen.getByText("45.000 EUR")).toBeInTheDocument();
+      expect(screen.getByText("€400M")).toBeInTheDocument();
+      expect(screen.getByText("€4.2B+")).toBeInTheDocument();
+      expect(screen.getByText("€45k")).toBeInTheDocument();
       expect(screen.getByText("Prenos gradiv")).toBeInTheDocument();
       expect(screen.getByText("Osnovna pogosta vprašanja")).toBeInTheDocument();
       expect(screen.getByText("Splošni pogoji poslovanja")).toBeInTheDocument();
@@ -355,7 +355,7 @@ describe("I18nProvider", () => {
     await waitFor(() => {
       expect(document.title).toBe("AIXCO.Global | Naložbe v nepremičnine");
       expect(description.content).toBe(
-        "Odkrijte izbrane nepremičninske priložnosti s pregledno oblikovanimi cenami v evrih že od 45.000 EUR, posredovanjem in upravljanjem nepremičnin prek podjetja AIXCO.",
+        "Odkrijte izbrane nepremičninske priložnosti s pregledno oblikovanimi cenami v evrih že od €45.000, posredovanjem in upravljanjem nepremičnin prek podjetja AIXCO.",
       );
     });
 
