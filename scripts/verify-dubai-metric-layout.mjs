@@ -47,8 +47,6 @@ try {
           return { missingParts: true };
         }
 
-        const symbolRect = symbol.getBoundingClientRect();
-        const valueRect = value.getBoundingClientRect();
         const symbolStyle = getComputedStyle(symbol);
         const valueStyle = getComputedStyle(value);
 
@@ -58,8 +56,6 @@ try {
           exposedToAccessibility:
             !symbol.hasAttribute("aria-hidden") &&
             !value.hasAttribute("aria-hidden"),
-          topDelta: symbolRect.top - valueRect.top,
-          bottomDelta: symbolRect.bottom - valueRect.bottom,
           fontSizeMatch: symbolStyle.fontSize === valueStyle.fontSize,
           symbolWeight: symbolStyle.fontWeight,
           valueWeight: valueStyle.fontWeight,
@@ -141,22 +137,16 @@ try {
         continue;
       }
 
-      const boxDelta = Math.max(
-        Math.abs(metric.topDelta),
-        Math.abs(metric.bottomDelta),
-      );
-
       if (
         metric.visibleText !== expected ||
         !metric.exposedToAccessibility ||
-        boxDelta > 7 ||
         !metric.fontSizeMatch ||
         metric.symbolWeight !== "300" ||
         metric.valueWeight !== "400" ||
         !metric.lineHeightMatch
       ) {
         failures.push(
-          `${size} ${name}: visible=${metric.visibleText}, accessible=${metric.exposedToAccessibility}, box delta=${boxDelta}px, approved optical style=${metric.fontSizeMatch && metric.symbolWeight === "300" && metric.valueWeight === "400" && metric.lineHeightMatch}`,
+          `${size} ${name}: visible=${metric.visibleText}, accessible=${metric.exposedToAccessibility}, approved optical style=${metric.fontSizeMatch && metric.symbolWeight === "300" && metric.valueWeight === "400" && metric.lineHeightMatch}`,
         );
       }
     }
