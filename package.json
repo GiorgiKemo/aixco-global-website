@@ -26,6 +26,7 @@
     "smoke:mobile": "node scripts/verify-mobile-experience.mjs",
     "smoke:mobile-scope": "node scripts/verify-mobile-only-scope.mjs",
     "smoke:currency": "node scripts/verify-currency-glyph-alignment.mjs",
+    "smoke:typography": "node scripts/verify-typography-consistency.mjs",
     "smoke:title-motion": "node scripts/verify-title-animations.mjs",
     "smoke:transitions": "node scripts/verify-section-transitions.mjs",
     "test": "vitest run",
@@ -35,6 +36,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@fontsource/epilogue": "^5.3.0",
     "@radix-ui/react-toast": "^1.2.14",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.105.3",

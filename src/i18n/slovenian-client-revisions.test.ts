@@ -27,10 +27,10 @@ describe("client-approved Slovenian document catalog", () => {
   it("matches every document-defined commercial value and Batumi label", () => {
     expect(slovenianClientRevisions).toMatchObject({
       "5,000+": { sl: "5.000+" },
-      "$400M": { sl: "€400M" },
-      "$400M+": { sl: "€400M+" },
+      "$400M": { sl: "$400M" },
+      "$400M+": { sl: "$400M+" },
       "2,000+": { sl: "2.000+" },
-      "$4.2B+": { sl: "€4.2B+" },
+      "$4.2B+": { sl: "$4.2B+" },
       "USD 800m+ development volume": { sl: "$800M+ vrednost razvojnega obsega projektov" },
       "USD 462m": { sl: "$462M" },
       "USD 350m mixed-use program": { sl: "$350M, večnamenski program" },
@@ -40,6 +40,17 @@ describe("client-approved Slovenian document catalog", () => {
       "12%": { sl: "12 %" },
       "Project Reverance": { sl: "Projekt Reverance" },
     });
+
+    expect(
+      slovenianClientRevisions[
+        "Today, AIXCO manages projects representing more than $400 million in gross development value, supported by an international team of over 90 professional and highly skilled employees and a global network of clients, brokers, developers, and partners."
+      ]?.sl,
+    ).toContain("ameriških dolarjev");
+    expect(
+      slovenianClientRevisions[
+        "AIXCO has completed more than 2,000 real estate transactions and transacted over $4.2 billion in property value across international markets."
+      ]?.sl,
+    ).toContain("ameriških dolarjev");
   });
 
   it("matches the approved materials, journeys, FAQ, and footer wording", () => {

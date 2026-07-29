@@ -12,7 +12,7 @@
   border: 2px solid #e6c767;
   background: #161616;
   color: #fff;
-  font-weight: 700;
+  font-weight: 600;
   transform: translateY(-160%);
   transition: transform 160ms ease-out;
 }
@@ -166,6 +166,7 @@
     overflow-x: hidden;
     scroll-behavior: smooth;
     scroll-padding-top: 5.5rem;
+    font-synthesis: none;
   }
 
   html.lenis {
@@ -178,6 +179,8 @@
     overflow-x: hidden;
     font-family: var(--font-brand-sans);
     font-feature-settings: 'kern';
+    font-synthesis: none;
+    font-weight: 400;
     font-size: 16.5px;
     line-height: 1.6;
   }
@@ -1510,6 +1513,9 @@
     width: 100%;
     max-width: none;
     min-width: 0;
+    font-family: var(--font-brand-sans);
+    font-synthesis: none;
+    font-weight: 400;
     font-size: clamp(
       var(--story-body-min),
       var(--story-body-pref),
@@ -1519,6 +1525,14 @@
     overflow-wrap: anywhere;
     word-break: normal;
     hyphens: auto;
+  }
+
+  .story-team-member__role {
+    color: hsl(var(--primary));
+  }
+
+  .story-team-member__summary {
+    color: hsl(var(--foreground) / 0.64);
   }
 
   .story-eyebrow {
@@ -1848,7 +1862,7 @@
     padding: 0.62rem 0.88rem;
     color: hsl(var(--foreground));
     font-size: 0.76rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     box-shadow: 0 14px 32px -26px hsl(var(--foreground) / 0.45);
@@ -1994,7 +2008,7 @@
     max-width: min(100%, 18ch);
     font-family: var(--font-legacy-display);
     font-size: clamp(3.5rem, min(7.35vw, 11.2svh), 7.9rem);
-    font-weight: 700;
+    font-weight: 600;
     line-height: 0.91;
     letter-spacing: -0.04em;
     text-transform: none;
@@ -2022,7 +2036,7 @@
   }
 
   .story-hero-statement__line:first-child {
-    font-weight: 700;
+    font-weight: 600;
     color: hsl(0 0% 100% / 0.96);
   }
 
@@ -3072,7 +3086,7 @@
     color: hsl(var(--foreground) / 0.46);
     font-family: var(--font-brand-display);
     font-size: clamp(0.82rem, 0.82vw, 0.95rem);
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.02em;
     line-height: 1.15;
     text-align: center;
@@ -3351,7 +3365,7 @@
     display: block;
     color: hsl(var(--primary));
     font-size: clamp(1.2rem, 1.75vw, 1.9rem);
-    font-weight: 650;
+    font-weight: 600;
     line-height: 0.95;
   }
 
@@ -3360,7 +3374,7 @@
     margin-top: 0.35rem;
     color: hsl(var(--foreground) / 0.72);
     font-size: clamp(0.78rem, 0.84vw, 0.94rem);
-    font-weight: 650;
+    font-weight: 600;
     line-height: 1.2;
   }
 
@@ -3851,7 +3865,7 @@
     display: inline-block;
     flex: 0 0 auto;
     font-size: 0.68em;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1;
     transform: translateY(-0.12em);
   }
@@ -4023,7 +4037,7 @@
     overflow: hidden;
     color: hsl(var(--primary-foreground) / 0.9);
     font-size: 0.98rem;
-    font-weight: 650;
+    font-weight: 600;
     letter-spacing: 0;
     line-height: 1.2;
     text-overflow: ellipsis;
@@ -4556,7 +4570,7 @@
       color: hsl(var(--foreground));
       font-family: var(--font-brand-display);
       font-size: clamp(0.98rem, 1.05vw, 1.18rem);
-      font-weight: 650;
+      font-weight: 600;
       line-height: 1.14;
       text-wrap: balance;
     }
@@ -4892,7 +4906,7 @@
       color: hsl(var(--primary));
       font-family: var(--font-brand-display);
       font-size: clamp(1rem, 1.7vw, 1.35rem);
-      font-weight: 650;
+      font-weight: 600;
       letter-spacing: 0;
       line-height: 1.12;
     }
@@ -7617,7 +7631,7 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   min-height: 0;
   color: hsl(var(--foreground) / 0.52);
   font-size: clamp(0.82rem, 0.9vw, 0.94rem);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.16;
   letter-spacing: 0.09em;
 }
@@ -8144,7 +8158,7 @@ html[data-home-experience='story'] {
 
   .story-mobile-header > a span {
     font-size: 0.8rem !important;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0 !important;
   }
 
@@ -10342,14 +10356,16 @@ html[dir='rtl'] {
   }
 }
 
-/* One editorial number language across the site, sourced from AIXCO Philosophy. */
+/* One editorial number language across the site. Epilogue is bundled locally
+   so currency and non-currency metrics use the same numeral shapes on every
+   browser instead of mixing Gilroy figures with fallback currency figures. */
 .story-standard-number,
 .story-philosophy-stat .story-standard-number,
 .story-dubai-portfolio-card__metric .story-standard-number,
 [data-story-section='batumi'] .story-standard-number,
 [data-story-section='participate'] .story-standard-number {
   color: hsl(var(--primary)) !important;
-  font-family: var(--font-legacy-ui) !important;
+  font-family: "Epilogue", Arial, sans-serif !important;
   font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;
   font-weight: 400 !important;
   font-variant-numeric: lining-nums tabular-nums;
@@ -10558,89 +10574,66 @@ html[lang='de']
   transform: none;
 }
 
-/* Currency symbols keep the metric's exact size and baseline, but use a
-   lighter optical weight so $ and € do not render darker than the figures. */
-.story-standard-number .story-currency-symbol {
+/* Keep each monetary value in one unbroken font run. The symbol and figures
+   inherit identical size, weight, line-height, color, and baseline metrics. */
+.story-standard-number .story-currency-token {
   display: inline-block;
-  margin-inline-end: 0.025em;
   color: inherit;
-  font-family: inherit !important;
-  font-size: 1em !important;
-  font-weight: 300 !important;
+  font: inherit !important;
   font-style: normal;
   line-height: inherit !important;
   letter-spacing: inherit;
+  white-space: nowrap;
   opacity: 1;
   vertical-align: baseline;
   transform: none;
 }
 
-/* Keep the dollar at the exact same declared size, weight, and baseline as
-   its adjacent figures. It must read as part of one continuous value. */
-.story-standard-number .story-currency-symbol--dollar {
-  display: inline-block;
-  margin-inline-end: 0.2em;
-  font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;
-  font-size: 1em !important;
-  font-weight: 300 !important;
+/* Epilogue is bundled locally for monetary values because its $ and € glyphs
+   share the numerals' exact painted height and optical center. Keeping the
+   complete token in this one geometric face avoids device font fallbacks. */
+.story-standard-number
+  :is(.story-currency-token--dollar, .story-currency-token--euro) {
+  font-family: "Epilogue", Arial, sans-serif !important;
+  font-size: inherit !important;
+  font-weight: 400 !important;
   font-synthesis: none;
   line-height: inherit !important;
-  opacity: 1;
-  position: relative;
-  top: -0.004364rem;
-  vertical-align: baseline;
-  transform: scaleX(1.45) scaleY(0.8085);
-  transform-origin: left center;
 }
 
-/* Gilroy's bundled files do not contain U+20AC. Use the same genuine light
-   face as the dollar so the Euro never falls back to Arial's heavier regular
-   glyph; keep the independently tuned Euro baseline intact. */
-.story-standard-number .story-currency-symbol--euro {
-  font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;
-  font-size: 1em !important;
-  font-weight: 300 !important;
-  font-synthesis: none;
-  line-height: inherit !important;
-  position: relative;
-  top: 0;
-  vertical-align: baseline;
-  transform: none;
-}
-
-.story-standard-number .story-currency-symbol--euro + .story-currency-value {
-  font-family: Arial, sans-serif !important;
-}
-
+.story-standard-number .story-currency-symbol,
 .story-standard-number .story-currency-value {
-  display: inline-block;
+  display: inline;
+  margin: 0;
   color: inherit;
-  font: inherit;
-  line-height: inherit;
-  letter-spacing: inherit;
-  vertical-align: baseline;
+  font: inherit !important;
+  font-style: normal;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  opacity: 1;
+  position: static;
+  vertical-align: inherit;
+  transform: none;
+}
+
+/* Epilogue's euro is optically two painted pixels shorter than its lining
+   figures at laptop and desktop sizes. Increase the glyph itself—not its
+   line box—so its visible cap height matches the adjacent figures exactly. */
+.story-standard-number .story-currency-symbol--euro {
+  font-size: 1.055em !important;
+  line-height: 0.947867em !important;
 }
 
 /* Batumi's four headline figures share one complete face so the euro glyph,
    numerals, percentages, and suffixes have the same optical weight. */
 [data-story-section='batumi']
   .story-batumi-benefit__metric.story-standard-number
-  .story-currency-value,
+  .story-currency-token,
 [data-story-section='batumi']
   .story-batumi-benefit__metric.story-standard-number {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    'Helvetica Neue', Arial, sans-serif !important;
+  font-family: "Epilogue", Arial, sans-serif !important;
   font-weight: 400 !important;
   font-synthesis: none;
-}
-
-[data-story-section='batumi']
-  .story-batumi-benefit__metric.story-standard-number
-  .story-currency-symbol {
-  font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;
-  font-weight: 300 !important;
-  font-synthesis: none;
-  opacity: 1;
 }
 
 [data-story-section='batumi'] .story-batumi-benefit__label {
@@ -10653,37 +10646,33 @@ html[lang='de']
 
 .story-inline-currency-token {
   display: inline-block;
-  font: inherit;
-  font-family: Arial, sans-serif !important;
-  line-height: inherit;
+  color: inherit;
+  font-family: "Epilogue", Arial, sans-serif !important;
+  font-size: 1em;
+  font-weight: inherit;
+  font-style: normal;
+  line-height: inherit !important;
+  letter-spacing: inherit;
   white-space: nowrap;
 }
 
 .story-inline-currency-symbol,
 .story-inline-currency-value {
-  display: inline-block;
+  display: inline;
+  margin: 0;
   color: inherit;
-  font-size: 1em;
+  font: inherit !important;
   font-style: normal;
-  line-height: inherit;
-  letter-spacing: inherit;
-  vertical-align: baseline;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  opacity: 1;
+  position: static;
+  vertical-align: inherit;
   transform: none;
 }
 
-.story-inline-currency-symbol {
-  margin-inline-end: 0.015em;
-}
-
 .story-inline-currency-symbol--euro {
-  font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;
-  font-size: 1em !important;
-  font-weight: 300 !important;
-  font-synthesis: none;
-  line-height: inherit !important;
-  opacity: 1;
-  position: relative;
-  top: 0;
+  font: inherit !important;
 }
 
 /* The About metrics sit on photography, so use the brighter champagne tone

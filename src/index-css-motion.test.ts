@@ -207,12 +207,13 @@ describe("index.css motion rules", () => {
   });
 
   it("renders metric symbols with a complete system font and no artificial spacing", () => {
-    expect(desktopStoryHome).toContain('numericValue.split(/([.,])/u).filter(Boolean)');
-    expect(desktopStoryHome).toContain('"story-philosophy-stat__punctuation"');
-    expect(css).toContain(".story-philosophy-stat__punctuation,\n  .story-philosophy-stat__affix");
-    expect(css).toContain("font-family: var(--font-legacy-display);");
-    expect(css).toContain(".story-philosophy-stat__affix--prefix {\n    margin-right: 0;");
-    expect(css).toContain(".story-philosophy-stat__affix--suffix {\n    margin-left: 0;");
+    expect(desktopStoryHome).toContain("<StoryMetricText value={localizedValue} />");
+    expect(desktopStoryHome).not.toContain("numericValue.split(/([.,])/u)");
+    expect(desktopStoryHome).not.toContain('"story-philosophy-stat__punctuation"');
+    expect(css).toContain(".story-standard-number .story-currency-token {");
+    expect(css).toContain("font: inherit !important;");
+    expect(css).toContain("letter-spacing: inherit;");
+    expect(css).toContain("white-space: nowrap;");
   });
 
   it("registers the supplied AIXCO SVG icons for contact/social slots", () => {
@@ -704,7 +705,10 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('className="story-metric-value"');
     expect(desktopStoryHome).not.toContain('<p className="story-metric-value story-standard-number">');
     expect(desktopStoryHome).toContain("story-standard-number story-legacy-number");
-    expect(css).toContain("/* One editorial number language across the site, sourced from AIXCO Philosophy. */");
+    expect(css).toContain("/* One editorial number language across the site. Epilogue is bundled locally");
+    expect(css).toContain(
+      'font-family: "Epilogue", Arial, sans-serif !important;',
+    );
     expect(css).toContain("font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;");
     expect(css).toContain("font-weight: 400 !important;");
     expect(css).toContain("font-variant-numeric: lining-nums tabular-nums;");
@@ -720,78 +724,64 @@ describe("index.css motion rules", () => {
   });
 
   it("keeps currency symbols on the exact same typographic line as their figures", () => {
-    const currencyStart = css.indexOf(
-      ".story-standard-number .story-currency-symbol {",
+    const currencyTokenStart = css.indexOf(
+      ".story-standard-number .story-currency-token {",
     );
-    const currencyBlock = css.slice(
-      currencyStart,
-      css.indexOf("\n}", currencyStart),
+    const currencyTokenBlock = css.slice(
+      currencyTokenStart,
+      css.indexOf("\n}", currencyTokenStart),
     );
 
-    expect(currencyStart).toBeGreaterThanOrEqual(0);
-    expect(currencyBlock).toContain("font-size: 1em !important;");
-    expect(currencyBlock).toContain("font-weight: 300 !important;");
-    expect(currencyBlock).toContain("opacity: 1;");
-    expect(currencyBlock).toContain("line-height: inherit !important;");
-    expect(currencyBlock).toContain("vertical-align: baseline;");
-    expect(currencyBlock).not.toContain("font-size: 0.82em");
-    expect(currencyBlock).not.toContain("vertical-align: 0.055em");
+    expect(currencyTokenStart).toBeGreaterThanOrEqual(0);
+    expect(currencyTokenBlock).toContain("font: inherit !important;");
+    expect(currencyTokenBlock).toContain("opacity: 1;");
+    expect(currencyTokenBlock).toContain("line-height: inherit !important;");
+    expect(currencyTokenBlock).toContain("vertical-align: baseline;");
+    expect(currencyTokenBlock).toContain("transform: none;");
+    expect(currencyTokenBlock).not.toContain("font-size: 0.82em");
+    expect(currencyTokenBlock).not.toContain("vertical-align: 0.055em");
+    expect(desktopStoryHome).toContain("story-currency-token--dollar");
     expect(desktopStoryHome).toContain("story-currency-symbol--dollar");
-    expect(desktopStoryHome).toContain("story-philosophy-stat__number");
+    expect(desktopStoryHome).not.toContain("story-philosophy-stat__number-part");
 
     const dollarStart = css.indexOf(
-      ".story-standard-number .story-currency-symbol--dollar {",
+      ".story-standard-number\n  :is(.story-currency-token--dollar, .story-currency-token--euro) {",
     );
     const dollarBlock = css.slice(dollarStart, css.indexOf("\n}", dollarStart));
 
     expect(dollarStart).toBeGreaterThanOrEqual(0);
     expect(dollarBlock).toContain(
-      'font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;',
+      'font-family: "Epilogue", Arial, sans-serif !important;',
     );
-    expect(dollarBlock).toContain("font-size: 1em !important;");
-    expect(dollarBlock).toContain("font-weight: 300 !important;");
+    expect(dollarBlock).toContain("font-size: inherit !important;");
+    expect(dollarBlock).toContain("font-weight: 400 !important;");
     expect(dollarBlock).toContain("font-synthesis: none;");
     expect(dollarBlock).toContain("line-height: inherit !important;");
-    expect(dollarBlock).toContain("top: -0.004364rem;");
-    expect(dollarBlock).toContain("transform: scaleX(1.45) scaleY(0.8085);");
-    expect(dollarBlock).toContain("transform-origin: left center;");
-    expect(dollarBlock).toContain("opacity: 1;");
+    expect(dollarBlock).not.toContain("top:");
+    expect(dollarBlock).not.toContain("transform:");
+
+    expect(dollarBlock).toContain(".story-currency-token--euro");
+    expect(dollarBlock).not.toContain("top:");
+    expect(css).not.toContain("scaleX(1.45)");
+
+    const childStart = css.indexOf(
+      ".story-standard-number .story-currency-symbol,\n.story-standard-number .story-currency-value {",
+    );
+    const childBlock = css.slice(childStart, css.indexOf("\n}", childStart));
+    expect(childStart).toBeGreaterThanOrEqual(0);
+    expect(childBlock).toContain("display: inline;");
+    expect(childBlock).toContain("margin: 0;");
+    expect(childBlock).toContain("font: inherit !important;");
+    expect(childBlock).toContain("position: static;");
+    expect(childBlock).toContain("transform: none;");
 
     const euroStart = css.indexOf(
       ".story-standard-number .story-currency-symbol--euro {",
     );
     const euroBlock = css.slice(euroStart, css.indexOf("\n}", euroStart));
-
     expect(euroStart).toBeGreaterThanOrEqual(0);
-    expect(euroBlock).toContain(
-      'font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;',
-    );
-    expect(euroBlock).toContain("font-size: 1em !important;");
-    expect(euroBlock).toContain("font-weight: 300 !important;");
-    expect(euroBlock).toContain("font-synthesis: none;");
-    expect(euroBlock).toContain("line-height: inherit !important;");
-    expect(euroBlock).toContain("top: 0;");
-    expect(euroBlock).toContain("vertical-align: baseline;");
-    expect(css).toContain(
-      ".story-standard-number .story-currency-symbol--euro + .story-currency-value {",
-    );
-    expect(css).toContain(
-      "font-family: Arial, sans-serif !important;",
-    );
-    const batumiCurrencyStart = css.indexOf(
-      "[data-story-section='batumi']\n  .story-batumi-benefit__metric.story-standard-number\n  .story-currency-symbol {",
-    );
-    const batumiCurrencyBlock = css.slice(
-      batumiCurrencyStart,
-      css.indexOf("\n}", batumiCurrencyStart),
-    );
-    expect(batumiCurrencyStart).toBeGreaterThanOrEqual(0);
-    expect(batumiCurrencyBlock).toContain(
-      'font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;',
-    );
-    expect(batumiCurrencyBlock).toContain("font-weight: 300 !important;");
-    expect(batumiCurrencyBlock).toContain("font-synthesis: none;");
-    expect(batumiCurrencyBlock).toContain("opacity: 1;");
+    expect(euroBlock).toContain("font-size: 1.055em !important;");
+    expect(euroBlock).toContain("line-height: 0.947867em !important;");
   });
 
   it("aligns the wrapped construction qualifier with the scope copy on English laptops", () => {
@@ -823,15 +813,14 @@ describe("index.css motion rules", () => {
       "<StoryInlineCurrencyText value={tx(label)} />",
     );
     expect(css).toContain(".story-inline-currency-token {");
-    expect(css).toContain("font-family: Arial, sans-serif !important;");
+    expect(css).toContain(
+      'font-family: "Epilogue", Arial, sans-serif !important;',
+    );
     expect(css).toContain("white-space: nowrap;");
     expect(css).toContain(".story-inline-currency-symbol--euro {");
-    expect(css).toContain(
-      'font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;',
-    );
-    expect(css).toContain("font-weight: 300 !important;");
-    expect(css).toContain("font-synthesis: none;");
-    expect(css).toContain("top: 0;");
+    expect(css).toContain("font: inherit !important;");
+    expect(css).not.toContain("top: -0.004364rem;");
+    expect(css).not.toContain("transform: scaleX(1.45)");
   });
 
   it("matches Dubai card typography to the Philosophy card scale", () => {
@@ -951,6 +940,25 @@ describe("index.css motion rules", () => {
     expect(appLayout).toContain('variable: "--font-gilroy-german"');
     expect(appLayout).toContain("Gilroy-Regular-German.woff2");
     expect(appLayout).toContain("Gilroy-Black-German.woff2");
+  });
+
+  it("uses only real bundled font weights and keeps repeated body copy neutral", () => {
+    const bodyRule = cssBlock("body");
+    const storyBodyRule = cssBlock(".story-body");
+    const teamSummaryRule = cssBlock(".story-team-member__summary");
+
+    expect(bodyRule).toContain("font-synthesis: none;");
+    expect(bodyRule).toContain("font-weight: 400;");
+    expect(storyBodyRule).toContain("font-family: var(--font-brand-sans);");
+    expect(storyBodyRule).toContain("font-synthesis: none;");
+    expect(storyBodyRule).toContain("font-weight: 400;");
+    expect(teamSummaryRule).toContain(
+      "color: hsl(var(--foreground) / 0.64);",
+    );
+    expect(css).not.toMatch(/font-weight:\s*(?:650|700);/);
+    expect(desktopStoryHome).toContain(
+      'className="story-team-member__summary story-body"',
+    );
   });
 
   it("renders other supported localized glyphs with one complete platform stack", () => {

@@ -113,16 +113,43 @@ try {
       const normalizedText = details.text.replace(/\s+/gu, "").trim();
       const normalizedLabel = details.label.replace(/\s+/gu, "").trim();
       const symbol = metric.locator(":scope .story-currency-symbol").first();
-      const value = metric
-        .locator(
-          ":scope > .story-currency-value, :scope > .story-philosophy-stat__number",
-        )
-        .first();
-      const [symbolBox, valueBox, symbolColor, valueColor] = await Promise.all([
+      const value = metric.locator(":scope .story-currency-value").first();
+      const [
+        symbolBox,
+        valueBox,
+        symbolColor,
+        valueColor,
+        symbolTypography,
+        valueTypography,
+      ] = await Promise.all([
         symbol.boundingBox(),
         value.boundingBox(),
         symbol.evaluate((node) => getComputedStyle(node).color),
         value.evaluate((node) => getComputedStyle(node).color),
+        symbol.evaluate((node) => {
+          const style = getComputedStyle(node);
+          return {
+            family: style.fontFamily,
+            size: style.fontSize,
+            weight: style.fontWeight,
+            lineHeight: style.lineHeight,
+            letterSpacing: style.letterSpacing,
+            position: style.position,
+            transform: style.transform,
+          };
+        }),
+        value.evaluate((node) => {
+          const style = getComputedStyle(node);
+          return {
+            family: style.fontFamily,
+            size: style.fontSize,
+            weight: style.fontWeight,
+            lineHeight: style.lineHeight,
+            letterSpacing: style.letterSpacing,
+            position: style.position,
+            transform: style.transform,
+          };
+        }),
       ]);
       const [symbolPaint, valuePaint] = await Promise.all([
         paintedBounds(
@@ -154,25 +181,76 @@ try {
         valueBox.x +
         valuePaint.left -
         (symbolBox.x + symbolPaint.right + 1);
-      // Chromium's glyph antialiasing can add or remove a single painted edge
-      // row/column between Windows and Linux. Keep the optical center strict,
-      // while allowing that cross-platform rasterization variance.
+      // A single antialiased edge row may vary across operating systems, but
+      // the symbol must otherwise share the figures' painted height and center.
       const visuallyAligned =
-        Math.abs(heightDelta) <= 6 &&
-        Math.abs(centerDelta) <= 2 &&
+        Math.abs(heightDelta) <= 1 &&
+        Math.abs(centerDelta) <= 1 &&
         gap >= -5;
+      const typographyMatches =
+        symbolTypography.family === valueTypography.family &&
+        (details.isEuro
+          ? Math.abs(
+              Number.parseFloat(symbolTypography.size) /
+                Number.parseFloat(valueTypography.size) -
+                1.055,
+            ) <= 0.002
+          : symbolTypography.size === valueTypography.size) &&
+        symbolTypography.weight === valueTypography.weight &&
+        symbolTypography.lineHeight === valueTypography.lineHeight &&
+        symbolTypography.letterSpacing === valueTypography.letterSpacing &&
+        symbolTypography.position === "static" &&
+        symbolTypography.transform === "none";
 
       if (
         normalizedText !== normalizedLabel ||
         !details.nowrap ||
         details.overflow > 0 ||
         symbolColor !== valueColor ||
+        !typographyMatches ||
         !visuallyAligned
       ) {
         failures.push(
-          `${size} ${normalizedLabel}: visible=${normalizedText}, symbol color=${symbolColor}, value color=${valueColor}, painted height delta=${heightDelta}px, painted center delta=${centerDelta}px, painted gap=${gap}px, nowrap=${details.nowrap}, overflow=${details.overflow}px`,
+          `${size} ${normalizedLabel}: visible=${normalizedText}, symbol color=${symbolColor}, value color=${valueColor}, symbol typography=${JSON.stringify(symbolTypography)}, value typography=${JSON.stringify(valueTypography)}, painted height delta=${heightDelta}px, painted center delta=${centerDelta}px, painted gap=${gap}px, nowrap=${details.nowrap}, overflow=${details.overflow}px`,
         );
       }
+    }
+
+    const platformTypography = await page
+      .locator(
+        '[data-layout="story-philosophy-platform-stats"] .story-standard-number',
+      )
+      .evaluateAll((nodes) =>
+        nodes
+          .filter((node) => node.getClientRects().length > 0)
+          .map((node) => {
+            const style = getComputedStyle(node);
+            return {
+              text: node.textContent?.trim() ?? "",
+              family: style.fontFamily,
+              size: style.fontSize,
+              weight: style.fontWeight,
+              lineHeight: style.lineHeight,
+              letterSpacing: style.letterSpacing,
+            };
+          }),
+      );
+    const platformTreatmentKeys = new Set(
+      platformTypography.map(
+        ({ family, size, weight, lineHeight, letterSpacing }) =>
+          JSON.stringify({
+            family,
+            size,
+            weight,
+            lineHeight,
+            letterSpacing,
+          }),
+      ),
+    );
+    if (platformTreatmentKeys.size !== 1) {
+      failures.push(
+        `${size} Philosophy platform metrics do not share one numeral treatment: ${JSON.stringify(platformTypography)}`,
+      );
     }
 
     const inlineTokens = page.locator(
@@ -235,7 +313,7 @@ try {
     const localeTreatments = await page.evaluate(() =>
       Array.from(
         document.querySelectorAll(
-          ".story-currency-symbol--euro, .story-inline-currency-symbol--euro",
+          ".story-currency-symbol, .story-inline-currency-symbol",
         ),
       )
         .filter((symbol) => symbol.getClientRects().length > 0)
@@ -243,20 +321,73 @@ try {
           const value = symbol.nextElementSibling;
           const symbolStyle = getComputedStyle(symbol);
           const valueStyle = value ? getComputedStyle(value) : null;
+          const isEuro = symbol.classList.contains(
+            "story-currency-symbol--euro",
+          );
           return {
             text: `${symbol.textContent ?? ""}${value?.textContent ?? ""}`,
+            isEuro,
+            familyMatches: valueStyle
+              ? symbolStyle.fontFamily === valueStyle.fontFamily
+              : false,
+            sizeMatches: valueStyle
+              ? isEuro
+                ? Math.abs(
+                    Number.parseFloat(symbolStyle.fontSize) /
+                      Number.parseFloat(valueStyle.fontSize) -
+                      1.055,
+                  ) <= 0.002
+                : symbolStyle.fontSize === valueStyle.fontSize
+              : false,
+            weightMatches: valueStyle
+              ? symbolStyle.fontWeight === valueStyle.fontWeight
+              : false,
+            lineMatches: valueStyle
+              ? symbolStyle.lineHeight === valueStyle.lineHeight
+              : false,
             colorMatches: valueStyle
               ? symbolStyle.color === valueStyle.color
               : false,
             fullOpacity: symbolStyle.opacity === "1",
+            staticPosition: symbolStyle.position === "static",
+            untransformed: symbolStyle.transform === "none",
           };
         }),
     );
 
     for (const treatment of localeTreatments) {
-      if (!treatment.colorMatches || !treatment.fullOpacity) {
+      if (
+        !treatment.familyMatches ||
+        !treatment.sizeMatches ||
+        !treatment.weightMatches ||
+        !treatment.lineMatches ||
+        !treatment.colorMatches ||
+        !treatment.fullOpacity ||
+        !treatment.staticPosition ||
+        !treatment.untransformed
+      ) {
         failures.push(
-          `${locale} ${treatment.text}: euro color match=${treatment.colorMatches}, full opacity=${treatment.fullOpacity}`,
+          `${locale} ${treatment.text}: ${JSON.stringify(treatment)}`,
+        );
+      }
+    }
+
+    if (locale === "sl") {
+      const slHeadlineValues = await page
+        .locator(
+          '[data-story-section="about"] .story-standard-number, [data-story-section="philosophy"] .story-standard-number, [data-story-section="philosophyPlatform"] .story-standard-number',
+        )
+        .allTextContents();
+      for (const expectedValue of ["$400M", "$400M+", "$4.2B+"]) {
+        if (!slHeadlineValues.some((value) => value.trim() === expectedValue)) {
+          failures.push(
+            `sl: expected dollar-denominated headline ${expectedValue}; visible values=${slHeadlineValues.join("|")}`,
+          );
+        }
+      }
+      if (slHeadlineValues.some((value) => /^€(?:400M|4\.2B)/u.test(value.trim()))) {
+        failures.push(
+          `sl: legacy euro-denominated development headline remains: ${slHeadlineValues.join("|")}`,
         );
       }
     }

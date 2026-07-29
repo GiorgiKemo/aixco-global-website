@@ -313,8 +313,8 @@ describe("I18nProvider", () => {
       expect(screen.getByText("Od Švice do Dubaja do Batumija")).toBeInTheDocument();
       expect(screen.getByText("$350M, večnamenski program")).toBeInTheDocument();
       expect(screen.getByText("KUPITE. SODELUJTE. USTVARITE VREDNOST.")).toBeInTheDocument();
-      expect(screen.getByText("€400M")).toBeInTheDocument();
-      expect(screen.getByText("€4.2B+")).toBeInTheDocument();
+      expect(screen.getByText("$400M")).toBeInTheDocument();
+      expect(screen.getByText("$4.2B+")).toBeInTheDocument();
       expect(screen.getByText("€45k")).toBeInTheDocument();
       expect(screen.getByText("Prenos gradiv")).toBeInTheDocument();
       expect(screen.getByText("Osnovna pogosta vprašanja")).toBeInTheDocument();

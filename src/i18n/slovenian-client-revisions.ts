@@ -40,7 +40,7 @@ export const slovenianClientRevisions = {
   "5,000+": { sl: "5.000+" },
   "Trusted Clients": { sl: "Zaupanja vrednih strank" },
   "Trusted clients": { sl: "Zaupanja vrednih strank" },
-  "$400M": { sl: "€400M" },
+  "$400M": { sl: "$400M" },
   "Gross Development Value (GDV)": { sl: "Skupna razvojna vrednost (GDV)" },
   "2000+": { sl: "2000+" },
   "Total Transactions": { sl: "Skupno število transakcij" },
@@ -58,13 +58,13 @@ export const slovenianClientRevisions = {
   },
   "First acquisition": { sl: "Prva pridobitev" },
   "Current gross development value": { sl: "Trenutna skupna razvojna vrednost" },
-  "$400M+": { sl: "€400M+" },
+  "$400M+": { sl: "$400M+" },
   "Transactions completed": { sl: "Zaključene transakcije" },
   "2,000+": { sl: "2.000+" },
   "Real estate transacted across markets": {
     sl: "Skupna vrednost nepremičninskih transakcij, s katerimi se je trgovalo na vseh trgih",
   },
-  "$4.2B+": { sl: "€4.2B+" },
+  "$4.2B+": { sl: "$4.2B+" },
   "Disciplined ownership": { sl: "Disciplinirano lastništvo" },
   "Property administration": { sl: "Upravljanje nepremičnin" },
   "Responsible risk assessment": { sl: "Odgovorno ocenjevanje tveganj" },
@@ -108,10 +108,10 @@ export const slovenianClientRevisions = {
     sl: "Zgrajen na desetletjih tržnih izkušenj in odgovornega lastništva, AIXCO nadaljuje mednarodno širitev prek izbranih priložnosti v Dubaju in Gruziji.",
   },
   "Today, AIXCO manages projects representing more than $400 million in gross development value, supported by an international team of over 90 professional and highly skilled employees and a global network of clients, brokers, developers, and partners.": {
-    sl: "Danes AIXCO upravlja projekte v skupni vrednosti več kot 400 milijonov evrov razvojne vrednosti, podprte z mednarodno ekipo več kot 90 strokovno usposobljenih zaposlenih ter globalno mrežo strank, posrednikov, razvijalcev in partnerjev.",
+    sl: "Danes AIXCO upravlja projekte v skupni razvojni vrednosti več kot 400 milijonov ameriških dolarjev, podprte z mednarodno ekipo več kot 90 strokovno usposobljenih zaposlenih ter globalno mrežo strank, posrednikov, razvijalcev in partnerjev.",
   },
   "AIXCO has completed more than 2,000 real estate transactions and transacted over $4.2 billion in property value across international markets.": {
-    sl: "AIXCO je zaključil več kot 2.000 nepremičninskih transakcij in v mednarodnih trgih realiziral prek 4,2 milijarde evrov vrednosti nepremičnin.",
+    sl: "AIXCO je zaključil več kot 2.000 nepremičninskih transakcij in na mednarodnih trgih realiziral prek 4,2 milijarde ameriških dolarjev vrednosti nepremičnin.",
   },
   "Principles": { sl: "Načela" },
   "Integrity, stability, discipline, and responsible risk assessment": {

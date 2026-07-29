@@ -1814,17 +1814,19 @@ function StoryMetricText({
   if (!currencyMetric) return <>{value}</>;
 
   return (
-    <>
+    <span
+      className={`story-currency-token ${currencyMetric[1] === "€" ? "story-currency-token--euro" : "story-currency-token--dollar"}`}
+      aria-hidden={ariaHidden || undefined}
+    >
       <span
         className={`story-currency-symbol ${currencyMetric[1] === "€" ? "story-currency-symbol--euro" : "story-currency-symbol--dollar"}`}
-        aria-hidden={ariaHidden || undefined}
       >
         {currencyMetric[1]}
       </span>
-      <span className="story-currency-value" aria-hidden={ariaHidden || undefined}>
+      <span className="story-currency-value">
         {currencyMetric[2]}
       </span>
-    </>
+    </span>
   );
 }
 
@@ -1839,7 +1841,7 @@ function StoryInlineCurrencyText({ value }: { value: string }) {
     return (
       <span
         key={`${part}:${partIndex}`}
-        className="story-inline-currency-token"
+        className="story-currency-token story-currency-token--euro story-inline-currency-token"
         data-inline-currency-token="euro"
       >
         <span className="story-inline-currency-symbol story-inline-currency-symbol--euro">
@@ -2184,47 +2186,12 @@ function PhilosophyPlatformScene({
       <dl data-layout="story-philosophy-platform-stats" className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
         {philosophyPlatformStats.map((stat) => {
           const localizedValue = tx(stat.value);
-          const prefix =
-            localizedValue.startsWith("$")
-              ? "$"
-              : localizedValue.startsWith("€")
-                ? "€"
-                : "";
-          const suffix = localizedValue.endsWith("+") ? "+" : "";
-          const numericValue = localizedValue.slice(prefix.length, suffix ? -1 : undefined);
-          const numericSegments = numericValue.split(/([.,])/u).filter(Boolean);
 
           return (
             <div key={stat.label} className="story-philosophy-stat">
               <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
               <dd className="story-metric-value story-philosophy-stat__value story-standard-number" aria-label={localizedValue}>
-                {prefix ? (
-                  <span
-                    className={cn(
-                      "story-philosophy-stat__affix story-philosophy-stat__affix--prefix story-currency-symbol",
-                      prefix === "€"
-                        ? "story-currency-symbol--euro"
-                        : "story-currency-symbol--dollar",
-                    )}
-                    aria-hidden="true"
-                  >
-                    {prefix}
-                  </span>
-                ) : null}
-                <span className="story-philosophy-stat__number">
-                  {numericSegments.map((segment, segmentIndex) => (
-                    <span
-                      key={`${segment}:${segmentIndex}`}
-                      className={cn(
-                        "story-philosophy-stat__number-part",
-                        /^[.,]$/u.test(segment) && "story-philosophy-stat__punctuation",
-                      )}
-                    >
-                      {segment}
-                    </span>
-                  ))}
-                </span>
-                {suffix ? <span className="story-philosophy-stat__affix story-philosophy-stat__affix--suffix">{suffix}</span> : null}
+                <StoryMetricText value={localizedValue} />
               </dd>
             </div>
           );
@@ -2999,8 +2966,8 @@ function TeamScene({
               </div>
               <div className="min-w-0 self-center">
                 <h3 className={cn("story-card-title", isSelected && "text-primary")}>{tx(member.name)}</h3>
-                <p className="story-body font-medium text-primary">{tx(member.role)}</p>
-                <p className="story-body text-foreground/64">{tx(member.summary)}</p>
+                <p className="story-team-member__role story-body font-medium text-primary">{tx(member.role)}</p>
+                <p className="story-team-member__summary story-body">{tx(member.summary)}</p>
               </div>
             </button>
           );
