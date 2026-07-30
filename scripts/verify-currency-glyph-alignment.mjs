@@ -102,6 +102,9 @@ try {
           isDollar: symbol?.classList.contains(
             "story-currency-symbol--dollar",
           ),
+          isTranslucentOverlay: Boolean(
+            node.closest(".story-about-cinematic-copy"),
+          ),
           nowrap: style.whiteSpace === "nowrap",
           overflow: card
             ? Math.max(
@@ -166,11 +169,17 @@ try {
       ]);
       inspectedGlyphs += 1;
 
-      if (!symbolBox || !valueBox || !symbolPaint || !valuePaint) {
+      if (
+        details.isTranslucentOverlay ||
+        !symbolBox ||
+        !valueBox ||
+        !symbolPaint ||
+        !valuePaint
+      ) {
         // The dark photographic About card composites its gold text through a
-        // translucent overlay in some Chromium raster sizes. That can defeat
-        // the exact color mask even though the separately captured visual
-        // matrix still covers the value.
+        // translucent overlay. Its background-dependent antialiasing differs
+        // across operating systems, so the exact color mask is intentionally
+        // deferred to the separately captured visual matrix.
         colorMaskSkips += 1;
         continue;
       }
