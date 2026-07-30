@@ -10356,16 +10356,16 @@ html[dir='rtl'] {
   }
 }
 
-/* One editorial number language across the site. Epilogue is bundled locally
-   so currency and non-currency metrics use the same numeral shapes on every
-   browser instead of mixing Gilroy figures with fallback currency figures. */
+/* One locally bundled AIXCO number face across the site. Using the active
+   Gilroy brand face for the complete value keeps figures and native currency
+   glyphs identical on every browser without relying on a missing webfont. */
 .story-standard-number,
 .story-philosophy-stat .story-standard-number,
 .story-dubai-portfolio-card__metric .story-standard-number,
 [data-story-section='batumi'] .story-standard-number,
 [data-story-section='participate'] .story-standard-number {
   color: hsl(var(--primary)) !important;
-  font-family: "Epilogue", Arial, sans-serif !important;
+  font-family: var(--font-brand-sans) !important;
   font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;
   font-weight: 400 !important;
   font-variant-numeric: lining-nums tabular-nums;
@@ -10589,12 +10589,11 @@ html[lang='de']
   transform: none;
 }
 
-/* Epilogue is bundled locally for monetary values because its $ and € glyphs
-   share the numerals' exact painted height and optical center. Keeping the
-   complete token in this one geometric face avoids device font fallbacks. */
+/* Keep the complete monetary token in the active, locally bundled brand face.
+   The symbol and figures therefore come from one real font run on every device. */
 .story-standard-number
   :is(.story-currency-token--dollar, .story-currency-token--euro) {
-  font-family: "Epilogue", Arial, sans-serif !important;
+  font-family: var(--font-brand-sans) !important;
   font-size: inherit !important;
   font-weight: 400 !important;
   font-synthesis: none;
@@ -10616,51 +10615,24 @@ html[lang='de']
   transform: none;
 }
 
-/* Epilogue's native euro paints a touch shorter than its lining figures.
-   Preserve its width, but optically extend only its painted height so it
-   shares the adjacent numeral's cap height and center at every responsive size. */
+/* Use the brand face's native euro without a transform or baseline correction. */
 .story-standard-number .story-currency-symbol--euro {
-  display: inline-block;
+  display: inline;
   font-size: inherit !important;
   line-height: inherit !important;
-  transform: scaleY(1.04);
-  transform-origin: 50% 50%;
+  transform: none;
 }
 
-/* The native dollar reserves part of its height for the projecting strike,
-   which makes the visible S look shorter than the neighboring numeral. Keep
-   the real "$" in the DOM for copying/accessibility, replace only its paint
-   with the same Epilogue capital S used by the metric face, and contain the
-   strike inside that cap height. */
+/* Use the native Gilroy dollar as one real glyph. Constructing it from a
+   painted S and a separate vertical rule produces visibly uneven strokes
+   after browser antialiasing, particularly at the compact hero-card size. */
 .story-standard-number .story-currency-symbol--dollar {
-  display: inline-block;
-  position: relative;
-  -webkit-text-fill-color: transparent;
-}
-
-.story-standard-number .story-currency-symbol--dollar::before {
-  position: absolute;
-  inset: 0;
-  content: "S";
-  color: currentColor;
-  font: inherit;
-  line-height: inherit;
-  text-align: center;
+  display: inline;
+  position: static;
+  color: inherit;
+  font-family: var(--font-brand-sans) !important;
+  font-weight: 300 !important;
   -webkit-text-fill-color: currentColor;
-  transform: scaleX(0.78);
-  transform-origin: 50% 50%;
-}
-
-.story-standard-number .story-currency-symbol--dollar::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: max(1.5px, 0.045em);
-  height: 0.84em;
-  border-radius: 999px;
-  background: currentColor;
-  content: "";
-  transform: translate(-50%, -50%);
 }
 
 /* Batumi's four headline figures share one complete face so the euro glyph,
@@ -10670,7 +10642,7 @@ html[lang='de']
   .story-currency-token,
 [data-story-section='batumi']
   .story-batumi-benefit__metric.story-standard-number {
-  font-family: "Epilogue", Arial, sans-serif !important;
+  font-family: var(--font-brand-sans) !important;
   font-weight: 400 !important;
   font-synthesis: none;
 }
@@ -10686,7 +10658,7 @@ html[lang='de']
 .story-inline-currency-token {
   display: inline-block;
   color: inherit;
-  font-family: "Epilogue", Arial, sans-serif !important;
+  font-family: var(--font-brand-sans) !important;
   font-size: 1em;
   font-weight: inherit;
   font-style: normal;

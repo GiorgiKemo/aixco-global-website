@@ -705,9 +705,9 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('className="story-metric-value"');
     expect(desktopStoryHome).not.toContain('<p className="story-metric-value story-standard-number">');
     expect(desktopStoryHome).toContain("story-standard-number story-legacy-number");
-    expect(css).toContain("/* One editorial number language across the site. Epilogue is bundled locally");
+    expect(css).toContain("/* One locally bundled AIXCO number face across the site.");
     expect(css).toContain(
-      'font-family: "Epilogue", Arial, sans-serif !important;',
+      "font-family: var(--font-brand-sans) !important;",
     );
     expect(css).toContain("font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;");
     expect(css).toContain("font-weight: 400 !important;");
@@ -751,7 +751,7 @@ describe("index.css motion rules", () => {
 
     expect(dollarStart).toBeGreaterThanOrEqual(0);
     expect(dollarBlock).toContain(
-      'font-family: "Epilogue", Arial, sans-serif !important;',
+      "font-family: var(--font-brand-sans) !important;",
     );
     expect(dollarBlock).toContain("font-size: inherit !important;");
     expect(dollarBlock).toContain("font-weight: 400 !important;");
@@ -780,22 +780,31 @@ describe("index.css motion rules", () => {
     );
     const euroBlock = css.slice(euroStart, css.indexOf("\n}", euroStart));
     expect(euroStart).toBeGreaterThanOrEqual(0);
+    expect(euroBlock).toContain("display: inline;");
     expect(euroBlock).toContain("font-size: inherit !important;");
     expect(euroBlock).toContain("line-height: inherit !important;");
-    expect(euroBlock).toContain("transform: scaleY(1.04);");
+    expect(euroBlock).toContain("transform: none;");
 
-    const dollarStrikeStart = css.indexOf(
-      ".story-standard-number .story-currency-symbol--dollar::after {",
+    const dollarSymbolStart = css.indexOf(
+      ".story-standard-number .story-currency-symbol--dollar {",
     );
-    const dollarStrikeBlock = css.slice(
-      dollarStrikeStart,
-      css.indexOf("\n}", dollarStrikeStart),
+    const dollarSymbolBlock = css.slice(
+      dollarSymbolStart,
+      css.indexOf("\n}", dollarSymbolStart),
     );
-    expect(dollarStrikeStart).toBeGreaterThanOrEqual(0);
-    expect(dollarStrikeBlock).toContain("width: max(1.5px, 0.045em);");
-    expect(dollarStrikeBlock).toContain("height: 0.84em;");
-    expect(dollarStrikeBlock).toContain(
-      "transform: translate(-50%, -50%);",
+    expect(dollarSymbolStart).toBeGreaterThanOrEqual(0);
+    expect(dollarSymbolBlock).toContain("display: inline;");
+    expect(dollarSymbolBlock).toContain("position: static;");
+    expect(dollarSymbolBlock).toContain(
+      "font-family: var(--font-brand-sans) !important;",
+    );
+    expect(dollarSymbolBlock).toContain("font-weight: 300 !important;");
+    expect(dollarSymbolBlock).toContain("-webkit-text-fill-color: currentColor;");
+    expect(css).not.toContain(
+      ".story-standard-number .story-currency-symbol--dollar::before",
+    );
+    expect(css).not.toContain(
+      ".story-standard-number .story-currency-symbol--dollar::after",
     );
   });
 
@@ -832,7 +841,7 @@ describe("index.css motion rules", () => {
     );
     expect(css).toContain(".story-inline-currency-token {");
     expect(css).toContain(
-      'font-family: "Epilogue", Arial, sans-serif !important;',
+      "font-family: var(--font-brand-sans) !important;",
     );
     expect(css).toContain("white-space: nowrap;");
     expect(css).toContain(".story-inline-currency-symbol--euro {");

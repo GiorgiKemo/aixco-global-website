@@ -15,7 +15,11 @@ const viewports = [
   { width: 1920, height: 1080 },
 ];
 
-const paintedBounds = async (png, expectedColor) => {
+const paintedBounds = async (
+  png,
+  expectedColor,
+  { trimNarrowVerticalExtenders = false } = {},
+) => {
   const { data, info } = await sharp(png)
     .ensureAlpha()
     .raw()
@@ -34,9 +38,11 @@ const paintedBounds = async (png, expectedColor) => {
   let right = -1;
   let top = info.height;
   let bottom = -1;
+  const rowInk = new Uint16Array(info.height);
   for (let x = 0; x < info.width; x += 1) {
     for (let y = 0; y < info.height; y += 1) {
       if (!mask[y * info.width + x]) continue;
+      rowInk[y] += 1;
       left = Math.min(left, x);
       right = Math.max(right, x);
       top = Math.min(top, y);
@@ -45,6 +51,23 @@ const paintedBounds = async (png, expectedColor) => {
   }
 
   if (right < left || bottom < top) return null;
+
+  // A native dollar has a deliberately narrow vertical stroke extending
+  // beyond its S-shaped body. Compare that S body with the adjacent numeral,
+  // while the normal bounding box and computed-style checks still guard the
+  // complete glyph's baseline, centering, and lack of CSS distortion.
+  if (trimNarrowVerticalExtenders) {
+    const widestRow = Math.max(...rowInk);
+    const bodyThreshold = Math.max(2, Math.ceil(widestRow * 0.34));
+    const bodyRows = [...rowInk.keys()].filter(
+      (row) => rowInk[row] >= bodyThreshold,
+    );
+    if (bodyRows.length > 0) {
+      top = bodyRows[0];
+      bottom = bodyRows[bodyRows.length - 1];
+    }
+  }
+
   return {
     left,
     right,
@@ -67,10 +90,6 @@ try {
       html .story-standard-number .story-currency-audit-ink {
         background: #fff !important;
         color: #000 !important;
-      }
-      html[data-currency-dollar-body-audit]
-        .story-currency-symbol--dollar::after {
-        display: none !important;
       }
     `,
   });
@@ -165,11 +184,6 @@ try {
           value.evaluate((node) =>
             node.classList.add("story-currency-audit-ink"),
           ),
-          details.isDollar
-            ? page.evaluate(() => {
-                document.documentElement.dataset.currencyDollarBodyAudit = "true";
-              })
-            : Promise.resolve(),
         ]);
         try {
           return await Promise.all([
@@ -184,17 +198,13 @@ try {
             value.evaluate((node) =>
               node.classList.remove("story-currency-audit-ink"),
             ),
-            details.isDollar
-              ? page.evaluate(() => {
-                  delete document.documentElement.dataset
-                    .currencyDollarBodyAudit;
-                })
-              : Promise.resolve(),
           ]);
         }
       })();
       const [symbolPaint, valuePaint] = await Promise.all([
-        paintedBounds(symbolPng, [0, 0, 0]),
+        paintedBounds(symbolPng, [0, 0, 0], {
+          trimNarrowVerticalExtenders: details.isDollar,
+        }),
         paintedBounds(valuePng, [0, 0, 0]),
       ]);
       inspectedGlyphs += 1;
@@ -217,23 +227,24 @@ try {
         valueBox.x +
         valuePaint.left -
         (symbolBox.x + symbolPaint.right + 1);
-      // A single antialiased edge row may vary across operating systems, but
-      // the symbol must otherwise share the figures' painted height and center.
+      // Fractional responsive sizes can spread either antialiased edge over
+      // two device-pixel rows. The euro or the dollar's S body must otherwise
+      // share the figures' painted height and optical center.
       const visuallyAligned =
-        Math.abs(heightDelta) <= 1 &&
+        Math.abs(heightDelta) <= 2 &&
         Math.abs(centerDelta) <= 1.5 &&
         gap >= -5;
       const typographyMatches =
         symbolTypography.family === valueTypography.family &&
         symbolTypography.size === valueTypography.size &&
-        symbolTypography.weight === valueTypography.weight &&
+        (details.isDollar
+          ? symbolTypography.weight === "300" &&
+            valueTypography.weight === "400"
+          : symbolTypography.weight === valueTypography.weight) &&
         symbolTypography.lineHeight === valueTypography.lineHeight &&
         symbolTypography.letterSpacing === valueTypography.letterSpacing &&
-        symbolTypography.position ===
-          (details.isDollar ? "relative" : "static") &&
-        (details.isEuro
-          ? symbolTypography.transform === "matrix(1, 0, 0, 1.04, 0, 0)"
-          : symbolTypography.transform === "none");
+        symbolTypography.position === "static" &&
+        symbolTypography.transform === "none";
 
       if (
         normalizedText !== normalizedLabel ||
@@ -289,20 +300,16 @@ try {
       const fixture = page.locator("#currency-about-audit-fixture");
       const symbol = fixture.locator(".story-currency-symbol--dollar");
       const value = fixture.locator(".story-currency-value");
-      await page.evaluate(() => {
-        document.documentElement.dataset.currencyDollarBodyAudit = "true";
-      });
       const [symbolBox, valueBox, symbolPng, valuePng] = await Promise.all([
         symbol.boundingBox(),
         value.boundingBox(),
         symbol.screenshot({ animations: "disabled" }),
         value.screenshot({ animations: "disabled" }),
       ]);
-      await page.evaluate(() => {
-        delete document.documentElement.dataset.currencyDollarBodyAudit;
-      });
       const [symbolPaint, valuePaint] = await Promise.all([
-        paintedBounds(symbolPng, [0, 0, 0]),
+        paintedBounds(symbolPng, [0, 0, 0], {
+          trimNarrowVerticalExtenders: true,
+        }),
         paintedBounds(valuePng, [0, 0, 0]),
       ]);
       inspectedGlyphs += 1;
@@ -314,7 +321,7 @@ try {
           valueBox.y + (valuePaint.top + valuePaint.bottom) / 2;
         const heightDelta = symbolPaint.height - valuePaint.height;
         const centerDelta = symbolCenter - valueCenter;
-        if (Math.abs(heightDelta) > 1 || Math.abs(centerDelta) > 1.5) {
+        if (Math.abs(heightDelta) > 2 || Math.abs(centerDelta) > 1.5) {
           failures.push(
             `${size} About $ body fixture: painted height delta=${heightDelta}px, painted center delta=${centerDelta}px`,
           );
@@ -446,7 +453,10 @@ try {
               ? symbolStyle.fontSize === valueStyle.fontSize
               : false,
             weightMatches: valueStyle
-              ? symbolStyle.fontWeight === valueStyle.fontWeight
+              ? isDollarHeadline
+                ? symbolStyle.fontWeight === "300" &&
+                  valueStyle.fontWeight === "400"
+                : symbolStyle.fontWeight === valueStyle.fontWeight
               : false,
             lineMatches: valueStyle
               ? symbolStyle.lineHeight === valueStyle.lineHeight
@@ -455,12 +465,8 @@ try {
               ? symbolStyle.color === valueStyle.color
               : false,
             fullOpacity: symbolStyle.opacity === "1",
-            staticPosition: isDollarHeadline
-              ? symbolStyle.position === "relative"
-              : symbolStyle.position === "static",
-            transformMatches: isEuro
-              ? symbolStyle.transform === "matrix(1, 0, 0, 1.04, 0, 0)"
-              : symbolStyle.transform === "none",
+            staticPosition: symbolStyle.position === "static",
+            transformMatches: symbolStyle.transform === "none",
           };
         }),
     );
