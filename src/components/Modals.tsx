@@ -575,6 +575,7 @@ function ContactRequestModal({
   const [phoneCountry, setPhoneCountry] = useState<CountryCode>(() =>
     promptPhoneCountry ?? getPhoneCountryFallback(locale),
   );
+  const phoneCountryEditedRef = useRef(false);
   const formStartedAtRef = useRef(Date.now());
 
   useEffect(() => {
@@ -587,9 +588,11 @@ function ContactRequestModal({
     if (typeof window === "undefined") return;
 
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    setPhoneCountry(
-      promptPhoneCountry ?? getPhoneCountryFallback(window.navigator.language, timezone),
-    );
+    if (!phoneCountryEditedRef.current) {
+      setPhoneCountry(
+        promptPhoneCountry ?? getPhoneCountryFallback(window.navigator.language, timezone),
+      );
+    }
     if (process.env.NODE_ENV === "test") return;
 
     const controller = new AbortController();
@@ -604,7 +607,7 @@ function ContactRequestModal({
             ? String((payload as { country?: unknown }).country ?? "")
             : null,
         );
-        if (country) setPhoneCountry(country);
+        if (country && !phoneCountryEditedRef.current) setPhoneCountry(country);
       })
       .catch(() => undefined);
 
@@ -796,7 +799,10 @@ function ContactRequestModal({
                   id="contact-phone-country"
                   name="phoneCountry"
                   value={phoneCountry}
-                  onChange={(event) => setPhoneCountry(event.target.value as CountryCode)}
+                  onChange={(event) => {
+                    phoneCountryEditedRef.current = true;
+                    setPhoneCountry(event.target.value as CountryCode);
+                  }}
                   autoComplete="country"
                   className="contact-request-input min-w-0"
                 >

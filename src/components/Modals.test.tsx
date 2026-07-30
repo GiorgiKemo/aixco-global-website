@@ -489,7 +489,8 @@ describe("Modals", () => {
     fireEvent.click(screen.getByRole("button", { name: /open contact/i }));
     fireEvent.click(screen.getByRole("button", { name: "Schedule a Call" }));
     fireEvent.change(screen.getByLabelText("Name & Surname"), { target: { value: "Jane Client" } });
-    fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "+995 555 010101" } });
+    fireEvent.change(screen.getByLabelText("Country code"), { target: { value: "GE" } });
+    fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "555 010101" } });
     fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "jane@example.com" } });
     fireEvent.submit(screen.getByRole("button", { name: "Submit" }).closest("form") as HTMLFormElement);
 
