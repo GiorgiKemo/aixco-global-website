@@ -18,8 +18,10 @@ import {
   composeInternationalPhone,
   getPhoneCountryFallback,
   getPhoneCountryOptions,
+  isValidInternationalPhone,
   toSupportedPhoneCountry,
 } from "@/lib/phone-country";
+import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
 import { getCountryCallingCode, type CountryCode } from "libphonenumber-js";
 
 const teamImageMap: Record<string, string> = {
@@ -639,6 +641,10 @@ function ContactRequestModal({
     if (!mode || isSubmitting) return;
 
     setSubmitError(null);
+    if ((isDownloadRequest || mode === "call") && !isValidInternationalPhone(phone)) {
+      setSubmitError(tx("Please enter a valid phone number for the selected country."));
+      return;
+    }
     const preferredDate = preferredTime ? new Date(preferredTime) : null;
     if (preferredDate && Number.isNaN(preferredDate.getTime())) {
       setSubmitError(tx("Please choose a valid preferred call time."));
@@ -690,7 +696,7 @@ function ContactRequestModal({
       return;
     }
 
-    setSubmitError(tx("We could not send your request. Please try again or email info@aixco.global."));
+    setSubmitError(tx(getContactSubmitErrorMessage(result.reason)));
   };
 
   if (submitted) {

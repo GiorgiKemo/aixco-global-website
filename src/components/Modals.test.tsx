@@ -363,9 +363,36 @@ describe("Modals", () => {
     fireEvent.submit(screen.getByRole("button", { name: "Unlock and download" }).closest("form") as HTMLFormElement);
 
     await waitFor(() => {
-      expect(screen.getByRole("alert")).toHaveTextContent("We could not send your request.");
+      expect(screen.getByRole("alert")).toHaveTextContent("The contact service is temporarily unavailable.");
     });
     expect(hasDownloadAccess()).toBe(false);
+  });
+
+  it("rejects an invalid phone number for the selected country before submission", async () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <ContactTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open contact/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Schedule a Call" }));
+    fireEvent.change(screen.getByLabelText("Name & Surname"), { target: { value: "Test Client" } });
+    fireEvent.change(screen.getByLabelText("Country code"), { target: { value: "SI" } });
+    fireEvent.change(screen.getByLabelText("Phone Number"), { target: { value: "123123" } });
+    fireEvent.change(screen.getByLabelText("Preferred Time for a Call"), {
+      target: { value: "2099-06-25T10:37" },
+    });
+    fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "client@example.com" } });
+    fireEvent.submit(screen.getByRole("button", { name: "Submit" }).closest("form") as HTMLFormElement);
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Please enter a valid phone number for the selected country.",
+    );
+    expect(recordContactSubmission).not.toHaveBeenCalled();
   });
 
   it("submits the schedule-call request and shows confirmation", async () => {
@@ -467,7 +494,7 @@ describe("Modals", () => {
     fireEvent.submit(screen.getByRole("button", { name: "Submit" }).closest("form") as HTMLFormElement);
 
     await waitFor(() => {
-      expect(screen.getByRole("alert")).toHaveTextContent("We could not send your request.");
+      expect(screen.getByRole("alert")).toHaveTextContent("The contact service is temporarily unavailable.");
     });
     expect(screen.queryByText("Thank you. We will contact you shortly.")).not.toBeInTheDocument();
   });

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isValidPhoneNumber } from "libphonenumber-js";
 
 export type ContactEmailQueueStatus = "queued" | "processing" | "retrying" | "provider_accepted" | "failed";
 
@@ -40,7 +41,8 @@ export const contactSubmissionSchema = z
       .min(5)
       .max(40)
       .regex(/^[+()0-9\s.-]+$/, "Phone number contains unsupported characters.")
-      .optional(),
+      .optional()
+      .refine((value) => !value || isValidPhoneNumber(value), "Phone number is not valid for its country."),
     preferredCallAt: z.string().datetime({ offset: true }).optional(),
     preferredCallTimezone: z.string().trim().min(1).max(80).optional(),
   })

@@ -151,6 +151,7 @@ export const aixcoLiveIcons = {
 export const aixcoLiveAssetDetails = {
   currentProjectBrochure: aixcoLivePath("documents/reverance-brochure-en.pdf"),
   currentProjectBrochureGerman: aixcoLivePath("documents/reverance-brochure-de.pdf"),
+  currentProjectBrochureSlovenian: aixcoLivePath("documents/reverance-brochure-sl.pdf"),
   dubaiFundOne: `${liveImageBase}/fund/fund1.jpeg`,
   dubaiFundTwo: `${liveImageBase}/fund2.png`,
 } as const;
@@ -170,8 +171,8 @@ export const aixcoCurrentProjectBrochureDownloads: Partial<Record<Lang, CurrentP
     fileName: "Reverance-brochure-DE.pdf",
   },
   sl: {
-    href: aixcoLiveAssetDetails.currentProjectBrochure,
-    fileName: "Reverance-brochure-EN.pdf",
+    href: aixcoLiveAssetDetails.currentProjectBrochureSlovenian,
+    fileName: "Reverance-brochure-SL.pdf",
   },
 };
 

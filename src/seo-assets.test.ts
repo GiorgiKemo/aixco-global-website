@@ -82,6 +82,9 @@ describe("SEO static assets", () => {
     expect(
       existsSync(resolve(root, "public/aixco-global-op2/documents/reverance-brochure-de.pdf")),
     ).toBe(true);
+    expect(
+      existsSync(resolve(root, "public/aixco-global-op2/documents/reverance-brochure-sl.pdf")),
+    ).toBe(true);
   });
 
   it("serves complete canonical and social metadata for property pages", async () => {

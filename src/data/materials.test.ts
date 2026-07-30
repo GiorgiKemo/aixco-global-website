@@ -31,7 +31,15 @@ describe("public material downloads", () => {
     });
   });
 
-  it.each(["en", "pl", "sl", "ru"] satisfies Lang[])(
+  it("serves the Slovenian catalog to the Slovenian materials section", () => {
+    expect(currentProjectMaterial).toBeDefined();
+    expect(resolveMaterialDownload(currentProjectMaterial!, "sl")).toEqual({
+      href: "/aixco-global-op2/documents/reverance-brochure-sl.pdf",
+      fileName: "Reverance-brochure-SL.pdf",
+    });
+  });
+
+  it.each(["en", "pl", "ru"] satisfies Lang[])(
     "keeps the English catalog fallback for %s materials",
     (lang) => {
       expect(currentProjectMaterial).toBeDefined();

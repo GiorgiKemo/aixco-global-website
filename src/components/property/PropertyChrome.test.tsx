@@ -166,7 +166,7 @@ describe("PropertyChrome", () => {
   it.each([
     ["en", "Download brochure", "/aixco-global-op2/documents/reverance-brochure-en.pdf", "Reverance-brochure-EN.pdf"],
     ["de", "Broschüre herunterladen", "/aixco-global-op2/documents/reverance-brochure-de.pdf", "Reverance-brochure-DE.pdf"],
-    ["sl", "Prenesite brošuro", "/aixco-global-op2/documents/reverance-brochure-en.pdf", "Reverance-brochure-EN.pdf"],
+    ["sl", "Prenesite brošuro", "/aixco-global-op2/documents/reverance-brochure-sl.pdf", "Reverance-brochure-SL.pdf"],
   ] as const)(
     "gates the %s current-project brochure behind the contact flow",
     async (lang, label, href, fileName) => {

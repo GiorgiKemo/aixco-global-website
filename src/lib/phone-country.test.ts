@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   composeInternationalPhone,
   getPhoneCountryFallback,
+  isValidInternationalPhone,
   toSupportedPhoneCountry,
 } from "./phone-country";
 
@@ -20,5 +21,11 @@ describe("brochure phone country helpers", () => {
     expect(composeInternationalPhone("DE", "+49 30 123456")).toBe("+49 30 123456");
     expect(toSupportedPhoneCountry("pl")).toBe("PL");
     expect(toSupportedPhoneCountry("XX")).toBeNull();
+  });
+
+  it("validates the complete international number instead of only its length", () => {
+    expect(isValidInternationalPhone("+386 123123")).toBe(false);
+    expect(isValidInternationalPhone("+386 40 123 456")).toBe(true);
+    expect(isValidInternationalPhone("+995 555 123 456")).toBe(true);
   });
 });

@@ -58,6 +58,11 @@ export function composeInternationalPhone(country: CountryCode, value: string) {
   return `+${getCountryCallingCode(country)} ${trimmed}`;
 }
 
+export function isValidInternationalPhone(value: string) {
+  const parsed = parsePhoneNumberFromString(value.trim());
+  return Boolean(parsed?.isValid());
+}
+
 export function toSupportedPhoneCountry(value: string | null | undefined) {
   const country = value?.trim().toUpperCase() ?? "";
   return isSupportedCountry(country) ? country : null;

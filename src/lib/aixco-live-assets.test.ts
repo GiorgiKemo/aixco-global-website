@@ -54,8 +54,8 @@ describe("aixcoLiveImages", () => {
       fileName: "Reverance-brochure-DE.pdf",
     });
     expect(aixcoCurrentProjectBrochureDownloads.sl).toEqual({
-      href: "/aixco-global-op2/documents/reverance-brochure-en.pdf",
-      fileName: "Reverance-brochure-EN.pdf",
+      href: "/aixco-global-op2/documents/reverance-brochure-sl.pdf",
+      fileName: "Reverance-brochure-SL.pdf",
     });
     expect(getCurrentProjectBrochureDownload("de")).toEqual(
       aixcoCurrentProjectBrochureDownloads.de,
