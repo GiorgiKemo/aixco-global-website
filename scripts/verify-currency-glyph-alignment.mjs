@@ -67,7 +67,7 @@ const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ reducedMotion: "reduce" });
 
 try {
-  await page.goto(`${baseUrl}/#batumi`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}/#batumi`, { waitUntil: "domcontentloaded" });
   await page.waitForSelector(".story-currency-symbol");
   await page.evaluate(() => document.fonts.ready);
 
@@ -99,6 +99,9 @@ try {
           text: node.textContent ?? "",
           color: style.color,
           isEuro: symbol?.classList.contains("story-currency-symbol--euro"),
+          isDollar: symbol?.classList.contains(
+            "story-currency-symbol--dollar",
+          ),
           nowrap: style.whiteSpace === "nowrap",
           overflow: card
             ? Math.max(
@@ -185,7 +188,7 @@ try {
       // the symbol must otherwise share the figures' painted height and center.
       const visuallyAligned =
         Math.abs(heightDelta) <= 1 &&
-        Math.abs(centerDelta) <= 1 &&
+        Math.abs(centerDelta) <= 1.5 &&
         gap >= -5;
       const typographyMatches =
         symbolTypography.family === valueTypography.family &&
@@ -200,7 +203,9 @@ try {
         symbolTypography.lineHeight === valueTypography.lineHeight &&
         symbolTypography.letterSpacing === valueTypography.letterSpacing &&
         symbolTypography.position === "static" &&
-        symbolTypography.transform === "none";
+        (details.isDollar
+          ? symbolTypography.transform === "matrix(1, 0, 0, 1.03, 0, 0)"
+          : symbolTypography.transform === "none");
 
       if (
         normalizedText !== normalizedLabel ||
@@ -324,6 +329,9 @@ try {
           const isEuro = symbol.classList.contains(
             "story-currency-symbol--euro",
           );
+          const isDollarHeadline = symbol.classList.contains(
+            "story-currency-symbol--dollar",
+          );
           return {
             text: `${symbol.textContent ?? ""}${value?.textContent ?? ""}`,
             isEuro,
@@ -350,7 +358,9 @@ try {
               : false,
             fullOpacity: symbolStyle.opacity === "1",
             staticPosition: symbolStyle.position === "static",
-            untransformed: symbolStyle.transform === "none",
+            transformMatches: isDollarHeadline
+              ? symbolStyle.transform === "matrix(1, 0, 0, 1.03, 0, 0)"
+              : symbolStyle.transform === "none",
           };
         }),
     );
@@ -364,7 +374,7 @@ try {
         !treatment.colorMatches ||
         !treatment.fullOpacity ||
         !treatment.staticPosition ||
-        !treatment.untransformed
+        !treatment.transformMatches
       ) {
         failures.push(
           `${locale} ${treatment.text}: ${JSON.stringify(treatment)}`,

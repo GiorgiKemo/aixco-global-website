@@ -10624,6 +10624,16 @@ html[lang='de']
   line-height: 0.947867em !important;
 }
 
+/* Epilogue's dollar paints one pixel shorter than its lining figures at the
+   standard metric size. Stretch only the painted height and anchor the
+   correction to the line box bottom so its approved width and baseline stay
+   unchanged across responsive sizes. */
+.story-standard-number .story-currency-symbol--dollar {
+  display: inline-block;
+  transform: scaleY(1.03);
+  transform-origin: 50% 50%;
+}
+
 /* Batumi's four headline figures share one complete face so the euro glyph,
    numerals, percentages, and suffixes have the same optical weight. */
 [data-story-section='batumi']

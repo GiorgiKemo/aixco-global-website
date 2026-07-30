@@ -531,12 +531,8 @@ function toDateTimeLocalValue(date: Date) {
 
 function getMinimumCallTimeValue() {
   const nextAvailable = new Date();
-  nextAvailable.setMinutes(nextAvailable.getMinutes() + 15, 0, 0);
-  const minutesPastStep = nextAvailable.getMinutes() % 15;
-
-  if (minutesPastStep) {
-    nextAvailable.setMinutes(nextAvailable.getMinutes() + (15 - minutesPastStep));
-  }
+  nextAvailable.setSeconds(0, 0);
+  nextAvailable.setMinutes(nextAvailable.getMinutes() + 1);
 
   return toDateTimeLocalValue(nextAvailable);
 }
@@ -642,13 +638,13 @@ function ContactRequestModal({
 
     if (!mode || isSubmitting) return;
 
-    setIsSubmitting(true);
     setSubmitError(null);
     const preferredDate = preferredTime ? new Date(preferredTime) : null;
     if (preferredDate && Number.isNaN(preferredDate.getTime())) {
       setSubmitError(tx("Please choose a valid preferred call time."));
       return;
     }
+    setIsSubmitting(true);
     const preferredCallAt = preferredDate?.toISOString();
     const preferredCallTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     const payload =
@@ -836,7 +832,7 @@ function ContactRequestModal({
                   type="datetime-local"
                   required
                   min={minimumCallTime}
-                  step={900}
+                  step="any"
                   autoComplete="off"
                   className="contact-request-input"
                 />
