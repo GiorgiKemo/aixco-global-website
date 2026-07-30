@@ -141,12 +141,12 @@ try {
         metric.visibleText !== expected ||
         !metric.exposedToAccessibility ||
         !metric.fontSizeMatch ||
-        metric.symbolWeight !== "300" ||
+        metric.symbolWeight !== "400" ||
         metric.valueWeight !== "400" ||
         !metric.lineHeightMatch
       ) {
         failures.push(
-          `${size} ${name}: visible=${metric.visibleText}, accessible=${metric.exposedToAccessibility}, approved optical style=${metric.fontSizeMatch && metric.symbolWeight === "300" && metric.valueWeight === "400" && metric.lineHeightMatch}`,
+          `${size} ${name}: visible=${metric.visibleText}, accessible=${metric.exposedToAccessibility}, approved optical style=${metric.fontSizeMatch && metric.symbolWeight === metric.valueWeight && metric.valueWeight === "400" && metric.lineHeightMatch}`,
         );
       }
     }
