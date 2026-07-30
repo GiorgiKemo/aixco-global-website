@@ -204,7 +204,7 @@ try {
         symbolTypography.letterSpacing === valueTypography.letterSpacing &&
         symbolTypography.position === "static" &&
         (details.isDollar
-          ? symbolTypography.transform === "matrix(1, 0, 0, 1.03, 0, 0)"
+          ? symbolTypography.transform === "matrix(1, 0, 0, 1.05, 0, 0)"
           : symbolTypography.transform === "none");
 
       if (
@@ -359,7 +359,7 @@ try {
             fullOpacity: symbolStyle.opacity === "1",
             staticPosition: symbolStyle.position === "static",
             transformMatches: isDollarHeadline
-              ? symbolStyle.transform === "matrix(1, 0, 0, 1.03, 0, 0)"
+              ? symbolStyle.transform === "matrix(1, 0, 0, 1.05, 0, 0)"
               : symbolStyle.transform === "none",
           };
         }),

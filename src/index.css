@@ -10630,7 +10630,7 @@ html[lang='de']
    unchanged across responsive sizes. */
 .story-standard-number .story-currency-symbol--dollar {
   display: inline-block;
-  transform: scaleY(1.03);
+  transform: scaleY(1.05);
   transform-origin: 50% 50%;
 }
 
