@@ -35,9 +35,9 @@ describe("distributed lead capture abuse guard", () => {
     const args = client.rpc.mock.calls[0]?.[1] as Record<string, unknown>;
     expect(args).toMatchObject({
       p_resource: "contact",
-      p_client_limit: 5,
+      p_client_limit: 12,
       p_client_window_seconds: 600,
-      p_recipient_limit: 2,
+      p_recipient_limit: 6,
       p_recipient_window_seconds: 3600,
     });
     expect(args.p_client_hash).toMatch(/^[a-f0-9]{64}$/);

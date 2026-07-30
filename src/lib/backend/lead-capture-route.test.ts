@@ -49,11 +49,11 @@ describe("lead capture route", () => {
       ok: false,
       reason: "Invalid form verification data.",
     });
-    expect(validateLeadCaptureAntiAbuse({ website: "", startedAt: 9_500 }, 10_000)).toEqual({
+    expect(validateLeadCaptureAntiAbuse({ website: "", startedAt: 9_800 }, 10_000)).toEqual({
       ok: false,
       reason: "The form was submitted too quickly. Please try again.",
     });
-    expect(validateLeadCaptureAntiAbuse({ website: "", startedAt: 8_000 }, 10_000)).toBeNull();
+    expect(validateLeadCaptureAntiAbuse({ website: "", startedAt: 9_500 }, 10_000)).toBeNull();
   });
 
   it("returns a shared recipient cooldown before storage or email work", async () => {

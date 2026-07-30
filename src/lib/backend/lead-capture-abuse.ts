@@ -47,9 +47,12 @@ const rules: Record<
   }
 > = {
   contact: {
-    clientLimit: 5,
+    // A visitor may legitimately use the contact, brochure, and download
+    // forms during one session. Keep a bounded burst limit without making a
+    // later locale or form look broken after only a couple of submissions.
+    clientLimit: 12,
     clientWindowSeconds: 10 * 60,
-    recipientLimit: 2,
+    recipientLimit: 6,
     recipientWindowSeconds: 60 * 60,
   },
   chat: {

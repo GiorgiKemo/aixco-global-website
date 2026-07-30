@@ -77,7 +77,10 @@ export function validateLeadCaptureAntiAbuse(input: unknown, now = Date.now()): 
   if (parsed.data.startedAt === undefined) return { ok: false, reason: "Invalid form verification data." };
 
   const elapsed = now - parsed.data.startedAt;
-  if (elapsed < 1_200) {
+  // Autofill and mobile browser contact data can make a legitimate form
+  // submission very quick. The honeypot and distributed rate limits remain
+  // the primary abuse controls; this only rejects effectively instant posts.
+  if (elapsed < 300) {
     return { ok: false, reason: "The form was submitted too quickly. Please try again." };
   }
 
