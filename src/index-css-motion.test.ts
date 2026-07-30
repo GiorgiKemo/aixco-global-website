@@ -780,8 +780,23 @@ describe("index.css motion rules", () => {
     );
     const euroBlock = css.slice(euroStart, css.indexOf("\n}", euroStart));
     expect(euroStart).toBeGreaterThanOrEqual(0);
-    expect(euroBlock).toContain("font-size: 1.055em !important;");
-    expect(euroBlock).toContain("line-height: 0.947867em !important;");
+    expect(euroBlock).toContain("font-size: inherit !important;");
+    expect(euroBlock).toContain("line-height: inherit !important;");
+    expect(euroBlock).toContain("transform: scaleY(1.04);");
+
+    const dollarStrikeStart = css.indexOf(
+      ".story-standard-number .story-currency-symbol--dollar::after {",
+    );
+    const dollarStrikeBlock = css.slice(
+      dollarStrikeStart,
+      css.indexOf("\n}", dollarStrikeStart),
+    );
+    expect(dollarStrikeStart).toBeGreaterThanOrEqual(0);
+    expect(dollarStrikeBlock).toContain("width: max(1.5px, 0.045em);");
+    expect(dollarStrikeBlock).toContain("height: 0.84em;");
+    expect(dollarStrikeBlock).toContain(
+      "transform: translate(-50%, -50%);",
+    );
   });
 
   it("aligns the wrapped construction qualifier with the scope copy on English laptops", () => {
@@ -811,6 +826,9 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('data-batumi-intro-copy="true"');
     expect(desktopStoryHome).toContain(
       "<StoryInlineCurrencyText value={tx(label)} />",
+    );
+    expect(desktopStoryHome).toContain(
+      "<StoryInlineCurrencyText value={tx(chapter.highlight)} />",
     );
     expect(css).toContain(".story-inline-currency-token {");
     expect(css).toContain(

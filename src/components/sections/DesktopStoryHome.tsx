@@ -2493,7 +2493,9 @@ function LegacyScene({
           >
             <p className="story-metric-value story-standard-number story-legacy-number">{formatChapterNumber(index + 1)}</p>
             <h3 className="story-card-title">{tx(chapter.title)}</h3>
-            <p className="story-body story-glyph-safe text-foreground/72">{tx(chapter.highlight)}</p>
+            <p className="story-body story-glyph-safe text-foreground/72">
+              <StoryInlineCurrencyText value={tx(chapter.highlight)} />
+            </p>
           </div>
         ))}
       </div>

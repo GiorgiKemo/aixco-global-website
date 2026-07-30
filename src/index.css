@@ -10616,22 +10616,51 @@ html[lang='de']
   transform: none;
 }
 
-/* Epilogue's euro is optically two painted pixels shorter than its lining
-   figures at laptop and desktop sizes. Increase the glyph itself—not its
-   line box—so its visible cap height matches the adjacent figures exactly. */
+/* Epilogue's native euro paints a touch shorter than its lining figures.
+   Preserve its width, but optically extend only its painted height so it
+   shares the adjacent numeral's cap height and center at every responsive size. */
 .story-standard-number .story-currency-symbol--euro {
-  font-size: 1.055em !important;
-  line-height: 0.947867em !important;
+  display: inline-block;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  transform: scaleY(1.04);
+  transform-origin: 50% 50%;
 }
 
-/* Epilogue's dollar paints one pixel shorter than its lining figures at the
-   standard metric size. Stretch only the painted height and anchor the
-   correction to the line box bottom so its approved width and baseline stay
-   unchanged across responsive sizes. */
+/* The native dollar reserves part of its height for the projecting strike,
+   which makes the visible S look shorter than the neighboring numeral. Keep
+   the real "$" in the DOM for copying/accessibility, replace only its paint
+   with the same Epilogue capital S used by the metric face, and contain the
+   strike inside that cap height. */
 .story-standard-number .story-currency-symbol--dollar {
   display: inline-block;
-  transform: scaleY(1.05);
+  position: relative;
+  -webkit-text-fill-color: transparent;
+}
+
+.story-standard-number .story-currency-symbol--dollar::before {
+  position: absolute;
+  inset: 0;
+  content: "S";
+  color: currentColor;
+  font: inherit;
+  line-height: inherit;
+  text-align: center;
+  -webkit-text-fill-color: currentColor;
+  transform: scaleX(0.78);
   transform-origin: 50% 50%;
+}
+
+.story-standard-number .story-currency-symbol--dollar::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(1.5px, 0.045em);
+  height: 0.84em;
+  border-radius: 999px;
+  background: currentColor;
+  content: "";
+  transform: translate(-50%, -50%);
 }
 
 /* Batumi's four headline figures share one complete face so the euro glyph,

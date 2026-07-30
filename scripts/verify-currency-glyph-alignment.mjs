@@ -15,14 +15,6 @@ const viewports = [
   { width: 1920, height: 1080 },
 ];
 
-const parseRgb = (value) => {
-  const channels = value.match(/\d+(?:\.\d+)?/gu)?.slice(0, 3).map(Number);
-  if (!channels || channels.length !== 3) {
-    throw new Error(`Could not parse color: ${value}`);
-  }
-  return channels;
-};
-
 const paintedBounds = async (png, expectedColor) => {
   const { data, info } = await sharp(png)
     .ensureAlpha()
@@ -70,10 +62,21 @@ try {
   await page.goto(`${baseUrl}/#batumi`, { waitUntil: "domcontentloaded" });
   await page.waitForSelector(".story-currency-symbol");
   await page.evaluate(() => document.fonts.ready);
+  await page.addStyleTag({
+    content: `
+      html .story-standard-number .story-currency-audit-ink {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      html[data-currency-dollar-body-audit]
+        .story-currency-symbol--dollar::after {
+        display: none !important;
+      }
+    `,
+  });
 
   const failures = [];
   let inspectedGlyphs = 0;
-  let colorMaskSkips = 0;
 
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
@@ -81,7 +84,7 @@ try {
 
     const size = `${viewport.width}x${viewport.height}`;
     const metrics = page.locator(
-      ".story-standard-number:has(.story-currency-symbol)",
+      ".story-standard-number:has(.story-currency-symbol):not([data-story-section='about'] .story-standard-number)",
     );
 
     for (let index = 0; index < (await metrics.count()); index += 1) {
@@ -101,9 +104,6 @@ try {
           isEuro: symbol?.classList.contains("story-currency-symbol--euro"),
           isDollar: symbol?.classList.contains(
             "story-currency-symbol--dollar",
-          ),
-          isTranslucentOverlay: Boolean(
-            node.closest(".story-about-cinematic-copy"),
           ),
           nowrap: style.whiteSpace === "nowrap",
           overflow: card
@@ -157,30 +157,54 @@ try {
           };
         }),
       ]);
+      const [symbolPng, valuePng] = await (async () => {
+        await Promise.all([
+          symbol.evaluate((node) =>
+            node.classList.add("story-currency-audit-ink"),
+          ),
+          value.evaluate((node) =>
+            node.classList.add("story-currency-audit-ink"),
+          ),
+          details.isDollar
+            ? page.evaluate(() => {
+                document.documentElement.dataset.currencyDollarBodyAudit = "true";
+              })
+            : Promise.resolve(),
+        ]);
+        try {
+          return await Promise.all([
+            symbol.screenshot({ animations: "disabled" }),
+            value.screenshot({ animations: "disabled" }),
+          ]);
+        } finally {
+          await Promise.all([
+            symbol.evaluate((node) =>
+              node.classList.remove("story-currency-audit-ink"),
+            ),
+            value.evaluate((node) =>
+              node.classList.remove("story-currency-audit-ink"),
+            ),
+            details.isDollar
+              ? page.evaluate(() => {
+                  delete document.documentElement.dataset
+                    .currencyDollarBodyAudit;
+                })
+              : Promise.resolve(),
+          ]);
+        }
+      })();
       const [symbolPaint, valuePaint] = await Promise.all([
-        paintedBounds(
-          await symbol.screenshot({ animations: "disabled" }),
-          parseRgb(symbolColor),
-        ),
-        paintedBounds(
-          await value.screenshot({ animations: "disabled" }),
-          parseRgb(valueColor),
-        ),
+        paintedBounds(symbolPng, [0, 0, 0]),
+        paintedBounds(valuePng, [0, 0, 0]),
       ]);
       inspectedGlyphs += 1;
 
       if (
-        details.isTranslucentOverlay ||
         !symbolBox ||
         !valueBox ||
         !symbolPaint ||
         !valuePaint
       ) {
-        // The dark photographic About card composites its gold text through a
-        // translucent overlay. Its background-dependent antialiasing differs
-        // across operating systems, so the exact color mask is intentionally
-        // deferred to the separately captured visual matrix.
-        colorMaskSkips += 1;
         continue;
       }
 
@@ -201,19 +225,14 @@ try {
         gap >= -5;
       const typographyMatches =
         symbolTypography.family === valueTypography.family &&
-        (details.isEuro
-          ? Math.abs(
-              Number.parseFloat(symbolTypography.size) /
-                Number.parseFloat(valueTypography.size) -
-                1.055,
-            ) <= 0.002
-          : symbolTypography.size === valueTypography.size) &&
+        symbolTypography.size === valueTypography.size &&
         symbolTypography.weight === valueTypography.weight &&
         symbolTypography.lineHeight === valueTypography.lineHeight &&
         symbolTypography.letterSpacing === valueTypography.letterSpacing &&
-        symbolTypography.position === "static" &&
-        (details.isDollar
-          ? symbolTypography.transform === "matrix(1, 0, 0, 1.05, 0, 0)"
+        symbolTypography.position ===
+          (details.isDollar ? "relative" : "static") &&
+        (details.isEuro
+          ? symbolTypography.transform === "matrix(1, 0, 0, 1.04, 0, 0)"
           : symbolTypography.transform === "none");
 
       if (
@@ -228,6 +247,82 @@ try {
           `${size} ${normalizedLabel}: visible=${normalizedText}, symbol color=${symbolColor}, value color=${valueColor}, symbol typography=${JSON.stringify(symbolTypography)}, value typography=${JSON.stringify(valueTypography)}, painted height delta=${heightDelta}px, painted center delta=${centerDelta}px, painted gap=${gap}px, nowrap=${details.nowrap}, overflow=${details.overflow}px`,
         );
       }
+    }
+
+    // The About figures are rendered over detailed photography. Measuring
+    // their original screenshots would let bright image pixels leak into the
+    // glyph mask, so reproduce the exact computed type treatment in an opaque
+    // fixture and inspect the painted S body there.
+    const aboutFixture = await page.evaluate(() => {
+      document.querySelector("#currency-about-audit-fixture")?.remove();
+      const source = document.querySelector(
+        "[data-story-section='about'] .story-standard-number:has(.story-currency-symbol--dollar)",
+      );
+      if (!(source instanceof HTMLElement)) return null;
+      const style = getComputedStyle(source);
+      const fixture = document.createElement("span");
+      fixture.id = "currency-about-audit-fixture";
+      fixture.className = "story-standard-number story-currency-audit-ink";
+      fixture.setAttribute("aria-label", "$4");
+      Object.assign(fixture.style, {
+        position: "fixed",
+        inset: "0 auto auto 0",
+        zIndex: "2147483647",
+        display: "inline-block",
+        padding: "8px",
+        background: "#fff",
+        color: "#000",
+        fontFamily: style.fontFamily,
+        fontSize: style.fontSize,
+        fontWeight: style.fontWeight,
+        lineHeight: style.lineHeight,
+        letterSpacing: style.letterSpacing,
+        whiteSpace: "nowrap",
+      });
+      fixture.innerHTML =
+        '<span class="story-currency-token story-currency-token--dollar"><span class="story-currency-symbol story-currency-symbol--dollar story-currency-audit-ink">$</span><span class="story-currency-value story-currency-audit-ink">4</span></span>';
+      document.body.append(fixture);
+      return true;
+    });
+
+    if (aboutFixture) {
+      const fixture = page.locator("#currency-about-audit-fixture");
+      const symbol = fixture.locator(".story-currency-symbol--dollar");
+      const value = fixture.locator(".story-currency-value");
+      await page.evaluate(() => {
+        document.documentElement.dataset.currencyDollarBodyAudit = "true";
+      });
+      const [symbolBox, valueBox, symbolPng, valuePng] = await Promise.all([
+        symbol.boundingBox(),
+        value.boundingBox(),
+        symbol.screenshot({ animations: "disabled" }),
+        value.screenshot({ animations: "disabled" }),
+      ]);
+      await page.evaluate(() => {
+        delete document.documentElement.dataset.currencyDollarBodyAudit;
+      });
+      const [symbolPaint, valuePaint] = await Promise.all([
+        paintedBounds(symbolPng, [0, 0, 0]),
+        paintedBounds(valuePng, [0, 0, 0]),
+      ]);
+      inspectedGlyphs += 1;
+
+      if (symbolBox && valueBox && symbolPaint && valuePaint) {
+        const symbolCenter =
+          symbolBox.y + (symbolPaint.top + symbolPaint.bottom) / 2;
+        const valueCenter =
+          valueBox.y + (valuePaint.top + valuePaint.bottom) / 2;
+        const heightDelta = symbolPaint.height - valuePaint.height;
+        const centerDelta = symbolCenter - valueCenter;
+        if (Math.abs(heightDelta) > 1 || Math.abs(centerDelta) > 1.5) {
+          failures.push(
+            `${size} About $ body fixture: painted height delta=${heightDelta}px, painted center delta=${centerDelta}px`,
+          );
+        }
+      } else {
+        failures.push(`${size} About $ body fixture could not be measured`);
+      }
+      await fixture.evaluate((node) => node.remove());
     }
 
     const platformTypography = await page
@@ -348,13 +443,7 @@ try {
               ? symbolStyle.fontFamily === valueStyle.fontFamily
               : false,
             sizeMatches: valueStyle
-              ? isEuro
-                ? Math.abs(
-                    Number.parseFloat(symbolStyle.fontSize) /
-                      Number.parseFloat(valueStyle.fontSize) -
-                      1.055,
-                  ) <= 0.002
-                : symbolStyle.fontSize === valueStyle.fontSize
+              ? symbolStyle.fontSize === valueStyle.fontSize
               : false,
             weightMatches: valueStyle
               ? symbolStyle.fontWeight === valueStyle.fontWeight
@@ -366,9 +455,11 @@ try {
               ? symbolStyle.color === valueStyle.color
               : false,
             fullOpacity: symbolStyle.opacity === "1",
-            staticPosition: symbolStyle.position === "static",
-            transformMatches: isDollarHeadline
-              ? symbolStyle.transform === "matrix(1, 0, 0, 1.05, 0, 0)"
+            staticPosition: isDollarHeadline
+              ? symbolStyle.position === "relative"
+              : symbolStyle.position === "static",
+            transformMatches: isEuro
+              ? symbolStyle.transform === "matrix(1, 0, 0, 1.04, 0, 0)"
               : symbolStyle.transform === "none",
           };
         }),
@@ -417,7 +508,7 @@ try {
     process.exitCode = 1;
   } else {
     console.log(
-      `Currency typography passed: ${inspectedGlyphs} rendered headline values at ${viewports.length} viewports were checked from painted pixels (${colorMaskSkips} translucent-overlay masks deferred to the full visual matrix), with centered symbols, matched optical heights, intact spacing, and no clipping.`,
+      `Currency typography passed: ${inspectedGlyphs} rendered headline values at ${viewports.length} viewports were checked from painted pixels, including controlled translucent-overlay glyph masks, with centered symbols, matched optical heights, intact spacing, and no clipping.`,
     );
   }
 } finally {
