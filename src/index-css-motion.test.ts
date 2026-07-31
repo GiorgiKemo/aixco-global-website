@@ -764,6 +764,19 @@ describe("index.css motion rules", () => {
     expect(dollarBlock).not.toContain("top:");
     expect(css).not.toContain("scaleX(1.45)");
 
+    const customDollarTokenStart = css.indexOf(
+      ".story-standard-number .story-currency-token--dollar {",
+    );
+    const customDollarTokenBlock = css.slice(
+      customDollarTokenStart,
+      css.indexOf("\n}", customDollarTokenStart),
+    );
+    expect(customDollarTokenStart).toBeGreaterThanOrEqual(0);
+    expect(customDollarTokenBlock).toContain(
+      "font-family: var(--font-gilroy-currency) !important;",
+    );
+    expect(customDollarTokenBlock).toContain("font-weight: 400 !important;");
+
     const childStart = css.indexOf(
       ".story-standard-number .story-currency-symbol,\n.story-standard-number .story-currency-value {",
     );
@@ -795,10 +808,9 @@ describe("index.css motion rules", () => {
     expect(dollarSymbolStart).toBeGreaterThanOrEqual(0);
     expect(dollarSymbolBlock).toContain("display: inline;");
     expect(dollarSymbolBlock).toContain("position: static;");
-    expect(dollarSymbolBlock).toContain(
-      "font-family: var(--font-brand-sans) !important;",
-    );
-    expect(dollarSymbolBlock).toContain("font-weight: 300 !important;");
+    expect(dollarSymbolBlock).toContain("font: inherit !important;");
+    expect(dollarSymbolBlock).not.toContain("-webkit-text-stroke:");
+    expect(dollarSymbolBlock).not.toContain("paint-order:");
     expect(dollarSymbolBlock).toContain("-webkit-text-fill-color: currentColor;");
     expect(css).not.toContain(
       ".story-standard-number .story-currency-symbol--dollar::before",
@@ -831,7 +843,8 @@ describe("index.css motion rules", () => {
 
   it("normalizes inline Batumi euro tokens without changing their copy", () => {
     expect(desktopStoryHome).toContain("function StoryInlineCurrencyText");
-    expect(desktopStoryHome).toContain('data-inline-currency-token="euro"');
+    expect(desktopStoryHome).toContain('data-inline-currency-token={currencyName}');
+    expect(desktopStoryHome).toContain('const currencyName = isEuro ? "euro" : "dollar"');
     expect(desktopStoryHome).toContain('data-batumi-intro-copy="true"');
     expect(desktopStoryHome).toContain(
       "<StoryInlineCurrencyText value={tx(label)} />",
@@ -844,7 +857,9 @@ describe("index.css motion rules", () => {
       "font-family: var(--font-brand-sans) !important;",
     );
     expect(css).toContain("white-space: nowrap;");
-    expect(css).toContain(".story-inline-currency-symbol--euro {");
+    expect(css).toContain(
+      ".story-inline-currency-symbol--euro,\n.story-inline-currency-symbol--dollar {",
+    );
     expect(css).toContain("font: inherit !important;");
     expect(css).not.toContain("top: -0.004364rem;");
     expect(css).not.toContain("transform: scaleX(1.45)");

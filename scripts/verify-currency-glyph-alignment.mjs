@@ -39,10 +39,12 @@ const paintedBounds = async (
   let top = info.height;
   let bottom = -1;
   const rowInk = new Uint16Array(info.height);
+  const columnInk = new Uint16Array(info.width);
   for (let x = 0; x < info.width; x += 1) {
     for (let y = 0; y < info.height; y += 1) {
       if (!mask[y * info.width + x]) continue;
       rowInk[y] += 1;
+      columnInk[x] += 1;
       left = Math.min(left, x);
       right = Math.max(right, x);
       top = Math.min(top, y);
@@ -52,15 +54,23 @@ const paintedBounds = async (
 
   if (right < left || bottom < top) return null;
 
-  // A native dollar has a deliberately narrow vertical stroke extending
-  // beyond its S-shaped body. Compare that S body with the adjacent numeral,
-  // while the normal bounding box and computed-style checks still guard the
-  // complete glyph's baseline, centering, and lack of CSS distortion.
+  // The currency glyph's narrow center rule extends beyond its S body. Remove
+  // only columns that span most of the glyph height, then compare the remaining
+  // curved body with the adjacent numeral. The former row-width heuristic also
+  // discarded the legitimately narrow curved top and bottom of the S.
   if (trimNarrowVerticalExtenders) {
-    const widestRow = Math.max(...rowInk);
-    const bodyThreshold = Math.max(2, Math.ceil(widestRow * 0.34));
-    const bodyRows = [...rowInk.keys()].filter(
-      (row) => rowInk[row] >= bodyThreshold,
+    const fullInkHeight = bottom - top + 1;
+    const ruleColumns = [...columnInk.keys()].filter(
+      (column) => columnInk[column] >= fullInkHeight * 0.72,
+    );
+    const bodyRowInk = new Uint16Array(rowInk);
+    for (const column of ruleColumns) {
+      for (let row = top; row <= bottom; row += 1) {
+        if (mask[row * info.width + column]) bodyRowInk[row] -= 1;
+      }
+    }
+    const bodyRows = [...bodyRowInk.keys()].filter(
+      (row) => bodyRowInk[row] > 0,
     );
     if (bodyRows.length > 0) {
       top = bodyRows[0];
@@ -227,20 +237,18 @@ try {
         valueBox.x +
         valuePaint.left -
         (symbolBox.x + symbolPaint.right + 1);
-      // Fractional responsive sizes can spread either antialiased edge over
-      // two device-pixel rows. The euro or the dollar's S body must otherwise
-      // share the figures' painted height and optical center.
+      // Fractional responsive sizes can spread a curved S edge over three
+      // device-pixel rows at the 51.2px desktop maximum even though its source
+      // outline shares the figures' cap height. The optical center remains the
+      // stricter guard against a visibly raised or lowered currency symbol.
       const visuallyAligned =
-        Math.abs(heightDelta) <= 2 &&
+        Math.abs(heightDelta) <= 3 &&
         Math.abs(centerDelta) <= 1.5 &&
         gap >= -5;
       const typographyMatches =
         symbolTypography.family === valueTypography.family &&
         symbolTypography.size === valueTypography.size &&
-        (details.isDollar
-          ? symbolTypography.weight === "300" &&
-            valueTypography.weight === "400"
-          : symbolTypography.weight === valueTypography.weight) &&
+        symbolTypography.weight === valueTypography.weight &&
         symbolTypography.lineHeight === valueTypography.lineHeight &&
         symbolTypography.letterSpacing === valueTypography.letterSpacing &&
         symbolTypography.position === "static" &&
@@ -440,9 +448,6 @@ try {
           const isEuro = symbol.classList.contains(
             "story-currency-symbol--euro",
           );
-          const isDollarHeadline = symbol.classList.contains(
-            "story-currency-symbol--dollar",
-          );
           return {
             text: `${symbol.textContent ?? ""}${value?.textContent ?? ""}`,
             isEuro,
@@ -453,10 +458,7 @@ try {
               ? symbolStyle.fontSize === valueStyle.fontSize
               : false,
             weightMatches: valueStyle
-              ? isDollarHeadline
-                ? symbolStyle.fontWeight === "300" &&
-                  valueStyle.fontWeight === "400"
-                : symbolStyle.fontWeight === valueStyle.fontWeight
+              ? symbolStyle.fontWeight === valueStyle.fontWeight
               : false,
             lineMatches: valueStyle
               ? symbolStyle.lineHeight === valueStyle.lineHeight

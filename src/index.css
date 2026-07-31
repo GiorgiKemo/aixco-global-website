@@ -10600,6 +10600,14 @@ html[lang='de']
   line-height: inherit !important;
 }
 
+/* Gilroy omits U+0024. This dedicated face contains the same Gilroy figures
+   plus a real dollar built from its S outline, with a 20% lighter center
+   stroke. Keeping the complete token in one face prevents device fallback. */
+.story-standard-number .story-currency-token--dollar {
+  font-family: var(--font-gilroy-currency) !important;
+  font-weight: 400 !important;
+}
+
 .story-standard-number .story-currency-symbol,
 .story-standard-number .story-currency-value {
   display: inline;
@@ -10623,15 +10631,12 @@ html[lang='de']
   transform: none;
 }
 
-/* Use the native Gilroy dollar as one real glyph. Constructing it from a
-   painted S and a separate vertical rule produces visibly uneven strokes
-   after browser antialiasing, particularly at the compact hero-card size. */
+/* The dollar and figures inherit one real font run and one baseline. */
 .story-standard-number .story-currency-symbol--dollar {
   display: inline;
   position: static;
   color: inherit;
-  font-family: var(--font-brand-sans) !important;
-  font-weight: 300 !important;
+  font: inherit !important;
   -webkit-text-fill-color: currentColor;
 }
 
@@ -10667,6 +10672,11 @@ html[lang='de']
   white-space: nowrap;
 }
 
+.story-inline-currency-token.story-currency-token--dollar {
+  font-family: var(--font-gilroy-currency) !important;
+  font-weight: 400;
+}
+
 .story-inline-currency-symbol,
 .story-inline-currency-value {
   display: inline;
@@ -10682,7 +10692,8 @@ html[lang='de']
   transform: none;
 }
 
-.story-inline-currency-symbol--euro {
+.story-inline-currency-symbol--euro,
+.story-inline-currency-symbol--dollar {
   font: inherit !important;
 }
 

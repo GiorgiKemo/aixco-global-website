@@ -1830,24 +1830,29 @@ function StoryMetricText({
   );
 }
 
-const INLINE_EURO_TOKEN_PATTERN = /(€\d+(?:[.,]\d+)*(?:[kKmMbB])?)/gu;
+const INLINE_CURRENCY_TOKEN_PATTERN = /([$€]\d+(?:[.,]\d+)*(?:[kKmMbB])?)/gu;
 
 function StoryInlineCurrencyText({ value }: { value: string }) {
-  return value.split(INLINE_EURO_TOKEN_PATTERN).map((part, partIndex) => {
-    const euroToken = part.match(/^€(.+)$/u);
+  return value.split(INLINE_CURRENCY_TOKEN_PATTERN).map((part, partIndex) => {
+    const currencyToken = part.match(/^([$€])(.+)$/u);
 
-    if (!euroToken) return part;
+    if (!currencyToken) return part;
+
+    const isEuro = currencyToken[1] === "€";
+    const currencyName = isEuro ? "euro" : "dollar";
 
     return (
       <span
         key={`${part}:${partIndex}`}
-        className="story-currency-token story-currency-token--euro story-inline-currency-token"
-        data-inline-currency-token="euro"
+        className={`story-currency-token story-currency-token--${currencyName} story-inline-currency-token`}
+        data-inline-currency-token={currencyName}
       >
-        <span className="story-inline-currency-symbol story-inline-currency-symbol--euro">
-          €
+        <span
+          className={`story-inline-currency-symbol story-inline-currency-symbol--${currencyName}`}
+        >
+          {currencyToken[1]}
         </span>
-        <span className="story-inline-currency-value">{euroToken[1]}</span>
+        <span className="story-inline-currency-value">{currencyToken[2]}</span>
       </span>
     );
   });
@@ -2206,7 +2211,7 @@ function PhilosophyPlatformScene({
             <div className="mt-2 grid gap-2">
               {section.paragraphs.map((paragraph) => (
                 <p key={paragraph} className="story-body text-foreground/68">
-                  {tx(paragraph)}
+                  <StoryInlineCurrencyText value={tx(paragraph)} />
                 </p>
               ))}
             </div>
@@ -2271,7 +2276,7 @@ function PhilosophyDetailScene({
                   <div className="mt-3 grid gap-3">
                     {section.paragraphs.map((paragraph) => (
                       <p key={paragraph} className="story-body text-foreground/72">
-                        {tx(paragraph)}
+                        <StoryInlineCurrencyText value={tx(paragraph)} />
                       </p>
                     ))}
                   </div>
