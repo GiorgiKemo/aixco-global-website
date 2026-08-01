@@ -798,6 +798,23 @@ describe("index.css motion rules", () => {
     expect(euroBlock).toContain("line-height: inherit !important;");
     expect(euroBlock).toContain("transform: none;");
 
+    const localeEuroStart = css.indexOf(
+      "html:is([lang='en'], [lang='de'])\n  .story-standard-number\n  .story-currency-symbol--euro {",
+    );
+    const localeEuroBlock = css.slice(
+      localeEuroStart,
+      css.indexOf("\n}", localeEuroStart),
+    );
+    expect(localeEuroStart).toBeGreaterThanOrEqual(0);
+    expect(localeEuroBlock).toContain(
+      "font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',",
+    );
+    expect(localeEuroBlock).toContain("font-weight: inherit !important;");
+    expect(localeEuroBlock).toContain("font-synthesis: none;");
+    expect(css).toContain(
+      "html:is([lang='en'], [lang='de']) .story-inline-currency-symbol--euro {",
+    );
+
     const dollarSymbolStart = css.indexOf(
       ".story-standard-number .story-currency-symbol--dollar {",
     );

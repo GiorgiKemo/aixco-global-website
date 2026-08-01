@@ -246,7 +246,9 @@ try {
         Math.abs(centerDelta) <= 1.5 &&
         gap >= -5;
       const typographyMatches =
-        symbolTypography.family === valueTypography.family &&
+        (details.isEuro
+          ? symbolTypography.family.startsWith("system-ui")
+          : symbolTypography.family === valueTypography.family) &&
         symbolTypography.size === valueTypography.size &&
         symbolTypography.weight === valueTypography.weight &&
         symbolTypography.lineHeight === valueTypography.lineHeight &&
@@ -445,15 +447,18 @@ try {
           const value = symbol.nextElementSibling;
           const symbolStyle = getComputedStyle(symbol);
           const valueStyle = value ? getComputedStyle(value) : null;
-          const isEuro = symbol.classList.contains(
-            "story-currency-symbol--euro",
-          );
+          const isEuro =
+            symbol.classList.contains("story-currency-symbol--euro") ||
+            symbol.classList.contains("story-inline-currency-symbol--euro");
           return {
             text: `${symbol.textContent ?? ""}${value?.textContent ?? ""}`,
             isEuro,
             familyMatches: valueStyle
               ? symbolStyle.fontFamily === valueStyle.fontFamily
               : false,
+            euroFamilyMatchesReference: isEuro
+              ? symbolStyle.fontFamily.startsWith("system-ui")
+              : true,
             sizeMatches: valueStyle
               ? symbolStyle.fontSize === valueStyle.fontSize
               : false,
@@ -474,8 +479,11 @@ try {
     );
 
     for (const treatment of localeTreatments) {
+      const familyMatches = treatment.isEuro
+        ? treatment.euroFamilyMatchesReference
+        : treatment.familyMatches;
       if (
-        !treatment.familyMatches ||
+        !familyMatches ||
         !treatment.sizeMatches ||
         !treatment.weightMatches ||
         !treatment.lineMatches ||

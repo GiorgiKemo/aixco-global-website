@@ -41,6 +41,16 @@ function LoginTrigger() {
   );
 }
 
+function RegisterTrigger() {
+  const { openRegister } = useUI();
+
+  return (
+    <button type="button" onClick={openRegister}>
+      Open register
+    </button>
+  );
+}
+
 function ContactTrigger() {
   const { openContact } = useUI();
 
@@ -73,6 +83,7 @@ function BrochureTrigger() {
 describe("Modals", () => {
   beforeEach(() => {
     window.history.replaceState({}, "", "/");
+    window.localStorage.removeItem("aixco-lang");
     resetContactNudgePreferencesForTests();
     resetDownloadAccessForTests();
     vi.mocked(recordContactSubmission).mockResolvedValue({ ok: true, reference: "AIX-2026-000018" });
@@ -82,9 +93,38 @@ describe("Modals", () => {
     document.body.style.overflow = "";
     document.documentElement.style.overflow = "";
     window.history.replaceState({}, "", "/");
+    window.localStorage.removeItem("aixco-lang");
     resetContactNudgePreferencesForTests();
     resetDownloadAccessForTests();
     vi.clearAllMocks();
+  });
+
+  it("renders the complete registration flow in Polish without English fallbacks", async () => {
+    window.localStorage.setItem("aixco-lang", "pl");
+
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <RegisterTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open register/i }));
+
+    expect(await screen.findByRole("dialog", { name: "Zarejestruj się w AIXCO" })).toBeInTheDocument();
+    expect(screen.getByText("Dlaczego warto zostać klientem?")).toBeInTheDocument();
+    expect(screen.getByText("Dlaczego warto zostać brokerem?")).toBeInTheDocument();
+    expect(screen.getByText("Dlaczego warto zostać partnerem deweloperskim?")).toBeInTheDocument();
+    expect(screen.getByText("Rozpocznij rejestrację klienta")).toBeInTheDocument();
+    expect(screen.getByText("Rozpocznij rejestrację brokera")).toBeInTheDocument();
+    expect(screen.getByText("Rozpocznij wdrożenie dewelopera")).toBeInTheDocument();
+
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).not.toHaveTextContent("Register with AIXCO");
+    expect(dialog).not.toHaveTextContent("Why become a customer?");
+    expect(dialog).not.toHaveTextContent("Start customer registration");
   });
 
   it("gives legal dialogs an accessible name", () => {
