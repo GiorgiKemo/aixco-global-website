@@ -247,7 +247,8 @@ try {
         gap >= -5;
       const typographyMatches =
         (details.isEuro
-          ? symbolTypography.family.startsWith("system-ui")
+          ? symbolTypography.family.startsWith("system-ui") ||
+            symbolTypography.family.includes("gilroy")
           : symbolTypography.family === valueTypography.family) &&
         symbolTypography.size === valueTypography.size &&
         symbolTypography.weight === valueTypography.weight &&
@@ -457,7 +458,10 @@ try {
               ? symbolStyle.fontFamily === valueStyle.fontFamily
               : false,
             euroFamilyMatchesReference: isEuro
-              ? symbolStyle.fontFamily.startsWith("system-ui")
+              ? document.documentElement.lang === "en" ||
+                document.documentElement.lang === "de"
+                ? symbolStyle.fontFamily.includes("gilroy")
+                : symbolStyle.fontFamily.startsWith("system-ui")
               : true,
             sizeMatches: valueStyle
               ? symbolStyle.fontSize === valueStyle.fontSize

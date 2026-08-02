@@ -5,6 +5,7 @@ const viewports = [
   { name: "foldable", width: 280, height: 653, orientation: "portrait" },
   { name: "small-phone", width: 320, height: 568, orientation: "portrait" },
   { name: "compact-phone", width: 360, height: 640, orientation: "portrait" },
+  { name: "iphone-8", width: 375, height: 667, orientation: "portrait" },
   { name: "phone", width: 390, height: 844, orientation: "portrait" },
   { name: "large-phone", width: 430, height: 932, orientation: "portrait" },
   { name: "compact-phone-landscape", width: 568, height: 320, orientation: "landscape" },
@@ -13,6 +14,7 @@ const viewports = [
 ];
 const propertyViewports = [
   { name: "property-foldable", width: 280, height: 653, orientation: "portrait" },
+  { name: "property-iphone-8", width: 375, height: 667, orientation: "portrait" },
   { name: "property-phone", width: 390, height: 844, orientation: "portrait" },
   { name: "property-compact-landscape", width: 568, height: 320, orientation: "landscape" },
   { name: "property-foldable-landscape", width: 653, height: 280, orientation: "landscape" },
@@ -221,7 +223,7 @@ try {
         await languageList.waitFor({ state: "detached" });
       }
 
-      if (viewport.name === "phone") {
+      if (viewport.name === "phone" || viewport.name === "iphone-8") {
         await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
         await page.waitForTimeout(220);
 
@@ -254,13 +256,13 @@ try {
         });
 
         if (menuMetrics.rootOverflow !== "hidden" || menuMetrics.bodyOverflow !== "hidden") {
-          errors.push("phone/menu: page scroll is not locked while the drawer is open");
+          errors.push(`${viewport.name}/menu: page scroll is not locked while the drawer is open`);
         }
         if (!menuMetrics.withinViewport || menuMetrics.horizontalOverflow > 4) {
-          errors.push("phone/menu: drawer is not fully contained by the viewport");
+          errors.push(`${viewport.name}/menu: drawer is not fully contained by the viewport`);
         }
         if (menuMetrics.targets.some((target) => target.width < 44 || target.height < 44)) {
-          errors.push("phone/menu: drawer has tap targets below 44px");
+          errors.push(`${viewport.name}/menu: drawer has tap targets below 44px`);
         }
 
         await page.locator('[role="dialog"][aria-modal="true"] > button').click();
@@ -291,11 +293,11 @@ try {
         });
 
         if (modalMetrics.rootOverflow !== "hidden" || modalMetrics.bodyOverflow !== "hidden") {
-          errors.push("phone/register-modal: page scroll is not locked while the modal is open");
+          errors.push(`${viewport.name}/register-modal: page scroll is not locked while the modal is open`);
         }
-        if (!modalMetrics.withinViewport) errors.push("phone/register-modal: dialog is not fully contained by the viewport");
+        if (!modalMetrics.withinViewport) errors.push(`${viewport.name}/register-modal: dialog is not fully contained by the viewport`);
         if (!modalMetrics.closeTarget || modalMetrics.closeTarget.width < 44 || modalMetrics.closeTarget.height < 44) {
-          errors.push("phone/register-modal: close control is below 44px");
+          errors.push(`${viewport.name}/register-modal: close control is below 44px`);
         }
 
         await page.keyboard.press("Escape");
@@ -332,11 +334,11 @@ try {
         });
 
         if (!chatMetrics.withinViewport || chatMetrics.horizontalOverflow > 4) {
-          errors.push("phone/chat: panel is not fully contained by the viewport");
+          errors.push(`${viewport.name}/chat: panel is not fully contained by the viewport`);
         }
         const undersizedChatTargets = chatMetrics.targets.filter((target) => target.width < 44 || target.height < 44);
         if (undersizedChatTargets.length) {
-          errors.push(`phone/chat: panel has tap targets below 44px ${JSON.stringify(undersizedChatTargets)}`);
+          errors.push(`${viewport.name}/chat: panel has tap targets below 44px ${JSON.stringify(undersizedChatTargets)}`);
         }
         await page.getByRole("button", { name: /Close live chat/i }).click();
 
@@ -346,7 +348,7 @@ try {
           options.map((option) => option.getAttribute("data-lang")),
         );
         if (visibleLanguageCodes.join(",") !== "en,de,pl,sl,ru") {
-          errors.push(`phone/language: unexpected options ${visibleLanguageCodes.join(",")}`);
+          errors.push(`${viewport.name}/language: unexpected options ${visibleLanguageCodes.join(",")}`);
         }
         await languageList.locator('[data-lang="sl"]').click();
         await page.waitForFunction(
@@ -367,9 +369,9 @@ try {
         });
 
         if (slovenianMetrics.language !== "sl" || slovenianMetrics.direction !== "ltr" || !slovenianMetrics.floatingAtInlineEnd) {
-          errors.push("phone/slovenian: language switch or logical inline-end positioning failed");
+          errors.push(`${viewport.name}/slovenian: language switch or logical inline-end positioning failed`);
         }
-        if (slovenianMetrics.horizontalOverflow > 4) errors.push("phone/slovenian: horizontal overflow after switching language");
+        if (slovenianMetrics.horizontalOverflow > 4) errors.push(`${viewport.name}/slovenian: horizontal overflow after switching language`);
       }
 
       if (consoleErrors.length) errors.push(`${viewport.name}: console errors ${consoleErrors.join(" | ")}`);

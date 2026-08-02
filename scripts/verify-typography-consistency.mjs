@@ -3,18 +3,32 @@ import { chromium } from "playwright";
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
 const locales = ["en", "de", "pl", "sl", "ru"];
 const viewports = [
+  { name: "foldable", width: 280, height: 653 },
+  { name: "small-phone", width: 320, height: 568 },
+  { name: "compact-phone", width: 360, height: 640 },
   { name: "phone", width: 390, height: 844 },
-  { name: "laptop", width: 1440, height: 900 },
+  { name: "large-phone", width: 430, height: 932 },
+  { name: "foldable-landscape", width: 653, height: 280 },
+  { name: "tablet-portrait", width: 768, height: 1024 },
+  { name: "large-tablet", width: 820, height: 1180 },
+  { name: "tablet-landscape", width: 1024, height: 768 },
+  { name: "compact-laptop", width: 1280, height: 720 },
+  { name: "laptop", width: 1366, height: 768 },
+  { name: "wide-desktop", width: 1920, height: 1080 },
 ];
 const errors = [];
 const browser = await chromium.launch({ headless: true });
+const numberStyleBaselines = new Map();
 
 const expectedFamily = {
-  en: /gilroy|Epilogue/i,
-  de: /gilroyGerman|Epilogue/i,
-  pl: /system-ui|Segoe UI|Epilogue/i,
-  sl: /system-ui|Segoe UI|Epilogue/i,
-  ru: /system-ui|Segoe UI|Epilogue/i,
+  // Cyrillic text still uses the platform fallback when required, while
+  // Latin text and numeric runs use the bundled AIXCO faces. Currency
+  // symbols may use the approved system fallback for stable glyph metrics.
+  en: /gilroy|Epilogue|system-ui|Segoe UI/i,
+  de: /gilroyGerman|gilroy|Epilogue|system-ui|Segoe UI/i,
+  pl: /gilroy|system-ui|Segoe UI|Epilogue/i,
+  sl: /gilroy|system-ui|Segoe UI|Epilogue/i,
+  ru: /gilroy|system-ui|Segoe UI|Epilogue/i,
 };
 
 try {
@@ -43,7 +57,22 @@ try {
           locale,
           { timeout: 30_000 },
         );
+        // The section shell mounts before all metric cards hydrate. Wait for
+        // the complete numeric surface so locale comparisons never capture a
+        // partially rendered translation.
+        await page.waitForFunction(
+          () => document.querySelectorAll(".story-standard-number").length >= 29,
+          { timeout: 30_000 },
+        );
         await page.evaluate(() => document.fonts.ready);
+        await page.waitForFunction(
+          () => document.body.innerText.trim().length >= 1_500,
+          { timeout: 30_000 },
+        );
+        // Let locale hydration and responsive CSS settle before collecting
+        // computed styles; otherwise the first language can be sampled during
+        // its initial fallback frame.
+        await page.waitForTimeout(350);
 
         const audit = await page.evaluate(() => {
           const directTextRuns = [
@@ -82,6 +111,30 @@ try {
 
           return {
             typographyRuns,
+            standardNumberStyles: [
+              ...document.querySelectorAll(".story-standard-number"),
+            ].filter((element) => element.getClientRects().length > 0)
+              .map((element) => {
+                const style = getComputedStyle(element);
+                return {
+                  text: element.textContent
+                    ?.replace(/\s+/g, " ")
+                    .trim()
+                    .slice(0, 90),
+                  className:
+                    typeof element.className === "string"
+                      ? element.className
+                      : "",
+                  family: style.fontFamily,
+                  weight: style.fontWeight,
+                  size: style.fontSize,
+                  lineHeight: style.lineHeight,
+                  letterSpacing: style.letterSpacing,
+                  fontVariantNumeric: style.fontVariantNumeric,
+                  fontFeatureSettings: style.fontFeatureSettings,
+                  color: style.color,
+                };
+              }),
             summaryStyles: [...new Set(summaryStyles)],
             horizontalOverflow:
               document.documentElement.scrollWidth -
@@ -117,6 +170,69 @@ try {
             `${label}: mixed font families ${JSON.stringify(
               mixedFamilies.slice(0, 5),
             )}`,
+          );
+        }
+
+        const nonGilroyNumbers = audit.standardNumberStyles.filter(
+          ({ family }) => !/gilroy/i.test(family),
+        );
+        if (nonGilroyNumbers.length) {
+          errors.push(
+            `${label}: numeric runs are not using the bundled Gilroy face ${JSON.stringify(
+              nonGilroyNumbers.slice(0, 5),
+            )}`,
+          );
+        }
+
+        const numberStyleSignature = [
+          ...new Set(
+            audit.standardNumberStyles.map(
+              ({
+                className,
+                family,
+                weight,
+                size,
+                lineHeight,
+                letterSpacing,
+                fontVariantNumeric,
+                fontFeatureSettings,
+                color,
+              }) =>
+                JSON.stringify({
+                  className,
+                  family,
+                  weight,
+                  size,
+                  lineHeight,
+                  letterSpacing,
+                  fontVariantNumeric,
+                  fontFeatureSettings,
+                  color,
+                }),
+            ),
+          ),
+        ]
+          .sort()
+          .join("\n");
+        const baseline = numberStyleBaselines.get(viewport.name);
+        if (baseline === undefined) {
+          numberStyleBaselines.set(viewport.name, numberStyleSignature);
+        } else if (baseline !== numberStyleSignature) {
+          const baselineStyles = new Set(baseline.split("\n").filter(Boolean));
+          const currentStyles = new Set(
+            numberStyleSignature.split("\n").filter(Boolean),
+          );
+          const missingStyles = [...baselineStyles].filter(
+            (style) => !currentStyles.has(style),
+          );
+          const addedStyles = [...currentStyles].filter(
+            (style) => !baselineStyles.has(style),
+          );
+          errors.push(
+            `${label}: numeric typography differs from the English baseline for this viewport ${JSON.stringify({
+              missing: missingStyles.slice(0, 2),
+              added: addedStyles.slice(0, 2),
+            })}`,
           );
         }
 

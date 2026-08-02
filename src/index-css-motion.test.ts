@@ -707,7 +707,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("story-standard-number story-legacy-number");
     expect(css).toContain("/* One locally bundled AIXCO number face across the site.");
     expect(css).toContain(
-      "font-family: var(--font-brand-sans) !important;",
+      "font-family: var(--font-gilroy) !important;",
     );
     expect(css).toContain("font-size: clamp(1.8rem, 2.8vw, 3.2rem) !important;");
     expect(css).toContain("font-weight: 400 !important;");
@@ -807,7 +807,7 @@ describe("index.css motion rules", () => {
     );
     expect(localeEuroStart).toBeGreaterThanOrEqual(0);
     expect(localeEuroBlock).toContain(
-      "font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',",
+      "font-family: var(--font-brand-sans) !important;",
     );
     expect(localeEuroBlock).toContain("font-weight: inherit !important;");
     expect(localeEuroBlock).toContain("font-synthesis: none;");
