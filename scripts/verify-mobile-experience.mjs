@@ -460,6 +460,14 @@ try {
           text: (element.textContent ?? "").replace(/\s+/g, " ").trim(),
           horizontalOverflow: root.scrollWidth - root.clientWidth,
           ownOverflow: element.scrollWidth - element.clientWidth,
+          bounds: {
+            top: Math.round(rect.top * 10) / 10,
+            right: Math.round(rect.right * 10) / 10,
+            bottom: Math.round(rect.bottom * 10) / 10,
+            left: Math.round(rect.left * 10) / 10,
+            width: Math.round(rect.width * 10) / 10,
+            height: Math.round(rect.height * 10) / 10,
+          },
           fullyVisible: style.display !== "none"
             && style.visibility !== "hidden"
             && rect.width > 0
@@ -486,7 +494,9 @@ try {
       if (titleMetrics.text.length < 8 || !/[\p{L}\p{N}]/u.test(titleMetrics.text)) {
         errors.push(`${label}: property title is missing meaningful text`);
       }
-      if (!titleMetrics.fullyVisible) errors.push(`${label}: property title is not fully visible when scrolled into view`);
+      if (!titleMetrics.fullyVisible) {
+        errors.push(`${label}: property title is not fully visible when scrolled into view ${JSON.stringify(titleMetrics.bounds)}`);
+      }
       if (titleMetrics.ownOverflow > 3) errors.push(`${label}: property title overflows by ${titleMetrics.ownOverflow}px`);
 
       if (viewport.orientation === "portrait") {

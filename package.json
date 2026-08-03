@@ -20,6 +20,7 @@
     "smoke": "node scripts/render-smoke.mjs",
     "smoke:locales": "node scripts/render-locales-smoke.mjs",
     "smoke:languages": "node scripts/verify-language-layout.mjs",
+    "smoke:boundaries": "node scripts/verify-section-content-boundaries.mjs",
     "smoke:dubai": "node scripts/verify-dubai-scroll.mjs",
     "smoke:dubai-metrics": "node scripts/verify-dubai-metric-layout.mjs",
     "smoke:nav": "node scripts/verify-nav-scale.mjs",

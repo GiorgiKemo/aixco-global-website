@@ -4630,7 +4630,10 @@
       justify-content: flex-start;
     }
 
+    [data-story-section='hero'],
+    [data-story-section='about'],
     [data-story-section='philosophy'],
+    [data-story-section='philosophyOrigins'],
     [data-story-section='philosophyPlatform'],
     [data-story-section='aboutObjectives'],
     [data-story-section='aboutAccess'],
@@ -7679,6 +7682,31 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   text-wrap: balance;
 }
 
+.story-dubai-progress-rows {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: clamp(0.2rem, 0.45svh, 0.35rem);
+  width: 100%;
+  min-width: 0;
+}
+
+.story-dubai-progress-row {
+  display: grid;
+  grid-template-columns: max-content max-content minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: clamp(0.25rem, 0.45vw, 0.45rem);
+  min-width: 0;
+}
+
+.story-dubai-progress-row .story-dubai-metric-number {
+  justify-self: start;
+  width: auto;
+}
+
+.story-dubai-progress-row .story-dubai-metric-copy:last-child {
+  min-width: 0;
+}
+
 .story-dubai-metric-prefix {
   color: hsl(var(--primary) / 0.84);
   font-family: var(--font-legacy-ui);
@@ -10567,6 +10595,19 @@ html[lang='de']
 
   html[lang='pl']
     .story-dubai-portfolio-card__metric[data-metric-layout='progress']
+    .story-dubai-progress-rows {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  html[lang='pl']
+    .story-dubai-portfolio-card__metric[data-metric-layout='progress']
+    .story-dubai-progress-row {
+    grid-template-columns: max-content max-content minmax(0, 1fr);
+  }
+
+  html[lang='pl']
+    .story-dubai-portfolio-card__metric[data-metric-layout='progress']
     .story-dubai-metric-copy {
     display: inline !important;
     align-self: auto !important;
@@ -10633,7 +10674,11 @@ html[lang='de']
    plus a real dollar built from its S outline, with a 20% lighter center
    stroke. Keeping the complete token in one face prevents device fallback. */
 .story-standard-number .story-currency-token--dollar {
-  font-family: var(--font-gilroy-currency) !important;
+  /* The currency face supplies the aligned dollar and Latin figures. Keep a
+     locale-aware fallback for Cyrillic suffixes such as Russian М so that the
+     suffix inherits the same size, weight, and baseline instead of falling
+     back to an unrelated browser face. */
+  font-family: var(--font-gilroy-currency), var(--font-brand-sans) !important;
   font-weight: 400 !important;
 }
 
@@ -11398,19 +11443,12 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   }
 }
 
-/* German philosophy copy wraps onto additional lines on shorter laptop
-   viewports. Size containment kept the section locked to one viewport even
-   when its content was taller, so the next transition started over the final
-   paragraph. Let this scene grow in the block axis and preserve a comfortable
-   clear area below the copy without reducing the typography. */
+/* Translated philosophy copy can wrap onto additional lines on shorter laptop
+   viewports. Preserve a comfortable clear area below the copy without reducing
+   the typography. The section itself uses inline-size containment above so its
+   block size can grow with every locale instead of being locked to one screen. */
 @media (min-width: 1024px) and (max-height: 48rem) {
-  html[lang='de'] [data-story-section='philosophyOrigins'] {
-    container-type: inline-size;
-  }
-
-  html[lang='de']
-    [data-story-section='philosophyOrigins']
-    .story-philosophy-detail-stage {
+  [data-story-section='philosophyOrigins'] .story-philosophy-detail-stage {
     padding-bottom: clamp(3.5rem, 8svh, 4.5rem);
   }
 }

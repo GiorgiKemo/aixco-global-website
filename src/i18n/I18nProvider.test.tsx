@@ -49,6 +49,20 @@ function GermanDubaiMetricProbe() {
   );
 }
 
+function PolishDubaiMetricProbe() {
+  const { tx } = useI18n();
+
+  return (
+    <div>
+      <p>{tx("USD 462m")}</p>
+      <p>{tx("USD 350m")}</p>
+      <p>{tx("USD 350m mixed-use program")}</p>
+      <p>{tx("Development value: USD 462m")}</p>
+      <p>{tx("Development scope: USD 350m mixed-use program")}</p>
+    </div>
+  );
+}
+
 function RussianBriefFixProbe() {
   const { tx } = useI18n();
 
@@ -59,6 +73,9 @@ function RussianBriefFixProbe() {
       <p>{tx("Swiss real estate heritage")}</p>
       <p>{tx("Development value")}</p>
       <p>{tx("Development value: USD 462m")}</p>
+      <p>{tx("USD 462m")}</p>
+      <p>{tx("USD 350m mixed-use program")}</p>
+      <p>{tx("Development scope: USD 350m mixed-use program")}</p>
     </div>
   );
 }
@@ -220,6 +237,26 @@ describe("I18nProvider", () => {
     });
   });
 
+  it("keeps Polish Dubai metrics in compact dollar notation", async () => {
+    localStorage.setItem("aixco-lang", "pl");
+
+    render(
+      <I18nProvider>
+        <PolishDubaiMetricProbe />
+      </I18nProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("$462M")).toBeInTheDocument();
+      expect(screen.getByText("$350M")).toBeInTheDocument();
+      expect(screen.getByText("Program wielofunkcyjny o wartości $350M")).toBeInTheDocument();
+      expect(screen.getByText("Wartość deweloperska: $462M")).toBeInTheDocument();
+      expect(
+        screen.getByText("Zakres projektu: program wielofunkcyjny o wartości $350M"),
+      ).toBeInTheDocument();
+    });
+  });
+
   it("uses the approved Russian client-brief terminology", async () => {
     localStorage.setItem("aixco-lang", "ru");
 
@@ -234,7 +271,12 @@ describe("I18nProvider", () => {
       expect(screen.getByText("Валовая стоимость развития (GDV)")).toBeInTheDocument();
       expect(screen.getByText("Швейцарское наследие в сфере недвижимости")).toBeInTheDocument();
       expect(screen.getByText("Стоимость девелопмента")).toBeInTheDocument();
-      expect(screen.getByText("Стоимость девелопмента: 462 млн USD")).toBeInTheDocument();
+      expect(screen.getByText("Стоимость девелопмента: $462М")).toBeInTheDocument();
+      expect(screen.getByText("$462М")).toBeInTheDocument();
+      expect(screen.getByText("Многофункциональная программа на $350М")).toBeInTheDocument();
+      expect(
+        screen.getByText("Масштаб: многофункциональная программа на $350М"),
+      ).toBeInTheDocument();
     });
   });
 

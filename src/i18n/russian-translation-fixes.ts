@@ -14,6 +14,18 @@ export const russianTranslationFixes = {
     ru: "Стоимость девелопмента",
   },
   "Development value: USD 462m": {
-    ru: "Стоимость девелопмента: 462 млн USD",
+    ru: "Стоимость девелопмента: $462М",
+  },
+  "USD 462m": {
+    ru: "$462М",
+  },
+  "USD 350m": {
+    ru: "$350М",
+  },
+  "USD 350m mixed-use program": {
+    ru: "Многофункциональная программа на $350М",
+  },
+  "Development scope: USD 350m mixed-use program": {
+    ru: "Масштаб: многофункциональная программа на $350М",
   },
 } satisfies RussianTranslationSource;

@@ -1443,9 +1443,36 @@ function HeroScene({
   );
 }
 
-const DUBAI_METRIC_NUMBER_PATTERN = /([$€]?~?\d[\d,.]*(?:\s*%|\+|[mMbBkK])?)/gu;
+const DUBAI_METRIC_NUMBER_PATTERN = /([$€]?~?\d[\d,.]*(?:\s*%|\+|[mMbBkK\u041c\u043c])?)/gu;
 
 function StoryDubaiMetricNumbers({ value }: { value: string }) {
+  const polishProgress = value.match(
+    /^około\s+(\d+%)\s+([^,]+),\s+około\s+(\d+%)\s+(.+)$/iu,
+  );
+
+  if (polishProgress) {
+    const [, firstNumber, firstCopy, secondNumber, secondCopy] = polishProgress;
+
+    return (
+      <span className="story-dubai-progress-rows" lang="pl">
+        <span className="story-dubai-progress-row">
+          <span className="story-dubai-metric-copy">około</span>
+          <span className="story-standard-number story-dubai-metric-number">
+            {firstNumber}
+          </span>
+          <span className="story-dubai-metric-copy">{firstCopy},</span>
+        </span>
+        <span className="story-dubai-progress-row">
+          <span className="story-dubai-metric-copy">około</span>
+          <span className="story-standard-number story-dubai-metric-number">
+            {secondNumber}
+          </span>
+          <span className="story-dubai-metric-copy">{secondCopy}</span>
+        </span>
+      </span>
+    );
+  }
+
   return value.split(DUBAI_METRIC_NUMBER_PATTERN).map((part, partIndex) =>
     /\d/u.test(part) ? (
       <span

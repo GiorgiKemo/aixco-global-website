@@ -773,7 +773,7 @@ describe("index.css motion rules", () => {
     );
     expect(customDollarTokenStart).toBeGreaterThanOrEqual(0);
     expect(customDollarTokenBlock).toContain(
-      "font-family: var(--font-gilroy-currency) !important;",
+      "font-family: var(--font-gilroy-currency), var(--font-brand-sans) !important;",
     );
     expect(customDollarTokenBlock).toContain("font-weight: 400 !important;");
 
@@ -1117,9 +1117,9 @@ describe("index.css motion rules", () => {
     expect(propertyPage).toContain('className="property-highlights__title ');
   });
 
-  it("keeps German philosophy copy clear of the transition on short laptops", () => {
+  it("keeps translated philosophy copy clear of the transition on short laptops", () => {
     const shortLaptopStart = css.indexOf(
-      "/* German philosophy copy wraps onto additional lines",
+      "/* Translated philosophy copy can wrap onto additional lines",
     );
     const shortLaptopRules = css.slice(shortLaptopStart);
 
@@ -1128,9 +1128,8 @@ describe("index.css motion rules", () => {
       "@media (min-width: 1024px) and (max-height: 48rem)",
     );
     expect(shortLaptopRules).toContain(
-      "html[lang='de'] [data-story-section='philosophyOrigins']",
+      "[data-story-section='philosophyOrigins'] .story-philosophy-detail-stage",
     );
-    expect(shortLaptopRules).toContain("container-type: inline-size;");
     expect(shortLaptopRules).toContain(
       "padding-bottom: clamp(3.5rem, 8svh, 4.5rem);",
     );
