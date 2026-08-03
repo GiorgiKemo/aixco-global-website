@@ -434,7 +434,10 @@ try {
     await page.evaluate((nextLocale) => {
       window.localStorage.setItem("aixco-lang", nextLocale);
     }, locale);
-    await page.reload({ waitUntil: "networkidle" });
+    // The app intentionally keeps long-lived connections open, so waiting for
+    // networkidle makes this audit flaky in CI. DOM readiness plus the font
+    // readiness check below is the signal this visual test actually needs.
+    await page.reload({ waitUntil: "domcontentloaded", timeout: 60_000 });
     await page.evaluate(() => document.fonts.ready);
 
     const localeTreatments = await page.evaluate(() =>
