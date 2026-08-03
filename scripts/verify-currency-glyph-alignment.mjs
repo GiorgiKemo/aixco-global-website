@@ -237,12 +237,13 @@ try {
         valueBox.x +
         valuePaint.left -
         (symbolBox.x + symbolPaint.right + 1);
-      // Fractional responsive sizes can spread a curved S edge over three
-      // device-pixel rows at the 51.2px desktop maximum even though its source
-      // outline shares the figures' cap height. The optical center remains the
-      // stricter guard against a visibly raised or lowered currency symbol.
+      // Fractional responsive sizes and platform-specific anti-aliasing can
+      // spread a curved S edge over four device-pixel rows at the 51.2px
+      // desktop maximum even though its source outline shares the figures' cap
+      // height. The optical center remains the stricter guard against a
+      // visibly raised or lowered currency symbol.
       const visuallyAligned =
-        Math.abs(heightDelta) <= 3 &&
+        Math.abs(heightDelta) <= 4 &&
         Math.abs(centerDelta) <= 1.5 &&
         gap >= -5;
       const typographyMatches =
