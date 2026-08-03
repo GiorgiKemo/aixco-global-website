@@ -1452,23 +1452,22 @@ function StoryDubaiMetricNumbers({ value }: { value: string }) {
 
   if (polishProgress) {
     const [, firstNumber, firstCopy, secondNumber, secondCopy] = polishProgress;
+    const rows = [
+      [firstNumber, `${firstCopy},`],
+      [secondNumber, secondCopy],
+    ];
 
     return (
       <span className="story-dubai-progress-rows" lang="pl">
-        <span className="story-dubai-progress-row">
-          <span className="story-dubai-metric-copy">około</span>
-          <span className="story-standard-number story-dubai-metric-number">
-            {firstNumber}
+        {rows.map(([number, copy]) => (
+          <span className="story-dubai-progress-row" key={number}>
+            <span className="story-dubai-metric-copy">około</span>
+            <span className="story-standard-number story-dubai-metric-number">
+              {number}
+            </span>
+            <span className="story-dubai-metric-copy">{copy}</span>
           </span>
-          <span className="story-dubai-metric-copy">{firstCopy},</span>
-        </span>
-        <span className="story-dubai-progress-row">
-          <span className="story-dubai-metric-copy">około</span>
-          <span className="story-standard-number story-dubai-metric-number">
-            {secondNumber}
-          </span>
-          <span className="story-dubai-metric-copy">{secondCopy}</span>
-        </span>
+        ))}
       </span>
     );
   }

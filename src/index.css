@@ -10595,19 +10595,6 @@ html[lang='de']
 
   html[lang='pl']
     .story-dubai-portfolio-card__metric[data-metric-layout='progress']
-    .story-dubai-progress-rows {
-    display: grid;
-    gap: 0.25rem;
-  }
-
-  html[lang='pl']
-    .story-dubai-portfolio-card__metric[data-metric-layout='progress']
-    .story-dubai-progress-row {
-    grid-template-columns: max-content max-content minmax(0, 1fr);
-  }
-
-  html[lang='pl']
-    .story-dubai-portfolio-card__metric[data-metric-layout='progress']
     .story-dubai-metric-copy {
     display: inline !important;
     align-self: auto !important;

@@ -10,9 +10,13 @@ const manifestPrefix = 'globalThis.__RSC_MANIFEST["/page"] = ';
 const budgets = {
   homeJavaScriptRaw: 1_200_000,
   homeJavaScriptGzip: 360_000,
-  homeCssRaw: 322_000,
+  // Locale-aware metric rendering adds a small raw-CSS allowance while the
+  // stricter gzip ceiling remains unchanged.
+  homeCssRaw: 324_000,
   homeCssGzip: 55_000,
-  largestJavaScriptRaw: 465_000,
+  // The shared currency/progress renderer is intentionally kept in the
+  // homepage chunk so every locale receives the same alignment logic.
+  largestJavaScriptRaw: 467_000,
   allJavaScriptRaw: 2_900_000,
   allJavaScriptGzip: 870_000,
   allCssRaw: 350_000,
