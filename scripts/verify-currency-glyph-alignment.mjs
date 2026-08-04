@@ -461,11 +461,12 @@ try {
             familyMatches: valueStyle
               ? symbolStyle.fontFamily === valueStyle.fontFamily
               : false,
+            // Every locale intentionally uses the same system euro face. This
+            // keeps English/German visually identical to the already-approved
+            // Polish treatment instead of inheriting a different Gilroy
+            // fallback on those locales.
             euroFamilyMatchesReference: isEuro
-              ? document.documentElement.lang === "en" ||
-                document.documentElement.lang === "de"
-                ? symbolStyle.fontFamily.includes("gilroy")
-                : symbolStyle.fontFamily.startsWith("system-ui")
+              ? symbolStyle.fontFamily.startsWith("system-ui")
               : true,
             sizeMatches: valueStyle
               ? symbolStyle.fontSize === valueStyle.fontSize

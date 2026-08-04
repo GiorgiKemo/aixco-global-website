@@ -3762,7 +3762,7 @@
   [data-story-section='contact'] .story-contact-social-links {
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     align-items: stretch;
     gap: 0;
   }
@@ -9192,6 +9192,13 @@ html[data-home-experience='story'] {
     border-top: 1px solid hsl(var(--primary) / 0.28);
   }
 
+  [data-story-section='contact'] .story-contact-social-links > a:nth-child(5) {
+    grid-column: 1 / -1;
+    width: 50%;
+    justify-self: center;
+    border-left: 0;
+  }
+
   [data-story-section='contact'] .story-contact-social-links .social-link__label {
     font-size: 0.8rem;
   }
@@ -10631,8 +10638,9 @@ html[lang='de']
   transform: none;
 }
 
-/* Keep each monetary value in one unbroken font run. The symbol and figures
-   inherit identical size, weight, line-height, color, and baseline metrics. */
+/* Keep each monetary value in one unbroken inline token. The symbol and
+   figures inherit identical size, weight, line-height, color, and baseline
+   metrics, with the approved shared system euro face applied below. */
 .story-standard-number .story-currency-token {
   display: inline-block;
   color: inherit;
@@ -10646,8 +10654,8 @@ html[lang='de']
   transform: none;
 }
 
-/* Keep the complete monetary token in the active, locally bundled brand face.
-   The symbol and figures therefore come from one real font run on every device. */
+/* Keep the complete monetary token in the active, locally bundled brand face
+   before the euro symbol is deliberately normalized to the shared system face. */
 .story-standard-number
   :is(.story-currency-token--dollar, .story-currency-token--euro) {
   font-family: var(--font-brand-sans) !important;
@@ -10684,12 +10692,11 @@ html[lang='de']
   transform: none;
 }
 
-/* Keep the euro glyph in the same font run as the surrounding value. On
-   Gilroy locales this lets the browser's euro fallback inherit Gilroy's
-   ascent/descent metrics instead of the taller platform UI line box. */
+/* Use the same euro face in every locale. Polish established this optical
+   treatment first; reusing it for English and German prevents platform- or
+   brand-font fallback differences between language versions. */
 .story-standard-number .story-currency-symbol--euro {
   display: inline;
-  /* Non-Gilroy locales still use their complete platform face. */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     'Helvetica Neue', Arial, sans-serif !important;
   font-size: inherit !important;
@@ -10697,18 +10704,6 @@ html[lang='de']
   font-synthesis: none;
   line-height: inherit !important;
   transform: none;
-}
-
-/* English and German use Gilroy for their figures. Keep the euro fallback in
-   that same font run so its ascent, descent, and baseline match the digits
-   (the platform UI font otherwise renders a visibly taller symbol on phones). */
-html:is([lang='en'], [lang='de'])
-  .story-standard-number
-  .story-currency-symbol--euro {
-  font-family: var(--font-brand-sans) !important;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  font-synthesis: none;
 }
 
 /* The dollar and figures inherit one real font run and one baseline. */
@@ -10772,16 +10767,19 @@ html:is([lang='en'], [lang='de'])
   transform: none;
 }
 
-.story-inline-currency-symbol--euro,
 .story-inline-currency-symbol--dollar {
   font: inherit !important;
 }
 
-html:is([lang='en'], [lang='de']) .story-inline-currency-symbol--euro {
-  font-family: var(--font-brand-sans) !important;
+/* Inline euro prices use the same shared system euro face as the card
+   metrics, including English and German. */
+.story-inline-currency-symbol--euro {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif !important;
   font-size: inherit !important;
   font-weight: inherit !important;
   font-synthesis: none;
+  line-height: inherit !important;
 }
 
 /* The About metrics sit on photography, so use the brighter champagne tone
@@ -11231,6 +11229,23 @@ html:is([lang='ka'], [lang='ar']) .story-title-reveal__text {
   color: hsl(var(--foreground));
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
+}
+
+[data-story-section='contact'] .story-contact-social-links .social-link__detail {
+  max-width: 100%;
+  color: hsl(var(--foreground) / 0.68);
+  font-family: var(--font-brand-sans);
+  font-size: clamp(0.68rem, 0.72vw, 0.76rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  [data-story-section='contact'] .story-contact-social-links .social-link__detail {
+    font-size: 0.7rem;
+  }
 }
 
 /* Give the Dubai legacy scene a complete viewport of breathing room on

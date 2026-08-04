@@ -50,6 +50,9 @@ function sanitizeCompanyProfile(profile: SiteContent["company"]): SiteContent["c
         "instagram.com",
         "www.instagram.com",
       ]),
+      whatsapp: getSafeHttpsUrl(profile.socials?.whatsapp, rawSiteContentDefaults.company.socials.whatsapp, [
+        "wa.me",
+      ]),
       youtube: getSafeHttpsUrl(profile.socials?.youtube, rawSiteContentDefaults.company.socials.youtube, [
         "youtube.com",
         "www.youtube.com",

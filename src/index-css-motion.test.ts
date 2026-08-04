@@ -222,10 +222,13 @@ describe("index.css motion rules", () => {
     expect(liveAssets).toContain("AIXCO_icons-03.svg");
     expect(liveAssets).toContain("AIXCO_icons-04.svg");
     expect(liveAssets).toContain("AIXCO_icons-05.svg");
+    expect(liveAssets).toContain("AIXCO_icons-06.svg");
     expect(socialLinks).toContain("aixcoLiveIcons.website");
     expect(socialLinks).toContain("aixcoLiveIcons.linkedin");
     expect(socialLinks).toContain("aixcoLiveIcons.instagram");
     expect(socialLinks).toContain("aixcoLiveIcons.facebook");
+    expect(socialLinks).toContain("aixcoLiveIcons.whatsapp");
+    expect(socialLinks).toContain("https://wa.me/41794340581");
     expect(desktopStoryHome).toContain("aixcoLiveIcons.email");
     expect(css).toContain(".story-contact-card__svg-icon");
   });
@@ -249,7 +252,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('className="story-contact-social-links"');
     expect(css).toContain("[data-story-section='contact'] .story-contact-social-links > a");
     expect(css).toContain("[data-story-section='contact'] .story-contact-social-links .social-link__icon");
-    expect(css).toContain("grid-template-columns: repeat(4, minmax(0, 1fr));");
+    expect(css).toContain("grid-template-columns: repeat(5, minmax(0, 1fr));");
     expect(css).toContain(".social-link__label");
     expect(selectedContactStart).toBeGreaterThanOrEqual(0);
     expect(selectedContact).toContain("border-radius: 1.25rem !important;");
@@ -798,22 +801,27 @@ describe("index.css motion rules", () => {
     expect(euroBlock).toContain("line-height: inherit !important;");
     expect(euroBlock).toContain("transform: none;");
 
-    const localeEuroStart = css.indexOf(
-      "html:is([lang='en'], [lang='de'])\n  .story-standard-number\n  .story-currency-symbol--euro {",
+    expect(euroBlock).toContain(
+      "font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',",
     );
-    const localeEuroBlock = css.slice(
-      localeEuroStart,
-      css.indexOf("\n}", localeEuroStart),
-    );
-    expect(localeEuroStart).toBeGreaterThanOrEqual(0);
-    expect(localeEuroBlock).toContain(
-      "font-family: var(--font-brand-sans) !important;",
-    );
-    expect(localeEuroBlock).toContain("font-weight: inherit !important;");
-    expect(localeEuroBlock).toContain("font-synthesis: none;");
-    expect(css).toContain(
+    expect(euroBlock).toContain("font-weight: inherit !important;");
+    expect(euroBlock).toContain("font-synthesis: none;");
+    expect(css).not.toContain(
       "html:is([lang='en'], [lang='de']) .story-inline-currency-symbol--euro {",
     );
+    const inlineEuroStart = css.indexOf(
+      ".story-inline-currency-symbol--euro {",
+    );
+    const inlineEuroBlock = css.slice(
+      inlineEuroStart,
+      css.indexOf("\n}", inlineEuroStart),
+    );
+    expect(inlineEuroStart).toBeGreaterThanOrEqual(0);
+    expect(inlineEuroBlock).toContain(
+      "font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',",
+    );
+    expect(inlineEuroBlock).toContain("font-size: inherit !important;");
+    expect(inlineEuroBlock).toContain("line-height: inherit !important;");
 
     const dollarSymbolStart = css.indexOf(
       ".story-standard-number .story-currency-symbol--dollar {",
@@ -874,9 +882,8 @@ describe("index.css motion rules", () => {
       "font-family: var(--font-brand-sans) !important;",
     );
     expect(css).toContain("white-space: nowrap;");
-    expect(css).toContain(
-      ".story-inline-currency-symbol--euro,\n.story-inline-currency-symbol--dollar {",
-    );
+    expect(css).toContain(".story-inline-currency-symbol--euro {");
+    expect(css).toContain(".story-inline-currency-symbol--dollar {");
     expect(css).toContain("font: inherit !important;");
     expect(css).not.toContain("top: -0.004364rem;");
     expect(css).not.toContain("transform: scaleX(1.45)");

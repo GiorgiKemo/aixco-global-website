@@ -146,6 +146,7 @@ export const aixcoLiveIcons = {
   facebook: `${iconBase}/AIXCO_icons-02.svg`,
   instagram: `${iconBase}/AIXCO_icons-03.svg`,
   email: `${iconBase}/AIXCO_icons-04.svg`,
+  whatsapp: `${iconBase}/AIXCO_icons-06.svg`,
 } as const;
 
 export const aixcoLiveAssetDetails = {

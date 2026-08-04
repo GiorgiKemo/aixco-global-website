@@ -12,6 +12,7 @@ type Socials = SiteContent["company"]["socials"];
 type SocialLink = {
   key: keyof Socials;
   label: string;
+  detail?: string;
   fallback: string;
   allowedHosts: string[];
   allowedPath: string;
@@ -24,6 +25,7 @@ type SocialLinksProps = {
   linkClassName?: string;
   theme?: "dark" | "light";
   showLabels?: boolean;
+  showWhatsApp?: boolean;
   "aria-label"?: string;
 };
 
@@ -60,6 +62,15 @@ const socialLinks: SocialLink[] = [
     allowedPath: "/profile.php",
     iconSrc: aixcoLiveIcons.facebook,
   },
+  {
+    key: "whatsapp",
+    label: "WhatsApp",
+    detail: "+41 79 434 05 81",
+    fallback: "https://wa.me/41794340581",
+    allowedHosts: ["wa.me"],
+    allowedPath: "/41794340581",
+    iconSrc: aixcoLiveIcons.whatsapp,
+  },
 ];
 
 const darkLinkClassName =
@@ -77,6 +88,7 @@ export function SocialLinks({
   linkClassName,
   theme = "dark",
   showLabels = false,
+  showWhatsApp = false,
   "aria-label": ariaLabel = "AIXCO social media links",
 }: SocialLinksProps) {
   const { tx } = useI18n();
@@ -85,14 +97,14 @@ export function SocialLinks({
 
   return (
     <div aria-label={ariaLabel} className={cn("flex items-center gap-2", className)}>
-      {socialLinks.map(({ key, label, fallback, allowedHosts, allowedPath, iconSrc }) => {
+      {socialLinks.filter(({ key }) => key !== "whatsapp" || showWhatsApp).map(({ key, label, detail, fallback, allowedHosts, allowedPath, iconSrc }) => {
         const safeHref = getSafeHttpsUrl(socials[key], fallback, allowedHosts);
         const href = new URL(safeHref).pathname.replace(/\/$/, "") === allowedPath.replace(/\/$/, "") ? safeHref : fallback;
 
         return (
           <a
             key={key}
-            aria-label={tx(label)}
+            aria-label={detail ? `${tx(label)} ${detail}` : tx(label)}
             href={href}
             target="_blank"
             rel="noreferrer"
@@ -111,6 +123,7 @@ export function SocialLinks({
                   />
                 </span>
                 <span className="social-link__label">{tx(label)}</span>
+                {detail ? <span className="social-link__detail">{detail}</span> : null}
               </>
             ) : (
               <>

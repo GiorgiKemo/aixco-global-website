@@ -10,6 +10,10 @@ export function normalizeCountryCode(value: string | null | undefined) {
   return /^[A-Z]{2}$/u.test(country) && country !== "XX" ? country : null;
 }
 
+export function isSwitzerlandCountryCode(value: string | null | undefined) {
+  return normalizeCountryCode(value) === "CH";
+}
+
 export function getCountryFromLocationHeaders(headers: Pick<Headers, "get">) {
   for (const name of LOCATION_COUNTRY_HEADERS) {
     const country = normalizeCountryCode(headers.get(name));

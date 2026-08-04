@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getCountryFromLocationHeaders, normalizeCountryCode } from "./location-country";
+import { getCountryFromLocationHeaders, isSwitzerlandCountryCode, normalizeCountryCode } from "./location-country";
 
 describe("location country detection", () => {
   it("prefers the hosting edge country header", () => {
@@ -19,5 +19,12 @@ describe("location country detection", () => {
 
     expect(getCountryFromLocationHeaders(headers)).toBe("PL");
     expect(normalizeCountryCode("not-a-country")).toBeNull();
+  });
+
+  it("recognizes Switzerland while rejecting neighboring and unknown countries", () => {
+    expect(isSwitzerlandCountryCode("ch")).toBe(true);
+    expect(isSwitzerlandCountryCode("DE")).toBe(false);
+    expect(isSwitzerlandCountryCode("XX")).toBe(false);
+    expect(isSwitzerlandCountryCode(null)).toBe(false);
   });
 });
