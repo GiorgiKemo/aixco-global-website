@@ -50,7 +50,8 @@ import {
   aixcoLiveVideos,
 } from "@/lib/aixco-live-assets";
 import { replaceLocationHash } from "@/lib/section-hash";
-import { isSwitzerlandCountryCode } from "@/lib/location-country";
+import { getWhatsAppContactForCountry } from "@/lib/market-whatsapp";
+import type { MarketWhatsAppContact } from "@/lib/market-whatsapp";
 import { getSafePublicAssetHref } from "@/lib/security/urls";
 import { scrollToHash, scrollToPageTop } from "@/lib/smooth-scroll";
 import { cn } from "@/lib/utils";
@@ -3170,14 +3171,14 @@ function FaqScene({
 function ContactScene({
   isActive,
   isRevealed,
-  showSwissWhatsApp,
+  whatsappContact,
   onLogin,
   onRegister,
   tx,
 }: {
   isActive: boolean;
   isRevealed: boolean;
-  showSwissWhatsApp: boolean;
+  whatsappContact: MarketWhatsAppContact | null;
   onLogin: () => void;
   onRegister: () => void;
   tx: (copy: string) => string;
@@ -3257,7 +3258,7 @@ function ContactScene({
                     socials={company.socials}
                     theme="light"
                     showLabels
-                    showWhatsApp={showSwissWhatsApp}
+                    whatsappContact={whatsappContact}
                     className="story-contact-social-links"
                     aria-label={tx("AIXCO social media links")}
                   />
@@ -3309,7 +3310,7 @@ export function DesktopStoryHome() {
   const sectionPresenceRef = useRef(sectionPresence);
   const { openContact, openJourney, openLogin, openPartner, openRegister } = useUI();
   const { lang, setLang, tx } = useI18n();
-  const [showSwissWhatsApp, setShowSwissWhatsApp] = useState(false);
+  const [whatsappContact, setWhatsAppContact] = useState<MarketWhatsAppContact | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -3320,9 +3321,9 @@ export function DesktopStoryHome() {
         const country = payload && typeof payload === "object" && "country" in payload
           ? String((payload as { country?: unknown }).country ?? "")
           : "";
-        setShowSwissWhatsApp(isSwitzerlandCountryCode(country));
+        setWhatsAppContact(getWhatsAppContactForCountry(country));
       })
-      .catch(() => setShowSwissWhatsApp(false));
+      .catch(() => setWhatsAppContact(null));
 
     return () => controller.abort();
   }, []);
@@ -3613,10 +3614,10 @@ export function DesktopStoryHome() {
       <MemoizedTeamScene key="team" isActive={activeIndex === 13} isRevealed={isRevealed(13)} tx={tx} />,
       <MemoizedPartnersScene key="partners" isActive={activeIndex === 14} isRevealed={isRevealed(14)} tx={tx} onPartnerClick={openPartner} />,
       <MemoizedFaqScene key="faqs" isActive={activeIndex === 15} isRevealed={isRevealed(15)} tx={tx} />,
-      <MemoizedContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} showSwissWhatsApp={showSwissWhatsApp} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
+      <MemoizedContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} whatsappContact={whatsappContact} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
-    [activeIndex, lang, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, showSwissWhatsApp, tx],
+    [activeIndex, lang, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx, whatsappContact],
   );
 
   return (

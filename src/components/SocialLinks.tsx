@@ -4,6 +4,7 @@ import Image from "next/image";
 import { aixcoLiveIcons } from "@/lib/aixco-live-assets";
 import { useI18n } from "@/i18n/I18nProvider";
 import type { SiteContent } from "@/lib/backend/site-content";
+import type { MarketWhatsAppContact } from "@/lib/market-whatsapp";
 import { getSafeHttpsUrl } from "@/lib/security/urls";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +26,7 @@ type SocialLinksProps = {
   linkClassName?: string;
   theme?: "dark" | "light";
   showLabels?: boolean;
-  showWhatsApp?: boolean;
+  whatsappContact?: MarketWhatsAppContact | null;
   "aria-label"?: string;
 };
 
@@ -65,7 +66,6 @@ const socialLinks: SocialLink[] = [
   {
     key: "whatsapp",
     label: "WhatsApp",
-    detail: "+41 79 434 05 81",
     fallback: "https://wa.me/41794340581",
     allowedHosts: ["wa.me"],
     allowedPath: "/41794340581",
@@ -88,7 +88,7 @@ export function SocialLinks({
   linkClassName,
   theme = "dark",
   showLabels = false,
-  showWhatsApp = false,
+  whatsappContact = null,
   "aria-label": ariaLabel = "AIXCO social media links",
 }: SocialLinksProps) {
   const { tx } = useI18n();
@@ -97,14 +97,18 @@ export function SocialLinks({
 
   return (
     <div aria-label={ariaLabel} className={cn("flex items-center gap-2", className)}>
-      {socialLinks.filter(({ key }) => key !== "whatsapp" || showWhatsApp).map(({ key, label, detail, fallback, allowedHosts, allowedPath, iconSrc }) => {
-        const safeHref = getSafeHttpsUrl(socials[key], fallback, allowedHosts);
-        const href = new URL(safeHref).pathname.replace(/\/$/, "") === allowedPath.replace(/\/$/, "") ? safeHref : fallback;
+      {socialLinks.filter(({ key }) => key !== "whatsapp" || whatsappContact).map(({ key, label, detail, fallback, allowedHosts, allowedPath, iconSrc }) => {
+        const resolvedDetail = key === "whatsapp" ? whatsappContact?.number : detail;
+        const resolvedFallback = key === "whatsapp" && whatsappContact ? whatsappContact.href : fallback;
+        const resolvedAllowedPath = key === "whatsapp" && whatsappContact ? whatsappContact.allowedPath : allowedPath;
+        const socialValue = key === "whatsapp" && whatsappContact ? whatsappContact.href : socials[key];
+        const safeHref = getSafeHttpsUrl(socialValue, resolvedFallback, allowedHosts);
+        const href = new URL(safeHref).pathname.replace(/\/$/, "") === resolvedAllowedPath.replace(/\/$/, "") ? safeHref : resolvedFallback;
 
         return (
           <a
             key={key}
-            aria-label={detail ? `${tx(label)} ${detail}` : tx(label)}
+            aria-label={resolvedDetail ? `${tx(label)} ${resolvedDetail}` : tx(label)}
             href={href}
             target="_blank"
             rel="noreferrer"
@@ -123,7 +127,7 @@ export function SocialLinks({
                   />
                 </span>
                 <span className="social-link__label">{tx(label)}</span>
-                {detail ? <span className="social-link__detail">{detail}</span> : null}
+                {resolvedDetail ? <span className="social-link__detail">{resolvedDetail}</span> : null}
               </>
             ) : (
               <>

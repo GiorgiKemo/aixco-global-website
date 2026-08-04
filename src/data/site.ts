@@ -11,7 +11,7 @@ export const company = {
     linkedin: "https://www.linkedin.com/company/aixco-global",
     facebook: "https://www.facebook.com/profile.php?id=61589341472475",
     instagram: "https://www.instagram.com/aixco.global/",
-    // Swiss-market WhatsApp contact (message or call from WhatsApp).
+    // Default/fallback WhatsApp contact; the rendered market number is selected by geolocation.
     whatsapp: "https://wa.me/41794340581",
     youtube: "",
     x: "",

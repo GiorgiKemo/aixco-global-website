@@ -229,11 +229,11 @@ describe("index.css motion rules", () => {
     expect(socialLinks).toContain("aixcoLiveIcons.facebook");
     expect(socialLinks).toContain("aixcoLiveIcons.whatsapp");
     expect(socialLinks).toContain("https://wa.me/41794340581");
-    expect(socialLinks).toContain("showWhatsApp = false");
-    expect(socialLinks).toContain("key !== \"whatsapp\" || showWhatsApp");
-    expect(socialLinks).toContain("+41 79 434 05 81");
-    expect(desktopStoryHome).toContain("isSwitzerlandCountryCode(country)");
-    expect(desktopStoryHome).toContain("showWhatsApp={showSwissWhatsApp}");
+    expect(socialLinks).toContain("whatsappContact = null");
+    expect(socialLinks).toContain("key !== \"whatsapp\" || whatsappContact");
+    expect(socialLinks).toContain("whatsappContact?.number");
+    expect(desktopStoryHome).toContain("getWhatsAppContactForCountry(country)");
+    expect(desktopStoryHome).toContain("whatsappContact={whatsappContact}");
     expect(desktopStoryHome).toContain("aixcoLiveIcons.email");
     expect(css).toContain(".story-contact-card__svg-icon");
   });
