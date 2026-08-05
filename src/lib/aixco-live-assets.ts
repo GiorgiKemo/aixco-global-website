@@ -19,6 +19,8 @@ const projectGalleryBase = `${liveImageBase}/project-gallery`;
 const currentProjectGalleryBase = `${liveImageBase}/project-gallery-2026`;
 const healthcareGalleryVersion = "healthcare-gallery-20260506";
 const heroVideoVersion = "hero-batumi-web-20260715-p1";
+const currentProjectHostedVideoBase =
+  "https://media.githubusercontent.com/media/GiorgiKemo/aixco-global-website/main/public/aixco-global-op2/media";
 
 const versionHealthcareImage = (src: string) => `${src}?v=${healthcareGalleryVersion}`;
 
@@ -115,6 +117,8 @@ export const aixcoLiveVideos = {
   fundThree: `${optimizedVideoBase}/fund3-optimized.mp4`,
   tempo: `${optimizedVideoBase}/tempo-optimized.mp4`,
   currentProject: `${optimizedVideoBase}/current-project-optimized.mp4`,
+  currentProjectEnglish: `${currentProjectHostedVideoBase}/current-project-english.mp4`,
+  currentProjectGerman: `${currentProjectHostedVideoBase}/current-project-german.mp4`,
 } as const;
 
 export const aixcoLiveVideoPreviews = {

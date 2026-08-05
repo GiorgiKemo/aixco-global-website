@@ -32,7 +32,7 @@ const getContentSecurityPolicy = () => {
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
     `connect-src ${connectSources.join(" ")}`,
-    "media-src 'self' blob:",
+    "media-src 'self' blob: https://media.githubusercontent.com",
     "worker-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",

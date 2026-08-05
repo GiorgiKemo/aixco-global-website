@@ -17,6 +17,7 @@ import { ClientShell } from "@/app/client-shell";
 import { JsonLd } from "@/components/JsonLd";
 import { Tx } from "@/components/i18n/Tx";
 import { CurrentProjectBrochureLink, PropertyChrome, PropertyContactLink } from "@/components/property/PropertyChrome";
+import { CurrentProjectVideoButton } from "@/components/property/CurrentProjectVideoButton";
 import {
   batumiImageMap,
   batumiVideoMap,
@@ -24,7 +25,7 @@ import {
   type BatumiProperty,
 } from "@/components/sections/batumi/batumi-data";
 import { getSiteUrl } from "@/lib/site-url";
-import { aixcoCurrentProjectGalleryImages } from "@/lib/aixco-live-assets";
+import { aixcoCurrentProjectGalleryImages, aixcoLiveVideos } from "@/lib/aixco-live-assets";
 
 type PropertyPageProps = {
   params: Promise<{
@@ -187,14 +188,21 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
             ))}
           </div>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className={`mt-6 grid gap-3 ${property.id === "current-project" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
             <PropertyContactLink className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
               <Tx>Contact AIXCO</Tx>
             </PropertyContactLink>
             {property.id === "current-project" ? (
-              <CurrentProjectBrochureLink
-                className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] px-3 text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#9A7425] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
-              />
+              <>
+                <CurrentProjectBrochureLink
+                  className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] px-3 text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#9A7425] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
+                />
+                <CurrentProjectVideoButton
+                  englishSrc={aixcoLiveVideos.currentProjectEnglish}
+                  germanSrc={aixcoLiveVideos.currentProjectGerman}
+                  title="Project Reverance video"
+                />
+              </>
             ) : null}
           </div>
         </div>
