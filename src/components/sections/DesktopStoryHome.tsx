@@ -557,6 +557,7 @@ function StoryMediaPanel({
       src={media.src}
       alt={media.alt}
       fill
+      unoptimized
       preload={preloadMedia}
       fetchPriority={shouldLoadEagerly ? "high" : "auto"}
       loading={shouldLoadEagerly ? "eager" : "lazy"}
@@ -1338,11 +1339,11 @@ function SceneShell({
                       <StoryCrossfadeMediaPanel
                         media={media}
                         mediaKey={mediaCrossfadeKey}
-                        isActive={isActive}
+                        isActive={shouldRevealMedia}
                         preloadMedia={preloadMedia}
                       />
                     ) : (
-                      <StoryMediaPanel media={media} isActive={isActive} preloadMedia={preloadMedia} />
+                      <StoryMediaPanel media={media} isActive={shouldRevealMedia} preloadMedia={preloadMedia} />
                     )}
                     <StoryMediaGradient overlay={resolvedOverlay} reverse={reverse} />
                   </div>

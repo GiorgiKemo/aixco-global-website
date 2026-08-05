@@ -125,7 +125,9 @@ describe("home page performance structure", () => {
     expect(desktopStorySource).toContain("const shouldRenderMedia = Boolean(isRevealed || isActive || preloadMedia);");
     expect(desktopStorySource).toContain("const shouldRevealMedia = Boolean(isRevealed || isActive);");
     expect(desktopStorySource).toContain("<StoryMediaReveal isActive={shouldRevealMedia}");
+    expect(desktopStorySource).toContain("<StoryMediaPanel media={media} isActive={shouldRevealMedia}");
     expect(desktopStorySource).toContain('loading={shouldLoadEagerly ? "eager" : "lazy"}');
+    expect(desktopStorySource).toContain("unoptimized");
     expect(desktopStorySource).toContain("shouldRenderMedia && mediaContent");
     expect(desktopStorySource).toContain("shouldRenderMedia && media");
     expect(desktopStorySource).toContain("media && isRevealed");
