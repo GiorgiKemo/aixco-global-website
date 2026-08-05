@@ -123,6 +123,9 @@ describe("home page performance structure", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
 
     expect(desktopStorySource).toContain("const shouldRenderMedia = Boolean(isRevealed || isActive || preloadMedia);");
+    expect(desktopStorySource).toContain("const shouldRevealMedia = Boolean(isRevealed || isActive);");
+    expect(desktopStorySource).toContain("<StoryMediaReveal isActive={shouldRevealMedia}");
+    expect(desktopStorySource).toContain('loading={shouldLoadEagerly ? "eager" : "lazy"}');
     expect(desktopStorySource).toContain("shouldRenderMedia && mediaContent");
     expect(desktopStorySource).toContain("shouldRenderMedia && media");
     expect(desktopStorySource).toContain("media && isRevealed");
