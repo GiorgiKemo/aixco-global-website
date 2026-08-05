@@ -3693,6 +3693,7 @@
     display: flex;
     min-width: 0;
     align-items: center;
+    justify-content: center;
     gap: clamp(0.72rem, 1vw, 0.95rem);
   }
 
@@ -11213,7 +11214,16 @@ html:is([lang='ka'], [lang='ar']) .story-title-reveal__text {
   }
 }
 
-@media (min-width: 1024px) {
+/* Keep the intro/card split for roomy desktops only. At smaller laptop widths
+   the split makes the email/address cards too narrow for their icon + value
+   row, so the panel stays in the single-column composition until 1200px. */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  [data-story-section='contact'] [data-layout='story-contact-layout'] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+@media (min-width: 1200px) {
   [data-story-section='contact'] [data-layout='story-contact-layout'] {
     /* Give the contact intro and cards equal visual weight. The previous
        right-heavy split made the heading collapse into three short rows and

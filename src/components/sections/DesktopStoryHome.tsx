@@ -531,6 +531,7 @@ function StoryMediaPanel({
   preloadMedia?: boolean;
 }) {
   const objectPosition = media.position ?? "center";
+  const shouldLoadEagerly = preloadMedia || isActive;
 
   if (media.kind === "video") {
     return (
@@ -557,8 +558,8 @@ function StoryMediaPanel({
       alt={media.alt}
       fill
       preload={preloadMedia}
-      fetchPriority={preloadMedia ? "high" : "auto"}
-      loading={preloadMedia ? "eager" : "lazy"}
+      fetchPriority={shouldLoadEagerly ? "high" : "auto"}
+      loading={shouldLoadEagerly ? "eager" : "lazy"}
       decoding="async"
       quality={75}
       sizes={media.sizes ?? "(min-width: 1280px) 56vw, 100vw"}
@@ -1295,6 +1296,7 @@ function SceneShell({
   const copyColumnSpan = fullWidth ? "md:col-span-2 xl:col-span-12" : mediaWeight === "gallery" ? "xl:col-span-5" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-7";
   const mediaColumnSpan = mediaWeight === "gallery" ? "xl:col-span-7" : mediaWeight === "wide" ? "xl:col-span-6" : "xl:col-span-5";
   const shouldRenderMedia = Boolean(isRevealed || isActive || preloadMedia);
+  const shouldRevealMedia = Boolean(isRevealed || isActive);
 
   return (
     <div className={`relative min-h-[100svh] ${toneClass}`}>
@@ -1324,13 +1326,13 @@ function SceneShell({
               }`}
             >
               {shouldRenderMedia && mediaContent ? (
-                <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
+                <StoryMediaReveal isActive={shouldRevealMedia} reverse={reverse} className="absolute inset-0">
                   <div className="story-media-panel__stage story-media-panel__stage--custom relative h-full w-full overflow-hidden">
                     {mediaContent}
                   </div>
                 </StoryMediaReveal>
               ) : shouldRenderMedia && media ? (
-                <StoryMediaReveal isActive={isRevealed} reverse={reverse} className="absolute inset-0">
+                <StoryMediaReveal isActive={shouldRevealMedia} reverse={reverse} className="absolute inset-0">
                   <div className="story-media-panel__stage relative h-full w-full overflow-hidden">
                     {mediaCrossfadeKey ? (
                       <StoryCrossfadeMediaPanel
@@ -1929,13 +1931,11 @@ function BatumiBenefitIconGrid({
 function AboutScene({
   isActive,
   isRevealed,
-  shouldExposeVideo,
   shouldStartVideo,
   tx,
 }: {
   isActive: boolean;
   isRevealed: boolean;
-  shouldExposeVideo: boolean;
   shouldStartVideo: boolean;
   tx: (copy: string) => string;
 }) {
@@ -2015,7 +2015,7 @@ function AboutScene({
                 ref={dubaiVideoRef}
                 src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}
                 className="h-full w-full object-cover"
-                style={{ visibility: shouldExposeVideo ? "visible" : "hidden" }}
+                style={{ visibility: shouldAttachVideo ? "visible" : "hidden" }}
                 autoPlay={shouldAttachVideo}
                 muted
                 playsInline
@@ -2049,7 +2049,7 @@ function AboutScene({
                 aria-hidden="true"
                 fill
                 data-about-video-poster=""
-                data-video-started={videoStarted && shouldExposeVideo ? "true" : "false"}
+                data-video-started={videoStarted && shouldAttachVideo ? "true" : "false"}
                 className="story-about-cinematic-poster object-cover"
                 loading="eager"
                 fetchPriority="high"
@@ -3580,7 +3580,6 @@ export function DesktopStoryHome() {
         key="about"
         isActive={activeIndex === 1}
         isRevealed={isRevealed(1)}
-        shouldExposeVideo={activeIndex === 1}
         shouldStartVideo={sectionPresence[1] ?? true}
         tx={tx}
       />,

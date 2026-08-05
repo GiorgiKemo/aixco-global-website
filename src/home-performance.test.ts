@@ -105,12 +105,11 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).toContain("autoPlay={shouldAttachVideo}");
     expect(aboutSceneSource).toContain("loop");
     expect(aboutSceneSource).toContain('preload={shouldAttachVideo ? "auto" : "none"}');
-    expect(aboutSceneSource).toContain('style={{ visibility: shouldExposeVideo ? "visible" : "hidden" }}');
-    expect(aboutSceneSource).toContain('data-video-started={videoStarted && shouldExposeVideo ? "true" : "false"}');
+    expect(aboutSceneSource).toContain('style={{ visibility: shouldAttachVideo ? "visible" : "hidden" }}');
+    expect(aboutSceneSource).toContain('data-video-started={videoStarted && shouldAttachVideo ? "true" : "false"}');
     expect(aboutSceneSource).not.toContain("poster={aixcoDubaiHeroVideo.poster}");
     expect(desktopStorySource).toContain("shouldStartVideo={sectionPresence[1] ?? true}");
-    expect(desktopStorySource).toContain("shouldExposeVideo={activeIndex === 1}");
-    expect(desktopStorySource).not.toContain("shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}");
+    expect(desktopStorySource).not.toContain("shouldExposeVideo");
     expect(desktopStorySource).toContain("storyChapters.map((_, index) => index <= 1)");
     expect(aboutSceneSource).not.toContain("if (!shouldPrimeVideo)");
     expect(aboutSceneSource).not.toContain("shouldReduceMotion");

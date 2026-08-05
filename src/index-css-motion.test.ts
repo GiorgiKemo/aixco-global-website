@@ -306,10 +306,9 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("if (shouldAttachVideo) {\n                    void event.currentTarget.play().catch(() => undefined);");
     expect(desktopStoryHome).toContain("onPlaying={markVideoStarted}");
     expect(desktopStoryHome).toContain('data-about-video-poster=""');
-    expect(desktopStoryHome).toContain('data-video-started={videoStarted && shouldExposeVideo ? "true" : "false"}');
-    expect(desktopStoryHome).toContain('style={{ visibility: shouldExposeVideo ? "visible" : "hidden" }}');
-    expect(desktopStoryHome).toContain("shouldExposeVideo={activeIndex === 1}");
-    expect(desktopStoryHome).not.toContain("shouldExposeVideo={activeIndex === 1 && !heroBackdropVisible}");
+    expect(desktopStoryHome).toContain('data-video-started={videoStarted && shouldAttachVideo ? "true" : "false"}');
+    expect(desktopStoryHome).toContain('style={{ visibility: shouldAttachVideo ? "visible" : "hidden" }}');
+    expect(desktopStoryHome).not.toContain("shouldExposeVideo");
     expect(desktopStoryHome).not.toContain("poster={aixcoDubaiHeroVideo.poster}");
     expect(desktopStoryHome).toContain('fetchPriority="high"');
     expect(css).toContain("[data-story-section='about'] .story-about-cinematic-poster");
