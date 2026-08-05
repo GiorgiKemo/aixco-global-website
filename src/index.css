@@ -11228,9 +11228,17 @@ html:is([lang='ka'], [lang='ar']) .story-title-reveal__text {
     /* Give the contact intro and cards equal visual weight. The previous
        right-heavy split made the heading collapse into three short rows and
        left an unnecessary strip of empty space beside the cards. */
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
     column-gap: clamp(2rem, 3.5vw, 3.5rem);
     padding-inline-end: 0;
+  }
+
+  [data-story-section='contact']
+    .story-contact-card--email
+    .story-contact-detail {
+    /* Preserve the email's painted width. Allowing this item to flex-shrink
+       centered its box but let the final glyphs drift toward the card edge. */
+    flex: 0 0 auto;
   }
 
   [data-story-section='contact'] .story-contact-intro h2 {

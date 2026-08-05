@@ -285,10 +285,11 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain("[data-story-section='faqs'] [data-layout='story-faq-list'],\n  [data-story-section='contact']");
   });
 
-  it("gives the contact footer equal-width columns without a narrow right strip", () => {
-    expect(css).toContain("grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);");
+  it("gives the contact cards enough desktop width for centered contact details", () => {
+    expect(css).toContain("grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);");
     expect(css).toContain("[data-story-section='contact'] [data-layout='story-contact-layout'] {\n    /* Give the contact intro and cards equal visual weight.");
     expect(css).toContain("padding-inline-end: 0;");
+    expect(css).toContain("flex: 0 0 auto;");
     expect(css).toContain("max-width: clamp(26rem, 34vw, 32rem) !important;");
   });
 
