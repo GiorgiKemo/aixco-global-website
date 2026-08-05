@@ -1940,9 +1940,11 @@ function AboutScene({
   tx: (copy: string) => string;
 }) {
   const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
-  const [videoRequested, setVideoRequested] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
-  const shouldAttachVideo = videoRequested;
+  // The parent keeps this true while the About scene is within two story
+  // sections of the viewport. Attach the video immediately on first paint,
+  // then release it only after that two-section buffer is exhausted.
+  const shouldAttachVideo = shouldStartVideo;
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
@@ -1951,18 +1953,16 @@ function AboutScene({
   ];
 
   useEffect(() => {
-    if (shouldStartVideo) {
-      setVideoRequested(true);
-    }
-  }, [shouldStartVideo]);
-
-  useEffect(() => {
     const video = dubaiVideoRef.current;
     if (!video) return undefined;
 
     video.playbackRate = 0.82;
 
     if (!shouldAttachVideo) {
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+      setVideoStarted(false);
       return undefined;
     }
 
@@ -3581,7 +3581,7 @@ export function DesktopStoryHome() {
         isActive={activeIndex === 1}
         isRevealed={isRevealed(1)}
         shouldExposeVideo={activeIndex === 1}
-        shouldStartVideo={activeIndex >= 1}
+        shouldStartVideo={sectionPresence[1] ?? true}
         tx={tx}
       />,
       <MemoizedPhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,

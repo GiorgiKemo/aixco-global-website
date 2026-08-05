@@ -255,9 +255,13 @@ describe("index.css motion rules", () => {
 
     expect(desktopStoryHome).toContain('{tx("SOCIAL MEDIA")}');
     expect(desktopStoryHome).toContain('className="story-contact-social-links"');
+    expect(socialLinks).toContain("story-contact-social-links--whatsapp");
     expect(css).toContain("[data-story-section='contact'] .story-contact-social-links > a");
     expect(css).toContain("[data-story-section='contact'] .story-contact-social-links .social-link__icon");
     expect(css).toContain("grid-template-columns: repeat(5, minmax(0, 1fr));");
+    expect(css).toContain("grid-template-columns: repeat(4, minmax(0, 1fr));");
+    expect(socialLinks).toContain("social-link__icon--whatsapp");
+    expect(css).toContain("object-position: center;");
     expect(css).toContain(".social-link__label");
     expect(selectedContactStart).toBeGreaterThanOrEqual(0);
     expect(selectedContact).toContain("border-radius: 1.25rem !important;");
@@ -281,18 +285,24 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain("[data-story-section='faqs'] [data-layout='story-faq-list'],\n  [data-story-section='contact']");
   });
 
-  it("starts the About video on demand and keeps playback continuous after activation", () => {
-    expect(desktopStoryHome).toContain("const [videoRequested, setVideoRequested] = useState(false);");
-    expect(desktopStoryHome).toContain("const shouldAttachVideo = videoRequested;");
-    expect(desktopStoryHome).toContain("if (shouldStartVideo)");
+  it("gives the contact footer equal-width columns without a narrow right strip", () => {
+    expect(css).toContain("grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);");
+    expect(css).toContain("[data-story-section='contact'] [data-layout='story-contact-layout'] {\n    /* Give the contact intro and cards equal visual weight.");
+    expect(css).toContain("padding-inline-end: 0;");
+    expect(css).toContain("max-width: clamp(26rem, 34vw, 32rem) !important;");
+  });
+
+  it("starts the About video immediately and keeps it active within a two-section buffer", () => {
+    expect(desktopStoryHome).toContain("const shouldAttachVideo = shouldStartVideo;");
+    expect(desktopStoryHome).toContain("if (!shouldAttachVideo)");
+    expect(desktopStoryHome).toContain('video.removeAttribute("src");');
+    expect(desktopStoryHome).toContain("setVideoStarted(false);");
     expect(desktopStoryHome).toContain("src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}");
     expect(desktopStoryHome).toContain('preload={shouldAttachVideo ? "auto" : "none"}');
     expect(desktopStoryHome).toContain("autoPlay={shouldAttachVideo}");
     expect(desktopStoryHome).toContain("loop");
-    expect(desktopStoryHome).toContain("shouldStartVideo={activeIndex >= 1}");
+    expect(desktopStoryHome).toContain("shouldStartVideo={sectionPresence[1] ?? true}");
     expect(desktopStoryHome).toContain("storyChapters.map((_, index) => index <= 1)");
-    expect(desktopStoryHome).not.toContain("if (!shouldPrimeVideo)");
-    expect(desktopStoryHome).not.toContain("setVideoStarted(false);");
     expect(desktopStoryHome).toContain("if (shouldAttachVideo) {\n                    void event.currentTarget.play().catch(() => undefined);");
     expect(desktopStoryHome).toContain("onPlaying={markVideoStarted}");
     expect(desktopStoryHome).toContain('data-about-video-poster=""');

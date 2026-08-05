@@ -96,7 +96,14 @@ export function SocialLinks({
     linkClassName ?? (showLabels ? labelledLinkClassName : theme === "light" ? lightLinkClassName : darkLinkClassName);
 
   return (
-    <div aria-label={ariaLabel} className={cn("flex items-center gap-2", className)}>
+    <div
+      aria-label={ariaLabel}
+      className={cn(
+        "flex items-center gap-2",
+        whatsappContact && "story-contact-social-links--whatsapp",
+        className,
+      )}
+    >
       {socialLinks.filter(({ key }) => key !== "whatsapp" || whatsappContact).map(({ key, label, detail, fallback, allowedHosts, allowedPath, iconSrc }) => {
         const resolvedDetail = key === "whatsapp" ? whatsappContact?.number : detail;
         const resolvedFallback = key === "whatsapp" && whatsappContact ? whatsappContact.href : fallback;
@@ -123,7 +130,10 @@ export function SocialLinks({
                     width={34}
                     height={34}
                     unoptimized
-                    className="social-link__icon h-[2.1rem] w-[2.1rem] object-contain"
+                    className={cn(
+                      "social-link__icon h-[2.1rem] w-[2.1rem] object-contain",
+                      key === "whatsapp" && "social-link__icon--whatsapp",
+                    )}
                   />
                 </span>
                 <span className="social-link__label">{tx(label)}</span>
@@ -145,7 +155,10 @@ export function SocialLinks({
                   width={34}
                   height={34}
                   unoptimized
-                  className="social-link__icon relative h-[2.1rem] w-[2.1rem] object-contain"
+                  className={cn(
+                    "social-link__icon relative h-[2.1rem] w-[2.1rem] object-contain",
+                    key === "whatsapp" && "social-link__icon--whatsapp",
+                  )}
                 />
               </>
             )}
