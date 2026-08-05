@@ -137,7 +137,7 @@ export function SocialLinks({
                   />
                 </span>
                 <span className="social-link__label">{tx(label)}</span>
-                {resolvedDetail ? <span className="social-link__detail">{resolvedDetail}</span> : null}
+                {key !== "whatsapp" && resolvedDetail ? <span className="social-link__detail">{resolvedDetail}</span> : null}
               </>
             ) : (
               <>
