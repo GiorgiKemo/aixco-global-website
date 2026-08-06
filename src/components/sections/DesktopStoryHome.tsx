@@ -2715,6 +2715,7 @@ function MaterialsScene({
   tx: (copy: string) => string;
 }) {
   const materials = useMemo(() => getMaterialDownloadsForLanguage(lang), [lang]);
+  const isMaterialsStatic = materials.length <= 3;
   const materialsViewportRef = useRef<HTMLDivElement>(null);
   const materialsDragRef = useRef<{
     animation: Animation;
@@ -2847,7 +2848,7 @@ function MaterialsScene({
           className="story-materials-marquee__viewport"
           role="region"
           aria-label={tx("Available files")}
-          data-materials-static={materials.length < 2 ? "true" : "false"}
+          data-materials-static={isMaterialsStatic ? "true" : "false"}
           onPointerDown={handleMaterialsPointerDown}
           onPointerMove={handleMaterialsPointerMove}
           onPointerUp={finishMaterialsDrag}
@@ -2855,7 +2856,7 @@ function MaterialsScene({
           onClickCapture={handleMaterialsClickCapture}
         >
           <div className="story-materials-marquee__track">
-            {[0, 1].map((setIndex) => (
+            {(isMaterialsStatic ? [0] : [0, 1]).map((setIndex) => (
               <div
                 key={setIndex}
                 className="story-materials-marquee__set"

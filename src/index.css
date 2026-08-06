@@ -9177,6 +9177,15 @@ html[data-home-experience='story'] {
     box-shadow: none;
   }
 
+  [data-story-section='contact'] .story-contact-card__row {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    align-items: center;
+    justify-content: stretch;
+    gap: 0.85rem;
+  }
+
   [data-story-section='contact'] [data-layout='story-contact-socials'] {
     min-height: 6.25rem;
   }
@@ -9186,8 +9195,20 @@ html[data-home-experience='story'] {
   }
 
   [data-story-section='contact'] .story-contact-social-links > a {
+    display: grid;
+    grid-template-rows: 3.25rem minmax(1.5rem, auto);
+    align-content: start;
+    justify-items: center;
     min-height: 6.15rem;
     padding: 0.6rem 0.4rem;
+    border-left: 0;
+    gap: 0.55rem;
+    transform: none;
+  }
+
+  /* Reset the desktop adjacent-sibling divider before drawing the mobile
+     two-column grid. Without this, the third link inherits a stray left line. */
+  [data-story-section='contact'] .story-contact-social-links > a + a {
     border-left: 0;
   }
 
@@ -9207,13 +9228,49 @@ html[data-home-experience='story'] {
   }
 
   [data-story-section='contact'] .story-contact-social-links .social-link__label {
+    align-self: start;
     font-size: 0.8rem;
+  }
+
+  [data-story-section='contact'] .story-contact-social-links .social-link__icon-tile {
+    align-self: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-color: hsl(var(--primary) / 0.28);
+    background: hsl(0 0% 100% / 0.92);
+    box-shadow: 0 12px 28px -24px hsl(var(--foreground) / 0.22);
+  }
+
+  [data-story-section='contact'] .story-contact-social-links .social-link__icon {
+    width: 2.35rem;
+    height: 2.35rem;
   }
 
   [data-story-section='contact'] .story-contact-card__icon-tile {
     width: 2.6rem;
     height: 2.6rem;
     border-radius: 0.5rem;
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    [data-story-section='contact'] .story-contact-card:hover,
+    [data-story-section='contact'] .story-contact-social-links > a:hover,
+    [data-story-section='contact'] .story-contact-social-links > a:active {
+      transform: none;
+    }
+
+    [data-story-section='contact']
+      .story-contact-social-links
+      > a:hover
+      .social-link__icon-tile,
+    [data-story-section='contact']
+      .story-contact-social-links
+      > a:active
+      .social-link__icon-tile {
+      border-color: hsl(var(--primary) / 0.28);
+      background: hsl(0 0% 100% / 0.92);
+      box-shadow: 0 12px 28px -24px hsl(var(--foreground) / 0.22);
+    }
   }
 
   [data-story-section='contact'] .site-footer-legal {
@@ -10581,6 +10638,20 @@ html[lang='de']
   align-self: baseline;
   padding-top: 0;
   line-height: 1.24 !important;
+}
+
+@media (max-width: 767px) {
+  .story-dubai-portfolio-card__metric[data-metric-layout='progress']
+    .story-metric-value {
+    align-items: baseline;
+  }
+
+  .story-dubai-portfolio-card__metric[data-metric-layout='progress']
+    .story-dubai-metric-copy {
+    align-self: baseline;
+    padding-top: 0;
+    line-height: 1.24 !important;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1279px) {

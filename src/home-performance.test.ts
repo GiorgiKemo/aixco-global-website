@@ -289,5 +289,7 @@ describe("home page performance structure", () => {
     expect(desktopStorySource).toContain('"data-material-order": String(order)');
     expect(desktopStorySource).toContain('String(order).padStart(2, "0")');
     expect(desktopStorySource).toContain('className="story-material-card__number');
+    expect(desktopStorySource).toContain("const isMaterialsStatic = materials.length <= 3;");
+    expect(desktopStorySource).toContain("(isMaterialsStatic ? [0] : [0, 1]).map");
   });
 });

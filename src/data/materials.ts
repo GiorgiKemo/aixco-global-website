@@ -140,10 +140,17 @@ export const materialDownloads: MaterialDownload[] = [
   },
 ];
 
+const featuredSupplementalMaterialIds = new Set([
+  "medical-tourism-guide",
+  "leisure-activities",
+]);
+
 export function getMaterialDownloadsForLanguage(lang: Lang): MaterialDownload[] {
-  return materialDownloads.filter(
-    (material) => !material.localizedDownloads || Boolean(material.localizedDownloads[lang]),
-  );
+  return materialDownloads.filter((material) => {
+    if (material.id === "current-project-brochure") return true;
+    if (!featuredSupplementalMaterialIds.has(material.id)) return false;
+    return Boolean(material.localizedDownloads?.[lang]);
+  });
 }
 
 export function resolveMaterialTitle(material: MaterialDownload, lang: Lang): string {

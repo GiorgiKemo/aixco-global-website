@@ -52,16 +52,13 @@ describe("public material downloads", () => {
     },
   );
 
-  it("publishes all five distinct English guides with clean source titles", () => {
+  it("publishes only the two currently featured English guides", () => {
     const guides = getMaterialDownloadsForLanguage("en").filter(
       (material) => material.localizedDownloads,
     );
 
     expect(guides.map((material) => resolveMaterialTitle(material, "en"))).toEqual([
-      "AIXCO Tax Residency Guide for HNWIs",
-      "AIXCO Brief Residence Guide",
       "AIXCO Medical Tourism Guide",
-      "AIXCO Full Residence Guide",
       "AIXCO Leisure Activities",
     ]);
     expect(guides.map((material) => resolveMaterialTitle(material, "en")).join(" ")).not.toMatch(
@@ -69,21 +66,18 @@ describe("public material downloads", () => {
     );
   });
 
-  it("serves the matching German guides and titles on the German site", () => {
+  it("serves only the matching two German guides on the German site", () => {
     const guides = getMaterialDownloadsForLanguage("de").filter(
       (material) => material.localizedDownloads,
     );
 
     expect(guides.map((material) => resolveMaterialTitle(material, "de"))).toEqual([
-      "AIXCO Leitfaden zur Steuerresidenz für HNWI",
-      "AIXCO Aufenthaltsleitfaden Kompakt",
       "AIXCO Leitfaden für Medizintourismus",
-      "AIXCO Aufenthaltsleitfaden Gesamtversion",
       "AIXCO Freizeitaktivitäten",
     ]);
     expect(resolveMaterialDownload(guides[0]!, "de")).toEqual({
-      href: "/aixco-global-op2/documents/aixco-leitfaden-steuerresidenz-hnwi-de.pdf",
-      fileName: "AIXCO-Leitfaden-zur-Steuerresidenz-fuer-HNWI.pdf",
+      href: "/aixco-global-op2/documents/aixco-leitfaden-medizintourismus-de.pdf",
+      fileName: "AIXCO-Leitfaden-fuer-Medizintourismus.pdf",
     });
     expect(guides.map((material) => resolveMaterialTitle(material, "de")).join(" ")).not.toMatch(
       /ausgabe|juli|2026/i,

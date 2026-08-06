@@ -279,6 +279,17 @@ describe("index.css motion rules", () => {
     );
   });
 
+  it("keeps the mobile contact icons aligned and resets the desktop social divider", () => {
+    expect(css).toContain("grid-template-columns: 2.6rem minmax(0, 1fr);");
+    expect(css).toContain(
+      "[data-story-section='contact'] .story-contact-social-links > a + a {\n    border-left: 0;",
+    );
+    expect(css).toContain(
+      "[data-story-section='contact'] .story-contact-social-links > a:nth-child(even) {\n    border-left: 1px solid",
+    );
+    expect(css).toContain("@media (hover: none), (pointer: coarse)");
+  });
+
   it("keeps the FAQ heading left-aligned while spreading the question grid evenly", () => {
     expect(css).not.toContain("[data-story-section='faqs'] [data-story-scene-copy] {\n    width: min(100%, 72rem);");
     expect(css).toContain("[data-story-section='faqs'] [data-layout='story-faq-list'] {\n    width: 100%;\n    margin-inline: auto;\n    padding-inline: 0;");
@@ -965,6 +976,21 @@ describe("index.css motion rules", () => {
     expect(css).toContain("html[lang='de']\n  .story-dubai-portfolio-card__metric[data-metric-layout='progress']");
     expect(css).toContain("align-items: baseline;");
     expect(css).toContain("padding-top: 0;");
+  });
+
+  it("bottom-aligns mobile Dubai progress labels with their percentages", () => {
+    const mobileProgressStart = css.indexOf(
+      "@media (max-width: 767px) {\n  .story-dubai-portfolio-card__metric[data-metric-layout='progress']",
+    );
+    const mobileProgressBlock = css.slice(
+      mobileProgressStart,
+      css.indexOf("\n}\n\n@media (min-width: 768px)", mobileProgressStart),
+    );
+
+    expect(mobileProgressStart).toBeGreaterThanOrEqual(0);
+    expect(mobileProgressBlock).toContain("align-items: baseline;");
+    expect(mobileProgressBlock).toContain("align-self: baseline;");
+    expect(mobileProgressBlock).toContain("padding-top: 0;");
   });
 
   it("keeps the current project reachable only from the hero CTA", () => {
