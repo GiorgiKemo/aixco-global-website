@@ -1978,10 +1978,10 @@ function AboutScene({
 }) {
   const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
   const [videoStarted, setVideoStarted] = useState(false);
-  // The parent keeps this true while the About scene is within two story
-  // sections of the viewport. Attach the video immediately on first paint,
-  // then release it only after that two-section buffer is exhausted.
-  const shouldAttachVideo = shouldStartVideo;
+  // Keep the media element and source stable for the lifetime of the page.
+  // Outside the two-section buffer we pause decoding, but preserving the
+  // element means returning to the scene resumes from the exact same frame.
+  const shouldPlayVideo = shouldStartVideo;
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
@@ -1995,11 +1995,8 @@ function AboutScene({
 
     video.playbackRate = 0.82;
 
-    if (!shouldAttachVideo) {
+    if (!shouldPlayVideo) {
       video.pause();
-      video.removeAttribute("src");
-      video.load();
-      setVideoStarted(false);
       return undefined;
     }
 
@@ -2022,7 +2019,6 @@ function AboutScene({
     window.addEventListener("pageshow", recoverPlayback);
 
     if (video.readyState >= 2) playVideo();
-    else video.load();
 
     return () => {
       cancelled = true;
@@ -2033,7 +2029,7 @@ function AboutScene({
       window.removeEventListener("focus", recoverPlayback);
       window.removeEventListener("pageshow", recoverPlayback);
     };
-  }, [shouldAttachVideo]);
+  }, [shouldPlayVideo]);
 
   const markVideoStarted = () => {
     setVideoStarted(true);
@@ -2050,27 +2046,26 @@ function AboutScene({
             <div className="story-about-cinematic-image relative h-full w-full">
               <video
                 ref={dubaiVideoRef}
-                src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}
+                src={aixcoDubaiHeroVideo.src}
                 className="h-full w-full object-cover"
-                style={{ visibility: shouldAttachVideo ? "visible" : "hidden" }}
-                autoPlay={shouldAttachVideo}
+                autoPlay
                 muted
                 playsInline
                 loop
-                preload={shouldAttachVideo ? "auto" : "none"}
+                preload="auto"
                 aria-label={tx(aixcoDubaiHeroVideo.title)}
                 onLoadedData={(event) => {
                   event.currentTarget.playbackRate = 0.82;
                 }}
                 onCanPlay={(event) => {
                   event.currentTarget.playbackRate = 0.82;
-                  if (shouldAttachVideo) {
+                  if (shouldPlayVideo) {
                     void event.currentTarget.play().catch(() => undefined);
                   }
                 }}
                 onPlaying={markVideoStarted}
                 onPause={(event) => {
-                  if (shouldAttachVideo && document.visibilityState === "visible") {
+                  if (shouldPlayVideo && document.visibilityState === "visible") {
                     void event.currentTarget.play().catch(() => undefined);
                   }
                 }}
@@ -2086,7 +2081,7 @@ function AboutScene({
                 aria-hidden="true"
                 fill
                 data-about-video-poster=""
-                data-video-started={videoStarted && shouldAttachVideo ? "true" : "false"}
+                data-video-started={videoStarted ? "true" : "false"}
                 className="story-about-cinematic-poster object-cover"
                 loading="eager"
                 fetchPriority="high"

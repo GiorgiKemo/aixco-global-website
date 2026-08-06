@@ -89,7 +89,7 @@ describe("home page performance structure", () => {
     expect(sectionSource.match(/leading-\[1\.65\] text-white/g)).toHaveLength(3);
   });
 
-  it("starts the about video immediately and releases it beyond the two-section buffer", () => {
+  it("starts the About video immediately and preserves its position beyond the two-section buffer", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const aboutSceneStart = desktopStorySource.indexOf("function AboutScene");
     const philosophySceneStart = desktopStorySource.indexOf("function PhilosophyScene");
@@ -97,16 +97,16 @@ describe("home page performance structure", () => {
 
     expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
     expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
-    expect(aboutSceneSource).toContain("const shouldAttachVideo = shouldStartVideo;");
-    expect(aboutSceneSource).toContain("if (!shouldAttachVideo)");
-    expect(aboutSceneSource).toContain('video.removeAttribute("src");');
-    expect(aboutSceneSource).toContain("setVideoStarted(false);");
-    expect(aboutSceneSource).toContain("src={shouldAttachVideo ? aixcoDubaiHeroVideo.src : undefined}");
-    expect(aboutSceneSource).toContain("autoPlay={shouldAttachVideo}");
+    expect(aboutSceneSource).toContain("const shouldPlayVideo = shouldStartVideo;");
+    expect(aboutSceneSource).toContain("if (!shouldPlayVideo)");
+    expect(aboutSceneSource).toContain("src={aixcoDubaiHeroVideo.src}");
+    expect(aboutSceneSource).toContain("autoPlay");
     expect(aboutSceneSource).toContain("loop");
-    expect(aboutSceneSource).toContain('preload={shouldAttachVideo ? "auto" : "none"}');
-    expect(aboutSceneSource).toContain('style={{ visibility: shouldAttachVideo ? "visible" : "hidden" }}');
-    expect(aboutSceneSource).toContain('data-video-started={videoStarted && shouldAttachVideo ? "true" : "false"}');
+    expect(aboutSceneSource).toContain('preload="auto"');
+    expect(aboutSceneSource).toContain('data-video-started={videoStarted ? "true" : "false"}');
+    expect(aboutSceneSource).not.toContain('video.removeAttribute("src")');
+    expect(aboutSceneSource).not.toContain("video.load();");
+    expect(aboutSceneSource).not.toContain("setVideoStarted(false)");
     expect(aboutSceneSource).not.toContain("poster={aixcoDubaiHeroVideo.poster}");
     expect(desktopStorySource).toContain("shouldStartVideo={sectionPresence[1] ?? true}");
     expect(desktopStorySource).not.toContain("shouldExposeVideo");
