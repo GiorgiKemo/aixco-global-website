@@ -189,13 +189,13 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
           </div>
 
           <div className={`mt-6 grid gap-3 ${property.id === "current-project" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
-            <PropertyContactLink className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
+            <PropertyContactLink className="inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap border border-[#9E9D9D] bg-transparent px-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#161616] hover:bg-[#161616] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]">
               <Tx>Contact AIXCO</Tx>
             </PropertyContactLink>
             {property.id === "current-project" ? (
               <>
                 <CurrentProjectBrochureLink
-                  className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] px-3 text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#9A7425] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap bg-[#161616] px-3 text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#9A7425] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
                 />
                 <CurrentProjectVideoButton
                   englishSrc={aixcoLiveVideos.currentProjectEnglish}
