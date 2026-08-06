@@ -281,4 +281,13 @@ describe("home page performance structure", () => {
     expect(desktopStorySource).toContain("storyMediaSwitchReducedMotionTransition");
     expect(desktopStorySource).not.toContain("const storyTeamSwitchIntervalMs = 2400;");
   });
+
+  it("keeps download-material numbering ordered in both marquee sets", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+
+    expect(desktopStorySource).toContain("order={materialIndex + 1}");
+    expect(desktopStorySource).toContain('"data-material-order": String(order)');
+    expect(desktopStorySource).toContain('String(order).padStart(2, "0")');
+    expect(desktopStorySource).toContain('className="story-material-card__number');
+  });
 });

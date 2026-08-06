@@ -2644,11 +2644,13 @@ function BatumiScene({
 
 function MaterialMarqueeCard({
   material,
+  order,
   lang,
   tx,
   isClone,
 }: {
   material: MaterialDownload;
+  order: number;
   lang: Lang;
   tx: (copy: string) => string;
   isClone: boolean;
@@ -2667,10 +2669,17 @@ function MaterialMarqueeCard({
         "data-material-id": material.id,
         "data-material-card": "true",
         "data-material-clone": isClone ? "true" : "false",
+        "data-material-order": String(order),
       }}
-      className="story-material-card group grid min-h-[6.8rem] w-full shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 rounded-[0.7rem] border border-primary/20 bg-white/95 px-4 py-4 shadow-[0_18px_42px_-32px_rgba(45,35,17,0.46)] transition-[transform,border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_24px_48px_-30px_rgba(45,35,17,0.52)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 sm:px-5"
-      ariaLabel={`${tx("Download")} ${localizedTitle}`}
+      className="story-material-card group grid min-h-[6.8rem] w-full shrink-0 grid-cols-[auto_auto_minmax(0,1fr)_auto] items-center gap-3 rounded-[0.7rem] border border-primary/20 bg-white/95 px-4 py-4 shadow-[0_18px_42px_-32px_rgba(45,35,17,0.46)] transition-[transform,border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_24px_48px_-30px_rgba(45,35,17,0.52)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 sm:gap-4 sm:px-5"
+      ariaLabel={`${order}. ${tx("Download")} ${localizedTitle}`}
     >
+      <span
+        className="story-material-card__number flex size-9 shrink-0 items-center justify-center rounded-md border border-primary/25 bg-primary/[0.035] text-[0.74rem] font-semibold tracking-[0.08em] text-primary"
+        aria-hidden="true"
+      >
+        {String(order).padStart(2, "0")}
+      </span>
       <span className="story-material-card__icon flex size-12 shrink-0 items-center justify-center rounded-md border border-primary/25 bg-primary/[0.06] text-primary">
         {material.format === "PDF" ? (
           <FileText size={23} aria-hidden />
@@ -2852,10 +2861,11 @@ function MaterialsScene({
                 className="story-materials-marquee__set"
                 aria-hidden={setIndex === 1 ? "true" : undefined}
               >
-                {materials.map((material) => (
+                {materials.map((material, materialIndex) => (
                   <MaterialMarqueeCard
                     key={`${setIndex}-${material.id}`}
                     material={material}
+                    order={materialIndex + 1}
                     lang={lang}
                     tx={tx}
                     isClone={setIndex === 1}
