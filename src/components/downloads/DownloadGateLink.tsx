@@ -11,6 +11,7 @@ type DownloadGateLinkProps = {
   lockedHref?: string;
   className?: string;
   ariaLabel?: string;
+  tabIndex?: number;
   dataAttributes?: Record<string, string>;
   children: ReactNode;
 };
@@ -21,6 +22,7 @@ export function DownloadGateLink({
   lockedHref = "#materials",
   className,
   ariaLabel,
+  tabIndex,
   dataAttributes,
   children,
 }: DownloadGateLinkProps) {
@@ -46,6 +48,7 @@ export function DownloadGateLink({
       download={isUnlocked ? fileName : undefined}
       onClick={handleClick}
       aria-label={ariaLabel}
+      tabIndex={tabIndex}
       aria-haspopup={isUnlocked ? undefined : "dialog"}
       className={className}
       {...dataAttributes}

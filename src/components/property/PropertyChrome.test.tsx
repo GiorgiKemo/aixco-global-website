@@ -166,7 +166,9 @@ describe("PropertyChrome", () => {
   it.each([
     ["en", "Download brochure", "/aixco-global-op2/documents/reverance-brochure-en.pdf", "Reverance-brochure-EN.pdf"],
     ["de", "Broschüre herunterladen", "/aixco-global-op2/documents/reverance-brochure-de.pdf", "Reverance-brochure-DE.pdf"],
+    ["pl", "Pobierz broszurę", "/aixco-global-op2/documents/reverance-brochure-pl.pdf", "Reverance-brochure-PL.pdf"],
     ["sl", "Prenesite brošuro", "/aixco-global-op2/documents/reverance-brochure-sl.pdf", "Reverance-brochure-SL.pdf"],
+    ["ru", "Скачать брошюру", "/aixco-global-op2/documents/reverance-brochure-ru.pdf", "Reverance-brochure-RU.pdf"],
   ] as const)(
     "gates the %s current-project brochure behind the contact flow",
     async (lang, label, href, fileName) => {
@@ -214,22 +216,4 @@ describe("PropertyChrome", () => {
     expect(screen.getByLabelText("active modal")).toHaveTextContent("none");
   });
 
-  it.each(["pl", "ru"])(
-    "keeps the current-project brochure hidden for %s until a localized file exists",
-    async (lang) => {
-      localStorage.setItem("aixco-lang", lang);
-      const { container } = render(
-        <I18nProvider>
-          <UIProvider>
-            <CurrentProjectBrochureLink />
-          </UIProvider>
-        </I18nProvider>,
-      );
-
-      await waitFor(() => {
-        expect(document.documentElement).toHaveAttribute("lang", lang);
-      });
-      expect(container.querySelector("[data-current-project-brochure]")).not.toBeInTheDocument();
-    },
-  );
 });

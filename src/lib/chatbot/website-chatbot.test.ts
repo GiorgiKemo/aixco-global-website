@@ -54,8 +54,9 @@ describe("website chatbot", () => {
     expect(answer.matchedTopics).toContain("Download Materials");
     expect(answer.answer).toContain("#materials");
     expect(answer.answer).not.toContain(retiredProjectName);
-    expect(answer.answer).toContain("Dubai Healthcare City image");
     expect(answer.answer).toContain("Reverance Brochure");
+    expect(answer.answer).toContain("AIXCO Tax Residency Guide for HNWIs");
+    expect(answer.answer).not.toContain("Dubai Healthcare City image");
     expect(answer.answer).not.toContain("AIXCO client brochure");
   });
 

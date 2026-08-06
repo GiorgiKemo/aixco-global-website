@@ -53,17 +53,27 @@ describe("aixcoLiveImages", () => {
       href: "/aixco-global-op2/documents/reverance-brochure-de.pdf",
       fileName: "Reverance-brochure-DE.pdf",
     });
+    expect(aixcoCurrentProjectBrochureDownloads.pl).toEqual({
+      href: "/aixco-global-op2/documents/reverance-brochure-pl.pdf",
+      fileName: "Reverance-brochure-PL.pdf",
+    });
     expect(aixcoCurrentProjectBrochureDownloads.sl).toEqual({
       href: "/aixco-global-op2/documents/reverance-brochure-sl.pdf",
       fileName: "Reverance-brochure-SL.pdf",
+    });
+    expect(aixcoCurrentProjectBrochureDownloads.ru).toEqual({
+      href: "/aixco-global-op2/documents/reverance-brochure-ru.pdf",
+      fileName: "Reverance-brochure-RU.pdf",
     });
     expect(getCurrentProjectBrochureDownload("de")).toEqual(
       aixcoCurrentProjectBrochureDownloads.de,
     );
     expect(getCurrentProjectBrochureDownload("pl")).toEqual(
-      aixcoCurrentProjectBrochureDownloads.en,
+      aixcoCurrentProjectBrochureDownloads.pl,
     );
-    expect(getCurrentProjectBrochureDownload("pl", { fallbackToEnglish: false })).toBeNull();
+    expect(getCurrentProjectBrochureDownload("ru", { fallbackToEnglish: false })).toEqual(
+      aixcoCurrentProjectBrochureDownloads.ru,
+    );
   });
 
   it("publishes grouped Dubai asset galleries from the OP2 source files", () => {

@@ -252,7 +252,9 @@ try {
             symbolTypography.family.includes("gilroy")
           : symbolTypography.family === valueTypography.family) &&
         symbolTypography.size === valueTypography.size &&
-        symbolTypography.weight === valueTypography.weight &&
+        (details.isEuro && viewport.width <= 767
+          ? symbolTypography.weight === "300" && valueTypography.weight === "400"
+          : symbolTypography.weight === valueTypography.weight) &&
         symbolTypography.lineHeight === valueTypography.lineHeight &&
         symbolTypography.letterSpacing === valueTypography.letterSpacing &&
         symbolTypography.position === "static" &&

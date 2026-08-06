@@ -179,7 +179,7 @@ describe("home page performance structure", () => {
   it("uses native scroll timelines with one shared observer fallback", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
-    const revealComponentEnd = desktopStorySource.indexOf("function getMaterialIcon");
+    const revealComponentEnd = desktopStorySource.indexOf("function StoryCrossfadeMediaPanel");
     const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
 
     expect(revealComponentStart).toBeGreaterThanOrEqual(0);
@@ -198,7 +198,7 @@ describe("home page performance structure", () => {
   it("uses one whole-title animation instead of per-glyph or compact fallbacks", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
-    const revealComponentEnd = desktopStorySource.indexOf("function getMaterialIcon");
+    const revealComponentEnd = desktopStorySource.indexOf("function StoryCrossfadeMediaPanel");
     const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
 
     expect(revealComponentSource).toContain('className="story-title-reveal__text"');
@@ -211,7 +211,7 @@ describe("home page performance structure", () => {
   it("replays each story title when its section becomes active again", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
-    const revealComponentEnd = desktopStorySource.indexOf("function getMaterialIcon");
+    const revealComponentEnd = desktopStorySource.indexOf("function StoryCrossfadeMediaPanel");
     const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
 
     expect(revealComponentSource).toContain("active: boolean;");

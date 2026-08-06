@@ -34,7 +34,12 @@ import {
   philosophySections,
   philosophyStats,
 } from "@/data/aixco-philosophy";
-import { materialDownloads, resolveMaterialDownload } from "@/data/materials";
+import {
+  getMaterialDownloadsForLanguage,
+  resolveMaterialDownload,
+  resolveMaterialTitle,
+  type MaterialDownload,
+} from "@/data/materials";
 import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { LANGS, useI18n } from "@/i18n/I18nProvider";
@@ -485,10 +490,6 @@ function StoryTextReveal({
       </span>
     </span>
   );
-}
-
-function getMaterialIcon(format: string) {
-  return format === "PDF" ? FileText : ImageIcon;
 }
 
 function StoryCrossfadeMediaPanel({
@@ -1495,11 +1496,8 @@ function StoryDubaiMetricNumbers({ value }: { value: string }) {
           <span
             key={`${part}:${partIndex}`}
             className="story-dubai-metric-copy story-dubai-metric-copy--construction"
-            aria-label="under construction"
           >
-            <span aria-hidden="true">under</span>
-            {" "}
-            <span aria-hidden="true">construction</span>
+            {part}
           </span>
         ) : (
           <span key={`${part}:${partIndex}`} className="story-dubai-metric-copy">
@@ -2644,6 +2642,58 @@ function BatumiScene({
   );
 }
 
+function MaterialMarqueeCard({
+  material,
+  lang,
+  tx,
+  isClone,
+}: {
+  material: MaterialDownload;
+  lang: Lang;
+  tx: (copy: string) => string;
+  isClone: boolean;
+}) {
+  const localizedDownload = resolveMaterialDownload(material, lang);
+  const localizedTitle = tx(resolveMaterialTitle(material, lang));
+  const href = getSafePublicAssetHref(localizedDownload.href, "#materials");
+
+  return (
+    <DownloadGateLink
+      href={href}
+      fileName={localizedDownload.fileName}
+      lockedHref="#materials"
+      tabIndex={isClone ? -1 : undefined}
+      dataAttributes={{
+        "data-material-id": material.id,
+        "data-material-card": "true",
+        "data-material-clone": isClone ? "true" : "false",
+      }}
+      className="story-material-card group grid min-h-[6.8rem] w-full shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 rounded-[0.7rem] border border-primary/20 bg-white/95 px-4 py-4 shadow-[0_18px_42px_-32px_rgba(45,35,17,0.46)] transition-[transform,border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_24px_48px_-30px_rgba(45,35,17,0.52)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 sm:px-5"
+      ariaLabel={`${tx("Download")} ${localizedTitle}`}
+    >
+      <span className="story-material-card__icon flex size-12 shrink-0 items-center justify-center rounded-md border border-primary/25 bg-primary/[0.06] text-primary">
+        {material.format === "PDF" ? (
+          <FileText size={23} aria-hidden />
+        ) : (
+          <ImageIcon size={23} aria-hidden />
+        )}
+      </span>
+      <span className="min-w-0">
+        <span className="block text-[clamp(1rem,1.1vw,1.18rem)] font-semibold leading-[1.24] text-foreground [overflow-wrap:anywhere]">
+          {localizedTitle}
+        </span>
+        <span className="mt-1.5 block text-[0.78rem] leading-relaxed text-foreground/58 [overflow-wrap:anywhere]">
+          {material.format} <span aria-hidden>/</span> {tx(material.audience)}
+        </span>
+      </span>
+      <span className="story-material-card__download flex size-10 shrink-0 items-center justify-center rounded-full border border-primary/25 text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-white">
+        <Download className="block h-4 w-4" aria-hidden />
+        <span className="sr-only">{tx("Download")}</span>
+      </span>
+    </DownloadGateLink>
+  );
+}
+
 function MaterialsScene({
   isActive,
   isRevealed,
@@ -2655,6 +2705,109 @@ function MaterialsScene({
   lang: Lang;
   tx: (copy: string) => string;
 }) {
+  const materials = useMemo(() => getMaterialDownloadsForLanguage(lang), [lang]);
+  const materialsViewportRef = useRef<HTMLDivElement>(null);
+  const materialsDragRef = useRef<{
+    animation: Animation;
+    didDrag: boolean;
+    pointerId: number;
+    startTime: number;
+    startY: number;
+  } | null>(null);
+  const suppressMaterialClickRef = useRef(false);
+
+  const getMaterialsAnimation = useCallback(() => {
+    const viewport = materialsViewportRef.current;
+    const track = viewport?.querySelector<HTMLElement>(".story-materials-marquee__track");
+    const animation = track?.getAnimations()[0];
+    return viewport && track && animation ? { viewport, track, animation } : null;
+  }, []);
+
+  const shiftMaterialsAnimation = useCallback((animation: Animation, track: HTMLElement, deltaY: number) => {
+    const duration = animation.effect?.getTiming().duration;
+    const loopDistance = track.scrollHeight / 2;
+    if (typeof duration !== "number" || loopDistance <= 0) return;
+
+    const currentTime = Number(animation.currentTime ?? 0);
+    const requestedTime = currentTime + (deltaY / loopDistance) * duration;
+    animation.currentTime = ((requestedTime % duration) + duration) % duration;
+  }, []);
+
+  const handleMaterialsPointerDown = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary || event.pointerType === "touch" || (event.pointerType === "mouse" && event.button !== 0)) return;
+
+    const context = getMaterialsAnimation();
+    if (!context) return;
+    const currentTime = Number(context.animation.currentTime ?? 0);
+    materialsDragRef.current = {
+      animation: context.animation,
+      didDrag: false,
+      pointerId: event.pointerId,
+      startTime: Number.isFinite(currentTime) ? currentTime : 0,
+      startY: event.clientY,
+    };
+    suppressMaterialClickRef.current = false;
+  }, [getMaterialsAnimation]);
+
+  const handleMaterialsPointerMove = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    const drag = materialsDragRef.current;
+    const context = getMaterialsAnimation();
+    if (!drag || drag.pointerId !== event.pointerId || !context) return;
+
+    const deltaY = event.clientY - drag.startY;
+    if (!drag.didDrag && Math.abs(deltaY) > 4) {
+      drag.didDrag = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+      event.currentTarget.dataset.dragging = "true";
+    }
+    if (!drag.didDrag) return;
+
+    const duration = drag.animation.effect?.getTiming().duration;
+    const loopDistance = context.track.scrollHeight / 2;
+    if (typeof duration !== "number" || loopDistance <= 0) return;
+    const requestedTime = drag.startTime - (deltaY / loopDistance) * duration;
+    drag.animation.currentTime = ((requestedTime % duration) + duration) % duration;
+  }, [getMaterialsAnimation]);
+
+  const finishMaterialsDrag = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    const drag = materialsDragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    suppressMaterialClickRef.current = drag.didDrag;
+    materialsDragRef.current = null;
+    delete event.currentTarget.dataset.dragging;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    if (drag.didDrag && event.currentTarget.contains(document.activeElement)) {
+      (document.activeElement as HTMLElement | null)?.blur();
+    }
+    window.setTimeout(() => {
+      suppressMaterialClickRef.current = false;
+    }, 0);
+  }, []);
+
+  const handleMaterialsWheel = useCallback((event: globalThis.WheelEvent) => {
+    const context = getMaterialsAnimation();
+    if (!context || Math.abs(event.deltaY) < Math.abs(event.deltaX)) return;
+    event.preventDefault();
+    shiftMaterialsAnimation(context.animation, context.track, event.deltaY);
+  }, [getMaterialsAnimation, shiftMaterialsAnimation]);
+
+  useEffect(() => {
+    const viewport = materialsViewportRef.current;
+    if (!viewport) return undefined;
+
+    viewport.addEventListener("wheel", handleMaterialsWheel, { passive: false });
+    return () => viewport.removeEventListener("wheel", handleMaterialsWheel);
+  }, [handleMaterialsWheel]);
+
+  const handleMaterialsClickCapture = useCallback((event: MouseEvent<HTMLDivElement>) => {
+    if (!suppressMaterialClickRef.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+  }, []);
+
   return (
     <SceneShell
       isActive={isActive}
@@ -2674,33 +2827,44 @@ function MaterialsScene({
       <p className="story-body text-foreground/74">
         {tx("Access property reference images and supporting documentation.")}
       </p>
-      <div className="w-full divide-y divide-foreground/10 border-y border-foreground/10">
-        {materialDownloads.map((material) => {
-          const Icon = getMaterialIcon(material.format);
-          const localizedDownload = resolveMaterialDownload(material, lang);
-          const href = getSafePublicAssetHref(localizedDownload.href, "#materials");
-
-          return (
-            <DownloadGateLink
-              key={material.id}
-              href={href}
-              fileName={localizedDownload.fileName}
-              lockedHref="#materials"
-              dataAttributes={{ "data-material-id": material.id }}
-              className="group grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3 py-3.5 transition-colors duration-300 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2"
-              ariaLabel={`${tx("Download")} ${tx(material.title)}`}
-            >
-              <span className="flex size-12 shrink-0 items-center justify-center text-primary">
-                <Icon size={22} aria-hidden />
-              </span>
-              <span className="min-w-0">
-                <span className="story-card-title block [overflow-wrap:anywhere]">{tx(material.title)}</span>
-                <span className="story-body mt-0.5 block text-foreground/62 [overflow-wrap:anywhere]">{material.format} / {tx(material.audience)}</span>
-              </span>
-              <Download className="h-4 w-4 text-primary transition-transform group-hover:translate-y-0.5" aria-hidden />
-            </DownloadGateLink>
-          );
-        })}
+      <div className="story-materials-marquee w-full min-w-0" data-layout="story-materials-marquee">
+        <div className="mb-3 flex items-center justify-between gap-4">
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-primary">
+            {tx("Available files")} <span aria-hidden>·</span> {materials.length}
+          </p>
+        </div>
+        <div
+          ref={materialsViewportRef}
+          className="story-materials-marquee__viewport"
+          role="region"
+          aria-label={tx("Available files")}
+          data-materials-static={materials.length < 2 ? "true" : "false"}
+          onPointerDown={handleMaterialsPointerDown}
+          onPointerMove={handleMaterialsPointerMove}
+          onPointerUp={finishMaterialsDrag}
+          onPointerCancel={finishMaterialsDrag}
+          onClickCapture={handleMaterialsClickCapture}
+        >
+          <div className="story-materials-marquee__track">
+            {[0, 1].map((setIndex) => (
+              <div
+                key={setIndex}
+                className="story-materials-marquee__set"
+                aria-hidden={setIndex === 1 ? "true" : undefined}
+              >
+                {materials.map((material) => (
+                  <MaterialMarqueeCard
+                    key={`${setIndex}-${material.id}`}
+                    material={material}
+                    lang={lang}
+                    tx={tx}
+                    isClone={setIndex === 1}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </SceneShell>
   );
@@ -2974,6 +3138,7 @@ function TeamScene({
               type="button"
               aria-pressed={isSelected}
               data-active={isSelected ? "true" : "false"}
+              data-team-member-card={member.name}
               onClick={() => {
                 selectMember(index);
                 openTeam(member);
@@ -2991,7 +3156,10 @@ function TeamScene({
                 )}
                 aria-hidden="true"
               />
-              <div className="relative aspect-square overflow-hidden">
+              <div
+                className="relative aspect-square overflow-hidden"
+                data-team-member-image={member.name}
+              >
                 <Image
                   src={teamImageMap[member.image as keyof typeof teamImageMap]}
                   alt=""

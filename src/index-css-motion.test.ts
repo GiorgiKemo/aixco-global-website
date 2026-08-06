@@ -838,6 +838,17 @@ describe("index.css motion rules", () => {
     expect(inlineEuroBlock).toContain("font-size: inherit !important;");
     expect(inlineEuroBlock).toContain("line-height: inherit !important;");
 
+    const mobileEuroStart = css.indexOf(
+      "@media (max-width: 767px) {\n  .story-standard-number .story-currency-symbol--euro,",
+    );
+    const mobileEuroBlock = css.slice(
+      mobileEuroStart,
+      css.indexOf("\n}", mobileEuroStart),
+    );
+    expect(mobileEuroStart).toBeGreaterThanOrEqual(0);
+    expect(mobileEuroBlock).toContain(".story-inline-currency-symbol--euro");
+    expect(mobileEuroBlock).toContain("font-weight: 300 !important;");
+
     const dollarSymbolStart = css.indexOf(
       ".story-standard-number .story-currency-symbol--dollar {",
     );
@@ -860,25 +871,24 @@ describe("index.css motion rules", () => {
     );
   });
 
-  it("aligns the wrapped construction qualifier with the scope copy on English laptops", () => {
+  it("keeps the English construction qualifier together on one line", () => {
     const constructionAlignmentStart = css.indexOf(
-      "html[lang='en']\n    .story-dubai-portfolio-card__metric[data-metric-layout='progress']\n    .story-dubai-metric-copy--construction {",
+      "html[lang='en']\n  .story-dubai-portfolio-card__metric[data-metric-layout='progress']\n  .story-dubai-metric-copy--construction {",
     );
     const constructionAlignmentBlock = css.slice(
       constructionAlignmentStart,
-      css.indexOf("\n  }", constructionAlignmentStart),
+      css.indexOf("\n}", constructionAlignmentStart),
     );
 
     expect(constructionAlignmentStart).toBeGreaterThanOrEqual(0);
-    expect(constructionAlignmentBlock).toContain("position: relative;");
-    expect(constructionAlignmentBlock).toContain("top: -0.5rem;");
-    expect(constructionAlignmentBlock).toContain("line-height: 1 !important;");
+    expect(constructionAlignmentBlock).toContain("display: inline-block;");
+    expect(constructionAlignmentBlock).toContain("white-space: nowrap;");
     expect(desktopStoryHome).toContain(
       'className="story-dubai-metric-copy story-dubai-metric-copy--construction"',
     );
-    expect(desktopStoryHome).toContain('aria-label="under construction"');
-    expect(desktopStoryHome).toContain('<span aria-hidden="true">under</span>');
-    expect(desktopStoryHome).toContain('<span aria-hidden="true">construction</span>');
+    expect(desktopStoryHome).not.toContain('aria-label="under construction"');
+    expect(desktopStoryHome).not.toContain('<span aria-hidden="true">under</span>');
+    expect(desktopStoryHome).not.toContain('<span aria-hidden="true">construction</span>');
   });
 
   it("normalizes inline Batumi euro tokens without changing their copy", () => {

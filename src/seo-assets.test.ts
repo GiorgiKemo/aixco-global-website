@@ -83,8 +83,36 @@ describe("SEO static assets", () => {
       existsSync(resolve(root, "public/aixco-global-op2/documents/reverance-brochure-de.pdf")),
     ).toBe(true);
     expect(
+      existsSync(resolve(root, "public/aixco-global-op2/documents/reverance-brochure-pl.pdf")),
+    ).toBe(true);
+    expect(
       existsSync(resolve(root, "public/aixco-global-op2/documents/reverance-brochure-sl.pdf")),
     ).toBe(true);
+    expect(
+      existsSync(resolve(root, "public/aixco-global-op2/documents/reverance-brochure-ru.pdf")),
+    ).toBe(true);
+  });
+
+  it("publishes every English and German guide used by the materials carousel", () => {
+    const guideFiles = [
+      "aixco-tax-residency-guide-hnwi-en.pdf",
+      "aixco-brief-residence-guide-en.pdf",
+      "aixco-medical-tourism-guide-en.pdf",
+      "aixco-full-residence-guide-en.pdf",
+      "aixco-leisure-activities-en.pdf",
+      "aixco-leitfaden-steuerresidenz-hnwi-de.pdf",
+      "aixco-aufenthaltsleitfaden-kompakt-de.pdf",
+      "aixco-leitfaden-medizintourismus-de.pdf",
+      "aixco-aufenthaltsleitfaden-gesamtversion-de.pdf",
+      "aixco-freizeitaktivitaeten-de.pdf",
+    ];
+
+    for (const fileName of guideFiles) {
+      expect(
+        existsSync(resolve(root, "public/aixco-global-op2/documents", fileName)),
+        fileName,
+      ).toBe(true);
+    }
   });
 
   it("serves complete canonical and social metadata for property pages", async () => {
