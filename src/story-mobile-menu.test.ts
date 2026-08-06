@@ -12,7 +12,9 @@ describe("mobile story menu", () => {
     expect(css).toContain("top: var(--story-mobile-header-height) !important");
     expect(css).toContain("width: 100vw !important");
     expect(css).toContain("width: min(24rem, 90vw) !important");
-    expect(storyHome).toContain('className="fixed inset-0 w-screen z-[70] xl:hidden"');
+    expect(storyHome).toContain('className="pointer-events-none fixed inset-0 z-[70] w-screen xl:hidden"');
+    expect(storyHome).toContain('sibling.classList.contains("story-mobile-header")');
+    expect(storyHome).toContain('className="pointer-events-auto absolute inset-x-0 bottom-0 top-[var(--story-mobile-header-height)]');
   });
 
   it("keeps the navigation compact and readable", () => {

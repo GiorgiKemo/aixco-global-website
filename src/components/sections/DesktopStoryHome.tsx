@@ -696,7 +696,14 @@ function StoryChrome({
     while (current.parentElement) {
       const parent = current.parentElement;
       Array.from(parent.children).forEach((sibling) => {
-        if (sibling === current || !(sibling instanceof HTMLElement)) return;
+        // Keep the fixed mobile header interactive while the drawer is open.
+        // The language trigger lives there, so it must remain available for
+        // switching locale without first closing the navigation drawer.
+        if (
+          sibling === current
+          || !(sibling instanceof HTMLElement)
+          || sibling.classList.contains("story-mobile-header")
+        ) return;
         previousStates.push({ element: sibling, inert: sibling.inert, ariaHidden: sibling.getAttribute("aria-hidden") });
         sibling.inert = true;
         sibling.setAttribute("aria-hidden", "true");
@@ -922,11 +929,11 @@ function StoryChrome({
           aria-modal="true"
           aria-label={tx("Story navigation")}
           tabIndex={-1}
-          className="fixed inset-0 w-screen z-[70] xl:hidden"
+          className="pointer-events-none fixed inset-0 z-[70] w-screen xl:hidden"
         >
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 top-[var(--story-mobile-header-height)] bg-foreground/30 backdrop-blur-sm"
+            className="pointer-events-auto absolute inset-x-0 bottom-0 top-[var(--story-mobile-header-height)] bg-foreground/30 backdrop-blur-sm"
             onClick={() => setMenuOpen(false)}
           />
           <button
@@ -934,14 +941,14 @@ function StoryChrome({
             type="button"
             aria-label={tx("Close menu")}
             onClick={() => setMenuOpen(false)}
-            className="absolute end-[max(0.85rem,env(safe-area-inset-right,0px))] top-[max(0.8rem,env(safe-area-inset-top,0px))] z-20 inline-flex h-11 w-11 items-center justify-center rounded-lg border border-foreground/10 bg-white text-foreground shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="pointer-events-auto absolute end-[max(0.85rem,env(safe-area-inset-right,0px))] top-[max(0.8rem,env(safe-area-inset-top,0px))] z-20 inline-flex h-11 w-11 items-center justify-center rounded-lg border border-foreground/10 bg-white text-foreground shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <X className="h-[1.125rem] w-[1.125rem]" aria-hidden />
           </button>
           <aside
             id="story-mobile-menu"
             aria-label={tx("Story navigation")}
-            className="absolute bottom-0 end-0 top-0 z-10 max-h-[100dvh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-s border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] [scrollbar-gutter:stable]"
+            className="pointer-events-auto absolute bottom-0 end-0 top-0 z-10 max-h-[100dvh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-s border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] [scrollbar-gutter:stable]"
           >
             <nav aria-label={tx("Story navigation")} className="grid gap-1">
               {storyChapters.map((chapter, index) => {
