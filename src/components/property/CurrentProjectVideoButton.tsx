@@ -61,7 +61,12 @@ export function CurrentProjectVideoButton({
 
       {isOpen && typeof document !== "undefined"
         ? createPortal(
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-md sm:p-8">
+            <div
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-md sm:p-8"
+              onClick={(event) => {
+                if (event.target === event.currentTarget) setIsOpen(false);
+              }}
+            >
               <div
                 role="dialog"
                 aria-modal="true"
