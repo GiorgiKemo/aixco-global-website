@@ -1146,6 +1146,7 @@ function StoryChrome({
 
 function FixedHeroBackdrop({ visible }: { visible: boolean }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const mobileScrollResumeTimerRef = useRef<number | null>(null);
   const videoSrc = useHeroBackdropVideoSrc();
   const shouldReduceMotion = useHydratedReducedMotion();
   const canAnimate = shouldReduceMotion !== true;
@@ -1172,15 +1173,52 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
       return undefined;
     }
 
-    // Keep the full-quality backdrop playing after its first activation. Once
-    // the opacity transition completes, visibility removes only the inactive
-    // compositor layer; decoding/playback continues without a pause.
+    // Desktop keeps the backdrop warm for a seamless return. On mobile, stop
+    // the hidden decoder so it cannot compete with the always-primed About
+    // video for the same hardware decode/compositor resources.
+    if (window.matchMedia(heroMobileVideoQuery).matches) {
+      video?.pause();
+    }
+
     const visibilityTimer = window.setTimeout(() => {
       setShouldExposeBackdrop(false);
     }, 760);
 
     return () => window.clearTimeout(visibilityTimer);
   }, [canAnimate, videoSrc, visible]);
+
+  useEffect(() => {
+    if (!canAnimate || !visible || !shouldRenderVideo) return undefined;
+    if (!window.matchMedia(heroMobileVideoQuery).matches) return undefined;
+
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    const clearResumeTimer = () => {
+      if (mobileScrollResumeTimerRef.current === null) return;
+      window.clearTimeout(mobileScrollResumeTimerRef.current);
+      mobileScrollResumeTimerRef.current = null;
+    };
+
+    const pauseHeroDuringMobileScroll = () => {
+      clearResumeTimer();
+      if (!video.paused) video.pause();
+      mobileScrollResumeTimerRef.current = window.setTimeout(() => {
+        mobileScrollResumeTimerRef.current = null;
+        if (document.visibilityState === "visible") {
+          void video.play().catch(() => undefined);
+        }
+      }, 180);
+    };
+
+    window.addEventListener("touchstart", pauseHeroDuringMobileScroll, { passive: true });
+    window.addEventListener("scroll", pauseHeroDuringMobileScroll, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", pauseHeroDuringMobileScroll);
+      window.removeEventListener("scroll", pauseHeroDuringMobileScroll);
+      clearResumeTimer();
+    };
+  }, [canAnimate, shouldRenderVideo, videoSrc, visible]);
 
   return (
     <div

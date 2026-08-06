@@ -119,6 +119,24 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).toContain("onPause={(event) => {");
   });
 
+  it("pauses only the decorative hero video while native mobile scrolling is active", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const backdropStart = desktopStorySource.indexOf("function FixedHeroBackdrop");
+    const backdropEnd = desktopStorySource.indexOf("function StorySceneBody");
+    const backdropSource = desktopStorySource.slice(backdropStart, backdropEnd);
+
+    expect(backdropStart).toBeGreaterThanOrEqual(0);
+    expect(backdropEnd).toBeGreaterThan(backdropStart);
+    expect(backdropSource).toContain("mobileScrollResumeTimerRef");
+    expect(backdropSource).toContain("pauseHeroDuringMobileScroll");
+    expect(backdropSource).toContain('window.matchMedia(heroMobileVideoQuery).matches');
+    expect(backdropSource).toContain('window.addEventListener("touchstart", pauseHeroDuringMobileScroll, { passive: true });');
+    expect(backdropSource).toContain('window.addEventListener("scroll", pauseHeroDuringMobileScroll, { passive: true });');
+    expect(backdropSource).toContain("if (!video.paused) video.pause();");
+    expect(backdropSource).toContain("void video.play().catch(() => undefined);");
+    expect(backdropSource).toContain("}, 180);");
+  });
+
   it("does not mount heavy story media before its section is revealed", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
 
