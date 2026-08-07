@@ -853,6 +853,7 @@ function StoryChrome({
             type="button"
             onClick={(event) => {
               languageOpenerRef.current = event.currentTarget;
+              if (menuOpen) shouldRestoreMobileMenuFocusRef.current = false;
               setMenuOpen(false);
               setLangOpen((value) => !value);
             }}
