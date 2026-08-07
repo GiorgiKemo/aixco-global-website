@@ -15,7 +15,8 @@ describe("mobile story menu", () => {
     expect(storyHome).toContain('className="pointer-events-none fixed inset-0 z-[70] w-screen xl:hidden"');
     expect(storyHome).toContain('sibling.classList.contains("story-mobile-header")');
     expect(storyHome).toContain('className="pointer-events-auto absolute inset-x-0 bottom-0 top-[var(--story-mobile-header-height)]');
-    expect(storyHome).toContain("if (menuOpen) shouldRestoreMobileMenuFocusRef.current = false;");
+    expect(storyHome).toContain('menuOpen ? "z-[80]" : "z-[60]"');
+    expect(storyHome).not.toContain("setMenuOpen(false);\n              setLangOpen((value) => !value);");
   });
 
   it("keeps the navigation compact and readable", () => {

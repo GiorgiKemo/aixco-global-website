@@ -819,7 +819,8 @@ function StoryChrome({
     <>
       <div
         className={cn(
-          "story-mobile-header fixed inset-x-0 top-0 z-[60] flex items-center justify-between gap-2 border-b border-transparent bg-transparent px-3 py-3 sm:px-4 xl:hidden",
+          "story-mobile-header fixed inset-x-0 top-0 flex items-center justify-between gap-2 border-b border-transparent bg-transparent px-3 py-3 sm:px-4 xl:hidden",
+          menuOpen ? "z-[80]" : "z-[60]",
           useLightMobileLogo ? "story-mobile-header--dark text-white" : "story-mobile-header--light text-foreground",
           isHeaderTransparent && "story-mobile-header--transparent",
         )}
@@ -853,8 +854,6 @@ function StoryChrome({
             type="button"
             onClick={(event) => {
               languageOpenerRef.current = event.currentTarget;
-              if (menuOpen) shouldRestoreMobileMenuFocusRef.current = false;
-              setMenuOpen(false);
               setLangOpen((value) => !value);
             }}
             aria-expanded={langOpen}
