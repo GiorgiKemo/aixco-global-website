@@ -1588,7 +1588,7 @@
     visibility: visible;
   }
 
-  body.story-mobile-menu-open [data-chat-floating-container='true'] {
+  body.story-mobile-menu-open [data-whatsapp-floating-container='true'] {
     opacity: 0;
     pointer-events: none;
     transform: translate3d(0, 0.75rem, 0);
@@ -7069,7 +7069,7 @@ html[data-home-experience='story'] {
     scroll-margin-top: calc(5.35rem + env(safe-area-inset-top, 0px));
   }
 
-  [data-chat-floating-container='true'] {
+  [data-whatsapp-floating-container='true'] {
     bottom: max(0.72rem, env(safe-area-inset-bottom, 0px)) !important;
     right: max(0.72rem, env(safe-area-inset-right, 0px)) !important;
   }
@@ -7081,21 +7081,15 @@ html[data-home-experience='story'] {
 }
 
 @media (max-width: 767px) {
-  [data-chat-floating-container='true'] > button {
+  [data-whatsapp-floating-container='true'] > a {
     width: 2.55rem !important;
     height: 2.55rem !important;
     border-radius: 0.55rem !important;
   }
 
-  [data-chat-floating-container='true'] [data-chat-launcher-icon='message-circle-more'] {
-    width: 1.25rem !important;
-    height: 1.25rem !important;
-  }
-
-  [data-chat-floating-container='true'] [data-chat-online-indicator='true'] {
-    width: 0.62rem !important;
-    height: 0.62rem !important;
-    border-width: 1.5px !important;
+  [data-market-whatsapp-link='true'] img {
+    width: 1.35rem !important;
+    height: 1.35rem !important;
   }
 
   [data-story-section='philosophy'] [data-layout='story-philosophy-principles'] > * {
@@ -9286,7 +9280,7 @@ html[data-home-experience='story'] {
     margin-top: 1.5rem;
   }
 
-  [data-chat-floating-container='true'] {
+  [data-whatsapp-floating-container='true'] {
     bottom: max(0.85rem, env(safe-area-inset-bottom, 0px)) !important;
     right: max(0.85rem, env(safe-area-inset-right, 0px)) !important;
   }
@@ -9987,12 +9981,12 @@ html[dir='rtl'] {
     overscroll-behavior: none;
   }
 
-  html.property-mobile-menu-open [data-chat-floating-container='true'],
-  body.property-mobile-menu-open [data-chat-floating-container='true'],
+  html.property-mobile-menu-open [data-whatsapp-floating-container='true'],
+  body.property-mobile-menu-open [data-whatsapp-floating-container='true'],
   html.property-mobile-menu-open [data-scroll-to-top-button='true'],
   body.property-mobile-menu-open [data-scroll-to-top-button='true'],
-  html.story-mobile-menu-open [data-chat-floating-container='true'],
-  body.story-mobile-menu-open [data-chat-floating-container='true'],
+  html.story-mobile-menu-open [data-whatsapp-floating-container='true'],
+  body.story-mobile-menu-open [data-whatsapp-floating-container='true'],
   html.story-mobile-menu-open [data-scroll-to-top-button='true'],
   body.story-mobile-menu-open [data-scroll-to-top-button='true'] {
     visibility: hidden;
@@ -10045,7 +10039,7 @@ html[dir='rtl'] {
     inset-inline-end: max(1.25rem, var(--safe-inline-end)) !important;
   }
 
-  [data-chat-floating-container='true'] {
+  [data-whatsapp-floating-container='true'] {
     right: auto !important;
     inset-inline-end: max(0.72rem, var(--safe-inline-end)) !important;
   }
@@ -10079,12 +10073,12 @@ html[dir='rtl'] {
     font-size: clamp(0.72rem, 2.8vw, 0.8rem) !important;
   }
 
-  [data-chat-floating-container='true'] > button {
+  [data-whatsapp-floating-container='true'] > a {
     min-width: 2.75rem !important;
     min-height: 2.75rem !important;
   }
 
-  [data-chat-floating-container='true'] {
+  [data-whatsapp-floating-container='true'] {
     right: auto !important;
     inset-inline-end: max(0.85rem, var(--safe-inline-end)) !important;
   }
@@ -11712,5 +11706,35 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 @media (min-width: 1024px) and (max-height: 48rem) {
   [data-story-section='philosophyOrigins'] .story-philosophy-detail-stage {
     padding-bottom: clamp(3.5rem, 8svh, 4.5rem);
+  }
+}
+
+/* Contact cards use one shared, complete system face in every locale. The
+   Cyrillic and Polish stacks already resolve to this face; applying it to the
+   Latin locales keeps the email, address, labels, and social captions on the
+   same x-height, weight, and baseline instead of switching to Gilroy metrics. */
+[data-story-section='contact'] {
+  --story-contact-unified-font:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif;
+}
+
+[data-story-section='contact']
+  :is(
+    .story-contact-card > .story-metric-label,
+    .story-contact-detail,
+    .story-contact-social-links .social-link__label,
+    .story-contact-social-links .social-link__detail
+  ) {
+  font-family: var(--story-contact-unified-font) !important;
+  font-synthesis: none;
+}
+
+/* The intro source is portrait-safe on phones and portrait tablets. Contain it
+   within the blue overlay so the logo and wordmark stay fully visible instead
+   of being enlarged and clipped by a landscape object-cover crop. */
+@media (max-width: 1023px) and (orientation: portrait) {
+  .initial-site-animation-video {
+    object-fit: contain;
   }
 }

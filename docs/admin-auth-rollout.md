@@ -1,9 +1,10 @@
 # Admin identity and MFA rollout
 
-The `/admin` area supports individual Supabase Auth identities and requires an
-Authenticator Assurance Level of `aal2` (password plus TOTP) before any admin
-page or mutation is authorized. Authorization uses `app_metadata`, which users
-cannot edit, and never trusts `user_metadata` for roles.
+The `/admin` area supports individual Supabase Auth identities. Password-only
+sign-in is the default; set `ADMIN_REQUIRE_MFA=true` to require an Authenticator
+Assurance Level of `aal2` (password plus TOTP). Authorization uses
+`app_metadata`, which users cannot edit, and never trusts `user_metadata` for
+roles.
 
 ## Rollout modes
 
@@ -11,7 +12,8 @@ cannot edit, and never trusts `user_metadata` for roles.
   public Supabase configuration is present and temporarily keeps the legacy
   shared-password form available. This mode is only for the migration window.
 - `ADMIN_AUTH_MODE=identity` accepts only an authorized Supabase identity at
-  AAL2. Shared-password cookies and credentials are ignored.
+  the configured assurance level. Shared-password cookies and credentials are
+  ignored.
 - Missing or invalid `ADMIN_AUTH_MODE` fails closed. It never silently enables
   shared-password access.
 
@@ -48,10 +50,9 @@ server-managed role name. Admin users must have either
    server sends the Supabase invite and then assigns `app_metadata.role`; if
    role assignment fails, it attempts a compensating delete of the new user.
    Disable public signup unless the website needs it for another feature.
-5. Each administrator accepts the invite, creates a unique password of at least
-   12 characters, scans the one-time QR code in an authenticator app, and
-   verifies the six-digit code. The admin area remains inaccessible until the
-   session reaches AAL2.
+5. Each administrator accepts the invite and creates a unique password of at
+   least 12 characters. If `ADMIN_REQUIRE_MFA=true`, they also scan the one-time
+   QR code in an authenticator app and verify the six-digit code.
 6. Confirm every expected administrator can sign in and that the lead dashboard
    identifies them by email.
 7. Set `ADMIN_AUTH_MODE=identity`, redeploy, and verify the shared-password form
@@ -62,10 +63,14 @@ server-managed role name. Admin users must have either
 
 ## Operational notes
 
-- Successful admin mutations and email-delivery tests emit structured
-  `[aixco-admin-audit]` events containing the Supabase user ID, a truncated
-  SHA-256 email hash, action, outcome, and non-PII target identifier. Raw email
-  addresses, secrets, and lead message bodies are excluded.
+- Successful admin mutations and email-delivery tests write structured,
+  service-role-only audit records containing the Supabase user ID, an HMAC
+  email pseudonym, action, outcome, and bounded non-PII context. Raw email
+  addresses, secrets, and lead message bodies are excluded. Security-sensitive
+  mutations require the pre-action audit record to persist before proceeding.
+- When `ADMIN_REQUIRE_MFA=true`, the analytics dashboard and sensitive tools are
+  restricted to verified Supabase AAL2 identities. The legacy shared password
+  can only be used to complete the identity rollout.
 - If an administrator replaces or loses their authenticator device, an owner of
   the Supabase project must follow the Supabase MFA recovery procedure. Do not
   switch the whole site back to migration mode for one user.

@@ -145,7 +145,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
     ? aixcoCurrentProjectGalleryImages[0].src
     : image;
   const heroSizes = property.id === "current-project"
-    ? "(max-width: 639px) 773px, (max-width: 1023px) 1075px, 1344px"
+    ? "(min-width: 1024px) 44vw, 100vw"
     : "(min-width: 1024px) 44vw, 100vw";
   const heroMetrics = [
     ...property.metrics,
@@ -208,17 +208,32 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
         </div>
 
         <aside className="property-hero__media relative order-1 min-h-[23rem] overflow-hidden bg-[#161616] sm:min-h-[32rem] lg:order-2 lg:min-h-full">
-          <Image
-            src={heroImage}
-            alt={property.name}
-            fill
-            sizes={heroSizes}
-            unoptimized={property.id === "current-project"}
-            className="object-cover object-[62%_center]"
-            preload
-            fetchPriority="high"
-            loading="eager"
-          />
+           {property.id === "current-project" ? (
+             // Deliberate native srcset: these candidates are pre-generated lossless
+             // WebPs, while Next's image optimizer would re-encode them.
+             // eslint-disable-next-line @next/next/no-img-element
+             <img
+              src="/aixco-global-op2/images/project-gallery-2026/01-hero-exterior-2048.webp"
+              srcSet="/aixco-global-op2/images/project-gallery-2026/01-hero-exterior-768.webp 768w, /aixco-global-op2/images/project-gallery-2026/01-hero-exterior-1344.webp 1344w, /aixco-global-op2/images/project-gallery-2026/01-hero-exterior-2048.webp 2048w, /aixco-global-op2/images/project-gallery-2026/01-hero-exterior.webp 3882w"
+              sizes={heroSizes}
+              alt={property.name}
+              className="absolute inset-0 h-full w-full object-cover object-[62%_center]"
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt={property.name}
+              fill
+              sizes={heroSizes}
+              className="object-cover object-[62%_center]"
+              preload
+              fetchPriority="high"
+              loading="eager"
+            />
+          )}
         </aside>
       </section>
 

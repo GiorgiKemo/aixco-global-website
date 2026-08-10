@@ -3,6 +3,7 @@
 import { ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { openAnalyticsPreferences } from "@/lib/analytics/client";
 
 export function FooterLegalBar({
   tx,
@@ -69,6 +70,13 @@ export function FooterLegalBar({
             className="inline-flex min-h-11 items-center text-start transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             {tx("Privacy Policy")}
+          </button>
+          <button
+            type="button"
+            onClick={openAnalyticsPreferences}
+            className="inline-flex min-h-11 items-center text-start transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            {tx("Cookie preferences")}
           </button>
         </div>
       </div>

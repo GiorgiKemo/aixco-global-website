@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAdminAuthDecision } from "@/lib/admin/auth";
+import { getAal2AdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
 import {
   exportContactSubjectData,
@@ -8,7 +8,7 @@ import {
 } from "@/lib/admin/privacy";
 
 export async function POST(request: Request) {
-  const auth = await getAdminAuthDecision();
+  const auth = await getAal2AdminAuthDecision();
   if (!auth.ok) return NextResponse.redirect(new URL("/admin/login", request.url), { status: 303 });
 
   const requestOrigin = request.headers.get("origin");
@@ -21,8 +21,16 @@ export async function POST(request: Request) {
   if (!email.success) return NextResponse.redirect(new URL("/admin/privacy?error=invalid-email", request.url), { status: 303 });
 
   try {
+    await auditAdminAction({
+      action: "privacy.subject.export.requested",
+      actor: auth.principal,
+      outcome: "success",
+      target: privacySubjectAuditTarget(email.data),
+      headers: request.headers,
+    }, { required: true });
+
     const data = await exportContactSubjectData(email.data);
-    auditAdminAction({
+    await auditAdminAction({
       action: "privacy.subject.export",
       actor: auth.principal,
       outcome: "success",
@@ -33,7 +41,10 @@ export async function POST(request: Request) {
         deliveries: data.emailDeliveries.length,
         deliveryEvents: data.emailEvents.length,
         abuseAttempts: data.leadCaptureAttempts.length,
+        analyticsSessions: data.analyticsSessions.length,
+        analyticsEvents: data.analyticsEvents.length,
       },
+      headers: request.headers,
     });
 
     return new NextResponse(JSON.stringify(data, null, 2), {
@@ -44,11 +55,12 @@ export async function POST(request: Request) {
       },
     });
   } catch {
-    auditAdminAction({
+    await auditAdminAction({
       action: "privacy.subject.export",
       actor: auth.principal,
       outcome: "failure",
       target: privacySubjectAuditTarget(email.data),
+      headers: request.headers,
     });
     return NextResponse.redirect(new URL("/admin/privacy?error=export-failed", request.url), { status: 303 });
   }

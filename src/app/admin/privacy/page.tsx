@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Download, ShieldCheck, Trash2 } from "lucide-react";
-import { requireAdminSession } from "@/lib/admin/auth";
+import { requireAal2AdminSession } from "@/lib/admin/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +15,7 @@ type PrivacyPageProps = {
 };
 
 export default async function AdminPrivacyPage({ searchParams }: PrivacyPageProps) {
-  await requireAdminSession();
+  await requireAal2AdminSession();
   const params = searchParams ? await searchParams : {};
 
   return (

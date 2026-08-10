@@ -129,10 +129,12 @@ type StoryMediaOverlay = "light" | "dark" | "contact" | "none";
 
 const heroMobileVideoQuery = "(max-width: 767px)";
 
-function useHeroBackdropVideoSrc() {
+function useHeroBackdropVideoSrc(enabled: boolean) {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!enabled) return undefined;
+
     if (typeof window.matchMedia !== "function") {
       setVideoSrc(aixcoHeroBackgroundVideo.src);
       return undefined;
@@ -146,9 +148,27 @@ function useHeroBackdropVideoSrc() {
     syncVideoSrc();
     mediaQuery.addEventListener("change", syncVideoSrc);
     return () => mediaQuery.removeEventListener("change", syncVideoSrc);
-  }, []);
+  }, [enabled]);
 
   return videoSrc;
+}
+
+function useSiteIntroReady() {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const intro = document.querySelector<HTMLElement>("[data-site-intro]");
+    if (!intro || document.documentElement.dataset.siteIntro === "complete") {
+      setIsReady(true);
+      return undefined;
+    }
+
+    const markReady = () => setIsReady(true);
+    window.addEventListener("aixco:site-intro-complete", markReady, { once: true });
+    return () => window.removeEventListener("aixco:site-intro-complete", markReady);
+  }, []);
+
+  return isReady;
 }
 
 const storyChapters: StoryChapter[] = [
@@ -558,12 +578,11 @@ function StoryMediaPanel({
       src={media.src}
       alt={media.alt}
       fill
-      unoptimized
       preload={preloadMedia}
       fetchPriority={shouldLoadEagerly ? "high" : "auto"}
       loading={shouldLoadEagerly ? "eager" : "lazy"}
       decoding="async"
-      quality={75}
+      quality={90}
       sizes={media.sizes ?? "(min-width: 1280px) 56vw, 100vw"}
       className={cn(
         "story-media-panel__image h-full w-full",
@@ -1151,10 +1170,9 @@ function StoryChrome({
   );
 }
 
-function FixedHeroBackdrop({ visible }: { visible: boolean }) {
+function FixedHeroBackdrop({ mediaReady, visible }: { mediaReady: boolean; visible: boolean }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const mobileScrollResumeTimerRef = useRef<number | null>(null);
-  const videoSrc = useHeroBackdropVideoSrc();
+  const videoSrc = useHeroBackdropVideoSrc(mediaReady);
   const shouldReduceMotion = useHydratedReducedMotion();
   const canAnimate = shouldReduceMotion !== true;
   // Fail closed until the hydrated motion preference has been evaluated. This
@@ -1172,7 +1190,7 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
       return undefined;
     }
 
-    if (visible) {
+    if (visible && mediaReady) {
       setShouldRenderVideo(true);
       setShouldExposeBackdrop(true);
       void video?.play().catch(() => undefined);
@@ -1180,52 +1198,12 @@ function FixedHeroBackdrop({ visible }: { visible: boolean }) {
       return undefined;
     }
 
-    // Desktop keeps the backdrop warm for a seamless return. On mobile, stop
-    // the hidden decoder so it cannot compete with the always-primed About
-    // video for the same hardware decode/compositor resources.
-    if (window.matchMedia(heroMobileVideoQuery).matches) {
-      video?.pause();
-    }
-
     const visibilityTimer = window.setTimeout(() => {
       setShouldExposeBackdrop(false);
     }, 760);
 
     return () => window.clearTimeout(visibilityTimer);
-  }, [canAnimate, videoSrc, visible]);
-
-  useEffect(() => {
-    if (!canAnimate || !visible || !shouldRenderVideo) return undefined;
-    if (!window.matchMedia(heroMobileVideoQuery).matches) return undefined;
-
-    const video = videoRef.current;
-    if (!video) return undefined;
-
-    const clearResumeTimer = () => {
-      if (mobileScrollResumeTimerRef.current === null) return;
-      window.clearTimeout(mobileScrollResumeTimerRef.current);
-      mobileScrollResumeTimerRef.current = null;
-    };
-
-    const pauseHeroDuringMobileScroll = () => {
-      clearResumeTimer();
-      if (!video.paused) video.pause();
-      mobileScrollResumeTimerRef.current = window.setTimeout(() => {
-        mobileScrollResumeTimerRef.current = null;
-        if (document.visibilityState === "visible") {
-          void video.play().catch(() => undefined);
-        }
-      }, 180);
-    };
-
-    window.addEventListener("touchstart", pauseHeroDuringMobileScroll, { passive: true });
-    window.addEventListener("scroll", pauseHeroDuringMobileScroll, { passive: true });
-    return () => {
-      window.removeEventListener("touchstart", pauseHeroDuringMobileScroll);
-      window.removeEventListener("scroll", pauseHeroDuringMobileScroll);
-      clearResumeTimer();
-    };
-  }, [canAnimate, shouldRenderVideo, videoSrc, visible]);
+  }, [canAnimate, mediaReady, videoSrc, visible]);
 
   return (
     <div
@@ -1811,8 +1789,8 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
           alt={selectedImage.alt}
           fill
           sizes="(min-width: 1280px) 100vw, 100vw"
-          unoptimized
           loading="lazy"
+          quality={90}
           data-batumi-hero-image={selectedImage.key}
           className="story-batumi-gallery__hero-image"
           style={{ objectPosition: selectedImage.objectPosition }}
@@ -1860,8 +1838,8 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
               width={192}
               height={128}
               sizes="(min-width: 1280px) 144px, 34vw"
-              unoptimized
-              loading="eager"
+              loading="lazy"
+              quality={75}
               decoding="async"
               draggable={false}
               className="story-batumi-gallery__thumb-image"
@@ -1985,16 +1963,20 @@ function AboutScene({
 }) {
   const dubaiVideoRef = useRef<HTMLVideoElement | null>(null);
   const [videoStarted, setVideoStarted] = useState(false);
-  // Keep the media element and source stable for the lifetime of the page.
-  // Outside the two-section buffer we pause decoding, but preserving the
-  // element means returning to the scene resumes from the exact same frame.
-  const shouldPlayVideo = shouldStartVideo;
+  const [videoAttached, setVideoAttached] = useState(false);
+  // Attach this full-quality source only as the About scene approaches. Once
+  // started, keep it playing so performance is not achieved by pausing video.
+  const shouldPlayVideo = videoAttached;
   const metrics = [
     { value: "5,000+", label: "Trusted clients" },
     { value: "$400M", label: "Gross Development Value (GDV)" },
     { value: "2000+", label: "Total transactions" },
     { value: "2009", label: "In business since" },
   ];
+
+  useEffect(() => {
+    if (shouldStartVideo) setVideoAttached(true);
+  }, [shouldStartVideo]);
 
   useEffect(() => {
     const video = dubaiVideoRef.current;
@@ -2053,13 +2035,13 @@ function AboutScene({
             <div className="story-about-cinematic-image relative h-full w-full">
               <video
                 ref={dubaiVideoRef}
-                src={aixcoDubaiHeroVideo.src}
+                src={videoAttached ? aixcoDubaiHeroVideo.src : undefined}
                 className="h-full w-full object-cover"
                 autoPlay
                 muted
                 playsInline
                 loop
-                preload="auto"
+                preload={videoAttached ? "metadata" : "none"}
                 aria-label={tx(aixcoDubaiHeroVideo.title)}
                 onLoadedData={(event) => {
                   event.currentTarget.playbackRate = 0.82;
@@ -2090,8 +2072,8 @@ function AboutScene({
                 data-about-video-poster=""
                 data-video-started={videoStarted ? "true" : "false"}
                 className="story-about-cinematic-poster object-cover"
-                loading="eager"
-                fetchPriority="high"
+                loading="lazy"
+                fetchPriority="auto"
                 sizes="100vw"
                 decoding="async"
               />
@@ -3523,13 +3505,14 @@ export function DesktopStoryHome() {
   const pageProgressRef = useRef(-1);
   const [activeIndex, setActiveIndex] = useState(0);
   const [langOpen, setLangOpen] = useState(false);
-  const [sectionPresence, setSectionPresence] = useState<boolean[]>(() => storyChapters.map((_, index) => index <= 1));
+  const [sectionPresence, setSectionPresence] = useState<boolean[]>(() => storyChapters.map((_, index) => index === 0));
   const activeIndexRef = useRef(0);
   const [heroBackdropVisible, setHeroBackdropVisible] = useState(true);
   const heroBackdropVisibleRef = useRef(true);
   const sectionPresenceRef = useRef(sectionPresence);
   const { openContact, openJourney, openLogin, openPartner, openRegister } = useUI();
   const { lang, setLang, tx } = useI18n();
+  const siteIntroReady = useSiteIntroReady();
   const [whatsappContact, setWhatsAppContact] = useState<MarketWhatsAppContact | null>(null);
 
   useEffect(() => {
@@ -3800,7 +3783,7 @@ export function DesktopStoryHome() {
         key="about"
         isActive={activeIndex === 1}
         isRevealed={isRevealed(1)}
-        shouldStartVideo={sectionPresence[1] ?? true}
+        shouldStartVideo={siteIntroReady && activeIndex === 1}
         tx={tx}
       />,
       <MemoizedPhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
@@ -3836,12 +3819,12 @@ export function DesktopStoryHome() {
       <MemoizedContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} whatsappContact={whatsappContact} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
-    [activeIndex, lang, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, tx, whatsappContact],
+    [activeIndex, lang, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, siteIntroReady, tx, whatsappContact],
   );
 
   return (
     <div ref={storyRef} data-home-experience="desktop-story" className="relative bg-background">
-      <FixedHeroBackdrop visible={heroBackdropVisible} />
+      <FixedHeroBackdrop mediaReady={siteIntroReady} visible={heroBackdropVisible} />
       <StoryChrome
         activeIndex={activeIndex}
         lang={lang}

@@ -19,6 +19,7 @@ const structuredClientErrorSchema = z.object({
     component: z.string().trim().max(120).optional(),
     digest: z.string().trim().max(255).optional(),
     routeKind: z.string().trim().max(80).optional(),
+    sessionId: z.string().uuid().optional(),
     source: z.string().trim().max(80).optional(),
   }).strict().optional(),
 }).strict();
@@ -42,6 +43,12 @@ export async function POST(request: Request) {
   }
   if (!isTrustedLeadCaptureOrigin(request, process.env)) {
     return NextResponse.json({ ok: false }, { status: 403, headers: noStoreHeaders });
+  }
+  if (request.headers.get("sec-gpc") === "1" || request.headers.get("dnt") === "1") {
+    return NextResponse.json(
+      { ok: true, stored: false, droppedReason: "browser_privacy_signal" },
+      { status: 202, headers: noStoreHeaders },
+    );
   }
 
   const localGuard = checkRateLimit({

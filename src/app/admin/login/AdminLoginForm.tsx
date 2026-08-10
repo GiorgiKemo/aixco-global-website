@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { type FormEvent, useCallback, useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
@@ -13,12 +12,23 @@ type AdminLoginFormProps = {
     missing: string[];
     mode: "identity" | "migration";
     role: string;
+    mfaRequired: boolean;
     identityAvailable: boolean;
     legacyAvailable: boolean;
   };
+  onAuthenticated?: () => void;
 };
 
-type MfaStage = "credentials" | "set-password" | "challenge" | "enroll";
+type MfaStage = "credentials" | "set-password" | "challenge" | "enroll" | "audit";
+
+type SuccessfulAuditPhase = "mfa" | "session";
+
+const AUDIT_UNAVAILABLE_MESSAGE =
+  "Your MFA sign-in succeeded, but the required security audit could not be saved. Your authenticated session is still active. Retry to continue.";
+
+function navigateToAnalytics() {
+  window.location.assign("/admin/analytics");
+}
 
 function getErrorMessage(error: string | null) {
   if (error === "invalid") return "The sign-in details are incorrect.";
@@ -40,7 +50,36 @@ function readableAuthError(message: string) {
   return "Admin sign-in could not be completed. Please try again.";
 }
 
-export function AdminLoginForm({ config }: AdminLoginFormProps) {
+async function reportAdminLogin(
+  email: string | null,
+  phase: "credentials" | "authorization" | "mfa" | "session",
+  outcome: "success" | "failure",
+  reason?: string,
+): Promise<boolean> {
+  try {
+    const response = await fetch("/admin/login/audit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      keepalive: true,
+      body: JSON.stringify({
+        email: email && email.includes("@") ? email : null,
+        phase,
+        outcome,
+        ...(reason ? { reason } : {}),
+      }),
+    });
+    const result = await response.json().catch(() => null) as { stored?: unknown } | null;
+    return response.ok && result?.stored === true;
+  } catch {
+    return false;
+  }
+}
+
+export function AdminLoginForm({
+  config,
+  onAuthenticated = navigateToAnalytics,
+}: AdminLoginFormProps) {
   const params = useSearchParams();
   const queryError = getErrorMessage(params?.get("error") ?? null);
   const setupRequested = params?.get("setup") === "1";
@@ -52,13 +91,33 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
   const [identityEmail, setIdentityEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [pendingAuditPhase, setPendingAuditPhase] = useState<SuccessfulAuditPhase | null>(null);
   const [errorMessage, setErrorMessage] = useState(queryError);
   const [working, setWorking] = useState(false);
+
+  const finalizeVerifiedSignIn = useCallback(
+    async (email: string | null, phase: SuccessfulAuditPhase) => {
+      const stored = await reportAdminLogin(email, phase, "success");
+      if (stored) {
+        setPendingAuditPhase(null);
+        onAuthenticated();
+        return true;
+      }
+
+      setIdentityEmail(email ?? "your admin account");
+      setPendingAuditPhase(phase);
+      setStage("audit");
+      setErrorMessage(AUDIT_UNAVAILABLE_MESSAGE);
+      return false;
+    },
+    [onAuthenticated],
+  );
 
   const prepareMfa = useCallback(
     async (user: User) => {
       const supabase = getSupabaseAuthBrowserClient();
       if (!hasAdminRole(user.app_metadata, config.role)) {
+        await reportAdminLogin(user.email ?? null, "authorization", "failure", "role_missing");
         await supabase.auth.signOut();
         setStage("credentials");
         setErrorMessage("This identity is not assigned the AIXCO admin role.");
@@ -66,11 +125,16 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
       }
 
       setIdentityEmail(user.email ?? "your admin account");
+      if (!config.mfaRequired) {
+        await finalizeVerifiedSignIn(user.email ?? null, "session");
+        return;
+      }
+
       const assurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
       if (assurance.error) throw assurance.error;
 
       if (assurance.data.currentLevel === "aal2") {
-        window.location.assign("/admin/leads");
+        await finalizeVerifiedSignIn(user.email ?? null, "session");
         return;
       }
 
@@ -102,7 +166,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
       setTotpSecret(enrollment.data.totp.secret);
       setStage("enroll");
     },
-    [config.role],
+    [config.mfaRequired, config.role, finalizeVerifiedSignIn],
   );
 
   useEffect(() => {
@@ -149,13 +213,21 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
     const formData = new FormData(event.currentTarget);
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
+    let credentialsAccepted = false;
 
     try {
       const supabase = getSupabaseAuthBrowserClient();
       const result = await supabase.auth.signInWithPassword({ email, password });
       if (result.error || !result.data.user) throw result.error ?? new Error("Missing user");
+      credentialsAccepted = true;
       await prepareMfa(result.data.user);
     } catch (error) {
+      await reportAdminLogin(
+        email || null,
+        credentialsAccepted ? "authorization" : "credentials",
+        "failure",
+        credentialsAccepted ? "mfa_preparation_failed" : "invalid_credentials",
+      );
       setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
     } finally {
       setWorking(false);
@@ -175,10 +247,23 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
         code: totpCode.trim(),
       });
       if (result.error) throw result.error;
-      window.location.assign("/admin/leads");
+      await finalizeVerifiedSignIn(identityEmail, "mfa");
     } catch (error) {
+      await reportAdminLogin(identityEmail, "mfa", "failure", "invalid_code");
       setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
       setTotpCode("");
+    } finally {
+      setWorking(false);
+    }
+  }
+
+  async function retryVerifiedAudit() {
+    if (!pendingAuditPhase) return;
+
+    setWorking(true);
+    setErrorMessage("");
+    try {
+      await finalizeVerifiedSignIn(identityEmail || null, pendingAuditPhase);
     } finally {
       setWorking(false);
     }
@@ -220,6 +305,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
       setIdentityEmail("");
       setNewPassword("");
       setConfirmPassword("");
+      setPendingAuditPhase(null);
       setErrorMessage("");
       setWorking(false);
     }
@@ -254,7 +340,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
               <div>
                 <h2 className="font-display text-xl">Individual admin sign-in</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Use your invited AIXCO admin account. An authenticator code is required.
+                  Use your invited AIXCO admin account and password to continue.
                 </p>
               </div>
               <div>
@@ -282,7 +368,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
             </form>
           )}
 
-          {config.identityAvailable && stage === "enroll" && (
+          {config.identityAvailable && config.mfaRequired && stage === "enroll" && (
             <div className="grid gap-5">
               <div>
                 <p className="eyebrow">One-time setup</p>
@@ -293,7 +379,15 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
               </div>
               {qrCode && (
                 <div className="mx-auto rounded-md border border-border bg-white p-3">
-                  <Image src={qrCode} alt="QR code for AIXCO admin authenticator setup" width={208} height={208} unoptimized />
+                  {/* Inline Supabase TOTP QR data cannot be sent through Next's image optimizer. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={qrCode}
+                    alt="QR code for AIXCO admin authenticator setup"
+                    width={208}
+                    height={208}
+                    className="block h-[208px] w-[208px]"
+                  />
                 </div>
               )}
               {totpSecret && (
@@ -321,7 +415,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
                 <p className="eyebrow">Invitation setup</p>
                 <h2 className="mt-2 font-display text-xl">Create your admin password</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  This password is required for future sign-ins. Authenticator enrollment follows next.
+                  This password is required for future sign-ins.
                 </p>
               </div>
               <p className="text-xs text-muted-foreground">Setting up {identityEmail}</p>
@@ -338,7 +432,7 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
             </form>
           )}
 
-          {config.identityAvailable && stage === "challenge" && (
+          {config.identityAvailable && config.mfaRequired && stage === "challenge" && (
             <div className="grid gap-5">
               <div>
                 <p className="eyebrow">Second factor</p>
@@ -356,6 +450,35 @@ export function AdminLoginForm({ config }: AdminLoginFormProps) {
                 onSubmit={handleMfaVerification}
                 onReset={resetIdentity}
               />
+            </div>
+          )}
+
+          {config.identityAvailable && stage === "audit" && (
+            <div className="grid gap-5">
+              <div>
+                <p className="eyebrow">Security audit</p>
+                <h2 className="mt-2 font-display text-xl">Finish secure sign-in</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Your MFA session is active. AIXCO requires a durable, server-verified sign-in record before opening the dashboard.
+                </p>
+              </div>
+              <p className="text-xs text-muted-foreground">Signed in as {identityEmail}</p>
+              <button
+                type="button"
+                disabled={working}
+                onClick={retryVerifiedAudit}
+                className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60"
+              >
+                {working ? "Saving security audit…" : "Retry audit and continue"}
+              </button>
+              <button
+                type="button"
+                disabled={working}
+                onClick={resetIdentity}
+                className="inline-flex min-h-11 items-center justify-center text-sm text-muted-foreground underline-offset-4 hover:underline"
+              >
+                Use another account
+              </button>
             </div>
           )}
 

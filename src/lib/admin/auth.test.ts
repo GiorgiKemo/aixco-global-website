@@ -20,11 +20,12 @@ vi.mock("@/lib/supabase/auth-server", () => ({
   })),
 }));
 
-import { getAdminAuthConfig, getAdminAuthDecision } from "./auth";
+import { getAal2AdminAuthDecision, getAdminAuthConfig, getAdminAuthDecision } from "./auth";
 
 const ENV_KEYS = [
   "ADMIN_AUTH_MODE",
   "ADMIN_AUTH_ROLE",
+  "ADMIN_REQUIRE_MFA",
   "ADMIN_DASHBOARD_PASSWORD",
   "ADMIN_SESSION_SECRET",
   "NEXT_PUBLIC_SUPABASE_URL",
@@ -35,6 +36,7 @@ const originalEnv = Object.fromEntries(ENV_KEYS.map((key) => [key, process.env[k
 
 function setIdentityEnvironment() {
   process.env.ADMIN_AUTH_MODE = "identity";
+  process.env.ADMIN_REQUIRE_MFA = "true";
   process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co";
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_example";
 }
@@ -158,6 +160,31 @@ describe("admin identity authorization", () => {
     await expect(getAdminAuthDecision()).resolves.toEqual({ ok: false, reason: "mfa-required" });
   });
 
+  it("accepts a role-authorized password session when MFA is disabled", async () => {
+    setIdentityEnvironment();
+    process.env.ADMIN_REQUIRE_MFA = "false";
+    mocks.getUser.mockResolvedValue({
+      data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
+      error: null,
+    });
+    mocks.getAssurance.mockResolvedValue({
+      data: { currentLevel: "aal1", nextLevel: "aal1" },
+      error: null,
+    });
+
+    await expect(getAdminAuthDecision()).resolves.toEqual({
+      ok: true,
+      principal: {
+        id: "admin-id",
+        email: "admin@aixco.global",
+        authentication: "supabase-password",
+        aal: "aal1",
+      },
+    });
+    expect(mocks.getAssurance).not.toHaveBeenCalled();
+    await expect(getAal2AdminAuthDecision()).resolves.toMatchObject({ ok: true });
+  });
+
   it("accepts a valid legacy token only during migration mode", async () => {
     const sessionSecret = "0123456789abcdef0123456789abcdef";
     process.env.ADMIN_AUTH_MODE = "migration";
@@ -170,6 +197,42 @@ describe("admin identity authorization", () => {
     await expect(getAdminAuthDecision()).resolves.toMatchObject({
       ok: true,
       principal: { authentication: "legacy-shared-password" },
+    });
+  });
+
+  it("does not accept a migration password session for AAL2-only admin tools", async () => {
+    const sessionSecret = "0123456789abcdef0123456789abcdef";
+    process.env.ADMIN_AUTH_MODE = "migration";
+    process.env.ADMIN_DASHBOARD_PASSWORD = "a-long-temporary-password";
+    process.env.ADMIN_SESSION_SECRET = sessionSecret;
+    mocks.cookieGet.mockReturnValue({
+      value: createAdminSessionToken({ secret: sessionSecret, ttlSeconds: 60 }),
+    });
+
+    await expect(getAal2AdminAuthDecision()).resolves.toEqual({
+      ok: false,
+      reason: "mfa-required",
+    });
+  });
+
+  it("accepts a verified admin identity for AAL2-only admin tools", async () => {
+    setIdentityEnvironment();
+    mocks.getUser.mockResolvedValue({
+      data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
+      error: null,
+    });
+    mocks.getAssurance.mockResolvedValue({
+      data: { currentLevel: "aal2", nextLevel: "aal2" },
+      error: null,
+    });
+
+    await expect(getAal2AdminAuthDecision()).resolves.toMatchObject({
+      ok: true,
+      principal: {
+        id: "admin-id",
+        authentication: "supabase-mfa",
+        aal: "aal2",
+      },
     });
   });
 });

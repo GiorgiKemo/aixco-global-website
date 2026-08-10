@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { installNecessaryOnlyAnalyticsConsent } from "./lib/analytics-consent.mjs";
 import sharp from "sharp";
 
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
@@ -90,6 +91,7 @@ const paintedBounds = async (
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ reducedMotion: "reduce" });
+await installNecessaryOnlyAnalyticsConsent(page.context());
 
 try {
   await page.goto(`${baseUrl}/#batumi`, { waitUntil: "domcontentloaded" });

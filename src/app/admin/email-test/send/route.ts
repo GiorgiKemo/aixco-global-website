@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getAdminAuthDecision } from "@/lib/admin/auth";
+import { getAal2AdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
 import { sendLeadNotificationTestEmail } from "@/lib/backend/lead-notification-email";
 import { checkRateLimit, getRateLimitClientId } from "@/lib/security/rate-limit";
@@ -32,13 +32,13 @@ function errorRedirect(request: Request, error: string, detail?: string) {
 }
 
 export async function POST(request: Request) {
-  const auth = await getAdminAuthDecision();
+  const auth = await getAal2AdminAuthDecision();
   if (!auth.ok) {
     return redirectTo(request, "/admin/login");
   }
 
   const requestOrigin = request.headers.get("origin");
-  if (requestOrigin && requestOrigin !== new URL(request.url).origin) {
+  if (!requestOrigin || requestOrigin !== new URL(request.url).origin) {
     return new NextResponse("Forbidden", { status: 403 });
   }
 
@@ -67,22 +67,36 @@ export async function POST(request: Request) {
     return errorRedirect(request, "invalid");
   }
 
+  try {
+    await auditAdminAction({
+      action: "email.delivery.test.requested",
+      actor: auth.principal,
+      outcome: "success",
+      details: { hasReplyTo: Boolean(parsed.data.replyTo) },
+      headers: request.headers,
+    }, { required: true });
+  } catch {
+    return errorRedirect(request, "send", "Audit persistence is unavailable; no test email was sent.");
+  }
+
   const result = await sendLeadNotificationTestEmail(parsed.data);
   if (!result.ok) {
-    auditAdminAction({
+    await auditAdminAction({
       action: "email.delivery.test",
       actor: auth.principal,
       outcome: "failure",
       details: { skipped: result.skipped },
+      headers: request.headers,
     });
     return errorRedirect(request, result.skipped ? "config" : "send", result.reason);
   }
 
-  auditAdminAction({
+  await auditAdminAction({
     action: "email.delivery.test",
     actor: auth.principal,
     outcome: "success",
     target: result.id,
+    headers: request.headers,
   });
 
   const url = new URL("/admin/email-test", request.url);

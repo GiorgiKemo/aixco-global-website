@@ -5,6 +5,7 @@ vi.mock("next/web-vitals", () => ({
 }));
 
 import { reportWebVitals } from "./web-vitals";
+import { writeAnalyticsConsent } from "@/lib/analytics/client";
 
 const metric = {
   id: "v4-test",
@@ -18,8 +19,22 @@ const metric = {
 
 describe("web vitals client reporting", () => {
   beforeEach(() => {
+    window.localStorage.clear();
     window.sessionStorage.clear();
     vi.restoreAllMocks();
+    Object.defineProperty(navigator, "globalPrivacyControl", {
+      configurable: true,
+      value: false,
+    });
+    Object.defineProperty(navigator, "doNotTrack", {
+      configurable: true,
+      value: null,
+    });
+    Object.defineProperty(window, "doNotTrack", {
+      configurable: true,
+      value: null,
+    });
+    writeAnalyticsConsent("granted");
   });
 
   afterEach(() => vi.unstubAllGlobals());

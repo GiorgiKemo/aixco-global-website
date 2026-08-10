@@ -143,6 +143,7 @@ jobs:
           npm run smoke:mobile
           npm run smoke:mobile-scope
           npm run smoke:currency
+          npm run smoke:analytics
 
       - name: Upload preview logs on failure
         if: failure()

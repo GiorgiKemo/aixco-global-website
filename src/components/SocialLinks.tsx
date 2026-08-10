@@ -66,9 +66,9 @@ const socialLinks: SocialLink[] = [
   {
     key: "whatsapp",
     label: "WhatsApp",
-    fallback: "https://wa.me/41794340581",
+    fallback: "https://wa.me/41798320581",
     allowedHosts: ["wa.me"],
-    allowedPath: "/41794340581",
+    allowedPath: "/41798320581",
     iconSrc: aixcoLiveIcons.whatsapp,
   },
 ];

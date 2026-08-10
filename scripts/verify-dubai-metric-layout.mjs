@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { installNecessaryOnlyAnalyticsConsent } from "./lib/analytics-consent.mjs";
 
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
 const viewports = [
@@ -12,6 +13,7 @@ const viewports = [
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ reducedMotion: "reduce" });
+await installNecessaryOnlyAnalyticsConsent(page.context());
 
 try {
   await page.goto(`${baseUrl}/#dubai`, { waitUntil: "domcontentloaded" });

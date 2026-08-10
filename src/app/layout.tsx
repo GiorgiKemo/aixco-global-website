@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "lenis/dist/lenis.css";
-import "@fontsource/epilogue/latin-400.css";
 import "@/index.css";
 import "@/story-mobile-menu.css";
 import { getSiteUrl } from "@/lib/site-url";

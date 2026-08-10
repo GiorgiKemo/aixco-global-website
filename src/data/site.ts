@@ -12,7 +12,7 @@ export const company = {
     facebook: "https://www.facebook.com/profile.php?id=61589341472475",
     instagram: "https://www.instagram.com/aixco.global/",
     // Default/fallback WhatsApp contact; the rendered market number is selected by geolocation.
-    whatsapp: "https://wa.me/41794340581",
+    whatsapp: "https://wa.me/41798320581",
     youtube: "",
     x: "",
   },

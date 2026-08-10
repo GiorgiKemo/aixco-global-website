@@ -25,9 +25,13 @@ describe("current-project responsive metrics", () => {
     expect(css).toContain("overflow-wrap: anywhere;\n  white-space: normal;");
   });
 
-  it("serves the current-project panorama without a smaller re-encoded candidate", () => {
-    expect(pageSource).toContain('"(max-width: 639px) 773px, (max-width: 1023px) 1075px, 1344px"');
-    expect(pageSource).toContain('unoptimized={property.id === "current-project"}');
+  it("serves lossless responsive current-project display candidates while preserving the original", () => {
+    expect(pageSource).toContain('01-hero-exterior-768.webp 768w');
+    expect(pageSource).toContain('01-hero-exterior-1344.webp 1344w');
+    expect(pageSource).toContain('01-hero-exterior-2048.webp 2048w');
+    expect(pageSource).toContain('01-hero-exterior.webp 3882w');
+    expect(pageSource).toContain('sizes={heroSizes}');
+    expect(pageSource).not.toContain('unoptimized={property.id === "current-project"}');
   });
 
   it("marks every property content band for safe-area-aware gutters", () => {

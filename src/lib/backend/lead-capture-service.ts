@@ -60,14 +60,37 @@ function firstAcceptedLanguage(headers?: Headers) {
   return cleanOptionalText(headers?.get("accept-language")?.split(",")[0], 35);
 }
 
+function safePath(value: string | null | undefined) {
+  if (!value) return null;
+  try {
+    const url = new URL(value, "https://aixco.invalid");
+    const hash = /^#[a-z0-9][a-z0-9_-]{0,119}$/i.test(url.hash) ? url.hash : "";
+    return `${url.pathname}${hash}`.slice(0, 800);
+  } catch {
+    return null;
+  }
+}
+
+function safeReferrer(value: string | null | undefined) {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+    return `${url.origin}${url.pathname}`.slice(0, 2_048);
+  } catch {
+    return null;
+  }
+}
+
 function normalizeMetadata(context?: BrowserContextInput, headers?: Headers): Json {
   const metadata = context?.metadata ?? {};
 
   return {
-    referrer: cleanOptionalText(metadata.referrer ?? headers?.get("referer"), 2048),
+    referrer: safeReferrer(metadata.referrer ?? headers?.get("referer")),
     viewport_width: metadata.viewport_width ?? null,
     viewport_height: metadata.viewport_height ?? null,
     timezone: cleanOptionalText(metadata.timezone, 80),
+    analytics_session_id: metadata.analytics_session_id ?? null,
   };
 }
 
@@ -80,7 +103,7 @@ function buildServerContext(context: unknown, headers?: Headers): ServerContext 
 
   return {
     locale: cleanOptionalText(parsed.data.locale, 35) ?? firstAcceptedLanguage(headers),
-    page_path: cleanOptionalText(parsed.data.page_path, 800),
+    page_path: safePath(parsed.data.page_path),
     user_agent: cleanOptionalText(headers?.get("user-agent"), 500),
     metadata: normalizeMetadata(parsed.data, headers),
   };

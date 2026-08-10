@@ -35,7 +35,7 @@ vi.mock("@/hooks/use-idle-ready", () => ({
 vi.mock("@/components/ScrollManager", () => ({ ScrollManager: () => null }));
 vi.mock("@/components/ScrollToTopButton", () => ({ ScrollToTopButton: () => <div data-testid="scroll-to-top" /> }));
 vi.mock("@/components/Modals", () => ({ Modals: () => <div data-testid="modals" /> }));
-vi.mock("@/components/ChatWidget", () => ({ ChatWidget: () => <div data-testid="chat-widget" /> }));
+vi.mock("@/components/WhatsAppWidget", () => ({ WhatsAppWidget: () => <div data-testid="whatsapp-widget" /> }));
 
 describe("ClientShell", () => {
   beforeEach(() => {
@@ -52,6 +52,7 @@ describe("ClientShell", () => {
     expect(screen.queryByTestId("motion-config")).not.toBeInTheDocument();
     expect(screen.getByText("Page content")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Skip to main content" })).toHaveAttribute("href", "#main-content");
+    expect(screen.getByTestId("whatsapp-widget")).toBeInTheDocument();
   });
 
   it("defers noncritical floating UI until the browser is idle", async () => {
@@ -61,7 +62,7 @@ describe("ClientShell", () => {
       </ClientShell>,
     );
 
-    expect(screen.queryByTestId("chat-widget")).not.toBeInTheDocument();
+    expect(screen.getByTestId("whatsapp-widget")).toBeInTheDocument();
     expect(screen.queryByTestId("modals")).not.toBeInTheDocument();
 
     idleState.delayedReady = true;
@@ -72,6 +73,6 @@ describe("ClientShell", () => {
     );
 
     expect(await screen.findByTestId("modals")).toBeInTheDocument();
-    expect(await screen.findByTestId("chat-widget")).toBeInTheDocument();
+    expect(screen.getByTestId("whatsapp-widget")).toBeInTheDocument();
   });
 });

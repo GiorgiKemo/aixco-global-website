@@ -19,6 +19,7 @@ const webVitalSchema = z.object({
   rating: z.enum(["good", "needs-improvement", "poor"]),
   navigationType: z.string().max(40),
   pathname: z.string().startsWith("/").max(800),
+  sessionId: z.string().uuid().nullable().optional(),
 }).strict();
 
 function noStoreHeaders(additional: Record<string, string> = {}) {
@@ -64,6 +65,13 @@ export function resetWebVitalsRateLimitForTests() {
 export async function POST(request: Request) {
   if (!isTrustedLeadCaptureOrigin(request, process.env)) {
     return NextResponse.json({ ok: false }, { status: 403, headers: noStoreHeaders() });
+  }
+
+  if (request.headers.get("sec-gpc") === "1" || request.headers.get("dnt") === "1") {
+    return NextResponse.json(
+      { ok: true, stored: false, droppedReason: "browser_privacy_signal" },
+      { status: 202, headers: noStoreHeaders() },
+    );
   }
 
   const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
@@ -134,6 +142,7 @@ export async function POST(request: Request) {
         delta: parsed.data.delta,
         metricId: parsed.data.id,
         navigationType: parsed.data.navigationType,
+        sessionId: parsed.data.sessionId ?? undefined,
         source: "next_web_vitals",
       },
     });

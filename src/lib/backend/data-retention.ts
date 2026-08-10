@@ -1,3 +1,5 @@
+import "server-only";
+
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const DATA_RETENTION_WINDOWS = {
@@ -6,7 +8,12 @@ export const DATA_RETENTION_WINDOWS = {
   portalEvents: 180,
   abuseAttempts: 7,
   unmatchedEmailEvents: 30,
-  telemetry: 30,
+  telemetry: 180,
+  analyticsEvents: 180,
+  analyticsSessions: 395,
+  analyticsRawIps: 30,
+  adminAuditEvents: 730,
+  adminLoginRateLimits: 1,
 } as const;
 
 export type DataRetentionSummary = {
@@ -16,6 +23,12 @@ export type DataRetentionSummary = {
   abuseAttemptsDeleted: number;
   unmatchedEmailEventsDeleted: number;
   telemetryEventsDeleted: number;
+  analyticsEventsDeleted: number;
+  analyticsSessionsDeleted: number;
+  adminAuditEventsDeleted: number;
+  adminLoginRateLimitsDeleted: number;
+  analyticsNetworkIpsScrubbed: number;
+  adminAuditIpsScrubbed: number;
 };
 
 type RetentionRow = {
@@ -29,16 +42,9 @@ type RetentionRow = {
 
 type RetentionClient = {
   rpc: (
-    fn: "purge_expired_operational_data",
-    args: {
-      p_contact_days: number;
-      p_chat_days: number;
-      p_portal_days: number;
-      p_abuse_attempt_days: number;
-      p_email_event_days: number;
-      p_telemetry_days: number;
-    },
-  ) => Promise<{ data: RetentionRow[] | null; error: { message: string; code?: string } | null }>;
+    fn: string,
+    args: Record<string, number>,
+  ) => Promise<{ data: unknown; error: { message: string; code?: string } | null }>;
 };
 
 export async function purgeExpiredOperationalData(client?: RetentionClient): Promise<DataRetentionSummary> {
@@ -56,8 +62,28 @@ export async function purgeExpiredOperationalData(client?: RetentionClient): Pro
     throw new Error(`Operational data retention failed (${error.code ?? "database_error"}).`);
   }
 
-  const summary = data?.[0];
+  const summary = (data as RetentionRow[] | null)?.[0];
   if (!summary) throw new Error("Operational data retention did not return a summary.");
+
+  const analyticsResult = await supabase.rpc("purge_site_analytics_data", {
+    p_event_days: DATA_RETENTION_WINDOWS.analyticsEvents,
+    p_session_days: DATA_RETENTION_WINDOWS.analyticsSessions,
+    p_raw_ip_days: DATA_RETENTION_WINDOWS.analyticsRawIps,
+    p_audit_days: DATA_RETENTION_WINDOWS.adminAuditEvents,
+    p_admin_login_limit_days: DATA_RETENTION_WINDOWS.adminLoginRateLimits,
+  });
+  if (analyticsResult.error) {
+    throw new Error(`Analytics data retention failed (${analyticsResult.error.code ?? "database_error"}).`);
+  }
+  const analytics = analyticsResult.data as Partial<{
+    eventsDeleted: number;
+    sessionsDeleted: number;
+    adminAuditEventsDeleted: number;
+    adminLoginRateLimitsDeleted: number;
+    networkIpsScrubbed: number;
+    adminIpsScrubbed: number;
+  }> | null;
+  if (!analytics) throw new Error("Analytics data retention did not return a summary.");
 
   return {
     contactsDeleted: summary.contacts_deleted,
@@ -66,6 +92,11 @@ export async function purgeExpiredOperationalData(client?: RetentionClient): Pro
     abuseAttemptsDeleted: summary.abuse_attempts_deleted,
     unmatchedEmailEventsDeleted: summary.orphan_email_events_deleted,
     telemetryEventsDeleted: summary.telemetry_events_deleted,
+    analyticsEventsDeleted: analytics.eventsDeleted ?? 0,
+    analyticsSessionsDeleted: analytics.sessionsDeleted ?? 0,
+    adminAuditEventsDeleted: analytics.adminAuditEventsDeleted ?? 0,
+    adminLoginRateLimitsDeleted: analytics.adminLoginRateLimitsDeleted ?? 0,
+    analyticsNetworkIpsScrubbed: analytics.networkIpsScrubbed ?? 0,
+    adminAuditIpsScrubbed: analytics.adminIpsScrubbed ?? 0,
   };
 }
-import "server-only";

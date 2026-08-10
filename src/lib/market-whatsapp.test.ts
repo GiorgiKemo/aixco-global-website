@@ -4,9 +4,9 @@ import { getWhatsAppContactForCountry } from "./market-whatsapp";
 describe("market WhatsApp contacts", () => {
   it("uses the Swiss number for Switzerland", () => {
     expect(getWhatsAppContactForCountry("ch")).toEqual({
-      number: "+41 79 434 05 81",
-      href: "https://wa.me/41794340581",
-      allowedPath: "/41794340581",
+      number: "+41 79 832 05 81",
+      href: "https://wa.me/41798320581",
+      allowedPath: "/41798320581",
     });
   });
 

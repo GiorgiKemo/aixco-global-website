@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getAdminAuthDecision } from "@/lib/admin/auth";
+import { getAal2AdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
 import { requeueContactEmailDeliveries } from "@/lib/admin/leads";
 
@@ -11,7 +11,7 @@ function redirectTo(request: Request, path: string) {
 }
 
 export async function POST(request: Request) {
-  const auth = await getAdminAuthDecision();
+  const auth = await getAal2AdminAuthDecision();
   if (!auth.ok) return redirectTo(request, "/admin/login");
 
   const origin = request.headers.get("origin");
@@ -24,33 +24,44 @@ export async function POST(request: Request) {
   if (!parsed.success) return redirectTo(request, "/admin/leads?error=invalid-email-requeue");
 
   try {
+    await auditAdminAction({
+      action: "contact.email.requeue.requested",
+      actor: auth.principal,
+      outcome: "success",
+      target: `contact:${parsed.data.contactId}`,
+      headers: request.headers,
+    }, { required: true });
+
     const count = await requeueContactEmailDeliveries(parsed.data.contactId);
     if (count < 1) {
-      auditAdminAction({
+      await auditAdminAction({
         action: "contact.email.requeue",
         actor: auth.principal,
         outcome: "failure",
         target: `contact:${parsed.data.contactId}`,
         details: { reason: "no-eligible-failed-deliveries" },
+        headers: request.headers,
       });
       return redirectTo(request, "/admin/leads?error=no-email-to-requeue");
     }
 
-    auditAdminAction({
+    await auditAdminAction({
       action: "contact.email.requeue",
       actor: auth.principal,
       outcome: "success",
       target: `contact:${parsed.data.contactId}`,
       details: { deliveries: count },
+      headers: request.headers,
     });
     return redirectTo(request, `/admin/leads?requeued=${count}#contact-${parsed.data.contactId}`);
   } catch {
-    auditAdminAction({
+    await auditAdminAction({
       action: "contact.email.requeue",
       actor: auth.principal,
       outcome: "failure",
       target: `contact:${parsed.data.contactId}`,
       details: { reason: "storage-failure" },
+      headers: request.headers,
     });
     return redirectTo(request, "/admin/leads?error=email-requeue-failed");
   }

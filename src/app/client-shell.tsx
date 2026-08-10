@@ -5,11 +5,11 @@ import { I18nProvider, useI18n } from "@/i18n/I18nProvider";
 import { UIProvider, useUI } from "@/components/ui-state";
 import { SiteContentProvider } from "@/data/SiteContentProvider";
 import { ScrollManager } from "@/components/ScrollManager";
+import { WhatsAppWidget } from "@/components/WhatsAppWidget";
 import { useDelayedIdleReady } from "@/hooks/use-idle-ready";
 import type { SiteContent, SiteContentResult } from "@/lib/backend/site-content";
 
 const Modals = lazy(() => import("@/components/Modals").then((module) => ({ default: module.Modals })));
-const ChatWidget = lazy(() => import("@/components/ChatWidget").then((module) => ({ default: module.ChatWidget })));
 const ContactNudge = lazy(() =>
   import("@/components/ContactNudge").then((module) => ({ default: module.ContactNudge })),
 );
@@ -37,6 +37,7 @@ function DeferredShellUi() {
 
   return (
     <>
+      <WhatsAppWidget />
       {(interactiveUiReady || modal !== null) && (
         <Suspense fallback={null}>
           <Modals />
@@ -46,7 +47,6 @@ function DeferredShellUi() {
         <Suspense fallback={null}>
           <ScrollToTopButton />
           <ContactNudge />
-          <ChatWidget />
         </Suspense>
       )}
     </>

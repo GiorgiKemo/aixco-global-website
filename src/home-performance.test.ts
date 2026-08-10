@@ -89,7 +89,7 @@ describe("home page performance structure", () => {
     expect(sectionSource.match(/leading-\[1\.65\] text-white/g)).toHaveLength(3);
   });
 
-  it("starts the About video immediately and preserves its position beyond the two-section buffer", () => {
+  it("defers the About video until it is near, then preserves its source and playback", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const aboutSceneStart = desktopStorySource.indexOf("function AboutScene");
     const philosophySceneStart = desktopStorySource.indexOf("function PhilosophyScene");
@@ -97,20 +97,22 @@ describe("home page performance structure", () => {
 
     expect(aboutSceneStart).toBeGreaterThanOrEqual(0);
     expect(philosophySceneStart).toBeGreaterThan(aboutSceneStart);
-    expect(aboutSceneSource).toContain("const shouldPlayVideo = shouldStartVideo;");
+    expect(aboutSceneSource).toContain("const [videoAttached, setVideoAttached] = useState(false);");
+    expect(aboutSceneSource).toContain("const shouldPlayVideo = videoAttached;");
+    expect(aboutSceneSource).toContain("if (shouldStartVideo) setVideoAttached(true);");
     expect(aboutSceneSource).toContain("if (!shouldPlayVideo)");
-    expect(aboutSceneSource).toContain("src={aixcoDubaiHeroVideo.src}");
+    expect(aboutSceneSource).toContain("src={videoAttached ? aixcoDubaiHeroVideo.src : undefined}");
     expect(aboutSceneSource).toContain("autoPlay");
     expect(aboutSceneSource).toContain("loop");
-    expect(aboutSceneSource).toContain('preload="auto"');
+    expect(aboutSceneSource).toContain('preload={videoAttached ? "metadata" : "none"}');
     expect(aboutSceneSource).toContain('data-video-started={videoStarted ? "true" : "false"}');
     expect(aboutSceneSource).not.toContain('video.removeAttribute("src")');
     expect(aboutSceneSource).not.toContain("video.load();");
     expect(aboutSceneSource).not.toContain("setVideoStarted(false)");
     expect(aboutSceneSource).not.toContain("poster={aixcoDubaiHeroVideo.poster}");
-    expect(desktopStorySource).toContain("shouldStartVideo={sectionPresence[1] ?? true}");
+    expect(desktopStorySource).toContain("shouldStartVideo={siteIntroReady && activeIndex === 1}");
     expect(desktopStorySource).not.toContain("shouldExposeVideo");
-    expect(desktopStorySource).toContain("storyChapters.map((_, index) => index <= 1)");
+    expect(desktopStorySource).toContain("storyChapters.map((_, index) => index === 0)");
     expect(aboutSceneSource).not.toContain("if (!shouldPrimeVideo)");
     expect(aboutSceneSource).not.toContain("shouldReduceMotion");
     expect(aboutSceneSource).toContain("video.pause();");
@@ -119,7 +121,7 @@ describe("home page performance structure", () => {
     expect(aboutSceneSource).toContain("onPause={(event) => {");
   });
 
-  it("pauses only the decorative hero video while native mobile scrolling is active", () => {
+  it("keeps the visible hero video playing during native mobile scrolling", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const backdropStart = desktopStorySource.indexOf("function FixedHeroBackdrop");
     const backdropEnd = desktopStorySource.indexOf("function StorySceneBody");
@@ -127,14 +129,13 @@ describe("home page performance structure", () => {
 
     expect(backdropStart).toBeGreaterThanOrEqual(0);
     expect(backdropEnd).toBeGreaterThan(backdropStart);
-    expect(backdropSource).toContain("mobileScrollResumeTimerRef");
-    expect(backdropSource).toContain("pauseHeroDuringMobileScroll");
-    expect(backdropSource).toContain('window.matchMedia(heroMobileVideoQuery).matches');
-    expect(backdropSource).toContain('window.addEventListener("touchstart", pauseHeroDuringMobileScroll, { passive: true });');
-    expect(backdropSource).toContain('window.addEventListener("scroll", pauseHeroDuringMobileScroll, { passive: true });');
-    expect(backdropSource).toContain("if (!video.paused) video.pause();");
-    expect(backdropSource).toContain("void video.play().catch(() => undefined);");
-    expect(backdropSource).toContain("}, 180);");
+    expect(backdropSource).toContain("mediaReady: boolean");
+    expect(backdropSource).toContain("useHeroBackdropVideoSrc(mediaReady)");
+    expect(backdropSource).not.toContain("mobileScrollResumeTimerRef");
+    expect(backdropSource).not.toContain("pauseHeroDuringMobileScroll");
+    expect(backdropSource).not.toContain('window.addEventListener("touchstart"');
+    expect(backdropSource).not.toContain('window.addEventListener("scroll"');
+    expect(backdropSource).toContain("void video?.play().catch(() => undefined);");
   });
 
   it("does not mount heavy story media before its section is revealed", () => {

@@ -22,6 +22,7 @@ import {
   toSupportedPhoneCountry,
 } from "@/lib/phone-country";
 import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
+import type { Lang } from "@/i18n/languages";
 import { getCountryCallingCode, type CountryCode } from "libphonenumber-js";
 
 const teamImageMap: Record<string, string> = {
@@ -62,6 +63,19 @@ type PartnerDetailData = {
 };
 type LegalTitle = "Terms & Conditions" | "Privacy Policy";
 type LegalSection = { heading: string; body: string; items?: string[] };
+
+const analyticsPrivacyBody =
+  "Optional first-party analytics are activated only with your permission. They measure visits, navigation, active time, interactions, device context, performance, errors, and a server-derived IP address and coarse network location. Pseudonymous event data is retained for up to 180 days and session data for up to 395 days; raw IP addresses are automatically removed after 30 days. We do not record form contents or passwords. You may change your choice through Cookie preferences in the footer.";
+
+// Modals are lazy-loaded by the client shell, so keep this detailed policy copy
+// with the modal instead of inflating the initial homepage translation catalog.
+const analyticsPrivacyBodyByLanguage: Record<Lang, string> = {
+  en: analyticsPrivacyBody,
+  de: "Optionale, eigene Analysen werden nur mit Ihrer Zustimmung aktiviert. Sie messen Besuche, Navigation, aktive Zeit, Interaktionen, Gerätekontext, Leistung, Fehler sowie eine serverseitig ermittelte IP-Adresse und einen ungefähren Netzwerkstandort. Pseudonyme Ereignisdaten werden bis zu 180 Tage und Sitzungsdaten bis zu 395 Tage gespeichert; rohe IP-Adressen werden nach 30 Tagen automatisch entfernt. Formularinhalte oder Passwörter werden nicht erfasst. Ihre Auswahl können Sie über die Cookie-Einstellungen in der Fußzeile ändern.",
+  pl: "Opcjonalna analityka własna jest aktywowana wyłącznie za zgodą. Mierzy wizyty, nawigację, aktywny czas, interakcje, kontekst urządzenia, wydajność, błędy oraz adres IP i przybliżoną lokalizację sieciową ustalone przez serwer. Pseudonimizowane dane zdarzeń przechowujemy do 180 dni, a dane sesji do 395 dni; surowe adresy IP są automatycznie usuwane po 30 dniach. Nie rejestrujemy treści formularzy ani haseł. Wybór można zmienić w ustawieniach plików cookie w stopce.",
+  sl: "Izbirna lastna analitika se aktivira samo z vašim dovoljenjem. Meri obiske, navigacijo, aktivni čas, interakcije, kontekst naprave, delovanje, napake ter strežniško določen naslov IP in približno omrežno lokacijo. Psevdonimizirani podatki o dogodkih se hranijo do 180 dni, podatki o sejah pa do 395 dni; neobdelani naslovi IP se po 30 dneh samodejno odstranijo. Vsebine obrazcev in gesel ne beležimo. Izbiro lahko spremenite v nastavitvah piškotkov v nogi.",
+  ru: "Необязательная собственная аналитика включается только с вашего разрешения. Она измеряет посещения, навигацию, активное время, взаимодействия, контекст устройства, производительность, ошибки, а также определённый сервером IP-адрес и примерное сетевое местоположение. Псевдонимизированные данные о событиях хранятся до 180 дней, данные о сеансах — до 395 дней; исходные IP-адреса автоматически удаляются через 30 дней. Мы не записываем содержимое форм и пароли. Выбор можно изменить в настройках файлов cookie в нижней части сайта.",
+};
 
 const dialogFocusableSelector = [
   "a[href]",
@@ -343,8 +357,7 @@ const legalCopy: Record<LegalTitle, LegalSection[]> = {
     },
     {
       heading: "8. Cookies & Tracking",
-      body:
-        "We use cookies and analytics tools to enhance user experience and monitor platform performance. You may manage cookie preferences through your browser settings.",
+      body: analyticsPrivacyBody,
     },
     {
       heading: "9. Your Rights",
@@ -513,8 +526,8 @@ export function Modals() {
               promptRequest={isContactPromptData(modalData) ? modalData : null}
             />
           )}
-          {modal === "terms" && <Legal title="Terms & Conditions" tx={tx} />}
-          {modal === "privacy" && <Legal title="Privacy Policy" tx={tx} />}
+          {modal === "terms" && <Legal title="Terms & Conditions" tx={tx} lang={lang} />}
+          {modal === "privacy" && <Legal title="Privacy Policy" tx={tx} lang={lang} />}
           {modal === "journey" && <JourneyDetail data={modalData as JourneyDetailData} tx={tx} />}
           {modal === "team" && <TeamDetail data={modalData as TeamDetailData} tx={tx} />}
           {modal === "partner" && <PartnerDetail data={modalData as PartnerDetailData} tx={tx} />}
@@ -962,7 +975,15 @@ function AccessModal({ mode, tx }: { mode: "login" | "register"; tx: (text: stri
   );
 }
 
-function Legal({ title, tx }: { title: LegalTitle; tx: (text: string) => string }) {
+function Legal({
+  title,
+  tx,
+  lang,
+}: {
+  title: LegalTitle;
+  tx: (text: string) => string;
+  lang: Lang;
+}) {
   const sections = legalCopy[title];
 
   return (
@@ -973,7 +994,11 @@ function Legal({ title, tx }: { title: LegalTitle; tx: (text: string) => string 
         {sections.map((section) => (
           <section key={section.heading}>
             <h4 className="font-display text-lg">{tx(section.heading)}</h4>
-            <p className="mt-2 text-sm leading-relaxed text-foreground/80">{tx(section.body)}</p>
+            <p className="mt-2 text-sm leading-relaxed text-foreground/80">
+              {section.body === analyticsPrivacyBody
+                ? analyticsPrivacyBodyByLanguage[lang]
+                : tx(section.body)}
+            </p>
             {section.items && (
               <ul className="mt-3 list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
                 {section.items.map((item) => (

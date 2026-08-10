@@ -4,8 +4,11 @@ import { extname, resolve } from "node:path";
 
 const buildDirectory = resolve(process.cwd(), ".next");
 const manifestPath = resolve(buildDirectory, "server/app/page_client-reference-manifest.js");
+const adminAnalyticsManifestPath = resolve(
+  buildDirectory,
+  "server/app/admin/analytics/page_client-reference-manifest.js",
+);
 const buildManifestPath = resolve(buildDirectory, "build-manifest.json");
-const manifestPrefix = 'globalThis.__RSC_MANIFEST["/page"] = ';
 
 const budgets = {
   homeJavaScriptRaw: 1_200_000,
@@ -17,10 +20,10 @@ const budgets = {
   // The shared currency/progress renderer is intentionally kept in the
   // homepage chunk so every locale receives the same alignment logic.
   largestJavaScriptRaw: 467_000,
-  // Next's raw chunk total varies slightly as route manifests change; keep a
-  // narrow raw allowance while the compressed production ceiling stays fixed.
-  allJavaScriptRaw: 2_920_000,
-  allJavaScriptGzip: 870_000,
+  // Private analytics is a separate route, so measure its actual route
+  // payload rather than summing mutually exclusive chunks from every route.
+  adminAnalyticsJavaScriptRaw: 665_000,
+  adminAnalyticsJavaScriptGzip: 200_000,
   allCssRaw: 350_000,
   allCssGzip: 65_000,
 };
@@ -60,24 +63,37 @@ function formatBytes(value) {
 await stat(manifestPath).catch(() => {
   throw new Error("Next production output is missing. Run `npm run build` before the budget gate.");
 });
+await stat(adminAnalyticsManifestPath).catch(() => {
+  throw new Error("The admin analytics client-reference manifest is missing.");
+});
 
-const manifestSource = await readFile(manifestPath, "utf8");
-const manifestStart = manifestSource.indexOf(manifestPrefix);
-if (manifestStart < 0) {
-  throw new Error("Could not read the homepage client-reference manifest.");
+function parseRouteManifest(source, routeKey) {
+  const prefix = `globalThis.__RSC_MANIFEST["${routeKey}"] = `;
+  const start = source.indexOf(prefix);
+  if (start < 0) throw new Error(`Could not read the ${routeKey} client-reference manifest.`);
+  return JSON.parse(source
+    .slice(start + prefix.length)
+    .trim()
+    .replace(/;\s*$/, ""));
 }
-const manifestJson = manifestSource
-  .slice(manifestStart + manifestPrefix.length)
-  .trim()
-  .replace(/;\s*$/, "");
-const manifest = JSON.parse(manifestJson);
+
+const manifest = parseRouteManifest(await readFile(manifestPath, "utf8"), "/page");
+const adminAnalyticsManifest = parseRouteManifest(
+  await readFile(adminAnalyticsManifestPath, "utf8"),
+  "/admin/analytics/page",
+);
 const buildManifest = JSON.parse(await readFile(buildManifestPath, "utf8"));
 const pageKey = "[project]/src/app/page";
-const homeJavaScript = uniqueBuildPaths([
+const routeJavaScript = (routeManifest, routePageKey) => uniqueBuildPaths([
   ...(buildManifest.polyfillFiles ?? []),
   ...(buildManifest.rootMainFiles ?? []),
-  ...(manifest.entryJSFiles?.[pageKey] ?? []),
+  ...(routeManifest.entryJSFiles?.[routePageKey] ?? []),
 ]);
+const homeJavaScript = routeJavaScript(manifest, pageKey);
+const adminAnalyticsJavaScript = routeJavaScript(
+  adminAnalyticsManifest,
+  "[project]/src/app/admin/analytics/page",
+);
 const homeCss = uniqueBuildPaths(
   (manifest.entryCSSFiles?.[pageKey] ?? []).map((entry) => entry.path),
 );
@@ -90,6 +106,7 @@ const allStaticFiles = await listFiles(resolve(buildDirectory, "static/chunks"))
 const allJavaScript = allStaticFiles.filter((path) => extname(path) === ".js");
 const allCss = allStaticFiles.filter((path) => extname(path) === ".css");
 const homeJsSize = await measure(homeJavaScript);
+const adminAnalyticsJsSize = await measure(adminAnalyticsJavaScript);
 const homeCssSize = await measure(homeCss);
 const allJsSize = await measure(allJavaScript);
 const allCssSize = await measure(allCss);
@@ -100,8 +117,8 @@ const measurements = [
   ["Homepage CSS (raw)", homeCssSize.raw, budgets.homeCssRaw],
   ["Homepage CSS (gzip)", homeCssSize.gzip, budgets.homeCssGzip],
   ["Largest JavaScript chunk (raw)", allJsSize.largestRaw, budgets.largestJavaScriptRaw],
-  ["All JavaScript chunks (raw)", allJsSize.raw, budgets.allJavaScriptRaw],
-  ["All JavaScript chunks (gzip)", allJsSize.gzip, budgets.allJavaScriptGzip],
+  ["Admin analytics JavaScript (raw)", adminAnalyticsJsSize.raw, budgets.adminAnalyticsJavaScriptRaw],
+  ["Admin analytics JavaScript (gzip)", adminAnalyticsJsSize.gzip, budgets.adminAnalyticsJavaScriptGzip],
   ["All CSS chunks (raw)", allCssSize.raw, budgets.allCssRaw],
   ["All CSS chunks (gzip)", allCssSize.gzip, budgets.allCssGzip],
 ];

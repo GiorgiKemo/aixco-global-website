@@ -48,7 +48,12 @@ export async function POST(request: Request) {
   }
 
   if (decision.ok) {
-    auditAdminAction({ action: "admin.logout", actor: decision.principal, outcome: "success" });
+    await auditAdminAction({
+      action: "admin.logout",
+      actor: decision.principal,
+      outcome: "success",
+      headers: request.headers,
+    });
   }
 
   return clearLegacySession(request);

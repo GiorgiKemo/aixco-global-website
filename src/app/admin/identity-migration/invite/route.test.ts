@@ -45,7 +45,20 @@ describe("admin identity invitation route", () => {
       role: "admin",
       redirectTo: "https://www.aixco.global/admin/auth/complete",
     });
+    expect(mocks.audit).toHaveBeenNthCalledWith(1, expect.objectContaining({
+      action: "admin.identity.invite.requested",
+    }), { required: true });
     expect(mocks.audit).toHaveBeenCalledWith(expect.objectContaining({ outcome: "success" }));
+  });
+
+  it("does not send an invite when the required pre-action audit cannot persist", async () => {
+    mocks.audit.mockRejectedValueOnce(new Error("audit unavailable"));
+    const response = await POST(request());
+    expect(response.headers.get("location")).toContain("error=invite-failed");
+    expect(mocks.invite).not.toHaveBeenCalled();
+    expect(mocks.audit).toHaveBeenNthCalledWith(1, expect.objectContaining({
+      action: "admin.identity.invite.requested",
+    }), { required: true });
   });
 
   it("rejects cross-origin invite submissions", async () => {

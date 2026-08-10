@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { analyticsCollectionAllowed } from "@/lib/analytics/client";
 
 type RecoveryLang = "en" | "de" | "pl" | "sl" | "ru";
 
@@ -33,13 +34,15 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
     document.documentElement.lang = storedLang;
     document.documentElement.dir = "ltr";
     console.error("AIXCO root render failed.", { digest: safeDigest });
-    void fetch("/api/client-errors", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ kind: "root-render", digest: safeDigest, locale: storedLang }),
-      credentials: "same-origin",
-      keepalive: true,
-    }).catch(() => undefined);
+    if (analyticsCollectionAllowed()) {
+      void fetch("/api/client-errors", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ kind: "root-render", digest: safeDigest, locale: storedLang }),
+        credentials: "same-origin",
+        keepalive: true,
+      }).catch(() => undefined);
+    }
   }, [error]);
 
   const copy = recoveryCopy[lang];

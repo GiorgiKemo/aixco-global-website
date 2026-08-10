@@ -16,6 +16,8 @@ const getContentSecurityPolicy = () => {
   const connectSources = [
     "'self'",
     "https://*.supabase.co",
+    "https://www.google-analytics.com",
+    "https://www.google.com",
     "wss://*.supabase.co",
     supabaseOrigin,
     isDevelopment ? "http://localhost:*" : null,
@@ -29,7 +31,7 @@ const getContentSecurityPolicy = () => {
     `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDevelopment ? " 'unsafe-eval'" : ""}`,
     "script-src-attr 'none'",
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
+    "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com",
     "font-src 'self' data:",
     "frame-src 'self' https://www.googletagmanager.com",
     `connect-src ${connectSources.join(" ")}`,
@@ -64,7 +66,7 @@ const nextConfig = {
     webVitalsAttribution: ["CLS", "LCP", "INP"],
   },
   images: {
-    qualities: [62, 75, 78],
+    qualities: [62, 75, 78, 90],
     localPatterns: [
       {
         pathname: "/aixco-global-op2/images/**",

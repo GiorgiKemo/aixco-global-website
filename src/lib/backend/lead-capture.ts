@@ -7,6 +7,8 @@ import {
   type LeadCaptureAntiAbuseInput,
   type PortalEventInput,
 } from "@/lib/backend/lead-capture-contracts";
+import { analyticsCollectionAllowed, recordAnalyticsEvent } from "@/lib/analytics/client";
+import { ANALYTICS_SESSION_STORAGE_KEY } from "@/lib/analytics/constants";
 import { isSafePortalUrl } from "@/lib/security/urls";
 
 type CaptureEndpoint = "contact" | "chat" | "portal-event";
@@ -34,14 +36,33 @@ function getBrowserContext(locale?: string): BrowserContextInput {
     };
   }
 
+  let analyticsSessionId: string | null = null;
+  try {
+    const stored = JSON.parse(window.sessionStorage.getItem(ANALYTICS_SESSION_STORAGE_KEY) ?? "null") as {
+      id?: unknown;
+    } | null;
+    analyticsSessionId = analyticsCollectionAllowed()
+      && typeof stored?.id === "string"
+      && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(stored.id)
+      ? stored.id
+      : null;
+  } catch {
+    analyticsSessionId = null;
+  }
+
+  const safeHash = /^#[a-z0-9][a-z0-9_-]{0,119}$/i.test(window.location.hash)
+    ? window.location.hash
+    : "";
+
   return {
     locale: locale?.trim() || window.navigator.language || null,
-    page_path: `${window.location.pathname}${window.location.search}${window.location.hash}`,
+    page_path: `${window.location.pathname}${safeHash}`,
     metadata: {
       referrer: document.referrer || null,
       viewport_width: window.innerWidth,
       viewport_height: window.innerHeight,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || null,
+      analytics_session_id: analyticsSessionId,
     },
   };
 }
@@ -100,11 +121,43 @@ async function postCapture(
     const result = await readCaptureResponse(response);
 
     if (!response.ok && result.ok) {
+      recordAnalyticsEvent({
+        type: "form_error",
+        name: "form_failed",
+        targetLabel: endpoint,
+        metadata: { source: "lead_capture", status: `http_${response.status}` },
+      });
       return { ok: false, reason: `Lead capture failed with status ${response.status}.` };
+    }
+
+    if (result.ok) {
+      const event = endpoint === "contact"
+        ? { type: "form_submit" as const, name: "contact_request_acknowledged" as const }
+        : endpoint === "chat"
+          ? { type: "click" as const, name: "chat_message" as const }
+          : { type: "portal_handoff" as const, name: "portal_handoff" as const };
+      recordAnalyticsEvent({
+        ...event,
+        targetLabel: endpoint,
+        metadata: { source: "lead_capture", status: "stored" },
+      });
+    } else {
+      recordAnalyticsEvent({
+        type: "form_error",
+        name: "form_failed",
+        targetLabel: endpoint,
+        metadata: { source: "lead_capture", status: `http_${response.status}` },
+      });
     }
 
     return result;
   } catch (error) {
+    recordAnalyticsEvent({
+      type: "form_error",
+      name: "form_failed",
+      targetLabel: endpoint,
+      metadata: { source: "lead_capture", status: "network_error" },
+    });
     return {
       ok: false,
       reason: error instanceof Error ? error.message : "Unknown lead capture request error.",

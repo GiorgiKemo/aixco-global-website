@@ -14,6 +14,7 @@ describe("client recovery surfaces", () => {
   it("reports bounded render metadata without sending exception text or stacks", () => {
     for (const source of [routeError, globalError]) {
       expect(source).toContain('fetch("/api/client-errors"');
+      expect(source).toContain("analyticsCollectionAllowed()");
       expect(source).toContain("/^[a-zA-Z0-9._-]{1,128}$/");
       expect(source).not.toContain("error.message");
       expect(source).not.toContain("error.stack");

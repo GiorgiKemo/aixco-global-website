@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { installNecessaryOnlyAnalyticsConsent } from "./lib/analytics-consent.mjs";
 
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
 const viewports = [
@@ -41,7 +42,9 @@ try {
     const context = await browser.newContext({
       viewport: { width: viewport.width, height: viewport.height },
       reducedMotion: "no-preference",
+      extraHTTPHeaders: { "x-country-code": "CH" },
     });
+    await installNecessaryOnlyAnalyticsConsent(context);
     const page = await context.newPage();
     const consoleErrors = observePageErrors(page);
 
@@ -265,7 +268,7 @@ try {
           errors.push(`${viewport.name}/menu: drawer has tap targets below 44px`);
         }
 
-        await page.locator('[role="dialog"][aria-modal="true"] > button').click();
+        await page.locator('.story-mobile-header button[aria-controls="story-mobile-menu"]').click();
         await page.waitForFunction(
           () => document.querySelector('[data-story-section="hero"]')?.getAttribute("data-story-active") === "true",
           undefined,
@@ -302,45 +305,32 @@ try {
 
         await page.keyboard.press("Escape");
         await modal.waitFor({ state: "detached" });
-        await page.getByRole("button", { name: /Open live chat/i }).click();
-        const chat = page.getByRole("dialog", { name: /AIXCO live chat/i });
-        await chat.waitFor({ state: "visible" });
-        await page.waitForTimeout(400);
-        const chatMetrics = await chat.evaluate((dialog) => {
+        const whatsapp = page.locator('[data-market-whatsapp-link="true"]');
+        await whatsapp.waitFor({ state: "visible" });
+        const whatsappMetrics = await whatsapp.evaluate((link) => {
           const root = document.documentElement;
-          const rect = dialog.getBoundingClientRect();
-          const targets = [...dialog.querySelectorAll("a, button")]
-            .filter((target) => {
-              const style = getComputedStyle(target);
-              const targetRect = target.getBoundingClientRect();
-              return style.display !== "none" && style.visibility !== "hidden" && targetRect.width > 0 && targetRect.height > 0;
-            })
-            .map((target) => {
-              const targetRect = target.getBoundingClientRect();
-              return {
-                name: target.getAttribute("aria-label") || (target.textContent ?? "").replace(/\s+/g, " ").trim(),
-                width: Math.round(targetRect.width),
-                height: Math.round(targetRect.height),
-              };
-            });
+          const rect = link.getBoundingClientRect();
           return {
             withinViewport: rect.top >= -3
               && rect.right <= root.clientWidth + 3
               && rect.bottom <= window.innerHeight + 3
               && rect.left >= -3,
             horizontalOverflow: root.scrollWidth - root.clientWidth,
-            targets,
+            width: Math.round(rect.width),
+            height: Math.round(rect.height),
+            href: link.getAttribute("href"),
           };
         });
 
-        if (!chatMetrics.withinViewport || chatMetrics.horizontalOverflow > 4) {
-          errors.push(`${viewport.name}/chat: panel is not fully contained by the viewport`);
+        if (!whatsappMetrics.withinViewport || whatsappMetrics.horizontalOverflow > 4) {
+          errors.push(`${viewport.name}/whatsapp: launcher is not fully contained by the viewport`);
         }
-        const undersizedChatTargets = chatMetrics.targets.filter((target) => target.width < 44 || target.height < 44);
-        if (undersizedChatTargets.length) {
-          errors.push(`${viewport.name}/chat: panel has tap targets below 44px ${JSON.stringify(undersizedChatTargets)}`);
+        if (whatsappMetrics.width < 44 || whatsappMetrics.height < 44) {
+          errors.push(`${viewport.name}/whatsapp: launcher is below 44px`);
         }
-        await page.getByRole("button", { name: /Close live chat/i }).click();
+        if (whatsappMetrics.href !== "https://wa.me/41798320581") {
+          errors.push(`${viewport.name}/whatsapp: unexpected Swiss destination ${whatsappMetrics.href}`);
+        }
 
         await page.locator('.story-mobile-header button[aria-label$="Change language"]').click();
         const languageList = page.locator('.story-mobile-header ul[aria-label="Change language"]');
@@ -358,7 +348,7 @@ try {
         );
         const slovenianMetrics = await page.evaluate(() => {
           const root = document.documentElement;
-          const floating = document.querySelector('[data-chat-floating-container="true"]');
+          const floating = document.querySelector('[data-whatsapp-floating-container="true"]');
           const rect = floating?.getBoundingClientRect();
           return {
             language: root.lang,
@@ -387,7 +377,9 @@ try {
     const context = await browser.newContext({
       viewport: { width: viewport.width, height: viewport.height },
       reducedMotion: "reduce",
+      extraHTTPHeaders: { "x-country-code": "CH" },
     });
+    await installNecessaryOnlyAnalyticsConsent(context);
     const page = await context.newPage();
     const consoleErrors = observePageErrors(page);
 
@@ -508,8 +500,8 @@ try {
         const propertyMenuMetrics = await propertyMenu.evaluate((drawer) => {
           const root = document.documentElement;
           const rect = drawer.getBoundingClientRect();
-          const chat = document.querySelector('[data-chat-floating-container="true"]');
-          const chatStyle = chat ? getComputedStyle(chat) : null;
+          const whatsapp = document.querySelector('[data-whatsapp-floating-container="true"]');
+          const whatsappStyle = whatsapp ? getComputedStyle(whatsapp) : null;
           return {
             rootOverflow: getComputedStyle(root).overflow,
             bodyOverflow: getComputedStyle(document.body).overflow,
@@ -517,7 +509,7 @@ try {
               && rect.right <= root.clientWidth + 3
               && rect.bottom <= window.innerHeight + 3
               && rect.left >= -3,
-            chatHidden: !chat || chatStyle?.visibility === "hidden" || chatStyle?.display === "none",
+            whatsappHidden: !whatsapp || whatsappStyle?.visibility === "hidden" || whatsappStyle?.display === "none",
           };
         });
 
@@ -525,7 +517,7 @@ try {
           errors.push(`${label}/menu: page scroll is not locked`);
         }
         if (!propertyMenuMetrics.withinViewport) errors.push(`${label}/menu: drawer is outside the viewport`);
-        if (!propertyMenuMetrics.chatHidden) errors.push(`${label}/menu: chat remains above the property drawer`);
+        if (!propertyMenuMetrics.whatsappHidden) errors.push(`${label}/menu: WhatsApp remains above the property drawer`);
         await propertyMenu.getByRole("button", { name: /Close menu/i }).click();
         await propertyMenu.waitFor({ state: "detached" });
       }

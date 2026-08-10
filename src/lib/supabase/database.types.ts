@@ -310,6 +310,192 @@ export type Database = {
         };
         Update: never;
       };
+      site_analytics_sessions: {
+        Row: {
+          id: string;
+          visitor_id: string;
+          consent_version: string;
+          created_at: string;
+          updated_at: string;
+          started_at: string;
+          last_seen_at: string;
+          ended_at: string | null;
+          active_seconds: number;
+          landing_path: string | null;
+          exit_path: string | null;
+          referrer_host: string | null;
+          referrer_path: string | null;
+          utm_source: string | null;
+          utm_medium: string | null;
+          utm_campaign: string | null;
+          utm_content: string | null;
+          utm_term: string | null;
+          locale: string | null;
+          timezone: string | null;
+          screen_width: number | null;
+          screen_height: number | null;
+          viewport_width: number | null;
+          viewport_height: number | null;
+          device_type: string | null;
+          browser_name: string | null;
+          os_name: string | null;
+          user_agent: string | null;
+          is_returning: boolean;
+        };
+        Insert: {
+          id?: string;
+          visitor_id: string;
+          consent_version: string;
+          created_at?: string;
+          updated_at?: string;
+          started_at?: string;
+          last_seen_at?: string;
+          ended_at?: string | null;
+          active_seconds?: number;
+          landing_path?: string | null;
+          exit_path?: string | null;
+          referrer_host?: string | null;
+          referrer_path?: string | null;
+          utm_source?: string | null;
+          utm_medium?: string | null;
+          utm_campaign?: string | null;
+          utm_content?: string | null;
+          utm_term?: string | null;
+          locale?: string | null;
+          timezone?: string | null;
+          screen_width?: number | null;
+          screen_height?: number | null;
+          viewport_width?: number | null;
+          viewport_height?: number | null;
+          device_type?: string | null;
+          browser_name?: string | null;
+          os_name?: string | null;
+          user_agent?: string | null;
+          is_returning?: boolean;
+        };
+        Update: Partial<Database["public"]["Tables"]["site_analytics_sessions"]["Insert"]>;
+      };
+      site_analytics_session_network: {
+        Row: {
+          session_id: string;
+          ip_address: string | null;
+          ip_hash: string | null;
+          country_code: string | null;
+          region: string | null;
+          city: string | null;
+          first_seen_at: string;
+          last_seen_at: string;
+          raw_ip_expires_at: string | null;
+          raw_ip_purged_at: string | null;
+        };
+        Insert: {
+          session_id: string;
+          ip_address?: string | null;
+          ip_hash?: string | null;
+          country_code?: string | null;
+          region?: string | null;
+          city?: string | null;
+          first_seen_at?: string;
+          last_seen_at?: string;
+          raw_ip_expires_at?: string | null;
+          raw_ip_purged_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["site_analytics_session_network"]["Insert"]>;
+      };
+      site_analytics_events: {
+        Row: {
+          id: string;
+          session_id: string;
+          received_at: string;
+          occurred_at: string;
+          event_type: string;
+          name: string;
+          page_path: string | null;
+          section_id: string | null;
+          target_label: string | null;
+          value: number | null;
+          duration_ms: number | null;
+          scroll_depth: number | null;
+          metadata: Json;
+        };
+        Insert: {
+          id?: string;
+          session_id: string;
+          received_at?: string;
+          occurred_at?: string;
+          event_type: string;
+          name: string;
+          page_path?: string | null;
+          section_id?: string | null;
+          target_label?: string | null;
+          value?: number | null;
+          duration_ms?: number | null;
+          scroll_depth?: number | null;
+          metadata?: Json;
+        };
+        Update: never;
+      };
+      admin_audit_events: {
+        Row: {
+          id: string;
+          occurred_at: string;
+          actor_id: string | null;
+          actor_email_hash: string | null;
+          action: string;
+          outcome: "success" | "failure" | "denied";
+          auth_method: string | null;
+          target_type: string | null;
+          target_id: string | null;
+          ip_address: string | null;
+          ip_hash: string | null;
+          raw_ip_expires_at: string | null;
+          raw_ip_purged_at: string | null;
+          user_agent: string | null;
+          request_id: string | null;
+          details: Json;
+        };
+        Insert: {
+          id?: string;
+          occurred_at?: string;
+          actor_id?: string | null;
+          actor_email_hash?: string | null;
+          action: string;
+          outcome: "success" | "failure" | "denied";
+          auth_method?: string | null;
+          target_type?: string | null;
+          target_id?: string | null;
+          ip_address?: string | null;
+          ip_hash?: string | null;
+          raw_ip_expires_at?: string | null;
+          raw_ip_purged_at?: string | null;
+          user_agent?: string | null;
+          request_id?: string | null;
+          details?: Json;
+        };
+        Update: never;
+      };
+      admin_login_rate_limits: {
+        Row: {
+          client_hash: string;
+          window_started_at: string;
+          window_expires_at: string;
+          attempt_count: number;
+          updated_at: string;
+        };
+        Insert: {
+          client_hash: string;
+          window_started_at?: string;
+          window_expires_at: string;
+          attempt_count?: number;
+          updated_at?: string;
+        };
+        Update: {
+          window_started_at?: string;
+          window_expires_at?: string;
+          attempt_count?: number;
+          updated_at?: string;
+        };
+      };
       lead_capture_attempts: {
         Row: {
           id: number;
@@ -323,14 +509,14 @@ export type Database = {
         Insert: {
           id?: never;
           created_at?: string;
-          resource: "contact" | "chat" | "portal-event";
+          resource: "contact" | "chat" | "portal-event" | "telemetry";
           client_hash: string;
           recipient_hash?: string | null;
           allowed: boolean;
           reason?: string | null;
         };
         Update: {
-          resource?: "contact" | "chat" | "portal-event";
+          resource?: "contact" | "chat" | "portal-event" | "telemetry";
           client_hash?: string;
           recipient_hash?: string | null;
           allowed?: boolean;
@@ -548,6 +734,40 @@ export type Database = {
           orphan_email_events_deleted: number;
           telemetry_events_deleted: number;
         }[];
+      };
+      get_site_analytics_dashboard: {
+        Args: {
+          p_start?: string;
+          p_end?: string;
+          p_limit?: number;
+        };
+        Returns: Json;
+      };
+      consume_admin_login_rate_limit: {
+        Args: {
+          p_client_hash: string;
+          p_limit?: number;
+          p_window_seconds?: number;
+        };
+        Returns: { allowed: boolean; retry_after_seconds: number }[];
+      };
+      store_site_analytics_batch: {
+        Args: {
+          p_session: Json;
+          p_network: Json;
+          p_events: Json;
+        };
+        Returns: number;
+      };
+      purge_site_analytics_data: {
+        Args: {
+          p_event_days?: number;
+          p_session_days?: number;
+          p_raw_ip_days?: number;
+          p_audit_days?: number;
+          p_admin_login_limit_days?: number;
+        };
+        Returns: Json;
       };
     };
     Enums: Record<string, never>;

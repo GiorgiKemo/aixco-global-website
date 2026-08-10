@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { installNecessaryOnlyAnalyticsConsent } from "./lib/analytics-consent.mjs";
 
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
 const locales = ["en", "de", "pl", "sl", "ru"];
@@ -24,6 +25,7 @@ try {
         reducedMotion: "reduce",
         locale: locale === "sl" ? "sl-SI" : locale,
       });
+      await installNecessaryOnlyAnalyticsConsent(context);
       await context.addInitScript((selectedLocale) => {
         localStorage.setItem("aixco-lang", selectedLocale);
       }, locale);

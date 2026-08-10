@@ -93,7 +93,7 @@ try {
               "[aria-hidden='true']",
               "[data-story-scene-media]",
               ".story-section-boundary",
-              "[data-chat-floating-container='true']",
+              "[data-whatsapp-floating-container='true']",
               "#story-mobile-menu",
               "[role='listbox']",
             ].join(",");

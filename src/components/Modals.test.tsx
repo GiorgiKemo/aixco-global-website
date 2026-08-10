@@ -142,6 +142,25 @@ describe("Modals", () => {
     expect(screen.getByRole("dialog", { name: "Privacy Policy" })).toBeInTheDocument();
   });
 
+  it("keeps the detailed analytics disclosure localized in the lazy legal modal", async () => {
+    window.localStorage.setItem("aixco-lang", "de");
+
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <PrivacyTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open privacy/i }));
+
+    expect(await screen.findByText(/Optionale, eigene Analysen/)).toHaveTextContent(
+      "rohe IP-Adressen werden nach 30 Tagen automatisch entfernt",
+    );
+  });
+
   it("opens the contact dialog from the progressive-enhancement URL contract", () => {
     window.history.replaceState({}, "", "/?modal=contact");
 

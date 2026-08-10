@@ -19,6 +19,7 @@ export type RateLimitResult = {
 
 const STORE_KEY = "__AIXCO_RATE_LIMIT_STORE__";
 export const RATE_LIMIT_MAX_KEYS = 5_000;
+const RATE_LIMIT_PRUNE_BATCH_SIZE = 32;
 
 type RateLimitGlobal = typeof globalThis & {
   [STORE_KEY]?: Map<string, RateLimitEntry>;
@@ -50,22 +51,20 @@ export function getRateLimitClientId(headers: Headers) {
 export function checkRateLimit({ key, limit, windowMs, now = Date.now() }: RateLimitOptions): RateLimitResult {
   const store = getStore();
 
+  // Amortize expiry cleanup so a unique-IP flood cannot turn every request
+  // into an O(max keys) scan. Map order is maintained as a lightweight LRU.
+  let inspected = 0;
   for (const [entryKey, entry] of store) {
-    if (entry.resetAt <= now) {
-      store.delete(entryKey);
-    }
+    if (inspected >= RATE_LIMIT_PRUNE_BATCH_SIZE) break;
+    inspected += 1;
+    if (entry.resetAt <= now) store.delete(entryKey);
   }
 
-  const existing = store.get(key);
+  const candidate = store.get(key);
+  const existing = candidate && candidate.resetAt > now ? candidate : undefined;
+  if (candidate && !existing) store.delete(key);
   if (!existing && store.size >= RATE_LIMIT_MAX_KEYS) {
-    let oldestKey: string | undefined;
-    let oldestReset = Number.POSITIVE_INFINITY;
-    for (const [candidateKey, candidate] of store) {
-      if (candidate.resetAt < oldestReset) {
-        oldestKey = candidateKey;
-        oldestReset = candidate.resetAt;
-      }
-    }
+    const oldestKey = store.keys().next().value as string | undefined;
     if (oldestKey) store.delete(oldestKey);
   }
   const entry =
@@ -77,6 +76,7 @@ export function checkRateLimit({ key, limit, windowMs, now = Date.now() }: RateL
         };
 
   entry.count += 1;
+  if (existing) store.delete(key);
   store.set(key, entry);
 
   const retryAfterSeconds = Math.max(1, Math.ceil((entry.resetAt - now) / 1000));

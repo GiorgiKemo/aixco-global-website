@@ -22,6 +22,7 @@ const allowedMetadataKeys = new Set([
   "metricId",
   "navigationType",
   "routeKind",
+  "sessionId",
   "source",
 ]);
 

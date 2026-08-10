@@ -28,6 +28,8 @@
     "smoke:forms": "node scripts/verify-contact-forms.mjs",
     "smoke:mobile-scope": "node scripts/verify-mobile-only-scope.mjs",
     "smoke:currency": "node scripts/verify-currency-glyph-alignment.mjs",
+    "smoke:analytics": "node scripts/verify-analytics-consent.mjs",
+    "smoke:whatsapp": "node scripts/verify-market-whatsapp.mjs",
     "smoke:typography": "node scripts/verify-typography-consistency.mjs",
     "smoke:title-motion": "node scripts/verify-title-animations.mjs",
     "smoke:transitions": "node scripts/verify-section-transitions.mjs",

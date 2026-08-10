@@ -58,6 +58,12 @@ const keyedText: Record<string, string> = {
   "cta.contact": "Contact AIXCO",
 };
 const supplementalTranslations: Partial<Record<string, Partial<Record<CatalogLang, string>>>> = {
+  "Cookie preferences": {
+    de: "Cookie-Einstellungen",
+    pl: "Ustawienia plików cookie",
+    sl: "Nastavitve piškotkov",
+    ru: "Настройки файлов cookie",
+  },
   "Skip to main content": {
     de: "Zum Hauptinhalt springen",
     ru: "Перейти к основному содержанию",

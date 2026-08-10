@@ -16,13 +16,13 @@ const MINIMUM_MIGRATION_PASSWORD_LENGTH = 16;
 const MINIMUM_SESSION_SECRET_LENGTH = 32;
 
 export type AdminAuthMode = "identity" | "migration";
-export type AdminAuthentication = "supabase-mfa" | "legacy-shared-password";
+export type AdminAuthentication = "supabase-password" | "supabase-mfa" | "legacy-shared-password";
 
 export type AdminPrincipal = {
   id: string;
   email: string | null;
   authentication: AdminAuthentication;
-  aal: "aal2" | null;
+  aal: "aal1" | "aal2" | null;
 };
 
 export type AdminAuthFailureReason =
@@ -39,6 +39,7 @@ type AdminAuthConfig = {
   configured: boolean;
   mode: AdminAuthMode;
   role: string;
+  mfaRequired: boolean;
   identity: {
     configured: boolean;
     missing: string[];
@@ -69,6 +70,9 @@ function readAdminAuthMode(): { mode: AdminAuthMode; valid: boolean } {
 export function getAdminAuthConfig(): AdminAuthConfig {
   const modeResult = readAdminAuthMode();
   const role = readEnv("ADMIN_AUTH_ROLE") || DEFAULT_ADMIN_AUTH_ROLE;
+  // Keep MFA available as a production hardening option while allowing the
+  // local dashboard to use the requested simple email + password flow.
+  const mfaRequired = readEnv("ADMIN_REQUIRE_MFA") === "true";
   const supabaseAuth = getSupabaseAuthPublicConfig();
   const password = readEnv("ADMIN_DASHBOARD_PASSWORD");
   const sessionSecret = readEnv("ADMIN_SESSION_SECRET");
@@ -97,6 +101,7 @@ export function getAdminAuthConfig(): AdminAuthConfig {
     configured: modeResult.valid && missing.length === 0,
     mode: modeResult.mode,
     role,
+    mfaRequired,
     identity: {
       configured: identityConfigured,
       missing: supabaseAuth.missing,
@@ -135,6 +140,18 @@ async function getIdentityDecision(config: AdminAuthConfig): Promise<AdminAuthDe
 
     if (error || !user) return { ok: false, reason: "not-authenticated" };
     if (!hasAdminRole(user.app_metadata, config.role)) return { ok: false, reason: "not-authorized" };
+
+    if (!config.mfaRequired) {
+      return {
+        ok: true,
+        principal: {
+          id: user.id,
+          email: user.email ?? null,
+          authentication: "supabase-password",
+          aal: "aal1",
+        },
+      };
+    }
 
     const assurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
     if (assurance.error || assurance.data.currentLevel !== "aal2") {
@@ -192,6 +209,24 @@ export async function getAdminAuthDecision(): Promise<AdminAuthDecision> {
   return identity;
 }
 
+export async function getAal2AdminAuthDecision(): Promise<AdminAuthDecision> {
+  const decision = await getAdminAuthDecision();
+  if (!decision.ok) return decision;
+
+  if (!getAdminAuthConfig().mfaRequired && decision.principal.authentication === "supabase-password") {
+    return decision;
+  }
+
+  if (
+    decision.principal.authentication !== "supabase-mfa"
+    || decision.principal.aal !== "aal2"
+  ) {
+    return { ok: false, reason: "mfa-required" };
+  }
+
+  return decision;
+}
+
 export async function getAdminPrincipal() {
   const decision = await getAdminAuthDecision();
   return decision.ok ? decision.principal : null;
@@ -203,6 +238,15 @@ export async function hasAdminSession() {
 
 export async function requireAdminSession() {
   const decision = await getAdminAuthDecision();
+  if (!decision.ok) {
+    redirect(`/admin/login?error=${decision.reason}`);
+  }
+
+  return decision.principal;
+}
+
+export async function requireAal2AdminSession() {
+  const decision = await getAal2AdminAuthDecision();
   if (!decision.ok) {
     redirect(`/admin/login?error=${decision.reason}`);
   }

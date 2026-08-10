@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getAdminAuthDecision } from "@/lib/admin/auth";
+import { getAal2AdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
 import {
   LeadNotFoundError,
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       request.headers.get("content-type")?.includes("application/json"),
   );
 
-  const auth = await getAdminAuthDecision();
+  const auth = await getAal2AdminAuthDecision();
   if (!auth.ok) {
     if (wantsJson) return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
     return redirectTo(request, "/admin/login");
@@ -62,23 +62,34 @@ export async function POST(request: Request) {
   }
 
   try {
+    await auditAdminAction({
+      action: "lead.status.update.requested",
+      actor: auth.principal,
+      outcome: "success",
+      target: `${parsed.data.resource}:${parsed.data.id}`,
+      details: { status: parsed.data.status },
+      headers: request.headers,
+    }, { required: true });
+
     await updateLeadStatus(parsed.data.resource, parsed.data.id, parsed.data.status);
-    auditAdminAction({
+    await auditAdminAction({
       action: "lead.status.update",
       actor: auth.principal,
       outcome: "success",
       target: `${parsed.data.resource}:${parsed.data.id}`,
       details: { status: parsed.data.status },
+      headers: request.headers,
     });
     if (wantsJson) return NextResponse.json({ ok: true });
     return redirectTo(request, `/admin/leads?updated=1#${parsed.data.resource}-${parsed.data.id}`);
   } catch (error) {
-    auditAdminAction({
+    await auditAdminAction({
       action: "lead.status.update",
       actor: auth.principal,
       outcome: "failure",
       target: `${parsed.data.resource}:${parsed.data.id}`,
       details: { status: parsed.data.status },
+      headers: request.headers,
     });
     const notFound = error instanceof LeadNotFoundError;
     if (wantsJson) {

@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { installNecessaryOnlyAnalyticsConsent } from "./lib/analytics-consent.mjs";
 
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
 const viewports = [
@@ -13,6 +14,7 @@ const errors = [];
 try {
   for (const viewport of viewports) {
     const page = await browser.newPage({ viewport });
+    await installNecessaryOnlyAnalyticsConsent(page.context());
     const consoleErrors = [];
     page.on("console", (message) => {
       if (message.type() === "error") {

@@ -228,7 +228,7 @@ describe("index.css motion rules", () => {
     expect(socialLinks).toContain("aixcoLiveIcons.instagram");
     expect(socialLinks).toContain("aixcoLiveIcons.facebook");
     expect(socialLinks).toContain("aixcoLiveIcons.whatsapp");
-    expect(socialLinks).toContain("https://wa.me/41794340581");
+    expect(socialLinks).toContain("https://wa.me/41798320581");
     expect(socialLinks).toContain("whatsappContact = null");
     expect(socialLinks).toContain("key !== \"whatsapp\" || whatsappContact");
     expect(socialLinks).toContain("whatsappContact?.number");
@@ -304,31 +304,33 @@ describe("index.css motion rules", () => {
     expect(css).toContain("max-width: clamp(26rem, 34vw, 32rem) !important;");
   });
 
-  it("starts the About video immediately and resumes it without resetting its source", () => {
-    expect(desktopStoryHome).toContain("const shouldPlayVideo = shouldStartVideo;");
+  it("defers the About video until it is near and then resumes it without resetting its source", () => {
+    expect(desktopStoryHome).toContain("const [videoAttached, setVideoAttached] = useState(false);");
+    expect(desktopStoryHome).toContain("const shouldPlayVideo = videoAttached;");
+    expect(desktopStoryHome).toContain("if (shouldStartVideo) setVideoAttached(true);");
     expect(desktopStoryHome).toContain("if (!shouldPlayVideo)");
-    expect(desktopStoryHome).toContain("src={aixcoDubaiHeroVideo.src}");
-    expect(desktopStoryHome).toContain('preload="auto"');
+    expect(desktopStoryHome).toContain("src={videoAttached ? aixcoDubaiHeroVideo.src : undefined}");
+    expect(desktopStoryHome).toContain('preload={videoAttached ? "metadata" : "none"}');
     expect(desktopStoryHome).toContain("autoPlay");
     expect(desktopStoryHome).toContain("loop");
     expect(desktopStoryHome).not.toContain('video.removeAttribute("src");');
     expect(desktopStoryHome).not.toContain("setVideoStarted(false);");
-    expect(desktopStoryHome).toContain("shouldStartVideo={sectionPresence[1] ?? true}");
-    expect(desktopStoryHome).toContain("storyChapters.map((_, index) => index <= 1)");
+    expect(desktopStoryHome).toContain("shouldStartVideo={siteIntroReady && activeIndex === 1}");
+    expect(desktopStoryHome).toContain("storyChapters.map((_, index) => index === 0)");
     expect(desktopStoryHome).toContain("if (shouldPlayVideo) {\n                    void event.currentTarget.play().catch(() => undefined);");
     expect(desktopStoryHome).toContain("onPlaying={markVideoStarted}");
     expect(desktopStoryHome).toContain('data-about-video-poster=""');
     expect(desktopStoryHome).toContain('data-video-started={videoStarted ? "true" : "false"}');
     expect(desktopStoryHome).not.toContain("shouldExposeVideo");
     expect(desktopStoryHome).not.toContain("poster={aixcoDubaiHeroVideo.poster}");
-    expect(desktopStoryHome).toContain('fetchPriority="high"');
+    expect(desktopStoryHome).toContain('fetchPriority="auto"');
     expect(css).toContain("[data-story-section='about'] .story-about-cinematic-poster");
     expect(css).toContain(".story-about-cinematic-poster[data-video-started='true']");
     expect(css).toContain("transition: opacity 900ms var(--ease-apple)");
     expect(desktopStoryHome).toContain('document.addEventListener("visibilitychange", recoverPlayback);');
     expect(desktopStoryHome).toContain('window.addEventListener("focus", recoverPlayback);');
     expect(desktopStoryHome).toContain("onPause={(event) => {");
-    expect(desktopStoryHome).toContain("function useHeroBackdropVideoSrc()");
+    expect(desktopStoryHome).toContain("function useHeroBackdropVideoSrc(enabled: boolean)");
     expect(desktopStoryHome).toContain("mediaQuery.matches ? aixcoHeroBackgroundVideo.mobileSrc : aixcoHeroBackgroundVideo.src");
     expect(desktopStoryHome).toContain("src={videoSrc}");
     expect(liveAssets).toContain("hero-02-mobile.mp4");
@@ -343,7 +345,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('alt: tx("Burj Khalifa and Dubai skyline at sunset")');
     expect(desktopStoryHome).toContain('sizes: "(min-width: 1280px) 82vw, 100vw"');
     expect(desktopStoryHome).not.toContain('title: tx("Dubai legacy portfolio video")');
-    expect(desktopStoryHome).toContain("src={aixcoDubaiHeroVideo.src}");
+    expect(desktopStoryHome).toContain("src={videoAttached ? aixcoDubaiHeroVideo.src : undefined}");
   });
 
   it("requests high-density images for tall cropped story panels", () => {

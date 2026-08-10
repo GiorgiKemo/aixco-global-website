@@ -6,7 +6,7 @@ const mocks = vi.hoisted(() => ({
   maybeSingle: vi.fn(),
 }));
 
-vi.mock("@/lib/admin/auth", () => ({ getAdminAuthDecision: mocks.auth }));
+vi.mock("@/lib/admin/auth", () => ({ getAal2AdminAuthDecision: mocks.auth }));
 vi.mock("@/lib/admin/audit", () => ({ auditAdminAction: mocks.audit }));
 vi.mock("@/lib/supabase/admin", () => ({
   getSupabaseAdminClient: vi.fn(async () => ({
@@ -47,6 +47,16 @@ describe("admin lead status route", () => {
     });
   });
 
+  it("rejects the mutation without a verified AAL2 admin session", async () => {
+    mocks.auth.mockResolvedValue({ ok: false, reason: "mfa-required" });
+    const response = await POST(request());
+
+    expect(response.status).toBe(401);
+    await expect(response.json()).resolves.toEqual({ ok: false, error: "unauthorized" });
+    expect(mocks.maybeSingle).not.toHaveBeenCalled();
+    expect(mocks.audit).not.toHaveBeenCalled();
+  });
+
   it("returns 404 instead of falsely reporting success when the lead does not exist", async () => {
     mocks.maybeSingle.mockResolvedValue({ data: null, error: null });
     const response = await POST(request());
@@ -60,5 +70,19 @@ describe("admin lead status route", () => {
     const response = await POST(request());
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({ ok: true });
+    expect(mocks.audit).toHaveBeenNthCalledWith(1, expect.objectContaining({
+      action: "lead.status.update.requested",
+    }), { required: true });
+  });
+
+  it("does not update the lead when the required pre-action audit cannot persist", async () => {
+    mocks.audit.mockRejectedValueOnce(new Error("audit unavailable"));
+    const response = await POST(request());
+    expect(response.status).toBe(500);
+    await expect(response.json()).resolves.toEqual({ ok: false, error: "status-update-failed" });
+    expect(mocks.maybeSingle).not.toHaveBeenCalled();
+    expect(mocks.audit).toHaveBeenNthCalledWith(1, expect.objectContaining({
+      action: "lead.status.update.requested",
+    }), { required: true });
   });
 });

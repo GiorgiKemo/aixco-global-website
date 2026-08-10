@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { analyticsCollectionAllowed } from "@/lib/analytics/client";
 
 type RecoveryLang = "en" | "de" | "pl" | "sl" | "ru";
 
@@ -25,6 +26,7 @@ function readRecoveryLang(): RecoveryLang {
 }
 
 function reportClientError(kind: string, digest: string | undefined, locale: RecoveryLang) {
+  if (!analyticsCollectionAllowed()) return;
   const safeDigest = digest && /^[a-zA-Z0-9._-]{1,128}$/.test(digest) ? digest : undefined;
   void fetch("/api/client-errors", {
     method: "POST",

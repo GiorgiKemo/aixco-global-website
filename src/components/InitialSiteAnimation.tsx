@@ -63,11 +63,15 @@ export function InitialSiteAnimation() {
         poster={INTRO_POSTER}
         preload="auto"
         aria-hidden="true"
-        className="h-full w-full object-cover object-center"
+        className="initial-site-animation-video h-full w-full object-cover object-center"
         onEnded={closeIntro}
         onError={closeIntro}
       >
-        <source media="(max-width: 767px)" src="/animation-samples/w-logo-blue-yellow-dot-720.mp4" type="video/mp4" />
+        <source
+          media="(max-width: 767px), (orientation: portrait) and (max-width: 1023px)"
+          src="/animation-samples/w-logo-blue-yellow-dot-portrait-720.mp4"
+          type="video/mp4"
+        />
         <source src="/animation-samples/w-logo-blue-yellow-dot.webm" type="video/webm" />
         <source src="/animation-samples/w-logo-blue-yellow-dot-1080.mp4" type="video/mp4" />
       </video>

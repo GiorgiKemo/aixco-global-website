@@ -1,6 +1,19 @@
 "use client";
 
-import { useReportWebVitals } from "next/web-vitals";
+import type { useReportWebVitals } from "next/web-vitals";
+import { lazy, Suspense } from "react";
+import { analyticsCollectionAllowed } from "@/lib/analytics/client";
+import { ANALYTICS_SESSION_STORAGE_KEY } from "@/lib/analytics/constants";
+
+const AnalyticsTracker = lazy(async () => {
+  const analyticsModule = await import("@/components/AnalyticsTracker");
+  return { default: analyticsModule.AnalyticsTracker };
+});
+
+const WebVitalsReporter = lazy(async () => {
+  const reporterModule = await import("./web-vitals-reporter");
+  return { default: reporterModule.WebVitalsReporter };
+});
 
 type ReportWebVitalsCallback = Parameters<typeof useReportWebVitals>[0];
 
@@ -9,9 +22,7 @@ const configuredSampleRate = Number.parseFloat(
 );
 const sampleRate = Number.isFinite(configuredSampleRate)
   ? Math.min(1, Math.max(0, configuredSampleRate))
-  : process.env.NODE_ENV === "production"
-    ? 0.25
-    : 1;
+  : 1;
 let sampledSession: boolean | undefined;
 
 function shouldReportSession() {
@@ -34,7 +45,17 @@ function shouldReportSession() {
 }
 
 export const reportWebVitals: ReportWebVitalsCallback = (metric) => {
-  if (!shouldReportSession()) return;
+  if (!analyticsCollectionAllowed() || !shouldReportSession()) return;
+
+  let sessionId: string | null = null;
+  try {
+    const stored = JSON.parse(window.sessionStorage.getItem(ANALYTICS_SESSION_STORAGE_KEY) ?? "null") as {
+      id?: unknown;
+    } | null;
+    sessionId = typeof stored?.id === "string" ? stored.id : null;
+  } catch {
+    sessionId = null;
+  }
 
   const payload = JSON.stringify({
     id: metric.id,
@@ -44,6 +65,7 @@ export const reportWebVitals: ReportWebVitalsCallback = (metric) => {
     rating: metric.rating,
     navigationType: metric.navigationType,
     pathname: window.location.pathname,
+    sessionId,
   });
 
   if (navigator.sendBeacon?.(
@@ -62,6 +84,10 @@ export const reportWebVitals: ReportWebVitalsCallback = (metric) => {
 };
 
 export function WebVitals() {
-  useReportWebVitals(reportWebVitals);
-  return null;
+  return (
+    <Suspense fallback={null}>
+      <WebVitalsReporter report={reportWebVitals} />
+      <AnalyticsTracker />
+    </Suspense>
+  );
 }

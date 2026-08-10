@@ -19,10 +19,10 @@ vi.mock("@/lib/backend/site-telemetry", () => ({
 
 import { POST } from "./route";
 
-function request(body: unknown) {
+function request(body: unknown, headers: Record<string, string> = {}) {
   return new Request("https://www.aixco.global/api/client-errors", {
     method: "POST",
-    headers: { "content-type": "application/json", origin: "https://www.aixco.global" },
+    headers: { "content-type": "application/json", origin: "https://www.aixco.global", ...headers },
     body: JSON.stringify(body),
   });
 }
@@ -55,6 +55,21 @@ describe("client error telemetry route", () => {
   it("rejects unknown fields so stack traces and messages cannot be persisted", async () => {
     const response = await POST(request({ kind: "route-render", digest: "abc", message: "private@example.com" }));
     expect(response.status).toBe(400);
+    expect(mocks.store).not.toHaveBeenCalled();
+  });
+
+  it.each(["sec-gpc", "dnt"])("drops telemetry when %s is active", async (header) => {
+    const response = await POST(request(
+      { kind: "route-render", digest: "safe-digest", locale: "en" },
+      { [header]: "1" },
+    ));
+    expect(response.status).toBe(202);
+    await expect(response.json()).resolves.toEqual({
+      ok: true,
+      stored: false,
+      droppedReason: "browser_privacy_signal",
+    });
+    expect(mocks.guard).not.toHaveBeenCalled();
     expect(mocks.store).not.toHaveBeenCalled();
   });
 

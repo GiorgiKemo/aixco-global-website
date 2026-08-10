@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, MailCheck, Send, TriangleAlert } from "lucide-react";
-import { requireAdminSession } from "@/lib/admin/auth";
+import { requireAal2AdminSession } from "@/lib/admin/auth";
 import { getLeadNotificationConfig } from "@/lib/backend/lead-notification-email";
 
 export const dynamic = "force-dynamic";
@@ -40,7 +40,7 @@ function getErrorMessage(code: string | undefined, detail: string | undefined) {
 }
 
 export default async function EmailTestPage({ searchParams }: EmailTestPageProps) {
-  await requireAdminSession();
+  await requireAal2AdminSession();
 
   const params = searchParams ? await searchParams : {};
   const status = getQueryParam(params.status);

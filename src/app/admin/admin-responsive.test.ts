@@ -15,6 +15,7 @@ describe("admin responsive safeguards", () => {
       "./identity-migration/page.tsx",
       "./login/page.tsx",
       "./auth/complete/page.tsx",
+      "./analytics/page.tsx",
     ].map(readAdminSource);
 
     expect(css).toContain("env(safe-area-inset-top, 0px)");
@@ -23,6 +24,18 @@ describe("admin responsive safeguards", () => {
     expect(css).toContain("env(safe-area-inset-left, 0px)");
     expect(css).toContain("min-height: 100dvh");
     pages.forEach((page) => expect(page).toContain("admin-safe-page"));
+  });
+
+  it("keeps the raw analytics dashboard behind verified AAL2 admin access", () => {
+    const analyticsPage = readAdminSource("./analytics/page.tsx");
+    const adminIndex = readAdminSource("./page.tsx");
+
+    expect(analyticsPage).toContain("requireAal2AdminSession");
+    expect(analyticsPage).not.toContain("requireAdminSession");
+    expect(analyticsPage).toContain("{ required: true }");
+    expect(adminIndex).toContain("getAdminAuthDecision");
+    expect(adminIndex).toContain('redirect("/admin/analytics")');
+    expect(adminIndex).toContain('redirect("/admin/identity-migration")');
   });
 
   it("uses mobile-safe form text and 44px action floors", () => {

@@ -93,6 +93,22 @@ describe("web vitals endpoint", () => {
     expect(wrongContentType.status).toBe(415);
   });
 
+  it.each(["Sec-GPC", "DNT"])("drops telemetry when %s is active", async (header) => {
+    const response = await POST(request(JSON.stringify(validPayload), {
+      [header]: "1",
+      "X-Vercel-Forwarded-For": header === "DNT" ? "203.0.113.16" : "203.0.113.17",
+    }));
+
+    expect(response.status).toBe(202);
+    await expect(response.json()).resolves.toEqual({
+      ok: true,
+      stored: false,
+      droppedReason: "browser_privacy_signal",
+    });
+    expect(telemetryMocks.guard).not.toHaveBeenCalled();
+    expect(telemetryMocks.store).not.toHaveBeenCalled();
+  });
+
   it("bounds repeated telemetry from one client", async () => {
     const consoleInfo = vi.spyOn(console, "info").mockImplementation(() => undefined);
     try {

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({ auth: vi.fn(), audit: vi.fn(), requeue: vi.fn() }));
-vi.mock("@/lib/admin/auth", () => ({ getAdminAuthDecision: mocks.auth }));
+vi.mock("@/lib/admin/auth", () => ({ getAal2AdminAuthDecision: mocks.auth }));
 vi.mock("@/lib/admin/audit", () => ({ auditAdminAction: mocks.audit }));
 vi.mock("@/lib/admin/leads", () => ({ requeueContactEmailDeliveries: mocks.requeue }));
 
@@ -26,8 +26,8 @@ describe("failed email requeue route", () => {
     });
   });
 
-  it("requires an authenticated admin and same-origin form", async () => {
-    mocks.auth.mockResolvedValue({ ok: false, reason: "not-authenticated" });
+  it("requires a verified AAL2 admin and same-origin form", async () => {
+    mocks.auth.mockResolvedValue({ ok: false, reason: "mfa-required" });
     expect((await POST(request())).status).toBe(303);
 
     mocks.auth.mockResolvedValue({ ok: true, principal: { id: "admin-1" } });
@@ -40,7 +40,20 @@ describe("failed email requeue route", () => {
     const response = await POST(request());
     expect(response.status).toBe(303);
     expect(response.headers.get("location")).toContain("requeued=1");
+    expect(mocks.audit).toHaveBeenNthCalledWith(1, expect.objectContaining({
+      action: "contact.email.requeue.requested",
+    }), { required: true });
     expect(mocks.audit).toHaveBeenCalledWith(expect.objectContaining({ outcome: "success", details: { deliveries: 1 } }));
+  });
+
+  it("does not requeue deliveries when the required pre-action audit cannot persist", async () => {
+    mocks.audit.mockRejectedValueOnce(new Error("audit unavailable"));
+    const response = await POST(request());
+    expect(response.headers.get("location")).toContain("error=email-requeue-failed");
+    expect(mocks.requeue).not.toHaveBeenCalled();
+    expect(mocks.audit).toHaveBeenNthCalledWith(1, expect.objectContaining({
+      action: "contact.email.requeue.requested",
+    }), { required: true });
   });
 
   it("does not report success when no failed delivery is eligible", async () => {

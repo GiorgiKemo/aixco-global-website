@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAdminAuthDecision } from "@/lib/admin/auth";
+import { getAal2AdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
 import {
   deleteContactSubjectData,
@@ -8,7 +8,7 @@ import {
 } from "@/lib/admin/privacy";
 
 export async function POST(request: Request) {
-  const auth = await getAdminAuthDecision();
+  const auth = await getAal2AdminAuthDecision();
   if (!auth.ok) return NextResponse.redirect(new URL("/admin/login", request.url), { status: 303 });
 
   const requestOrigin = request.headers.get("origin");
@@ -24,21 +24,34 @@ export async function POST(request: Request) {
   }
 
   try {
+    await auditAdminAction({
+      action: "privacy.subject.delete.requested",
+      actor: auth.principal,
+      outcome: "success",
+      target: privacySubjectAuditTarget(email.data),
+      headers: request.headers,
+    }, { required: true });
+
     const result = await deleteContactSubjectData(email.data);
-    auditAdminAction({
+    await auditAdminAction({
       action: "privacy.subject.delete",
       actor: auth.principal,
       outcome: "success",
       target: privacySubjectAuditTarget(email.data),
-      details: { records: result.deleted },
+      details: {
+        records: result.deleted,
+        analyticsSessions: result.analyticsSessionsDeleted,
+      },
+      headers: request.headers,
     });
     return NextResponse.redirect(new URL(`/admin/privacy?deleted=${result.deleted}`, request.url), { status: 303 });
   } catch {
-    auditAdminAction({
+    await auditAdminAction({
       action: "privacy.subject.delete",
       actor: auth.principal,
       outcome: "failure",
       target: privacySubjectAuditTarget(email.data),
+      headers: request.headers,
     });
     return NextResponse.redirect(new URL("/admin/privacy?error=delete-failed", request.url), { status: 303 });
   }

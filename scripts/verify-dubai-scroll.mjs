@@ -1,8 +1,10 @@
 import { chromium } from "playwright";
+import { installNecessaryOnlyAnalyticsConsent } from "./lib/analytics-consent.mjs";
 
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
+await installNecessaryOnlyAnalyticsConsent(page.context());
 
 async function scrollToY(targetScrollY) {
   for (let attempt = 0; attempt < 6; attempt += 1) {

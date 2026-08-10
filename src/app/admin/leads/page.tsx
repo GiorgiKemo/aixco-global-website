@@ -14,7 +14,7 @@ import {
   UserCheck,
   UserPlus,
 } from "lucide-react";
-import { requireAdminSession } from "@/lib/admin/auth";
+import { requireAal2AdminSession } from "@/lib/admin/auth";
 import {
   fetchAdminLeadDashboard,
   parseLeadStatus,
@@ -506,7 +506,7 @@ type AdminLeadsPageProps = {
 };
 
 export default async function AdminLeadsPage({ searchParams }: AdminLeadsPageProps) {
-  const adminPrincipal = await requireAdminSession();
+  const adminPrincipal = await requireAal2AdminSession();
 
   const params = searchParams ? await searchParams : {};
   const activeView = getActiveView(params.tab);
@@ -531,6 +531,13 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              <Link
+                href="/admin/analytics"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
+              >
+                <BarChart3 className="h-3.5 w-3.5" aria-hidden="true" />
+                Analytics
+              </Link>
               <Link
                 href="/admin/email-test"
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"

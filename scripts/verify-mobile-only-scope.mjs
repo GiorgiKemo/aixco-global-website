@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { installNecessaryOnlyAnalyticsConsent } from "./lib/analytics-consent.mjs";
 
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
 const browser = await chromium.launch({ headless: true });
@@ -8,6 +9,7 @@ try {
   for (const width of [767, 768, 820, 1280]) {
     const height = 900;
     const context = await browser.newContext({ viewport: { width, height }, reducedMotion: "reduce" });
+    await installNecessaryOnlyAnalyticsConsent(context);
     const page = await context.newPage();
     await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
     await page.waitForFunction(() => {
@@ -79,6 +81,7 @@ try {
     viewport: { width: 390, height: 844 },
     reducedMotion: "no-preference",
   });
+  await installNecessaryOnlyAnalyticsConsent(animatedContext);
   const animatedPage = await animatedContext.newPage();
   await animatedPage.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
   await animatedPage.waitForFunction(() => (

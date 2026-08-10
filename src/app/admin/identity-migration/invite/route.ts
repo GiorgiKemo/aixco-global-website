@@ -21,6 +21,14 @@ export async function POST(request: Request) {
   if (!email.success) return redirectTo(request, "/admin/identity-migration?error=invalid-email");
 
   try {
+    await auditAdminAction({
+      action: "admin.identity.invite.requested",
+      actor: auth.principal,
+      outcome: "success",
+      target: privacySubjectAuditTarget(email.data),
+      headers: request.headers,
+    }, { required: true });
+
     const config = getAdminAuthConfig();
     const inviteOrigin = process.env.NODE_ENV === "production"
       ? getSiteUrl()
@@ -29,19 +37,21 @@ export async function POST(request: Request) {
       role: config.role,
       redirectTo: `${inviteOrigin}/admin/auth/complete`,
     });
-    auditAdminAction({
+    await auditAdminAction({
       action: "admin.identity.invite",
       actor: auth.principal,
       outcome: "success",
       target: privacySubjectAuditTarget(email.data),
+      headers: request.headers,
     });
     return redirectTo(request, "/admin/identity-migration?invited=1");
   } catch {
-    auditAdminAction({
+    await auditAdminAction({
       action: "admin.identity.invite",
       actor: auth.principal,
       outcome: "failure",
       target: privacySubjectAuditTarget(email.data),
+      headers: request.headers,
     });
     return redirectTo(request, "/admin/identity-migration?error=invite-failed");
   }
