@@ -11738,3 +11738,42 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
     object-fit: contain;
   }
 }
+
+/* Keep the three participation cards visually identical on touch screens.
+   The parent divide utility adds a stronger rule to every card after the
+   first, and mobile Safari can retain :hover after a tap. Normalize the full
+   border and text colors so a tapped card never looks selected or heavier. */
+@media (max-width: 1023px) {
+  [data-story-section='participate'] [data-layout='story-participation-routes'] > button {
+    border: 1px solid hsl(var(--foreground) / 0.14) !important;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  [data-story-section='participate']
+    [data-layout='story-participation-routes']
+    > button:is(:hover, :active, :focus) {
+    border-color: hsl(var(--foreground) / 0.14) !important;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  [data-story-section='participate']
+    [data-layout='story-participation-routes']
+    > button
+    :is(.story-card-title, .story-body) {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  [data-story-section='participate']
+    [data-layout='story-participation-routes']
+    > button
+    :is(.story-standard-number, svg) {
+    color: hsl(var(--primary)) !important;
+  }
+
+  [data-story-section='participate']
+    [data-layout='story-participation-routes']
+    > button:focus-visible {
+    outline: 2px solid hsl(var(--primary) / 0.65);
+    outline-offset: 2px;
+  }
+}
