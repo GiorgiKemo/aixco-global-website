@@ -1,20 +1,24 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import styles from "./InitialSiteAnimation.module.css";
 
-const INTRO_POSTER = "/animation-samples/w-logo-blue-yellow-dot-poster.webp";
-const INTRO_FAILSAFE_MS = 6_000;
-const INTRO_FADE_MS = 500;
+const INTRO_FAILSAFE_MS = 5_500;
+const REDUCED_MOTION_VISIBLE_MS = 700;
+const INTRO_FADE_MS = 450;
+const INTRO_DESKTOP_VIDEO = "/aixco-global-op2/media/aixco-intro-black-1080.mp4";
+const INTRO_PORTRAIT_VIDEO = "/aixco-global-op2/media/aixco-intro-black-portrait-1080.mp4";
 
 type IntroPhase = "visible" | "fading" | "hidden";
 
 /**
- * Plays the approved four-second W logo over the public landing page only.
+ * Plays the original four-second AIXCO logo assembly over black on the public
+ * landing page only.
  *
- * The responsive video sources are rendered in the initial HTML so the
- * browser can start the visible animation before React hydrates. The page
- * itself still loads underneath it; heavyweight scene videos are held back
- * until this overlay finishes.
+ * Separate landscape and portrait compositions preserve the complete motion
+ * at every viewport size without cropping or enlarging the mark on phones.
  */
 export function InitialSiteAnimation() {
   const [phase, setPhase] = useState<IntroPhase>("visible");
@@ -26,9 +30,13 @@ export function InitialSiteAnimation() {
   useEffect(() => {
     document.documentElement.dataset.siteIntro = "active";
 
-    // performance.now() is measured from navigation start. This prevents a
-    // slow hydration from extending the short intro safety limit indefinitely.
-    const remainingTime = Math.max(0, INTRO_FAILSAFE_MS - performance.now());
+    const visibleDuration = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? REDUCED_MOTION_VISIBLE_MS
+      : INTRO_FAILSAFE_MS;
+
+    // performance.now() is measured from navigation start. This safety timer
+    // only handles stalled playback; the four-second video closes onEnded.
+    const remainingTime = Math.max(0, visibleDuration - performance.now());
     const timeoutId = window.setTimeout(closeIntro, remainingTime);
 
     return () => window.clearTimeout(timeoutId);
@@ -51,30 +59,38 @@ export function InitialSiteAnimation() {
       data-site-intro=""
       aria-label="AIXCO.Global loading animation"
       aria-live="polite"
-      className={`fixed inset-0 z-[10000] bg-[#071c2d] transition-opacity duration-500 ${
-        phase === "fading" ? "pointer-events-none opacity-0" : "opacity-100"
-      }`}
+      className={`${styles.overlay} ${phase === "fading" ? styles.fading : ""}`}
       role="status"
     >
       <video
         autoPlay
         muted
         playsInline
-        poster={INTRO_POSTER}
         preload="auto"
         aria-hidden="true"
-        className="initial-site-animation-video h-full w-full object-cover object-center"
+        className={styles.video}
         onEnded={closeIntro}
         onError={closeIntro}
       >
         <source
           media="(max-width: 767px), (orientation: portrait) and (max-width: 1023px)"
-          src="/animation-samples/w-logo-blue-yellow-dot-portrait-720.mp4"
+          src={INTRO_PORTRAIT_VIDEO}
           type="video/mp4"
         />
-        <source src="/animation-samples/w-logo-blue-yellow-dot.webm" type="video/webm" />
-        <source src="/animation-samples/w-logo-blue-yellow-dot-1080.mp4" type="video/mp4" />
+        <source src={INTRO_DESKTOP_VIDEO} type="video/mp4" />
       </video>
+      <Image
+        src={aixcoLiveLogos.aixcoHorizontalLight}
+        alt=""
+        width={1600}
+        height={333}
+        sizes="78vw"
+        loading="eager"
+        fetchPriority="high"
+        decoding="sync"
+        className={styles.reducedMotionLogo}
+        aria-hidden="true"
+      />
       <span className="sr-only">Loading AIXCO.Global</span>
     </div>
   );
