@@ -4516,6 +4516,12 @@
       line-height: var(--story-body-lh);
     }
 
+    /* The divide utility draws rules only between route cards. Add a closing
+       rule so the final/open card has the same clear horizontal boundary. */
+    [data-story-scene-copy] [data-layout='story-participation-routes'] {
+      border-bottom: 1px solid hsl(var(--foreground) / 0.3);
+    }
+
     [data-story-scene-copy] [data-layout='story-legacy-timeline'] > * + * {
       margin-top: var(--story-grid-row-gap);
     }
@@ -8909,6 +8915,7 @@ html[data-home-experience='story'] {
     display: grid;
     gap: 0.65rem;
     border: 0;
+    border-bottom: 1px solid hsl(var(--foreground) / 0.3);
   }
 
   [data-story-section='participate'] [data-layout='story-participation-routes'] button {
