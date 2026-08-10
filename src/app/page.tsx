@@ -3,6 +3,7 @@ import { ClientShell } from "./client-shell";
 import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
 import { JsonLd } from "@/components/JsonLd";
 import { getSiteUrl } from "@/lib/site-url";
+import { InitialSiteAnimation } from "@/components/InitialSiteAnimation";
 
 export const revalidate = 300;
 
@@ -36,6 +37,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <InitialSiteAnimation />
       <JsonLd data={structuredData} />
       <ClientShell initialSiteContent={siteContent.content} initialSiteContentSource={siteContent.source}>
         <Index />
