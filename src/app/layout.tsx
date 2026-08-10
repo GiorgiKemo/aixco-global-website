@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "lenis/dist/lenis.css";
 import "@fontsource/epilogue/latin-400.css";
 import "@/index.css";
@@ -44,6 +45,7 @@ const gilroyCurrency = localFont({
 const metadataTitle = "AIXCO.Global | Real Estate Investment";
 const metadataDescription =
   "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
+const googleTagManagerId = "GTM-KCZJW8NN";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
@@ -91,6 +93,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" dir="ltr" className={`${gilroy.variable} ${gilroyGerman.variable} ${gilroyCurrency.variable}`} suppressHydrationWarning>
       <body suppressHydrationWarning>
+        <Script id="google-tag-manager" strategy="afterInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${googleTagManagerId}');`}
+        </Script>
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${googleTagManagerId}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+            title="Google Tag Manager"
+          />
+        </noscript>
         <WebVitals />
         {children}
       </body>

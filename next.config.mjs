@@ -26,11 +26,12 @@ const getContentSecurityPolicy = () => {
 
   return [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
+    `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDevelopment ? " 'unsafe-eval'" : ""}`,
     "script-src-attr 'none'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
+    "frame-src 'self' https://www.googletagmanager.com",
     `connect-src ${connectSources.join(" ")}`,
     "media-src 'self' blob: https://media.githubusercontent.com",
     "worker-src 'self' blob:",
