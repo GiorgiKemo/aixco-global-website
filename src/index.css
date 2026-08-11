@@ -11074,6 +11074,32 @@ html[lang='de']
   }
 }
 
+/* Keep each progress qualifier on the same baseline as its own percentage.
+   The final timeline cascade is intentionally explicit here because the
+   legacy card rules otherwise turn the second, longer qualifier into a new
+   inline line at desktop widths. */
+html:not([lang='pl'])
+  .story-dubai-timeline
+  .story-dubai-portfolio-card__metric[data-metric-layout='progress']
+  .story-metric-value {
+  display: grid !important;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: start;
+  gap: 0.28rem 0.42rem;
+}
+
+html:not([lang='pl'])
+  .story-dubai-timeline
+  .story-dubai-portfolio-card__metric[data-metric-layout='progress']
+  .story-dubai-metric-copy {
+  display: block !important;
+  align-self: start;
+  padding-top: 0 !important;
+  overflow-wrap: anywhere;
+  white-space: normal !important;
+  line-height: 1.1 !important;
+}
+
 /* Keep each monetary value in one unbroken inline token. The symbol and
    figures inherit identical size, weight, line-height, color, and baseline
    metrics, with the approved shared system euro face applied below. */
