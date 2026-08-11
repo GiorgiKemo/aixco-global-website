@@ -108,7 +108,7 @@ export function BrandbookLandingPage() {
     <div id="main-content" className="brandbook-landing bg-[#F3EDE1] text-[#161616]">
       <header className="brandbook-header sticky top-0 z-50 border-b border-[#161616]/10 bg-[#F3EDE1]/95 backdrop-blur-md">
         <div className="mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between px-5 sm:px-8 lg:px-12">
-          <Link href="#top" aria-label="AIXCO.Global home" className="flex items-center" onClick={() => handleNavClick("#top")}>
+          <Link href="/" aria-label="AIXCO.Global home" className="flex items-center">
             <Image
               src={aixcoLiveLogos.aixcoHorizontalDark}
               alt="AIXCO.Global"
@@ -193,20 +193,11 @@ export function BrandbookLandingPage() {
         <section id="top" className="scroll-mt-20">
           <div className="mx-auto grid min-h-[calc(100svh-4.6rem)] w-full max-w-[1600px] lg:grid-cols-[0.82fr_1.18fr]">
             <div className="relative flex min-h-[36rem] flex-col justify-between overflow-hidden bg-[#161616] px-6 pb-8 pt-8 text-white sm:px-10 sm:pb-10 lg:min-h-[calc(100svh-4.6rem)] lg:px-14 lg:pt-12">
-              <div className="relative z-10 flex items-start justify-between gap-6">
-                <Image
-                  src={aixcoLiveLogos.aixcoHorizontalLight}
-                  alt=""
-                  aria-hidden="true"
-                  width={1600}
-                  height={333}
-                  sizes="(min-width: 1024px) 13rem, 10rem"
-                  className="h-auto w-40 sm:w-48"
-                />
+              <div className="relative z-10 flex items-start justify-end">
                 <span className="pt-1 text-right text-[0.58rem] font-medium uppercase tracking-[0.2em] text-white/45">01 / 04<br />AIXCO GLOBAL</span>
               </div>
 
-              <div className="relative z-10 max-w-[35rem] py-16 lg:py-12">
+              <div className="relative z-10 max-w-[35rem] py-10 lg:py-6">
                 <p className="mb-6 flex items-center gap-3 text-[0.64rem] font-semibold uppercase tracking-[0.23em] text-[#E6C767]">
                   <span className="h-px w-8 bg-[#E6C767]" /> {tx("Batumi property profile")}
                 </p>
