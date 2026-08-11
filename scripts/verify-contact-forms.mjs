@@ -29,9 +29,29 @@ const deviceProfiles = [
 const failures = [];
 const results = [];
 
+function getFutureCallTimeValue() {
+  const nextAvailable = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const pad = (value) => String(value).padStart(2, "0");
+  return `${nextAvailable.getFullYear()}-${pad(nextAvailable.getMonth() + 1)}-${pad(nextAvailable.getDate())}T${pad(nextAvailable.getHours())}:${pad(nextAvailable.getMinutes())}`;
+}
+
+async function dismissAnalyticsConsent(page) {
+  const consent = page.getByRole("dialog", { name: "Cookies & analytics" });
+  if (await consent.isVisible().catch(() => false)) {
+    await consent.getByRole("button", { name: "Accept" }).click();
+    await consent.waitFor({ state: "hidden" });
+  }
+}
+
 for (const profile of deviceProfiles) {
   const browser = await profile.browser.launch({ headless: true });
   const context = await browser.newContext(profile.context);
+  await context.addInitScript(() => {
+    window.localStorage.setItem(
+      "aixco-analytics-consent-v1",
+      JSON.stringify({ status: "denied", version: "2026-08-07" }),
+    );
+  });
   const page = await context.newPage();
   let capturedRequest = null;
 
@@ -49,6 +69,7 @@ for (const profile of deviceProfiles) {
     await page.evaluate((lang) => localStorage.setItem("aixco-lang", lang), locale.lang);
     await page.reload({ waitUntil: "domcontentloaded" });
     await page.waitForFunction((lang) => document.documentElement.lang === lang, locale.lang);
+    await dismissAnalyticsConsent(page);
 
     for (const mode of ["call", "email"]) {
       const caseName = `${profile.name}/${locale.lang}/${mode}`;
@@ -56,6 +77,7 @@ for (const profile of deviceProfiles) {
       try {
         if (mode === "email") {
           await page.goto(`${baseUrl}/?modal=contact&qa=form-matrix`, { waitUntil: "domcontentloaded" });
+          await dismissAnalyticsConsent(page);
         }
 
         const dialog = page.getByRole("dialog");
@@ -67,7 +89,7 @@ for (const profile of deviceProfiles) {
         if (mode === "call") {
           await dialog.locator('select[name="phoneCountry"]').selectOption(locale.country);
           await dialog.locator('input[name="phoneNational"]').fill(locale.phone);
-          await dialog.locator('input[name="preferredTime"]').fill("2026-08-01T10:37");
+          await dialog.locator('input[name="preferredTime"]').fill(getFutureCallTimeValue());
         } else {
           await dialog.locator('textarea[name="message"]').fill("JUST TESTING");
         }
@@ -95,6 +117,42 @@ for (const profile of deviceProfiles) {
           () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 2,
         );
         if (hasHorizontalOverflow) throw new Error("page has horizontal overflow");
+
+        results.push({ caseName, ok: true });
+      } catch (error) {
+        failures.push(`${caseName}: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+
+    if (locale.lang === "en") {
+      const caseName = `${profile.name}/reverance-batumi/message`;
+
+      try {
+        capturedRequest = null;
+        await page.goto(`${baseUrl}/reverance-batumi#contact`, { waitUntil: "domcontentloaded" });
+        await dismissAnalyticsConsent(page);
+        const form = page.getByRole("form", { name: "Contact AIXCO form" });
+        await form.scrollIntoViewIfNeeded();
+        await form.locator('input[name="name"]').fill("Landing Page Test");
+        await form.locator('input[name="email"]').fill("landing-test@example.com");
+        await form.locator('select[name="interest"]').selectOption({ label: "Project Reverance" });
+        await form.locator('textarea[name="message"]').fill("Please send the current Reverance availability and payment details.");
+
+        const formIsValid = await form.evaluate((element) => element.checkValidity());
+        if (!formIsValid) throw new Error("landing-page browser-native form validation failed");
+
+        await form.locator('button[type="submit"]').click();
+        await page.getByText("Thank you. We will contact you shortly.").waitFor({ state: "visible" });
+
+        if (capturedRequest?.context?.page_path !== "/reverance-batumi#contact") {
+          throw new Error(`submitted page path ${String(capturedRequest?.context?.page_path)} instead of /reverance-batumi#contact`);
+        }
+        if (capturedRequest?.payload?.requestType !== "message") {
+          throw new Error(`submitted request type ${String(capturedRequest?.payload?.requestType)} instead of message`);
+        }
+        if (capturedRequest?.payload?.interest !== "Project Reverance") {
+          throw new Error(`submitted interest ${String(capturedRequest?.payload?.interest)} instead of Project Reverance`);
+        }
 
         results.push({ caseName, ok: true });
       } catch (error) {
