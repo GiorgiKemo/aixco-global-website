@@ -11,28 +11,22 @@ const adminAnalyticsManifestPath = resolve(
 const buildManifestPath = resolve(buildDirectory, "build-manifest.json");
 
 const budgets = {
-  // Next 16.2.12 clean-HEAD measurement (before the admin redesign):
-  // 1,317,530 raw / 397,163 gzip. Keep less than 1.5% headroom so this
-  // gate catches a real public-route regression without attributing the
-  // already-committed homepage payload to an admin-only change.
-  homeJavaScriptRaw: 1_335_000,
-  homeJavaScriptGzip: 403_000,
-  // Locale-aware responsive rules add a small raw-CSS allowance while the
-  // stricter gzip ceiling remains unchanged.
-  homeCssRaw: 336_000,
-  // Clean HEAD was 55,399 bytes gzip; this remains within 1.1% of it.
-  homeCssGzip: 56_000,
-  // The shared currency/progress renderer is intentionally kept in the
-  // homepage chunk so every locale receives the same alignment logic.
-  largestJavaScriptRaw: 467_000,
+  // Multilingual public routes are part of the homepage client graph, so the
+  // baseline includes their translation catalog and responsive renderers.
+  // Keep approximately 1.5% headroom over the measured production output.
+  homeJavaScriptRaw: 1_430_000,
+  homeJavaScriptGzip: 430_000,
+  homeCssRaw: 365_000,
+  homeCssGzip: 60_000,
+  largestJavaScriptRaw: 490_000,
   // Private analytics is a separate route, so measure its actual route
   // payload rather than summing mutually exclusive chunks from every route.
   adminAnalyticsJavaScriptRaw: 665_000,
   adminAnalyticsJavaScriptGzip: 200_000,
-  // Option 2 adds the private admin shell and launchpad surfaces. This raw
-  // ceiling is only 1,513 bytes above the verified 354,487-byte output;
-  // the stricter all-CSS gzip ceiling remains unchanged below.
-  allCssRaw: 356_000,
+  // Option 2 adds the private admin shell and launchpad surfaces. Keep the
+  // raw ceiling aligned with the multilingual public-route CSS output while
+  // retaining the stricter all-CSS gzip ceiling below.
+  allCssRaw: 386_000,
   allCssGzip: 65_000,
 };
 
