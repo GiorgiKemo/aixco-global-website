@@ -12,7 +12,7 @@ const DesktopStoryHome = dynamic(
   { loading: () => <StoryBootSurface /> },
 );
 
-const useLegacyStoryHome = process.env.NEXT_PUBLIC_AIXCO_LEGACY_HOME === "1";
+const useLegacyStoryHome = process.env.NEXT_PUBLIC_AIXCO_LEGACY_HOME !== "0";
 
 function StoryBootSurface() {
   return (

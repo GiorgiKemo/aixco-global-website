@@ -49,6 +49,19 @@ final result: passed
 
 ---
 
+# Reverance SEO landing route QA
+
+- Dedicated route: `/reverance-batumi`.
+- Production URL after deployment: `https://www.aixco.global/reverance-batumi`.
+- Homepage separation: `/` renders the existing AIXCO story homepage.
+- Metadata: title, description, Open Graph image, Twitter card, canonical URL, Residence JSON-LD, and sitemap entry verified.
+- Browser route check: HTTP 200, title `Project Reverance Batumi | AIXCO.Global`, canonical `https://www.aixco.global/reverance-batumi`.
+- Production build: passed.
+
+final result: passed
+
+---
+
 # German Euro-Symbol Consistency - Design QA
 
 - Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-8e5e5e97-b149-42d8-a0ba-2972e312959d.png`
@@ -2538,40 +2551,33 @@ final result: passed
 
 ## Source and implementation
 
-- Source visual truth: `C:/Users/Administrator/Desktop/AIXCO_Brandbook_new.pdf`, rendered reference pages `tmp/pdfs/aixco-brandbook-09.png`, `tmp/pdfs/aixco-brandbook-12.png`, and `tmp/pdfs/aixco-brandbook-15.png`.
+- Brand source: `C:/Users/Administrator/Desktop/AIXCO_Brandbook_new.pdf`, with rendered reference pages `tmp/pdfs/aixco-brandbook-09.png`, `tmp/pdfs/aixco-brandbook-12.png`, and `tmp/pdfs/aixco-brandbook-15.png`.
+- Live content source: AIXCO homepage and Project Reverance page, reflected in `src/data/site.ts` and `src/lib/aixco-live-assets.ts`.
 - Combined comparison: `artifacts/brandbook-qa-comparison.png`.
-- Desktop implementation: `artifacts/brandbook-landing-desktop-final.png`.
-- Mobile implementation: `artifacts/brandbook-landing-mobile-final.png`.
-- Desktop viewport: 1440 x 900 CSS px; implementation capture: 1440 x 900 px; `deviceScaleFactor` 1 / CSS scale.
-- Mobile viewport: 390 x 844 CSS px; implementation capture: 390 x 844 px; `deviceScaleFactor` 1 / CSS scale.
-- State: default landing page, cookie preference dismissed with “Necessary only”, intro animation complete, no form values entered for the final captures.
-
-## Full-view comparison evidence
-
-The implementation preserves the brandbook’s visible system: Gilroy typography, black / ivory / champagne / navy palette, generous editorial spacing, square-edged controls, and premium architectural imagery. The split hero is an intentional web composition built from the brandbook’s documented assets and usage rules rather than a direct page replica.
-
-## Focused region comparison evidence
-
-- Hero: compares the brandbook color palette, Gilroy sample, and photo-content guidance against the black editorial copy rail, champagne CTA, and architectural hero image.
-- Responsive mobile hero: confirms the same hierarchy and contrast stack at 390 x 844 without clipping the wordmark or primary CTA.
-- Inquiry form: confirms visible labels, focusable inputs, keyboard-safe controls, and a local success state after submission.
+- Desktop implementation: `artifacts/brandbook-landing-desktop-final.png` at 1440 x 900 CSS px.
+- Mobile implementation: `artifacts/brandbook-landing-mobile-final.png` at 390 x 844 CSS px.
+- State: default landing page, intro animation complete, no test lead submitted.
 
 ## Findings
 
-- No actionable P0, P1, or P2 visual issues remain.
-- P3 follow-up: if a later iteration needs a more campaign-led feel, add a subtle image sequence or motion treatment to the hero while preserving the current reduced-motion behavior.
-
-## Comparison history
-
-1. Initial rendered pass: one browser warning reported `quality={86}` on the hero image because the project configuration supports 62, 75, 78, and 90. Updated the hero asset to `quality={90}`.
-2. Final rendered pass: clean fresh-tab console check with no errors or warnings; desktop and mobile screenshots recaptured after the fix.
+- No actionable P0, P1, or P2 issues remain in the landing-page scope.
+- The page uses real Project Reverance imagery, project metrics, availability, completion target, address, investment case, participation routes, brochure gate, project route, company contact details, and lead-capture backend.
+- The brandbook system remains intact: Gilroy typography, black / ivory / champagne / navy palette, editorial spacing, square-edged controls, and premium architectural imagery.
 
 ## Primary interactions tested
 
-- Desktop navigation links are present and target the intended sections.
-- Mobile menu opens and closes with an accessible button state.
-- Mobile section navigation scrolls to the opportunity section.
-- Inquiry form accepts required fields and reaches the “Thank you. We’ll be in touch.” success state.
-- Fresh browser tab console check returned no errors or warnings.
+- Desktop navigation and mobile navigation scroll to the intended sections.
+- Mobile menu opens with an accessible expanded state and the private-brief action reaches the contact form.
+- Hero “View project” and residence links open `/aixco-global-op2/current-project` and render the current Reverance page.
+- Brochure action reaches the existing “Unlock downloads” contact gate without downloading or transmitting test data.
+- Contact form fields accept valid input and pass native constraints; no test submission was sent.
+- Fresh browser console check returned zero errors and zero warnings.
+
+## Verification
+
+- TypeScript: passed.
+- ESLint: passed.
+- Production build: passed after the live-copy and locale-catalog updates.
+- Full suite: 119 test files and 643 tests passed.
 
 final result: passed

@@ -105,7 +105,7 @@ export function BrandbookLandingPage() {
   };
 
   return (
-    <div className="brandbook-landing bg-[#F3EDE1] text-[#161616]">
+    <div id="main-content" className="brandbook-landing bg-[#F3EDE1] text-[#161616]">
       <header className="brandbook-header sticky top-0 z-50 border-b border-[#161616]/10 bg-[#F3EDE1]/95 backdrop-blur-md">
         <div className="mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between px-5 sm:px-8 lg:px-12">
           <Link href="#top" aria-label="AIXCO.Global home" className="flex items-center" onClick={() => handleNavClick("#top")}>
