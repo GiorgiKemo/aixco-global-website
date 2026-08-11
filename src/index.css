@@ -11100,6 +11100,12 @@ html:not([lang='pl'])
   line-height: 1.1 !important;
 }
 
+@media (min-width: 768px) and (max-width: 820px) {
+  .story-dubai-timeline .story-dubai-portfolio-card__metric .story-standard-number {
+    font-size: 1.45rem !important;
+  }
+}
+
 /* Keep each monetary value in one unbroken inline token. The symbol and
    figures inherit identical size, weight, line-height, color, and baseline
    metrics, with the approved shared system euro face applied below. */
