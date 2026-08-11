@@ -110,8 +110,18 @@ async function inspectTitleCase(browser, browserName, viewport, locale = "en") {
 
     const reveal = page.locator("[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']");
     await page.waitForFunction(() => document.fonts.status === "loaded");
+    // The branded intro intentionally holds scrolling for four seconds. Wait
+    // for it to finish before sampling the native view timeline; otherwise
+    // Chromium reports the title as outside the viewport while the intro is
+    // still active and the animation appears stuck at its initial value.
+    await page
+      .waitForFunction(
+        () => document.documentElement.dataset.siteIntro === "complete",
+        { timeout: 10000 },
+      )
+      .catch(() => undefined);
     // Let the final hash-stabilization pass finish before measuring positions.
-    await page.waitForTimeout(1250);
+    await page.waitForTimeout(1000);
 
     const scrollRevealToTop = async (documentTop, desiredTop) => {
       for (let attempt = 0; attempt < 6; attempt += 1) {

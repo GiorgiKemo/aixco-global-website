@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { waitFor } from "@testing-library/react";
 import { InitialSiteAnimation } from "./InitialSiteAnimation";
 
 describe("InitialSiteAnimation", () => {
@@ -24,12 +25,17 @@ describe("InitialSiteAnimation", () => {
     delete document.documentElement.dataset.siteIntro;
   });
 
-  it("uses dedicated four-second landscape and portrait motion sources", () => {
+  it("uses dedicated four-second landscape and portrait motion sources", async () => {
     const { container } = render(<InitialSiteAnimation />);
 
     expect(screen.getByRole("status", { name: "AIXCO.Global loading animation" })).toBeInTheDocument();
+    await waitFor(() => expect(container.querySelector("video")).toBeInTheDocument());
     expect(container.querySelector("video")).toHaveAttribute("autoplay");
     expect(container.querySelector("video")).toHaveAttribute("playsinline");
+    expect(container.querySelector("video")).toHaveAttribute(
+      "poster",
+      "/aixco-global-op2/media/aixco-intro-black-poster.webp",
+    );
 
     const sources = Array.from(container.querySelectorAll("source"));
     expect(sources).toHaveLength(2);
@@ -46,12 +52,9 @@ describe("InitialSiteAnimation", () => {
       "/aixco-global-op2/media/aixco-intro-black-1080.mp4",
     );
 
-    const logo = container.querySelector("img");
-    expect(logo).toBeInTheDocument();
-    expect(decodeURIComponent(logo?.getAttribute("src") ?? "")).toContain(
-      "/aixco-global-op2/images/AIXCOGlobal-horizontal-light.webp",
+    expect(container.querySelectorAll("img")).toHaveLength(1);
+    expect(decodeURIComponent(container.querySelector("img")?.getAttribute("src") ?? "")).toContain(
+      "/aixco-global-op2/media/aixco-intro-black-poster.webp",
     );
-    expect(logo).toHaveAttribute("loading", "eager");
-    expect(logo).toHaveAttribute("fetchpriority", "high");
   });
 });

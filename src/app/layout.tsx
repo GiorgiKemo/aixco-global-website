@@ -92,11 +92,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" dir="ltr" className={`${gilroy.variable} ${gilroyGerman.variable} ${gilroyCurrency.variable}`} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <Script id="google-tag-manager" strategy="afterInteractive">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        {/* Load marketing analytics after the first render and an idle window so
+            the public story can paint its hero and intro animation without
+            third-party script work on the critical path. */}
+        <Script id="google-tag-manager" strategy="lazyOnload">
+          {`(function(w,d,s,l,i){function load(){if(w.__aixcoGtmLoaded)return;w.__aixcoGtmLoaded=true;w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);}
+if('requestIdleCallback' in w){w.requestIdleCallback(load,{timeout:4000});}else{w.setTimeout(load,4000);}
 })(window,document,'script','dataLayer','${googleTagManagerId}');`}
         </Script>
         <noscript>

@@ -938,7 +938,7 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("aria-hidden={ariaHidden || undefined}");
     expect(desktopStoryHome).toContain("data-metric-label={detail.label}");
     expect(css).toContain("min-height: clamp(10.5rem, 22svh, 11.5rem) !important;");
-    expect(css).toContain("justify-content: flex-start !important;");
+    expect(css).toContain("justify-content: space-between !important;");
     expect(css).toContain("gap: clamp(0.68rem, 1.2svh, 0.88rem) !important;");
     expect(css).toContain("font-size: clamp(0.72rem, 0.74vw, 0.8rem) !important;");
     expect(css).toContain("font-size: clamp(0.95rem, 0.98vw, 1.06rem) !important;");
@@ -950,8 +950,8 @@ describe("index.css motion rules", () => {
     expect(css).toContain("grid-template-columns: max-content minmax(0, 1fr);");
     expect(css).toContain("@media (min-width: 768px) and (max-width: 1279px)");
     expect(css).toContain(".story-dubai-portfolio-card__metric[data-metric-layout='progress']");
-    expect(css).toContain("align-items: start;\n  column-gap: 0.25rem;");
-    expect(css).toContain("padding-top: clamp(0.18rem, 0.32vw, 0.28rem);");
+    expect(css).toContain("align-items: baseline;\n  column-gap: 0.25rem;");
+    expect(css).toContain("align-self: baseline;\n  padding-top: 0;");
     expect(css).toContain("line-height: 1.34 !important;");
     expect(css).toContain("@media (max-width: 479px)");
     expect(css).toContain("display: grid;");
