@@ -9907,6 +9907,64 @@ html[dir='rtl'] {
   overflow-wrap: anywhere;
 }
 
+@media (max-width: 30rem) {
+  .property-hero__content,
+  .property-content-section {
+    padding-inline-start: max(0.875rem, var(--safe-inline-start)) !important;
+    padding-inline-end: max(0.875rem, var(--safe-inline-end)) !important;
+  }
+
+  .property-hero__content {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .property-hero__content > div:first-child {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .property-hero__content > div:first-child > p:first-child {
+    max-width: 100%;
+    flex-wrap: wrap;
+    column-gap: 0.45rem;
+    row-gap: 0.25rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    line-height: 1.35;
+  }
+
+  .property-hero__title {
+    max-width: 100%;
+    font-size: clamp(2.7rem, 14vw, 3.5rem) !important;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+  }
+
+  .property-hero__subtitle {
+    max-width: 100%;
+    font-size: clamp(1.25rem, 8vw, 1.7rem) !important;
+    overflow-wrap: anywhere;
+  }
+
+  .property-hero__content > div:first-child > p:last-child {
+    max-width: 100%;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  .property-detail-metric__label {
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+  }
+
+  .property-detail-metric__value {
+    font-size: clamp(1.6rem, 8vw, 2rem);
+  }
+}
+
 @media (min-width: 640px) and (max-width: 1279px) {
   .property-hero__metrics .property-detail-metric:nth-child(odd) {
     border-inline-start: 0;
@@ -11789,6 +11847,37 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   box-shadow:
     0 1px 0 hsl(0 0% 100%) inset,
     0 18px 42px -32px hsl(220 28% 18% / 0.3);
+}
+
+@media (max-width: 30rem) {
+  .story-material-card {
+    grid-template-columns: 2.25rem minmax(0, 1fr) 2.5rem !important;
+    grid-template-areas:
+      "number content download"
+      "icon content download";
+    gap: 0.5rem !important;
+    padding-inline: 0.75rem !important;
+  }
+
+  .story-material-card__number {
+    grid-area: number;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .story-material-card__icon {
+    grid-area: icon;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .story-material-card > :nth-child(3) {
+    grid-area: content;
+  }
+
+  .story-material-card__download {
+    grid-area: download;
+  }
 }
 
 .story-material-card__icon {
