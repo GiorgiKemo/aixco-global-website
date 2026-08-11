@@ -138,6 +138,22 @@ try {
             return false;
           };
 
+          const visibleTextRects = (element) => {
+            const rects = [];
+            const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+            let textNode = walker.nextNode();
+            while (textNode) {
+              const parent = textNode.parentElement;
+              if (parent && !parent.closest(".sr-only")) {
+                const range = document.createRange();
+                range.selectNodeContents(textNode);
+                rects.push(...range.getClientRects());
+              }
+              textNode = walker.nextNode();
+            }
+            return rects;
+          };
+
           for (const char of document.querySelectorAll(".story-letter-reveal__char")) {
             if (!(char instanceof HTMLElement) || !rendered(char) || char.closest(skip)) continue;
             const rect = char.getBoundingClientRect();
@@ -217,9 +233,7 @@ try {
             if (horizontalClip || verticalClip) report(element, horizontalClip ? "text width clipped" : "text height clipped");
 
             if (!element.querySelector(".story-text-reveal")) {
-              const range = document.createRange();
-              range.selectNodeContents(element);
-              for (const rect of range.getClientRects()) {
+              for (const rect of visibleTextRects(element)) {
                 if (rect.left < -3 || rect.right > root.clientWidth + 3) {
                   const overflow = Math.ceil(Math.max(0, -rect.left, rect.right - root.clientWidth));
                   report(element, `visible text line extends beyond viewport by ${overflow}px`);
