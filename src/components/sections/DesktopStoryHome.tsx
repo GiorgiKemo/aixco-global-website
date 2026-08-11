@@ -1557,61 +1557,63 @@ function StoryDubaiFundRow({
   const headlineMetrics = details.filter((detail) => isHeadlineMetric(detail.label)).slice(0, 3);
 
   return (
-    <article className="story-fund-row story-dubai-portfolio-card">
-      <header className="story-dubai-portfolio-card__header">
-        <span className="story-dubai-portfolio-card__index" aria-hidden="true">
-          {formatChapterNumber(index + 1)}
-        </span>
-        <h3 className="story-card-title">{tx(fund.name)}</h3>
-      </header>
-      <div className="story-dubai-portfolio-card__metrics">
-        {headlineMetrics.map((detail, metricIndex) => {
-          const metric = formatMetricValue(detail.value);
-          const translatedFullValue = tx(detail.value);
-          const useTranslatedFullValue =
-            translatedFullValue !== detail.value &&
-            (Boolean(metric.prefix) ||
-              Boolean(metric.subtext) ||
-              metric.preserveLocalizedValue);
-          const metricLayout =
-            detail.label === "Status"
-              ? "status"
-              : detail.label === "Development scope"
-                ? "scope"
-                : detail.label === "Site progress"
-                  ? "progress"
-                  : "number";
-          return (
-            <div
-              key={`${detail.label}:${detail.value}`}
-              className="story-dubai-portfolio-card__metric"
-              data-metric-label={detail.label}
-              data-metric-layout={metricLayout}
-              data-metric-tone={(metricIndex % 3) + 1}
-            >
-              <p className="story-metric-label">{tx(detail.label)}</p>
-              <p className="story-metric-value">
-                {metricLayout === "status" ? (
-                  <StoryDubaiStatus value={translatedFullValue} />
-                ) : useTranslatedFullValue ? (
-                  <StoryDubaiMetricNumbers value={translatedFullValue} />
-                ) : (
-                  <>
-                    {metric.prefix ? (
-                      <span className="story-dubai-metric-prefix">{tx(metric.prefix)}</span>
-                    ) : null}
-                    <StoryDubaiMetricNumbers value={tx(metric.value)} />
-                    {metric.subtext ? (
-                      <span className="story-standard-number story-dubai-metric-number story-dubai-metric-affix">
-                        {tx(metric.subtext)}
-                      </span>
-                    ) : null}
-                  </>
-                )}
-              </p>
-            </div>
-          );
-        })}
+    <article className="story-fund-row story-dubai-portfolio-card story-dubai-timeline__entry">
+      <div className="story-dubai-timeline__marker" aria-hidden="true">
+        <span className="story-dubai-portfolio-card__index">{formatChapterNumber(index + 1)}</span>
+      </div>
+      <div className="story-dubai-timeline__content">
+        <header className="story-dubai-portfolio-card__header">
+          <h3 className="story-card-title">{tx(fund.name)}</h3>
+        </header>
+        <div className="story-dubai-portfolio-card__metrics">
+          {headlineMetrics.map((detail, metricIndex) => {
+            const metric = formatMetricValue(detail.value);
+            const translatedFullValue = tx(detail.value);
+            const useTranslatedFullValue =
+              translatedFullValue !== detail.value &&
+              (Boolean(metric.prefix) ||
+                Boolean(metric.subtext) ||
+                metric.preserveLocalizedValue);
+            const metricLayout =
+              detail.label === "Status"
+                ? "status"
+                : detail.label === "Development scope"
+                  ? "scope"
+                  : detail.label === "Site progress"
+                    ? "progress"
+                    : "number";
+            return (
+              <div
+                key={`${detail.label}:${detail.value}`}
+                className="story-dubai-portfolio-card__metric"
+                data-metric-label={detail.label}
+                data-metric-layout={metricLayout}
+                data-metric-tone={(metricIndex % 3) + 1}
+              >
+                <p className="story-metric-label">{tx(detail.label)}</p>
+                <p className="story-metric-value">
+                  {metricLayout === "status" ? (
+                    <StoryDubaiStatus value={translatedFullValue} />
+                  ) : useTranslatedFullValue ? (
+                    <StoryDubaiMetricNumbers value={translatedFullValue} />
+                  ) : (
+                    <>
+                      {metric.prefix ? (
+                        <span className="story-dubai-metric-prefix">{tx(metric.prefix)}</span>
+                      ) : null}
+                      <StoryDubaiMetricNumbers value={tx(metric.value)} />
+                      {metric.subtext ? (
+                        <span className="story-standard-number story-dubai-metric-number story-dubai-metric-affix">
+                          {tx(metric.subtext)}
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </article>
   );
@@ -2591,7 +2593,7 @@ function DubaiScene({
           {tx("Legacy market - we are not opening new Dubai real estate offers. Below is a snapshot of delivered and in-progress real estate volume.")}
         </p>
       </div>
-      <div data-layout="story-dubai-funds" className="w-full">
+      <div data-layout="story-dubai-funds" className="story-dubai-timeline w-full">
         {visibleFunds.map((fund, index) => (
           <StoryDubaiFundRow key={fund.id} fund={fund} index={index} tx={tx} />
         ))}

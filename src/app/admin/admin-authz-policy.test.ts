@@ -58,6 +58,6 @@ describe("admin authorization policy", () => {
     const source = readFileSync(join(adminRoot, "login", "page.tsx"), "utf8");
     expect(source).toContain('setup !== "1"');
     expect(source).toContain('"/admin/identity-migration"');
-    expect(source).toContain('"/admin/analytics"');
+    expect(source).toContain('? "/admin"');
   });
 });

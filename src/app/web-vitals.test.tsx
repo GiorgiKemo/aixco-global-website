@@ -21,6 +21,7 @@ describe("web vitals client reporting", () => {
   beforeEach(() => {
     window.localStorage.clear();
     window.sessionStorage.clear();
+    window.history.replaceState({}, "", "/");
     vi.restoreAllMocks();
     Object.defineProperty(navigator, "globalPrivacyControl", {
       configurable: true,
@@ -64,6 +65,19 @@ describe("web vitals client reporting", () => {
     reportWebVitals(metric as Parameters<typeof reportWebVitals>[0]);
 
     expect(sendBeacon).toHaveBeenCalledOnce();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("never reports metrics from an admin route", () => {
+    const sendBeacon = vi.fn(() => true);
+    const fetchMock = vi.fn();
+    Object.defineProperty(navigator, "sendBeacon", { configurable: true, value: sendBeacon });
+    vi.stubGlobal("fetch", fetchMock);
+    window.history.replaceState({}, "", "/admin/analytics?focus=traffic");
+
+    reportWebVitals(metric as Parameters<typeof reportWebVitals>[0]);
+
+    expect(sendBeacon).not.toHaveBeenCalled();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });

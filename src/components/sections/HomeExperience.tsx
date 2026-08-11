@@ -5,11 +5,14 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useLayoutEffect } from "react";
 import { aixcoHeroBackgroundVideo, aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { BrandbookLandingPage } from "@/components/sections/BrandbookLandingPage";
 
 const DesktopStoryHome = dynamic(
   () => import("@/components/sections/DesktopStoryHome").then((module) => module.DesktopStoryHome),
   { loading: () => <StoryBootSurface /> },
 );
+
+const useLegacyStoryHome = process.env.NEXT_PUBLIC_AIXCO_LEGACY_HOME === "1";
 
 function StoryBootSurface() {
   return (
@@ -89,7 +92,7 @@ export function HomeExperience() {
 
   return (
     <div data-home-experience-mode="story">
-      <DesktopStoryHome />
+      {useLegacyStoryHome ? <DesktopStoryHome /> : <BrandbookLandingPage />}
     </div>
   );
 }

@@ -183,6 +183,7 @@ type OperationsCountTable = "contact_submissions" | "chat_transcripts" | "portal
 type OperationsCountResult = { count: number | null; error: DatabaseError };
 type OperationsCountQuery = PromiseLike<OperationsCountResult> & {
   eq: (column: "status", value: "new" | "qualified") => PromiseLike<OperationsCountResult>;
+  neq: (column: "status", value: "archived") => PromiseLike<OperationsCountResult>;
 };
 type OperationsCountClient = {
   from: (table: OperationsCountTable) => {
@@ -671,7 +672,11 @@ async function countOperationalRows(
   status?: "new" | "qualified",
 ) {
   const query = client.from(table).select("id", { count: "exact", head: true });
-  const result = status ? await query.eq("status", status) : await query;
+  const result = status
+    ? await query.eq("status", status)
+    : table === "portal_click_events"
+      ? await query
+      : await query.neq("status", "archived");
   if (result.error) throw new Error(result.error.code ?? "database_error");
   return result.count ?? 0;
 }

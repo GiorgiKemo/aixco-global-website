@@ -27,6 +27,8 @@ describe("default Supabase admin invite completion", () => {
     auth.getUser.mockResolvedValue({ data: { user: { id: "admin-1" } }, error: null });
     render(<AdminAuthCompletePage />);
 
+    expect(screen.getByText("You will continue to finish your administrator account setup.")).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/authenticator/i);
     expect(window.location.hash).toBe("");
     expect(window.location.pathname).toBe("/admin/auth/complete");
     await waitFor(() => expect(auth.setSession).toHaveBeenCalledWith({

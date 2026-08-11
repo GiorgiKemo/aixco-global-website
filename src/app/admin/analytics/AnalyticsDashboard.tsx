@@ -2,6 +2,8 @@ import Link from "next/link";
 import {
   Activity,
   AlertTriangle,
+  ChevronLeft,
+  ChevronRight,
   Clock3,
   Eye,
   FileCheck2,
@@ -20,6 +22,15 @@ import type {
   AnalyticsDailyPoint,
   AnalyticsFunnelStep,
 } from "@/lib/admin/analytics";
+import {
+  buildAnalyticsPaginationHref,
+  sliceAnalyticsPage,
+} from "./pagination";
+import type {
+  AnalyticsListPagination,
+  AnalyticsPaginationKey,
+  AnalyticsPaginationState,
+} from "./pagination";
 
 const numberFormatter = new Intl.NumberFormat("en", { maximumFractionDigits: 1 });
 const dateTimeFormatter = new Intl.DateTimeFormat("en", {
@@ -83,7 +94,6 @@ function MetricCard({
   value,
   note,
   icon: Icon,
-  tone = "dark",
   onClick,
   active = false,
   ariaControls,
@@ -97,25 +107,18 @@ function MetricCard({
   active?: boolean;
   ariaControls?: string;
 }) {
-  const toneClass = tone === "dark"
-    ? "border-[#161616] bg-[#161616] text-white"
-    : tone === "gold"
-      ? "border-primary bg-primary text-white"
-      : "border-[#161616]/10 bg-white text-[#161616]";
-  const mutedClass = tone === "light" ? "text-[#6f6e6a]" : "text-white/65";
-
-  const className = `group w-full rounded-2xl border p-5 text-left shadow-sm transition-all duration-200 ${toneClass} ${onClick ? "cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" : ""} ${active ? "ring-2 ring-primary ring-offset-2" : ""}`;
+  const className = `group w-full rounded-[12px] border border-[#161616]/10 bg-white p-5 text-left text-[#161616] shadow-sm transition-all duration-200 ${onClick ? "cursor-pointer hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" : ""} ${active ? "ring-2 ring-primary ring-offset-2" : ""}`;
 
   const content = (
     <>
       <div className="flex items-center justify-between gap-4">
-        <p className={`text-[10px] font-semibold uppercase tracking-[0.2em] ${mutedClass}`}>{label}</p>
-        <span className={`grid h-9 w-9 place-items-center rounded-xl transition-transform group-hover:scale-105 ${tone === "light" ? "bg-background text-primary" : "bg-white/10 text-white"}`}>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#77746d]">{label}</p>
+        <span className="grid h-9 w-9 place-items-center rounded-[9px] bg-[#f4eddd] text-primary transition-transform group-hover:scale-105">
           <Icon className="h-4 w-4" aria-hidden="true" />
         </span>
       </div>
       <p className="mt-5 font-display text-[clamp(2rem,4vw,3rem)] font-semibold leading-none tracking-tight">{value}</p>
-      <p className={`mt-3 text-xs leading-5 ${mutedClass}`}>{note}</p>
+      <p className="mt-3 text-xs leading-5 text-[#6f6e6a]">{note}</p>
     </>
   );
 
@@ -134,7 +137,7 @@ const focusCopy: Record<DashboardFocus, { eyebrow: string; title: string; descri
   overview: {
     eyebrow: "At a glance",
     title: "Website performance",
-    description: "A compact read of the selected reporting window. Choose another card to open its focused workspace.",
+    description: "A compact read of the selected reporting window, with verified first-party activity only.",
   },
   operations: {
     eyebrow: "Applications & operations",
@@ -162,45 +165,6 @@ const focusCopy: Record<DashboardFocus, { eyebrow: string; title: string; descri
     description: "Review recent application errors and the durable audit trail for sensitive admin actions.",
   },
 };
-
-function FocusCard({
-  title,
-  value,
-  note,
-  icon: Icon,
-  active,
-  href,
-}: {
-  title: string;
-  value: string;
-  note: string;
-  icon: typeof Users;
-  active: boolean;
-  href: string;
-}) {
-  return (
-    <Link
-      href={href}
-      aria-current={active ? "page" : undefined}
-      className={`group rounded-2xl border bg-white p-5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${active ? "border-primary ring-2 ring-primary/20" : "border-[#161616]/10"}`}
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">{title}</p>
-          <p className="mt-4 font-display text-3xl font-semibold tracking-tight text-[#161616]">{value}</p>
-        </div>
-        <span className="grid h-10 w-10 place-items-center rounded-xl bg-background text-primary transition-transform group-hover:scale-105">
-          <Icon className="h-4 w-4" aria-hidden="true" />
-        </span>
-      </div>
-      <p className="mt-3 text-xs leading-5 text-[#6f6e6a]">{note}</p>
-      <span className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-primary">
-        {active ? "Viewing details" : "Open details"}
-        <span aria-hidden="true">→</span>
-      </span>
-    </Link>
-  );
-}
 
 function SectionHeader({ eyebrow, title, detail }: { eyebrow: string; title: string; detail?: string }) {
   return (
@@ -332,6 +296,81 @@ function UnavailablePanel({ label }: { label: string }) {
   );
 }
 
+function getPaginationItems(page: number, totalPages: number): Array<number | "ellipsis-start" | "ellipsis-end"> {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
+
+  const items: Array<number | "ellipsis-start" | "ellipsis-end"> = [1];
+  const start = Math.max(2, page - 1);
+  const end = Math.min(totalPages - 1, page + 1);
+  if (start > 2) items.push("ellipsis-start");
+  for (let value = start; value <= end; value += 1) items.push(value);
+  if (end < totalPages - 1) items.push("ellipsis-end");
+  items.push(totalPages);
+  return items;
+}
+
+function ListPagination({
+  pagination,
+  label,
+  hrefForPage,
+}: {
+  pagination: AnalyticsListPagination;
+  label: string;
+  hrefForPage: (page: number) => string;
+}) {
+  const { page, total, totalPages, start, end } = pagination;
+  const buttonClass = "inline-flex min-h-11 flex-1 items-center justify-center rounded-[8px] border border-[#161616]/10 bg-white px-3 text-xs font-semibold text-[#161616] transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 sm:flex-none";
+  const disabledClass = "inline-flex min-h-11 flex-1 items-center justify-center rounded-[8px] border border-[#161616]/10 bg-[#f1efe8] px-3 text-xs font-semibold text-[#6f6e6a] sm:flex-none";
+
+  return (
+    <div className="mt-4 flex flex-col gap-3 border-t border-[#161616]/10 pt-4 text-xs sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-[#6f6e6a]">Showing {start}-{end} of {total}</p>
+      {totalPages > 1 ? (
+        <nav className="flex w-full items-center gap-1 overflow-x-auto pb-1 sm:w-auto sm:justify-end sm:pb-0" aria-label={`${label} pagination`}>
+          {page > 1 ? (
+            <Link href={hrefForPage(page - 1)} scroll={false} className={buttonClass} aria-label={`Previous ${label.toLowerCase()} page`}>
+              <ChevronLeft className="h-4 w-4 sm:hidden" aria-hidden="true" />
+              <span className="sr-only sm:not-sr-only">Previous</span>
+            </Link>
+          ) : (
+            <span className={disabledClass} aria-disabled="true">
+              <ChevronLeft className="h-4 w-4 sm:hidden" aria-hidden="true" />
+              <span className="sr-only sm:not-sr-only">Previous</span>
+            </span>
+          )}
+          <div className="flex items-center gap-1 px-1">
+            {getPaginationItems(page, totalPages).map((item) => item === "ellipsis-start" || item === "ellipsis-end" ? (
+              <span key={item} className="grid h-11 min-w-7 place-items-center text-xs text-[#6f6e6a]" aria-hidden="true">&hellip;</span>
+            ) : (
+              <Link
+                key={item}
+                href={hrefForPage(item)}
+                scroll={false}
+                aria-current={item === page ? "page" : undefined}
+                aria-label={`${label}, page ${item}`}
+                className={`grid h-11 min-w-11 place-items-center rounded-[8px] border text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${item === page ? "border-[#161616] bg-[#161616] text-white" : "border-[#161616]/10 bg-white text-[#6f6e6a] hover:border-primary hover:text-primary"}`}
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
+          {page < totalPages ? (
+            <Link href={hrefForPage(page + 1)} scroll={false} className={buttonClass} aria-label={`Next ${label.toLowerCase()} page`}>
+              <span className="sr-only sm:not-sr-only">Next</span>
+              <ChevronRight className="h-4 w-4 sm:hidden" aria-hidden="true" />
+            </Link>
+          ) : (
+            <span className={disabledClass} aria-disabled="true">
+              <span className="sr-only sm:not-sr-only">Next</span>
+              <ChevronRight className="h-4 w-4 sm:hidden" aria-hidden="true" />
+            </span>
+          )}
+        </nav>
+      ) : null}
+    </div>
+  );
+}
+
 function OperationStat({ label, value, note, icon: Icon }: { label: string; value: number; note: string; icon: typeof Users }) {
   return (
     <article className="rounded-xl border border-[#161616]/10 bg-white p-5 shadow-sm">
@@ -391,14 +430,24 @@ export function OperationsOverview({
   );
 }
 
-function RecentSessions({ data }: { data: AdminAnalyticsDashboard["recentSessions"] }) {
+function RecentSessions({
+  data,
+  pagination,
+  hrefForPage,
+}: {
+  data: AdminAnalyticsDashboard["recentSessions"];
+  pagination: AnalyticsListPagination;
+  hrefForPage: (page: number) => string;
+}) {
   if (data === null) return <UnavailablePanel label="Recent sessions could not be loaded from the analytics source." />;
   if (!data.length) return <PanelEmpty label="No sessions have been recorded in this window." />;
+  const pageData = sliceAnalyticsPage(data, pagination);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm">
-      <div className="overflow-x-auto" role="region" tabIndex={0} aria-label="Recent analytics sessions table">
-        <table className="w-full border-collapse text-left text-xs" style={{ minWidth: "1120px" }}>
+    <div>
+      <div className="overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm">
+        <div className="overflow-x-auto" role="region" tabIndex={0} aria-label="Recent analytics sessions table">
+          <table className="w-full border-collapse text-left text-xs" style={{ minWidth: "1120px" }}>
           <thead className="bg-background text-[10px] uppercase tracking-widest text-muted-foreground">
             <tr>
               <th scope="col" className="px-5 py-3 font-semibold">Timing</th>
@@ -410,13 +459,13 @@ function RecentSessions({ data }: { data: AdminAnalyticsDashboard["recentSession
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {data.map((session) => (
+            {pageData.map((session) => (
               <tr key={session.id} className="align-top transition-colors hover:bg-background">
                 <td className="px-5 py-4 font-medium text-[#161616]">
                   <time dateTime={session.startedAt}>{formatDateTime(session.startedAt)}</time>
                   <p className="mt-1 text-[10px] text-muted-foreground">Last seen {formatDateTime(session.lastSeenAt)}</p>
                   {session.endedAt ? <p className="mt-1 text-[10px] text-muted-foreground">Ended {formatDateTime(session.endedAt)}</p> : null}
-                  <p className="mt-1 font-mono text-[10px] text-[#9e9d9d]">{session.id.slice(0, 12)}</p>
+                  <p className="mt-1 font-mono text-[10px] text-[#6f6e6a]">{session.id.slice(0, 12)}</p>
                 </td>
                 <td className="max-w-64 px-5 py-4 text-[#55534f]">
                   <p className="break-all font-semibold text-[#161616]">{session.landingPage}</p>
@@ -433,7 +482,7 @@ function RecentSessions({ data }: { data: AdminAnalyticsDashboard["recentSession
                             <span className="absolute top-1.5 h-1.5 w-1.5 rounded-full bg-primary" style={{ left: "-0.94rem" }} aria-hidden="true" />
                             <div className="flex items-start justify-between gap-2">
                               <strong className="font-semibold text-[#161616]">{event.name.replaceAll("_", " ")}</strong>
-                              <time dateTime={event.occurredAt} className="shrink-0 text-[#9e9d9d]">
+                              <time dateTime={event.occurredAt} className="shrink-0 text-[#6f6e6a]">
                                 {journeyTimeFormatter.format(new Date(event.occurredAt))}
                               </time>
                             </div>
@@ -458,50 +507,66 @@ function RecentSessions({ data }: { data: AdminAnalyticsDashboard["recentSession
                 </td>
                 <td className="px-5 py-4 font-mono text-[11px] text-foreground">
                   <p>{session.ipAddress ?? "Raw IP expired / unavailable"}</p>
-                  {session.ipHash ? <p className="mt-1 text-[10px] text-[#9e9d9d]">hash:{session.ipHash.slice(0, 16)}</p> : null}
+                  {session.ipHash ? <p className="mt-1 text-[10px] text-[#6f6e6a]">hash:{session.ipHash.slice(0, 16)}</p> : null}
                 </td>
                 <td className="px-5 py-4">
                   <span className={`inline-flex items-center rounded-full px-2.5 py-1 font-semibold ${session.isReturning ? "bg-background text-primary" : "bg-emerald-100 text-emerald-900"}`}>
                     {session.isReturning ? "Returning visitor" : "New visitor"}
                   </span>
-                  {session.visitorId ? <p className="mt-2 font-mono text-[10px] text-[#9e9d9d]">visitor:{session.visitorId.slice(0, 12)}</p> : null}
+                  {session.visitorId ? <p className="mt-2 font-mono text-[10px] text-[#6f6e6a]">visitor:{session.visitorId.slice(0, 12)}</p> : null}
                   {session.userAgent ? <p className="mt-2 max-w-56 truncate text-[10px] font-normal text-muted-foreground" title={session.userAgent}>{session.userAgent}</p> : null}
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
+        <p className="border-t border-[#161616]/10 bg-background px-5 py-3 text-[10px] leading-4 text-muted-foreground">
+          Raw network addresses are admin-only and subject to short retention; a one-way hash remains for abuse and session correlation.
+        </p>
       </div>
-      <p className="border-t border-[#161616]/10 bg-background px-5 py-3 text-[10px] leading-4 text-muted-foreground">
-        Raw network addresses are admin-only and subject to short retention; a one-way hash remains for abuse and session correlation.
-      </p>
+      <ListPagination pagination={pagination} label="Visitor sessions" hrefForPage={hrefForPage} />
     </div>
   );
 }
 
-function ErrorsAndAudit({ data }: { data: AdminAnalyticsDashboard }) {
+function ErrorsAndAudit({
+  data,
+  pagination,
+  hrefForPage,
+}: {
+  data: AdminAnalyticsDashboard;
+  pagination: AnalyticsPaginationState;
+  hrefForPage: (target: AnalyticsPaginationKey, page: number) => string;
+}) {
+  const recentErrors = data.recentErrors ? sliceAnalyticsPage(data.recentErrors, pagination.errors) : data.recentErrors;
+  const auditEvents = data.auditEvents ? sliceAnalyticsPage(data.auditEvents, pagination.audit) : data.auditEvents;
+
   return (
     <div className="grid gap-6 xl:grid-cols-2">
       <section>
         <SectionHeader eyebrow="Reliability" title="Recent errors" />
         {data.recentErrors === null ? <UnavailablePanel label="Recent errors could not be loaded." /> : data.recentErrors.length ? (
-          <div className="divide-y divide-border overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm">
-            {data.recentErrors.map((error) => (
+          <div>
+            <div className="divide-y divide-border overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm">
+              {recentErrors?.map((error) => (
               <article key={error.id} className="flex items-start gap-4 px-5 py-4">
                 <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-red-50 text-red-700"><AlertTriangle className="h-4 w-4" aria-hidden="true" /></span>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="break-words text-sm font-semibold text-[#161616]">{error.name}</p>
-                    <time dateTime={error.occurredAt} className="text-[10px] text-[#9e9d9d]">{formatDateTime(error.occurredAt)}</time>
+                    <time dateTime={error.occurredAt} className="text-[10px] text-[#6f6e6a]">{formatDateTime(error.occurredAt)}</time>
                   </div>
                   <p className="mt-1 truncate text-xs text-[#6f6e6a]">{error.pagePath ?? "Unknown page"}{error.sectionId ? ` · ${error.sectionId}` : ""}</p>
                   {error.targetLabel || error.eventType ? <p className="mt-1 truncate text-[10px] text-muted-foreground">{[error.eventType, error.targetLabel].filter(Boolean).join(" · ")}</p> : null}
-                  {error.sessionId ? <p className="mt-1 truncate font-mono text-[10px] text-[#9e9d9d]">session:{error.sessionId}</p> : null}
-                  {error.fingerprint ? <p className="mt-1 truncate font-mono text-[10px] text-[#9e9d9d]">fingerprint:{error.fingerprint}</p> : null}
+                  {error.sessionId ? <p className="mt-1 truncate font-mono text-[10px] text-[#6f6e6a]">session:{error.sessionId}</p> : null}
+                  {error.fingerprint ? <p className="mt-1 truncate font-mono text-[10px] text-[#6f6e6a]">fingerprint:{error.fingerprint}</p> : null}
                   {error.message ? <p className="mt-2 line-clamp-2 break-words font-mono text-[10px] leading-4 text-[#55534f]">{error.message}</p> : null}
                 </div>
               </article>
-            ))}
+              ))}
+            </div>
+            <ListPagination pagination={pagination.errors} label="Application errors" hrefForPage={(page) => hrefForPage("errors", page)} />
           </div>
         ) : <PanelEmpty label="No application errors were recorded in this window." />}
       </section>
@@ -509,8 +574,9 @@ function ErrorsAndAudit({ data }: { data: AdminAnalyticsDashboard }) {
       <section>
         <SectionHeader eyebrow="Security" title="Admin audit trail" />
         {data.auditEvents === null ? <UnavailablePanel label="Admin audit history could not be loaded." /> : data.auditEvents.length ? (
-          <div className="divide-y divide-border overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm">
-            {data.auditEvents.map((event) => (
+          <div>
+            <div className="divide-y divide-border overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm">
+              {auditEvents?.map((event) => (
               <article key={event.id} className="grid gap-2 px-5 py-4 sm:grid-cols-[1fr_auto] sm:items-start">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -531,8 +597,8 @@ function ErrorsAndAudit({ data }: { data: AdminAnalyticsDashboard }) {
                   <p className="mt-1 truncate text-xs text-[#6f6e6a]">Actor: {event.actorId} · {event.authentication}</p>
                   {event.actorEmailHash ? <p className="mt-1 truncate font-mono text-[10px] text-muted-foreground">actor-hash:{event.actorEmailHash}</p> : null}
                   {event.targetType || event.targetId ? <p className="mt-1 truncate text-[10px] text-muted-foreground">Target: {[event.targetType, event.targetId].filter(Boolean).join(":")}</p> : null}
-                  <p className="mt-1 truncate font-mono text-[10px] text-[#9e9d9d]">{event.ipAddress ?? (event.ipHash ? `hash:${event.ipHash.slice(0, 12)}` : "network unavailable")}</p>
-                  {event.requestId ? <p className="mt-1 truncate font-mono text-[10px] text-[#9e9d9d]">request:{event.requestId}</p> : null}
+                  <p className="mt-1 truncate font-mono text-[10px] text-[#6f6e6a]">{event.ipAddress ?? (event.ipHash ? `hash:${event.ipHash.slice(0, 12)}` : "network unavailable")}</p>
+                  {event.requestId ? <p className="mt-1 truncate font-mono text-[10px] text-[#6f6e6a]">request:{event.requestId}</p> : null}
                   {Object.keys(event.details).length ? (
                     <dl className="mt-3 grid gap-x-4 gap-y-1 rounded-lg border border-[#161616]/10 bg-background px-3 py-2 text-[10px] leading-4 sm:grid-cols-2">
                       {Object.entries(event.details).map(([key, value]) => (
@@ -544,9 +610,11 @@ function ErrorsAndAudit({ data }: { data: AdminAnalyticsDashboard }) {
                     </dl>
                   ) : null}
                 </div>
-                <time dateTime={event.occurredAt} className="text-[10px] text-[#9e9d9d]">{formatDateTime(event.occurredAt)}</time>
+                <time dateTime={event.occurredAt} className="text-[10px] text-[#6f6e6a]">{formatDateTime(event.occurredAt)}</time>
               </article>
-            ))}
+              ))}
+            </div>
+            <ListPagination pagination={pagination.audit} label="Admin audit trail" hrefForPage={(page) => hrefForPage("audit", page)} />
           </div>
         ) : <PanelEmpty label="No admin actions were recorded in this window." />}
       </section>
@@ -559,28 +627,34 @@ export function AnalyticsDashboard({
   operations,
   focus,
   range,
+  pagination,
 }: {
   data: AdminAnalyticsDashboard;
   operations: AdminOperationsSnapshotResult;
   focus: DashboardFocus;
   range: string;
+  pagination: AnalyticsPaginationState;
 }) {
   const { summary } = data;
   const conversionRate = getConversionRate(summary.convertedSessions, summary.sessions);
   const pageDepth = summary.sessions > 0 ? summary.pageViews / summary.sessions : 0;
   const engagedRate = summary.sessions > 0 ? (summary.engagedSessions / summary.sessions) * 100 : 0;
   const focusDetails = focusCopy[focus];
-  const focusCards: Array<{ key: DashboardFocus; title: string; value: string; note: string; icon: typeof Users }> = [
-    { key: "overview", title: "Overview", value: formatNumber(summary.sessions), note: `${formatNumber(summary.visitors)} unique visitors · ${formatPercent(engagedRate)} engaged`, icon: Users },
-    { key: "operations", title: "Operations", value: operations.ok ? formatNumber(operations.data.totalContacts) : "—", note: operations.ok ? `${formatNumber(operations.data.newContacts)} new contact requests` : "Operational source unavailable", icon: Inbox },
-    { key: "traffic", title: "Traffic", value: formatNumber(summary.pageViews), note: `${formatNumber(pageDepth)} pages per session · ${formatNumber(summary.uniqueCountries)} countries`, icon: Eye },
-    { key: "journey", title: "Journey", value: formatPercent(conversionRate), note: `${formatNumber(summary.formSubmissions)} confirmed contact requests`, icon: FileCheck2 },
-    { key: "sessions", title: "Sessions", value: data.recentSessions === null ? "—" : formatNumber(data.recentSessions.length), note: "Recent visitor journeys with device and network context", icon: Activity },
-    { key: "reliability", title: "Reliability", value: formatNumber(summary.errorEvents), note: summary.errorEvents === 0 ? "No captured application errors" : "Errors and security audit to review", icon: AlertTriangle },
-  ];
+  const pages = {
+    sessions: pagination.sessions.page,
+    errors: pagination.errors.page,
+    audit: pagination.audit.page,
+  };
+  const hrefForPage = (target: AnalyticsPaginationKey, page: number) => buildAnalyticsPaginationHref({
+    range,
+    focus,
+    pages,
+    target,
+    page,
+  });
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       {data.warnings.length ? (
         <aside className="flex items-start gap-3 rounded-xl border border-amber-800/20 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-950" role="status">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
@@ -588,22 +662,7 @@ export function AnalyticsDashboard({
         </aside>
       ) : null}
 
-      <section aria-labelledby="analytics-workspaces-title">
-        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">Operations workspace</p>
-            <h2 id="analytics-workspaces-title" className="mt-2 font-display text-2xl font-semibold tracking-[-0.035em] text-[#161616] sm:text-3xl">Choose a view</h2>
-          </div>
-          <p className="max-w-xl text-xs leading-5 text-[#6f6e6a] sm:text-right">Each card opens one focused surface, so sessions, conversions, errors, and operations stay easy to scan.</p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {focusCards.map((card) => (
-            <FocusCard key={card.key} title={card.title} value={card.value} note={card.note} icon={card.icon} active={focus === card.key} href={`/admin/analytics?range=${encodeURIComponent(range)}&focus=${card.key}`} />
-          ))}
-        </div>
-      </section>
-
-      <section id="analytics-focus-panel" aria-labelledby="analytics-focus-title" aria-live="polite" className="scroll-mt-6 rounded-2xl border border-[#161616]/10 bg-white p-5 shadow-sm sm:p-7">
+      <section id="analytics-focus-panel" aria-labelledby="analytics-focus-title" aria-live="polite" className="scroll-mt-6 rounded-[14px] border border-[#161616]/10 bg-white p-5 shadow-sm sm:p-7">
         <SectionHeader eyebrow={focusDetails.eyebrow} title={focusDetails.title} detail={focusDetails.description} />
       {focus === "overview" ? <section aria-labelledby="analytics-overview-title">
         <div className="sr-only" id="analytics-overview-title">Analytics overview</div>
@@ -648,11 +707,11 @@ export function AnalyticsDashboard({
 
       {focus === "sessions" ? <section>
         <SectionHeader eyebrow="Live operations" title="Recent sessions" detail="A bounded view of the most recent sessions. Raw IP addresses disappear automatically after the approved short retention window." />
-        <RecentSessions data={data.recentSessions} />
+        <RecentSessions data={data.recentSessions} pagination={pagination.sessions} hrefForPage={(page) => hrefForPage("sessions", page)} />
       </section>
       : null}
 
-      {focus === "reliability" ? <ErrorsAndAudit data={data} /> : null}
+      {focus === "reliability" ? <ErrorsAndAudit data={data} pagination={pagination} hrefForPage={hrefForPage} /> : null}
       </section>
 
       <details className="rounded-xl border border-[#161616]/10 bg-white px-5 py-4 text-xs text-[#55534f]">

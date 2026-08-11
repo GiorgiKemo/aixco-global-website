@@ -27,7 +27,7 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
   if (auth.ok && setup !== "1") {
     redirect(
       auth.principal.authentication !== "legacy-shared-password"
-        ? "/admin/analytics"
+        ? "/admin"
         : "/admin/identity-migration",
     );
   }
@@ -40,8 +40,8 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
         <p className="eyebrow">AIXCO Admin</p>
         <h1 className="mt-4 font-display text-4xl leading-tight">Operations dashboard</h1>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-          Sign in with your individual admin identity to review website analytics, contact submissions,
-          live chat transcripts, reliability events, and portal handoff activity.
+          Sign in with your individual admin identity to review website analytics, contact requests,
+          reliability events, email delivery, and privacy operations.
         </p>
 
         <AdminLoginForm

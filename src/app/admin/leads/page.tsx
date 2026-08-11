@@ -6,14 +6,12 @@ import {
   BarChart3,
   CheckCircle2,
   Inbox,
-  LogOut,
   Mail,
-  MailCheck,
   MessageCircle,
   MousePointerClick,
   UserCheck,
-  UserPlus,
 } from "lucide-react";
+import { AdminShell } from "@/app/admin/_components";
 import { requireAal2AdminSession } from "@/lib/admin/auth";
 import {
   fetchAdminLeadDashboard,
@@ -41,10 +39,10 @@ type AdminView = "overview" | "new" | "pipeline" | "records" | "portal";
 
 const adminViews: { label: string; value: AdminView }[] = [
   { label: "Overview", value: "overview" },
-  { label: "New Leads", value: "new" },
+  { label: "Inbox", value: "new" },
   { label: "Pipeline", value: "pipeline" },
-  { label: "Records", value: "records" },
-  { label: "Portal", value: "portal" },
+  { label: "Active records", value: "records" },
+  { label: "Portal handoffs", value: "portal" },
 ];
 
 function trimText(value: string | null, maxLength = 210) {
@@ -141,12 +139,27 @@ function formatCountSuffix(count: number, hideWhenZero = false) {
   return ` (${count})`;
 }
 
+function getPaginationItems(page: number, totalPages: number): Array<number | "ellipsis-start" | "ellipsis-end"> {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
+
+  const items: Array<number | "ellipsis-start" | "ellipsis-end"> = [1];
+  const start = Math.max(2, page - 1);
+  const end = Math.min(totalPages - 1, page + 1);
+  if (start > 2) items.push("ellipsis-start");
+  for (let value = start; value <= end; value += 1) items.push(value);
+  if (end < totalPages - 1) items.push("ellipsis-end");
+  items.push(totalPages);
+  return items;
+}
+
 function Pagination({
   pagination,
   hrefForPage,
+  label,
 }: {
   pagination: AdminLeadPage;
   hrefForPage: (page: number) => string;
+  label: string;
 }) {
   const { page, total, totalPages, start, end } = pagination;
   const buttonClass =
@@ -160,9 +173,9 @@ function Pagination({
         {total === 0 ? "Showing 0 of 0" : `Showing ${start}-${end} of ${total}`}
       </span>
       {totalPages > 1 ? (
-        <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
+        <nav className="flex w-full items-center gap-1 overflow-x-auto sm:w-auto sm:justify-end" aria-label={`${label} pagination`}>
           {page > 1 ? (
-            <Link href={hrefForPage(page - 1)} className={buttonClass}>
+            <Link href={hrefForPage(page - 1)} className={buttonClass} aria-label={`Previous ${label.toLowerCase()} page`}>
               Previous
             </Link>
           ) : (
@@ -170,11 +183,23 @@ function Pagination({
               Previous
             </span>
           )}
-          <span className="min-w-14 text-center text-xs text-[#6f6e6a]">
-            {page} / {totalPages}
-          </span>
+          <div className="flex items-center gap-1 px-1">
+            {getPaginationItems(page, totalPages).map((item) => item === "ellipsis-start" || item === "ellipsis-end" ? (
+              <span key={item} className="grid h-11 min-w-7 place-items-center text-xs text-[#9e9d9d]" aria-hidden="true">…</span>
+            ) : (
+              <Link
+                key={item}
+                href={hrefForPage(item)}
+                aria-current={item === page ? "page" : undefined}
+                aria-label={`${label}, page ${item}`}
+                className={`grid h-11 min-w-11 place-items-center rounded-md border text-xs font-semibold transition-colors ${item === page ? "border-[#161616] bg-[#161616] text-white" : "border-[#161616]/10 bg-white text-[#6f6e6a] hover:border-primary hover:text-primary"}`}
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
           {page < totalPages ? (
-            <Link href={hrefForPage(page + 1)} className={buttonClass}>
+            <Link href={hrefForPage(page + 1)} className={buttonClass} aria-label={`Next ${label.toLowerCase()} page`}>
               Next
             </Link>
           ) : (
@@ -182,7 +207,7 @@ function Pagination({
               Next
             </span>
           )}
-        </div>
+        </nav>
       ) : null}
     </div>
   );
@@ -196,17 +221,18 @@ function AdminTabs({
   counts: Record<AdminView, number>;
 }) {
   return (
-    <nav className="-mx-4 mb-6 flex overflow-x-auto border-b border-[#161616]/10 px-4 sm:mx-0 sm:px-0" aria-label="Admin dashboard tabs">
+    <nav className="mb-6 flex max-w-full gap-1 overflow-x-auto rounded-[10px] border border-[#161616]/10 bg-white p-1 shadow-sm" aria-label="Lead workspace views">
       {adminViews.map((view) => {
         const active = activeView === view.value;
         return (
           <Link
             key={view.value}
             href={tabHref(view.value)}
-            className={`inline-flex min-h-11 shrink-0 items-center border-b-2 px-3 py-2.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm ${
+            aria-current={active ? "page" : undefined}
+            className={`inline-flex min-h-10 shrink-0 items-center rounded-[7px] px-3 py-2 text-xs font-semibold transition-colors sm:px-4 ${
               active
-                ? "border-[#8b6a18] text-[#8b6a18]"
-                : "border-transparent text-[#6f6e6a] hover:border-[#161616]/20 hover:text-[#161616]"
+                ? "bg-[#161616] text-white"
+                : "text-[#6f6e6a] hover:bg-[#f8f6f1] hover:text-[#161616]"
             }`}
           >
             {view.label}
@@ -418,7 +444,7 @@ function OverviewSection({
       </h2>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <StatCard label="Total Leads" value={totalLeads} icon={BarChart3} />
+        <StatCard label="Active Leads" value={totalLeads} icon={BarChart3} />
         <StatCard label="Open Queue" value={openQueue} icon={Inbox} />
         <StatCard label="Contacts" value={stats.totalContacts} icon={Mail} />
         <StatCard label="Live Chats" value={stats.totalChats} icon={MessageCircle} />
@@ -484,12 +510,20 @@ function NewLeadQueue({
       <section>
         <SectionHeading title="Contact form requests" count={contactPagination.total} />
         <LeadRows leads={contactLeads} emptyLabel="No new contact requests right now." showActions />
-        <Pagination pagination={contactPagination} hrefForPage={(page) => hrefForPage("contact", page)} />
+        <Pagination
+          pagination={contactPagination}
+          hrefForPage={(page) => hrefForPage("contact", page)}
+          label="New contact requests"
+        />
       </section>
       <section>
         <SectionHeading title="Live chat transcripts" count={chatPagination.total} />
         <LeadRows leads={chatLeads} emptyLabel="No new chat transcripts right now." showActions />
-        <Pagination pagination={chatPagination} hrefForPage={(page) => hrefForPage("chat", page)} />
+        <Pagination
+          pagination={chatPagination}
+          hrefForPage={(page) => hrefForPage("chat", page)}
+          label="New chat transcripts"
+        />
       </section>
     </section>
   );
@@ -520,57 +554,14 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
   });
 
   return (
-    <main data-admin-scrollbar="true" className="admin-safe-page admin-safe-page--dashboard min-h-screen bg-[#f6f4ef] px-4 py-4 text-[#161616] sm:px-6 sm:py-8">
-      <div className="mx-auto max-w-[1400px]">
-        <section className="mb-6 border border-[#161616]/10 bg-[#161616] px-5 py-4 text-white">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="font-display text-lg font-bold leading-tight">Admin Panel</h1>
-              <p className="mt-0.5 text-sm text-white/70">
-                AIXCO lead center · {adminPrincipal.email ?? "temporary migration access"}
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <Link
-                href="/admin/analytics"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
-              >
-                <BarChart3 className="h-3.5 w-3.5" aria-hidden="true" />
-                Analytics
-              </Link>
-              <Link
-                href="/admin/email-test"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
-              >
-                <MailCheck className="h-3.5 w-3.5" aria-hidden="true" />
-                Test email
-              </Link>
-              <Link
-                href="/admin/privacy"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
-              >
-                <UserCheck className="h-3.5 w-3.5" aria-hidden="true" />
-                Privacy requests
-              </Link>
-              <Link
-                href="/admin/identity-migration"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
-              >
-                <UserPlus className="h-3.5 w-3.5" aria-hidden="true" />
-                Admin identities
-              </Link>
-              <form action="/admin/logout" method="post">
-                <button
-                  type="submit"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
-                >
-                  <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-                  Sign out
-                </button>
-              </form>
-            </div>
-          </div>
-        </section>
+    <AdminShell adminEmail={adminPrincipal.email}>
+      <main data-admin-scrollbar="true" className="admin-safe-page admin-safe-page--dashboard bg-[#f8f6f1] px-4 py-5 text-[#161616] sm:px-7 sm:py-8 lg:px-10">
+        <div className="mx-auto max-w-[1280px]">
+          <header className="mb-7 max-w-3xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">Leads</p>
+            <h1 className="mt-2 font-display text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.02] tracking-[-0.045em]">Lead workspace</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#6f6e6a]">Review new requests, move qualified leads through the pipeline, and open complete paginated records without mixing unrelated tools.</p>
+          </header>
 
         {result.ok === false ? (
           <section className="rounded-lg border border-[#161616]/10 bg-white p-6">
@@ -626,7 +617,7 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
                   <section className="space-y-4">
                     <div className="rounded-lg border border-[#8b6a18]/25 bg-[#e6c767]/15 px-4 py-3 text-sm leading-relaxed text-[#55534f]">
                       Pipeline shows the {result.data.window.perResourceLimit} most recent contact requests and the {result.data.window.perResourceLimit} most recent chat transcripts
-                      ({allLeads.length} of {totalLeads} total leads). Older leads remain available in Records.
+                      ({allLeads.length} of {totalLeads} active leads). Older active leads remain available in Active records.
                     </div>
                     <PipelineBoard leads={allLeads} />
                   </section>
@@ -659,7 +650,8 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
             );
           })()
         )}
-      </div>
-    </main>
+        </div>
+      </main>
+    </AdminShell>
   );
 }

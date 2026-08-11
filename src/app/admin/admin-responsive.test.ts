@@ -34,7 +34,8 @@ describe("admin responsive safeguards", () => {
     expect(analyticsPage).not.toContain("requireAdminSession");
     expect(analyticsPage).toContain("{ required: true }");
     expect(adminIndex).toContain("getAdminAuthDecision");
-    expect(adminIndex).toContain('redirect("/admin/analytics")');
+    expect(adminIndex).toContain("loadAdminLaunchpadData");
+    expect(adminIndex).toContain("<AdminShell");
     expect(adminIndex).toContain('redirect("/admin/identity-migration")');
   });
 
@@ -50,5 +51,29 @@ describe("admin responsive safeguards", () => {
     expect(emailTestPage).toContain("min-h-11");
     expect(privacyPage).toContain("min-h-11");
     expect(leadsPage).toContain("min-h-11");
+  });
+
+  it("describes password-only identity access without requiring an authenticator", () => {
+    const identityPage = readAdminSource("./identity-migration/page.tsx");
+
+    expect(identityPage).toContain("const passwordOnlyAccess = !config.mfaRequired");
+    expect(identityPage).toContain("Password-only admin access is active");
+    expect(identityPage).toContain("Password access active");
+  });
+
+  it("uses AA-safe admin metadata colors and honest active-lead labels", () => {
+    const css = readAdminSource("./admin.css");
+    const analyticsDashboard = readAdminSource("./analytics/AnalyticsDashboard.tsx");
+    const leadDetails = readAdminSource("./leads/AdminLeadDetails.tsx");
+    const leadsPage = readAdminSource("./leads/page.tsx");
+
+    expect(css).toContain("--primary: 41.6 68.7% 28.8%");
+    expect(css).toMatch(/\.admin-shell__rail-avatar,[\s\S]*?background:\s*#8b6818;[\s\S]*?color:\s*#fff;/);
+    expect(analyticsDashboard).not.toContain('text-[#9e9d9d]');
+    expect(leadDetails).not.toContain('text-[#9e9d9d]');
+    expect(leadsPage).toContain('{ label: "Active records", value: "records" }');
+    expect(leadsPage).toContain('label="Active Leads"');
+    expect(leadsPage).not.toContain("All records");
+    expect(leadsPage).not.toContain("Total Leads");
   });
 });

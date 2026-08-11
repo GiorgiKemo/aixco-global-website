@@ -8,6 +8,7 @@ import { ScrollManager } from "@/components/ScrollManager";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
 import { useDelayedIdleReady } from "@/hooks/use-idle-ready";
 import type { SiteContent, SiteContentResult } from "@/lib/backend/site-content";
+import { MarketingAnalytics } from "./marketing-analytics";
 
 const Modals = lazy(() => import("@/components/Modals").then((module) => ({ default: module.Modals })));
 const ContactNudge = lazy(() =>
@@ -70,15 +71,18 @@ export function ClientShell({
   initialSiteContentSource,
 }: ClientShellProps) {
   return (
-    <I18nProvider>
-      <SiteContentProvider initialContent={initialSiteContent} initialSource={initialSiteContentSource}>
-        <UIProvider>
-          <ScrollManager />
-          <SkipToContentLink />
-          {children}
-          <DeferredShellUi />
-        </UIProvider>
-      </SiteContentProvider>
-    </I18nProvider>
+    <>
+      <MarketingAnalytics />
+      <I18nProvider>
+        <SiteContentProvider initialContent={initialSiteContent} initialSource={initialSiteContentSource}>
+          <UIProvider>
+            <ScrollManager />
+            <SkipToContentLink />
+            {children}
+            <DeferredShellUi />
+          </UIProvider>
+        </SiteContentProvider>
+      </I18nProvider>
+    </>
   );
 }

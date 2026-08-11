@@ -5,12 +5,16 @@ const mocks = vi.hoisted(() => ({
   audit: vi.fn(),
   auth: vi.fn(),
   distributedGuard: vi.fn(),
+  serverSignOut: vi.fn(),
 }));
 
 vi.mock("@/lib/admin/audit", () => ({ auditAdminLoginAttempt: mocks.audit }));
 vi.mock("@/lib/admin/auth", () => ({ getAdminAuthDecision: mocks.auth }));
 vi.mock("@/lib/backend/lead-capture-abuse", () => ({
   checkDistributedLeadCaptureLimit: mocks.distributedGuard,
+}));
+vi.mock("@/lib/supabase/auth-server", () => ({
+  getSupabaseAuthServerClient: () => Promise.resolve({ auth: { signOut: mocks.serverSignOut } }),
 }));
 
 import { POST } from "./route";
@@ -32,9 +36,10 @@ describe("admin login audit route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resetRateLimitStore();
-    mocks.audit.mockResolvedValue(true);
-    mocks.distributedGuard.mockResolvedValue({ allowed: true });
-    mocks.auth.mockResolvedValue({
+    mocks.audit.mockReset().mockResolvedValue(true);
+    mocks.distributedGuard.mockReset().mockResolvedValue({ allowed: true });
+    mocks.serverSignOut.mockReset().mockResolvedValue({ error: null });
+    mocks.auth.mockReset().mockResolvedValue({
       ok: true,
       principal: {
         id: "4427dba7-3040-40fe-b965-9b278610f7b7",
@@ -90,6 +95,56 @@ describe("admin login audit route", () => {
         aal: "aal2",
       }),
     }));
+    expect(mocks.distributedGuard).not.toHaveBeenCalled();
+  });
+
+  it("authenticates a verified password-only success before anonymous abuse controls", async () => {
+    mocks.auth.mockResolvedValueOnce({
+      ok: true,
+      principal: {
+        id: "4427dba7-3040-40fe-b965-9b278610f7b7",
+        email: "admin@aixco.global",
+        authentication: "supabase-password",
+        aal: "aal1",
+      },
+    });
+    mocks.distributedGuard.mockResolvedValue({ allowed: false });
+
+    const response = await POST(request({
+      email: "admin@aixco.global",
+      outcome: "success",
+      phase: "session",
+    }));
+
+    expect(response.status).toBe(202);
+    await expect(response.json()).resolves.toEqual({ ok: true, stored: true });
+    expect(mocks.auth).toHaveBeenCalledOnce();
+    expect(mocks.distributedGuard).not.toHaveBeenCalled();
+    expect(mocks.audit).toHaveBeenCalledWith(expect.objectContaining({
+      principal: expect.objectContaining({
+        authentication: "supabase-password",
+        aal: "aal1",
+      }),
+    }));
+    expect(mocks.serverSignOut).not.toHaveBeenCalled();
+  });
+
+  it("does not let exhausted anonymous audit buckets block a verified success", async () => {
+    const failure = { email: null, outcome: "failure" as const, phase: "credentials" as const };
+    for (let index = 0; index < 20; index += 1) {
+      expect((await POST(request(failure))).status).toBe(202);
+    }
+
+    const response = await POST(request({
+      email: "admin@aixco.global",
+      outcome: "success",
+      phase: "session",
+    }));
+
+    expect(response.status).toBe(202);
+    await expect(response.json()).resolves.toEqual({ ok: true, stored: true });
+    expect(mocks.auth).toHaveBeenCalledOnce();
+    expect(mocks.audit).toHaveBeenCalledTimes(21);
   });
 
   it("fails closed for a verified login when its durable audit row is not stored", async () => {
@@ -108,6 +163,7 @@ describe("admin login audit route", () => {
       stored: false,
       error: "audit_unavailable",
     });
+    expect(mocks.serverSignOut).toHaveBeenCalledWith({ scope: "local" });
   });
 
   it("reports best-effort failure signals as unstored and unverified when persistence is unavailable", async () => {
@@ -128,6 +184,7 @@ describe("admin login audit route", () => {
       phase: "credentials",
     }));
     expect(mocks.audit.mock.calls[0]?.[0]).not.toHaveProperty("principal");
+    expect(mocks.serverSignOut).not.toHaveBeenCalled();
   });
 
   it("returns a retryable failure instead of claiming storage when the audit helper rejects", async () => {
@@ -145,6 +202,7 @@ describe("admin login audit route", () => {
       stored: false,
       error: "audit_unavailable",
     });
+    expect(mocks.serverSignOut).toHaveBeenCalledWith({ scope: "local" });
   });
 
   it.each(["credentials", "authorization", "mfa", "session"] as const)(

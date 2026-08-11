@@ -1,6 +1,8 @@
 .admin-safe-page {
   --admin-inline-padding: 1rem;
   --admin-block-padding: 1rem;
+  /* Admin copy uses the darker brand gold so 10-12px labels remain AA. */
+  --primary: 41.6 68.7% 28.8%;
   min-height: 100dvh;
   padding-top: max(var(--admin-block-padding), env(safe-area-inset-top, 0px)) !important;
   padding-right: max(var(--admin-inline-padding), env(safe-area-inset-right, 0px)) !important;
@@ -24,5 +26,669 @@
 
   .admin-safe-page--dashboard {
     --admin-block-padding: 2rem;
+  }
+}
+
+/* Shared AIXCO admin application shell. */
+.admin-shell {
+  --admin-shell-bg: #f8f6f1;
+  --admin-shell-panel: #ffffff;
+  --admin-shell-ink: #161616;
+  --admin-shell-muted: #6f6e6a;
+  --admin-shell-border: rgba(22, 22, 22, 0.12);
+  --admin-shell-gold: #a97d12;
+  --admin-shell-gold-soft: #d7ba67;
+  --admin-shell-rail-width: 100px;
+  --admin-shell-topbar-height: 130px;
+  min-height: 100dvh;
+  background: var(--admin-shell-bg);
+  color: var(--admin-shell-ink);
+}
+
+.admin-shell__skip-link {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top, 0px));
+  left: calc(var(--admin-shell-rail-width) + env(safe-area-inset-left, 0px) + 18px);
+  z-index: 120;
+  min-height: 44px;
+  border: 2px solid var(--admin-shell-gold);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--admin-shell-ink);
+  font-size: 13px;
+  font-weight: 650;
+  padding: 11px 16px;
+  transform: translateY(calc(-100% - 24px));
+  transition: transform 140ms ease;
+}
+
+.admin-shell__skip-link:focus {
+  transform: translateY(0);
+}
+
+.admin-shell__rail {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 50;
+  display: flex;
+  width: calc(var(--admin-shell-rail-width) + env(safe-area-inset-left, 0px));
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0d0d0d;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.admin-shell__rail::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-shell__rail-brand,
+.admin-shell__rail-link,
+.admin-shell__rail-avatar,
+.admin-shell__rail-signout button {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-shell__rail-brand {
+  width: 100%;
+  height: 130px;
+  flex: 0 0 130px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-shell__rail-brand-image {
+  display: block;
+  width: 48px;
+  height: 48px;
+  background: url("/aixco-global-op2/images/AIXW-transparent.webp") center / contain no-repeat;
+}
+
+.admin-shell__rail-nav {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.admin-shell__rail-link {
+  position: relative;
+  width: 100%;
+  height: 62px;
+  color: rgba(255, 255, 255, 0.74);
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.admin-shell__rail-link::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: transparent;
+  content: "";
+}
+
+.admin-shell__rail-link svg,
+.admin-shell__rail-signout svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.65;
+}
+
+.admin-shell__rail-link:hover,
+.admin-shell__rail-link[data-active="true"] {
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--admin-shell-gold-soft);
+}
+
+.admin-shell__rail-link[data-active="true"]::before {
+  background: var(--admin-shell-gold);
+}
+
+.admin-shell__rail-footer {
+  display: grid;
+  width: 100%;
+  justify-items: center;
+  gap: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 0;
+}
+
+.admin-shell__rail-avatar,
+.admin-shell__avatar {
+  border-radius: 999px;
+  background: #8b6818;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.admin-shell__rail-avatar {
+  width: 44px;
+  height: 44px;
+}
+
+.admin-shell__rail-signout,
+.admin-shell__rail-signout button {
+  width: 100%;
+}
+
+.admin-shell__rail-signout button {
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.admin-shell__rail-signout button:hover {
+  background: rgba(255, 255, 255, 0.055);
+  color: #fff;
+}
+
+.admin-shell__topbar {
+  position: fixed;
+  inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) auto calc(var(--admin-shell-rail-width) + env(safe-area-inset-left, 0px));
+  z-index: 40;
+  display: flex;
+  min-width: 0;
+  height: var(--admin-shell-topbar-height);
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--admin-shell-border);
+  background: rgba(255, 255, 255, 0.96);
+  padding: 0 max(46px, env(safe-area-inset-right, 0px)) 0 52px;
+}
+
+.admin-shell__wordmark {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+.admin-shell__wordmark-image {
+  display: block;
+  width: clamp(210px, 18vw, 258px);
+  aspect-ratio: 1600 / 333;
+  background: url("/aixco-global-op2/images/AIXCOGlobal-horizontal-dark.webp") center / contain no-repeat;
+}
+
+.admin-shell__topbar-profile {
+  display: flex;
+  min-height: 44px;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-shell__avatar {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-shell__profile-copy {
+  display: grid;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.admin-shell__profile-copy strong {
+  overflow: hidden;
+  color: var(--admin-shell-ink);
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-shell__profile-copy small {
+  max-width: 240px;
+  overflow: hidden;
+  color: var(--admin-shell-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-shell__menu-button {
+  display: none;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--admin-shell-border);
+  border-radius: 8px;
+  background: var(--admin-shell-panel);
+  color: var(--admin-shell-ink);
+  cursor: pointer;
+}
+
+.admin-shell__menu-button svg {
+  width: 22px;
+  height: 22px;
+}
+
+.admin-shell__content {
+  min-width: 0;
+  min-height: 100dvh;
+  margin-left: calc(var(--admin-shell-rail-width) + env(safe-area-inset-left, 0px));
+  padding-top: calc(var(--admin-shell-topbar-height) + env(safe-area-inset-top, 0px));
+}
+
+.admin-shell__content:focus {
+  outline: none;
+}
+
+.admin-loading {
+  min-height: calc(100dvh - var(--admin-shell-topbar-height));
+  padding: clamp(1.5rem, 3vw, 3.5rem);
+  background: #f8f6f1;
+}
+
+.admin-loading__header,
+.admin-loading__grid {
+  width: min(100%, 79.2rem);
+  margin-inline: auto;
+}
+
+.admin-loading__header {
+  display: grid;
+  gap: 0.9rem;
+  margin-block-end: 1.5rem;
+}
+
+.admin-loading__line,
+.admin-loading__icon {
+  display: block;
+  background: #e8e4da;
+  animation: admin-loading-pulse 1.1s ease-in-out infinite;
+}
+
+.admin-loading__line {
+  height: 0.8rem;
+  border-radius: 999px;
+}
+
+.admin-loading__line--eyebrow {
+  width: 8rem;
+  height: 0.55rem;
+}
+
+.admin-loading__line--title {
+  width: min(18rem, 54vw);
+  height: 3rem;
+  border-radius: 0.45rem;
+}
+
+.admin-loading__line--intro {
+  width: min(24rem, 68vw);
+}
+
+.admin-loading__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.admin-loading__card {
+  display: grid;
+  grid-template-columns: 4.45rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 12.5rem;
+  padding: 1.4rem 1.75rem;
+  border: 1px solid rgba(22, 22, 22, 0.1);
+  border-radius: 0.7rem;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(22, 22, 22, 0.04);
+}
+
+.admin-loading__icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+}
+
+.admin-loading__copy {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-loading__line--card-title {
+  width: min(11rem, 80%);
+}
+
+.admin-loading__line--metric {
+  width: 6rem;
+  height: 2.6rem;
+  border-radius: 0.4rem;
+}
+
+.admin-loading__line--body {
+  width: min(16rem, 100%);
+}
+
+.admin-loading__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes admin-loading-pulse {
+  0%, 100% { opacity: 0.58; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 52rem) {
+  .admin-loading {
+    padding: 1.5rem 1rem 2.5rem;
+  }
+
+  .admin-loading__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-loading__line,
+  .admin-loading__icon {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+.admin-shell__content > .admin-safe-page {
+  min-height: calc(100dvh - var(--admin-shell-topbar-height) - env(safe-area-inset-top, 0px));
+}
+
+.admin-shell__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  border: 0;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.admin-shell__drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 90;
+  display: flex;
+  width: min(90vw, 360px);
+  max-width: 100%;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--admin-shell-panel);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: -18px 0 48px rgba(0, 0, 0, 0.2);
+  overscroll-behavior: contain;
+}
+
+.admin-shell__drawer-header {
+  display: flex;
+  min-height: 82px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--admin-shell-border);
+  padding: 16px 18px 16px 22px;
+}
+
+.admin-shell__drawer-header p {
+  color: #7c5d17;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.admin-shell__drawer-header h2 {
+  margin-top: 3px;
+  color: var(--admin-shell-ink);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.admin-shell__drawer-header button {
+  display: inline-flex;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--admin-shell-border);
+  border-radius: 8px;
+  background: var(--admin-shell-panel);
+  color: var(--admin-shell-ink);
+  cursor: pointer;
+}
+
+.admin-shell__drawer-header svg {
+  width: 21px;
+  height: 21px;
+}
+
+.admin-shell__drawer-nav {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+}
+
+.admin-shell__drawer-link {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  gap: 14px;
+  border-left: 3px solid transparent;
+  border-radius: 6px;
+  color: var(--admin-shell-ink);
+  padding: 10px 12px;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.admin-shell__drawer-link:hover,
+.admin-shell__drawer-link[data-active="true"] {
+  border-left-color: var(--admin-shell-gold);
+  background: #f5f1e7;
+}
+
+.admin-shell__drawer-link svg {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  color: var(--admin-shell-gold);
+  stroke-width: 1.7;
+}
+
+.admin-shell__drawer-link span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.admin-shell__drawer-link strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-shell__drawer-link small {
+  color: var(--admin-shell-muted);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.admin-shell__drawer-footer {
+  display: grid;
+  gap: 10px;
+  margin-top: auto;
+  border-top: 1px solid var(--admin-shell-border);
+  padding: 14px;
+}
+
+.admin-shell__drawer-profile {
+  display: grid;
+  min-height: 58px;
+  grid-template-columns: 40px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+  color: var(--admin-shell-ink);
+  padding: 7px 8px;
+}
+
+.admin-shell__drawer-profile > span:not(.admin-shell__avatar) {
+  display: grid;
+  min-width: 0;
+}
+
+.admin-shell__drawer-profile strong,
+.admin-shell__drawer-profile small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-shell__drawer-profile strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-shell__drawer-profile small {
+  margin-top: 2px;
+  color: var(--admin-shell-muted);
+  font-size: 10px;
+}
+
+.admin-shell__drawer-profile > svg {
+  width: 18px;
+  height: 18px;
+  color: var(--admin-shell-muted);
+}
+
+.admin-shell__drawer-signout button {
+  display: inline-flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid var(--admin-shell-border);
+  border-radius: 8px;
+  background: var(--admin-shell-panel);
+  color: var(--admin-shell-ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-shell__drawer-signout svg {
+  width: 18px;
+  height: 18px;
+}
+
+.admin-shell a:focus-visible,
+.admin-shell button:focus-visible {
+  outline: 2px solid var(--admin-shell-gold);
+  outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+  .admin-shell {
+    --admin-shell-topbar-height: 72px;
+  }
+
+  .admin-shell__rail {
+    display: none;
+  }
+
+  .admin-shell__topbar {
+    inset: env(safe-area-inset-top, 0px) 0 auto 0;
+    height: var(--admin-shell-topbar-height);
+    gap: 12px;
+    padding-right: max(14px, env(safe-area-inset-right, 0px));
+    padding-left: max(14px, env(safe-area-inset-left, 0px));
+  }
+
+  .admin-shell__skip-link {
+    left: max(14px, env(safe-area-inset-left, 0px));
+  }
+
+  .admin-shell__wordmark-image {
+    width: clamp(150px, 47vw, 188px);
+  }
+
+  .admin-shell__topbar-profile {
+    display: none;
+  }
+
+  .admin-shell__menu-button {
+    display: inline-flex;
+  }
+
+  .admin-shell__content {
+    margin-left: 0;
+    padding-top: calc(var(--admin-shell-topbar-height) + env(safe-area-inset-top, 0px));
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .admin-shell {
+    --admin-shell-rail-width: 76px;
+    --admin-shell-topbar-height: 88px;
+  }
+
+  .admin-shell__rail-brand {
+    height: 88px;
+    flex-basis: 88px;
+  }
+
+  .admin-shell__rail-brand-image {
+    width: 42px;
+    height: 42px;
+  }
+
+  .admin-shell__topbar {
+    padding-right: max(28px, env(safe-area-inset-right, 0px));
+    padding-left: 32px;
+  }
+
+  .admin-shell__wordmark-image {
+    width: 210px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-shell *,
+  .admin-shell *::before,
+  .admin-shell *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

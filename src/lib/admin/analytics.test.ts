@@ -318,6 +318,7 @@ describe("admin analytics data access", () => {
       });
       return {
         eq: vi.fn((_column: "status", status: "new" | "qualified") => result(status)),
+        neq: vi.fn(() => result()),
         then: <TResult1 = { count: number; error: null }, TResult2 = never>(
           onfulfilled?: ((value: { count: number; error: null }) => TResult1 | PromiseLike<TResult1>) | null,
           onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
@@ -353,6 +354,7 @@ describe("admin analytics data access", () => {
   it("marks operations totals unavailable when a count query fails", async () => {
     const failedQuery = {
       eq: vi.fn(async () => ({ count: null, error: { code: "XX001", message: "failure" } })),
+      neq: vi.fn(async () => ({ count: null, error: { code: "XX001", message: "failure" } })),
       then: <TResult1 = { count: null; error: { code: string; message: string } }, TResult2 = never>(
         onfulfilled?: ((value: { count: null; error: { code: string; message: string } }) => TResult1 | PromiseLike<TResult1>) | null,
         onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
