@@ -225,7 +225,7 @@ export function BrandbookLandingPage() {
                 <p className="mb-6 flex items-center gap-3 text-[0.64rem] font-semibold uppercase tracking-[0.23em] text-[#E6C767]">
                   <span className="h-px w-8 bg-[#E6C767]" /> {tx("Batumi property profile")}
                 </p>
-                <h1 className="max-w-[8.5ch] text-[clamp(3.9rem,7vw,7.4rem)] font-medium leading-[0.86] tracking-[-0.065em]">
+                <h1 className="max-w-none text-[clamp(3.2rem,13vw,3.9rem)] font-medium leading-[0.86] tracking-[-0.065em] sm:max-w-[8.5ch] sm:text-[clamp(3.9rem,7vw,7.4rem)]">
                   Project <span className="text-[#E6C767]">Reverance</span>
                 </h1>
                 <p className="mt-8 max-w-[28rem] text-[1.05rem] leading-[1.55] text-white/68 sm:text-[1.12rem]">
