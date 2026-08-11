@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
   Check,
+  Maximize2,
   Menu,
   MoveRight,
   X,
@@ -35,6 +36,11 @@ const projectImages = {
   gym: aixcoCurrentProjectGalleryImages[15].src,
 } as const;
 
+type ExpandedImage = {
+  src: string;
+  alt: string;
+};
+
 const projectInvestmentBenefits = [
   { title: "100% Ownership", body: "Full freehold, no local partner, no conditions. Yours entirely." },
   { title: "No Residency Permit", body: "Ownership without relocation. Buy from anywhere." },
@@ -58,7 +64,25 @@ export function BrandbookLandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [requestReference, setRequestReference] = useState<string | null>(null);
+  const [expandedImage, setExpandedImage] = useState<ExpandedImage | null>(null);
   const formStartedAtRef = useRef(Date.now());
+
+  useEffect(() => {
+    if (!expandedImage) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setExpandedImage(null);
+    };
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [expandedImage]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -192,12 +216,12 @@ export function BrandbookLandingPage() {
       <main>
         <section id="top" className="scroll-mt-20">
           <div className="mx-auto grid min-h-[calc(100svh-4.6rem)] w-full max-w-[1600px] lg:grid-cols-[0.82fr_1.18fr]">
-            <div className="relative flex min-h-[36rem] flex-col justify-between overflow-hidden bg-[#161616] px-6 pb-8 pt-8 text-white sm:px-10 sm:pb-10 lg:min-h-[calc(100svh-4.6rem)] lg:px-14 lg:pt-12">
+            <div className="relative flex min-h-[36rem] flex-col overflow-hidden bg-[#161616] px-6 pb-8 pt-8 text-white sm:px-10 sm:pb-10 lg:min-h-[calc(100svh-4.6rem)] lg:px-14 lg:pt-12">
               <div className="relative z-10 flex items-start justify-end">
                 <span className="pt-1 text-right text-[0.58rem] font-medium uppercase tracking-[0.2em] text-white/45">01 / 04<br />AIXCO GLOBAL</span>
               </div>
 
-              <div className="relative z-10 max-w-[35rem] py-10 lg:py-6">
+              <div className="relative z-10 mt-4 max-w-[35rem] lg:mt-3">
                 <p className="mb-6 flex items-center gap-3 text-[0.64rem] font-semibold uppercase tracking-[0.23em] text-[#E6C767]">
                   <span className="h-px w-8 bg-[#E6C767]" /> {tx("Batumi property profile")}
                 </p>
@@ -224,16 +248,16 @@ export function BrandbookLandingPage() {
                       event.preventDefault();
                       handleNavClick("#contact");
                     }}
-                    className="inline-flex min-h-12 items-center gap-3 border border-white/25 px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:border-[#E6C767] hover:text-[#E6C767]"
+                    className="inline-flex min-h-12 items-center gap-3 border border-white/70 bg-white/[0.06] px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]"
                   >
                     {tx("Contact AIXCO")} <ArrowRight size={16} strokeWidth={1.6} />
                   </a>
                 </div>
               </div>
 
-              <div className="relative z-10 flex items-end justify-between border-t border-white/15 pt-5 text-[0.62rem] font-medium uppercase tracking-[0.17em] text-white/45">
+              <div className="relative z-10 mt-auto grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t border-white/25 pt-4 text-[0.58rem] font-medium uppercase tracking-[0.15em] text-white/60 sm:text-[0.62rem] sm:tracking-[0.17em]">
                 <span>59 Adlia Street · Batumi</span>
-                <span className="hidden items-center gap-2 sm:flex"><span className="h-1.5 w-1.5 rounded-full bg-[#E6C767]" /> {tx("Completion targeted for July 2028")}</span>
+                <span className="hidden items-center justify-self-end gap-2 text-right sm:flex"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#E6C767]" /> {tx("Completion targeted for July 2028")}</span>
               </div>
             </div>
 
@@ -247,15 +271,25 @@ export function BrandbookLandingPage() {
                 sizes="(min-width: 1024px) 60vw, 100vw"
                 className="object-cover object-[58%_center] transition-transform duration-[1400ms] ease-out hover:scale-[1.03]"
               />
-              <div aria-hidden="true" className="absolute inset-0 bg-black/30" />
-              <div className="absolute inset-x-5 bottom-5 flex items-end justify-between text-white sm:inset-x-8 sm:bottom-8 lg:inset-x-10">
-                <div>
+              <button
+                type="button"
+                aria-label="Expand the Reverance residence exterior image"
+                onClick={() => setExpandedImage({ src: projectImages.hero, alt: "The Reverance residence exterior in Batumi" })}
+                className="absolute inset-0 z-10 cursor-zoom-in"
+              >
+                <span className="absolute right-5 top-5 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:right-8 sm:top-8">
+                  <Maximize2 size={13} strokeWidth={1.7} /> Expand image
+                </span>
+              </button>
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/90 via-[#0b0b0b]/25 to-[#0b0b0b]/10" />
+              <div className="pointer-events-none absolute inset-x-5 bottom-5 z-20 grid gap-5 text-white sm:inset-x-8 sm:bottom-8 lg:inset-x-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                <div className="max-w-[30rem] bg-[#0b0b0b]/65 p-4 backdrop-blur-sm sm:p-5">
                   <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">Project Reverance</p>
-                  <p className="mt-2 max-w-[28rem] text-xl font-medium tracking-[-0.03em] sm:text-2xl">{tx("Reverance is a premium residential complex on Batumi's New Boulevard.")}</p>
+                  <p className="mt-2 text-xl font-medium leading-[1.15] tracking-[-0.03em] sm:text-2xl">{tx("Reverance is a premium residential complex on Batumi's New Boulevard.")}</p>
                 </div>
-                <div className="flex flex-wrap items-center justify-end gap-2">
-                  <Link href={currentProjectHref} className="border border-white/35 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] transition-colors hover:border-[#E6C767] hover:text-[#E6C767]">{tx("View project")}</Link>
-                  <CurrentProjectBrochureLink className="inline-flex items-center gap-2 border border-white/35 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] transition-colors hover:border-[#E6C767] hover:text-[#E6C767]" />
+                <div className="pointer-events-auto z-30 flex flex-wrap items-center justify-start gap-2 lg:justify-end">
+                  <Link href={currentProjectHref} className="inline-flex min-h-10 items-center justify-center border border-white/80 bg-[#0b0b0b]/80 px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white shadow-lg transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]">{tx("View project")}</Link>
+                  <CurrentProjectBrochureLink className="inline-flex min-h-10 items-center gap-2 border border-white/80 bg-[#0b0b0b]/80 px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white shadow-lg transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]" />
                 </div>
               </div>
             </div>
@@ -304,12 +338,22 @@ export function BrandbookLandingPage() {
 
             <div className="relative min-h-[28rem] overflow-hidden bg-[#D9D0C0] lg:min-h-[44rem]">
               <Image src={projectImages.sunset} alt="Sunset over the residence facade" fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover object-center" />
-              <div className="absolute inset-0 bg-black/20" />
-              <div className="absolute left-5 top-5 flex items-center gap-3 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white sm:left-8 sm:top-8">
+              <button
+                type="button"
+                aria-label="Expand the sunset over the residence facade image"
+                onClick={() => setExpandedImage({ src: projectImages.sunset, alt: "Sunset over the residence facade" })}
+                className="absolute inset-0 z-10 cursor-zoom-in"
+              >
+                <span className="absolute right-5 top-5 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:right-8 sm:top-8">
+                  <Maximize2 size={13} strokeWidth={1.7} /> Expand image
+                </span>
+              </button>
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/85 via-[#0b0b0b]/20 to-[#0b0b0b]/20" />
+              <div className="pointer-events-none absolute left-5 top-5 z-20 flex items-center gap-3 bg-[#0b0b0b]/60 px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm sm:left-8 sm:top-8">
                 <span className="h-px w-8 bg-[#E6C767]" /> {tx("Reverance project gallery")}
               </div>
-              <div className="absolute bottom-5 right-5 flex max-w-[16rem] items-end justify-between gap-8 text-right text-white sm:bottom-8 sm:right-8">
-                <span className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-white/65">{tx("59 Adlia Street")}</span>
+              <div className="pointer-events-none absolute bottom-5 right-5 z-20 grid max-w-[20rem] gap-2 bg-[#0b0b0b]/65 p-4 text-right text-white backdrop-blur-sm sm:bottom-8 sm:right-8">
+                <span className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-white/80">{tx("59 Adlia Street")}</span>
                 <p className="text-xl font-medium leading-[1.05] tracking-[-0.035em]">{tx("New Boulevard 5 minutes away.")}</p>
               </div>
             </div>
@@ -354,17 +398,35 @@ export function BrandbookLandingPage() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <figure className="relative aspect-[0.92] overflow-hidden bg-[#D9D0C0] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
+                <figure className="group relative aspect-[0.92] overflow-hidden bg-[#D9D0C0] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
                   <Image src={projectImages.lounge} alt="Reverance residential towers project render" fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <figcaption className="absolute bottom-4 left-4 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white/75">{tx("Project gallery")}</figcaption>
+                  <button type="button" aria-label="Expand the Reverance residential towers image" onClick={() => setExpandedImage({ src: projectImages.lounge, alt: "Reverance residential towers project render" })} className="absolute inset-0 z-10 cursor-zoom-in">
+                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                      <Maximize2 size={13} strokeWidth={1.7} /> Expand
+                    </span>
+                  </button>
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
+                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 bg-[#0b0b0b]/65 px-3 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">{tx("Project gallery")}</figcaption>
                 </figure>
-                <figure className="relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
+                <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
                   <Image src={projectImages.arrival} alt="Reverance arrival and landscaped exterior project render" fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <figcaption className="absolute bottom-4 left-4 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white/75">{tx("Project gallery")}</figcaption>
+                  <button type="button" aria-label="Expand the Reverance arrival image" onClick={() => setExpandedImage({ src: projectImages.arrival, alt: "Reverance arrival and landscaped exterior project render" })} className="absolute inset-0 z-10 cursor-zoom-in">
+                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                      <Maximize2 size={13} strokeWidth={1.7} /> Expand
+                    </span>
+                  </button>
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
+                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 bg-[#0b0b0b]/65 px-3 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">{tx("Project gallery")}</figcaption>
                 </figure>
-                <figure className="relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
+                <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
                   <Image src={projectImages.gym} alt="Reverance residential towers project render" fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <figcaption className="absolute bottom-4 left-4 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white/75">{tx("Project gallery")}</figcaption>
+                  <button type="button" aria-label="Expand the Reverance amenities image" onClick={() => setExpandedImage({ src: projectImages.gym, alt: "Reverance residential towers project render" })} className="absolute inset-0 z-10 cursor-zoom-in">
+                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                      <Maximize2 size={13} strokeWidth={1.7} /> Expand
+                    </span>
+                  </button>
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
+                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 bg-[#0b0b0b]/65 px-3 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">{tx("Project gallery")}</figcaption>
                 </figure>
               </div>
             </div>
@@ -455,6 +517,30 @@ export function BrandbookLandingPage() {
           </div>
         </div>
       </div>
+
+      {expandedImage ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Expanded project image"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0b0b0b]/95 p-4 sm:p-8"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setExpandedImage(null);
+          }}
+        >
+          <button
+            type="button"
+            aria-label="Close expanded image"
+            onClick={() => setExpandedImage(null)}
+            className="absolute right-4 top-4 z-10 inline-flex h-12 w-12 items-center justify-center border border-white/70 bg-[#0b0b0b]/75 text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:right-8 sm:top-8"
+          >
+            <X size={22} strokeWidth={1.6} />
+          </button>
+          <div className="relative h-[min(82vh,52rem)] w-full max-w-[92rem]">
+            <Image src={expandedImage.src} alt={expandedImage.alt} fill sizes="92vw" className="object-contain" />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
