@@ -8,12 +8,14 @@ import {
   ArrowRight,
   ArrowUpRight,
   Check,
+  ChevronDown,
+  Globe,
   Maximize2,
   Menu,
   MoveRight,
   X,
 } from "lucide-react";
-import { useI18n } from "@/i18n/I18nProvider";
+import { LANGS, useI18n } from "@/i18n/I18nProvider";
 import { useSiteContent } from "@/data/site-content-context";
 import { CurrentProjectBrochureLink } from "@/components/property/PropertyChrome";
 import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
@@ -55,7 +57,7 @@ function scrollToSection(href: string) {
 }
 
 export function BrandbookLandingPage() {
-  const { lang, tx } = useI18n();
+  const { lang, setLang, tx } = useI18n();
   const { company, batumiProperties, participationRoutes } = useSiteContent();
   const currentProject = batumiProperties.find((project) => project.id === "current-project") ?? batumiProperties[0];
   const currentProjectHref = `/aixco-global-op2/${currentProject.url}`;
@@ -65,7 +67,10 @@ export function BrandbookLandingPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [requestReference, setRequestReference] = useState<string | null>(null);
   const [expandedImage, setExpandedImage] = useState<ExpandedImage | null>(null);
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const languageSwitcherRef = useRef<HTMLDivElement | null>(null);
   const formStartedAtRef = useRef(Date.now());
+  const currentLangName = LANGS.find((option) => option.code === lang)?.native ?? lang.toUpperCase();
 
   useEffect(() => {
     if (!expandedImage) return;
@@ -83,6 +88,26 @@ export function BrandbookLandingPage() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [expandedImage]);
+
+  useEffect(() => {
+    if (!languageOpen) return;
+
+    const closeFromOutside = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node) || languageSwitcherRef.current?.contains(target)) return;
+      setLanguageOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLanguageOpen(false);
+    };
+
+    window.addEventListener("pointerdown", closeFromOutside);
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      window.removeEventListener("pointerdown", closeFromOutside);
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [languageOpen]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -132,7 +157,7 @@ export function BrandbookLandingPage() {
     <div id="main-content" className="brandbook-landing bg-[#F3EDE1] text-[#161616]">
       <header className="brandbook-header sticky top-0 z-50 border-b border-[#161616]/10 bg-[#F3EDE1]/95 backdrop-blur-md">
         <div className="mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between px-5 sm:px-8 lg:px-12">
-          <Link href="/" aria-label="AIXCO.Global home" className="flex items-center">
+          <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex items-center">
             <Image
               src={aixcoLiveLogos.aixcoHorizontalDark}
               alt="AIXCO.Global"
@@ -144,7 +169,7 @@ export function BrandbookLandingPage() {
             />
           </Link>
 
-          <nav aria-label="Primary navigation" className="hidden items-center gap-9 lg:flex">
+          <nav aria-label={tx("Primary navigation")} className="hidden items-center gap-9 lg:flex">
             {navigation.map((item) => (
               <a
                 key={item.href}
@@ -155,7 +180,7 @@ export function BrandbookLandingPage() {
                 }}
                 className="brandbook-nav-link text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[#161616]/68"
               >
-                {item.label}
+                {tx(item.label)}
               </a>
             ))}
             <a
@@ -166,23 +191,63 @@ export function BrandbookLandingPage() {
               }}
               className="brandbook-header-cta inline-flex min-h-10 items-center gap-2 bg-[#161616] px-4 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#002147]"
             >
-              Request a brief <ArrowUpRight size={14} strokeWidth={1.8} />
+              {tx("Request a brief")} <ArrowUpRight size={14} strokeWidth={1.8} />
             </a>
           </nav>
 
           <button
             type="button"
-            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+            aria-label={menuOpen ? tx("Close navigation") : tx("Open navigation")}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((value) => !value)}
             className="inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
           >
             {menuOpen ? <X size={21} strokeWidth={1.6} /> : <Menu size={21} strokeWidth={1.6} />}
           </button>
+
+          <div ref={languageSwitcherRef} className="relative shrink-0">
+            <button
+              data-language-trigger="true"
+              type="button"
+              aria-expanded={languageOpen}
+              aria-controls="brandbook-language-list"
+              aria-label={`${currentLangName} ${tx("Change language")}`}
+              onClick={() => setLanguageOpen((current) => !current)}
+              className="inline-flex min-h-11 items-center gap-1.5 border border-[#161616]/15 bg-transparent px-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#E6C767] hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 sm:px-3"
+            >
+              <Globe size={14} strokeWidth={1.6} aria-hidden />
+              {currentLangName}
+              <ChevronDown size={13} strokeWidth={1.6} className={languageOpen ? "rotate-180" : undefined} aria-hidden />
+            </button>
+            {languageOpen ? (
+              <div id="brandbook-language-list" className="absolute end-0 top-[calc(100%+0.5rem)] z-[80] w-56 border border-[#161616]/10 bg-[#F3EDE1] p-1.5 text-[#161616] shadow-xl">
+                <ul aria-label={tx("Change language")} className="grid gap-1">
+                  {LANGS.map((option) => (
+                    <li key={option.code}>
+                      <button
+                        type="button"
+                        data-lang={option.code}
+                        aria-current={option.code === lang ? "true" : undefined}
+                        translate="no"
+                        onClick={() => {
+                          setLang(option.code);
+                          setLanguageOpen(false);
+                        }}
+                        className={`flex min-h-10 w-full items-center justify-between px-3 py-2 text-start text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 ${option.code === lang ? "bg-[#E6C767]/25" : "hover:bg-[#161616]/[0.06]"}`}
+                      >
+                        <span lang={option.code} translate="no" className="language-option-label notranslate">{option.label}</span>
+                        <span className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] opacity-60">{option.native}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </div>
         </div>
 
         {menuOpen && (
-          <nav aria-label="Mobile navigation" className="border-t border-[#161616]/10 bg-[#F3EDE1] px-5 py-5 lg:hidden">
+          <nav aria-label={tx("Mobile navigation")} className="border-t border-[#161616]/10 bg-[#F3EDE1] px-5 py-5 lg:hidden">
             <div className="mx-auto flex max-w-[1600px] flex-col gap-1">
               {navigation.map((item) => (
                 <a
@@ -194,7 +259,7 @@ export function BrandbookLandingPage() {
                   }}
                   className="flex items-center justify-between border-b border-[#161616]/10 py-4 text-sm font-semibold uppercase tracking-[0.16em]"
                 >
-                  {item.label}
+                  {tx(item.label)}
                   <ArrowUpRight size={16} strokeWidth={1.6} />
                 </a>
               ))}
@@ -206,11 +271,12 @@ export function BrandbookLandingPage() {
                 }}
                 className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] text-xs font-semibold uppercase tracking-[0.17em] text-white"
               >
-                Request a private brief <ArrowUpRight size={15} strokeWidth={1.8} />
+                {tx("Request a private brief")} <ArrowUpRight size={15} strokeWidth={1.8} />
               </a>
             </div>
           </nav>
         )}
+
       </header>
 
       <main>
@@ -226,7 +292,7 @@ export function BrandbookLandingPage() {
                   <span className="h-px w-8 bg-[#E6C767]" /> {tx("Batumi property profile")}
                 </p>
                 <h1 className="max-w-none text-[clamp(3.2rem,13vw,3.9rem)] font-medium leading-[0.86] tracking-[-0.065em] sm:max-w-[8.5ch] sm:text-[clamp(3.9rem,7vw,7.4rem)]">
-                  Project <span className="text-[#E6C767]">Reverance</span>
+                  {tx("Project")} <span className="text-[#E6C767]">Reverance</span>
                 </h1>
                 <p className="mt-8 max-w-[28rem] text-[1.05rem] leading-[1.55] text-white/68 sm:text-[1.12rem]">
                   {tx(currentProject.summary)}
@@ -256,7 +322,7 @@ export function BrandbookLandingPage() {
               </div>
 
               <div className="relative z-10 mt-auto grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t border-white/25 pt-4 text-[0.58rem] font-medium uppercase tracking-[0.15em] text-white/60 sm:text-[0.62rem] sm:tracking-[0.17em]">
-                <span>59 Adlia Street · Batumi</span>
+                <span>{tx("59 Adlia Street")} · Batumi</span>
                 <span className="hidden items-center justify-self-end gap-2 text-right sm:flex"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#E6C767]" /> {tx("Completion targeted for July 2028")}</span>
               </div>
             </div>
@@ -264,7 +330,7 @@ export function BrandbookLandingPage() {
             <div className="relative min-h-[26rem] overflow-hidden bg-[#002147] lg:min-h-full">
               <Image
                 src={projectImages.hero}
-                alt="The Reverance residence exterior in Batumi"
+                alt={tx("The Reverance residence exterior in Batumi")}
                 fill
                 priority
                 quality={90}
@@ -273,18 +339,18 @@ export function BrandbookLandingPage() {
               />
               <button
                 type="button"
-                aria-label="Expand the Reverance residence exterior image"
-                onClick={() => setExpandedImage({ src: projectImages.hero, alt: "The Reverance residence exterior in Batumi" })}
+                aria-label={tx("Expand the Reverance residence exterior image")}
+                onClick={() => setExpandedImage({ src: projectImages.hero, alt: tx("The Reverance residence exterior in Batumi") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
                 <span className="absolute right-5 top-5 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:right-8 sm:top-8">
-                  <Maximize2 size={13} strokeWidth={1.7} /> Expand image
+                  <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand image")}
                 </span>
               </button>
               <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/90 via-[#0b0b0b]/25 to-[#0b0b0b]/10" />
               <div className="pointer-events-none absolute inset-x-5 bottom-5 z-20 grid gap-5 text-white sm:inset-x-8 sm:bottom-8 lg:inset-x-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                 <div className="max-w-[30rem] bg-[#0b0b0b]/65 p-4 backdrop-blur-sm sm:p-5">
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">Project Reverance</p>
+                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">{tx("Project Reverance")}</p>
                   <p className="mt-2 text-xl font-medium leading-[1.15] tracking-[-0.03em] sm:text-2xl">{tx("Reverance is a premium residential complex on Batumi's New Boulevard.")}</p>
                 </div>
                 <div className="pointer-events-auto z-30 flex flex-wrap items-center justify-start gap-2 lg:justify-end">
@@ -296,8 +362,8 @@ export function BrandbookLandingPage() {
           </div>
 
           <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between border-x border-b border-[#161616]/10 px-5 py-4 text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#161616]/45 sm:px-8 lg:px-12">
-            <span className="flex items-center gap-3"><ArrowDown size={14} strokeWidth={1.5} /> Scroll to explore</span>
-            <span>Private residences · 01</span>
+            <span className="flex items-center gap-3"><ArrowDown size={14} strokeWidth={1.5} /> {tx("Scroll to explore")}</span>
+            <span>{tx("Private residences")} · 01</span>
           </div>
         </section>
 
@@ -337,15 +403,15 @@ export function BrandbookLandingPage() {
             </div>
 
             <div className="relative min-h-[28rem] overflow-hidden bg-[#D9D0C0] lg:min-h-[44rem]">
-              <Image src={projectImages.sunset} alt="Sunset over the residence facade" fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover object-center" />
+              <Image src={projectImages.sunset} alt={tx("Sunset over the residence facade")} fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover object-center" />
               <button
                 type="button"
-                aria-label="Expand the sunset over the residence facade image"
-                onClick={() => setExpandedImage({ src: projectImages.sunset, alt: "Sunset over the residence facade" })}
+                aria-label={tx("Expand the sunset over the residence facade image")}
+                onClick={() => setExpandedImage({ src: projectImages.sunset, alt: tx("Sunset over the residence facade") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
                 <span className="absolute right-5 top-5 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:right-8 sm:top-8">
-                  <Maximize2 size={13} strokeWidth={1.7} /> Expand image
+                  <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand image")}
                 </span>
               </button>
               <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/85 via-[#0b0b0b]/20 to-[#0b0b0b]/20" />
@@ -399,30 +465,30 @@ export function BrandbookLandingPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <figure className="group relative aspect-[0.92] overflow-hidden bg-[#D9D0C0] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
-                  <Image src={projectImages.lounge} alt="Reverance residential towers project render" fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <button type="button" aria-label="Expand the Reverance residential towers image" onClick={() => setExpandedImage({ src: projectImages.lounge, alt: "Reverance residential towers project render" })} className="absolute inset-0 z-10 cursor-zoom-in">
+                      <Image src={projectImages.lounge} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                  <button type="button" aria-label={tx("Expand the Reverance residential towers image")} onClick={() => setExpandedImage({ src: projectImages.lounge, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                      <Maximize2 size={13} strokeWidth={1.7} /> Expand
+                      <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
                   </button>
                   <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 bg-[#0b0b0b]/65 px-3 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
-                  <Image src={projectImages.arrival} alt="Reverance arrival and landscaped exterior project render" fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <button type="button" aria-label="Expand the Reverance arrival image" onClick={() => setExpandedImage({ src: projectImages.arrival, alt: "Reverance arrival and landscaped exterior project render" })} className="absolute inset-0 z-10 cursor-zoom-in">
+                      <Image src={projectImages.arrival} alt={tx("Reverance arrival and landscaped exterior project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                  <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ src: projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                      <Maximize2 size={13} strokeWidth={1.7} /> Expand
+                      <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
                   </button>
                   <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 bg-[#0b0b0b]/65 px-3 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
-                  <Image src={projectImages.gym} alt="Reverance residential towers project render" fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <button type="button" aria-label="Expand the Reverance amenities image" onClick={() => setExpandedImage({ src: projectImages.gym, alt: "Reverance residential towers project render" })} className="absolute inset-0 z-10 cursor-zoom-in">
+                      <Image src={projectImages.gym} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                  <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ src: projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                      <Maximize2 size={13} strokeWidth={1.7} /> Expand
+                      <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
                   </button>
                   <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
@@ -466,9 +532,9 @@ export function BrandbookLandingPage() {
                   <button type="button" onClick={() => { setSubmitted(false); setRequestReference(null); }} className="mt-8 inline-flex w-fit items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.17em] text-[#E6C767]">{tx("Send another request")} <ArrowRight size={16} strokeWidth={1.6} /></button>
                 </div>
               ) : (
-                <form aria-label="Contact AIXCO form" onSubmit={handleSubmit} className="grid gap-7">
+                <form aria-label={tx("Contact AIXCO form")} onSubmit={handleSubmit} className="grid gap-7">
                   <div aria-hidden="true" className="pointer-events-none absolute -left-[10000px] top-auto h-px w-px overflow-hidden">
-                    <label>Website<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label>
+                    <label>{tx("Website")}<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label>
                   </div>
                   <div className="grid gap-7 sm:grid-cols-2">
                     <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white/55">
@@ -522,7 +588,7 @@ export function BrandbookLandingPage() {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Expanded project image"
+          aria-label={tx("Expanded project image")}
           className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0b0b0b]/95 p-4 sm:p-8"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) setExpandedImage(null);
@@ -530,7 +596,7 @@ export function BrandbookLandingPage() {
         >
           <button
             type="button"
-            aria-label="Close expanded image"
+            aria-label={tx("Close expanded image")}
             onClick={() => setExpandedImage(null)}
             className="absolute right-4 top-4 z-10 inline-flex h-12 w-12 items-center justify-center border border-white/70 bg-[#0b0b0b]/75 text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:right-8 sm:top-8"
           >

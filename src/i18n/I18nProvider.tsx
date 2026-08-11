@@ -22,6 +22,13 @@ const DEFAULT_LANG: Lang = "en";
 const HOME_METADATA_TITLE = "AIXCO.Global | Real Estate Investment";
 const HOME_METADATA_DESCRIPTION =
   "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
+const REVERANCE_METADATA_TITLE = "Project Reverance Batumi | AIXCO.Global";
+const REVERANCE_METADATA_DESCRIPTION =
+  "Explore selected Project Reverance apartments in Batumi's New Boulevard area with AIXCO.Global: 28 available apartments, transparent guidance, and completion targeted for July 2028.";
+const ROUTE_METADATA = {
+  "/": { title: HOME_METADATA_TITLE, description: HOME_METADATA_DESCRIPTION },
+  "/reverance-batumi": { title: REVERANCE_METADATA_TITLE, description: REVERANCE_METADATA_DESCRIPTION },
+} as const;
 
 function isLang(value: string | null): value is Lang {
   return LANGS.some((option) => option.code === value);
@@ -1904,33 +1911,33 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [lang, dir, hasLoadedStoredLang]);
 
   useEffect(() => {
-    if (window.location.pathname !== "/") return;
+    const routeMetadata = ROUTE_METADATA[window.location.pathname as keyof typeof ROUTE_METADATA];
+    if (!routeMetadata) return;
 
-    const knownHomeTitles = new Set<string>([HOME_METADATA_TITLE]);
-    const knownHomeDescriptions = new Set<string>([HOME_METADATA_DESCRIPTION]);
+    const knownTitles = new Set<string>([routeMetadata.title]);
+    const knownDescriptions = new Set<string>([routeMetadata.description]);
     for (const source of activeCatalogSources) {
-      for (const translatedTitle of Object.values(source[HOME_METADATA_TITLE] ?? {})) {
-        if (translatedTitle) knownHomeTitles.add(translatedTitle);
+      for (const translatedTitle of Object.values(source[routeMetadata.title] ?? {})) {
+        if (translatedTitle) knownTitles.add(translatedTitle);
       }
-      for (const translatedDescription of Object.values(source[HOME_METADATA_DESCRIPTION] ?? {})) {
-        if (translatedDescription) knownHomeDescriptions.add(translatedDescription);
+      for (const translatedDescription of Object.values(source[routeMetadata.description] ?? {})) {
+        if (translatedDescription) knownDescriptions.add(translatedDescription);
       }
     }
 
-    if (knownHomeTitles.has(document.title)) {
+    if (knownTitles.has(document.title)) {
       document.title =
         lang === "en"
-          ? HOME_METADATA_TITLE
-          : lookupTranslation(HOME_METADATA_TITLE, lang, activeCatalogSources) ?? HOME_METADATA_TITLE;
+          ? routeMetadata.title
+          : lookupTranslation(routeMetadata.title, lang, activeCatalogSources) ?? routeMetadata.title;
     }
 
     const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
-    if (description && knownHomeDescriptions.has(description.content)) {
+    if (description && knownDescriptions.has(description.content)) {
       description.content =
         lang === "en"
-          ? HOME_METADATA_DESCRIPTION
-          : lookupTranslation(HOME_METADATA_DESCRIPTION, lang, activeCatalogSources) ??
-            HOME_METADATA_DESCRIPTION;
+          ? routeMetadata.description
+          : lookupTranslation(routeMetadata.description, lang, activeCatalogSources) ?? routeMetadata.description;
     }
   }, [activeCatalogSources, lang]);
 

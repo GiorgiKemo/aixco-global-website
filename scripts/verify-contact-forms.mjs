@@ -124,25 +124,25 @@ for (const profile of deviceProfiles) {
       }
     }
 
-    if (locale.lang === "en") {
-      const caseName = `${profile.name}/reverance-batumi/message`;
+    {
+      const caseName = `${profile.name}/${locale.lang}/reverance-batumi/message`;
 
       try {
         capturedRequest = null;
         await page.goto(`${baseUrl}/reverance-batumi#contact`, { waitUntil: "domcontentloaded" });
         await dismissAnalyticsConsent(page);
-        const form = page.getByRole("form", { name: "Contact AIXCO form" });
+        const form = page.locator("form").first();
         await form.scrollIntoViewIfNeeded();
         await form.locator('input[name="name"]').fill("Landing Page Test");
         await form.locator('input[name="email"]').fill("landing-test@example.com");
-        await form.locator('select[name="interest"]').selectOption({ label: "Project Reverance" });
+        await form.locator('select[name="interest"]').selectOption("Project Reverance");
         await form.locator('textarea[name="message"]').fill("Please send the current Reverance availability and payment details.");
 
         const formIsValid = await form.evaluate((element) => element.checkValidity());
         if (!formIsValid) throw new Error("landing-page browser-native form validation failed");
 
         await form.locator('button[type="submit"]').click();
-        await page.getByText("Thank you. We will contact you shortly.").waitFor({ state: "visible" });
+        await form.waitFor({ state: "detached" });
 
         if (capturedRequest?.context?.page_path !== "/reverance-batumi#contact") {
           throw new Error(`submitted page path ${String(capturedRequest?.context?.page_path)} instead of /reverance-batumi#contact`);
