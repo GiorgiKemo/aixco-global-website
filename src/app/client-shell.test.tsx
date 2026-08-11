@@ -36,6 +36,9 @@ vi.mock("@/components/ScrollManager", () => ({ ScrollManager: () => null }));
 vi.mock("@/components/ScrollToTopButton", () => ({ ScrollToTopButton: () => <div data-testid="scroll-to-top" /> }));
 vi.mock("@/components/Modals", () => ({ Modals: () => <div data-testid="modals" /> }));
 vi.mock("@/components/WhatsAppWidget", () => ({ WhatsAppWidget: () => <div data-testid="whatsapp-widget" /> }));
+vi.mock("./marketing-analytics", () => ({
+  MarketingAnalytics: () => <div data-testid="marketing-analytics" />,
+}));
 
 describe("ClientShell", () => {
   beforeEach(() => {
@@ -53,6 +56,7 @@ describe("ClientShell", () => {
     expect(screen.getByText("Page content")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Skip to main content" })).toHaveAttribute("href", "#main-content");
     expect(screen.getByTestId("whatsapp-widget")).toBeInTheDocument();
+    expect(screen.getByTestId("marketing-analytics")).toBeInTheDocument();
   });
 
   it("defers noncritical floating UI until the browser is idle", async () => {

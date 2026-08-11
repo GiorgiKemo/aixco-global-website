@@ -128,6 +128,25 @@ describe("AdminLoginForm", () => {
     expect(authMocks.getAssurance).not.toHaveBeenCalled();
   });
 
+  it("fails closed and signs out a password-only session when its audit cannot persist", async () => {
+    const onAuthenticated = vi.fn();
+    const passwordOnlyConfig = { ...identityConfig, mfaRequired: false };
+    authMocks.signInWithPassword.mockResolvedValue({ data: { user: adminUser }, error: null });
+    fetchMock
+      .mockResolvedValueOnce(auditResponse(false))
+      .mockResolvedValueOnce(new Response(null, { status: 204 }));
+
+    render(<AdminLoginForm config={passwordOnlyConfig} onAuthenticated={onAuthenticated} />);
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "admin@aixco.global" } });
+    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct-password" } });
+    fireEvent.submit(screen.getByRole("button", { name: "Continue securely" }).closest("form")!);
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/authenticated session was signed out/i);
+    expect(onAuthenticated).not.toHaveBeenCalled();
+    expect(authMocks.signOut).toHaveBeenCalledWith({ scope: "local" });
+    expect(authMocks.getAssurance).not.toHaveBeenCalled();
+  });
+
   it("moves an authorized user with an enrolled factor to the TOTP challenge", async () => {
     authMocks.signInWithPassword.mockResolvedValue({
       data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
@@ -233,7 +252,7 @@ describe("AdminLoginForm", () => {
     }));
   });
 
-  it("keeps the authenticated session and offers a retry when the server reports stored false", async () => {
+  it("signs out an authenticated session when the required audit row is not stored", async () => {
     const onAuthenticated = vi.fn();
     authMocks.getUser.mockResolvedValue({ data: { user: adminUser }, error: null });
     authMocks.getAssurance.mockResolvedValue({
@@ -244,14 +263,19 @@ describe("AdminLoginForm", () => {
 
     render(<AdminLoginForm config={identityConfig} onAuthenticated={onAuthenticated} />);
 
-    expect(await screen.findByRole("heading", { name: "Finish secure sign-in" })).toBeInTheDocument();
-    expect(screen.getByRole("alert")).toHaveTextContent(/security audit could not be saved/i);
-    expect(screen.getByRole("button", { name: "Retry audit and continue" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Individual admin sign-in" })).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent(/authenticated session was signed out/i);
     expect(onAuthenticated).not.toHaveBeenCalled();
-    expect(authMocks.signOut).not.toHaveBeenCalled();
+    expect(authMocks.signOut).toHaveBeenCalledWith({ scope: "local" });
+    expect(fetchMock).toHaveBeenCalledWith("/admin/logout", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store",
+    });
+    expect(screen.queryByRole("button", { name: /retry security record/i })).not.toBeInTheDocument();
   });
 
-  it("keeps the authenticated session retryable when the audit request has a network failure", async () => {
+  it("signs out locally when both audit persistence and server logout are unreachable", async () => {
     const onAuthenticated = vi.fn();
     authMocks.getUser.mockResolvedValue({ data: { user: adminUser }, error: null });
     authMocks.getAssurance.mockResolvedValue({
@@ -262,12 +286,13 @@ describe("AdminLoginForm", () => {
 
     render(<AdminLoginForm config={identityConfig} onAuthenticated={onAuthenticated} />);
 
-    expect(await screen.findByRole("heading", { name: "Finish secure sign-in" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Individual admin sign-in" })).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent(/authenticated session was signed out/i);
     expect(onAuthenticated).not.toHaveBeenCalled();
-    expect(authMocks.signOut).not.toHaveBeenCalled();
+    expect(authMocks.signOut).toHaveBeenCalledWith({ scope: "local" });
   });
 
-  it("does not navigate after MFA when the audit is missing, then continues after a successful retry", async () => {
+  it("invalidates an MFA session when its required success audit is unavailable", async () => {
     const onAuthenticated = vi.fn();
     authMocks.signInWithPassword.mockResolvedValue({ data: { user: adminUser }, error: null });
     authMocks.getAssurance.mockResolvedValue({
@@ -285,7 +310,7 @@ describe("AdminLoginForm", () => {
     authMocks.challengeAndVerify.mockResolvedValue({ data: {}, error: null });
     fetchMock
       .mockResolvedValueOnce(auditResponse(false))
-      .mockResolvedValueOnce(auditResponse(true));
+      .mockResolvedValueOnce(new Response(null, { status: 204 }));
 
     render(<AdminLoginForm config={identityConfig} onAuthenticated={onAuthenticated} />);
     fireEvent.change(screen.getByLabelText("Email"), { target: { value: "admin@aixco.global" } });
@@ -296,12 +321,11 @@ describe("AdminLoginForm", () => {
     fireEvent.change(code, { target: { value: "123456" } });
     fireEvent.submit(screen.getByRole("button", { name: "Verify and sign in" }).closest("form")!);
 
-    expect(await screen.findByRole("heading", { name: "Finish secure sign-in" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Individual admin sign-in" })).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent(/authenticated session was signed out/i);
     expect(onAuthenticated).not.toHaveBeenCalled();
     expect(authMocks.challengeAndVerify).toHaveBeenCalledTimes(1);
-
-    fireEvent.click(screen.getByRole("button", { name: "Retry audit and continue" }));
-    await waitFor(() => expect(onAuthenticated).toHaveBeenCalledTimes(1));
-    expect(authMocks.challengeAndVerify).toHaveBeenCalledTimes(1);
+    expect(authMocks.signOut).toHaveBeenCalledWith({ scope: "local" });
+    expect(screen.queryByLabelText("Six-digit code")).not.toBeInTheDocument();
   });
 });

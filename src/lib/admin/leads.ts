@@ -99,17 +99,20 @@ export const ADMIN_PIPELINE_RESOURCE_LIMIT = 100;
 
 type AdminClient = Awaited<ReturnType<typeof getSupabaseAdminClient>>;
 
-function applyStatusFilter<T extends { eq: (column: "status", value: LeadStatus) => T }>(query: T, status?: LeadStatus) {
-  return status ? query.eq("status", status) : query;
-}
-
 async function countRows(
   client: AdminClient,
   table: "contact_submissions" | "chat_transcripts" | "portal_click_events",
   status?: LeadStatus,
 ) {
   const query = client.from(table).select("id", { count: "exact", head: true });
-  const { count, error } = status ? await query.eq("status", status) : await query;
+  // Active dashboard totals intentionally exclude archived records. Archived
+  // leads remain available through the explicit Archived filter in Records.
+  const filteredQuery = status
+    ? query.eq("status", status)
+    : table === "portal_click_events"
+      ? query
+      : query.neq("status", "archived");
+  const { count, error } = await filteredQuery;
 
   if (error) throw new Error(error.message);
 
@@ -135,12 +138,9 @@ function getRange(page: AdminLeadPage) {
 
 async function fetchContacts(client: AdminClient, page: AdminLeadPage, status?: LeadStatus) {
   const { from, to } = getRange(page);
-  const query = client
-    .from("contact_submissions")
-    .select(CONTACT_COLUMNS)
-    .order("created_at", { ascending: false })
-    .range(from, to);
-  const { data, error } = await applyStatusFilter(query, status);
+  const query = client.from("contact_submissions").select(CONTACT_COLUMNS);
+  const filteredQuery = status ? query.eq("status", status) : query.neq("status", "archived");
+  const { data, error } = await filteredQuery.order("created_at", { ascending: false }).range(from, to);
 
   if (error) throw new Error(error.message);
   return (data ?? []) as ContactLead[];
@@ -148,12 +148,9 @@ async function fetchContacts(client: AdminClient, page: AdminLeadPage, status?: 
 
 async function fetchChats(client: AdminClient, page: AdminLeadPage, status?: LeadStatus) {
   const { from, to } = getRange(page);
-  const query = client
-    .from("chat_transcripts")
-    .select(CHAT_COLUMNS)
-    .order("created_at", { ascending: false })
-    .range(from, to);
-  const { data, error } = await applyStatusFilter(query, status);
+  const query = client.from("chat_transcripts").select(CHAT_COLUMNS);
+  const filteredQuery = status ? query.eq("status", status) : query.neq("status", "archived");
+  const { data, error } = await filteredQuery.order("created_at", { ascending: false }).range(from, to);
 
   if (error) throw new Error(error.message);
   return (data ?? []) as ChatLead[];

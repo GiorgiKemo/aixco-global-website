@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft, CheckCircle2, MailCheck, Send, TriangleAlert } from "lucide-react";
+import { CheckCircle2, MailCheck, Send, TriangleAlert } from "lucide-react";
+import { AdminShell } from "@/app/admin/_components";
 import { requireAal2AdminSession } from "@/lib/admin/auth";
 import { getLeadNotificationConfig } from "@/lib/backend/lead-notification-email";
 
@@ -40,7 +40,7 @@ function getErrorMessage(code: string | undefined, detail: string | undefined) {
 }
 
 export default async function EmailTestPage({ searchParams }: EmailTestPageProps) {
-  await requireAal2AdminSession();
+  const adminPrincipal = await requireAal2AdminSession();
 
   const params = searchParams ? await searchParams : {};
   const status = getQueryParam(params.status);
@@ -53,23 +53,14 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
   const errorMessage = getErrorMessage(errorCode, detail);
 
   return (
-    <main data-admin-scrollbar="true" className="admin-safe-page admin-safe-page--dashboard min-h-screen bg-[#f6f4ef] px-4 py-4 text-[#161616] sm:px-6 sm:py-8">
-      <div className="mx-auto w-full max-w-3xl">
-        <header className="mb-6 border border-[#161616]/10 bg-[#161616] px-5 py-4 text-white">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#e6c767]">AIXCO Admin</p>
-              <h1 className="mt-1 font-display text-xl font-bold leading-tight">Email delivery test</h1>
-            </div>
-            <Link
-              href="/admin/leads"
-              className="inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-md border border-white/15 px-3 text-xs font-semibold text-white transition-colors hover:border-[#e6c767] hover:text-[#e6c767]"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-              Lead dashboard
-            </Link>
-          </div>
-        </header>
+    <AdminShell adminEmail={adminPrincipal.email}>
+      <main data-admin-scrollbar="true" className="admin-safe-page admin-safe-page--dashboard bg-[#f8f6f1] px-4 py-5 text-[#161616] sm:px-7 sm:py-8 lg:px-10">
+        <div className="mx-auto w-full max-w-4xl">
+          <header className="mb-7 max-w-3xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">Email delivery</p>
+            <h1 className="mt-2 font-display text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.02] tracking-[-0.045em]">Delivery controls</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#6f6e6a]">Verify the configured notification path and send a controlled inbox test without creating a lead record.</p>
+          </header>
 
         {status === "sent" && (
           <section className="mb-6 border border-emerald-700/20 bg-emerald-50 px-5 py-4 text-emerald-950" aria-live="polite">
@@ -96,7 +87,7 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
           </section>
         )}
 
-        <section className="border border-[#161616]/10 bg-white">
+        <section className="overflow-hidden rounded-[12px] border border-[#161616]/10 bg-white shadow-sm">
           <div className="border-b border-[#161616]/10 px-5 py-5 sm:px-6">
             <div className="flex items-center gap-3">
               <MailCheck className="h-5 w-5 text-[#8b6a18]" aria-hidden="true" />
@@ -165,7 +156,8 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
             </div>
           </form>
         </section>
-      </div>
-    </main>
+        </div>
+      </main>
+    </AdminShell>
   );
 }

@@ -1,11 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import Script from "next/script";
 import "lenis/dist/lenis.css";
 import "@/index.css";
 import "@/story-mobile-menu.css";
 import { getSiteUrl } from "@/lib/site-url";
-import { WebVitals } from "./web-vitals";
 
 const gilroy = localFont({
   src: [
@@ -44,8 +42,6 @@ const gilroyCurrency = localFont({
 const metadataTitle = "AIXCO.Global | Real Estate Investment";
 const metadataDescription =
   "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
-const googleTagManagerId = "GTM-KCZJW8NN";
-
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: metadataTitle,
@@ -90,29 +86,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className={`${gilroy.variable} ${gilroyGerman.variable} ${gilroyCurrency.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      dir="ltr"
+      className={`${gilroy.variable} ${gilroyGerman.variable} ${gilroyCurrency.variable}`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body suppressHydrationWarning>
-        {/* Load marketing analytics after the first render and an idle window so
-            the public story can paint its hero and intro animation without
-            third-party script work on the critical path. */}
-        <Script id="google-tag-manager" strategy="lazyOnload">
-          {`(function(w,d,s,l,i){function load(){if(w.__aixcoGtmLoaded)return;w.__aixcoGtmLoaded=true;w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);}
-if('requestIdleCallback' in w){w.requestIdleCallback(load,{timeout:4000});}else{w.setTimeout(load,4000);}
-})(window,document,'script','dataLayer','${googleTagManagerId}');`}
-        </Script>
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${googleTagManagerId}`}
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-            title="Google Tag Manager"
-          />
-        </noscript>
-        <WebVitals />
         {children}
       </body>
     </html>

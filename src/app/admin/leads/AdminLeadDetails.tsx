@@ -7,7 +7,7 @@ import type { AdminLeadPage, LeadStatus, PortalEvent } from "@/lib/admin/leads";
 import type { DashboardLead } from "./PipelineBoard";
 
 const statusTabs: { label: string; value?: LeadStatus }[] = [
-  { label: "All" },
+  { label: "Active" },
   { label: "New", value: "new" },
   { label: "Contacted", value: "contacted" },
   { label: "Qualified", value: "qualified" },
@@ -59,33 +59,48 @@ function StatusBadge({ status }: { status: LeadStatus }) {
 
 function EmptyState({ label }: { label: string }) {
   return (
-    <div className="rounded-lg border border-dashed border-[#161616]/10 bg-[#f6f4ef] p-6 text-center text-sm font-medium text-[#9e9d9d]">
+    <div className="rounded-lg border border-dashed border-[#161616]/10 bg-[#f6f4ef] p-6 text-center text-sm font-medium text-[#6f6e6a]">
       {label}
     </div>
   );
 }
 
+function getPaginationItems(page: number, totalPages: number): Array<number | "ellipsis-start" | "ellipsis-end"> {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
+
+  const items: Array<number | "ellipsis-start" | "ellipsis-end"> = [1];
+  const start = Math.max(2, page - 1);
+  const end = Math.min(totalPages - 1, page + 1);
+  if (start > 2) items.push("ellipsis-start");
+  for (let value = start; value <= end; value += 1) items.push(value);
+  if (end < totalPages - 1) items.push("ellipsis-end");
+  items.push(totalPages);
+  return items;
+}
+
 function Pagination({
   pagination,
   hrefForPage,
+  label,
 }: {
   pagination: AdminLeadPage;
   hrefForPage: (page: number) => string;
+  label: string;
 }) {
   const { page, total, totalPages, start, end } = pagination;
   const buttonClass =
     "inline-flex min-h-11 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-white px-3 text-sm font-medium text-[#161616] transition-colors hover:bg-[#f6f4ef] sm:flex-none";
   const disabledClass =
-    "inline-flex min-h-11 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-[#f1efe8] px-3 text-sm font-medium text-[#9e9d9d] sm:flex-none";
+    "inline-flex min-h-11 flex-1 items-center justify-center rounded-md border border-[#161616]/10 bg-[#f1efe8] px-3 text-sm font-medium text-[#6f6e6a] sm:flex-none";
 
   return (
     <div className="mt-4 flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
       <span className="text-[#6f6e6a]">
         {total === 0 ? "Showing 0 of 0" : `Showing ${start}-${end} of ${total}`}
       </span>
-      {totalPages > 1 ? <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
+      {totalPages > 1 ? <nav className="flex w-full items-center gap-1 overflow-x-auto sm:w-auto sm:justify-end" aria-label={`${label} pagination`}>
         {page > 1 ? (
-          <Link href={hrefForPage(page - 1)} className={buttonClass}>
+          <Link href={hrefForPage(page - 1)} className={buttonClass} aria-label={`Previous ${label.toLowerCase()} page`}>
             Previous
           </Link>
         ) : (
@@ -93,11 +108,23 @@ function Pagination({
             Previous
           </span>
         )}
-        <span className="min-w-14 text-center text-xs text-[#6f6e6a]">
-          {page} / {totalPages}
-        </span>
+        <div className="flex items-center gap-1 px-1">
+          {getPaginationItems(page, totalPages).map((item) => item === "ellipsis-start" || item === "ellipsis-end" ? (
+            <span key={item} className="grid h-11 min-w-7 place-items-center text-xs text-[#6f6e6a]" aria-hidden="true">…</span>
+          ) : (
+            <Link
+              key={item}
+              href={hrefForPage(item)}
+              aria-current={item === page ? "page" : undefined}
+              aria-label={`${label}, page ${item}`}
+              className={`grid h-11 min-w-11 place-items-center rounded-md border text-xs font-semibold transition-colors ${item === page ? "border-[#161616] bg-[#161616] text-white" : "border-[#161616]/10 bg-white text-[#6f6e6a] hover:border-primary hover:text-primary"}`}
+            >
+              {item}
+            </Link>
+          ))}
+        </div>
         {page < totalPages ? (
-          <Link href={hrefForPage(page + 1)} className={buttonClass}>
+          <Link href={hrefForPage(page + 1)} className={buttonClass} aria-label={`Next ${label.toLowerCase()} page`}>
             Next
           </Link>
         ) : (
@@ -105,7 +132,7 @@ function Pagination({
             Next
           </span>
         )}
-      </div> : null}
+      </nav> : null}
     </div>
   );
 }
@@ -144,7 +171,7 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
               ) : (
                 <p className="truncate">{lead.contactLabel}</p>
               )}
-              {getReadablePagePath(lead.pagePath) && <p className="mt-1 truncate font-normal text-[#9e9d9d]">{getReadablePagePath(lead.pagePath)}</p>}
+              {getReadablePagePath(lead.pagePath) && <p className="mt-1 truncate font-normal text-[#6f6e6a]">{getReadablePagePath(lead.pagePath)}</p>}
               {lead.resource === "contact" ? (
                 <div className="mt-2 grid gap-1 font-normal text-[#6f6e6a]">
                   <p>
@@ -208,7 +235,7 @@ function LeadRecordGroup({
         </div>
         <LeadRecords leads={leads} />
       </div>
-      <Pagination pagination={pagination} hrefForPage={hrefForPage} />
+      <Pagination pagination={pagination} hrefForPage={hrefForPage} label={title} />
     </section>
   );
 }
@@ -236,7 +263,7 @@ function PortalActivity({ events, total }: { events: PortalEvent[]; total: numbe
                 <div className="min-w-0">
                   <p className="text-sm font-semibold capitalize text-[#161616]">{event.mode}</p>
                   <p className="mt-1 truncate text-xs text-[#6f6e6a]">{event.role_title}</p>
-                  <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[#9e9d9d]">{formatDate(event.created_at)}</p>
+                  <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[#6f6e6a]">{formatDate(event.created_at)}</p>
                 </div>
                 <a
                   href={event.portal_url}
@@ -337,6 +364,7 @@ export function AdminLeadDetails({
                       <Link
                         key={tab.label}
                         href={tab.value ? `${filterBaseHref}${requestedTab ? "&" : "?"}status=${tab.value}` : filterBaseHref}
+                        aria-current={active ? "page" : undefined}
                         className={`inline-flex min-h-11 items-center rounded-md border px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors ${
                           active ? "border-[#161616] bg-[#161616] text-white" : "border-[#161616]/10 bg-white text-[#6f6e6a] hover:border-[#e6c767] hover:text-[#161616]"
                         }`}
@@ -368,7 +396,11 @@ export function AdminLeadDetails({
         {showPortal && (
           <>
             <PortalActivity events={portalEvents} total={portalPagination.total} />
-            <Pagination pagination={portalPagination} hrefForPage={(page) => createPageHref("portalPage", page)} />
+            <Pagination
+              pagination={portalPagination}
+              hrefForPage={(page) => createPageHref("portalPage", page)}
+              label="Portal handoffs"
+            />
           </>
         )}
       </section>

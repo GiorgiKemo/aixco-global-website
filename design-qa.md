@@ -49,6 +49,19 @@ final result: passed
 
 ---
 
+# Reverance SEO landing route QA
+
+- Dedicated route: `/reverance-batumi`.
+- Production URL after deployment: `https://www.aixco.global/reverance-batumi`.
+- Homepage separation: `/` renders the existing AIXCO story homepage.
+- Metadata: title, description, Open Graph image, Twitter card, canonical URL, Residence JSON-LD, and sitemap entry verified.
+- Browser route check: HTTP 200, title `Project Reverance Batumi | AIXCO.Global`, canonical `https://www.aixco.global/reverance-batumi`.
+- Production build: passed.
+
+final result: passed
+
+---
+
 # German Euro-Symbol Consistency - Design QA
 
 - Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-8e5e5e97-b149-42d8-a0ba-2972e312959d.png`
@@ -545,6 +558,55 @@ final result: passed
 - ESLint: passed.
 - Production build, TypeScript, and bundled-font validation: passed.
 - Nothing was pushed or deployed during this fix.
+
+final result: passed
+
+---
+
+# Admin Operations Dashboard - Option 2 Design QA
+
+- Selected visual reference: `C:/Users/Administrator/.codex/generated_images/019f603a-707a-7e10-81fb-ef88cdb5f644/exec-40297f3d-011f-4eb0-a75a-50ccfd725f0d.png`
+- Final desktop screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/admin-option2-implementation-final-v3.jpg`
+- Final mobile screenshot: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/admin-option2-mobile-final-v3.jpg`
+- Combined source and implementation comparison: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/output/admin-option2-comparison-final-v3.png`
+- Primary comparison viewport: 1487 x 1058 CSS pixels
+- Responsive matrix: 360 x 800, 390 x 844, 768 x 1024, 1024 x 768, 1280 x 800, 1487 x 1058, and 1920 x 1080
+- State: authenticated password-only administrator on `/admin`
+
+## Findings
+
+- No actionable P0, P1, or P2 differences remain in the approved Option 2 dashboard scope.
+- The final launchpad preserves the reference hierarchy: black navigation rail, restrained ivory workspace, two-column operational cards, gold line icons, source-backed status indicators, and a compact recent-activity strip.
+- Every visible module opens a real focused workspace; intentionally nonfunctional search and notification controls from the concept were omitted rather than shipped as dead UI.
+- Cards use real lead, session, reliability, email-pipeline, privacy, and admin-identity sources. Each source degrades independently so one unavailable service does not break the dashboard.
+- Sessions, errors, audit events, lead records, and portal records use server-rendered query-parameter pagination with accessible labels and clamped pages.
+- At 360 px all six launchpad cards share the same 206.6 px height; at 390 px they share the same 190.2 px height; every audited viewport has zero horizontal overflow.
+- Admin pages are AAL2-policy protected where configured, required successful-login audit failures revoke the incomplete Supabase session, and public GTM/Web Vitals instrumentation is structurally excluded from the admin route tree.
+
+## Required fidelity surfaces
+
+- Layout and spacing: passed; the source's rail, header, two-column card rhythm, card radii, generous whitespace, and activity strip are retained.
+- Typography: passed; display and UI hierarchy use the established AIXCO font tokens, with AA-safe small-text colors.
+- Colors and tokens: passed; onyx, ivory, white, and dark brand-gold treatments match the approved direction without introducing unrelated public-site styles.
+- Icons and controls: passed; consistent library icons, 44 px minimum interactive targets, visible focus states, skip navigation, and current-page semantics are present.
+- Responsive behavior: passed; desktop rail becomes a tested mobile drawer, cards become one equal-height column, and focused pagination remains inside the viewport.
+- Data integrity: passed; the summary is source-backed, PII is excluded from the launchpad, detail views remain bounded, and source failures are labelled rather than fabricated.
+
+## Comparison history
+
+1. Selected Option 2 established the visual target and information architecture.
+2. Initial implementation matched the desktop composition but still required pagination, source isolation, accessibility, and authentication hardening.
+3. Final implementation added those production behaviors, removed dead concept controls, equalized the smallest mobile cards, darkened low-contrast metadata, and compared the finished 1487 x 1058 render directly with the selected source.
+
+## Verification
+
+- Full Vitest suite: 119 files and 643 tests passed.
+- TypeScript, test TypeScript, ESLint, 505-string localization coverage, bundled-font validation, and dependency audit: passed; zero vulnerabilities.
+- Optimized Next.js production build: passed.
+- Production budgets: all passed, including homepage JavaScript/CSS, largest chunk, admin route JavaScript, and aggregate CSS.
+- Real in-app browser QA: launchpad, mobile drawer, leads, visitor-session pagination, error pagination, and audit pagination passed with no horizontal overflow.
+- Admin routes contained zero Google Tag Manager elements during browser verification.
+- Nothing was staged, committed, pushed, or deployed during this redesign.
 
 final result: passed
 
@@ -2483,5 +2545,39 @@ final result: passed
 - ESLint: passed.
 - Production build, TypeScript, and bundled-font validation: passed.
 - Nothing was pushed or deployed during this fix.
+
+final result: passed
+# AIXCO brandbook landing page QA
+
+## Source and implementation
+
+- Brand source: `C:/Users/Administrator/Desktop/AIXCO_Brandbook_new.pdf`, with rendered reference pages `tmp/pdfs/aixco-brandbook-09.png`, `tmp/pdfs/aixco-brandbook-12.png`, and `tmp/pdfs/aixco-brandbook-15.png`.
+- Live content source: AIXCO homepage and Project Reverance page, reflected in `src/data/site.ts` and `src/lib/aixco-live-assets.ts`.
+- Combined comparison: `artifacts/brandbook-qa-comparison.png`.
+- Desktop implementation: `artifacts/brandbook-landing-desktop-final.png` at 1440 x 900 CSS px.
+- Mobile implementation: `artifacts/brandbook-landing-mobile-final.png` at 390 x 844 CSS px.
+- State: default landing page, intro animation complete, no test lead submitted.
+
+## Findings
+
+- No actionable P0, P1, or P2 issues remain in the landing-page scope.
+- The page uses real Project Reverance imagery, project metrics, availability, completion target, address, investment case, participation routes, brochure gate, project route, company contact details, and lead-capture backend.
+- The brandbook system remains intact: Gilroy typography, black / ivory / champagne / navy palette, editorial spacing, square-edged controls, and premium architectural imagery.
+
+## Primary interactions tested
+
+- Desktop navigation and mobile navigation scroll to the intended sections.
+- Mobile menu opens with an accessible expanded state and the private-brief action reaches the contact form.
+- Hero “View project” and residence links open `/aixco-global-op2/current-project` and render the current Reverance page.
+- Brochure action reaches the existing “Unlock downloads” contact gate without downloading or transmitting test data.
+- Contact form fields accept valid input and pass native constraints; no test submission was sent.
+- Fresh browser console check returned zero errors and zero warnings.
+
+## Verification
+
+- TypeScript: passed.
+- ESLint: passed.
+- Production build: passed after the live-copy and locale-catalog updates.
+- Full suite: 119 test files and 643 tests passed.
 
 final result: passed

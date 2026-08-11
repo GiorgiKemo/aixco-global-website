@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { brandbookLandingTranslations } from "./brandbook-landing-translations";
 import { curatedVisibleTranslations } from "./curated-visible-translations";
 import { downloadGateTranslations } from "./download-gate-translations";
 import { normalizeGermanCompactMetricTranslation } from "./german-metric-notation";
@@ -1746,6 +1747,7 @@ const siteProgressTranslations: TranslationSource = {
 };
 
 const baseCatalogSources: TranslationSource[] = [
+  brandbookLandingTranslations,
   siteProgressTranslations,
   slovenianClientRevisions,
   downloadGateTranslations,
@@ -1780,6 +1782,7 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
+        brandbookLandingTranslations,
         siteProgressTranslations,
         slovenianClientRevisions,
         downloadGateTranslations,

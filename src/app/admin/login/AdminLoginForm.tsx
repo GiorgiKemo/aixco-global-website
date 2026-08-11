@@ -19,15 +19,15 @@ type AdminLoginFormProps = {
   onAuthenticated?: () => void;
 };
 
-type MfaStage = "credentials" | "set-password" | "challenge" | "enroll" | "audit";
+type MfaStage = "credentials" | "set-password" | "challenge" | "enroll";
 
 type SuccessfulAuditPhase = "mfa" | "session";
 
 const AUDIT_UNAVAILABLE_MESSAGE =
-  "Your MFA sign-in succeeded, but the required security audit could not be saved. Your authenticated session is still active. Retry to continue.";
+  "Your admin sign-in could not be completed because the required security record was unavailable. For your protection, the authenticated session was signed out. Please sign in again.";
 
-function navigateToAnalytics() {
-  window.location.assign("/admin/analytics");
+function navigateToOperations() {
+  window.location.assign("/admin");
 }
 
 function getErrorMessage(error: string | null) {
@@ -76,9 +76,21 @@ async function reportAdminLogin(
   }
 }
 
+async function revokeIncompleteAdminSignIn() {
+  // Start the server-side cookie revocation before clearing the browser client.
+  // Promise.allSettled makes both independent safeguards run even if one fails.
+  const serverSignOut = fetch("/admin/logout", {
+    method: "POST",
+    credentials: "same-origin",
+    cache: "no-store",
+  });
+  const localSignOut = getSupabaseAuthBrowserClient().auth.signOut({ scope: "local" });
+  await Promise.allSettled([serverSignOut, localSignOut]);
+}
+
 export function AdminLoginForm({
   config,
-  onAuthenticated = navigateToAnalytics,
+  onAuthenticated = navigateToOperations,
 }: AdminLoginFormProps) {
   const params = useSearchParams();
   const queryError = getErrorMessage(params?.get("error") ?? null);
@@ -91,7 +103,6 @@ export function AdminLoginForm({
   const [identityEmail, setIdentityEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [pendingAuditPhase, setPendingAuditPhase] = useState<SuccessfulAuditPhase | null>(null);
   const [errorMessage, setErrorMessage] = useState(queryError);
   const [working, setWorking] = useState(false);
 
@@ -99,14 +110,17 @@ export function AdminLoginForm({
     async (email: string | null, phase: SuccessfulAuditPhase) => {
       const stored = await reportAdminLogin(email, phase, "success");
       if (stored) {
-        setPendingAuditPhase(null);
         onAuthenticated();
         return true;
       }
 
-      setIdentityEmail(email ?? "your admin account");
-      setPendingAuditPhase(phase);
-      setStage("audit");
+      await revokeIncompleteAdminSignIn();
+      setStage("credentials");
+      setFactorId("");
+      setQrCode("");
+      setTotpSecret("");
+      setTotpCode("");
+      setIdentityEmail("");
       setErrorMessage(AUDIT_UNAVAILABLE_MESSAGE);
       return false;
     },
@@ -257,18 +271,6 @@ export function AdminLoginForm({
     }
   }
 
-  async function retryVerifiedAudit() {
-    if (!pendingAuditPhase) return;
-
-    setWorking(true);
-    setErrorMessage("");
-    try {
-      await finalizeVerifiedSignIn(identityEmail || null, pendingAuditPhase);
-    } finally {
-      setWorking(false);
-    }
-  }
-
   async function handlePasswordSetup(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (newPassword.length < 12 || newPassword !== confirmPassword) {
@@ -305,7 +307,6 @@ export function AdminLoginForm({
       setIdentityEmail("");
       setNewPassword("");
       setConfirmPassword("");
-      setPendingAuditPhase(null);
       setErrorMessage("");
       setWorking(false);
     }
@@ -450,35 +451,6 @@ export function AdminLoginForm({
                 onSubmit={handleMfaVerification}
                 onReset={resetIdentity}
               />
-            </div>
-          )}
-
-          {config.identityAvailable && stage === "audit" && (
-            <div className="grid gap-5">
-              <div>
-                <p className="eyebrow">Security audit</p>
-                <h2 className="mt-2 font-display text-xl">Finish secure sign-in</h2>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Your MFA session is active. AIXCO requires a durable, server-verified sign-in record before opening the dashboard.
-                </p>
-              </div>
-              <p className="text-xs text-muted-foreground">Signed in as {identityEmail}</p>
-              <button
-                type="button"
-                disabled={working}
-                onClick={retryVerifiedAudit}
-                className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60"
-              >
-                {working ? "Saving security audit…" : "Retry audit and continue"}
-              </button>
-              <button
-                type="button"
-                disabled={working}
-                onClick={resetIdentity}
-                className="inline-flex min-h-11 items-center justify-center text-sm text-muted-foreground underline-offset-4 hover:underline"
-              >
-                Use another account
-              </button>
             </div>
           )}
 

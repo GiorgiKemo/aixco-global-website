@@ -6,8 +6,8 @@ const adminMocks = vi.hoisted(() => ({
 
 vi.mock("@/lib/supabase/admin", () => {
   const counts: Record<string, Record<string, number>> = {
-    contact_submissions: { all: 250, new: 12, qualified: 30, contacted: 40, archived: 168 },
-    chat_transcripts: { all: 80, new: 5, qualified: 10, contacted: 20, archived: 45 },
+    contact_submissions: { all: 250, active: 82, new: 12, qualified: 30, contacted: 40, archived: 168 },
+    chat_transcripts: { all: 80, active: 35, new: 5, qualified: 10, contacted: 20, archived: 45 },
     portal_click_events: { all: 40 },
   };
   const response = <T,>(value: T) => ({
@@ -21,6 +21,7 @@ vi.mock("@/lib/supabase/admin", () => {
         return {
           ...response(countResult()),
           eq: (_column: string, status: string) => Promise.resolve(countResult(status)),
+          neq: (_column: string, status: string) => Promise.resolve(countResult(status === "archived" ? "active" : "all")),
         };
       }
 
@@ -32,7 +33,8 @@ vi.mock("@/lib/supabase/admin", () => {
           adminMocks.ranges.push({ table, from, to });
           return query;
         },
-        eq: () => Promise.resolve(dataResult),
+        eq: () => query,
+        neq: () => query,
       };
       return query;
     },
@@ -98,8 +100,8 @@ describe("admin leads", () => {
 
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.data.pagination.contacts).toMatchObject({ page: 2, total: 250, start: 16, end: 30 });
-    expect(result.data.pagination.chats).toMatchObject({ page: 3, total: 80, start: 31, end: 45 });
+    expect(result.data.pagination.contacts).toMatchObject({ page: 2, total: 82, start: 16, end: 30 });
+    expect(result.data.pagination.chats).toMatchObject({ page: 3, total: 35, start: 31, end: 35 });
     expect(adminMocks.ranges).toEqual([
       { table: "contact_submissions", from: 15, to: 29 },
       { table: "chat_transcripts", from: 30, to: 44 },

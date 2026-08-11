@@ -544,7 +544,9 @@ describe("index.css motion rules", () => {
   });
 
   it("renders Dubai metric affixes with the exact same brand treatment as their values", () => {
-    const metricValueStart = css.indexOf(".story-dubai-portfolio-card__metric .story-metric-value {");
+    // Match the canonical rule, not the more-specific timeline override that
+    // happens to contain the same selector as a substring.
+    const metricValueStart = css.indexOf("\n.story-dubai-portfolio-card__metric .story-metric-value {");
     const metricAffixStart = css.indexOf(".story-dubai-metric-affix {");
     const metricValue = css.slice(metricValueStart, css.indexOf("\n}", metricValueStart));
     const metricAffix = css.slice(metricAffixStart, css.indexOf("\n}", metricAffixStart));

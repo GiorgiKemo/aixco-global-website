@@ -56,6 +56,7 @@ describe("admin lead details", () => {
     expect(retry).toHaveClass("min-h-11");
     expect(screen.getByText("Showing 1-1 of 1")).toBeInTheDocument();
     expect(screen.getByText("Showing 0 of 0")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Active" })).toHaveAttribute("aria-current", "page");
   });
 
   it("renders server-side page counts and resource-specific navigation", () => {
@@ -72,8 +73,11 @@ describe("admin lead details", () => {
     );
 
     expect(screen.getByText("Showing 1-15 of 16")).toBeInTheDocument();
-    expect(screen.getByText("1 / 2")).toBeInTheDocument();
-    const nextLink = screen.getByRole("link", { name: "Next" });
+    const pagination = screen.getByRole("navigation", { name: "Contact form requests pagination" });
+    expect(pagination).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Contact form requests, page 1" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Contact form requests, page 2" })).toHaveAttribute("href", "/admin/leads?contactPage=2");
+    const nextLink = screen.getByRole("link", { name: "Next contact form requests page" });
     expect(nextLink).toHaveAttribute("href", "/admin/leads?contactPage=2");
     expect(nextLink).toHaveClass("min-h-11");
   });

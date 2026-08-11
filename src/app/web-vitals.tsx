@@ -1,9 +1,11 @@
 "use client";
 
 import type { useReportWebVitals } from "next/web-vitals";
+import { usePathname } from "next/navigation";
 import { lazy, Suspense } from "react";
 import { analyticsCollectionAllowed } from "@/lib/analytics/client";
 import { ANALYTICS_SESSION_STORAGE_KEY } from "@/lib/analytics/constants";
+import { isAdminAnalyticsExcludedPath } from "@/lib/analytics/routes";
 
 const AnalyticsTracker = lazy(async () => {
   const analyticsModule = await import("@/components/AnalyticsTracker");
@@ -45,7 +47,11 @@ function shouldReportSession() {
 }
 
 export const reportWebVitals: ReportWebVitalsCallback = (metric) => {
-  if (!analyticsCollectionAllowed() || !shouldReportSession()) return;
+  if (
+    isAdminAnalyticsExcludedPath(window.location.pathname)
+    || !analyticsCollectionAllowed()
+    || !shouldReportSession()
+  ) return;
 
   let sessionId: string | null = null;
   try {
@@ -84,6 +90,9 @@ export const reportWebVitals: ReportWebVitalsCallback = (metric) => {
 };
 
 export function WebVitals() {
+  const pathname = usePathname();
+  if (isAdminAnalyticsExcludedPath(pathname)) return null;
+
   return (
     <Suspense fallback={null}>
       <WebVitalsReporter report={reportWebVitals} />
