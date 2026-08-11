@@ -10814,6 +10814,7 @@ html[lang='de']
   display: grid !important;
   grid-template-columns: clamp(4.55rem, 6.4vw, 6.2rem) minmax(0, 1fr) !important;
   gap: clamp(1rem, 1.8vw, 1.65rem) !important;
+  min-height: 12.5rem !important;
   min-width: 0;
   overflow: visible !important;
   padding: clamp(1.35rem, 2.45svh, 2.1rem) 0 !important;
@@ -10897,7 +10898,7 @@ html[lang='de']
 
 .story-dubai-timeline .story-dubai-portfolio-card__metric {
   min-width: 0;
-  min-height: clamp(7rem, 14svh, 9rem) !important;
+  min-height: clamp(7.5rem, 14svh, 9rem) !important;
   justify-content: flex-start !important;
   gap: clamp(0.58rem, 1.05svh, 0.9rem) !important;
   padding: clamp(1rem, 1.7svh, 1.35rem) clamp(0.8rem, 1.25vw, 1.2rem) 0 0 !important;
