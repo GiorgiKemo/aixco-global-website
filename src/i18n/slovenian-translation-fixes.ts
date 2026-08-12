@@ -313,6 +313,7 @@ export const slovenianTranslationFixes = {
     sl: "Obdržite 99% donosa svoje nepremičnine – dohodek od najemnin je obdavčen le z 1%.",
   },
   "0% Capital Gains": { sl: "0% davek na kapitalski dobiček" },
+  "0% Tax on Capital Gains": { sl: "0 % davek na kapitalski dobiček" },
   "Hold for more than two years and keep the full upside.": {
     sl: "Nepremičnino obdržite več kot dve leti in ohranite celoten kapitalski dobiček.",
   },

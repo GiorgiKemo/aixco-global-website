@@ -47,7 +47,7 @@ const projectInvestmentBenefits = [
   { title: "100% Ownership", body: "Full freehold, no local partner, no conditions. Yours entirely." },
   { title: "No Residency Permit", body: "Ownership without relocation. Buy from anywhere." },
   { title: "1% Rental Income Tax", body: "Keep 99% of what your asset earns - rental income taxed at just 1%." },
-  { title: "0% Capital Gains", body: "Hold for more than two years and keep the full upside." },
+  { title: "0% Tax on Capital Gains", body: "Hold for more than two years and keep the full upside." },
   { title: "Minimum 60% Financing", body: "Local bank financing can cover at least 60% of the purchase price." },
   { title: "Transparent Title", body: "ISO-certified guidance with clear, verifiable documentation." },
 ] as const;

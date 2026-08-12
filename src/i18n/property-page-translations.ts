@@ -113,6 +113,7 @@ export const propertyPageTranslations = {
     pl: "Zachowaj 99% przychodu — dochód z najmu jest opodatkowany stawką zaledwie 1%.",
   },
   "0% Capital Gains": { de: "0 % Kapitalertragsteuer", ru: "0% налог на прирост капитала", ka: "0% კაპიტალის მოგების გადასახადი", tr: "%0 sermaye kazancı vergisi", ar: "0% ضريبة أرباح رأسمالية", pl: "0% podatku od zysków kapitałowych" },
+  "0% Tax on Capital Gains": { de: "0 % Steuer auf Kapitalgewinne", ru: "0% налог на прирост капитала", ka: "0% კაპიტალის მოგების გადასახადი", tr: "%0 sermaye kazancı vergisi", ar: "0% ضريبة أرباح رأسمالية", pl: "0% podatku od zysków kapitałowych" },
   "Hold for more than two years and keep the full upside.": {
     de: "Halten Sie länger als zwei Jahre und behalten Sie den gesamten Wertzuwachs.",
     ru: "Владейте более двух лет и сохраните весь прирост стоимости.",

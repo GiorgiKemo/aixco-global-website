@@ -155,7 +155,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
     { icon: Globe2, title: "100% Ownership", body: "Full freehold, no local partner, no conditions. Yours entirely." },
     { icon: KeyRound, title: "No Residency Permit", body: "Ownership without relocation. Buy from anywhere." },
     { icon: Percent, title: "1% Rental Income Tax", body: "Keep 99% of what your asset earns - rental income taxed at just 1%." },
-    { icon: BadgeCheck, title: "0% Capital Gains", body: "Hold for more than two years and keep the full upside." },
+    { icon: BadgeCheck, title: "0% Tax on Capital Gains", body: "Hold for more than two years and keep the full upside." },
     { icon: Landmark, title: "Minimum 60% Financing", body: "Local bank financing can cover at least 60% of the purchase price." },
     { icon: FileCheck2, title: "Transparent Title", body: "ISO-certified guidance with clear, verifiable documentation." },
   ];
