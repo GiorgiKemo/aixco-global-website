@@ -169,7 +169,7 @@ export function BrandbookLandingPage() {
             />
           </Link>
 
-          <nav aria-label={tx("Primary navigation")} className="hidden items-center gap-9 lg:flex">
+          <nav aria-label={tx("Primary navigation")} className="hidden items-center gap-9 lg:ms-auto lg:flex">
             {navigation.map((item) => (
               <a
                 key={item.href}
@@ -347,15 +347,15 @@ export function BrandbookLandingPage() {
                   <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand image")}
                 </span>
               </button>
-              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/90 via-[#0b0b0b]/25 to-[#0b0b0b]/10" />
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#161616]/55 via-[#161616]/10 to-transparent" />
               <div className="pointer-events-none absolute inset-x-5 bottom-5 z-20 grid gap-5 text-white sm:inset-x-8 sm:bottom-8 lg:inset-x-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-                <div className="max-w-[30rem] bg-[#0b0b0b]/65 p-4 backdrop-blur-sm sm:p-5">
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">{tx("Project Reverance")}</p>
+                <div className="brandbook-hero-caption max-w-[30rem]">
+                  <p className="brandbook-hero-caption__eyebrow text-[0.62rem] font-semibold uppercase tracking-[0.2em]">{tx("Project Reverance")}</p>
                   <p className="mt-2 text-xl font-medium leading-[1.15] tracking-[-0.03em] sm:text-2xl">{tx("Reverance is a premium residential complex on Batumi's New Boulevard.")}</p>
                 </div>
                 <div className="pointer-events-auto z-30 flex flex-wrap items-center justify-start gap-2 lg:justify-end">
-                  <Link href={currentProjectHref} className="inline-flex min-h-10 items-center justify-center border border-white/80 bg-[#0b0b0b]/80 px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white shadow-lg transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]">{tx("View project")}</Link>
-                  <CurrentProjectBrochureLink className="inline-flex min-h-10 items-center gap-2 border border-white/80 bg-[#0b0b0b]/80 px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white shadow-lg transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]" />
+                  <Link href={currentProjectHref} className="inline-flex min-h-10 items-center justify-center border border-[#F3EDE1]/90 bg-[#F3EDE1]/95 px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-[#161616] shadow-lg transition-colors hover:border-[#E6C767] hover:bg-[#E6C767]">{tx("View project")}</Link>
+                  <CurrentProjectBrochureLink className="inline-flex min-h-10 items-center gap-2 border border-[#F3EDE1]/90 bg-[#F3EDE1]/95 px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-[#161616] shadow-lg transition-colors hover:border-[#E6C767] hover:bg-[#E6C767]" />
                 </div>
               </div>
             </div>
