@@ -997,9 +997,9 @@ describe("index.css motion rules", () => {
   });
 
   it("keeps the current project reachable only from the hero CTA", () => {
-    expect(desktopStoryHome).toContain('const currentProjectHref = "/aixco-global-op2/current-project";');
+    expect(desktopStoryHome).toContain('const currentProjectHref = "/reverance-batumi";');
     expect(desktopStoryHome.match(/href=\{currentProjectHref\}/g)).toHaveLength(1);
-    expect(desktopStoryHome).toContain('{ key: "batumi", id: "batumi", label: "Current project" }');
+    expect(desktopStoryHome).toContain('{ key: "batumi", id: "batumi", label: "Current project", href: "/reverance-batumi" }');
     expect(desktopStoryHome).toContain('className="btn-gold"');
     expect(desktopStoryHome).toContain('{tx("Current project")}');
     expect(desktopStoryHome).not.toContain("story-desktop-current-project-link");

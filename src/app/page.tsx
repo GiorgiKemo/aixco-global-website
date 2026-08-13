@@ -11,6 +11,13 @@ export default async function HomePage() {
   const siteContent = await fetchSiteContentForServer();
   const siteUrl = getSiteUrl();
   const { company } = siteContent.content;
+  const sameAs = [
+    company.socials.linkedin,
+    company.socials.facebook,
+    company.socials.instagram,
+    company.socials.youtube,
+    company.socials.x,
+  ].filter(Boolean);
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -23,7 +30,7 @@ export default async function HomePage() {
         email: company.email,
         address: company.address,
         foundingDate: String(company.founded),
-        sameAs: Object.values(company.socials).filter(Boolean),
+        sameAs,
       },
       {
         "@type": "WebSite",

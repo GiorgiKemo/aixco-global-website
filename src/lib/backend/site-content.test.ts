@@ -4,6 +4,7 @@ import { buildSiteContent, fetchSiteContent, siteContentDefaults } from "./site-
 describe("site content backend", () => {
   it("keeps the current website content available as a fallback", () => {
     expect(siteContentDefaults.company.name).toBe("AIXCO.Global");
+    expect(siteContentDefaults.company.socials.linkedin).toBe("https://www.linkedin.com/company/aixco");
     expect(siteContentDefaults.company.portals).toEqual({
       customerLogin: "https://customer.aixco.global/",
       brokerLogin: "https://broker.aixco.global/",

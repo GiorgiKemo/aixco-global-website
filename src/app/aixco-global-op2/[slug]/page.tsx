@@ -80,7 +80,9 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
   }
 
   const title = `${getPropertyPageTitle(property)} | AIXCO.Global`;
-  const canonicalPath = `/aixco-global-op2/${property.url}`;
+  const canonicalPath = property.id === "current-project"
+    ? "/reverance-batumi"
+    : `/aixco-global-op2/${property.url}`;
   const socialImage = property.id === "current-project"
     ? {
         url: aixcoCurrentProjectGalleryImages[0].src,

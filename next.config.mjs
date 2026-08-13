@@ -125,7 +125,12 @@ const nextConfig = {
       },
       {
         source: "/aixco-global-op2/current-project.html",
-        destination: "/aixco-global-op2/current-project",
+        destination: "/reverance-batumi",
+        permanent: true,
+      },
+      {
+        source: "/aixco-global-op2/current-project",
+        destination: "/reverance-batumi",
         permanent: true,
       },
       {

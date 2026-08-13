@@ -181,7 +181,7 @@ const storyChapters: StoryChapter[] = [
   { key: "aboutAccess", id: "about-access", label: "Access" },
   { key: "legacy", id: "legacy", label: "Legacy" },
   { key: "dubai", id: "dubai", label: "Dubai" },
-  { key: "batumi", id: "batumi", label: "Current project" },
+  { key: "batumi", id: "batumi", label: "Current project", href: "/reverance-batumi" },
   { key: "materials", id: "materials", label: "Download Materials" },
   { key: "participate", id: "participate", label: "How to work" },
   { key: "how", id: "how", label: "Journeys" },
@@ -191,7 +191,7 @@ const storyChapters: StoryChapter[] = [
   { key: "contact", id: "contact", label: "Contact" },
 ];
 
-const currentProjectHref = "/aixco-global-op2/current-project";
+const currentProjectHref = "/reverance-batumi";
 
 function getStoryChapterByKey(key: StoryChapterKey) {
   const chapter = storyChapters.find((item) => item.key === key);
@@ -2642,7 +2642,7 @@ function BatumiScene({
         {[firstProperty, secondProperty].filter(Boolean).map((property) => (
           <Link
             key={property.id}
-            href={`/aixco-global-op2/${property.url}`}
+            href={property.id === "current-project" ? currentProjectHref : `/aixco-global-op2/${property.url}`}
             prefetch={false}
             className="story-batumi-property-link grid w-full justify-items-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
           >

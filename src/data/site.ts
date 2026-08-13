@@ -8,7 +8,7 @@ export const company = {
   offices: ["Vienna", "Dubai", "Batumi"],
   socials: {
     website: "https://www.aixco.global/",
-    linkedin: "https://www.linkedin.com/company/aixco-global",
+    linkedin: "https://www.linkedin.com/company/aixco",
     facebook: "https://www.facebook.com/profile.php?id=61589341472475",
     instagram: "https://www.instagram.com/aixco.global/",
     // Default/fallback WhatsApp contact; the rendered market number is selected by geolocation.

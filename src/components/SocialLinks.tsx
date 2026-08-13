@@ -42,9 +42,9 @@ const socialLinks: SocialLink[] = [
   {
     key: "linkedin",
     label: "LinkedIn",
-    fallback: "https://www.linkedin.com/company/aixco-global",
+    fallback: "https://www.linkedin.com/company/aixco",
     allowedHosts: ["linkedin.com", "www.linkedin.com"],
-    allowedPath: "/company/aixco-global",
+    allowedPath: "/company/aixco",
     iconSrc: aixcoLiveIcons.linkedin,
   },
   {

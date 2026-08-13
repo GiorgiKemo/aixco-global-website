@@ -118,7 +118,9 @@ export function BrandbookLandingPage() {
   const { lang, setLang, tx } = useI18n();
   const { company, batumiProperties, participationRoutes } = useSiteContent();
   const currentProject = batumiProperties.find((project) => project.id === "current-project") ?? batumiProperties[0];
-  const currentProjectHref = `/aixco-global-op2/${currentProject.url}`;
+  const currentProjectHref = currentProject.id === "current-project"
+    ? "/reverance-batumi"
+    : `/aixco-global-op2/${currentProject.url}`;
   const [menuOpen, setMenuOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

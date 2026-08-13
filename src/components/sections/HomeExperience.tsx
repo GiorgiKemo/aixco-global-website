@@ -45,9 +45,9 @@ function StoryBootSurface() {
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-white/80 sm:text-sm">
             Switzerland · Dubai · Batumi
           </p>
-          <h1 className="max-w-[14ch] text-[clamp(2.6rem,8vw,6.8rem)] font-semibold leading-[0.92] tracking-[-0.035em]">
+          <div className="max-w-[14ch] text-[clamp(2.6rem,8vw,6.8rem)] font-semibold leading-[0.92] tracking-[-0.035em]">
             Wise selection. Recurring income generation.
-          </h1>
+          </div>
           <p className="mt-6 max-w-2xl text-base leading-7 text-white/84 sm:text-lg">
             Selected real estate opportunities, transparent guidance, and long-term property support since 2009.
           </p>
@@ -56,7 +56,7 @@ function StoryBootSurface() {
               Contact AIXCO
             </a>
             <Link
-              href="/aixco-global-op2/current-project"
+              href="/reverance-batumi"
               className="btn-ghost-gold inline-flex min-h-11 items-center justify-center px-6 py-3"
             >
               View current project

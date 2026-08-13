@@ -21,11 +21,19 @@ describe("SEO static assets", () => {
     expect(layout).not.toContain("https://aixco.global/logo.svg");
     expect(layout).toContain('canonical: "/"');
     expect(sitemap).not.toContain("legacyInsights");
+    expect(sitemap).not.toContain("lastModified");
     expect(robots).toContain("disallow: [\"/admin\", \"/admin/\"]");
     expect(getSiteUrl()).toBe("https://www.aixco.global");
     expect(existsSync(resolve(root, "public/robots.txt"))).toBe(false);
     expect(existsSync(resolve(root, "public/sitemap.xml"))).toBe(false);
     expect(existsSync(resolve(root, "src/app/sitemap.ts"))).toBe(true);
+  });
+
+  it("keeps the temporary boot surface from creating a second homepage heading", () => {
+    const homeExperience = readFileSync(resolve(root, "src/components/sections/HomeExperience.tsx"), "utf8");
+
+    expect(homeExperience).not.toContain("<h1");
+    expect(homeExperience).toContain("Wise selection. Recurring income generation.");
   });
 
   it("publishes canonical 200 routes and omits redirect-only routes", () => {
@@ -37,7 +45,6 @@ describe("SEO static assets", () => {
       "https://www.aixco.global/medical-tourism",
       "https://www.aixco.global/georgia-residency",
       "https://www.aixco.global/invest-in-batumi",
-      "https://www.aixco.global/aixco-global-op2/current-project",
     ]);
     expect(urls).not.toContain("https://www.aixco.global/aixco-global-op2");
   });
@@ -72,7 +79,12 @@ describe("SEO static assets", () => {
       }),
       expect.objectContaining({
         source: "/aixco-global-op2/current-project.html",
-        destination: "/aixco-global-op2/current-project",
+        destination: "/reverance-batumi",
+        permanent: true,
+      }),
+      expect.objectContaining({
+        source: "/aixco-global-op2/current-project",
+        destination: "/reverance-batumi",
         permanent: true,
       }),
     ]));
@@ -127,14 +139,14 @@ describe("SEO static assets", () => {
     expect(metadata).toMatchObject({
       title: "Project Reverance | AIXCO.Global",
       alternates: {
-        canonical: "/aixco-global-op2/current-project",
+        canonical: "/reverance-batumi",
       },
       robots: {
         index: true,
         follow: true,
       },
       openGraph: {
-        url: "/aixco-global-op2/current-project",
+        url: "/reverance-batumi",
         siteName: "AIXCO.Global",
         locale: "en_US",
         type: "website",
