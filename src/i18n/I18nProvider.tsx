@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { brandbookLandingTranslations } from "./brandbook-landing-translations";
+import { medicalTourismTranslations } from "./medical-tourism-translations";
 import { curatedVisibleTranslations } from "./curated-visible-translations";
 import { downloadGateTranslations } from "./download-gate-translations";
 import { normalizeGermanCompactMetricTranslation } from "./german-metric-notation";
@@ -25,9 +26,13 @@ const HOME_METADATA_DESCRIPTION =
 const REVERANCE_METADATA_TITLE = "Project Reverance Batumi | AIXCO.Global";
 const REVERANCE_METADATA_DESCRIPTION =
   "Explore selected Project Reverance apartments in Batumi's New Boulevard area with AIXCO.Global: 28 available apartments, transparent guidance, and completion targeted for July 2028.";
+const MEDICAL_TOURISM_METADATA_TITLE = "Medical Tourism in Georgia | AIXCO.Global";
+const MEDICAL_TOURISM_METADATA_DESCRIPTION =
+  "Plan medical treatment in Georgia with AIXCO.Global: 50-80% lower costs than Western Europe, named private clinics, and recovery on the Black Sea coast in Batumi.";
 const ROUTE_METADATA = {
   "/": { title: HOME_METADATA_TITLE, description: HOME_METADATA_DESCRIPTION },
   "/reverance-batumi": { title: REVERANCE_METADATA_TITLE, description: REVERANCE_METADATA_DESCRIPTION },
+  "/medical-tourism": { title: MEDICAL_TOURISM_METADATA_TITLE, description: MEDICAL_TOURISM_METADATA_DESCRIPTION },
 } as const;
 
 function isLang(value: string | null): value is Lang {
@@ -1754,6 +1759,7 @@ const siteProgressTranslations: TranslationSource = {
 };
 
 const baseCatalogSources: TranslationSource[] = [
+  medicalTourismTranslations,
   brandbookLandingTranslations,
   siteProgressTranslations,
   slovenianClientRevisions,
@@ -1789,6 +1795,7 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
+        medicalTourismTranslations,
         brandbookLandingTranslations,
         siteProgressTranslations,
         slovenianClientRevisions,

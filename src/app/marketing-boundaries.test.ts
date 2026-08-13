@@ -22,11 +22,13 @@ describe("marketing analytics route boundary", () => {
     const homePage = source("src/app/page.tsx");
     const propertyPage = source("src/app/aixco-global-op2/[slug]/page.tsx");
     const reverancePage = source("src/app/reverance-batumi/page.tsx");
+    const medicalTourismPage = source("src/app/medical-tourism/page.tsx");
 
     expect(clientShell).toContain('import { MarketingAnalytics } from "./marketing-analytics"');
     expect(clientShell).toContain("<MarketingAnalytics />");
     expect(homePage).toContain("<ClientShell");
     expect(propertyPage).toContain("<ClientShell");
     expect(reverancePage).toContain("<ClientShell");
+    expect(medicalTourismPage).toContain("<ClientShell");
   });
 });
