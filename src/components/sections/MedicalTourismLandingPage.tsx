@@ -417,7 +417,7 @@ export function MedicalTourismLandingPage() {
               </div>
 
               <div className="relative z-10 mt-7 max-w-[36rem]">
-                <h1 className="max-w-[11ch] text-[clamp(2.45rem,11vw,6.6rem)] font-medium leading-[0.86] tracking-[-0.065em]">
+                <h1 className="max-w-[11ch] text-[clamp(2.45rem,11vw,6.6rem)] font-medium leading-[0.94] tracking-[-0.065em]">
                   {tx("Medical care")} <span className="text-[#E6C767]">{tx("at European quality.")}</span>
                 </h1>
                 <p className="mt-8 max-w-[30rem] text-[1.05rem] leading-[1.55] text-white/68 sm:text-[1.12rem]">
