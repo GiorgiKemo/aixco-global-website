@@ -22,6 +22,9 @@ describe("aixcoLiveImages", () => {
     expect(aixcoLiveImages.batumiMosaicThumbBlueTower).toContain("/batumi-mosaic-thumbs/batumi-blue-tower.webp");
     expect(aixcoLiveImages.currentProjectExterior).toContain("/images/project-gallery/reverance-exterior.webp");
     expect(aixcoLiveImages.currentProjectTowers).toContain("/images/project-gallery/reverance-towers.webp");
+    expect(aixcoLiveImages.currentProjectCleanFacade).toContain(
+      "/images/project-gallery-2026/01-hero-exterior-2048.webp",
+    );
     expect(aixcoLiveImages.currentProjectCourtyard).toContain("/images/project-gallery/reverance-courtyard.webp");
     expect(aixcoLiveImages.currentProjectArrival).toContain("/images/project-gallery/reverance-arrival.webp");
   });

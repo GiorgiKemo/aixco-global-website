@@ -53,6 +53,7 @@ describe("landing page motion and responsiveness", () => {
     expect(residency).toContain("grid-cols-1 border-t border-white/20 min-[520px]:grid-cols-3");
     expect(residency).toContain("text-[clamp(2.55rem,12vw,7.6rem)]");
     expect(residency).toContain("w-[7.25rem] sm:w-36");
+    expect(residency).toContain("currentProjectCleanFacade");
     expect(css).toContain("overflow-x: clip");
     expect(css).toContain(".brandbook-landing h1,\n.brandbook-landing h2,\n.residency-dossier h1,\n.residency-dossier h2");
     expect(css).toContain("overflow-wrap: anywhere");

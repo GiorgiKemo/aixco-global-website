@@ -64,6 +64,7 @@ export const aixcoLiveImages = {
   batumiMosaicThumbBlueTower: `${liveImageBase}/batumi-mosaic-thumbs/batumi-blue-tower.webp`,
   batumiCurrentProject: `${optimizedImageBase}/current-project-reverance.webp`,
   currentProjectTowers: `${projectGalleryBase}/reverance-towers.webp`,
+  currentProjectCleanFacade: `${currentProjectGalleryBase}/01-hero-exterior-2048.webp`,
   currentProjectExterior: `${projectGalleryBase}/reverance-exterior.webp`,
   currentProjectCourtyard: `${projectGalleryBase}/reverance-courtyard.webp`,
   currentProjectArrival: `${projectGalleryBase}/reverance-arrival.webp`,

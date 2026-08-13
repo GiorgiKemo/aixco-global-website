@@ -39,7 +39,7 @@ const permitPaths = [
     price: "€138,000",
     detail: "Purchase property with a minimum value of €138,000. No work permit is required, saving at least 10 working days.",
     note: "When purchasing through AIXCO, no additional costs apply. Document preparation is completed within one working day.",
-    image: aixcoLiveImages.currentProjectTowers,
+    image: aixcoLiveImages.currentProjectCleanFacade,
   },
   {
     id: "investment",
