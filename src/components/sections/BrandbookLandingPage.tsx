@@ -283,14 +283,14 @@ export function BrandbookLandingPage() {
         <section id="top" className="scroll-mt-20">
           <div className="mx-auto grid min-h-[calc(100svh-4.6rem)] w-full max-w-[1600px] lg:grid-cols-[0.82fr_1.18fr]">
             <div className="relative flex min-h-[36rem] flex-col overflow-hidden bg-[#161616] px-6 pb-8 pt-8 text-white sm:px-10 sm:pb-10 lg:min-h-[calc(100svh-4.6rem)] lg:px-14 lg:pt-12">
-              <div className="relative z-10 flex items-start justify-end">
+              <div className="relative z-10 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
+                <p className="flex min-w-0 items-center gap-3 pt-1 text-[0.64rem] font-semibold uppercase tracking-[0.23em] text-[#E6C767]">
+                  <span className="h-px w-8 bg-[#E6C767]" /> {tx("Batumi property profile")}
+                </p>
                 <span className="pt-1 text-right text-[0.58rem] font-medium uppercase tracking-[0.2em] text-white/45">01 / 04<br />AIXCO GLOBAL</span>
               </div>
 
-              <div className="relative z-10 mt-4 max-w-[35rem] lg:mt-3">
-                <p className="mb-6 flex items-center gap-3 text-[0.64rem] font-semibold uppercase tracking-[0.23em] text-[#E6C767]">
-                  <span className="h-px w-8 bg-[#E6C767]" /> {tx("Batumi property profile")}
-                </p>
+              <div className="relative z-10 mt-7 max-w-[35rem]">
                 <h1 className="max-w-none text-[clamp(3.2rem,13vw,3.9rem)] font-medium leading-[0.86] tracking-[-0.065em] sm:max-w-[8.5ch] sm:text-[clamp(3.9rem,7vw,7.4rem)]">
                   {tx("Project")} <span className="text-[#E6C767]">Reverance</span>
                 </h1>
@@ -343,19 +343,19 @@ export function BrandbookLandingPage() {
                 onClick={() => setExpandedImage({ src: projectImages.hero, alt: tx("The Reverance residence exterior in Batumi") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
-                <span className="absolute right-5 top-5 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:right-8 sm:top-8">
+                <span className="absolute right-5 top-5 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8">
                   <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand image")}
                 </span>
               </button>
               <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#161616]/55 via-[#161616]/10 to-transparent" />
               <div className="pointer-events-none absolute inset-x-5 bottom-5 z-20 grid gap-5 text-white sm:inset-x-8 sm:bottom-8 lg:inset-x-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-                <div className="brandbook-hero-caption max-w-[30rem]">
-                  <p className="brandbook-hero-caption__eyebrow text-[0.62rem] font-semibold uppercase tracking-[0.2em]">{tx("Project Reverance")}</p>
-                  <p className="mt-2 text-xl font-medium leading-[1.15] tracking-[-0.03em] sm:text-2xl">{tx("Reverance is a premium residential complex on Batumi's New Boulevard.")}</p>
+                <div className="max-w-[30rem] [text-shadow:0_2px_10px_rgb(0_0_0/0.95),0_1px_2px_rgb(0_0_0)]">
+                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">{tx("Project Reverance")}</p>
+                  <p className="mt-2 text-xl font-medium leading-[1.15] tracking-[-0.03em] text-white sm:text-2xl">{tx("Reverance is a premium residential complex on Batumi's New Boulevard.")}</p>
                 </div>
                 <div className="pointer-events-auto z-30 flex flex-wrap items-center justify-start gap-2 lg:justify-end">
-                  <Link href={currentProjectHref} className="inline-flex min-h-10 items-center justify-center border border-[#F3EDE1]/90 bg-[#F3EDE1]/95 px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-[#161616] shadow-lg transition-colors hover:border-[#E6C767] hover:bg-[#E6C767]">{tx("View project")}</Link>
-                  <CurrentProjectBrochureLink className="inline-flex min-h-10 items-center gap-2 border border-[#F3EDE1]/90 bg-[#F3EDE1]/95 px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-[#161616] shadow-lg transition-colors hover:border-[#E6C767] hover:bg-[#E6C767]" />
+                  <Link href={currentProjectHref} className="inline-flex min-h-10 items-center justify-center border border-white/90 bg-transparent px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_6px_rgb(0_0_0/0.95)] transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] hover:[text-shadow:none]">{tx("View project")}</Link>
+                  <CurrentProjectBrochureLink className="inline-flex min-h-10 items-center gap-2 border border-white/90 bg-transparent px-4 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_6px_rgb(0_0_0/0.95)] transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] hover:[text-shadow:none]" />
                 </div>
               </div>
             </div>
@@ -410,15 +410,15 @@ export function BrandbookLandingPage() {
                 onClick={() => setExpandedImage({ src: projectImages.sunset, alt: tx("Sunset over the residence facade") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
-                <span className="absolute right-5 top-5 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:right-8 sm:top-8">
+                <span className="absolute right-5 top-5 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8">
                   <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand image")}
                 </span>
               </button>
               <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/85 via-[#0b0b0b]/20 to-[#0b0b0b]/20" />
-              <div className="pointer-events-none absolute left-5 top-5 z-20 flex items-center gap-3 bg-[#0b0b0b]/60 px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm sm:left-8 sm:top-8">
+              <div className="pointer-events-none absolute left-5 top-5 z-20 flex items-center gap-3 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:left-8 sm:top-8">
                 <span className="h-px w-8 bg-[#E6C767]" /> {tx("Reverance project gallery")}
               </div>
-              <div className="pointer-events-none absolute bottom-5 right-5 z-20 grid max-w-[20rem] gap-2 bg-[#0b0b0b]/65 p-4 text-right text-white backdrop-blur-sm sm:bottom-8 sm:right-8">
+              <div className="pointer-events-none absolute bottom-5 right-5 z-20 grid max-w-[20rem] gap-2 text-right text-white [text-shadow:0_2px_10px_rgb(0_0_0/0.95),0_1px_2px_rgb(0_0_0)] sm:bottom-8 sm:right-8">
                 <span className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-white/80">{tx("59 Adlia Street")}</span>
                 <p className="text-xl font-medium leading-[1.05] tracking-[-0.035em]">{tx("New Boulevard 5 minutes away.")}</p>
               </div>
@@ -467,32 +467,32 @@ export function BrandbookLandingPage() {
                 <figure className="group relative aspect-[0.92] overflow-hidden bg-[#D9D0C0] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
                       <Image src={projectImages.lounge} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance residential towers image")} onClick={() => setExpandedImage({ src: projectImages.lounge, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
-                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
                   </button>
                   <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
-                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 bg-[#0b0b0b]/65 px-3 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">{tx("Project gallery")}</figcaption>
+                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
                       <Image src={projectImages.arrival} alt={tx("Reverance arrival and landscaped exterior project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ src: projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
-                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
                   </button>
                   <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
-                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 bg-[#0b0b0b]/65 px-3 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">{tx("Project gallery")}</figcaption>
+                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
                       <Image src={projectImages.gym} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ src: projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
-                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 bg-[#0b0b0b]/75 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
                   </button>
                   <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
-                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 bg-[#0b0b0b]/65 px-3 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">{tx("Project gallery")}</figcaption>
+                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
               </div>
             </div>
@@ -598,7 +598,7 @@ export function BrandbookLandingPage() {
             type="button"
             aria-label={tx("Close expanded image")}
             onClick={() => setExpandedImage(null)}
-            className="absolute right-4 top-4 z-10 inline-flex h-12 w-12 items-center justify-center border border-white/70 bg-[#0b0b0b]/75 text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:right-8 sm:top-8"
+            className="absolute right-4 top-4 z-10 inline-flex h-12 w-12 items-center justify-center border border-white/70 bg-transparent text-white [filter:drop-shadow(0_2px_6px_rgb(0_0_0/0.95))] transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:right-8 sm:top-8"
           >
             <X size={22} strokeWidth={1.6} />
           </button>

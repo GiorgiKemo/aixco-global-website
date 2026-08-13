@@ -49,6 +49,38 @@ final result: passed
 
 ---
 
+# Reverance Image-Overlay Background Removal - Design QA (2026-08-13)
+
+- Source visual truth: `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-988b73bc-d57b-4a15-843d-c3b82661d13b.png` and `C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-c1432407-3f4b-4abb-867e-93c3f16b6415.png`.
+- Implementation screenshots: `C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/qa-reverance-desktop-en.png`, `qa-reverance-gallery.png`, and `qa-reverance-mobile-top.png`.
+- Viewports: 1440 x 900 and 390 x 844 CSS pixels at device density 1.
+- State: `/reverance-batumi`, English locale, hero and project-highlights image states.
+
+## Findings and comparison history
+
+1. P1: The ivory hero-caption panel and black gallery labels obscured the project images. Removed every filled text panel over the project images; captions now use transparent backgrounds with white/champagne foregrounds and layered dark text shadows.
+2. P2: The property-profile label sat below the AIXCO Global marker. Both labels now share one grid row and measure the same top coordinate (`topDelta: 0px`) on desktop and mobile.
+3. Post-fix captures show no image-label background fills and no horizontal overflow. No actionable P0/P1/P2 findings remain.
+
+## Required fidelity surfaces
+
+- Fonts and typography: existing Gilroy hierarchy retained; multilingual font validation passed.
+- Spacing and layout rhythm: top markers align exactly; image captions keep consistent edge spacing without panels.
+- Colors and visual tokens: existing white/champagne palette retained; image-label backgrounds compute to transparent.
+- Image quality and asset fidelity: original project renders and crops retained and no longer obscured by caption cards.
+- Copy and content: all existing localized copy retained.
+
+## Focused evidence and interactions
+
+- Computed backgrounds for visible project-image labels are `rgba(0, 0, 0, 0)`.
+- Image expansion opens the dialog, locks body scrolling, closes successfully, and produced no console errors or warnings.
+- Public locale layout audit passed 40 route/viewport/language combinations.
+- ESLint, the production build, and all 119 test files / 644 tests passed.
+
+final result: passed
+
+---
+
 # Reverance SEO landing route QA
 
 - Dedicated route: `/reverance-batumi`.
