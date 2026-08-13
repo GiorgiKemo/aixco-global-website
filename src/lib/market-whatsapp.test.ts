@@ -2,6 +2,15 @@ import { describe, expect, it } from "vitest";
 import { getWhatsAppContactForCountry } from "./market-whatsapp";
 
 describe("market WhatsApp contacts", () => {
+  it.each(["CH", "DE", "AT", "GE"])("keeps the WhatsApp URL aligned with the displayed number for %s", (country) => {
+    const contact = getWhatsAppContactForCountry(country);
+
+    expect(contact).not.toBeNull();
+    const digits = contact!.number.replace(/\D/g, "");
+    expect(contact!.href).toBe(`https://wa.me/${digits}`);
+    expect(contact!.allowedPath).toBe(`/${digits}`);
+  });
+
   it("uses the Swiss number for Switzerland", () => {
     expect(getWhatsAppContactForCountry("ch")).toEqual({
       number: "+41 79 832 05 81",
@@ -24,8 +33,8 @@ describe("market WhatsApp contacts", () => {
   it("uses the shared international number for other detected countries", () => {
     const expected = {
       number: "+995 555 54 36 55",
-      href: "https://wa.me/99555543655",
-      allowedPath: "/99555543655",
+      href: "https://wa.me/995555543655",
+      allowedPath: "/995555543655",
     };
 
     expect(getWhatsAppContactForCountry("GE")).toEqual(expected);

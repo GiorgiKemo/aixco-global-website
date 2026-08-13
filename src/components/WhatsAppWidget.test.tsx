@@ -56,7 +56,7 @@ describe("WhatsAppWidget", () => {
     const { container } = renderWidget();
 
     const link = await screen.findByRole("link", { name: "WhatsApp" });
-    expect(link).toHaveAttribute("href", "https://wa.me/99555543655");
+    expect(link).toHaveAttribute("href", "https://wa.me/995555543655");
     expect(container.querySelector('[data-whatsapp-floating-container="true"]')).toBeInTheDocument();
   });
 

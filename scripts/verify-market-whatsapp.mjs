@@ -9,7 +9,7 @@ const cases = [
   { name: "tablet-switzerland", engine: chromium, profile: { viewport: { width: 768, height: 1024 }, hasTouch: true }, country: "CH", expected: "41798320581" },
   { name: "laptop-germany", engine: chromium, profile: { viewport: { width: 1366, height: 768 } }, country: "DE", expected: "436642554285" },
   { name: "desktop-switzerland", engine: chromium, profile: { viewport: { width: 1920, height: 1080 } }, country: "CH", expected: "41798320581" },
-  { name: "global-georgia", engine: chromium, profile: devices["iPhone 13"], country: "GE", expected: "99555543655" },
+  { name: "global-georgia", engine: chromium, profile: devices["iPhone 13"], country: "GE", expected: "995555543655" },
 ];
 const paths = ["/", "/aixco-global-op2/current-project"];
 const errors = [];
