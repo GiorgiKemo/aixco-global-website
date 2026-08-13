@@ -1,5 +1,5 @@
 const consentKey = "aixco-analytics-consent-v1";
-const consentVersion = "2026-08-13-google-analytics";
+const consentVersion = "2026-08-13-google-analytics-policy-refresh";
 const sessionKey = "aixco-analytics-session-v1";
 
 function analyticsAllowed() {

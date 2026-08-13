@@ -49,7 +49,7 @@ for (const profile of deviceProfiles) {
   await context.addInitScript(() => {
     window.localStorage.setItem(
       "aixco-analytics-consent-v1",
-      JSON.stringify({ status: "denied", version: "2026-08-13-google-analytics" }),
+      JSON.stringify({ status: "denied", version: "2026-08-13-google-analytics-policy-refresh" }),
     );
   });
   const page = await context.newPage();

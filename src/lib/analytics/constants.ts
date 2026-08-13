@@ -11,4 +11,4 @@ export const ANALYTICS_OUTBOX_STORAGE_KEY = "aixco-analytics-outbox-v1";
 export const ANALYTICS_CONSENT_EVENT = "aixco:analytics-consent";
 export const ANALYTICS_TRACK_EVENT = "aixco:analytics-track";
 export const ANALYTICS_PREFERENCES_EVENT = "aixco:analytics-preferences";
-export const ANALYTICS_CONSENT_VERSION = "2026-08-13-google-analytics";
+export const ANALYTICS_CONSENT_VERSION = "2026-08-13-google-analytics-policy-refresh";
