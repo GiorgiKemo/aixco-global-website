@@ -20,6 +20,7 @@ describe("SEO static assets", () => {
     expect(layout).not.toContain("/og-image.jpg");
     expect(layout).not.toContain("https://aixco.global/logo.svg");
     expect(layout).toContain('canonical: "/"');
+    expect(layout).toContain('google: "cthSPFpr7n1-BQ5XXtLZXLv9cZ40teF4anFpNTn95ZU"');
     expect(sitemap).not.toContain("legacyInsights");
     expect(sitemap).not.toContain("lastModified");
     expect(robots).toContain("disallow: [\"/admin\", \"/admin/\"]");
