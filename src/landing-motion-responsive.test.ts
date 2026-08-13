@@ -30,6 +30,10 @@ describe("landing page motion and responsiveness", () => {
     expect(css).toContain("html:active-view-transition .aixco-page-shell");
   });
 
+  it("does not transform the page wrapper that owns fixed landing headers", () => {
+    expect(css).not.toContain("transform: translate3d(0, 12px, 0) scale(1.008);");
+  });
+
   it("scrolls landing-page sections through Lenis instead of native scrollIntoView", () => {
     expect(residency).toContain('import { scrollToHash } from "@/lib/smooth-scroll"');
     expect(residency).toContain("scrollToHash(`#${id}`)");
