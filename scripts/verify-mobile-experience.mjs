@@ -129,7 +129,7 @@ try {
         if (heroMetrics.controls.length !== 3) {
           errors.push(`${label}: expected 3 hero actions, found ${heroMetrics.controls.length}`);
         }
-        const missingActionLabels = ["Current project", "REGISTER", "CONTACT ME"].filter(
+        const missingActionLabels = ["Current project", "Login", "CONTACT ME"].filter(
           (expectedLabel) => !heroMetrics.controls.some(({ text }) => text.includes(expectedLabel)),
         );
         if (missingActionLabels.length) {
@@ -274,8 +274,8 @@ try {
           undefined,
           { timeout: 5_000 },
         );
-        await page.getByRole("button", { name: "REGISTER", exact: true }).click();
-        const modal = page.getByRole("dialog", { name: "Register with AIXCO" });
+        await page.locator('[data-story-section="hero"]').getByRole("button", { name: "Login", exact: true }).click();
+        const modal = page.getByRole("dialog", { name: "Login to your AIXCO portal" });
         await modal.waitFor({ state: "visible" });
         const modalMetrics = await modal.evaluate((dialog) => {
           const root = document.documentElement;
@@ -296,11 +296,11 @@ try {
         });
 
         if (modalMetrics.rootOverflow !== "hidden" || modalMetrics.bodyOverflow !== "hidden") {
-          errors.push(`${viewport.name}/register-modal: page scroll is not locked while the modal is open`);
+          errors.push(`${viewport.name}/login-modal: page scroll is not locked while the modal is open`);
         }
-        if (!modalMetrics.withinViewport) errors.push(`${viewport.name}/register-modal: dialog is not fully contained by the viewport`);
+        if (!modalMetrics.withinViewport) errors.push(`${viewport.name}/login-modal: dialog is not fully contained by the viewport`);
         if (!modalMetrics.closeTarget || modalMetrics.closeTarget.width < 44 || modalMetrics.closeTarget.height < 44) {
-          errors.push(`${viewport.name}/register-modal: close control is below 44px`);
+          errors.push(`${viewport.name}/login-modal: close control is below 44px`);
         }
 
         await page.keyboard.press("Escape");
