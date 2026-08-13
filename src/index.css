@@ -12121,19 +12121,6 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   color: #9c7f3c;
 }
 
-.brandbook-hero-caption {
-  border-top: 2px solid var(--brandbook-gold);
-  background: rgb(243 237 225 / 0.94);
-  box-shadow: 0 24px 60px -34px rgb(0 0 0 / 0.58);
-  color: var(--brandbook-ink);
-  padding: 1rem 1.15rem 1.1rem;
-  backdrop-filter: blur(12px);
-}
-
-.brandbook-hero-caption__eyebrow {
-  color: #9c7f3c;
-}
-
 .brandbook-input {
   min-height: 3.1rem;
   width: 100%;
