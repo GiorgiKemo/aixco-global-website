@@ -29,19 +29,74 @@ const navigation = [
 ];
 
 const projectImages = {
-  hero: aixcoCurrentProjectGalleryImages[0].src,
-  sunset: aixcoCurrentProjectGalleryImages[1].src,
-  night: aixcoCurrentProjectGalleryImages[2].src,
-  aerial: aixcoCurrentProjectGalleryImages[3].src,
-  arrival: aixcoCurrentProjectGalleryImages[5].src,
-  lounge: aixcoCurrentProjectGalleryImages[12].src,
-  gym: aixcoCurrentProjectGalleryImages[15].src,
+  hero: { src: aixcoCurrentProjectGalleryImages[0].src, width: 3882, height: 3871 },
+  sunset: { src: aixcoCurrentProjectGalleryImages[1].src, width: 3974, height: 3913 },
+  night: { src: aixcoCurrentProjectGalleryImages[2].src, width: 4096, height: 4096 },
+  aerial: { src: aixcoCurrentProjectGalleryImages[3].src, width: 4000, height: 4000 },
+  arrival: { src: aixcoCurrentProjectGalleryImages[5].src, width: 4000, height: 4000 },
+  lounge: { src: aixcoCurrentProjectGalleryImages[12].src, width: 3935, height: 2733 },
+  gym: { src: aixcoCurrentProjectGalleryImages[15].src, width: 3840, height: 2160 },
 } as const;
 
 type ExpandedImage = {
   src: string;
   alt: string;
+  width: number;
+  height: number;
 };
+
+type ExpandedProjectImageModalProps = {
+  image: ExpandedImage;
+  dialogLabel: string;
+  closeLabel: string;
+  onClose: () => void;
+};
+
+export function ExpandedProjectImageModal({ image, dialogLabel, closeLabel, onClose }: ExpandedProjectImageModalProps) {
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={dialogLabel}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0b0b0b]/95 p-4 sm:p-8"
+      onClick={(event) => {
+        const mediaBounds = event.currentTarget.querySelector("[data-expanded-project-media]")?.getBoundingClientRect();
+        if (
+          mediaBounds &&
+          event.clientX >= mediaBounds.left &&
+          event.clientX <= mediaBounds.right &&
+          event.clientY >= mediaBounds.top &&
+          event.clientY <= mediaBounds.bottom
+        ) {
+          return;
+        }
+        onClose();
+      }}
+    >
+      <button
+        type="button"
+        aria-label={closeLabel}
+        onClick={(event) => {
+          event.stopPropagation();
+          onClose();
+        }}
+        className="absolute right-4 top-4 z-10 inline-flex h-12 w-12 items-center justify-center border border-white/70 bg-transparent text-white [filter:drop-shadow(0_2px_6px_rgb(0_0_0/0.95))] transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:right-8 sm:top-8"
+      >
+        <X size={22} strokeWidth={1.6} />
+      </button>
+      <div data-expanded-project-media className="relative inline-flex max-h-[82dvh] max-w-[92vw]">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
+          sizes="92vw"
+          className="h-auto max-h-[82dvh] w-auto max-w-[92vw] object-contain"
+        />
+      </div>
+    </div>
+  );
+}
 
 const projectInvestmentBenefits = [
   { title: "100% Ownership", body: "Full freehold, no local partner, no conditions. Yours entirely." },
@@ -329,7 +384,7 @@ export function BrandbookLandingPage() {
 
             <div className="relative min-h-[26rem] overflow-hidden bg-[#002147] lg:min-h-full">
               <Image
-                src={projectImages.hero}
+                src={projectImages.hero.src}
                 alt={tx("The Reverance residence exterior in Batumi")}
                 fill
                 priority
@@ -340,7 +395,7 @@ export function BrandbookLandingPage() {
               <button
                 type="button"
                 aria-label={tx("Expand the Reverance residence exterior image")}
-                onClick={() => setExpandedImage({ src: projectImages.hero, alt: tx("The Reverance residence exterior in Batumi") })}
+                onClick={() => setExpandedImage({ ...projectImages.hero, alt: tx("The Reverance residence exterior in Batumi") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
                 <span className="absolute right-5 top-5 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8">
@@ -403,11 +458,11 @@ export function BrandbookLandingPage() {
             </div>
 
             <div className="relative min-h-[28rem] overflow-hidden bg-[#D9D0C0] lg:min-h-[44rem]">
-              <Image src={projectImages.sunset} alt={tx("Sunset over the residence facade")} fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover object-center" />
+              <Image src={projectImages.sunset.src} alt={tx("Sunset over the residence facade")} fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover object-center" />
               <button
                 type="button"
                 aria-label={tx("Expand the sunset over the residence facade image")}
-                onClick={() => setExpandedImage({ src: projectImages.sunset, alt: tx("Sunset over the residence facade") })}
+                onClick={() => setExpandedImage({ ...projectImages.sunset, alt: tx("Sunset over the residence facade") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
                 <span className="absolute right-5 top-5 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8">
@@ -465,8 +520,8 @@ export function BrandbookLandingPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <figure className="group relative aspect-[0.92] overflow-hidden bg-[#D9D0C0] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
-                      <Image src={projectImages.lounge} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <button type="button" aria-label={tx("Expand the Reverance residential towers image")} onClick={() => setExpandedImage({ src: projectImages.lounge, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
+                      <Image src={projectImages.lounge.src} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                  <button type="button" aria-label={tx("Expand the Reverance residential towers image")} onClick={() => setExpandedImage({ ...projectImages.lounge, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
@@ -475,8 +530,8 @@ export function BrandbookLandingPage() {
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
-                      <Image src={projectImages.arrival} alt={tx("Reverance arrival and landscaped exterior project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ src: projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
+                      <Image src={projectImages.arrival.src} alt={tx("Reverance arrival and landscaped exterior project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                  <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ ...projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
@@ -485,8 +540,8 @@ export function BrandbookLandingPage() {
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
-                      <Image src={projectImages.gym} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ src: projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
+                      <Image src={projectImages.gym.src} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                  <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ ...projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
@@ -585,27 +640,12 @@ export function BrandbookLandingPage() {
       </div>
 
       {expandedImage ? (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={tx("Expanded project image")}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0b0b0b]/95 p-4 sm:p-8"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setExpandedImage(null);
-          }}
-        >
-          <button
-            type="button"
-            aria-label={tx("Close expanded image")}
-            onClick={() => setExpandedImage(null)}
-            className="absolute right-4 top-4 z-10 inline-flex h-12 w-12 items-center justify-center border border-white/70 bg-transparent text-white [filter:drop-shadow(0_2px_6px_rgb(0_0_0/0.95))] transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:right-8 sm:top-8"
-          >
-            <X size={22} strokeWidth={1.6} />
-          </button>
-          <div className="relative h-[min(82vh,52rem)] w-full max-w-[92rem]">
-            <Image src={expandedImage.src} alt={expandedImage.alt} fill sizes="92vw" className="object-contain" />
-          </div>
-        </div>
+        <ExpandedProjectImageModal
+          image={expandedImage}
+          dialogLabel={tx("Expanded project image")}
+          closeLabel={tx("Close expanded image")}
+          onClose={() => setExpandedImage(null)}
+        />
       ) : null}
     </div>
   );

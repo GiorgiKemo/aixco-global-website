@@ -33,6 +33,10 @@ describe("WhatsAppWidget", () => {
     expect(link).not.toHaveClass("hover:-translate-y-0.5");
     expect(container.querySelector('[data-whatsapp-floating-container="true"]')).toBeInTheDocument();
     expect(container.querySelector('img[src*="AIXCO_icons-06.svg"]')).toBeInTheDocument();
+    expect(container.querySelector('img[src*="AIXCO_icons-06-yellow.svg"]')).toHaveClass(
+      "group-hover:opacity-100",
+      "group-focus-visible:opacity-100",
+    );
   });
 
   it.each(["DE", "AT"])("opens the German/Austrian contact for %s", async (country) => {

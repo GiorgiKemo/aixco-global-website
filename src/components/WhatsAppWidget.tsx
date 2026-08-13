@@ -52,7 +52,7 @@ export function WhatsAppWidget() {
         rel="noopener noreferrer"
         aria-label="WhatsApp"
         title="WhatsApp"
-        className="pointer-events-auto relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-primary/30 bg-white text-primary shadow-gold transition-[background-color,border-color,box-shadow] duration-200 ease-out hover:border-primary/55 hover:bg-primary/[0.06] hover:shadow-[0_12px_30px_-18px_hsl(var(--primary)/0.8)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-14 md:w-14"
+        className="group pointer-events-auto relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-primary/30 bg-white text-primary shadow-gold transition-[background-color,border-color,box-shadow] duration-200 ease-out hover:border-[#E6C767] hover:bg-primary/[0.06] hover:shadow-[0_12px_30px_-18px_hsl(var(--primary)/0.8)] focus-visible:border-[#E6C767] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-14 md:w-14"
       >
         <Image
           src={aixcoLiveIcons.whatsapp}
@@ -61,7 +61,16 @@ export function WhatsAppWidget() {
           width={34}
           height={34}
           unoptimized
-          className="h-8 w-8 object-contain md:h-9 md:w-9"
+          className="h-8 w-8 object-contain opacity-100 transition-opacity duration-200 ease-out group-hover:opacity-0 group-focus-visible:opacity-0 md:h-9 md:w-9"
+        />
+        <Image
+          src={aixcoLiveIcons.whatsappYellow}
+          alt=""
+          aria-hidden="true"
+          width={34}
+          height={34}
+          unoptimized
+          className="pointer-events-none absolute h-8 w-8 object-contain opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-visible:opacity-100 md:h-9 md:w-9"
         />
         <span className="sr-only">WhatsApp</span>
       </a>
