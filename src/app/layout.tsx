@@ -4,6 +4,7 @@ import "lenis/dist/lenis.css";
 import "@/index.css";
 import "@/story-mobile-menu.css";
 import { getSiteUrl } from "@/lib/site-url";
+import { RouteTransition } from "@/components/RouteTransition";
 
 const gilroy = localFont({
   src: [
@@ -94,6 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
+        <RouteTransition />
         {children}
       </body>
     </html>

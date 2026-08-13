@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { brandbookLandingTranslations } from "./brandbook-landing-translations";
 import { medicalTourismTranslations } from "./medical-tourism-translations";
+import { georgiaResidencyTranslations } from "./georgia-residency-translations";
 import { curatedVisibleTranslations } from "./curated-visible-translations";
 import { downloadGateTranslations } from "./download-gate-translations";
 import { normalizeGermanCompactMetricTranslation } from "./german-metric-notation";
@@ -29,10 +30,14 @@ const REVERANCE_METADATA_DESCRIPTION =
 const MEDICAL_TOURISM_METADATA_TITLE = "Medical Tourism in Georgia | AIXCO.Global";
 const MEDICAL_TOURISM_METADATA_DESCRIPTION =
   "Plan medical treatment in Georgia with AIXCO.Global: 50-80% lower costs than Western Europe, named private clinics, and recovery on the Black Sea coast in Batumi.";
+const GEORGIA_RESIDENCY_METADATA_TITLE = "Residence Permit and Tax Residency in Georgia | AIXCO.Global";
+const GEORGIA_RESIDENCY_METADATA_DESCRIPTION =
+  "Three official AIXCO paths to reside in Georgia: business registration from about €17,000 turnover, property from €138,000, or investment from €276,000, plus the HNWI tax residency process.";
 const ROUTE_METADATA = {
   "/": { title: HOME_METADATA_TITLE, description: HOME_METADATA_DESCRIPTION },
   "/reverance-batumi": { title: REVERANCE_METADATA_TITLE, description: REVERANCE_METADATA_DESCRIPTION },
   "/medical-tourism": { title: MEDICAL_TOURISM_METADATA_TITLE, description: MEDICAL_TOURISM_METADATA_DESCRIPTION },
+  "/georgia-residency": { title: GEORGIA_RESIDENCY_METADATA_TITLE, description: GEORGIA_RESIDENCY_METADATA_DESCRIPTION },
 } as const;
 
 function isLang(value: string | null): value is Lang {
@@ -76,6 +81,12 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<CatalogLan
     pl: "Ustawienia plików cookie",
     sl: "Nastavitve piškotkov",
     ru: "Настройки файлов cookie",
+  },
+  "Also from AIXCO": {
+    de: "Auch von AIXCO",
+    pl: "Także od AIXCO",
+    sl: "Tudi od AIXCO",
+    ru: "Также от AIXCO",
   },
   "Skip to main content": {
     de: "Zum Hauptinhalt springen",
@@ -1759,6 +1770,7 @@ const siteProgressTranslations: TranslationSource = {
 };
 
 const baseCatalogSources: TranslationSource[] = [
+  georgiaResidencyTranslations,
   medicalTourismTranslations,
   brandbookLandingTranslations,
   siteProgressTranslations,
@@ -1795,6 +1807,7 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
+        georgiaResidencyTranslations,
         medicalTourismTranslations,
         brandbookLandingTranslations,
         siteProgressTranslations,

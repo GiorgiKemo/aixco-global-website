@@ -22,6 +22,8 @@ import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
 import { recordContactSubmission } from "@/lib/backend/lead-capture";
 import { aixcoCurrentProjectGalleryImages, aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { openAnalyticsPreferences } from "@/lib/analytics/client";
+import { LandingSiblingLinks } from "@/components/landing/LandingSiblingLinks";
+import { scrollToHash } from "@/lib/smooth-scroll";
 
 const navigation = [
   { label: "Opportunity", href: "#opportunity" },
@@ -109,7 +111,7 @@ const projectInvestmentBenefits = [
 ] as const;
 
 function scrollToSection(href: string) {
-  document.querySelector(href)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollToHash(href);
 }
 
 export function BrandbookLandingPage() {
@@ -212,8 +214,8 @@ export function BrandbookLandingPage() {
   return (
     <div id="main-content" className="brandbook-landing bg-[#F3EDE1] text-[#161616]">
       <header className="brandbook-header sticky top-0 z-50 border-b border-[#161616]/10 bg-[#F3EDE1]/95 backdrop-blur-md">
-        <div className="mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between px-5 sm:px-8 lg:px-12">
-          <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex items-center">
+        <div className="landing-header-bar mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between gap-3 px-5 sm:px-8 lg:px-12">
+          <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex min-w-0 shrink-0 items-center">
             <Image
               src={aixcoLiveLogos.aixcoHorizontalDark}
               alt="AIXCO.Global"
@@ -221,7 +223,7 @@ export function BrandbookLandingPage() {
               height={333}
               priority
               sizes="(min-width: 1024px) 12rem, 10rem"
-              className="h-auto w-36 sm:w-40"
+              className="h-auto w-[7.25rem] sm:w-36 lg:w-40"
             />
           </Link>
 
@@ -251,6 +253,7 @@ export function BrandbookLandingPage() {
             </a>
           </nav>
 
+          <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             aria-label={menuOpen ? tx("Close navigation") : tx("Open navigation")}
@@ -269,10 +272,11 @@ export function BrandbookLandingPage() {
               aria-controls="brandbook-language-list"
               aria-label={`${currentLangName} ${tx("Change language")}`}
               onClick={() => setLanguageOpen((current) => !current)}
-              className="inline-flex min-h-11 items-center gap-1.5 border border-[#161616]/15 bg-transparent px-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#E6C767] hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 sm:px-3"
+              className="inline-flex min-h-11 items-center gap-1.5 border border-[#161616]/15 bg-transparent px-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#E6C767] hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 sm:px-3"
             >
               <Globe size={14} strokeWidth={1.6} aria-hidden />
-              {currentLangName}
+              <span className="sm:hidden">{lang.toUpperCase()}</span>
+              <span className="hidden sm:inline">{currentLangName}</span>
               <ChevronDown size={13} strokeWidth={1.6} className={languageOpen ? "rotate-180" : undefined} aria-hidden />
             </button>
             {languageOpen ? (
@@ -299,6 +303,7 @@ export function BrandbookLandingPage() {
                 </ul>
               </div>
             ) : null}
+          </div>
           </div>
         </div>
 
@@ -338,7 +343,7 @@ export function BrandbookLandingPage() {
       <main>
         <section id="top" className="scroll-mt-20">
           <div className="mx-auto grid min-h-[calc(100svh-4.6rem)] w-full max-w-[1600px] lg:grid-cols-[0.82fr_1.18fr]">
-            <div className="relative flex min-h-[36rem] flex-col overflow-hidden bg-[#161616] px-6 pb-8 pt-8 text-white sm:px-10 sm:pb-10 lg:min-h-[calc(100svh-4.6rem)] lg:px-14 lg:pt-12">
+            <div className="relative flex min-h-[min(28rem,calc(100svh-4.6rem))] flex-col overflow-hidden bg-[#161616] px-5 pb-8 pt-8 text-white sm:min-h-[36rem] sm:px-10 sm:pb-10 lg:min-h-[calc(100svh-4.6rem)] lg:px-14 lg:pt-12">
               <div className="relative z-10 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
                 <p className="flex min-w-0 items-center gap-3 pt-1 text-[0.64rem] font-semibold uppercase tracking-[0.23em] text-[#E6C767]">
                   <span className="h-px w-8 bg-[#E6C767]" /> {tx("Batumi property profile")}
@@ -636,6 +641,7 @@ export function BrandbookLandingPage() {
             <span>{company.address}</span>
             <span>{company.offices.join(" · ")}</span>
             <span>{tx("Since")} {company.founded}</span>
+            <LandingSiblingLinks tone="ivory" />
             <button type="button" onClick={openAnalyticsPreferences} className="transition-colors hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161616]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F3EDE1]">
               {tx("Cookie preferences")}
             </button>

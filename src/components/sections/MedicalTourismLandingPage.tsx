@@ -23,6 +23,8 @@ import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
 import { recordContactSubmission } from "@/lib/backend/lead-capture";
 import { aixcoCurrentProjectGalleryImages, aixcoLiveImages, aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { openAnalyticsPreferences } from "@/lib/analytics/client";
+import { LandingSiblingLinks } from "@/components/landing/LandingSiblingLinks";
+import { scrollToHash } from "@/lib/smooth-scroll";
 import type { Lang } from "@/i18n/languages";
 
 const navigation = [
@@ -114,7 +116,7 @@ type SceneImage = {
 };
 
 function scrollToSection(href: string) {
-  document.querySelector(href)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollToHash(href);
 }
 
 function MedicalTourismGuideLink({ className }: { className?: string }) {
@@ -281,8 +283,8 @@ export function MedicalTourismLandingPage() {
   return (
     <div id="main-content" className="brandbook-landing bg-[#F3EDE1] text-[#161616]">
       <header className="brandbook-header sticky top-0 z-50 border-b border-[#161616]/10 bg-[#F3EDE1]/95 backdrop-blur-md">
-        <div className="mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between px-5 sm:px-8 lg:px-12">
-          <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex items-center">
+        <div className="landing-header-bar mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between gap-3 px-5 sm:px-8 lg:px-12">
+          <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex min-w-0 shrink-0 items-center">
             <Image
               src={aixcoLiveLogos.aixcoHorizontalDark}
               alt="AIXCO.Global"
@@ -290,7 +292,7 @@ export function MedicalTourismLandingPage() {
               height={333}
               priority
               sizes="(min-width: 1024px) 12rem, 10rem"
-              className="h-auto w-36 sm:w-40"
+              className="h-auto w-[7.25rem] sm:w-36 lg:w-40"
             />
           </Link>
 
@@ -320,6 +322,7 @@ export function MedicalTourismLandingPage() {
             </a>
           </nav>
 
+          <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             aria-label={menuOpen ? tx("Close navigation") : tx("Open navigation")}
@@ -338,10 +341,11 @@ export function MedicalTourismLandingPage() {
               aria-controls="medical-tourism-language-list"
               aria-label={`${currentLangName} ${tx("Change language")}`}
               onClick={() => setLanguageOpen((current) => !current)}
-              className="inline-flex min-h-11 items-center gap-1.5 border border-[#161616]/15 bg-transparent px-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#E6C767] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 sm:px-3"
+              className="inline-flex min-h-11 items-center gap-1.5 border border-[#161616]/15 bg-transparent px-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#E6C767] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 sm:px-3"
             >
               <Globe size={14} strokeWidth={1.6} aria-hidden />
-              {currentLangName}
+              <span className="sm:hidden">{lang.toUpperCase()}</span>
+              <span className="hidden sm:inline">{currentLangName}</span>
               <ChevronDown size={13} strokeWidth={1.6} className={languageOpen ? "rotate-180" : undefined} aria-hidden />
             </button>
             {languageOpen ? (
@@ -368,6 +372,7 @@ export function MedicalTourismLandingPage() {
                 </ul>
               </div>
             ) : null}
+          </div>
           </div>
         </div>
 
@@ -406,7 +411,7 @@ export function MedicalTourismLandingPage() {
       <main>
         <section id="top" className="scroll-mt-20">
           <div className="mx-auto grid min-h-[calc(100svh-4.6rem)] w-full max-w-[1600px] lg:grid-cols-[0.86fr_1.14fr]">
-            <div className="relative flex min-h-[34rem] flex-col overflow-hidden bg-[#161616] px-6 pb-8 pt-8 text-white sm:px-10 sm:pb-10 lg:min-h-[calc(100svh-4.6rem)] lg:px-14 lg:pt-12">
+            <div className="relative flex min-h-[min(28rem,calc(100svh-4.6rem))] flex-col overflow-hidden bg-[#161616] px-5 pb-8 pt-8 text-white sm:min-h-[34rem] sm:px-10 sm:pb-10 lg:min-h-[calc(100svh-4.6rem)] lg:px-14 lg:pt-12">
               <div className="relative z-10 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
                 <p className="flex min-w-0 items-center gap-3 pt-1 text-[0.64rem] font-semibold uppercase tracking-[0.23em] text-[#E6C767]">
                   <span className="h-px w-8 bg-[#E6C767]" /> {tx("Georgia healthcare")}
@@ -415,7 +420,7 @@ export function MedicalTourismLandingPage() {
               </div>
 
               <div className="relative z-10 mt-7 max-w-[36rem]">
-                <h1 className="max-w-[11ch] text-[clamp(3.1rem,7.4vw,6.6rem)] font-medium leading-[0.86] tracking-[-0.065em]">
+                <h1 className="max-w-[11ch] text-[clamp(2.45rem,11vw,6.6rem)] font-medium leading-[0.86] tracking-[-0.065em]">
                   {tx("Medical care")} <span className="text-[#E6C767]">{tx("at European quality.")}</span>
                 </h1>
                 <p className="mt-8 max-w-[30rem] text-[1.05rem] leading-[1.55] text-white/68 sm:text-[1.12rem]">
@@ -444,7 +449,7 @@ export function MedicalTourismLandingPage() {
               </div>
             </div>
 
-            <div className="relative min-h-[26rem] overflow-hidden bg-[#002147] lg:min-h-full">
+            <div className="relative min-h-[17.5rem] overflow-hidden bg-[#002147] sm:min-h-[26rem] lg:min-h-full">
               <Image
                 src={sceneImages.hero.src}
                 alt={tx("Batumi coastline at golden hour")}
@@ -479,9 +484,9 @@ export function MedicalTourismLandingPage() {
               { value: "7", label: "Named private clinics" },
               { value: "2026", label: "Insurance required for entry" },
             ].map((metric) => (
-              <div key={metric.label} className="border-r border-[#161616]/10 px-5 py-6 last:border-r-0 sm:px-8">
-                <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{metric.value}</strong>
-                <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/48">{tx(metric.label)}</span>
+              <div key={metric.label} className="border-r border-[#161616]/10 px-4 py-5 last:border-r-0 sm:px-8 sm:py-6">
+                <strong className="block text-xl font-medium tracking-[-0.04em] sm:text-3xl">{metric.value}</strong>
+                <span className="mt-2 block text-[0.56rem] font-semibold uppercase tracking-[0.12em] text-[#161616]/48 [overflow-wrap:anywhere] sm:text-[0.6rem] sm:tracking-[0.15em]">{tx(metric.label)}</span>
               </div>
             ))}
           </div>
@@ -793,6 +798,7 @@ export function MedicalTourismLandingPage() {
             <span>{company.address}</span>
             <span>{company.offices.join(" · ")}</span>
             <span>{tx("Since")} {company.founded}</span>
+            <LandingSiblingLinks tone="ivory" />
             <button type="button" onClick={openAnalyticsPreferences} className="transition-colors hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161616]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F3EDE1]">
               {tx("Cookie preferences")}
             </button>

@@ -12028,6 +12028,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   --brandbook-ink: #161616;
   --brandbook-gold: #e6c767;
   --brandbook-navy: #002147;
+  overflow-x: clip;
   font-family: var(--font-gilroy), Arial, sans-serif;
   font-synthesis: none;
 }
@@ -12418,5 +12419,278 @@ html[lang='de'] [data-story-section='contact'] {
     > button:focus-visible {
     outline: 2px solid hsl(var(--primary) / 0.65);
     outline-offset: 2px;
+  }
+}
+
+/* Georgia residency dossier: cinematic full-bleed chapters, gold corner
+   brackets, and a vertical spine. Same brand palette, different structure. */
+.residency-dossier {
+  --ink: #161616;
+  --ivory: #f3ede1;
+  --gold: #e6c767;
+  --navy: #002147;
+  overflow-x: clip;
+  background: #0b0b0b;
+  color: #f3ede1;
+  font-family: var(--font-gilroy), Arial, sans-serif;
+  font-synthesis: none;
+}
+
+.residency-dossier :is(a, button, input, select, textarea) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.residency-dossier :is(a, button):focus-visible,
+.residency-dossier :is(input, select, textarea):focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.residency-frame {
+  pointer-events: none;
+  position: absolute;
+  inset: 1.1rem;
+  z-index: 2;
+  border: 1px solid rgb(230 199 103 / 0.42);
+}
+
+.residency-frame::before,
+.residency-frame::after {
+  position: absolute;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1.5px solid var(--gold);
+  content: '';
+}
+
+.residency-frame::before {
+  top: -1px;
+  left: -1px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.residency-frame::after {
+  right: -1px;
+  bottom: -1px;
+  border-top: 0;
+  border-left: 0;
+}
+
+.residency-spine {
+  position: relative;
+}
+
+.residency-spine::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: rgb(230 199 103 / 0.45);
+  content: '';
+  transform: translateX(-50%);
+}
+
+.residency-input {
+  min-height: 3rem;
+  width: 100%;
+  border: 1px solid rgb(22 22 22 / 0.16);
+  border-radius: 0;
+  background: #fff;
+  padding: 0.75rem 0.9rem;
+  color: #161616;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.residency-input:focus {
+  border-color: #9a7425;
+  outline: none;
+}
+
+.residency-input option {
+  background: #fff;
+  color: #161616;
+}
+
+@media (max-width: 1023px) {
+  .residency-spine::before {
+    left: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .residency-dossier *,
+  .residency-dossier *::before,
+  .residency-dossier *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Route transitions: View Transitions when available, ivory veil fallback,
+   and a first-paint enter for browsers without the API. */
+.aixco-page-shell {
+  min-height: 100%;
+  animation: aixco-page-in 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html:active-view-transition .aixco-page-shell {
+  animation: none;
+}
+
+@keyframes aixco-page-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(1.008);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes aixco-route-out {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0) scale(0.992);
+  }
+}
+
+@keyframes aixco-route-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(1.008);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes aixco-veil-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes aixco-veil-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes aixco-veil-rule {
+  from {
+    transform: scaleX(0.18);
+    opacity: 0;
+  }
+
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+html[data-route-transition='marketing']::view-transition-old(root) {
+  animation: aixco-route-out 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html[data-route-transition='marketing']::view-transition-new(root) {
+  animation: aixco-route-in 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.aixco-route-veil {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  background: #f3ede1;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.aixco-route-veil.is-active {
+  visibility: visible;
+  animation: aixco-veil-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.aixco-route-veil.is-leaving {
+  animation: aixco-veil-out 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.aixco-route-veil__rule {
+  width: min(12rem, 42vw);
+  height: 1px;
+  background: #e6c767;
+  transform-origin: center;
+}
+
+.aixco-route-veil.is-active .aixco-route-veil__rule {
+  animation: aixco-veil-rule 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.brandbook-landing h1,
+.brandbook-landing h2,
+.residency-dossier h1,
+.residency-dossier h2 {
+  overflow-wrap: anywhere;
+}
+
+.brandbook-landing header,
+.residency-dossier header {
+  padding-inline-start: env(safe-area-inset-left, 0px);
+  padding-inline-end: env(safe-area-inset-right, 0px);
+}
+
+.brandbook-landing [id],
+.residency-dossier [id] {
+  scroll-margin-top: 5rem;
+}
+
+@media (max-width: 767px) {
+  .residency-frame {
+    inset: 0.7rem;
+  }
+
+  .brandbook-landing [id$='-language-list'],
+  .residency-dossier [id$='-language-list'] {
+    width: min(14rem, calc(100vw - 1.5rem));
+  }
+}
+
+@media (max-width: 479px) {
+  .aixco-route-veil__rule {
+    width: min(8.5rem, 48vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aixco-page-shell,
+  html[data-route-transition='marketing']::view-transition-old(root),
+  html[data-route-transition='marketing']::view-transition-new(root),
+  .aixco-route-veil,
+  .aixco-route-veil.is-active,
+  .aixco-route-veil.is-leaving,
+  .aixco-route-veil.is-active .aixco-route-veil__rule {
+    animation: none !important;
+  }
+
+  .aixco-route-veil.is-active {
+    opacity: 0;
+    visibility: hidden;
   }
 }

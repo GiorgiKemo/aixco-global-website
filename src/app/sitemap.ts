@@ -33,6 +33,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/georgia-residency`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/invest-in-batumi`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
     ...propertyPages,
   ];
 }

@@ -35,6 +35,8 @@ describe("SEO static assets", () => {
       "https://www.aixco.global",
       "https://www.aixco.global/reverance-batumi",
       "https://www.aixco.global/medical-tourism",
+      "https://www.aixco.global/georgia-residency",
+      "https://www.aixco.global/invest-in-batumi",
       "https://www.aixco.global/aixco-global-op2/current-project",
     ]);
     expect(urls).not.toContain("https://www.aixco.global/aixco-global-op2");

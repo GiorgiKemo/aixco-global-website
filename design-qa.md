@@ -47,6 +47,54 @@ The combined focused comparison places the source `Slovenščina` row beside the
 
 final result: passed
 
+# Georgia Residency route transition QA (2026-08-13)
+
+## Findings and fixes
+
+- [P1] The route-transition fallback did not coordinate the outgoing veil and the incoming page shell cleanly in browsers without native View Transitions. A page could remain under a stale transition state or reveal a route between frames.
+  Location: cross-page navigation into `/georgia-residency`.
+  Fix: centralized veil activation/reset, reset the veil on `pageshow`, cover browser-history navigation with `popstate`, and let the incoming page shell run its entrance animation beneath the exiting veil.
+- Reduced-motion behavior remains explicit: the veil does not activate and route entrance animations are disabled by the existing accessibility media query.
+
+## Verification
+
+- Georgia Residency route: HTTP 200 and expected page title.
+- Desktop viewport: 1440 x 900; hero rendered and horizontal overflow measured at 0 px.
+- Mobile viewport: 390 x 844; hero rendered and horizontal overflow measured at 0 px.
+- Preview state: veil is inactive after the route loads; page shell uses the intended `aixco-page-in` entrance animation.
+- Transition-specific Vitest suite: 5 tests passed.
+- Production build: passed.
+- Targeted ESLint for `RouteTransition.tsx`: passed.
+- Full TypeScript check: still reports the pre-existing unrelated admin analytics import mismatch (`AdminAnalyticsRange` vs `AnalyticsRange`).
+
+final result: passed
+
+# Invest in Batumi header control cleanup QA (2026-08-13)
+
+## Findings and fixes
+
+- [P1] The responsive header language selector and menu button were rendered as adjacent bordered boxes, creating unnecessary visual noise and weakening the restrained AIXCO navigation treatment.
+  Location: `/invest-in-batumi` header at the tablet/mobile breakpoint.
+  Fix: removed the visible borders from both header controls, increased the spacing between them, and kept the border treatment only on the opened language menu where it provides structural separation.
+- Preserved keyboard visibility with a restrained champagne focus indicator instead of a persistent box.
+- Kept the globe icon visible at mobile widths so the control remains immediately recognizable.
+
+## Visual evidence
+
+- Desktop evidence: browser capture at 1280 x 720 CSS px, with the full header visible and the language control rendered without a border.
+- Mobile evidence: browser capture at 390 x 844 CSS px, with the globe / EN control and menu icon separated by 18 px of whitespace and no header control borders.
+- Dropdown evidence: opened language menu retains its 1 px structural border and all five language options remain available.
+
+## Verification
+
+- TypeScript: passed.
+- Targeted ESLint for `InvestBatumiLandingPage.tsx`: passed.
+- Desktop computed-style check: language and menu controls both report `border-width: 0px`.
+- Mobile computed-style check: language and menu controls both report `border-width: 0px`; measured separation is 18.48 px.
+- Language interaction: dropdown opens with `aria-expanded="true"` and lists English, Deutsch, Polski, Slovenščina, and Русский.
+
+final result: passed
+
 ---
 
 # Reverance Image-Overlay Background Removal - Design QA (2026-08-13)
@@ -2611,5 +2659,54 @@ final result: passed
 - ESLint: passed.
 - Production build: passed after the live-copy and locale-catalog updates.
 - Full suite: 119 test files and 643 tests passed.
+
+final result: passed
+
+# Invest in Batumi hero correction QA (2026-08-13 18:15:28)
+
+## Findings and fixes
+
+- [P1] Hero copy was placed directly over a detailed, soft evening aerial, reducing readability and making the hero feel unlike the AIXCO brandbook's high-contrast editorial compositions.
+  Location: /invest-in-batumi hero.
+  Evidence: the prior browser capture showed white and champagne text over dense city lights, with the photograph occupying the same field as the text.
+  Fix: split the hero into a solid AIXCO near-black copy column and a separate full-height real-image column. The headline now has stable contrast without a background card or gradient.
+
+- [P1] The previous hero crop did not hold enough sharp architectural detail at the rendered size.
+  Location: hero image delivery.
+  Evidence: the prior atumi-golden-hour-coastline.webp asset was 3,840 x 2,160 but visually soft in the browser crop; the replacement local asset is atumi-day-aerial.jpg at 7,360 x 4,912.
+  Fix: use the sharper local daytime aerial and request it through Next Image at quality={90}. The browser-rendered source now resolves to the real asset with w=3840&q=90.
+
+## Visual evidence
+
+- Source visual target: C:/Users/Administrator/.codex/generated_images/019ff0f5-a20b-75c0-ba0f-b58ff19c189e/exec-db07b3d1-d4d7-4f8b-bfd5-59ab6a60bb62.png, 799 x 1967 pixels.
+- Previous implementation evidence: C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/tmp/invest-in-batumi-hero-split-desktop.png.
+- Final implementation evidence: C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/tmp/invest-in-batumi-final-hero-sharp.png, 1280 x 720 CSS-pixel browser capture at device scale 1.
+- Mobile evidence: C:/Users/Administrator/Desktop/OG Websites/aixco-design 2/tmp/invest-in-batumi-hero-sharp-mobile.png, 390 x 844 CSS-pixel browser capture.
+- Final hero comparison: the copy is isolated on near-black, the real photo is constrained to a dedicated media field, and the desktop/mobile captures report zero horizontal overflow.
+
+## Brandbook fidelity review
+
+- Fonts/typography: passed; Gilroy remains the only page typeface, with the thin display face, champagne accent, uppercase eyebrow, and compact tracking preserved.
+- Spacing/layout rhythm: passed for the revised hero; the black copy column and image column align to the nav and transition directly into the existing dark buyer-lens section.
+- Colors/tokens: passed; near-black, ivory, white, and champagne are used without introducing a new panel color or text-overlay gradient.
+- Image quality/asset fidelity: passed; the hero uses a real local AIXCO/Batumi source at 7,360 x 4,912 and Next image quality 90. Existing gallery imagery remains real local photography.
+- Copy/content: passed; hero copy is unchanged and remains available through all five language variants.
+
+## Interaction and responsive checks
+
+- Production build: passed.
+- TypeScript: passed.
+- Targeted ESLint: passed.
+- Desktop viewport: 1280 x 720; no horizontal overflow.
+- Mobile viewport: 390 x 844; no horizontal overflow; hero copy and media stack cleanly.
+- Existing route: HTTP 200 at /invest-in-batumi with title Invest in Batumi Property | AIXCO.Global.
+- No external form submission was made during this visual correction.
+
+## Comparison history
+
+1. Initial finding: text-on-photo hero had low readability and insufficient perceived sharpness.
+2. First fix: moved the hero copy onto a solid near-black column and separated the image into a dedicated media column.
+3. Second fix: changed the hero from atumi-golden-hour-coastline.webp to the sharper atumi-day-aerial.jpg and set Next image quality to 90.
+4. Final evidence: invest-in-batumi-final-hero-sharp.png and invest-in-batumi-hero-sharp-mobile.png show the revised brandbook treatment; remaining changes are not actionable P0/P1/P2 issues.
 
 final result: passed
