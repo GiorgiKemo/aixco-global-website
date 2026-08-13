@@ -209,12 +209,12 @@ export function GeorgiaResidencyLandingPage() {
   };
 
   return (
-    <div id="main-content" className="residency-dossier">
+    <div id="main-content" className="residency-dossier residency-editorial">
       <header className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${scrolled || menuOpen ? "bg-[#161616]" : "bg-transparent"}`}>
         <div className="landing-header-bar mx-auto flex h-16 max-w-[1480px] items-center justify-between gap-3 px-5 sm:px-8">
           <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex min-w-0 shrink-0 items-center">
             <Image
-              src={aixcoLiveLogos.aixcoHorizontalLight}
+              src={aixcoLiveLogos.aixcoHorizontalDark}
               alt="AIXCO.Global"
               width={1600}
               height={333}
@@ -535,7 +535,7 @@ export function GeorgiaResidencyLandingPage() {
 
       <div role="contentinfo" className="border-t border-white/10 bg-[#0b0b0b]">
         <div className="mx-auto flex max-w-[1480px] flex-col gap-4 px-5 py-6 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-16">
-          <Image src={aixcoLiveLogos.aixcoHorizontalLight} alt="AIXCO.Global" width={1600} height={333} sizes="7rem" className="h-auto w-24 opacity-70" />
+          <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="7rem" className="h-auto w-24 opacity-70" />
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <a href={`mailto:${company.email}`} className="hover:text-white">{company.email}</a>
             <span>{company.address}</span>

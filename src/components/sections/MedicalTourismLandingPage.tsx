@@ -278,7 +278,7 @@ export function MedicalTourismLandingPage() {
   };
 
   return (
-    <div id="main-content" className="brandbook-landing bg-[#F3EDE1] text-[#161616]">
+    <div id="main-content" className="brandbook-landing medical-editorial bg-[#F3EDE1] text-[#161616]">
       <header className="brandbook-header sticky top-0 z-50 border-b border-[#161616]/10 bg-[#F3EDE1]/95 backdrop-blur-md">
         <div className="landing-header-bar mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between gap-3 px-5 sm:px-8 lg:px-12">
           <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex min-w-0 shrink-0 items-center">
@@ -655,7 +655,7 @@ export function MedicalTourismLandingPage() {
           </div>
         </section>
 
-        <section className="scroll-mt-20 bg-[#161616] text-white">
+        <section className="medical-editorial-patient-path scroll-mt-20 bg-[#161616] text-white">
           <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
             <p className="brandbook-eyebrow brandbook-eyebrow-light">04 — {tx("Patient path")}</p>
             <h2 className="mt-8 max-w-[11ch] text-[clamp(3.1rem,5.4vw,6.2rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("Arrive prepared. Recover well.")}</h2>

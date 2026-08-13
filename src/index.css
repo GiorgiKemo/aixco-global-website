@@ -12159,6 +12159,390 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   color: #7a6224;
 }
 
+/* Remaining landing pages: a shared premium paper-led direction. The existing
+   content, imagery, translations, forms, analytics, and chapter structure stay
+   intact; only the visual surfaces and contrast are tuned to the brandbook. */
+.medical-editorial {
+  --medical-paper: #f7f2e9;
+  --medical-paper-deep: #e9dfcf;
+  --medical-ink: #161616;
+  background: var(--medical-paper) !important;
+  color: var(--medical-ink) !important;
+}
+
+.medical-editorial .brandbook-header {
+  background: rgb(247 242 233 / 94%) !important;
+  box-shadow: 0 1rem 2.5rem -2.2rem rgb(22 22 22 / 0.35);
+}
+
+.medical-editorial #top > div:first-child > div:first-child {
+  background: var(--medical-paper) !important;
+  border-right: 1px solid rgb(22 22 22 / 0.12);
+  color: var(--medical-ink) !important;
+}
+
+@media (min-width: 1024px) {
+  .medical-editorial #top > div:first-child > div:first-child {
+    padding-right: clamp(3.5rem, 5vw, 6.5rem);
+  }
+
+  .medical-editorial #top > div:first-child > div:first-child,
+  .medical-editorial #top > div:first-child > div:nth-child(2) {
+    min-height: calc(100svh - 4.6rem);
+  }
+}
+
+.medical-editorial #top > div:first-child > div:first-child [class*="text-white"],
+.medical-editorial #top > div:first-child > div:first-child .text-white {
+  color: var(--medical-ink) !important;
+}
+
+.medical-editorial #top > div:first-child > div:first-child [class*="border-white"] {
+  border-color: rgb(22 22 22 / 0.24) !important;
+}
+
+.medical-editorial #top > div:first-child > div:first-child a:not(.brandbook-button-gold) {
+  background: transparent !important;
+  color: var(--medical-ink) !important;
+  text-shadow: none !important;
+}
+
+.medical-editorial #top > div:first-child > div:first-child > p,
+.medical-editorial #top > div:first-child > div:first-child [class*="text-[#E6C767]"] {
+  color: #7a6224 !important;
+}
+
+.medical-editorial #top > div:first-child > div:nth-child(2) {
+  background: #d8d0c2 !important;
+}
+
+.medical-editorial #top > div:first-child > div:nth-child(2) > div:last-child > div:last-child a {
+  border-color: rgb(255 255 255 / 0.88);
+  background: rgb(22 22 22 / 0.12);
+  backdrop-filter: blur(4px);
+}
+
+.medical-editorial #advantage,
+.medical-editorial #clinics,
+.medical-editorial #batumi {
+  background: var(--medical-paper) !important;
+}
+
+.medical-editorial #treatments,
+.medical-editorial .medical-editorial-patient-path,
+.medical-editorial #contact {
+  background: var(--medical-paper-deep) !important;
+  color: var(--medical-ink) !important;
+}
+
+.medical-editorial #treatments [class*="text-white"],
+.medical-editorial #treatments .text-white,
+.medical-editorial .medical-editorial-patient-path [class*="text-white"],
+.medical-editorial .medical-editorial-patient-path .text-white,
+.medical-editorial #contact [class*="text-white"],
+.medical-editorial #contact .text-white {
+  color: var(--medical-ink) !important;
+}
+
+.medical-editorial #treatments [class*="border-white"],
+.medical-editorial .medical-editorial-patient-path [class*="border-white"],
+.medical-editorial #contact [class*="border-white"] {
+  border-color: rgb(22 22 22 / 0.18) !important;
+}
+
+.medical-editorial #treatments [class*="text-[#E6C767]"],
+.medical-editorial .medical-editorial-patient-path [class*="text-[#E6C767]"],
+.medical-editorial #contact .brandbook-eyebrow-light {
+  color: #7a6224 !important;
+}
+
+.medical-editorial #contact .brandbook-input {
+  border-color: rgb(22 22 22 / 0.25);
+  background: rgb(255 255 255 / 0.42);
+  color: var(--medical-ink);
+}
+
+.medical-editorial #contact .brandbook-input::placeholder {
+  color: rgb(22 22 22 / 0.48);
+}
+
+.medical-editorial #contact .brandbook-input option {
+  background: var(--medical-paper);
+  color: var(--medical-ink);
+}
+
+.medical-editorial #contact .brandbook-input:focus {
+  background: rgb(255 255 255 / 0.72);
+}
+
+.medical-editorial > [role="contentinfo"] {
+  background: var(--medical-paper) !important;
+  color: rgb(22 22 22 / 0.58) !important;
+}
+
+.residency-editorial {
+  --residency-paper: #f7f2e9;
+  --residency-paper-deep: #e9dfcf;
+  --residency-ink: #161616;
+  overflow-x: clip;
+  background: var(--residency-paper) !important;
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial > header {
+  background: rgb(247 242 233 / 94%) !important;
+  box-shadow: 0 1rem 2.5rem -2.2rem rgb(22 22 22 / 0.35);
+}
+
+.residency-editorial > header [class*="text-white"],
+.residency-editorial > header .text-white {
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial > header [class*="bg-[#161616]"] {
+  background: var(--residency-ink) !important;
+}
+
+.residency-editorial > header > div > div > div > div[id$="-language-list"] {
+  border-color: rgb(22 22 22 / 0.14) !important;
+  background: var(--residency-paper) !important;
+}
+
+.residency-editorial > header > div > div > div > div[id$="-language-list"] [class*="text-white"] {
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial > main > section:first-child {
+  min-height: 100svh;
+  background: var(--residency-paper) !important;
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial > main > section:first-child > img {
+  left: 42% !important;
+  width: 58% !important;
+  object-position: 58% center;
+}
+
+.residency-editorial > main > section:first-child > div[aria-hidden] {
+  background: linear-gradient(90deg, var(--residency-paper) 0%, var(--residency-paper) 39%, rgb(247 242 233 / 0.72) 55%, transparent 78%), linear-gradient(0deg, rgb(22 22 22 / 0.08), transparent 30%) !important;
+}
+
+.residency-editorial > main > section:first-child > div.relative {
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial > main > section:first-child > div.relative [class*="text-white"],
+.residency-editorial > main > section:first-child > div.relative .text-white {
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial > main > section:first-child > div.relative [class*="text-[#E6C767]"] {
+  color: #7a6224 !important;
+}
+
+.residency-editorial > main > section:first-child > div.relative > p:first-child {
+  color: #7a6224 !important;
+}
+
+.residency-editorial > main > section:first-child > div.relative h1 span,
+.residency-editorial > main > section:first-child > div.relative strong {
+  color: #7a6224 !important;
+}
+
+.residency-editorial > main > section:first-child > div.relative > p:nth-of-type(2) {
+  color: rgb(22 22 22 / 72%) !important;
+}
+
+.residency-editorial > main > section:first-child > div.relative > div {
+  border-color: rgb(22 22 22 / 0.2) !important;
+}
+
+.residency-editorial > main > section:first-child > div.relative > div a {
+  border-color: rgb(22 22 22 / 0.16) !important;
+}
+
+.residency-editorial > main > section:first-child > div.relative > div span {
+  color: rgb(22 22 22 / 68%) !important;
+}
+
+@media (min-width: 768px) {
+  .residency-editorial > main > section:first-child > div.relative h1 {
+    max-width: 8ch !important;
+    font-size: clamp(4.8rem, 8vw, 6.6rem) !important;
+  }
+}
+
+.residency-editorial #paths article {
+  background: var(--residency-paper-deep) !important;
+  border-color: rgb(22 22 22 / 0.14) !important;
+}
+
+.residency-editorial #paths article > img {
+  left: 42% !important;
+  width: 58% !important;
+  object-position: center;
+}
+
+.residency-editorial #paths article > div[aria-hidden] {
+  background: linear-gradient(90deg, var(--residency-paper-deep) 0%, var(--residency-paper-deep) 35%, rgb(233 223 207 / 0.72) 52%, transparent 78%), linear-gradient(0deg, rgb(22 22 22 / 0.1), transparent 35%) !important;
+}
+
+.residency-editorial #paths article > div.relative,
+.residency-editorial #paths article > div.relative [class*="text-white"],
+.residency-editorial #paths article > div.relative .text-white {
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial #paths article [class*="text-[#E6C767]"] {
+  color: #7a6224 !important;
+}
+
+.residency-editorial #hnwi {
+  background: var(--residency-paper) !important;
+}
+
+.residency-editorial #services {
+  background: var(--residency-paper-deep) !important;
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial #services [class*="text-white"],
+.residency-editorial #services .text-white,
+.residency-editorial #services [class*="border-white"] {
+  color: var(--residency-ink) !important;
+  border-color: rgb(22 22 22 / 0.18) !important;
+}
+
+.residency-editorial #services [class*="text-[#E6C767]"] {
+  color: #7a6224 !important;
+}
+
+.residency-editorial #contact {
+  background: var(--residency-paper-deep) !important;
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial #contact > img {
+  left: 50% !important;
+  width: 50% !important;
+  object-position: center;
+}
+
+.residency-editorial #contact > div[aria-hidden] {
+  background: linear-gradient(90deg, var(--residency-paper-deep) 0%, var(--residency-paper-deep) 43%, rgb(233 223 207 / 0.72) 58%, transparent 82%) !important;
+}
+
+.residency-editorial #contact > div.relative > div:first-child {
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial #contact [class*="text-white"],
+.residency-editorial #contact .text-white,
+.residency-editorial #contact [class*="border-white"] {
+  color: var(--residency-ink) !important;
+  border-color: rgb(22 22 22 / 0.18) !important;
+}
+
+.residency-editorial #contact [class*="text-[#E6C767]"] {
+  color: #7a6224 !important;
+}
+
+.residency-editorial #contact form {
+  background: rgb(251 248 241 / 0.92) !important;
+  box-shadow: 0 1.5rem 3rem -2rem rgb(22 22 22 / 0.3);
+}
+
+.residency-editorial #contact input,
+.residency-editorial #contact select,
+.residency-editorial #contact textarea {
+  border-color: rgb(22 22 22 / 0.25) !important;
+  background: rgb(255 255 255 / 0.46) !important;
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial #contact form button[type="submit"] {
+  background: #e6c767 !important;
+  color: var(--residency-ink) !important;
+}
+
+.residency-editorial #contact input::placeholder,
+.residency-editorial #contact textarea::placeholder {
+  color: rgb(22 22 22 / 0.48) !important;
+}
+
+.residency-editorial > [role="contentinfo"] {
+  border-color: rgb(22 22 22 / 0.14) !important;
+  background: var(--residency-paper) !important;
+  color: rgb(22 22 22 / 0.58) !important;
+}
+
+.residency-editorial > [role="contentinfo"] [class*="text-white"],
+.residency-editorial > [role="contentinfo"] .text-white {
+  color: rgb(22 22 22 / 0.58) !important;
+}
+
+@media (max-width: 767px) {
+  .residency-editorial > main > section:first-child {
+    min-height: 100svh;
+  }
+
+  .residency-editorial > main > section:first-child > img {
+    inset: 0 0 auto !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 48% !important;
+    object-position: 58% center;
+  }
+
+  .residency-editorial > main > section:first-child > div[aria-hidden] {
+    inset: 0 0 auto !important;
+    height: 58% !important;
+    background: linear-gradient(180deg, transparent 55%, var(--residency-paper) 100%) !important;
+  }
+
+  .residency-editorial > main > section:first-child > div.relative {
+    min-height: 100svh;
+    padding-top: 48svh;
+  }
+
+  .residency-editorial #paths article,
+  .residency-editorial #paths article > div.relative {
+    min-height: 74svh;
+  }
+
+  .residency-editorial #paths article > img {
+    inset: 0 0 auto !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 55% !important;
+  }
+
+  .residency-editorial #paths article > div[aria-hidden] {
+    inset: 0 0 auto !important;
+    height: 64% !important;
+    background: linear-gradient(180deg, transparent 54%, var(--residency-paper-deep) 100%) !important;
+  }
+
+  .residency-editorial #paths article > div.relative {
+    align-items: end;
+    padding-top: 44svh;
+  }
+
+  .residency-editorial #contact > img {
+    inset: 0 0 auto !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 45% !important;
+  }
+
+  .residency-editorial #contact > div[aria-hidden] {
+    inset: 0 0 auto !important;
+    height: 58% !important;
+    background: linear-gradient(180deg, transparent 52%, var(--residency-paper-deep) 100%) !important;
+  }
+}
+
 /* Keep consent controls readable at small sizes while preserving the gold
    brand accent. */
 .analytics-consent .text-primary {

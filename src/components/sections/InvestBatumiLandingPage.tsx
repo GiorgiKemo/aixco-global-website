@@ -625,7 +625,7 @@ export function InvestBatumiLandingPage() {
   const lens = content.lens[activeLens];
 
   return (
-    <div id="main-content" className={styles.page}>
+    <div id="main-content" className={`${styles.page} ${styles.paperLedPage}`}>
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link href="/" aria-label="AIXCO.Global home" className={styles.logoLink}>
@@ -786,7 +786,7 @@ export function InvestBatumiLandingPage() {
       </main>
 
       <footer className={styles.footer}>
-        <Link href="/" aria-label="AIXCO.Global home"><Image src={aixcoLiveLogos.aixcoHorizontalLight} alt="AIXCO.Global" width={1600} height={333} sizes="8rem" /></Link>
+        <Link href="/" aria-label="AIXCO.Global home"><Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="8rem" /></Link>
         <div><a href={`mailto:${company.email}`}>{company.email}</a><span>{company.offices.join(" · ")}</span></div>
         <div className={styles.footerLinks}>
           <Link href="/">{content.footer.home}</Link>

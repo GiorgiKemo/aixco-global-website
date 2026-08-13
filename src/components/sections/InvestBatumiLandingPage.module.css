@@ -1329,6 +1329,232 @@
   }
 }
 
+/* Premium paper-led variant: preserve the investment page's editorial grid,
+   imagery, and interaction model while making the brandbook's ivory language
+   the dominant surface instead of charcoal. */
+.paperLedPage {
+  --ink: #161616;
+  --ivory: #f7f2e9;
+  --paper: #fbf8f1;
+  --mineral: #e9dfcf;
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+.paperLedPage .header {
+  border-bottom-color: rgb(22 22 22 / 12%);
+  background: rgb(247 242 233 / 94%);
+  box-shadow: 0 8px 26px rgb(22 22 22 / 6%);
+}
+
+.paperLedPage .hero {
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+.paperLedPage .heroContent {
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+.paperLedPage .hero h1 {
+  color: var(--ink);
+}
+
+.paperLedPage .heroBody {
+  color: rgb(22 22 22 / 68%);
+}
+
+.paperLedPage .heroMeta {
+  border-top-color: rgb(22 22 22 / 20%);
+  color: rgb(22 22 22 / 58%);
+}
+
+.paperLedPage .eyebrowLight,
+.paperLedPage .eyebrowGold {
+  color: var(--gold-deep);
+}
+
+.paperLedPage .eyebrowLight::before,
+.paperLedPage .eyebrowGold::before {
+  background: var(--gold-deep);
+}
+
+.paperLedPage .heroImageFrame {
+  background: #d7cec0;
+}
+
+.paperLedPage .lensSection,
+.paperLedPage .processSection,
+.paperLedPage .contactSection {
+  background: var(--mineral);
+  color: var(--ink);
+}
+
+.paperLedPage .lensInner > p,
+.paperLedPage .lensSummary span,
+.paperLedPage .processIntro > p:last-child,
+.paperLedPage .batumiCopy > p:not(.eyebrowGold),
+.paperLedPage .contactIntro,
+.paperLedPage .form label,
+.paperLedPage .formFooter p,
+.paperLedPage .success p {
+  color: rgb(22 22 22 / 68%);
+}
+
+.paperLedPage .lensTabs button {
+  border-color: rgb(22 22 22 / 20%);
+  color: rgb(22 22 22 / 68%);
+}
+
+.paperLedPage .lensTabs button[aria-selected="true"] {
+  border-color: var(--gold-deep);
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.paperLedPage .lensSummary,
+.paperLedPage .processGrid,
+.paperLedPage .processGrid article,
+.paperLedPage .formFooter,
+.paperLedPage .success {
+  border-color: rgb(22 22 22 / 20%);
+}
+
+.paperLedPage .lensSummary strong,
+.paperLedPage .stepTop,
+.paperLedPage .success .reference {
+  color: var(--gold-deep);
+}
+
+.paperLedPage .batumiSection {
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+.paperLedPage .batumiWord,
+.paperLedPage .batumiCopy h2,
+.paperLedPage .processIntro h2,
+.paperLedPage .galleryHeading h2,
+.paperLedPage .guidanceIntro h2,
+.paperLedPage .contactPanel h2 {
+  color: var(--ink);
+}
+
+.paperLedPage .textButton,
+.paperLedPage .galleryHeading button {
+  border-bottom-color: var(--gold-deep);
+  color: var(--ink);
+}
+
+.paperLedPage .gallerySection,
+.paperLedPage .guidanceSection {
+  background: var(--paper);
+}
+
+.paperLedPage .galleryGrid button {
+  border-color: var(--paper);
+}
+
+.paperLedPage .guidanceIntro > p:last-child,
+.paperLedPage .guidanceList p {
+  color: rgb(22 22 22 / 70%);
+}
+
+.paperLedPage .guidanceList,
+.paperLedPage .guidanceList article {
+  border-color: rgb(22 22 22 / 24%);
+}
+
+.paperLedPage .contactMedia {
+  background: #d7cec0;
+}
+
+.paperLedPage .contactPanel {
+  background: var(--mineral);
+}
+
+.paperLedPage .form input,
+.paperLedPage .form select,
+.paperLedPage .form textarea {
+  border-color: rgb(22 22 22 / 28%);
+  background: rgb(251 248 241 / 62%);
+  color: var(--ink);
+}
+
+.paperLedPage .form select option {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.paperLedPage .form input::-moz-placeholder,
+.paperLedPage .form textarea::-moz-placeholder,
+.paperLedPage .form input::placeholder,
+.paperLedPage .form textarea::placeholder {
+  color: rgb(22 22 22 / 42%);
+}
+
+.paperLedPage .form input:focus,
+.paperLedPage .form select:focus,
+.paperLedPage .form textarea:focus {
+  border-color: var(--gold-deep);
+  box-shadow: 0 0 0 1px var(--gold-deep);
+}
+
+.paperLedPage .formError {
+  color: #8e2626;
+}
+
+.paperLedPage .success > span {
+  border-color: var(--gold-deep);
+  color: var(--gold-deep);
+}
+
+.paperLedPage .success button {
+  border-bottom-color: var(--gold-deep);
+  color: var(--ink);
+}
+
+.paperLedPage .footer {
+  background: var(--ivory);
+  color: rgb(22 22 22 / 58%);
+}
+
+.paperLedPage .footer > p {
+  border-top-color: rgb(22 22 22 / 16%);
+}
+
+.paperLedPage .footer a:hover,
+.paperLedPage .footer button:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 960px) {
+  .paperLedPage .mobileNav {
+    border-top-color: rgb(22 22 22 / 10%);
+    background: var(--ivory);
+  }
+
+  .paperLedPage .mobileNav a {
+    border-bottom-color: rgb(22 22 22 / 10%);
+  }
+}
+
+@media (max-width: 700px) {
+  .paperLedPage .heroContent {
+    min-height: 31rem;
+    padding-top: 5.4rem;
+  }
+
+  .paperLedPage .heroImageFrame {
+    height: min(30rem, 88vw);
+  }
+
+  .paperLedPage .batumiSection {
+    background: var(--ivory);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page *,
   .page *::before,
