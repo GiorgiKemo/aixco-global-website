@@ -95,6 +95,12 @@ export type RecentAnalyticsSession = {
   landingPage: string;
   exitPage: string | null;
   referrer: string | null;
+  referrerPath?: string | null;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  utmContent?: string | null;
+  utmTerm?: string | null;
   country: string | null;
   region: string | null;
   city: string | null;
@@ -107,6 +113,8 @@ export type RecentAnalyticsSession = {
   isReturning: boolean;
   viewportWidth: number | null;
   viewportHeight: number | null;
+  screenWidth?: number | null;
+  screenHeight?: number | null;
   ipAddress: string | null;
   ipHash: string | null;
   journey: RecentSessionJourneyEvent[];
@@ -460,6 +468,12 @@ export function parseRecentSessions(value: unknown): RecentAnalyticsSession[] {
       landingPage: cleanString(candidate.landingPage ?? candidate.landingPath ?? candidate.landing_page_path, "/"),
       exitPage: optionalString(candidate.exitPage ?? candidate.exitPath ?? candidate.exit_page_path),
       referrer: optionalString(candidate.referrer ?? candidate.referrerHost ?? candidate.referrer_host),
+      referrerPath: optionalString(candidate.referrerPath ?? candidate.referrer_path),
+      utmSource: optionalString(candidate.utmSource ?? candidate.utm_source),
+      utmMedium: optionalString(candidate.utmMedium ?? candidate.utm_medium),
+      utmCampaign: optionalString(candidate.utmCampaign ?? candidate.utm_campaign),
+      utmContent: optionalString(candidate.utmContent ?? candidate.utm_content),
+      utmTerm: optionalString(candidate.utmTerm ?? candidate.utm_term),
       country: optionalString(candidate.country ?? candidate.countryCode ?? candidate.country_code),
       region: optionalString(candidate.region),
       city: optionalString(candidate.city),
@@ -472,6 +486,8 @@ export function parseRecentSessions(value: unknown): RecentAnalyticsSession[] {
       isReturning: booleanValue(candidate.isReturning ?? candidate.is_returning),
       viewportWidth: optionalFiniteNumber(candidate.viewportWidth ?? candidate.viewport_width),
       viewportHeight: optionalFiniteNumber(candidate.viewportHeight ?? candidate.viewport_height),
+      screenWidth: optionalFiniteNumber(candidate.screenWidth ?? candidate.screen_width),
+      screenHeight: optionalFiniteNumber(candidate.screenHeight ?? candidate.screen_height),
       ipAddress: optionalString(candidate.ipAddress ?? candidate.ip_address),
       ipHash: optionalString(candidate.ipHash ?? candidate.ip_hash),
       journey,

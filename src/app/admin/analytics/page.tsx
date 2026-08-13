@@ -4,12 +4,12 @@ import Link from "next/link";
 import {
   BarChart3,
   DatabaseZap,
-  RefreshCw,
   ShieldCheck,
 } from "lucide-react";
 import { AdminShell } from "@/app/admin/_components";
 import { AnalyticsDashboard, OperationsOverview } from "./AnalyticsDashboard";
 import type { DashboardFocus } from "./AnalyticsDashboard";
+import { AnalyticsRangeControls } from "./AnalyticsRangeControls";
 import {
   createAnalyticsPaginationState,
   parseAnalyticsPage,
@@ -104,17 +104,19 @@ export default async function AdminAnalyticsPage({ searchParams }: AdminAnalytic
     audit: parseAnalyticsPage(params.auditPage),
   };
   const requestHeaders = await headers();
-  await auditAdminAction({
-    action: "admin.analytics.view",
-    actor: adminPrincipal,
-    outcome: "success",
-    target: "website-analytics",
-    details: { range },
-    headers: requestHeaders,
-  }, { required: true });
   const [result, operations] = await Promise.all([
     fetchAdminAnalyticsDashboard(range),
-    fetchAdminOperationsSnapshot(),
+    focus === "operations"
+      ? fetchAdminOperationsSnapshot()
+      : Promise.resolve({ ok: false as const, reason: "Operational totals were not requested for this view." }),
+    auditAdminAction({
+      action: "admin.analytics.view",
+      actor: adminPrincipal,
+      outcome: "success",
+      target: "website-analytics",
+      details: { range },
+      headers: requestHeaders,
+    }, { required: true }),
   ]);
   const pagination = result.ok ? createAnalyticsPaginationState({
     totals: {
@@ -167,30 +169,14 @@ export default async function AdminAnalyticsPage({ searchParams }: AdminAnalytic
                   <p className="mt-1 max-w-2xl text-xs leading-5 text-[#6f6e6a]">All information uses one bounded UTC reporting window.</p>
                 </div>
               </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="flex flex-wrap rounded-[9px] border border-[#161616]/10 bg-[#f8f6f1] p-1" aria-label="Select reporting window">
-                  {ANALYTICS_RANGE_OPTIONS.map((option) => {
-                    const active = option.value === range;
-                    return (
-                      <Link
-                        key={option.value}
-                        href={`/admin/analytics?range=${option.value}&focus=${focus}`}
-                        aria-current={active ? "page" : undefined}
-                        className={`inline-flex min-h-10 items-center rounded-[6px] px-3 text-[11px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${active ? "bg-white text-[#161616] shadow-sm" : "text-[#6f6e6a] hover:text-[#161616]"}`}
-                      >
-                        {option.value === "24h" ? "24 hours" : option.value}
-                      </Link>
-                    );
-                  })}
-                </div>
-                <Link
-                  href={`/admin/analytics?range=${range}&focus=${focus}`}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[9px] border border-[#161616]/10 bg-white px-3 text-xs font-semibold text-[#161616] transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-                >
-                  <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
-                  Refresh
-                </Link>
-              </div>
+              <AnalyticsRangeControls
+                focus={focus}
+                range={range}
+                options={ANALYTICS_RANGE_OPTIONS.map((option) => ({
+                  label: option.value === "24h" ? "24 hours" : option.value,
+                  value: option.value,
+                }))}
+              />
             </div>
           </section>
 

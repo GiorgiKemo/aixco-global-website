@@ -2,6 +2,8 @@ import Link from "next/link";
 import {
   Activity,
   AlertTriangle,
+  ArrowRight,
+  CalendarClock,
   ChevronLeft,
   ChevronRight,
   Clock3,
@@ -10,9 +12,13 @@ import {
   Globe2,
   Inbox,
   Mail,
+  MapPin,
   MessageCircle,
+  MonitorSmartphone,
   MousePointerClick,
+  Route,
   ShieldCheck,
+  Sparkles,
   Users,
 } from "lucide-react";
 import type {
@@ -21,6 +27,8 @@ import type {
   AnalyticsBreakdownItem,
   AnalyticsDailyPoint,
   AnalyticsFunnelStep,
+  RecentAnalyticsSession,
+  RecentSessionJourneyEvent,
 } from "@/lib/admin/analytics";
 import {
   buildAnalyticsPaginationHref,
@@ -73,6 +81,61 @@ function formatDuration(value: number) {
 
 function formatDateTime(value: string) {
   return dateTimeFormatter.format(new Date(value));
+}
+
+function formatJourneyElapsed(startedAt: string, occurredAt: string) {
+  const elapsedSeconds = Math.max(
+    0,
+    Math.round((new Date(occurredAt).getTime() - new Date(startedAt).getTime()) / 1000),
+  );
+  return elapsedSeconds < 1 ? "Start" : `+${formatDuration(elapsedSeconds)}`;
+}
+
+function humanizeEventName(name: string) {
+  const knownNames: Record<string, string> = {
+    page_view: "Viewed page",
+    section_view: "Viewed section",
+    click: "Clicked",
+    download: "Downloaded a file",
+    outbound: "Opened an external link",
+    outbound_click: "Opened an external link",
+    whatsapp_click: "Opened WhatsApp",
+    phone_click: "Tapped phone number",
+    scroll_depth: "Reached page depth",
+    form_started: "Started a form",
+    form_submit_attempted: "Tried to submit a form",
+    form_submitted: "Submitted a form",
+    form_failed: "Form error",
+    active_time: "Active time",
+    heartbeat: "Active time",
+    language_changed: "Changed language",
+    visibility_changed: "Changed tab visibility",
+    portal_handoff: "Opened portal",
+    session_start: "Session started",
+    session_end: "Session ended",
+  };
+  return knownNames[name] ?? name.replaceAll("_", " ").replace(/^./, (character) => character.toUpperCase());
+}
+
+function getEventContext(event: RecentSessionJourneyEvent) {
+  const location = [event.pagePath, event.sectionId, event.targetLabel].filter(Boolean).join(" · ");
+  const metrics = [
+    event.scrollDepth === null ? null : `${numberFormatter.format(event.scrollDepth)}% depth`,
+    event.durationMs === null ? null : formatDuration(event.durationMs / 1000),
+    event.value === null ? null : `value ${numberFormatter.format(event.value)}`,
+  ].filter(Boolean).join(" · ");
+  const context = location || (event.type === "engagement" ? "Recorded active engagement" : event.type);
+  return [context, metrics].filter(Boolean).join(" · ");
+}
+
+function maskIpAddress(value: string | null) {
+  if (!value) return "Raw address expired or unavailable";
+  if (value.includes(":")) {
+    const groups = value.split(":").filter(Boolean);
+    return `${groups.slice(0, 2).join(":") || "IPv6"}:…`;
+  }
+  const octets = value.split(".");
+  return octets.length === 4 ? `${octets[0]}.${octets[1]}.x.x` : "Address retained";
 }
 
 function formatAuditDetail(value: string | number | boolean | null) {
@@ -155,9 +218,9 @@ const focusCopy: Record<DashboardFocus, { eyebrow: string; title: string; descri
     description: "Intent signals are kept separate from confirmed contact requests and completed applications.",
   },
   sessions: {
-    eyebrow: "Live operations",
-    title: "Recent visitor sessions",
-    description: "A bounded, admin-only session view with journey, device, location, and network context.",
+    eyebrow: "Session intelligence",
+    title: "Sessions",
+    description: "Scan recent visits, then open one record for its event timeline and supporting context.",
   },
   reliability: {
     eyebrow: "Reliability & security",
@@ -442,90 +505,196 @@ function RecentSessions({
   if (data === null) return <UnavailablePanel label="Recent sessions could not be loaded from the analytics source." />;
   if (!data.length) return <PanelEmpty label="No sessions have been recorded in this window." />;
   const pageData = sliceAnalyticsPage(data, pagination);
+  const returningCount = pageData.filter((session) => session.isReturning).length;
+  const pageViews = pageData.reduce((total, session) => total + session.pageViews, 0);
+  const averageActiveSeconds = pageData.length
+    ? pageData.reduce((total, session) => total + session.activeSeconds, 0) / pageData.length
+    : 0;
 
   return (
     <div>
-      <div className="overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm">
-        <div className="overflow-x-auto" role="region" tabIndex={0} aria-label="Recent analytics sessions table">
-          <table className="w-full border-collapse text-left text-xs" style={{ minWidth: "1120px" }}>
-          <thead className="bg-background text-[10px] uppercase tracking-widest text-muted-foreground">
-            <tr>
-              <th scope="col" className="px-5 py-3 font-semibold">Timing</th>
-              <th scope="col" className="px-5 py-3 font-semibold">Journey</th>
-              <th scope="col" className="px-5 py-3 font-semibold">Engagement</th>
-              <th scope="col" className="px-5 py-3 font-semibold">Location / device</th>
-              <th scope="col" className="px-5 py-3 font-semibold">Network</th>
-              <th scope="col" className="px-5 py-3 font-semibold">Visitor</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {pageData.map((session) => (
-              <tr key={session.id} className="align-top transition-colors hover:bg-background">
-                <td className="px-5 py-4 font-medium text-[#161616]">
-                  <time dateTime={session.startedAt}>{formatDateTime(session.startedAt)}</time>
-                  <p className="mt-1 text-[10px] text-muted-foreground">Last seen {formatDateTime(session.lastSeenAt)}</p>
-                  {session.endedAt ? <p className="mt-1 text-[10px] text-muted-foreground">Ended {formatDateTime(session.endedAt)}</p> : null}
-                  <p className="mt-1 font-mono text-[10px] text-[#6f6e6a]">{session.id.slice(0, 12)}</p>
-                </td>
-                <td className="max-w-64 px-5 py-4 text-[#55534f]">
-                  <p className="break-all font-semibold text-[#161616]">{session.landingPage}</p>
-                  <p className="mt-1 truncate">Exit: {session.exitPage ?? "active / unknown"}</p>
-                  <p className="mt-1 truncate">From: {session.referrer ?? "direct"}</p>
-                  {session.journey.length ? (
-                    <details className="group mt-3 rounded-lg border border-[#161616]/10 bg-background px-3 py-2">
-                      <summary className="cursor-pointer text-[10px] font-semibold uppercase tracking-widest text-primary">
-                        View journey · {session.journey.length} events
-                      </summary>
-                      <ol className="mt-2 space-y-2 overflow-y-auto border-l border-primary/25 pl-3" style={{ maxHeight: "16rem" }}>
-                        {session.journey.map((event) => (
-                          <li key={event.id} className="relative text-[10px] leading-4 text-[#6f6e6a]">
-                            <span className="absolute top-1.5 h-1.5 w-1.5 rounded-full bg-primary" style={{ left: "-0.94rem" }} aria-hidden="true" />
-                            <div className="flex items-start justify-between gap-2">
-                              <strong className="font-semibold text-[#161616]">{event.name.replaceAll("_", " ")}</strong>
-                              <time dateTime={event.occurredAt} className="shrink-0 text-[#6f6e6a]">
-                                {journeyTimeFormatter.format(new Date(event.occurredAt))}
-                              </time>
-                            </div>
-                            <p className="break-all">
-                              {[event.pagePath, event.sectionId, event.targetLabel].filter(Boolean).join(" · ") || event.type}
-                            </p>
-                          </li>
-                        ))}
-                      </ol>
-                    </details>
-                  ) : null}
-                </td>
-                <td className="px-5 py-4 text-[#55534f]">
-                  <p>{formatDuration(session.activeSeconds)} active</p>
-                  <p className="mt-1">{formatNumber(session.pageViews)} pages · {formatNumber(session.events)} events</p>
-                </td>
-                <td className="px-5 py-4 text-[#55534f]">
-                  <p>{[session.city, session.region, session.country].filter(Boolean).join(", ") || "Unknown location"}</p>
-                  <p className="mt-1">{[session.device, session.browser, session.operatingSystem].filter(Boolean).join(" · ") || "Unknown device"}</p>
-                  {session.locale || session.timezone ? <p className="mt-1">{[session.locale, session.timezone].filter(Boolean).join(" · ")}</p> : null}
-                  {session.viewportWidth && session.viewportHeight ? <p className="mt-1">{session.viewportWidth}×{session.viewportHeight} viewport</p> : null}
-                </td>
-                <td className="px-5 py-4 font-mono text-[11px] text-foreground">
-                  <p>{session.ipAddress ?? "Raw IP expired / unavailable"}</p>
-                  {session.ipHash ? <p className="mt-1 text-[10px] text-[#6f6e6a]">hash:{session.ipHash.slice(0, 16)}</p> : null}
-                </td>
-                <td className="px-5 py-4">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-1 font-semibold ${session.isReturning ? "bg-background text-primary" : "bg-emerald-100 text-emerald-900"}`}>
-                    {session.isReturning ? "Returning visitor" : "New visitor"}
-                  </span>
-                  {session.visitorId ? <p className="mt-2 font-mono text-[10px] text-[#6f6e6a]">visitor:{session.visitorId.slice(0, 12)}</p> : null}
-                  {session.userAgent ? <p className="mt-2 max-w-56 truncate text-[10px] font-normal text-muted-foreground" title={session.userAgent}>{session.userAgent}</p> : null}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          </table>
-        </div>
-        <p className="border-t border-[#161616]/10 bg-background px-5 py-3 text-[10px] leading-4 text-muted-foreground">
-          Raw network addresses are admin-only and subject to short retention; a one-way hash remains for abuse and session correlation.
+      <dl className="mb-4 grid grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-[#161616]/10 bg-[#dedbd3] sm:grid-cols-4" aria-label="Sessions on this page">
+        <SessionMiniMetric label="Records shown" value={formatNumber(pageData.length)} />
+        <SessionMiniMetric label="Returning" value={formatNumber(returningCount)} />
+        <SessionMiniMetric label="Page views" value={formatNumber(pageViews)} />
+        <SessionMiniMetric label="Average active" value={formatDuration(averageActiveSeconds)} />
+      </dl>
+
+      <div className="space-y-3" aria-label="Recent visitor sessions">
+        {pageData.map((session, sessionIndex) => (
+          <SessionCard
+            key={session.id}
+            session={session}
+            visibleNumber={(pagination.page - 1) * pagination.pageSize + sessionIndex + 1}
+          />
+        ))}
+        <p className="rounded-[10px] border border-[#161616]/8 bg-[#fbfaf7] px-4 py-3 text-xs leading-5 text-[#6f6e6a]">
+          Technical identifiers stay collapsed by default. Raw network addresses are visible only to authorized administrators and disappear after the short retention window. Timelines show the latest 40 retained events.
         </p>
       </div>
       <ListPagination pagination={pagination} label="Visitor sessions" hrefForPage={hrefForPage} />
+    </div>
+  );
+}
+function SessionMiniMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="bg-[#fbfaf7] px-4 py-3">
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6f6e6a]">{label}</dt>
+      <dd className="mt-1 text-lg font-semibold tracking-[-0.02em] text-[#161616]">{value}</dd>
+    </div>
+  );
+}
+
+function SessionCard({ session, visibleNumber }: { session: RecentAnalyticsSession; visibleNumber: number }) {
+  const location = [session.city, session.region, session.country].filter(Boolean).join(", ") || "Location unavailable";
+  const device = [session.device, session.browser, session.operatingSystem].filter(Boolean).join(" · ") || "Device unavailable";
+  const source = session.referrer ? `${session.referrer}${session.referrerPath ?? ""}` : "Direct visit";
+  const campaign = [session.utmSource, session.utmMedium, session.utmCampaign].filter(Boolean).join(" · ");
+  const deepestScroll = session.journey.reduce((maximum, event) => Math.max(maximum, event.scrollDepth ?? 0), 0);
+  const meaningfulEventNames = new Set([
+    "click",
+    "download",
+    "form_failed",
+    "form_started",
+    "form_submit_attempted",
+    "form_submitted",
+    "language_changed",
+    "outbound",
+    "outbound_click",
+    "phone_click",
+    "portal_handoff",
+    "whatsapp_click",
+  ]);
+  const meaningfulEvents = session.journey.filter((event) => meaningfulEventNames.has(event.name));
+  const lastPage = session.exitPage ?? session.journey.at(-1)?.pagePath ?? "End page not recorded";
+
+  return (
+    <details className="group overflow-hidden rounded-[12px] border border-[#161616]/10 bg-white shadow-[0_8px_22px_rgba(22,22,22,0.04)] open:border-[#a97d12]/40 open:shadow-[0_14px_34px_rgba(22,22,22,0.07)]">
+      <summary className="grid min-h-[92px] cursor-pointer list-none gap-4 px-4 py-4 marker:content-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#7c5d17] sm:px-5 lg:grid-cols-[minmax(190px,0.9fr)_minmax(260px,1.3fr)_auto_44px] lg:items-center [&::-webkit-details-marker]:hidden">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[9px] bg-[#161616] text-xs font-semibold text-white" aria-hidden="true">
+            {String(visibleNumber).padStart(2, "0")}
+          </span>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <strong className="break-words text-sm font-semibold text-[#161616]">{location}</strong>
+              <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${session.isReturning ? "bg-[#f4eddd] text-[#7c5d17]" : "bg-emerald-100 text-emerald-900"}`}>
+                {session.isReturning ? "Returning visitor" : "New visitor"}
+              </span>
+            </div>
+            <time dateTime={session.startedAt} className="mt-1 block text-xs text-[#6f6e6a]">Started {formatDateTime(session.startedAt)}</time>
+          </div>
+        </div>
+
+        <div className="min-w-0 rounded-[9px] bg-[#fbfaf7] px-3 py-2.5">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6f6e6a]">Visitor path</span>
+          <p className="mt-1 flex min-w-0 items-center gap-2 text-sm text-[#161616]">
+            <span className="min-w-0 truncate font-semibold" title={session.landingPage}>{session.landingPage}</span>
+            <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#a97d12]" aria-hidden="true" />
+            <span className="min-w-0 truncate" title={lastPage}>{lastPage}</span>
+          </p>
+        </div>
+
+        <dl className="grid grid-cols-3 gap-2 lg:min-w-[250px]">
+          <CompactStat label="Active" value={formatDuration(session.activeSeconds)} />
+          <CompactStat label="Pages" value={formatNumber(session.pageViews)} />
+          <CompactStat label="Actions" value={formatNumber(meaningfulEvents.length)} />
+        </dl>
+
+        <span className="grid h-11 w-11 place-items-center justify-self-end rounded-full border border-[#161616]/10 bg-[#fbfaf7] text-[#7c5d17] transition group-hover:border-[#a97d12]/50 group-open:bg-[#161616] group-open:text-white" aria-hidden="true">
+          <ChevronRight className="h-4 w-4 transition-transform group-open:rotate-90" />
+        </span>
+      </summary>
+
+      <div className="border-t border-[#161616]/8 bg-[#fbfaf7] p-4 sm:p-5">
+        <div className="grid gap-5 xl:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)]">
+          <section aria-labelledby={`session-timeline-${session.id}`}>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2 text-[#7c5d17]">
+                  <Route className="h-4 w-4" aria-hidden="true" />
+                  <h3 id={`session-timeline-${session.id}`} className="text-xs font-semibold uppercase tracking-[0.16em]">Activity timeline</h3>
+                </div>
+                <p className="mt-1 text-xs leading-5 text-[#6f6e6a]">Chronological events recorded during this visit. This is an event timeline, not a video replay.</p>
+              </div>
+              {deepestScroll > 0 ? <span className="rounded-full bg-[#f4eddd] px-3 py-1.5 text-xs font-semibold text-[#7c5d17]">Deepest scroll {formatNumber(deepestScroll)}%</span> : null}
+            </div>
+
+            {session.journey.length ? (
+              <ol className="mt-4 border-l border-[#a97d12]/25 pl-5">
+                {session.journey.map((event, eventIndex) => (
+                  <li key={event.id} className="relative grid gap-1 border-b border-[#161616]/8 py-3 last:border-0 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-4">
+                    <span className="absolute top-4 grid h-6 w-6 place-items-center rounded-full border border-[#a97d12]/25 bg-[#f4eddd] text-[10px] font-semibold text-[#7c5d17]" style={{ left: "-2.08rem" }} aria-hidden="true">{eventIndex + 1}</span>
+                    <div className="min-w-0">
+                      <strong className="block text-sm font-semibold text-[#161616]">{humanizeEventName(event.name)}</strong>
+                      <p className="mt-0.5 break-words text-xs leading-5 text-[#6f6e6a]">{getEventContext(event)}</p>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs sm:flex-col sm:items-end sm:gap-0">
+                      <strong className="font-semibold text-[#7c5d17]">{formatJourneyElapsed(session.startedAt, event.occurredAt)}</strong>
+                      <time dateTime={event.occurredAt} className="text-[#6f6e6a]">{journeyTimeFormatter.format(new Date(event.occurredAt))}</time>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="mt-4 rounded-[9px] border border-[#161616]/8 bg-white px-4 py-3 text-xs leading-5 text-[#6f6e6a]">No detailed interaction events were retained for this session.</p>
+            )}
+          </section>
+
+          <aside className="grid content-start gap-3 sm:grid-cols-2 xl:grid-cols-1" aria-label="Session context">
+            <ContextCard icon={MapPin} label="Location" value={location} detail={[session.locale, session.timezone].filter(Boolean).join(" · ") || "Locale unavailable"} />
+            <ContextCard icon={MonitorSmartphone} label="Device" value={device} detail={`${session.viewportWidth && session.viewportHeight ? `${session.viewportWidth}×${session.viewportHeight} viewport` : "Viewport unavailable"}${session.screenWidth && session.screenHeight ? ` · ${session.screenWidth}×${session.screenHeight} screen` : ""}`} />
+            <ContextCard icon={Route} label="Route" value={session.landingPage} detail={`Last page: ${lastPage}`} />
+            <ContextCard icon={CalendarClock} label="Timing" value={`Last seen ${formatDateTime(session.lastSeenAt)}`} detail={session.endedAt ? `Ended ${formatDateTime(session.endedAt)}` : "No explicit session end recorded"} />
+            <ContextCard icon={Sparkles} label="Acquisition" value={source} detail={campaign ? `Campaign: ${campaign}` : "No campaign parameters recorded"} />
+
+            <details className="group rounded-[10px] border border-[#161616]/10 bg-white sm:col-span-2 xl:col-span-1">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-xs font-semibold text-[#161616] marker:content-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#7c5d17] [&::-webkit-details-marker]:hidden">
+                <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-[#a97d12]" aria-hidden="true" /> Technical &amp; privacy details</span>
+                <ChevronRight className="h-4 w-4 text-[#7c5d17] transition-transform group-open:rotate-90" aria-hidden="true" />
+              </summary>
+              <dl className="space-y-3 border-t border-[#161616]/8 px-4 py-3 text-xs">
+                <TechnicalRow label="Network" value={maskIpAddress(session.ipAddress)} />
+                <TechnicalRow label="Session ID" value={session.id} mono />
+                {session.visitorId ? <TechnicalRow label="Visitor ID" value={session.visitorId} mono /> : null}
+                {session.ipHash ? <TechnicalRow label="IP hash" value={session.ipHash} mono /> : null}
+                {session.userAgent ? <TechnicalRow label="User agent" value={session.userAgent} /> : null}
+              </dl>
+            </details>
+          </aside>
+        </div>
+      </div>
+    </details>
+  );
+}
+
+function CompactStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[8px] border border-[#161616]/8 bg-white px-2.5 py-2 text-center">
+      <dt className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#6f6e6a]">{label}</dt>
+      <dd className="mt-1 text-sm font-semibold text-[#161616]">{value}</dd>
+    </div>
+  );
+}
+
+function ContextCard({ icon: Icon, label, value, detail }: { icon: typeof MapPin; label: string; value: string; detail: string }) {
+  return (
+    <div className="rounded-[10px] border border-[#161616]/10 bg-white p-4">
+      <div className="flex items-center gap-2">
+        <Icon className="h-4 w-4 text-[#a97d12]" aria-hidden="true" />
+        <h4 className="text-xs font-semibold uppercase tracking-[0.13em] text-[#6f6e6a]">{label}</h4>
+      </div>
+      <p className="mt-2 break-words text-sm font-semibold text-[#161616]">{value}</p>
+      <p className="mt-1 break-words text-xs leading-5 text-[#6f6e6a]">{detail}</p>
+    </div>
+  );
+}
+
+function TechnicalRow({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div>
+      <dt className="font-semibold text-[#6f6e6a]">{label}</dt>
+      <dd className={`mt-1 break-words text-[#343330] ${mono ? "font-mono text-[11px]" : "leading-5"}`}>{value}</dd>
     </div>
   );
 }
@@ -662,8 +831,16 @@ export function AnalyticsDashboard({
         </aside>
       ) : null}
 
-      <section id="analytics-focus-panel" aria-labelledby="analytics-focus-title" aria-live="polite" className="scroll-mt-6 rounded-[14px] border border-[#161616]/10 bg-white p-5 shadow-sm sm:p-7">
-        <SectionHeader eyebrow={focusDetails.eyebrow} title={focusDetails.title} detail={focusDetails.description} />
+      <section
+        id="analytics-focus-panel"
+        aria-labelledby={focus === "sessions" ? undefined : "analytics-focus-title"}
+        aria-label={focus === "sessions" ? "Recent visitor sessions" : undefined}
+        aria-live="polite"
+        className="scroll-mt-6 rounded-[14px] border border-[#161616]/10 bg-white p-5 shadow-sm sm:p-7"
+      >
+        {focus === "sessions" ? null : (
+          <SectionHeader eyebrow={focusDetails.eyebrow} title={focusDetails.title} detail={focusDetails.description} />
+        )}
       {focus === "overview" ? <section aria-labelledby="analytics-overview-title">
         <div className="sr-only" id="analytics-overview-title">Analytics overview</div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -706,7 +883,6 @@ export function AnalyticsDashboard({
       : null}
 
       {focus === "sessions" ? <section>
-        <SectionHeader eyebrow="Live operations" title="Recent sessions" detail="A bounded view of the most recent sessions. Raw IP addresses disappear automatically after the approved short retention window." />
         <RecentSessions data={data.recentSessions} pagination={pagination.sessions} hrefForPage={(page) => hrefForPage("sessions", page)} />
       </section>
       : null}

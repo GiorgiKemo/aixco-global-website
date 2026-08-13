@@ -124,8 +124,8 @@ describe("analytics dashboard list pagination", () => {
 
     render(<AnalyticsDashboard data={data} operations={unavailableOperations} focus="sessions" range="7d" pagination={pagination} />);
 
-    expect(screen.getByText("/page/7")).toBeInTheDocument();
-    expect(screen.getByText("/page/8")).toBeInTheDocument();
+    expect(screen.getAllByText("/page/7").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("/page/8").length).toBeGreaterThan(0);
     expect(screen.queryByText("/page/1")).not.toBeInTheDocument();
     expect(screen.getByText("Showing 7-8 of 8")).toBeInTheDocument();
 
@@ -135,6 +135,67 @@ describe("analytics dashboard list pagination", () => {
       "href",
       "/admin/analytics?range=7d&focus=sessions",
     );
+  });
+
+  it("uses a compact responsive disclosure with human-readable timeline and private details", () => {
+    const session = createSession(1);
+    session.landingPage = "/#materials";
+    session.exitPage = "/#contact";
+    session.referrer = "google.com";
+    session.referrerPath = "/search";
+    session.utmSource = "google";
+    session.utmMedium = "cpc";
+    session.utmCampaign = "swiss-investors";
+    session.screenWidth = 1440;
+    session.screenHeight = 900;
+    session.ipAddress = "185.99.26.69/32";
+    session.journey = [
+      {
+        id: "event-1",
+        occurredAt: "2026-08-11T12:00:05.000Z",
+        type: "page",
+        name: "page_view",
+        pagePath: "/#materials",
+        sectionId: null,
+        targetLabel: null,
+        value: null,
+        durationMs: null,
+        scrollDepth: null,
+      },
+      {
+        id: "event-2",
+        occurredAt: "2026-08-11T12:00:18.000Z",
+        type: "interaction",
+        name: "whatsapp_click",
+        pagePath: "/#contact",
+        sectionId: "contact",
+        targetLabel: "WhatsApp",
+        value: null,
+        durationMs: null,
+        scrollDepth: 75,
+      },
+    ];
+    session.events = session.journey.length;
+
+    const data = createDashboard({ recentSessions: [session] });
+    const pagination = createAnalyticsPaginationState({
+      totals: { sessions: 1, errors: 0, audit: 0 },
+      requestedPages: { sessions: 1, errors: 1, audit: 1 },
+    });
+
+    const { container } = render(<AnalyticsDashboard data={data} operations={unavailableOperations} focus="sessions" range="7d" pagination={pagination} />);
+
+    expect(screen.getByLabelText("Sessions on this page")).toBeInTheDocument();
+    expect(screen.getByText("Visitor path")).toBeInTheDocument();
+    expect(screen.getByText("Activity timeline")).toBeInTheDocument();
+    expect(screen.getByText("Opened WhatsApp")).toBeInTheDocument();
+    expect(screen.getByText(/Campaign: google · cpc · swiss-investors/)).toBeInTheDocument();
+    expect(screen.getByText("Last page: /#contact")).toBeInTheDocument();
+    expect(screen.getByText(/1440×900 screen/)).toBeInTheDocument();
+    expect(screen.getByText("Technical & privacy details")).toBeInTheDocument();
+    expect(screen.getByText("185.99.x.x")).toBeInTheDocument();
+    expect(container.querySelector("table[style*='1120px']")).not.toBeInTheDocument();
+    expect(container.textContent).not.toMatch(/Â·|Ã—/u);
   });
 
   it("paginates errors and audit events independently while preserving both page positions", () => {
