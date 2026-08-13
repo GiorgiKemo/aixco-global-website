@@ -21,6 +21,7 @@ import { CurrentProjectBrochureLink } from "@/components/property/PropertyChrome
 import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
 import { recordContactSubmission } from "@/lib/backend/lead-capture";
 import { aixcoCurrentProjectGalleryImages, aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { openAnalyticsPreferences } from "@/lib/analytics/client";
 
 const navigation = [
   { label: "Opportunity", href: "#opportunity" },
@@ -630,11 +631,14 @@ export function BrandbookLandingPage() {
       <div role="contentinfo" className="border-t border-[#161616]/10 bg-[#F3EDE1]">
         <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 px-5 py-7 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/45 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-14">
           <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="8rem" className="h-auto w-28 opacity-70" />
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <a href={`mailto:${company.email}`} className="transition-colors hover:text-[#161616]">{company.email}</a>
             <span>{company.address}</span>
             <span>{company.offices.join(" · ")}</span>
             <span>{tx("Since")} {company.founded}</span>
+            <button type="button" onClick={openAnalyticsPreferences} className="transition-colors hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161616]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F3EDE1]">
+              {tx("Cookie preferences")}
+            </button>
           </div>
         </div>
       </div>

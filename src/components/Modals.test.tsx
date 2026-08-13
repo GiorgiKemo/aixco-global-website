@@ -156,7 +156,10 @@ describe("Modals", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /open privacy/i }));
 
-    expect(await screen.findByText(/Optionale, eigene Analysen/)).toHaveTextContent(
+    expect(await screen.findByText(/Optionale AIXCO-Analysen und Google Analytics/)).toHaveTextContent(
+      "Google Tag Manager",
+    );
+    expect(screen.getByText(/Optionale AIXCO-Analysen und Google Analytics/)).toHaveTextContent(
       "rohe IP-Adressen werden nach 30 Tagen automatisch entfernt",
     );
   });

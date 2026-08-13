@@ -38,7 +38,7 @@ function getFutureCallTimeValue() {
 async function dismissAnalyticsConsent(page) {
   const consent = page.getByRole("dialog", { name: "Cookies & analytics" });
   if (await consent.isVisible().catch(() => false)) {
-    await consent.getByRole("button", { name: "Accept" }).click();
+    await consent.getByRole("button", { name: "Accept analytics" }).click();
     await consent.waitFor({ state: "hidden" });
   }
 }
@@ -49,7 +49,7 @@ for (const profile of deviceProfiles) {
   await context.addInitScript(() => {
     window.localStorage.setItem(
       "aixco-analytics-consent-v1",
-      JSON.stringify({ status: "denied", version: "2026-08-07" }),
+      JSON.stringify({ status: "denied", version: "2026-08-13-google-analytics" }),
     );
   });
   const page = await context.newPage();

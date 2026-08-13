@@ -1,5 +1,6 @@
-import { render } from "@testing-library/react";
+import { act, render, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { writeAnalyticsConsent } from "@/lib/analytics/client";
 
 const navigation = vi.hoisted(() => ({ pathname: "/" }));
 
@@ -20,13 +21,19 @@ import { MarketingAnalytics } from "./marketing-analytics";
 describe("route-aware marketing analytics", () => {
   beforeEach(() => {
     navigation.pathname = "/";
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+    delete (window as Window & { dataLayer?: unknown[] }).dataLayer;
   });
 
-  it("keeps GTM and first-party web vitals on public routes", () => {
+  it("holds GTM until analytics consent is granted on public routes", async () => {
     const { getByTestId } = render(<MarketingAnalytics />);
 
-    expect(getByTestId("google-tag-manager")).toBeInTheDocument();
+    expect(document.querySelector("#google-tag-manager")).not.toBeInTheDocument();
     expect(getByTestId("web-vitals")).toBeInTheDocument();
+
+    act(() => writeAnalyticsConsent("granted"));
+    await waitFor(() => expect(getByTestId("google-tag-manager")).toBeInTheDocument());
   });
 
   it.each(["/admin", "/admin/login", "/admin/analytics?focus=traffic"])(

@@ -111,8 +111,12 @@ describe("AnalyticsTracker consent and session lifecycle", () => {
       .toBeInTheDocument();
     expect(readAnalyticsConsent()).toBe("unset");
     expect(fetchMock).not.toHaveBeenCalled();
+    expect(screen.getByText(/Google Analytics and optional AIXCO analytics stay off until you choose/)).toBeVisible();
 
-    fireEvent.click(screen.getByRole("button", { name: "Accept" }));
+    fireEvent.click(screen.getByText("Read more"));
+    expect(screen.getByText(/We use Google Analytics through Google Tag Manager/)).toBeVisible();
+
+    fireEvent.click(screen.getByRole("button", { name: "Accept analytics" }));
 
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());

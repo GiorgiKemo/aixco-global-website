@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart3, LockKeyhole, X } from "lucide-react";
+import { BarChart3, ChevronDown, LockKeyhole, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -50,8 +50,11 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3
 type Copy = {
   eyebrow: string;
   title: string;
+  summary: string;
   body: string;
   privacyBody: string;
+  expand: string;
+  collapse: string;
   accept: string;
   necessary: string;
   close: string;
@@ -61,45 +64,60 @@ const copyByLanguage: Record<string, Copy> = {
   en: {
     eyebrow: "Privacy",
     title: "Cookies & analytics",
-    body: "We use optional first-party analytics to understand visits and performance. Data stays pseudonymous — never form fields or passwords. You can change this anytime in the footer.",
-    privacyBody: "Your browser privacy signal is on, so analytics stays off.",
-    accept: "Accept",
+    summary: "Google Analytics and optional AIXCO analytics stay off until you choose. You can change this anytime.",
+    body: "We use Google Analytics through Google Tag Manager, plus optional AIXCO analytics, to understand visits, navigation and performance. Google Analytics may use cookies or similar identifiers. These tools stay off until you choose “Accept analytics”. We never record form contents or passwords. Change your choice anytime in the footer.",
+    privacyBody: "Your browser privacy signal is on, so Google Analytics and optional AIXCO analytics stay off.",
+    expand: "Read more",
+    collapse: "Show less",
+    accept: "Accept analytics",
     necessary: "Necessary only",
     close: "Close preferences",
   },
   de: {
     eyebrow: "Datenschutz",
     title: "Cookies & Analysen",
-    body: "Mit optionaler First-Party-Analyse verstehen wir Besuche und Leistung. Daten bleiben pseudonym — keine Formulare oder Passwörter. Änderung jederzeit in der Fußzeile.",
-    privacyBody: "Das Datenschutzsignal Ihres Browsers ist aktiv. Analysen bleiben aus.",
-    accept: "Akzeptieren",
+    summary: "Google Analytics und optionale AIXCO-Analysen bleiben deaktiviert, bis Sie zustimmen. Sie können dies jederzeit ändern.",
+    body: "Wir verwenden Google Analytics über Google Tag Manager sowie optionale AIXCO-Analysen, um Besuche, Navigation und Leistung zu verstehen. Google Analytics kann Cookies oder ähnliche Kennungen verwenden. Diese Tools bleiben deaktiviert, bis Sie „Analysen akzeptieren“ wählen. Formularinhalte und Passwörter werden niemals erfasst. Ihre Auswahl können Sie jederzeit in der Fußzeile ändern.",
+    privacyBody: "Das Datenschutzsignal Ihres Browsers ist aktiv. Google Analytics und optionale AIXCO-Analysen bleiben deaktiviert.",
+    expand: "Mehr erfahren",
+    collapse: "Weniger anzeigen",
+    accept: "Analysen akzeptieren",
     necessary: "Nur notwendige",
     close: "Einstellungen schließen",
   },
   pl: {
     eyebrow: "Prywatność",
     title: "Pliki cookie i analityka",
-    body: "Opcjonalna analityka własna pomaga nam rozumieć wizyty i wydajność. Dane są pseudonimowe — bez formularzy i haseł. Zmianę możesz wprowadzić w stopce.",
-    privacyBody: "Sygnał prywatności przeglądarki jest aktywny, więc analityka pozostaje wyłączona.",
-    accept: "Akceptuj",
+    summary: "Google Analytics i opcjonalna analityka AIXCO pozostają wyłączone, dopóki nie wyrazisz zgody. Możesz zmienić wybór w dowolnym momencie.",
+    body: "Używamy Google Analytics przez Google Tag Manager oraz opcjonalnej analityki AIXCO, aby rozumieć wizyty, nawigację i wydajność. Google Analytics może używać plików cookie lub podobnych identyfikatorów. Narzędzia te pozostają wyłączone, dopóki nie wybierzesz „Akceptuj analitykę”. Nie rejestrujemy treści formularzy ani haseł. Wybór możesz zmienić w stopce.",
+    privacyBody: "Sygnał prywatności przeglądarki jest aktywny, więc Google Analytics i opcjonalna analityka AIXCO pozostają wyłączone.",
+    expand: "Dowiedz się więcej",
+    collapse: "Pokaż mniej",
+    accept: "Akceptuj analitykę",
     necessary: "Tylko niezbędne",
     close: "Zamknij ustawienia",
   },
   sl: {
     eyebrow: "Zasebnost",
     title: "Piškotki in analitika",
-    body: "Izbirna lastna analitika nam pomaga razumeti obiske in delovanje. Podatki so psevdonimni — brez obrazcev in gesel. Spremenite lahko kadarkoli v nogi strani.",
-    privacyBody: "Signal zasebnosti brskalnika je aktiven, zato analitika ostaja izklopljena.",
-    accept: "Sprejmi",
+    summary: "Google Analytics in izbirna analitika AIXCO ostajata izklopljena, dokler ne izberete soglasja. Izbiro lahko kadar koli spremenite.",
+    body: "Google Analytics prek Google Tag Manager in izbirno analitiko AIXCO uporabljamo za razumevanje obiskov, navigacije in delovanja. Google Analytics lahko uporablja piškotke ali podobne identifikatorje. Orodja ostanejo izklopljena, dokler ne izberete »Sprejmi analitiko«. Vsebine obrazcev in gesel ne beležimo. Izbiro lahko kadar koli spremenite v nogi strani.",
+    privacyBody: "Signal zasebnosti brskalnika je aktiven, zato Google Analytics in izbirna analitika AIXCO ostajata izklopljena.",
+    expand: "Preberite več",
+    collapse: "Pokaži manj",
+    accept: "Sprejmi analitiko",
     necessary: "Samo nujno",
     close: "Zapri nastavitve",
   },
   ru: {
     eyebrow: "Конфиденциальность",
     title: "Файлы cookie и аналитика",
-    body: "Опциональная собственная аналитика помогает понимать посещения и производительность. Данные псевдонимны — без форм и паролей. Изменить выбор можно внизу сайта.",
-    privacyBody: "Сигнал конфиденциальности браузера активен, аналитика отключена.",
-    accept: "Принять",
+    summary: "Google Analytics и необязательная аналитика AIXCO отключены, пока вы не дадите согласие. Вы можете изменить выбор в любое время.",
+    body: "Мы используем Google Analytics через Google Tag Manager и необязательную аналитику AIXCO, чтобы понимать посещения, навигацию и производительность. Google Analytics может использовать файлы cookie и похожие идентификаторы. Эти инструменты отключены, пока вы не выберете «Принять аналитику». Мы не записываем содержимое форм или пароли. Вы можете изменить выбор в нижней части сайта.",
+    privacyBody: "Сигнал конфиденциальности браузера активен, поэтому Google Analytics и необязательная аналитика AIXCO отключены.",
+    expand: "Подробнее",
+    collapse: "Скрыть подробности",
+    accept: "Принять аналитику",
     necessary: "Только необходимые",
     close: "Закрыть настройки",
   },
@@ -840,6 +858,7 @@ export function AnalyticsTracker() {
   const [consent, setConsent] = useState<"granted" | "denied" | "unset">("unset");
   const [ready, setReady] = useState(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [language, setLanguage] = useState("en");
   const privacySignal = ready && hasBrowserPrivacySignal();
   const adminRoute = isAdminAnalyticsExcludedPath(pathname);
@@ -882,7 +901,7 @@ export function AnalyticsTracker() {
       aria-modal="false"
       aria-labelledby="analytics-consent-title"
       data-analytics-ignore="true"
-      className="analytics-consent fixed inset-x-3 z-[120] mx-auto w-auto max-w-[28.5rem] overflow-hidden border border-primary/30 bg-surface-elevated/95 text-foreground shadow-[0_24px_70px_-30px_rgb(17_16_14/0.58)] backdrop-blur-xl sm:inset-x-auto sm:start-1/2 sm:w-[min(28.5rem,calc(100vw-2rem))] sm:-translate-x-1/2"
+      className="analytics-consent fixed inset-x-3 z-[120] mx-auto w-auto max-w-[23rem] overflow-hidden border border-primary/30 bg-surface-elevated/95 text-foreground shadow-[0_24px_70px_-30px_rgb(17_16_14/0.58)] backdrop-blur-xl sm:inset-x-auto sm:start-1/2 sm:w-[min(23rem,calc(100vw-2rem))] sm:-translate-x-1/2"
       style={{ bottom: "max(1rem, env(safe-area-inset-bottom, 0px))" }}
     >
       {/* Champagne edge accent */}
@@ -892,11 +911,14 @@ export function AnalyticsTracker() {
         style={{ background: "var(--gradient-gold)" }}
       />
 
-      <div className="relative p-4 sm:p-5">
+      <div className="relative p-4">
         {showClose && (
           <button
             type="button"
-            onClick={() => setPreferencesOpen(false)}
+            onClick={() => {
+              setPreferencesOpen(false);
+              setDetailsOpen(false);
+            }}
             aria-label={copy.close}
             className="icon-button-glass absolute end-3 top-3 h-9 w-9 shrink-0"
           >
@@ -905,7 +927,7 @@ export function AnalyticsTracker() {
         )}
 
         <div className={`flex items-start gap-3 ${showClose ? "pe-10" : ""}`}>
-          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/12 text-primary">
+          <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/12 text-primary">
             {privacySignal ? (
               <LockKeyhole className="h-4 w-4" aria-hidden />
             ) : (
@@ -919,16 +941,31 @@ export function AnalyticsTracker() {
             </p>
             <h2
               id="analytics-consent-title"
-              className="mt-1 font-display text-xl font-semibold leading-tight tracking-[-0.02em]"
+              className="mt-1 font-display text-lg font-semibold leading-tight tracking-[-0.02em]"
             >
               {copy.title}
             </h2>
           </div>
         </div>
 
-        <p className="mt-3 text-sm leading-relaxed text-foreground/70">
-          {privacySignal ? copy.privacyBody : copy.body}
-        </p>
+        {privacySignal ? (
+          <p className="mt-3 text-sm leading-relaxed text-foreground/70">{copy.privacyBody}</p>
+        ) : (
+          <details
+            className="group mt-3"
+            open={detailsOpen}
+            onToggle={(event) => setDetailsOpen(event.currentTarget.open)}
+          >
+            <summary className="cursor-pointer list-none text-sm leading-snug text-foreground/70 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-details-marker]:hidden">
+              {copy.summary}{" "}
+              <span className="inline-flex items-center gap-1 whitespace-nowrap align-baseline text-[0.66rem] font-semibold uppercase tracking-[0.13em] text-primary">
+                {detailsOpen ? copy.collapse : copy.expand}
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${detailsOpen ? "rotate-180" : ""}`} aria-hidden />
+              </span>
+            </summary>
+            <p className="mt-2 text-xs leading-relaxed text-foreground/62">{copy.body}</p>
+          </details>
+        )}
 
         <div
           className={
@@ -942,6 +979,7 @@ export function AnalyticsTracker() {
             onClick={() => {
               writeAnalyticsConsent("denied");
               setPreferencesOpen(false);
+              setDetailsOpen(false);
             }}
             className="btn-ghost-gold !min-h-10 whitespace-nowrap !px-4 !py-2 !text-[0.7rem]"
           >
@@ -953,6 +991,7 @@ export function AnalyticsTracker() {
               onClick={() => {
                 writeAnalyticsConsent("granted");
                 setPreferencesOpen(false);
+                setDetailsOpen(false);
               }}
               className="btn-gold !min-h-10 whitespace-nowrap !px-4 !py-2 !text-[0.7rem]"
             >

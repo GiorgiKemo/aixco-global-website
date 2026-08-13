@@ -158,8 +158,19 @@ try {
     const dialogBounds = await dialog.boundingBox();
     assert(dialogBounds !== null, "consent dialog has no layout box");
     assert(dialogBounds.x >= -1 && dialogBounds.x + dialogBounds.width <= 361, "consent dialog overflows the 360px viewport");
+    assert(
+      await dialog.getByText("Google Analytics and optional AIXCO analytics stay off until you choose", { exact: false }).isVisible(),
+      "compact consent summary is missing",
+    );
+    const details = dialog.locator("details");
+    await details.locator("summary").click();
+    assert(
+      await dialog.getByText("We use Google Analytics through Google Tag Manager", { exact: false }).isVisible(),
+      "expanded consent details are missing",
+    );
+    await details.locator("summary").click();
 
-    await page.getByRole("button", { name: "Accept" }).click();
+    await page.getByRole("button", { name: "Accept analytics" }).click();
     await waitFor(() => batches.length > 0, "granting consent did not send the initial analytics batch");
     validateInitialBatch(batches[0]);
     const serialized = JSON.stringify(batches[0]);
@@ -217,7 +228,7 @@ try {
     await gpcPage.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
     const gpcDialog = gpcPage.getByRole("dialog", { name: "Cookies & analytics" });
     await gpcDialog.waitFor({ state: "visible", timeout: 20_000 });
-    assert(await gpcPage.getByRole("button", { name: "Accept" }).count() === 0, "GPC still exposes analytics opt-in");
+    assert(await gpcPage.getByRole("button", { name: "Accept analytics" }).count() === 0, "GPC still exposes analytics opt-in");
     assert(await gpcDialog.getByText("Your browser privacy signal is on", { exact: false }).isVisible(), "GPC explanation is missing");
     await gpcPage.getByRole("button", { name: "Necessary only" }).click();
     await gpcPage.waitForTimeout(500);
