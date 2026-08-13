@@ -30,6 +30,7 @@ describe("WhatsAppWidget", () => {
     expect(link).toHaveAttribute("target", "_blank");
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
     expect(link).toHaveClass("h-12", "w-12", "md:h-14", "md:w-14");
+    expect(link).not.toHaveClass("hover:-translate-y-0.5");
     expect(container.querySelector('[data-whatsapp-floating-container="true"]')).toBeInTheDocument();
     expect(container.querySelector('img[src*="AIXCO_icons-06.svg"]')).toBeInTheDocument();
   });

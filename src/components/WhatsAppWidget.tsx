@@ -2,13 +2,11 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { motion } from "@/lib/framer-motion";
 import { aixcoLiveIcons } from "@/lib/aixco-live-assets";
 import {
   getWhatsAppContactForCountry,
   type MarketWhatsAppContact,
 } from "@/lib/market-whatsapp";
-import { premiumPress } from "@/lib/motion";
 
 function readCountry(payload: unknown) {
   if (!payload || typeof payload !== "object" || !("country" in payload)) return null;
@@ -47,16 +45,14 @@ export function WhatsAppWidget() {
       data-whatsapp-floating-container="true"
       className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))] end-[max(1.25rem,env(safe-area-inset-right,0px))] z-[95] flex max-w-[calc(100vw-2.5rem)] items-end justify-end md:bottom-[max(1.5rem,env(safe-area-inset-bottom,0px))] md:end-[max(1.5rem,env(safe-area-inset-right,0px))]"
     >
-      <motion.a
+      <a
         data-market-whatsapp-link="true"
         href={contact.href}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp"
         title="WhatsApp"
-        className="pointer-events-auto group relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-primary/30 bg-white text-primary shadow-gold transition hover:-translate-y-0.5 hover:border-primary/55 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-14 md:w-14"
-        whileHover={{ y: -2, scale: 1.03 }}
-        whileTap={premiumPress}
+        className="pointer-events-auto relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-primary/30 bg-white text-primary shadow-gold transition-[background-color,border-color,box-shadow] duration-200 ease-out hover:border-primary/55 hover:bg-primary/[0.06] hover:shadow-[0_12px_30px_-18px_hsl(var(--primary)/0.8)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-14 md:w-14"
       >
         <Image
           src={aixcoLiveIcons.whatsapp}
@@ -68,7 +64,7 @@ export function WhatsAppWidget() {
           className="h-8 w-8 object-contain md:h-9 md:w-9"
         />
         <span className="sr-only">WhatsApp</span>
-      </motion.a>
+      </a>
     </div>
   );
 }
