@@ -21,9 +21,19 @@ describe("market WhatsApp contacts", () => {
     expect(getWhatsAppContactForCountry("AT")).toEqual(expected);
   });
 
-  it("does not expose a market number for other or unknown locations", () => {
-    expect(getWhatsAppContactForCountry("GE")).toBeNull();
+  it("uses the shared international number for other detected countries", () => {
+    const expected = {
+      number: "+995 555 54 36 55",
+      href: "https://wa.me/99555543655",
+      allowedPath: "/99555543655",
+    };
+
+    expect(getWhatsAppContactForCountry("GE")).toEqual(expected);
+    expect(getWhatsAppContactForCountry("US")).toEqual(expected);
     expect(getWhatsAppContactForCountry("XX")).toBeNull();
+  });
+
+  it("fails closed when country detection is unavailable", () => {
     expect(getWhatsAppContactForCountry(null)).toBeNull();
   });
 });

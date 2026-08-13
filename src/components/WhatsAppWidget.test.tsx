@@ -45,15 +45,14 @@ describe("WhatsAppWidget", () => {
     );
   });
 
-  it("does not reserve an empty floating slot for markets without a configured number", async () => {
+  it("uses the shared international number for other detected countries", async () => {
     vi.mocked(fetch).mockResolvedValue(new Response(JSON.stringify({ country: "GE" }), { status: 200 }));
 
     const { container } = renderWidget();
 
-    await waitFor(() => expect(fetch).toHaveBeenCalledOnce());
-    await act(async () => undefined);
-    expect(screen.queryByRole("link", { name: "WhatsApp" })).not.toBeInTheDocument();
-    expect(container.querySelector("[data-whatsapp-floating-container]")).not.toBeInTheDocument();
+    const link = await screen.findByRole("link", { name: "WhatsApp" });
+    expect(link).toHaveAttribute("href", "https://wa.me/99555543655");
+    expect(container.querySelector('[data-whatsapp-floating-container="true"]')).toBeInTheDocument();
   });
 
   it("fails closed when country detection is unavailable", async () => {

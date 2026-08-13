@@ -9,7 +9,7 @@ const cases = [
   { name: "tablet-switzerland", engine: chromium, profile: { viewport: { width: 768, height: 1024 }, hasTouch: true }, country: "CH", expected: "41798320581" },
   { name: "laptop-germany", engine: chromium, profile: { viewport: { width: 1366, height: 768 } }, country: "DE", expected: "436642554285" },
   { name: "desktop-switzerland", engine: chromium, profile: { viewport: { width: 1920, height: 1080 } }, country: "CH", expected: "41798320581" },
-  { name: "unsupported-georgia", engine: chromium, profile: devices["iPhone 13"], country: "GE", expected: null },
+  { name: "global-georgia", engine: chromium, profile: devices["iPhone 13"], country: "GE", expected: "99555543655" },
 ];
 const paths = ["/", "/aixco-global-op2/current-project"];
 const errors = [];
@@ -76,7 +76,7 @@ for (const testCase of cases) {
         }
         if (!metrics.imageLoaded) errors.push(`${testCase.name}${path}: WhatsApp logo did not load`);
       } else if (metrics.containerPresent || metrics.linkPresent) {
-        errors.push(`${testCase.name}${path}: unsupported market must not reserve a launcher slot`);
+        errors.push(`${testCase.name}${path}: launcher should be absent when no market contact is configured`);
       }
 
       if (metrics.overflow > 3) errors.push(`${testCase.name}${path}: horizontal overflow ${metrics.overflow}px`);

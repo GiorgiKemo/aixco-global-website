@@ -18,9 +18,11 @@ const GERMAN_AUSTRIAN_WHATSAPP: MarketWhatsAppContact = {
   allowedPath: "/436642554285",
 };
 
-// Klem will provide the all-markets fallback separately. Until then, visitors
-// outside CH/DE/AT do not see a dead or incorrectly routed WhatsApp control.
-const GLOBAL_WHATSAPP: MarketWhatsAppContact | null = null;
+const GLOBAL_WHATSAPP: MarketWhatsAppContact = {
+  number: "+995 555 54 36 55",
+  href: "https://wa.me/99555543655",
+  allowedPath: "/99555543655",
+};
 
 export function getWhatsAppContactForCountry(country: string | null | undefined): MarketWhatsAppContact | null {
   const countryCode = normalizeCountryCode(country);
@@ -28,5 +30,5 @@ export function getWhatsAppContactForCountry(country: string | null | undefined)
   if (countryCode === "CH") return SWITZERLAND_WHATSAPP;
   if (countryCode === "AT" || countryCode === "DE") return GERMAN_AUSTRIAN_WHATSAPP;
 
-  return GLOBAL_WHATSAPP;
+  return countryCode ? GLOBAL_WHATSAPP : null;
 }
