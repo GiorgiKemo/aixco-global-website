@@ -11977,6 +11977,12 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   color: #7a6224 !important;
 }
 
+/* The approach eyebrow sits over photography, so retain the brighter accent
+   instead of the paper-background editorial label color above. */
+[data-story-section='aboutAccess'] .story-about-access-eyebrow {
+  color: #e6c867 !important;
+}
+
 [data-story-section='philosophy'] .story-philosophy-card > .story-metric-label > span,
 [data-story-section='philosophy'] .story-philosophy-stat > .story-metric-label {
   color: #5b574e !important;
