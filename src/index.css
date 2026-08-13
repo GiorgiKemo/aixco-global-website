@@ -12163,6 +12163,178 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   color: white;
 }
 
+/* Reverance benchmark: a quieter, paper-led expression of the brandbook.
+   The primary logo, Gilroy hierarchy, champagne accent, and square editorial
+   geometry remain unchanged; the oversized dark surfaces become supporting
+   accents instead of the page's dominant background. */
+.reverance-editorial {
+  --reverance-paper: #f7f2e9;
+  --reverance-paper-deep: #e9dfcf;
+  --reverance-ink: #161616;
+  --reverance-muted: #57534b;
+  background: var(--reverance-paper) !important;
+}
+
+.reverance-editorial .brandbook-header {
+  background: rgb(247 242 233 / 94%) !important;
+  box-shadow: 0 1rem 2.5rem -2.2rem rgb(22 22 22 / 0.35);
+}
+
+.reverance-editorial #top > div:first-child > div:first-child {
+  background: var(--reverance-paper) !important;
+  border-right: 1px solid rgb(22 22 22 / 0.12);
+  color: var(--reverance-ink) !important;
+}
+
+@media (min-width: 1024px) {
+  .reverance-editorial #top > div:first-child > div:first-child {
+    padding-right: clamp(3.5rem, 5vw, 6.5rem);
+  }
+
+  .reverance-editorial #top > div:first-child > div:first-child,
+  .reverance-editorial #top > div:first-child > div:nth-child(2) {
+    min-height: calc(100svh - 4.6rem);
+  }
+
+  .reverance-editorial #top > div:first-child > div {
+    min-width: 0;
+  }
+
+  .reverance-editorial #top > div:first-child > div {
+    min-width: 0;
+  }
+}
+
+.reverance-editorial #top > div:first-child > div:first-child [class*="text-white"],
+.reverance-editorial #top > div:first-child > div:first-child .text-white {
+  color: var(--reverance-ink) !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child [class*="border-white"] {
+  border-color: rgb(22 22 22 / 0.24) !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child .brandbook-button-gold {
+  box-shadow: 0 1rem 2rem -1.3rem rgb(122 98 36 / 0.62);
+}
+
+.reverance-editorial #top > div:first-child > div:first-child a:not(.brandbook-button-gold) {
+  background: transparent !important;
+  color: var(--reverance-ink) !important;
+  text-shadow: none !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child .brandbook-button-gold {
+  color: var(--reverance-ink) !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child > p {
+  color: #7a6224 !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child > p > span {
+  background: var(--brandbook-gold) !important;
+}
+
+.reverance-editorial #top > div:first-child > div:nth-child(2) {
+  background: #d8d0c2 !important;
+}
+
+.reverance-editorial #top > div:first-child > div:nth-child(2) > div:last-child {
+  padding-bottom: clamp(1.5rem, 3vw, 3rem);
+}
+
+.reverance-editorial #top > div:first-child > div:nth-child(2) > div:last-child > div:first-child {
+  max-width: 34rem;
+}
+
+.reverance-editorial #top > div:first-child > div:nth-child(2) > div:last-child > div:last-child a {
+  border-color: rgb(255 255 255 / 0.88);
+  background: rgb(22 22 22 / 0.12);
+  backdrop-filter: blur(4px);
+}
+
+.reverance-editorial #top > div:first-child > div:nth-child(2) > div:last-child > div:last-child a:hover {
+  background: var(--brandbook-gold);
+}
+
+.reverance-editorial #opportunity {
+  background: var(--reverance-paper) !important;
+}
+
+.reverance-editorial #opportunity > div > div:first-child {
+  padding-top: clamp(5rem, 9vw, 9rem);
+  padding-bottom: clamp(5rem, 9vw, 9rem);
+}
+
+.reverance-editorial #approach {
+  background: var(--reverance-paper-deep) !important;
+  color: var(--reverance-ink) !important;
+}
+
+.reverance-editorial #approach [class*="text-white"],
+.reverance-editorial #approach .text-white {
+  color: var(--reverance-ink) !important;
+}
+
+.reverance-editorial #approach [class*="border-white"],
+.reverance-editorial #approach article {
+  border-color: rgb(22 22 22 / 0.18) !important;
+}
+
+.reverance-editorial #approach [class*="text-[#E6C767]"] {
+  color: #7a6224 !important;
+}
+
+.reverance-editorial #residence {
+  background: #fbf8f1 !important;
+}
+
+.reverance-editorial #contact {
+  background: var(--reverance-paper-deep) !important;
+  color: var(--reverance-ink) !important;
+}
+
+.reverance-editorial #contact [class*="text-white"],
+.reverance-editorial #contact .text-white {
+  color: var(--reverance-ink) !important;
+}
+
+.reverance-editorial #contact [class*="border-white"] {
+  border-color: rgb(22 22 22 / 0.18) !important;
+}
+
+.reverance-editorial #contact .brandbook-eyebrow-light {
+  color: #7a6224 !important;
+}
+
+.reverance-editorial #contact .brandbook-input {
+  border-color: rgb(22 22 22 / 0.25);
+  background: rgb(255 255 255 / 0.42);
+  color: var(--reverance-ink);
+}
+
+.reverance-editorial #contact .brandbook-input::placeholder {
+  color: rgb(22 22 22 / 0.48);
+}
+
+.reverance-editorial #contact .brandbook-input option {
+  background: var(--reverance-paper);
+  color: var(--reverance-ink);
+}
+
+.reverance-editorial #contact .brandbook-input:focus {
+  background: rgb(255 255 255 / 0.72);
+}
+
+.reverance-editorial #contact .brandbook-button-gold {
+  box-shadow: 0 1rem 2rem -1.3rem rgb(122 98 36 / 0.62);
+}
+
+.reverance-editorial > [role="contentinfo"] {
+  background: var(--reverance-paper) !important;
+}
+
 @media (max-width: 767px) {
   .brandbook-header {
     backdrop-filter: none;
