@@ -52,7 +52,7 @@ export function WhatsAppWidget() {
         rel="noopener noreferrer"
         aria-label="WhatsApp"
         title="WhatsApp"
-        className="group pointer-events-auto relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-primary/30 bg-white text-primary shadow-gold transition-[background-color,border-color,box-shadow] duration-200 ease-out hover:border-[#E6C767] hover:bg-primary/[0.06] hover:shadow-[0_12px_30px_-18px_hsl(var(--primary)/0.8)] focus-visible:border-[#E6C767] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-14 md:w-14"
+        className="group pointer-events-auto relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-[#6A5417]/30 bg-white text-[#6A5417] shadow-gold transition-[background-color,border-color,box-shadow] duration-200 ease-out hover:border-[#E6C767] hover:bg-[#6A5417]/[0.06] hover:shadow-[0_12px_30px_-18px_hsl(var(--primary)/0.8)] focus-visible:border-[#E6C767] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A5417]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-14 md:w-14"
       >
         <Image
           src={aixcoLiveIcons.whatsapp}

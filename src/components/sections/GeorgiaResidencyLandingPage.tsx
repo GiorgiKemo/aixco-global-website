@@ -232,7 +232,7 @@ export function GeorgiaResidencyLandingPage() {
                   event.preventDefault();
                   scrollToId(chapter.id);
                 }}
-                className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white/55 transition-colors hover:text-white"
+                className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white/70 transition-colors hover:text-white"
               >
                 {tx(chapter.label)}
               </a>
@@ -325,10 +325,13 @@ export function GeorgiaResidencyLandingPage() {
       <main>
         <section className="relative min-h-[100svh] overflow-hidden bg-[#0b0b0b]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={aixcoLiveImages.batumiMosaicNightSkyline}
             alt={tx("Batumi night skyline")}
-            className="absolute inset-0 h-full w-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/25" />
           <div className="residency-frame hidden sm:block" />
@@ -352,7 +355,7 @@ export function GeorgiaResidencyLandingPage() {
                   className="border-b border-white/15 px-0 py-4 last:border-b-0 min-[520px]:border-b-0 min-[520px]:border-r min-[520px]:px-5 min-[520px]:py-5 min-[520px]:last:border-r-0"
                 >
                   <strong className="block text-2xl font-medium tracking-[-0.04em] text-[#E6C767] sm:text-3xl">{path.price}</strong>
-                  <span className="mt-2 block text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white/55">{tx(path.title)}</span>
+                  <span className="mt-2 block text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white/70">{tx(path.title)}</span>
                 </a>
               ))}
             </div>
@@ -363,7 +366,7 @@ export function GeorgiaResidencyLandingPage() {
           {permitPaths.map((path) => (
             <article key={path.id} id={path.id} className="relative min-h-[78svh] overflow-hidden border-t border-white/10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={path.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+              <Image src={path.image} alt="" fill sizes="100vw" className="object-cover" />
               <div aria-hidden className="absolute inset-0 bg-[#0b0b0b]/72" />
               <div className="relative z-10 mx-auto grid min-h-[78svh] max-w-[1480px] items-end gap-10 px-5 py-16 sm:px-10 lg:grid-cols-[0.7fr_1fr] lg:px-16 lg:py-20">
                 <div>
@@ -382,7 +385,7 @@ export function GeorgiaResidencyLandingPage() {
 
         <section id="hnwi" className="scroll-mt-16 bg-[#F3EDE1] text-[#161616]">
           <div className="mx-auto max-w-[1480px] px-5 py-20 sm:px-10 lg:px-16 lg:py-28">
-            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.26em] text-[#9C7F3C]">{tx("Tax residency Georgia")}</p>
+            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.26em] text-[#7A6224]">{tx("Tax residency Georgia")}</p>
             <h2 className="mt-5 max-w-[16ch] text-[clamp(2.8rem,5.4vw,5.8rem)] font-medium leading-[0.9] tracking-[-0.05em]">{tx("HNWI status, run in parallel.")}</h2>
             <p className="mt-6 max-w-[38rem] text-lg leading-[1.55] text-[#161616]/65">
               {tx("An individual may qualify for tax residency in Georgia under the HNWI regime if they meet the following criteria.")}
@@ -403,7 +406,7 @@ export function GeorgiaResidencyLandingPage() {
                   className={`relative grid gap-3 lg:w-[46%] ${index % 2 === 1 ? "lg:ml-auto lg:text-right" : ""}`}
                 >
                   <span className="absolute left-1/2 top-2 hidden h-3 w-3 -translate-x-1/2 rounded-full border border-[#E6C767] bg-[#F3EDE1] lg:block" />
-                  <p className="text-[0.68rem] font-semibold tracking-[0.24em] text-[#9C7F3C]">{step.roman}</p>
+                  <p className="text-[0.68rem] font-semibold tracking-[0.24em] text-[#7A6224]">{step.roman}</p>
                   <h3 className="text-2xl font-medium tracking-[-0.035em] sm:text-3xl">{tx(step.title)}</h3>
                   <p className="text-sm leading-6 text-[#161616]/62">{tx(step.time)}</p>
                 </article>
@@ -426,7 +429,7 @@ export function GeorgiaResidencyLandingPage() {
                 {tx("For clients without an established tax residency, or who have exited their prior jurisdiction, AIXCO provides a Tax Relocation Package.")}
               </p>
               <p className="mt-10 text-5xl font-medium tracking-[-0.055em] text-[#E6C767]">2,500 EUR</p>
-              <p className="mt-2 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white/45">{tx("Tax relocation package")}</p>
+              <p className="mt-2 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white/60">{tx("Tax relocation package")}</p>
               <ul className="mt-6 grid gap-2 text-sm leading-6 text-white/70">
                 {relocationIncludes.map((item) => (
                   <li key={item} className="flex gap-3">
@@ -449,7 +452,7 @@ export function GeorgiaResidencyLandingPage() {
 
         <section id="contact" className="relative scroll-mt-16 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={aixcoLiveImages.batumiMosaicEveningWaterfront} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <Image src={aixcoLiveImages.batumiMosaicEveningWaterfront} alt="" fill sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-[#0b0b0b]/78" />
           <div className="relative z-10 mx-auto grid max-w-[1480px] gap-12 px-5 py-20 sm:px-10 lg:grid-cols-[0.85fr_1.15fr] lg:px-16 lg:py-28">
             <div className="text-white">
@@ -476,7 +479,7 @@ export function GeorgiaResidencyLandingPage() {
                   <Download size={14} /> {tx("Tax residency guide")}
                 </DownloadGateLink>
               </div>
-              <p className="mt-6 max-w-[28rem] text-xs leading-5 text-white/42">
+              <p className="mt-6 max-w-[28rem] text-xs leading-5 text-white/70">
                 {tx("Currencies in Georgia are generally USD and GEL; pricing in EUR can vary according to exchange rates.")}
               </p>
             </div>
@@ -495,16 +498,16 @@ export function GeorgiaResidencyLandingPage() {
                     <label>{tx("Website")}<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label>
                   </div>
                   <div className="grid gap-5 sm:grid-cols-2">
-                    <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/55">
+                    <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">
                       {tx("Name & Surname")}
                       <input required minLength={2} maxLength={100} autoComplete="name" name="name" type="text" placeholder={tx("Full name")} className="residency-input" />
                     </label>
-                    <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/55">
+                    <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">
                       {tx("Email Address")}
                       <input required maxLength={255} autoComplete="email" name="email" type="email" placeholder="you@email.com" className="residency-input" />
                     </label>
                   </div>
-                  <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/55">
+                  <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">
                     {tx("I’m interested in")}
                     <select name="interest" defaultValue="Tax residency (HNWI)" className="residency-input">
                       {interestOptions.map((option) => (
@@ -512,13 +515,13 @@ export function GeorgiaResidencyLandingPage() {
                       ))}
                     </select>
                   </label>
-                  <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/55">
+                  <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">
                     {tx("Message")}
                     <textarea required minLength={10} maxLength={1500} name="message" rows={4} placeholder={tx("Tell us the path, timing, and whether you already own or want to buy property.")} className="residency-input resize-none" />
                   </label>
                   {submitError ? <p role="alert" className="text-sm font-medium text-[#9A3030]">{submitError}</p> : null}
                   <div className="flex flex-col gap-4 border-t border-[#161616]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="max-w-[16rem] text-xs leading-5 text-[#161616]/45">{tx("By sending this form, you agree that AIXCO may contact you about your request.")}</p>
+                    <p className="max-w-[16rem] text-xs leading-5 text-[#161616]/70">{tx("By sending this form, you agree that AIXCO may contact you about your request.")}</p>
                     <button type="submit" disabled={isSubmitting} className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] px-5 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-white disabled:opacity-60">
                       {isSubmitting ? tx("Sending...") : tx("Send request")} <ArrowUpRight size={15} />
                     </button>
@@ -531,7 +534,7 @@ export function GeorgiaResidencyLandingPage() {
       </main>
 
       <div role="contentinfo" className="border-t border-white/10 bg-[#0b0b0b]">
-        <div className="mx-auto flex max-w-[1480px] flex-col gap-4 px-5 py-6 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/40 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-16">
+        <div className="mx-auto flex max-w-[1480px] flex-col gap-4 px-5 py-6 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-16">
           <Image src={aixcoLiveLogos.aixcoHorizontalLight} alt="AIXCO.Global" width={1600} height={333} sizes="7rem" className="h-auto w-24 opacity-70" />
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <a href={`mailto:${company.email}`} className="hover:text-white">{company.email}</a>

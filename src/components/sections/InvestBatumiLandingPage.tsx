@@ -639,7 +639,7 @@ export function InvestBatumiLandingPage() {
           <div className={styles.headerActions}>
             <button type="button" className={styles.briefButton} onClick={() => handleNav("#contact")}>{content.requestBrief}<ArrowUpRight size={15} /></button>
             <div className={styles.language} ref={languageRef}>
-              <button type="button" className={styles.languageButton} aria-label={content.language} aria-expanded={languageOpen} onClick={() => setLanguageOpen((open) => !open)}>
+              <button type="button" className={styles.languageButton} aria-label={`${activeLanguage} ${content.language}`} aria-expanded={languageOpen} onClick={() => setLanguageOpen((open) => !open)}>
                 <Globe2 size={16} /><span>{activeLanguage}</span>
               </button>
               {languageOpen ? (
@@ -701,11 +701,11 @@ export function InvestBatumiLandingPage() {
             <p>{content.batumi.body}</p>
             <button type="button" className={styles.textButton} onClick={() => scrollTo("#contact")}>{content.batumi.cta}<ArrowUpRight size={16} /></button>
           </div>
-          <button type="button" className={`${styles.imageFrame} ${styles.imageFrameOne}`} aria-label={`${content.gallery.expand}: ${content.gallery.captions[1]}`} onClick={() => setGalleryIndex(1)}>
+          <button type="button" className={`${styles.imageFrame} ${styles.imageFrameOne}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(1)}>
             <Image src={images.verticalCity.src} alt={content.gallery.captions[1]} fill sizes="(min-width: 900px) 27vw, 56vw" />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
-          <button type="button" className={`${styles.imageFrame} ${styles.imageFrameTwo}`} aria-label={`${content.gallery.expand}: ${content.gallery.captions[2]}`} onClick={() => setGalleryIndex(2)}>
+          <button type="button" className={`${styles.imageFrame} ${styles.imageFrameTwo}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(2)}>
             <Image src={images.verticalTower.src} alt={content.gallery.captions[2]} fill sizes="(min-width: 900px) 24vw, 48vw" />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
@@ -733,7 +733,7 @@ export function InvestBatumiLandingPage() {
           </div>
           <div className={styles.galleryGrid}>
             {images.gallery.map((image, index) => (
-              <button key={image.src} type="button" aria-label={`${content.gallery.expand}: ${content.gallery.captions[index]}`} onClick={() => setGalleryIndex(index)}>
+              <button key={image.src} type="button" aria-label={content.gallery.captions[index]} onClick={() => setGalleryIndex(index)}>
                 <Image src={image.src} alt={content.gallery.captions[index]} fill sizes="(min-width: 900px) 20vw, 50vw" />
                 <span>{content.gallery.captions[index]}</span>
               </button>

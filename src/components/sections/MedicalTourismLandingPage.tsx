@@ -155,14 +155,11 @@ function ExpandableScene({
   return (
     <>
       <div className={`overflow-hidden ${className ?? "relative h-full"}`}>
-        {/* Native img: these files are already optimized WebPs/JPEGs; Next's optimizer
-            can leave the fill frame empty on some local patterns. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={image.src}
           alt={alt}
-          width={image.width}
-          height={image.height}
+          fill
+          sizes="(min-width: 1024px) 58vw, 100vw"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-[1.03]"
           style={{ objectPosition }}
         />
@@ -416,7 +413,7 @@ export function MedicalTourismLandingPage() {
                 <p className="flex min-w-0 items-center gap-3 pt-1 text-[0.64rem] font-semibold uppercase tracking-[0.23em] text-[#E6C767]">
                   <span className="h-px w-8 bg-[#E6C767]" /> {tx("Georgia healthcare")}
                 </p>
-                <span className="pt-1 text-right text-[0.58rem] font-medium uppercase tracking-[0.2em] text-white/45">03 / 03<br />AIXCO GLOBAL</span>
+                <span className="pt-1 text-right text-[0.58rem] font-medium uppercase tracking-[0.2em] text-white/60">03 / 03<br />AIXCO GLOBAL</span>
               </div>
 
               <div className="relative z-10 mt-7 max-w-[36rem]">
@@ -461,7 +458,7 @@ export function MedicalTourismLandingPage() {
               />
               <button
                 type="button"
-                aria-label={tx("Expand the Batumi coastline image")}
+                aria-label={tx("Expand image")}
                 onClick={() => setExpandedHero({ ...sceneImages.hero, alt: tx("Batumi coastline at golden hour") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
@@ -486,7 +483,7 @@ export function MedicalTourismLandingPage() {
             ].map((metric) => (
               <div key={metric.label} className="border-r border-[#161616]/10 px-4 py-5 last:border-r-0 sm:px-8 sm:py-6">
                 <strong className="block text-xl font-medium tracking-[-0.04em] sm:text-3xl">{metric.value}</strong>
-                <span className="mt-2 block text-[0.56rem] font-semibold uppercase tracking-[0.12em] text-[#161616]/48 [overflow-wrap:anywhere] sm:text-[0.6rem] sm:tracking-[0.15em]">{tx(metric.label)}</span>
+                <span className="mt-2 block text-[0.56rem] font-semibold uppercase tracking-[0.12em] text-[#161616]/70 [overflow-wrap:anywhere] sm:text-[0.6rem] sm:tracking-[0.15em]">{tx(metric.label)}</span>
               </div>
             ))}
           </div>
@@ -550,7 +547,7 @@ export function MedicalTourismLandingPage() {
                 <div className="mt-8 overflow-x-auto">
                 <table className="w-full min-w-[28rem] text-left text-sm">
                   <thead>
-                    <tr className="border-b border-white/20 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/45">
+                    <tr className="border-b border-white/20 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/60">
                       <th className="pb-3 font-semibold">{tx("Treatment")}</th>
                       <th className="pb-3 font-semibold">{tx("Georgia")}</th>
                       <th className="pb-3 font-semibold">{tx("Germany")}</th>
@@ -576,7 +573,7 @@ export function MedicalTourismLandingPage() {
                 <div className="mt-8 overflow-x-auto">
                 <table className="w-full min-w-[28rem] text-left text-sm">
                   <thead>
-                    <tr className="border-b border-white/20 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/45">
+                    <tr className="border-b border-white/20 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/60">
                       <th className="pb-3 font-semibold">{tx("Treatment")}</th>
                       <th className="pb-3 font-semibold">{tx("Georgia")}</th>
                       <th className="pb-3 font-semibold">{tx("Germany")}</th>
@@ -602,7 +599,7 @@ export function MedicalTourismLandingPage() {
                 <div className="mt-8 overflow-x-auto">
                 <table className="w-full min-w-[22rem] text-left text-sm">
                   <thead>
-                    <tr className="border-b border-white/20 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/45">
+                    <tr className="border-b border-white/20 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/60">
                       <th className="pb-3 font-semibold">{tx("Country")}</th>
                       <th className="pb-3 font-semibold">{tx("Typical cost")}</th>
                     </tr>
@@ -645,12 +642,12 @@ export function MedicalTourismLandingPage() {
               <div className="grid gap-0 border-t border-[#161616]/20">
                 {clinics.map((clinic, index) => (
                   <article key={clinic.name} className="grid gap-3 border-b border-[#161616]/15 py-6 sm:grid-cols-[4rem_minmax(0,1fr)_11rem] sm:items-start">
-                    <span className="text-3xl font-medium text-[#9C7F3C]">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="text-3xl font-medium text-[#7A6224]">{String(index + 1).padStart(2, "0")}</span>
                     <div>
                       <h3 className="text-xl font-medium tracking-[-0.03em]">{clinic.name}</h3>
                       <p className="mt-2 text-sm leading-6 text-[#161616]/62">{tx(clinic.body)}</p>
                     </div>
-                    <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/45 sm:pt-2 sm:text-right">{tx(clinic.focus)}</p>
+                    <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/70 sm:pt-2 sm:text-right">{tx(clinic.focus)}</p>
                   </article>
                 ))}
               </div>
@@ -733,7 +730,7 @@ export function MedicalTourismLandingPage() {
               <p className="brandbook-eyebrow brandbook-eyebrow-light">06 — {tx("Start with AIXCO")}</p>
               <h2 className="mt-8 max-w-[8ch] text-[clamp(3.2rem,5.7vw,6.7rem)] font-medium leading-[0.88] tracking-[-0.065em]">{tx("Contact AIXCO")}</h2>
               <p className="mt-9 max-w-[25rem] text-lg leading-[1.55] text-white/60">{tx("Tell us the treatment you are considering. The AIXCO team will follow up with a private brief.")}</p>
-              <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-5 text-[0.62rem] font-semibold uppercase tracking-[0.17em] text-white/45">
+              <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-5 text-[0.62rem] font-semibold uppercase tracking-[0.17em] text-white/60">
                 <span>{tx("Treatment planning")}</span>
                 <span>{tx("Clinic introductions")}</span>
                 <span>{tx("Recovery stays")}</span>
@@ -778,7 +775,7 @@ export function MedicalTourismLandingPage() {
                   </label>
                   {submitError ? <p role="alert" className="text-sm font-medium text-[#F0A9A9]">{submitError}</p> : null}
                   <div className="flex flex-col gap-5 border-t border-white/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="max-w-[17rem] text-xs leading-[1.5] text-white/38">{tx("By sending this form, you agree that AIXCO may contact you about your request.")}</p>
+                    <p className="max-w-[17rem] text-xs leading-[1.5] text-white/70">{tx("By sending this form, you agree that AIXCO may contact you about your request.")}</p>
                     <button type="submit" disabled={isSubmitting} className="brandbook-button-gold inline-flex min-h-12 items-center justify-center gap-3 bg-[#E6C767] px-6 text-[0.68rem] font-semibold uppercase tracking-[0.17em] text-[#161616] disabled:cursor-wait disabled:opacity-60">
                       {isSubmitting ? tx("Sending...") : tx("Send request")} <ArrowUpRight size={16} strokeWidth={1.8} />
                     </button>
@@ -791,7 +788,7 @@ export function MedicalTourismLandingPage() {
       </main>
 
       <div role="contentinfo" className="border-t border-[#161616]/10 bg-[#F3EDE1]">
-        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 px-5 py-7 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/45 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-14">
+        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 px-5 py-7 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/70 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-14">
           <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="8rem" className="h-auto w-28 opacity-70" />
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <a href={`mailto:${company.email}`} className="transition-colors hover:text-[#161616]">{company.email}</a>

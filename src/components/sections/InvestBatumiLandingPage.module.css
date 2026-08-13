@@ -3,7 +3,7 @@
   --ivory: #f3ede1;
   --paper: #fbf8f1;
   --gold: #e6c767;
-  --gold-deep: #a68731;
+  --gold-deep: #7a6224;
   min-width: 0;
   overflow: clip;
   background: var(--ivory);
@@ -628,7 +628,7 @@
 .guidanceIntro > p:last-child {
   max-width: 39rem;
   margin: 0;
-  color: rgb(21 21 21 / 60%);
+  color: rgb(21 21 21 / 70%);
   line-height: 1.8;
 }
 
@@ -660,7 +660,7 @@
 
 .guidanceList p {
   margin: 0;
-  color: rgb(21 21 21 / 58%);
+  color: rgb(21 21 21 / 70%);
   font-size: 0.88rem;
   line-height: 1.7;
 }
@@ -785,7 +785,7 @@
 .formFooter p {
   max-width: 21rem;
   margin: 0;
-  color: rgb(255 255 255 / 38%);
+  color: rgb(255 255 255 / 72%);
   font-size: 0.7rem;
   line-height: 1.55;
 }

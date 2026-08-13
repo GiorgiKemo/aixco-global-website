@@ -348,7 +348,7 @@ export function BrandbookLandingPage() {
                 <p className="flex min-w-0 items-center gap-3 pt-1 text-[0.64rem] font-semibold uppercase tracking-[0.23em] text-[#E6C767]">
                   <span className="h-px w-8 bg-[#E6C767]" /> {tx("Batumi property profile")}
                 </p>
-                <span className="pt-1 text-right text-[0.58rem] font-medium uppercase tracking-[0.2em] text-white/45">01 / 04<br />AIXCO GLOBAL</span>
+                <span className="pt-1 text-right text-[0.58rem] font-medium uppercase tracking-[0.2em] text-white/60">01 / 04<br />AIXCO GLOBAL</span>
               </div>
 
               <div className="relative z-10 mt-7 max-w-[35rem]">
@@ -400,7 +400,7 @@ export function BrandbookLandingPage() {
               />
               <button
                 type="button"
-                aria-label={tx("Expand the Reverance residence exterior image")}
+                aria-label={tx("Expand image")}
                 onClick={() => setExpandedImage({ ...projectImages.hero, alt: tx("The Reverance residence exterior in Batumi") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
@@ -422,7 +422,7 @@ export function BrandbookLandingPage() {
             </div>
           </div>
 
-          <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between border-x border-b border-[#161616]/10 px-5 py-4 text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#161616]/45 sm:px-8 lg:px-12">
+          <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between border-x border-b border-[#161616]/10 px-5 py-4 text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#161616]/70 sm:px-8 lg:px-12">
             <span className="flex items-center gap-3"><ArrowDown size={14} strokeWidth={1.5} /> {tx("Scroll to explore")}</span>
             <span>{tx("Private residences")} · 01</span>
           </div>
@@ -441,19 +441,19 @@ export function BrandbookLandingPage() {
               <div className="mt-12 grid max-w-[37rem] grid-cols-2 border-y border-[#161616]/20 sm:grid-cols-4">
                 <div className="py-5 pr-4">
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("17")}</strong>
-                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/48">{tx("Floors")}</span>
+                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/70">{tx("Floors")}</span>
                 </div>
                 <div className="border-l border-[#161616]/20 px-4 py-5">
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("408")}</strong>
-                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/48">{tx("Apartments")}</span>
+                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/70">{tx("Apartments")}</span>
                 </div>
                 <div className="border-l border-[#161616]/20 py-5 pl-4 sm:px-4">
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("28")}</strong>
-                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/48">{tx("Available")}</span>
+                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/70">{tx("Available")}</span>
                 </div>
                 <div className="border-l border-[#161616]/20 py-5 pl-4">
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("Jul 2028")}</strong>
-                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/48">{tx("Completion")}</span>
+                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/70">{tx("Completion")}</span>
                 </div>
               </div>
               <div className="mt-8 grid gap-3 text-sm leading-6 text-[#161616]/62">
@@ -467,7 +467,7 @@ export function BrandbookLandingPage() {
               <Image src={projectImages.sunset.src} alt={tx("Sunset over the residence facade")} fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover object-center" />
               <button
                 type="button"
-                aria-label={tx("Expand the sunset over the residence facade image")}
+                aria-label={tx("Expand image")}
                 onClick={() => setExpandedImage({ ...projectImages.sunset, alt: tx("Sunset over the residence facade") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
@@ -578,7 +578,7 @@ export function BrandbookLandingPage() {
               <p className="brandbook-eyebrow brandbook-eyebrow-light">04 — {tx("Start with AIXCO")}</p>
               <h2 className="mt-8 max-w-[8ch] text-[clamp(3.2rem,5.7vw,6.7rem)] font-medium leading-[0.88] tracking-[-0.065em]">{tx("Contact AIXCO")}</h2>
               <p className="mt-9 max-w-[25rem] text-lg leading-[1.55] text-white/60">{tx("Register for the correct customer, broker, property owner, or developer journey and the AIXCO team will follow up.")}</p>
-              <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-5 text-[0.62rem] font-semibold uppercase tracking-[0.17em] text-white/45">
+              <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-5 text-[0.62rem] font-semibold uppercase tracking-[0.17em] text-white/60">
                 <span>{tx("Private viewings")}</span><span>{tx("Investment briefs")}</span><span>{tx("Owner support")}</span>
               </div>
             </div>
@@ -623,7 +623,7 @@ export function BrandbookLandingPage() {
                   </label>
                   {submitError ? <p role="alert" className="text-sm font-medium text-[#F0A9A9]">{submitError}</p> : null}
                   <div className="flex flex-col gap-5 border-t border-white/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="max-w-[17rem] text-xs leading-[1.5] text-white/38">{tx("By sending this form, you agree that AIXCO may contact you about your request.")}</p>
+                    <p className="max-w-[17rem] text-xs leading-[1.5] text-white/70">{tx("By sending this form, you agree that AIXCO may contact you about your request.")}</p>
                     <button type="submit" disabled={isSubmitting} className="brandbook-button-gold inline-flex min-h-12 items-center justify-center gap-3 bg-[#E6C767] px-6 text-[0.68rem] font-semibold uppercase tracking-[0.17em] text-[#161616] disabled:cursor-wait disabled:opacity-60">{isSubmitting ? tx("Sending...") : tx("Send request")} <ArrowUpRight size={16} strokeWidth={1.8} /></button>
                   </div>
                 </form>
@@ -634,7 +634,7 @@ export function BrandbookLandingPage() {
       </main>
 
       <div role="contentinfo" className="border-t border-[#161616]/10 bg-[#F3EDE1]">
-        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 px-5 py-7 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/45 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-14">
+        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 px-5 py-7 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/70 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-14">
           <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="8rem" className="h-auto w-28 opacity-70" />
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <a href={`mailto:${company.email}`} className="transition-colors hover:text-[#161616]">{company.email}</a>

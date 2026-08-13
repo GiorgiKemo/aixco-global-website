@@ -12074,7 +12074,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
-  color: #9c7f3c;
+  color: #7a6224;
   font-size: 0.64rem;
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -12119,7 +12119,13 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 
 .brandbook-text-link:hover {
   border-color: var(--brandbook-gold);
-  color: #9c7f3c;
+  color: #7a6224;
+}
+
+/* Keep consent controls readable at small sizes while preserving the gold
+   brand accent. */
+.analytics-consent .text-primary {
+  color: #6a5417 !important;
 }
 
 .brandbook-input {

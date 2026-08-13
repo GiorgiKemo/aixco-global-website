@@ -24,7 +24,7 @@ export function LandingSiblingLinks({ tone }: { tone: "ivory" | "dark" }) {
 
   return (
     <nav aria-label={tx("Also from AIXCO")} className="flex flex-wrap items-center gap-x-5 gap-y-2">
-      <span className="opacity-70">{tx("Also from AIXCO")}</span>
+      <span className={tone === "dark" ? "text-white/70" : "text-[#161616]/70"}>{tx("Also from AIXCO")}</span>
       {links.map((item) => (
         <Link key={item.href} href={item.href} className={linkClass}>
           {tx(item.label)}
