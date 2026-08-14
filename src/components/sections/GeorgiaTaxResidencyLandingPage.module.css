@@ -508,7 +508,16 @@
 
 .taxYearField select {
   min-width: 9rem;
-  padding-inline: 0.85rem 2rem;
+  appearance: none;
+  padding-inline: 0.85rem 2.75rem;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 0.95rem) 50%,
+    calc(100% - 0.62rem) 50%;
+  background-repeat: no-repeat;
+  background-size: 0.35rem 0.35rem, 0.35rem 0.35rem;
 }
 
 .stayFieldset {
