@@ -894,7 +894,6 @@ export function GeorgiaTaxResidencyLandingPage() {
               <Image src={heroImage} alt="Batumi coastline and modern architecture in Georgia" fill priority quality={90} sizes="(min-width: 1600px) 115vw, (min-width: 980px) 160vw, 200vw" />
             </motion.div>
             <div className={styles.heroMediaCaption}><span>{content.hero.location}</span><span>41.6168° N · 41.6367° E</span></div>
-            <motion.div className={styles.heroMarker} animate={reducedMotion ? undefined : { rotate: 360 }} transition={reducedMotion ? undefined : { duration: 22, repeat: Infinity, ease: "linear" }} aria-hidden="true"><span /></motion.div>
           </div>
           <div className={styles.heroIndex} aria-hidden="true"><span>01</span><span /><span>04</span></div>
         </section>
