@@ -33,11 +33,15 @@ const MEDICAL_TOURISM_METADATA_DESCRIPTION =
 const GEORGIA_RESIDENCY_METADATA_TITLE = "Residence Permit and Tax Residency in Georgia | AIXCO.Global";
 const GEORGIA_RESIDENCY_METADATA_DESCRIPTION =
   "Three official AIXCO paths to reside in Georgia: business registration from about €17,000 turnover, property from €138,000, or investment from €276,000, plus the HNWI tax residency process.";
+const GEORGIA_TAX_RESIDENCY_METADATA_TITLE = "Georgia Tax Residency for HNWI | AIXCO.Global";
+const GEORGIA_TAX_RESIDENCY_METADATA_DESCRIPTION =
+  "AIXCO.Global helps internationally mobile individuals map a clear, compliant route to Georgia tax residency with private guidance across residence, documentation and cross-border context.";
 const ROUTE_METADATA = {
   "/": { title: HOME_METADATA_TITLE, description: HOME_METADATA_DESCRIPTION },
   "/reverance-batumi": { title: REVERANCE_METADATA_TITLE, description: REVERANCE_METADATA_DESCRIPTION },
   "/medical-tourism": { title: MEDICAL_TOURISM_METADATA_TITLE, description: MEDICAL_TOURISM_METADATA_DESCRIPTION },
   "/georgia-residency": { title: GEORGIA_RESIDENCY_METADATA_TITLE, description: GEORGIA_RESIDENCY_METADATA_DESCRIPTION },
+  "/georgia-tax-residency": { title: GEORGIA_TAX_RESIDENCY_METADATA_TITLE, description: GEORGIA_TAX_RESIDENCY_METADATA_DESCRIPTION },
 } as const;
 
 function isLang(value: string | null): value is Lang {

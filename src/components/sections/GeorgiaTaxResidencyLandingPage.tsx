@@ -1,0 +1,1086 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  CalendarDays,
+  Check,
+  ChevronDown,
+  Globe2,
+  House,
+  Menu,
+  Plus,
+  ShieldCheck,
+  Trash2,
+  X,
+} from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform, type Variants } from "framer-motion";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { LANGS, useI18n } from "@/i18n/I18nProvider";
+import type { Lang } from "@/i18n/languages";
+import { useSiteContent } from "@/data/site-content-context";
+import { useUI } from "@/components/ui-state";
+import { aixcoLiveDocuments, aixcoLiveImages, aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { recordContactSubmission } from "@/lib/backend/lead-capture";
+import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
+import { openAnalyticsPreferences } from "@/lib/analytics/client";
+import { calculateBestWindow, isBackwardsStay, isValidStay, type StayPeriod } from "@/lib/georgia-tax-residency-calculator";
+import { scrollToHash } from "@/lib/smooth-scroll";
+import styles from "./GeorgiaTaxResidencyLandingPage.module.css";
+
+type TaxCopy = {
+  metaTitle: string;
+  metaDescription: string;
+  nav: { clock: string; position: string; path: string; why: string; contact: string };
+  hero: {
+    eyebrow: string;
+    title: string;
+    accent: string;
+    body: string;
+    primary: string;
+    secondary: string;
+    note: string;
+    location: string;
+  };
+  clock: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    selected: string;
+    threshold: string;
+    remaining: string;
+    reached: string;
+    quickSelect: string;
+    days: string;
+    adjust: string;
+    resident: string;
+    emerging: string;
+    residentBody: string;
+    emergingBody: string;
+    disclaimer: string;
+    sourceNote: string;
+    sources: { label: string; taxCode: string; hnwi: string; permits: string };
+  };
+  chapters: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    items: { number: string; title: string; body: string }[];
+  };
+  why: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    features: { title: string; body: string }[];
+  };
+  contact: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    name: string;
+    email: string;
+    interest: string;
+    message: string;
+    namePlaceholder: string;
+    emailPlaceholder: string;
+    messagePlaceholder: string;
+    interestOptions: string[];
+    consent: string;
+    submit: string;
+    sending: string;
+    successTitle: string;
+    successBody: string;
+    reference: string;
+    another: string;
+    error: string;
+  };
+  footer: { home: string; privacy: string; terms: string; cookies: string; photos: string; rights: string };
+  language: string;
+  menu: string;
+  closeMenu: string;
+  close: string;
+  home: string;
+  consultation: string;
+};
+
+const copyByLanguage: Record<Lang, TaxCopy> = {
+  en: {
+    metaTitle: "Georgia Tax Residency for HNWI | AIXCO.Global",
+    metaDescription: "AIXCO.Global helps internationally mobile individuals map a clear, compliant route to Georgia tax residency.",
+    nav: { clock: "183-day rule", position: "Your position", path: "The route", why: "Why Georgia", contact: "Consultation" },
+    hero: {
+      eyebrow: "Georgia tax residency",
+      title: "Where your life",
+      accent: "takes shape.",
+      body: "A clearer route to Georgia tax residency for internationally mobile people, families and private clients.",
+      primary: "Schedule a consultation",
+      secondary: "Discover the route",
+      note: "AIXCO advisory · Georgia",
+      location: "Batumi · Georgia",
+    },
+    clock: {
+      eyebrow: "183-day presence check",
+      title: "Calculate from your actual stay dates.",
+      body: "Under Article 34 of Georgia's Tax Code, the general test is 183 or more days in any continuous 12-calendar-month period ending in the tax year. It is a starting point, not a standalone answer: the Code contains specific counting rules and separate routes.",
+      selected: "Selected presence",
+      threshold: "General threshold",
+      remaining: "days remaining",
+      reached: "Threshold reached",
+      quickSelect: "Quick select",
+      days: "days in a 12-month period",
+      adjust: "Days spent in Georgia in the relevant 12-month period",
+      resident: "General 183-day threshold reached",
+      emerging: "Below the general 183-day threshold",
+      residentBody: "This reaches the general statutory threshold. Resident status is established for each tax period; a certificate and any treaty outcome still require a case-specific review.",
+      emergingBody: "Below 183 days does not settle your position. Article 34 also provides a separate HNWI procedure, while other residence, source and treaty rules may still matter.",
+      disclaimer: "Illustrative information only — not tax or legal advice. Verify the current rules before acting.",
+      sourceNote: "AIXCO brochure figures in EUR are indicative conversions. The references below use current official GEL/USD thresholds and should be rechecked before filing.",
+      sources: {
+        label: "Official references",
+        taxCode: "Georgia Tax Code · Article 34",
+        hnwi: "Minister of Finance Order No. 60 · HNWI procedure",
+        permits: "SDA · residence permits",
+      },
+    },
+    chapters: {
+      eyebrow: "A clear route",
+      title: "Make the move feel considered.",
+      body: "Start with the statutory test, then separate tax residence from an immigration permit and check the HNWI procedure only if the facts fit.",
+      items: [
+        { number: "01", title: "Understand the 183-day test", body: "Count actual days using the continuous 12-month rule and keep clear travel evidence." },
+        { number: "02", title: "Separate the legal questions", body: "Tax residence, a residence permit and a tax-residency certificate are different outcomes; one does not automatically grant the others." },
+        { number: "03", title: "Check the HNWI procedure", body: "Order No. 60 uses property over GEL 3 million or annual income over GEL 200,000 in each of the preceding three years, plus a Georgian connection condition. Confirm before relying on it." },
+      ],
+    },
+    why: {
+      eyebrow: "Why Georgia",
+      title: "A framework built around facts.",
+      body: "Georgia has a clear starting point, but tax residence is determined by the Code and the complete cross-border profile — not lifestyle alone.",
+      features: [
+        { title: "183-day baseline", body: "Article 34 uses 183 or more days in any continuous 12-month period ending in the tax year." },
+        { title: "HNWI procedure", body: "Order No. 60 sets a separate route for significant-property individuals; wealth alone does not produce an automatic result." },
+        { title: "GEL thresholds", body: "The order uses property over GEL 3 million or annual income over GEL 200,000 in each of the previous three years, plus a Georgian connection: a permit/ID or at least GEL 25,000 of Georgian-source income." },
+        { title: "Permit is separate", body: "The SDA lists separate routes, including short-term property over USD 150,000 and investment residence at USD 300,000 or more. Eligibility and amounts must be checked on the official page." },
+      ],
+    },
+    contact: {
+      eyebrow: "Ready to map your position?",
+      title: "Let’s make the route legible.",
+      body: "Tell us what is changing, where you are based and what you need to understand. We will return with the right next conversation.",
+      name: "Full name",
+      email: "Email address",
+      interest: "I am interested in",
+      message: "Your message",
+      namePlaceholder: "Your name",
+      emailPlaceholder: "you@example.com",
+      messagePlaceholder: "Tell us what you are planning",
+      interestOptions: ["Georgia tax residency", "Residence permit", "Property in Batumi", "Private client advisory"],
+      consent: "By sending this form, you agree that AIXCO may contact you about your request.",
+      submit: "Request a private consultation",
+      sending: "Sending request",
+      successTitle: "Your request is with us.",
+      successBody: "A member of the AIXCO team will be in touch shortly.",
+      reference: "Reference",
+      another: "Send another request",
+      error: "We could not send this request. Please try again or email us directly.",
+    },
+    footer: { home: "Main website", privacy: "Privacy", terms: "Terms", cookies: "Cookie preferences", photos: "Photo credits", rights: "All rights reserved." },
+    language: "Change language",
+    menu: "Open menu",
+    closeMenu: "Close menu",
+    close: "Close",
+    home: "AIXCO.Global home",
+    consultation: "Book a consultation",
+  },
+  de: {
+    metaTitle: "Steuerresidenz in Georgien für HNWI | AIXCO.Global",
+    metaDescription: "AIXCO.Global begleitet international mobile Privatpersonen bei der klaren und strukturierten Prüfung einer Steuerresidenz in Georgien.",
+    nav: { clock: "183-Tage-Regel", position: "Ihre Position", path: "Der Weg", why: "Warum Georgien", contact: "Beratung" },
+    hero: {
+      eyebrow: "Steuerresidenz Georgien",
+      title: "Wo Ihr Leben",
+      accent: "Gestalt annimmt.",
+      body: "Ein klarer Weg zur Steuerresidenz in Georgien für international mobile Menschen, Familien und Privatkunden.",
+      primary: "Beratung vereinbaren",
+      secondary: "Den Weg entdecken",
+      note: "AIXCO Beratung · Georgien",
+      location: "Batumi · Georgien",
+    },
+    clock: {
+      eyebrow: "Prüfung der 183-Tage-Regel",
+      title: "Berechnen Sie anhand Ihrer tatsächlichen Aufenthaltsdaten.",
+      body: "Nach Artikel 34 des georgischen Steuergesetzbuchs gilt grundsätzlich: mindestens 183 Tage in einem beliebigen zusammenhängenden Zeitraum von 12 Kalendermonaten, der im Steuerjahr endet. Das ist ein Ausgangspunkt, keine vollständige Prüfung; das Gesetz enthält eigene Zählregeln und weitere Verfahren.",
+      selected: "Ausgewählter Aufenthalt",
+      threshold: "Allgemeiner Schwellenwert",
+      remaining: "verbleibende Tage",
+      reached: "Schwellenwert erreicht",
+      quickSelect: "Schnellauswahl",
+      days: "Tage in einem 12-Monats-Zeitraum",
+      adjust: "Aufenthaltstage in Georgien im maßgeblichen 12-Monats-Zeitraum",
+      resident: "Allgemeiner 183-Tage-Schwellenwert erreicht",
+      emerging: "Unter dem allgemeinen 183-Tage-Schwellenwert",
+      residentBody: "Damit ist der allgemeine gesetzliche Schwellenwert erreicht. Der Status wird für jedes Steuerjahr festgestellt; eine Bescheinigung und die Einordnung nach einem Doppelbesteuerungsabkommen erfordern weiterhin eine Einzelfallprüfung.",
+      emergingBody: "Weniger als 183 Tage entscheiden die Frage nicht allein. Artikel 34 sieht außerdem ein eigenes HNWI-Verfahren vor; weitere Wohnsitz-, Quellen- und Abkommensregeln können relevant sein.",
+      disclaimer: "Nur zur Orientierung — keine Steuer- oder Rechtsberatung. Prüfen Sie die aktuellen Regeln vor einer Antragstellung.",
+      sourceNote: "Die EUR-Beträge in der AIXCO-Broschüre sind indikative Umrechnungen. Die folgenden Quellen verwenden aktuelle offizielle GEL/USD-Schwellenwerte und sollten vor einer Einreichung erneut geprüft werden.",
+      sources: {
+        label: "Offizielle Quellen",
+        taxCode: "Steuergesetz Georgiens · Artikel 34",
+        hnwi: "Verordnung Nr. 60 des Finanzministers · HNWI-Verfahren",
+        permits: "SDA · Aufenthaltstitel",
+      },
+    },
+    chapters: {
+      eyebrow: "Ein klarer Weg",
+      title: "Den Schritt bewusst gestalten.",
+      body: "Beginnen Sie mit dem gesetzlichen Test, trennen Sie anschließend Steuerresidenz und Aufenthaltstitel und prüfen Sie das HNWI-Verfahren nur, wenn die Fakten passen.",
+      items: [
+        { number: "01", title: "Den 183-Tage-Test verstehen", body: "Zählen Sie die tatsächlichen Tage nach der zusammenhängenden 12-Monats-Regel und bewahren Sie klare Reisedaten auf." },
+        { number: "02", title: "Rechtsfragen trennen", body: "Steuerresidenz, Aufenthaltstitel und Steuerresidenzbescheinigung sind unterschiedliche Ergebnisse; das eine gewährt nicht automatisch das andere." },
+        { number: "03", title: "Das HNWI-Verfahren prüfen", body: "Verordnung Nr. 60 nennt Vermögen über 3 Mio. GEL oder ein Jahreseinkommen über 200.000 GEL in jedem der drei Vorjahre sowie eine Verbindung zu Georgien. Vor einer Nutzung bestätigen." },
+      ],
+    },
+    why: {
+      eyebrow: "Warum Georgien",
+      title: "Ein Rahmen, der auf Fakten beruht.",
+      body: "Georgien bietet einen klaren Ausgangspunkt, doch die Steuerresidenz richtet sich nach dem Gesetz und dem vollständigen grenzüberschreitenden Profil — nicht allein nach dem Lebensstil.",
+      features: [
+        { title: "183-Tage-Basis", body: "Artikel 34 verwendet mindestens 183 Tage in einem zusammenhängenden 12-Monats-Zeitraum, der im Steuerjahr endet." },
+        { title: "HNWI-Verfahren", body: "Verordnung Nr. 60 beschreibt einen gesonderten Weg für Personen mit erheblichem Vermögen; Vermögen allein führt nicht automatisch zum Ergebnis." },
+        { title: "GEL-Schwellenwerte", body: "Genannt werden Vermögen über 3 Mio. GEL oder Jahreseinkommen über 200.000 GEL in jedem der drei Vorjahre sowie eine Verbindung zu Georgien: Aufenthaltstitel/ID oder mindestens 25.000 GEL aus georgischer Quelle." },
+        { title: "Aufenthaltstitel getrennt", body: "Die SDA führt eigene Wege auf, darunter Immobilien über 150.000 USD für den kurzfristigen Aufenthaltstitel und mindestens 300.000 USD für den Investitionsaufenthalt. Voraussetzungen und Beträge bitte offiziell prüfen." },
+      ],
+    },
+    contact: {
+      eyebrow: "Bereit, Ihre Position zu klären?",
+      title: "Machen wir den Weg verständlich.",
+      body: "Erzählen Sie uns, was sich verändert, wo Sie derzeit leben und was Sie verstehen möchten.",
+      name: "Vollständiger Name",
+      email: "E-Mail-Adresse",
+      interest: "Ich interessiere mich für",
+      message: "Ihre Nachricht",
+      namePlaceholder: "Ihr Name",
+      emailPlaceholder: "sie@beispiel.com",
+      messagePlaceholder: "Was planen Sie?",
+      interestOptions: ["Steuerresidenz Georgien", "Aufenthaltstitel", "Immobilie in Batumi", "Private Beratung"],
+      consent: "Mit dem Absenden stimmen Sie zu, dass AIXCO Sie zu Ihrer Anfrage kontaktieren darf.",
+      submit: "Private Beratung anfragen",
+      sending: "Anfrage wird gesendet",
+      successTitle: "Ihre Anfrage ist bei uns.",
+      successBody: "Ein Mitglied des AIXCO-Teams meldet sich in Kürze.",
+      reference: "Referenz",
+      another: "Weitere Anfrage senden",
+      error: "Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    },
+    footer: { home: "Hauptwebsite", privacy: "Datenschutz", terms: "Bedingungen", cookies: "Cookie-Einstellungen", photos: "Bildnachweise", rights: "Alle Rechte vorbehalten." },
+    language: "Sprache ändern",
+    menu: "Menü öffnen",
+    closeMenu: "Menü schließen",
+    close: "Schließen",
+    home: "AIXCO.Global Startseite",
+    consultation: "Beratung buchen",
+  },
+  pl: {
+    metaTitle: "Rezydencja podatkowa w Gruzji dla HNWI | AIXCO.Global",
+    metaDescription: "AIXCO.Global pomaga osobom mobilnym międzynarodowo uporządkować drogę do rezydencji podatkowej w Gruzji.",
+    nav: { clock: "Reguła 183 dni", position: "Twoja sytuacja", path: "Droga", why: "Dlaczego Gruzja", contact: "Konsultacja" },
+    hero: {
+      eyebrow: "Rezydencja podatkowa w Gruzji",
+      title: "Tam, gdzie Twoje życie",
+      accent: "nabiera kształtu.",
+      body: "Przejrzysta droga do rezydencji podatkowej w Gruzji dla osób, rodzin i klientów prywatnych mobilnych międzynarodowo.",
+      primary: "Umów konsultację",
+      secondary: "Poznaj drogę",
+      note: "Doradztwo AIXCO · Gruzja",
+      location: "Batumi · Gruzja",
+    },
+    clock: {
+      eyebrow: "Sprawdzenie reguły 183 dni",
+      title: "Oblicz wynik na podstawie rzeczywistych dat pobytu.",
+      body: "Zgodnie z art. 34 gruzińskiego kodeksu podatkowego podstawowy test to co najmniej 183 dni w dowolnym nieprzerwanym okresie 12 miesięcy kalendarzowych kończącym się w danym roku podatkowym. To punkt wyjścia, a nie pełna odpowiedź; kodeks zawiera szczególne zasady liczenia i odrębne procedury.",
+      selected: "Wybrany pobyt",
+      threshold: "Próg ogólny",
+      remaining: "dni do progu",
+      reached: "Próg osiągnięty",
+      quickSelect: "Szybki wybór",
+      days: "dni w okresie 12 miesięcy",
+      adjust: "Dni spędzone w Gruzji w odpowiednim okresie 12 miesięcy",
+      resident: "Ogólny próg 183 dni został osiągnięty",
+      emerging: "Poniżej ogólnego progu 183 dni",
+      residentBody: "Osiągasz ogólny próg ustawowy. Status rezydenta ustala się dla każdego roku podatkowego, a zaświadczenie i wynik analizy umowy podatkowej nadal wymagają oceny konkretnej sytuacji.",
+      emergingBody: "Mniej niż 183 dni nie rozstrzyga sprawy samo w sobie. Art. 34 przewiduje także odrębną procedurę HNWI, a znaczenie mogą mieć inne zasady dotyczące rezydencji, źródeł dochodu i umów.",
+      disclaimer: "Informacja poglądowa — nie stanowi porady podatkowej ani prawnej. Przed działaniem sprawdź aktualne przepisy.",
+      sourceNote: "Kwoty w EUR w broszurze AIXCO są orientacyjnymi przeliczeniami. Poniższe źródła używają aktualnych oficjalnych progów w GEL/USD i należy je ponownie sprawdzić przed złożeniem wniosku.",
+      sources: {
+        label: "Oficjalne źródła",
+        taxCode: "Kodeks podatkowy Gruzji · art. 34",
+        hnwi: "Rozporządzenie ministra finansów nr 60 · procedura HNWI",
+        permits: "SDA · zezwolenia na pobyt",
+      },
+    },
+    chapters: {
+      eyebrow: "Jasna droga",
+      title: "Zaplanuj zmianę świadomie.",
+      body: "Zacznij od testu ustawowego, następnie oddziel rezydencję podatkową od zezwolenia na pobyt i sprawdź procedurę HNWI tylko wtedy, gdy fakty ją uzasadniają.",
+      items: [
+        { number: "01", title: "Zrozum test 183 dni", body: "Policz faktyczne dni zgodnie z zasadą nieprzerwanego okresu 12 miesięcy i zachowaj dokładną historię podróży." },
+        { number: "02", title: "Oddziel pytania prawne", body: "Rezydencja podatkowa, zezwolenie na pobyt i certyfikat rezydencji podatkowej to różne rezultaty; jedno nie daje automatycznie drugiego." },
+        { number: "03", title: "Sprawdź procedurę HNWI", body: "Rozporządzenie nr 60 wskazuje majątek powyżej 3 mln GEL lub roczny dochód powyżej 200 000 GEL w każdym z trzech poprzednich lat oraz warunek związku z Gruzją. Potwierdź to przed zastosowaniem." },
+      ],
+    },
+    why: {
+      eyebrow: "Dlaczego Gruzja",
+      title: "Ramy oparte na faktach.",
+      body: "Gruzja ma jasny punkt wyjścia, ale rezydencję podatkową określa kodeks i pełny profil transgraniczny — nie sam styl życia.",
+      features: [
+        { title: "Podstawa 183 dni", body: "Art. 34 stosuje co najmniej 183 dni w dowolnym nieprzerwanym okresie 12 miesięcy kończącym się w roku podatkowym." },
+        { title: "Procedura HNWI", body: "Rozporządzenie nr 60 opisuje odrębną ścieżkę dla osób o znacznym majątku; sam majątek nie daje automatycznego rezultatu." },
+        { title: "Progi w GEL", body: "Rozporządzenie wskazuje majątek powyżej 3 mln GEL lub roczny dochód powyżej 200 000 GEL w każdym z trzech poprzednich lat oraz związek z Gruzją: zezwolenie/ID lub co najmniej 25 000 GEL dochodu ze źródła w Gruzji." },
+        { title: "Zezwolenie to osobna kwestia", body: "SDA wymienia osobne ścieżki, w tym nieruchomość powyżej 150 000 USD dla krótkoterminowego pobytu i co najmniej 300 000 USD dla pobytu inwestycyjnego. Warunki i kwoty należy sprawdzić oficjalnie." },
+      ],
+    },
+    contact: {
+      eyebrow: "Gotowy, aby uporządkować swoją sytuację?",
+      title: "Nadajmy tej drodze jasny kształt.",
+      body: "Napisz, co się zmienia, gdzie obecnie mieszkasz i co chcesz zrozumieć.",
+      name: "Imię i nazwisko",
+      email: "Adres e-mail",
+      interest: "Interesuje mnie",
+      message: "Twoja wiadomość",
+      namePlaceholder: "Twoje imię",
+      emailPlaceholder: "ty@przyklad.com",
+      messagePlaceholder: "Co planujesz?",
+      interestOptions: ["Rezydencja podatkowa w Gruzji", "Zezwolenie na pobyt", "Nieruchomość w Batumi", "Doradztwo dla klienta prywatnego"],
+      consent: "Wysyłając formularz, wyrażasz zgodę na kontakt AIXCO w sprawie zapytania.",
+      submit: "Poproś o prywatną konsultację",
+      sending: "Wysyłanie zapytania",
+      successTitle: "Twoje zapytanie do nas dotarło.",
+      successBody: "Członek zespołu AIXCO wkrótce się z Tobą skontaktuje.",
+      reference: "Numer referencyjny",
+      another: "Wyślij kolejne zapytanie",
+      error: "Nie udało się wysłać zapytania. Spróbuj ponownie.",
+    },
+    footer: { home: "Strona główna", privacy: "Prywatność", terms: "Warunki", cookies: "Ustawienia plików cookie", photos: "Autorzy zdjęć", rights: "Wszelkie prawa zastrzeżone." },
+    language: "Zmień język",
+    menu: "Otwórz menu",
+    closeMenu: "Zamknij menu",
+    close: "Zamknij",
+    home: "Strona główna AIXCO.Global",
+    consultation: "Umów konsultację",
+  },
+  sl: {
+    metaTitle: "Davčno rezidentstvo v Gruziji za HNWI | AIXCO.Global",
+    metaDescription: "AIXCO.Global pomaga mednarodno mobilnim posameznikom razumeti jasno pot do davčnega rezidentstva v Gruziji.",
+    nav: { clock: "Pravilo 183 dni", position: "Vaš položaj", path: "Pot", why: "Zakaj Gruzija", contact: "Posvet" },
+    hero: {
+      eyebrow: "Davčno rezidentstvo v Gruziji",
+      title: "Kjer vaše življenje",
+      accent: "dobi obliko.",
+      body: "Jasnejša pot do davčnega rezidentstva v Gruziji za mednarodno mobilne posameznike, družine in zasebne stranke.",
+      primary: "Dogovorite se za posvet",
+      secondary: "Odkrijte pot",
+      note: "Svetovanje AIXCO · Gruzija",
+      location: "Batumi · Gruzija",
+    },
+    clock: {
+      eyebrow: "Preverjanje pravila 183 dni",
+      title: "Izračunajte na podlagi dejanskih datumov bivanja.",
+      body: "Po 34. členu gruzijskega davčnega zakonika je splošni test najmanj 183 dni v katerem koli neprekinjenem 12-mesečnem koledarskem obdobju, ki se konča v davčnem letu. To je izhodišče, ne popoln odgovor; zakonik vsebuje posebna pravila štetja in ločene postopke.",
+      selected: "Izbrana prisotnost",
+      threshold: "Splošni prag",
+      remaining: "preostalih dni",
+      reached: "Prag dosežen",
+      quickSelect: "Hitra izbira",
+      days: "dni v 12-mesečnem obdobju",
+      adjust: "Dnevi v Gruziji v ustreznem 12-mesečnem obdobju",
+      resident: "Splošni prag 183 dni je dosežen",
+      emerging: "Pod splošnim pragom 183 dni",
+      residentBody: "S tem dosežete splošni zakonski prag. Status rezidenta se določa za vsako davčno obdobje; potrdilo in obravnava po davčni pogodbi še vedno zahtevata presojo konkretnega primera.",
+      emergingBody: "Manj kot 183 dni samo po sebi ne odloči položaja. 34. člen določa tudi ločen postopek HNWI, pomembna pa so lahko druga pravila o rezidentstvu, viru in pogodbah.",
+      disclaimer: "Samo informativno — ni davčno ali pravno svetovanje. Pred ukrepanjem preverite veljavna pravila.",
+      sourceNote: "Zneski v EUR v brošuri AIXCO so okvirne pretvorbe. Spodnji viri uporabljajo aktualne uradne pragove v GEL/USD in jih je treba pred vložitvijo ponovno preveriti.",
+      sources: {
+        label: "Uradni viri",
+        taxCode: "Davčni zakonik Gruzije · 34. člen",
+        hnwi: "Odredba ministra za finance št. 60 · postopek HNWI",
+        permits: "SDA · dovoljenja za prebivanje",
+      },
+    },
+    chapters: {
+      eyebrow: "Jasna pot",
+      title: "Premik naj bo premišljen.",
+      body: "Začnite z zakonskim testom, nato ločite davčno rezidentstvo od dovoljenja za prebivanje in postopek HNWI preverite le, če ga dejstva podpirajo.",
+      items: [
+        { number: "01", title: "Razumite test 183 dni", body: "Preštejte dejanske dni po pravilu neprekinjenega 12-mesečnega obdobja in shranite jasne podatke o potovanjih." },
+        { number: "02", title: "Ločite pravna vprašanja", body: "Davčno rezidentstvo, dovoljenje za prebivanje in potrdilo o davčnem rezidentstvu so različni rezultati; eden drugega ne podeli samodejno." },
+        { number: "03", title: "Preverite postopek HNWI", body: "Odredba št. 60 uporablja premoženje nad 3 milijone GEL ali letni prihodek nad 200.000 GEL v vsakem od treh prejšnjih let ter pogoj povezave z Gruzijo. Pred uporabo potrdite aktualne pogoje." },
+      ],
+    },
+    why: {
+      eyebrow: "Zakaj Gruzija",
+      title: "Okvir, ki temelji na dejstvih.",
+      body: "Gruzija ima jasno izhodišče, vendar davčno rezidentstvo določata zakonik in celoten čezmejni profil — ne le življenjski slog.",
+      features: [
+        { title: "Osnova 183 dni", body: "34. člen uporablja najmanj 183 dni v katerem koli neprekinjenem 12-mesečnem obdobju, ki se konča v davčnem letu." },
+        { title: "Postopek HNWI", body: "Odredba št. 60 opisuje ločeno pot za osebe z znatnim premoženjem; samo premoženje ne prinese samodejnega rezultata." },
+        { title: "Pragi v GEL", body: "Odredba uporablja premoženje nad 3 milijone GEL ali letni prihodek nad 200.000 GEL v vsakem od treh prejšnjih let ter povezavo z Gruzijo: dovoljenje/ID ali najmanj 25.000 GEL prihodka iz gruzijskega vira." },
+        { title: "Dovoljenje je ločeno", body: "SDA navaja ločene poti, vključno z nepremičnino nad 150.000 USD za kratkoročno dovoljenje in najmanj 300.000 USD za investicijsko prebivanje. Pogoje in zneske preverite na uradni strani." },
+      ],
+    },
+    contact: {
+      eyebrow: "Ste pripravljeni razumeti svoj položaj?",
+      title: "Naj bo pot jasna.",
+      body: "Povejte nam, kaj se spreminja, kje živite in kaj želite razumeti.",
+      name: "Polno ime",
+      email: "E-poštni naslov",
+      interest: "Zanima me",
+      message: "Vaše sporočilo",
+      namePlaceholder: "Vaše ime",
+      emailPlaceholder: "vi@primer.com",
+      messagePlaceholder: "Kaj načrtujete?",
+      interestOptions: ["Davčno rezidentstvo v Gruziji", "Dovoljenje za prebivanje", "Nepremičnina v Batumiju", "Svetovanje zasebni stranki"],
+      consent: "Z oddajo obrazca soglašate, da vas AIXCO kontaktira glede vašega povpraševanja.",
+      submit: "Zahtevajte zasebni posvet",
+      sending: "Pošiljanje povpraševanja",
+      successTitle: "Vaše povpraševanje smo prejeli.",
+      successBody: "Član ekipe AIXCO vas bo kmalu kontaktiral.",
+      reference: "Referenca",
+      another: "Pošljite novo povpraševanje",
+      error: "Povpraševanja ni bilo mogoče poslati. Poskusite znova.",
+    },
+    footer: { home: "Glavna stran", privacy: "Zasebnost", terms: "Pogoji", cookies: "Nastavitve piškotkov", photos: "Avtorji fotografij", rights: "Vse pravice pridržane." },
+    language: "Spremenite jezik",
+    menu: "Odprite meni",
+    closeMenu: "Zaprite meni",
+    close: "Zapri",
+    home: "Domov AIXCO.Global",
+    consultation: "Dogovorite posvet",
+  },
+  ru: {
+    metaTitle: "Налоговое резидентство в Грузии для HNWI | AIXCO.Global",
+    metaDescription: "AIXCO.Global помогает международно мобильным клиентам выстроить понятный путь к налоговому резидентству в Грузии.",
+    nav: { clock: "Правило 183 дней", position: "Ваша ситуация", path: "Маршрут", why: "Почему Грузия", contact: "Консультация" },
+    hero: {
+      eyebrow: "Налоговое резидентство в Грузии",
+      title: "Там, где ваша жизнь",
+      accent: "обретает форму.",
+      body: "Понятный путь к налоговому резидентству в Грузии для мобильных людей, семей и частных клиентов.",
+      primary: "Запланировать консультацию",
+      secondary: "Изучить маршрут",
+      note: "Консультация AIXCO · Грузия",
+      location: "Батуми · Грузия",
+    },
+    clock: {
+      eyebrow: "Проверка правила 183 дней",
+      title: "Рассчитайте результат по фактическим датам пребывания.",
+      body: "Согласно статье 34 Налогового кодекса Грузии, общий критерий — не менее 183 дней в любом непрерывном периоде из 12 календарных месяцев, который заканчивается в налоговом году. Это отправная точка, а не полный ответ: Кодекс содержит особые правила подсчёта и отдельные процедуры.",
+      selected: "Выбранное присутствие",
+      threshold: "Общий порог",
+      remaining: "дней до порога",
+      reached: "Порог достигнут",
+      quickSelect: "Быстрый выбор",
+      days: "дней за 12-месячный период",
+      adjust: "Дни, проведённые в Грузии за соответствующий 12-месячный период",
+      resident: "Общий порог 183 дней достигнут",
+      emerging: "Ниже общего порога 183 дней",
+      residentBody: "Это достигает общего установленного законом порога. Статус резидента определяется за каждый налоговый период; сертификат и результат по налоговому соглашению всё равно требуют анализа конкретной ситуации.",
+      emergingBody: "Менее 183 дней сами по себе не определяют вашу ситуацию. Статья 34 также предусматривает отдельную процедуру HNWI, а значение могут иметь другие правила о резидентстве, источнике дохода и соглашениях.",
+      disclaimer: "Только для общего ознакомления — не налоговая и не юридическая консультация. Проверьте действующие правила перед действиями.",
+      sourceNote: "Суммы в EUR в брошюре AIXCO являются ориентировочными конверсиями. В приведённых источниках используются актуальные официальные пороги в GEL/USD; проверьте их перед подачей заявления.",
+      sources: {
+        label: "Официальные источники",
+        taxCode: "Налоговый кодекс Грузии · статья 34",
+        hnwi: "Приказ министра финансов №60 · процедура HNWI",
+        permits: "SDA · виды на жительство",
+      },
+    },
+    chapters: {
+      eyebrow: "Понятный маршрут",
+      title: "Переезд должен быть осознанным.",
+      body: "Начните с установленного законом критерия, затем отделите налоговое резидентство от вида на жительство и проверяйте процедуру HNWI только при наличии соответствующих фактов.",
+      items: [
+        { number: "01", title: "Понять тест 183 дней", body: "Подсчитайте фактические дни по правилу непрерывного 12-месячного периода и сохраняйте точные данные о поездках." },
+        { number: "02", title: "Разделить правовые вопросы", body: "Налоговое резидентство, вид на жительство и сертификат налогового резидентства — разные результаты; одно не даёт автоматически другое." },
+        { number: "03", title: "Проверить процедуру HNWI", body: "Приказ №60 использует имущество свыше 3 млн GEL или годовой доход свыше 200 000 GEL в каждом из трёх предыдущих лет, а также условие связи с Грузией. Подтвердите правила перед применением." },
+      ],
+    },
+    why: {
+      eyebrow: "Почему Грузия",
+      title: "Система, основанная на фактах.",
+      body: "В Грузии есть понятная отправная точка, но налоговое резидентство определяется Кодексом и полной трансграничной картиной — а не только образом жизни.",
+      features: [
+        { title: "База 183 дней", body: "Статья 34 использует не менее 183 дней в любом непрерывном 12-месячном периоде, который заканчивается в налоговом году." },
+        { title: "Процедура HNWI", body: "Приказ №60 описывает отдельный путь для лиц со значительным имуществом; само имущество не даёт автоматического результата." },
+        { title: "Пороги в GEL", body: "Приказ использует имущество свыше 3 млн GEL или годовой доход свыше 200 000 GEL в каждом из трёх предыдущих лет, а также связь с Грузией: вид на жительство/ID или не менее 25 000 GEL дохода из грузинского источника." },
+        { title: "ВНЖ — отдельный вопрос", body: "SDA указывает отдельные пути, включая недвижимость свыше 150 000 USD для краткосрочного ВНЖ и от 300 000 USD для инвестиционного ВНЖ. Условия и суммы нужно проверить официально." },
+      ],
+    },
+    contact: {
+      eyebrow: "Готовы разобраться в своей ситуации?",
+      title: "Сделаем маршрут понятным.",
+      body: "Расскажите, что меняется, где вы находитесь и что хотите прояснить.",
+      name: "Имя и фамилия",
+      email: "Электронная почта",
+      interest: "Меня интересует",
+      message: "Ваше сообщение",
+      namePlaceholder: "Ваше имя",
+      emailPlaceholder: "you@example.com",
+      messagePlaceholder: "Что вы планируете?",
+      interestOptions: ["Налоговое резидентство в Грузии", "Вид на жительство", "Недвижимость в Батуми", "Консультация частного клиента"],
+      consent: "Отправляя форму, вы соглашаетесь, что AIXCO может связаться с вами по вашему запросу.",
+      submit: "Запросить личную консультацию",
+      sending: "Запрос отправляется",
+      successTitle: "Мы получили ваш запрос.",
+      successBody: "Представитель AIXCO свяжется с вами в ближайшее время.",
+      reference: "Номер запроса",
+      another: "Отправить новый запрос",
+      error: "Не удалось отправить запрос. Попробуйте ещё раз.",
+    },
+    footer: { home: "Главная страница", privacy: "Конфиденциальность", terms: "Условия", cookies: "Настройки файлов cookie", photos: "Авторы фотографий", rights: "Все права защищены." },
+    language: "Изменить язык",
+    menu: "Открыть меню",
+    closeMenu: "Закрыть меню",
+    close: "Закрыть",
+    home: "Главная AIXCO.Global",
+    consultation: "Записаться на консультацию",
+  },
+};
+
+type CalculatorCopy = {
+  title: string;
+  intro: string;
+  targetYear: string;
+  stays: string;
+  stay: string;
+  arrival: string;
+  departure: string;
+  addStay: string;
+  removeStay: string;
+  incomplete: string;
+  invalid: string;
+  result: string;
+  day: string;
+  days: string;
+  bestWindow: string;
+  waiting: string;
+  noDaysInYear: string;
+  method: string;
+  caveat: string;
+};
+
+const calculatorCopyByLanguage: Record<Lang, CalculatorCopy> = {
+  en: {
+    title: "Check your stay dates",
+    intro: "Enter every period you were physically present in Georgia. The result updates automatically.",
+    targetYear: "Tax year to test",
+    stays: "Stays in Georgia",
+    stay: "Stay",
+    arrival: "Arrival date",
+    departure: "Departure date",
+    addStay: "Add another stay",
+    removeStay: "Remove stay",
+    incomplete: "Enter both dates.",
+    invalid: "Departure must be on or after arrival.",
+    result: "Best 12-month result",
+    day: "day",
+    days: "days",
+    bestWindow: "Best qualifying window",
+    waiting: "Add complete stay dates to calculate.",
+    noDaysInYear: "No entered days fall within a 12-month window ending in this tax year.",
+    method: "Arrival and departure days are counted. Overlapping stays are counted once. The calculator checks every continuous 12-month window ending in the selected tax year.",
+    caveat: "Preliminary check only: Article 34 contains special inclusion and exclusion rules and prevents reusing days applied to a previous tax period. AIXCO should verify the result before it is relied upon.",
+  },
+  de: {
+    title: "Aufenthaltsdaten prüfen",
+    intro: "Tragen Sie jeden Zeitraum ein, in dem Sie sich tatsächlich in Georgien aufgehalten haben. Das Ergebnis wird automatisch aktualisiert.",
+    targetYear: "Zu prüfendes Steuerjahr",
+    stays: "Aufenthalte in Georgien",
+    stay: "Aufenthalt",
+    arrival: "Einreisedatum",
+    departure: "Ausreisedatum",
+    addStay: "Weiteren Aufenthalt hinzufügen",
+    removeStay: "Aufenthalt entfernen",
+    incomplete: "Bitte beide Daten eingeben.",
+    invalid: "Die Ausreise darf nicht vor der Einreise liegen.",
+    result: "Bestes 12-Monats-Ergebnis",
+    day: "Tag",
+    days: "Tage",
+    bestWindow: "Maßgeblicher Zeitraum",
+    waiting: "Vollständige Aufenthaltsdaten eingeben, um zu berechnen.",
+    noDaysInYear: "Keiner der eingegebenen Tage liegt in einem 12-Monats-Zeitraum, der in diesem Steuerjahr endet.",
+    method: "Einreise- und Ausreisetage werden mitgezählt. Überschneidungen zählen nur einmal. Geprüft wird jeder zusammenhängende 12-Monats-Zeitraum, der im gewählten Steuerjahr endet.",
+    caveat: "Nur eine vorläufige Prüfung: Artikel 34 enthält besondere Ein- und Ausschlussregeln und untersagt die erneute Verwendung von Tagen, die bereits einem früheren Steuerzeitraum zugeordnet wurden. AIXCO sollte das Ergebnis vor einer Verwendung prüfen.",
+  },
+  pl: {
+    title: "Sprawdź daty pobytu",
+    intro: "Wprowadź każdy okres faktycznego pobytu w Gruzji. Wynik zaktualizuje się automatycznie.",
+    targetYear: "Sprawdzany rok podatkowy",
+    stays: "Pobyty w Gruzji",
+    stay: "Pobyt",
+    arrival: "Data przyjazdu",
+    departure: "Data wyjazdu",
+    addStay: "Dodaj kolejny pobyt",
+    removeStay: "Usuń pobyt",
+    incomplete: "Wprowadź obie daty.",
+    invalid: "Data wyjazdu nie może być wcześniejsza niż data przyjazdu.",
+    result: "Najlepszy wynik za 12 miesięcy",
+    day: "dzień",
+    days: "dni",
+    bestWindow: "Najkorzystniejszy okres",
+    waiting: "Dodaj kompletne daty pobytu, aby wykonać obliczenie.",
+    noDaysInYear: "Żaden z wprowadzonych dni nie przypada na okres 12 miesięcy kończący się w tym roku podatkowym.",
+    method: "Dzień przyjazdu i wyjazdu są wliczane. Nakładające się pobyty liczą się tylko raz. Kalkulator sprawdza każdy ciągły okres 12 miesięcy kończący się w wybranym roku podatkowym.",
+    caveat: "To wyłącznie wstępna ocena: art. 34 zawiera szczególne zasady włączeń i wyłączeń oraz zakazuje ponownego użycia dni przypisanych do poprzedniego okresu podatkowego. AIXCO powinno zweryfikować wynik przed jego wykorzystaniem.",
+  },
+  sl: {
+    title: "Preverite datume bivanja",
+    intro: "Vnesite vsako obdobje dejanske prisotnosti v Gruziji. Rezultat se posodobi samodejno.",
+    targetYear: "Davčno leto za preverjanje",
+    stays: "Bivanja v Gruziji",
+    stay: "Bivanje",
+    arrival: "Datum prihoda",
+    departure: "Datum odhoda",
+    addStay: "Dodaj bivanje",
+    removeStay: "Odstrani bivanje",
+    incomplete: "Vnesite oba datuma.",
+    invalid: "Datum odhoda ne sme biti pred datumom prihoda.",
+    result: "Najboljši 12-mesečni rezultat",
+    day: "dan",
+    days: "dni",
+    bestWindow: "Upoštevano obdobje",
+    waiting: "Za izračun dodajte popolne datume bivanja.",
+    noDaysInYear: "Noben vneseni dan ne spada v 12-mesečno obdobje, ki se konča v tem davčnem letu.",
+    method: "Dan prihoda in odhoda se vštevata. Prekrivajoča se bivanja se štejejo samo enkrat. Kalkulator preveri vsako neprekinjeno 12-mesečno obdobje, ki se konča v izbranem davčnem letu.",
+    caveat: "To je le predhodno preverjanje: 34. člen vsebuje posebna pravila o vključitvah in izključitvah ter prepoveduje ponovno uporabo dni, pripisanih prejšnjemu davčnemu obdobju. AIXCO mora rezultat preveriti, preden se nanj zanesete.",
+  },
+  ru: {
+    title: "Проверьте даты пребывания",
+    intro: "Укажите каждый период фактического пребывания в Грузии. Результат обновится автоматически.",
+    targetYear: "Проверяемый налоговый год",
+    stays: "Периоды пребывания в Грузии",
+    stay: "Период",
+    arrival: "Дата въезда",
+    departure: "Дата выезда",
+    addStay: "Добавить период",
+    removeStay: "Удалить период",
+    incomplete: "Укажите обе даты.",
+    invalid: "Дата выезда не может быть раньше даты въезда.",
+    result: "Лучший результат за 12 месяцев",
+    day: "день",
+    days: "дней",
+    bestWindow: "Расчётный период",
+    waiting: "Для расчёта добавьте полные даты пребывания.",
+    noDaysInYear: "Ни один из введённых дней не входит в 12-месячный период, заканчивающийся в этом налоговом году.",
+    method: "Дни въезда и выезда учитываются. Пересекающиеся периоды считаются один раз. Калькулятор проверяет каждый непрерывный 12-месячный период, заканчивающийся в выбранном налоговом году.",
+    caveat: "Только предварительная оценка: статья 34 содержит специальные правила включения и исключения дней и запрещает повторно учитывать дни, использованные для предыдущего налогового периода. Перед использованием результата AIXCO должен его проверить.",
+  },
+};
+
+const heroImage = aixcoLiveImages.taxResidencyHeroGenerated;
+const chapterImages = [
+  aixcoLiveImages.taxResidencyRouteArchitecture,
+  aixcoLiveImages.batumiMosaicGoldenHourCoastline,
+  aixcoLiveImages.taxResidencyRouteNight,
+] as const;
+
+const officialSourceLinks = {
+  taxCode: "https://www.matsne.gov.ge/en/document/view/1043717?publication=230",
+  hnwi: "https://matsne.gov.ge/ka/document/view/5739890",
+  permits: "https://sda.gov.ge/en/products/migration-residence-permits/",
+} as const;
+
+const reveal: Variants = {
+  hidden: { opacity: 0, y: 36 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.82, ease: [0.16, 1, 0.3, 1] } },
+};
+
+function scrollToSection(id: string) {
+  scrollToHash(`#${id}`);
+}
+
+function getPositionCopy(days: number, content: TaxCopy["clock"]) {
+  return days >= 183
+    ? { title: content.resident, body: content.residentBody }
+    : { title: content.emerging, body: content.emergingBody };
+}
+
+const INITIAL_TAX_YEAR = new Date().getUTCFullYear();
+
+function formatCalculatorDate(timestamp: number, lang: Lang) {
+  const locale = { en: "en-GB", de: "de-DE", pl: "pl-PL", sl: "sl-SI", ru: "ru-RU" }[lang];
+  return new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(timestamp));
+}
+
+export function GeorgiaTaxResidencyLandingPage() {
+  const { lang, setLang } = useI18n();
+  const { company } = useSiteContent();
+  const { openPrivacy, openTerms } = useUI();
+  const content = copyByLanguage[lang] ?? copyByLanguage.en;
+  const calculator = calculatorCopyByLanguage[lang] ?? calculatorCopyByLanguage.en;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [taxYear, setTaxYear] = useState(INITIAL_TAX_YEAR);
+  const [stays, setStays] = useState<StayPeriod[]>([{ id: 1, arrival: "", departure: "" }]);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [requestReference, setRequestReference] = useState<string | null>(null);
+  const languageRef = useRef<HTMLDivElement | null>(null);
+  const nextStayId = useRef(2);
+  const formStartedAt = useRef(Date.now());
+  const reducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.35 });
+  const heroImageY = useTransform(smoothProgress, [0, 0.28], [0, 88]);
+  const progressWidth = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
+  const [scrolled, setScrolled] = useState(false);
+  const currentLanguage = LANGS.find((option) => option.code === lang)?.native ?? lang.toUpperCase();
+  const calculation = useMemo(() => calculateBestWindow(stays, taxYear), [stays, taxYear]);
+  const hasValidStays = useMemo(() => stays.some(isValidStay), [stays]);
+  const days = calculation.days;
+  const position = useMemo(() => getPositionCopy(days, content.clock), [content.clock, days]);
+  const daysRemaining = Math.max(0, 183 - days);
+  const taxYearOptions = useMemo(
+    () => Array.from({ length: 8 }, (_, index) => INITIAL_TAX_YEAR + 1 - index),
+    [],
+  );
+
+  useEffect(() => {
+    document.title = content.metaTitle;
+    document.documentElement.lang = lang;
+    const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    if (description) description.content = content.metaDescription;
+  }, [content.metaDescription, content.metaTitle, lang]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 32);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!languageOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.target instanceof Node && !languageRef.current?.contains(event.target)) setLanguageOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLanguageOpen(false);
+    };
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [languageOpen]);
+
+  const handleNav = (id: string) => {
+    setMenuOpen(false);
+    setTimeout(() => scrollToSection(id), 0);
+  };
+
+  const updateStay = (id: number, field: "arrival" | "departure", value: string) => {
+    setStays((current) => current.map((stay) => (stay.id === id ? { ...stay, [field]: value } : stay)));
+  };
+
+  const addStay = () => {
+    const id = nextStayId.current;
+    nextStayId.current += 1;
+    setStays((current) => [...current, { id, arrival: "", departure: "" }]);
+  };
+
+  const removeStay = (id: number) => {
+    setStays((current) => current.length === 1
+      ? [{ ...current[0], arrival: "", departure: "" }]
+      : current.filter((stay) => stay.id !== id));
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (submitting) return;
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") ?? "").trim();
+    const email = String(form.get("email") ?? "").trim();
+    const interest = String(form.get("interest") ?? "").trim();
+    const message = String(form.get("message") ?? "").trim();
+    const website = String(form.get("website") ?? "").trim();
+    setSubmitError(null);
+    setSubmitting(true);
+    const result = await recordContactSubmission(
+      { name, email, interest: `Georgia tax residency: ${interest}`, message, requestType: "message" },
+      { antiAbuse: { website, startedAt: formStartedAt.current }, locale: lang },
+    );
+    setSubmitting(false);
+    if (result.ok) {
+      setRequestReference(result.reference ?? null);
+      setSubmitted(true);
+      return;
+    }
+    setSubmitError(content.contact.error || getContactSubmitErrorMessage(result.reason));
+  };
+
+  const iconForChapter = [CalendarDays, House, ShieldCheck] as const;
+
+  return (
+    <div id="main-content" className={styles.page}>
+      <motion.div className={styles.progressBar} style={{ width: progressWidth }} aria-hidden="true" />
+
+      <header className={`${styles.header} ${scrolled || menuOpen ? styles.headerScrolled : ""}`}>
+        <div className={styles.headerInner}>
+          <Link href="/" aria-label={content.home} className={styles.logoLink}>
+            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} priority sizes="9rem" />
+          </Link>
+          <nav aria-label="Primary navigation" className={styles.desktopNav}>
+            <button type="button" onClick={() => handleNav("clock")}>{content.nav.clock}</button>
+            <button type="button" onClick={() => handleNav("position")}>{content.nav.position}</button>
+            <button type="button" onClick={() => handleNav("path")}>{content.nav.path}</button>
+            <button type="button" onClick={() => handleNav("why")}>{content.nav.why}</button>
+          </nav>
+          <div className={styles.headerActions}>
+            <button type="button" className={styles.headerCta} onClick={() => handleNav("contact")}>
+              {content.consultation}<ArrowUpRight size={14} aria-hidden />
+            </button>
+            <div className={styles.language} ref={languageRef}>
+              <button type="button" className={styles.languageButton} aria-label={`${currentLanguage} — ${content.language}`} aria-expanded={languageOpen} onClick={() => setLanguageOpen((open) => !open)}>
+                <Globe2 size={15} aria-hidden /><span>{currentLanguage}</span><ChevronDown size={13} className={languageOpen ? styles.chevronOpen : ""} aria-hidden />
+              </button>
+              <AnimatePresence>
+                {languageOpen ? (
+                  <motion.div className={styles.languageMenu} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
+                    {LANGS.map((option) => (
+                      <button key={option.code} type="button" data-active={option.code === lang} onClick={() => { setLang(option.code); setLanguageOpen(false); }}>
+                        <span>{option.label}</span><span>{option.native}</span>
+                      </button>
+                    ))}
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+            </div>
+            <button type="button" className={styles.menuButton} aria-label={menuOpen ? content.closeMenu : content.menu} aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>
+              {menuOpen ? <X size={21} aria-hidden /> : <Menu size={21} aria-hidden />}
+            </button>
+          </div>
+        </div>
+        <AnimatePresence>
+          {menuOpen ? (
+            <motion.nav className={styles.mobileNav} aria-label="Mobile navigation" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+              {["clock", "position", "path", "why", "contact"].map((id) => (
+                <button key={id} type="button" onClick={() => handleNav(id)}>{content.nav[id as keyof typeof content.nav]}</button>
+              ))}
+            </motion.nav>
+          ) : null}
+        </AnimatePresence>
+      </header>
+
+      <main>
+        <section className={styles.hero} aria-labelledby="tax-hero-title">
+          <div className={styles.heroCopy}>
+            <motion.div initial={reducedMotion ? false : "hidden"} animate="visible" variants={reveal}>
+              <p className={styles.eyebrow}><span />{content.hero.eyebrow}</p>
+              <h1 id="tax-hero-title">{content.hero.title}<br /><span>{content.hero.accent}</span></h1>
+              <p className={styles.heroBody}>{content.hero.body}</p>
+              <div className={styles.heroActions}>
+                <button type="button" className={styles.goldButton} onClick={() => handleNav("contact")}>{content.hero.primary}<ArrowUpRight size={16} aria-hidden /></button>
+                <button type="button" className={styles.textButton} onClick={() => handleNav("clock")}>{content.hero.secondary}<ArrowDown size={16} aria-hidden /></button>
+              </div>
+              <div className={styles.heroFootnote}><span>{content.hero.note}</span><span>{content.hero.location}</span></div>
+            </motion.div>
+          </div>
+          <div className={styles.heroMedia}>
+            <motion.div className={styles.heroImageInner} style={reducedMotion ? undefined : { y: heroImageY }}>
+              <Image src={heroImage} alt="Batumi coastline and modern architecture in Georgia" fill priority quality={90} sizes="(min-width: 1600px) 115vw, (min-width: 980px) 160vw, 200vw" />
+            </motion.div>
+            <div className={styles.heroMediaCaption}><span>{content.hero.location}</span><span>41.6168° N · 41.6367° E</span></div>
+            <motion.div className={styles.heroMarker} animate={reducedMotion ? undefined : { rotate: 360 }} transition={reducedMotion ? undefined : { duration: 22, repeat: Infinity, ease: "linear" }} aria-hidden="true"><span /></motion.div>
+          </div>
+          <div className={styles.heroIndex} aria-hidden="true"><span>01</span><span /><span>04</span></div>
+        </section>
+
+        <section id="clock" className={styles.clockSection} aria-labelledby="clock-title">
+          <div className={styles.sectionGrid}>
+            <motion.div className={styles.clockIntro} initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal}>
+              <p className={styles.eyebrow}><span />{content.clock.eyebrow}</p>
+              <h2 id="clock-title">{content.clock.title}</h2>
+              <p>{content.clock.body}</p>
+              <button type="button" className={styles.inlineLink} onClick={() => handleNav("position")}>{content.nav.position}<ArrowDown size={15} aria-hidden /></button>
+            </motion.div>
+            <motion.div className={styles.clockPanel} initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.15 }} variants={reveal}>
+              <div className={styles.calculatorHeader}>
+                <div>
+                  <h3>{calculator.title}</h3>
+                  <p>{calculator.intro}</p>
+                </div>
+                <label className={styles.taxYearField}>
+                  <span>{calculator.targetYear}</span>
+                  <select value={taxYear} onChange={(event) => setTaxYear(Number(event.target.value))}>
+                    {taxYearOptions.map((year) => <option key={year} value={year}>{year}</option>)}
+                  </select>
+                </label>
+              </div>
+
+              <fieldset className={styles.stayFieldset}>
+                <legend>{calculator.stays}</legend>
+                <div className={styles.periodList}>
+                  {stays.map((stay, index) => {
+                    const incomplete = Boolean(stay.arrival || stay.departure) && (!stay.arrival || !stay.departure);
+                    const invalid = isBackwardsStay(stay);
+                    const error = incomplete ? calculator.incomplete : invalid ? calculator.invalid : null;
+                    return (
+                      <div key={stay.id} className={styles.periodItem}>
+                        <div className={styles.periodHeading}>
+                          <span>{calculator.stay} {index + 1}</span>
+                          <button type="button" onClick={() => removeStay(stay.id)} aria-label={`${calculator.removeStay} ${index + 1}`}>
+                            <Trash2 size={15} aria-hidden />{calculator.removeStay}
+                          </button>
+                        </div>
+                        <div className={styles.periodFields}>
+                          <label className={styles.dateField}>
+                            <span>{calculator.arrival}</span>
+                            <input type="date" value={stay.arrival} onChange={(event) => updateStay(stay.id, "arrival", event.target.value)} onInput={(event) => updateStay(stay.id, "arrival", (event.target as HTMLInputElement).value)} aria-invalid={error ? true : undefined} />
+                          </label>
+                          <label className={styles.dateField}>
+                            <span>{calculator.departure}</span>
+                            <input type="date" value={stay.departure} onChange={(event) => updateStay(stay.id, "departure", event.target.value)} onInput={(event) => updateStay(stay.id, "departure", (event.target as HTMLInputElement).value)} aria-invalid={error ? true : undefined} />
+                          </label>
+                        </div>
+                        {error ? <p className={styles.periodError} role="alert">{error}</p> : null}
+                      </div>
+                    );
+                  })}
+                </div>
+                <button type="button" className={styles.addPeriod} onClick={addStay} disabled={stays.length >= 10}>
+                  <Plus size={16} aria-hidden />{calculator.addStay}
+                </button>
+              </fieldset>
+
+              <div id="position" className={styles.resultPanel} aria-live="polite">
+                <div className={styles.resultPrimary}>
+                  <span>{calculator.result}</span>
+                  <strong>{days}<small>{days === 1 ? calculator.day : calculator.days}</small></strong>
+                </div>
+                <div className={`${styles.resultThreshold} ${days >= 183 ? styles.resultThresholdReached : ""}`}>
+                  <div><span>{content.clock.threshold}</span><strong>183</strong></div>
+                  <div>
+                    {days >= 183 ? <Check size={25} strokeWidth={1.7} aria-hidden /> : <strong>{daysRemaining}</strong>}
+                    <span>{days >= 183 ? content.clock.reached : content.clock.remaining}</span>
+                  </div>
+                </div>
+                <div className={styles.windowResult}>
+                  <span>{calculator.bestWindow}</span>
+                  <strong>{calculation.start !== null && calculation.end !== null
+                    ? `${formatCalculatorDate(calculation.start, lang)} — ${formatCalculatorDate(calculation.end, lang)}`
+                    : hasValidStays ? calculator.noDaysInYear : calculator.waiting}</strong>
+                </div>
+              </div>
+              <p className={styles.calculationMethod}>{calculator.method}</p>
+              <AnimatePresence mode="wait">
+                {calculation.start !== null ? (
+                  <motion.div key={days >= 183 ? "resident" : "route"} className={styles.positionNote} initial={reducedMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={reducedMotion ? undefined : { opacity: 0, y: -8 }} transition={{ duration: 0.3 }} aria-live="polite">
+                    <span className={styles.positionDot} />
+                    <div><strong>{position.title}</strong><p>{position.body}</p></div>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+              <p className={styles.calculatorCaveat}>{calculator.caveat}</p>
+              <p className={styles.disclaimer}>{content.clock.disclaimer}</p>
+              <div className={styles.sourceLinks}>
+                <p>{content.clock.sources.label}</p>
+                <div>
+                  <a href={officialSourceLinks.taxCode} target="_blank" rel="noreferrer">{content.clock.sources.taxCode}</a>
+                  <a href={officialSourceLinks.hnwi} target="_blank" rel="noreferrer">{content.clock.sources.hnwi}</a>
+                  <a href={officialSourceLinks.permits} target="_blank" rel="noreferrer">{content.clock.sources.permits}</a>
+                </div>
+                <small>{content.clock.sourceNote}</small>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section id="path" className={styles.chapterSection} aria-labelledby="path-title">
+          <div className={styles.chapterSticky}>
+            <motion.div initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal}>
+              <p className={styles.eyebrow}><span />{content.chapters.eyebrow}</p>
+              <h2 id="path-title">{content.chapters.title}</h2>
+              <p>{content.chapters.body}</p>
+              <div className={styles.chapterRule} />
+              <span className={styles.chapterSignature}>AIXCO / PRIVATE CLIENTS</span>
+            </motion.div>
+          </div>
+          <div className={styles.chapterList}>
+            {content.chapters.items.map((item, index) => {
+              const Icon = iconForChapter[index];
+              return (
+                <motion.article key={item.number} className={styles.chapterItem} initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.25 }} variants={reveal}>
+                  <div className={styles.chapterNumber}><span>{item.number}</span><span className={styles.chapterNumberLine} /></div>
+                  <div className={styles.chapterText}><Icon size={21} strokeWidth={1.35} aria-hidden /><h3>{item.title}</h3><p>{item.body}</p></div>
+                  <div className={styles.chapterImage}><Image src={chapterImages[index]} alt="" fill quality={90} sizes="(min-width: 980px) 35vw, 88vw" /></div>
+                </motion.article>
+              );
+            })}
+          </div>
+        </section>
+
+        <section id="why" className={styles.whySection} aria-labelledby="why-title">
+          <div className={styles.whyImage}><Image src={aixcoLiveImages.taxResidencyWhyGeorgia} alt="Batumi skyline and waterfront at sunset" fill quality={90} sizes="(min-width: 980px) 160vw, 100vw" /></div>
+          <div className={styles.whyCopy}>
+            <motion.div initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal}>
+              <p className={styles.eyebrow}><span />{content.why.eyebrow}</p>
+              <h2 id="why-title">{content.why.title}</h2>
+              <p className={styles.whyBody}>{content.why.body}</p>
+            </motion.div>
+            <div className={styles.featureGrid}>
+              {content.why.features.map((feature, index) => (
+                <motion.article key={feature.title} initial={reducedMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.55, delay: index * 0.06 }}>
+                  <span>0{index + 1}</span><h3>{feature.title}</h3><p>{feature.body}</p>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className={styles.contactSection} aria-labelledby="contact-title">
+          <div className={styles.contactIntro}>
+            <motion.div initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal}>
+              <p className={styles.eyebrow}><span />{content.contact.eyebrow}</p>
+              <h2 id="contact-title">{content.contact.title}</h2>
+              <p>{content.contact.body}</p>
+              <div className={styles.contactCoordinates}><span>41.6168° N</span><span>41.6367° E</span><span>Private client desk</span></div>
+            </motion.div>
+          </div>
+          <div className={styles.contactPanel}>
+            {submitted ? (
+              <motion.div className={styles.success} initial={reducedMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} role="status">
+                <span className={styles.successIcon}><Check size={25} aria-hidden /></span>
+                <h3>{content.contact.successTitle}</h3><p>{content.contact.successBody}</p>
+                {requestReference ? <p className={styles.reference}>{content.contact.reference}: {requestReference}</p> : null}
+                <button type="button" className={styles.textButton} onClick={() => { setSubmitted(false); setRequestReference(null); formStartedAt.current = Date.now(); }}>{content.contact.another}<ArrowUpRight size={15} aria-hidden /></button>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <input className={styles.honeypot} type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+                <div className={styles.formRow}>
+                  <label>{content.contact.name}<input required minLength={2} maxLength={100} name="name" autoComplete="name" placeholder={content.contact.namePlaceholder} /></label>
+                  <label>{content.contact.email}<input required maxLength={255} name="email" type="email" autoComplete="email" placeholder={content.contact.emailPlaceholder} /></label>
+                </div>
+                <label>{content.contact.interest}<select name="interest" defaultValue={content.contact.interestOptions[0]}>{content.contact.interestOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
+                <label>{content.contact.message}<textarea required minLength={10} maxLength={1500} rows={5} name="message" placeholder={content.contact.messagePlaceholder} /></label>
+                {submitError ? <p className={styles.formError} role="alert">{submitError}</p> : null}
+                <div className={styles.formFooter}><p>{content.contact.consent}</p><button type="submit" className={styles.goldButton} disabled={submitting}>{submitting ? content.contact.sending : content.contact.submit}<ArrowUpRight size={16} aria-hidden /></button></div>
+              </form>
+            )}
+          </div>
+        </section>
+      </main>
+
+      <footer className={styles.footer}>
+        <Link href="/" aria-label={content.home}><Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="8rem" /></Link>
+        <div className={styles.footerInfo}><a href={`mailto:${company.email}`}>{company.email}</a><span>{company.offices.join(" · ")}</span></div>
+        <div className={styles.footerLinks}><Link href="/">{content.footer.home}</Link><button type="button" onClick={openPrivacy}>{content.footer.privacy}</button><button type="button" onClick={openTerms}>{content.footer.terms}</button><button type="button" onClick={openAnalyticsPreferences}>{content.footer.cookies}</button><a href={aixcoLiveDocuments.taxResidencyPhotoCredits} target="_blank" rel="noreferrer">{content.footer.photos}</a></div>
+        <p>© {new Date().getFullYear()} AIXCO.Global. {content.footer.rights}</p>
+      </footer>
+    </div>
+  );
+}

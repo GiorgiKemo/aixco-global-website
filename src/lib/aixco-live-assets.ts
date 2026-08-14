@@ -17,6 +17,7 @@ const batumiGalleryBase = `${optimizedVideoBase}/batumi-gallery`;
 const batumiGalleryPreviewBase = `${batumiGalleryBase}/previews`;
 const projectGalleryBase = `${liveImageBase}/project-gallery`;
 const currentProjectGalleryBase = `${liveImageBase}/project-gallery-2026`;
+const taxResidencyImageBase = `${liveImageBase}/georgia-tax-residency`;
 const healthcareGalleryVersion = "healthcare-gallery-20260506";
 const heroVideoVersion = "hero-batumi-web-20260715-p1";
 const currentProjectHostedVideoBase =
@@ -62,6 +63,10 @@ export const aixcoLiveImages = {
   batumiMosaicThumbNightSkyline: `${liveImageBase}/batumi-mosaic-thumbs/batumi-night-skyline.webp`,
   batumiMosaicThumbNatureAerial: `${liveImageBase}/batumi-mosaic-thumbs/batumi-nature-aerial.webp`,
   batumiMosaicThumbBlueTower: `${liveImageBase}/batumi-mosaic-thumbs/batumi-blue-tower.webp`,
+  taxResidencyHeroGenerated: `${taxResidencyImageBase}/batumi-tax-residency-hero-generated-v2.png`,
+  taxResidencyRouteArchitecture: `${taxResidencyImageBase}/batumi-modern-skyline-esra-kaya.jpg`,
+  taxResidencyRouteNight: `${taxResidencyImageBase}/batumi-night-panorama-giorgi-nakashidze.jpg`,
+  taxResidencyWhyGeorgia: `${taxResidencyImageBase}/batumi-sunset-dmitry-mottl.jpg`,
   batumiCurrentProject: `${optimizedImageBase}/current-project-reverance.webp`,
   currentProjectTowers: `${projectGalleryBase}/reverance-towers.webp`,
   currentProjectCleanFacade: `${currentProjectGalleryBase}/01-hero-exterior-2048.webp`,
@@ -252,6 +257,10 @@ export const aixcoLiveLogos = {
   bluerock: `${liveImageBase}/bluerock.png`,
   daewoo: `${liveImageBase}/daewoo.png`,
   iso: `${liveImageBase}/iso-logo.png`,
+} as const;
+
+export const aixcoLiveDocuments = {
+  taxResidencyPhotoCredits: `${taxResidencyImageBase}/IMAGE-SOURCES.md`,
 } as const;
 
 export const aixcoLivePartnerPeople = {

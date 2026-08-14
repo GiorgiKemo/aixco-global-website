@@ -39,6 +39,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/georgia-tax-residency`,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
     ...propertyPages,
   ];
 }

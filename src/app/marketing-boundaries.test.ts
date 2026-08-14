@@ -24,6 +24,7 @@ describe("marketing analytics route boundary", () => {
     const reverancePage = source("src/app/reverance-batumi/page.tsx");
     const medicalTourismPage = source("src/app/medical-tourism/page.tsx");
     const georgiaResidencyPage = source("src/app/georgia-residency/page.tsx");
+    const georgiaTaxResidencyPage = source("src/app/georgia-tax-residency/page.tsx");
 
     expect(clientShell).toContain('import { MarketingAnalytics } from "./marketing-analytics"');
     expect(clientShell).toContain("<MarketingAnalytics />");
@@ -32,5 +33,6 @@ describe("marketing analytics route boundary", () => {
     expect(reverancePage).toContain("<ClientShell");
     expect(medicalTourismPage).toContain("<ClientShell");
     expect(georgiaResidencyPage).toContain("<ClientShell");
+    expect(georgiaTaxResidencyPage).toContain("<ClientShell");
   });
 });
