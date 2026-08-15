@@ -175,4 +175,5 @@ export const polishTranslationsFinal = {
   "Contact me": { pl: "Proszę o kontakt" },
   "Dismiss contact prompt": { pl: "Zamknij okno kontaktowe" },
   "Cookie preferences": { pl: "Ustawienia plików cookie" },
+  "Also from AIXCO": { pl: "Także od AIXCO" },
 } satisfies PolishTranslationSource;

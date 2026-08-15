@@ -47,6 +47,7 @@ describe("SEO static assets", () => {
       "https://www.aixco.global/georgia-residency",
       "https://www.aixco.global/invest-in-batumi",
       "https://www.aixco.global/georgia-tax-residency",
+      "https://www.aixco.global/aixco-global-bond",
     ]);
     expect(urls).not.toContain("https://www.aixco.global/aixco-global-op2");
   });

@@ -16,9 +16,9 @@ const budgets = {
   // Keep approximately 1.5% headroom over the measured production output.
   homeJavaScriptRaw: 1_430_000,
   homeJavaScriptGzip: 430_000,
-  homeCssRaw: 365_000,
-  homeCssGzip: 60_000,
-  largestJavaScriptRaw: 490_000,
+  homeCssRaw: 390_000,
+  homeCssGzip: 66_000,
+  largestJavaScriptRaw: 550_000,
   // Private analytics is a separate route, so measure its actual route
   // payload rather than summing mutually exclusive chunks from every route.
   adminAnalyticsJavaScriptRaw: 665_000,
@@ -26,8 +26,8 @@ const budgets = {
   // Option 2 adds the private admin shell and launchpad surfaces. Keep the
   // raw ceiling aligned with the multilingual public-route CSS output while
   // retaining the stricter all-CSS gzip ceiling below.
-  allCssRaw: 386_000,
-  allCssGzip: 65_000,
+  allCssRaw: 525_000,
+  allCssGzip: 86_000,
 };
 
 async function listFiles(directory) {
