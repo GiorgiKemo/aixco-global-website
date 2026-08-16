@@ -1386,12 +1386,12 @@ function SceneShell({
 function HeroScene({
   isActive,
   onContact,
-  onLogin,
+  onRegister,
   tx,
 }: {
   isActive: boolean;
   onContact: () => void;
-  onLogin: () => void;
+  onRegister: () => void;
   tx: (copy: string) => string;
 }) {
   const statementLabel = heroStoryStatementLines.map((line) => tx(line)).join(" ");
@@ -1458,8 +1458,8 @@ function HeroScene({
                 {tx("Current project")}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
               </Link>
-              <button type="button" onClick={onLogin} className="btn-ghost-gold story-hero-actions__ghost">
-                {tx("Login")}
+              <button type="button" onClick={onRegister} className="btn-ghost-gold story-hero-actions__ghost">
+                {tx("REGISTER")}
               </button>
               <button type="button" onClick={onContact} className="btn-ghost-gold story-hero-actions__ghost">
                 {tx("CONTACT ME")}
@@ -2908,12 +2908,12 @@ function MaterialsScene({
 function ParticipateScene({
   isActive,
   isRevealed,
-  onLogin,
+  onRegister,
   tx,
 }: {
   isActive: boolean;
   isRevealed: boolean;
-  onLogin: () => void;
+  onRegister: () => void;
   tx: (copy: string) => string;
 }) {
   const { participationRoutes } = useSiteContent();
@@ -2954,7 +2954,7 @@ function ParticipateScene({
             key={route.id}
             type="button"
             data-participation-card={route.id}
-            onClick={onLogin}
+            onClick={onRegister}
             className="group grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 text-start transition-colors hover:text-primary"
           >
             <span className="story-metric-value story-standard-number">{formatChapterNumber(index + 1)}</span>
@@ -2974,13 +2974,13 @@ function HowScene({
   isActive,
   isRevealed,
   onJourney,
-  onLogin,
+  onRegister,
   tx,
 }: {
   isActive: boolean;
   isRevealed: boolean;
   onJourney: (journey: ReturnType<typeof useSiteContent>["journeys"][number]) => void;
-  onLogin: () => void;
+  onRegister: () => void;
   tx: (copy: string) => string;
 }) {
   const { journeys } = useSiteContent();
@@ -3112,8 +3112,8 @@ function HowScene({
           ))}
         </div>
       </div>
-      <button type="button" onClick={onLogin} className="btn-gold w-fit shrink-0">
-        {tx("Login")}
+      <button type="button" onClick={onRegister} className="btn-gold w-fit shrink-0">
+        {tx("Register")}
         <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
       </button>
     </SceneShell>
@@ -3377,12 +3377,14 @@ function ContactScene({
   isRevealed,
   whatsappContact,
   onLogin,
+  onRegister,
   tx,
 }: {
   isActive: boolean;
   isRevealed: boolean;
   whatsappContact: MarketWhatsAppContact | null;
   onLogin: () => void;
+  onRegister: () => void;
   tx: (copy: string) => string;
 }) {
   const { company } = useSiteContent();
@@ -3418,6 +3420,9 @@ function ContactScene({
                   <button type="button" onClick={onLogin} className="btn-gold">
                     {tx("Login")}
                     <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
+                  </button>
+                  <button type="button" onClick={onRegister} className="btn-ghost-gold">
+                    {tx("Register")}
                   </button>
                 </div>
               </div>
@@ -3507,7 +3512,7 @@ export function DesktopStoryHome() {
   const [heroBackdropVisible, setHeroBackdropVisible] = useState(true);
   const heroBackdropVisibleRef = useRef(true);
   const sectionPresenceRef = useRef(sectionPresence);
-  const { openContact, openJourney, openLogin, openPartner } = useUI();
+  const { openContact, openJourney, openLogin, openPartner, openRegister } = useUI();
   const { lang, setLang, tx } = useI18n();
   const siteIntroReady = useSiteIntroReady();
   const [whatsappContact, setWhatsAppContact] = useState<MarketWhatsAppContact | null>(null);
@@ -3775,7 +3780,7 @@ export function DesktopStoryHome() {
       const isRevealed = (index: number) => Boolean(sectionPresence[index] ?? index === 0);
 
       return [
-      <MemoizedHeroScene key="hero" isActive={activeIndex === 0} tx={tx} onContact={openContact} onLogin={openLogin} />,
+      <MemoizedHeroScene key="hero" isActive={activeIndex === 0} tx={tx} onContact={openContact} onRegister={openRegister} />,
       <MemoizedAboutScene
         key="about"
         isActive={activeIndex === 1}
@@ -3808,15 +3813,15 @@ export function DesktopStoryHome() {
       <MemoizedDubaiScene key="dubai" isActive={activeIndex === 8} isRevealed={isRevealed(8)} tx={tx} />,
       <MemoizedBatumiScene key="batumi" isActive={activeIndex === 9} isRevealed={isRevealed(9)} tx={tx} />,
       <MemoizedMaterialsScene key="materials" isActive={activeIndex === 10} isRevealed={isRevealed(10)} lang={lang} tx={tx} />,
-      <MemoizedParticipateScene key="participate" isActive={activeIndex === 11} isRevealed={isRevealed(11)} tx={tx} onLogin={openLogin} />,
-      <MemoizedHowScene key="how" isActive={activeIndex === 12} isRevealed={isRevealed(12)} tx={tx} onJourney={openJourney} onLogin={openLogin} />,
+      <MemoizedParticipateScene key="participate" isActive={activeIndex === 11} isRevealed={isRevealed(11)} tx={tx} onRegister={openRegister} />,
+      <MemoizedHowScene key="how" isActive={activeIndex === 12} isRevealed={isRevealed(12)} tx={tx} onJourney={openJourney} onRegister={openRegister} />,
       <MemoizedTeamScene key="team" isActive={activeIndex === 13} isRevealed={isRevealed(13)} tx={tx} />,
       <MemoizedPartnersScene key="partners" isActive={activeIndex === 14} isRevealed={isRevealed(14)} tx={tx} onPartnerClick={openPartner} />,
       <MemoizedFaqScene key="faqs" isActive={activeIndex === 15} isRevealed={isRevealed(15)} tx={tx} />,
-      <MemoizedContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} whatsappContact={whatsappContact} tx={tx} onLogin={openLogin} />,
+      <MemoizedContactScene key="contact" isActive={activeIndex === 16} isRevealed={isRevealed(16)} whatsappContact={whatsappContact} tx={tx} onLogin={openLogin} onRegister={openRegister} />,
       ];
     },
-    [activeIndex, lang, openContact, openJourney, openLogin, openPartner, sectionPresence, siteIntroReady, tx, whatsappContact],
+    [activeIndex, lang, openContact, openJourney, openLogin, openPartner, openRegister, sectionPresence, siteIntroReady, tx, whatsappContact],
   );
 
   return (

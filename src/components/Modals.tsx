@@ -6,7 +6,7 @@ import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveImages, aixcoLiveLogos, aixcoLivePartnerPeople } from "@/lib/aixco-live-assets";
 import { recordContactSubmission, recordPortalEvent } from "@/lib/backend/lead-capture";
-import { getSafePortalUrl } from "@/lib/security/urls";
+import { getSafePortalRegistrationUrl, getSafePortalUrl, type PortalRegistrationRole } from "@/lib/security/urls";
 import {
   markContactNudgeConverted,
   markContactNudgeOpenedThisSession,
@@ -154,6 +154,7 @@ function getLoginRoles(portals: SiteContent["company"]["portals"]) {
     title: "Customer",
     action: "Customer Login",
     cta: "Continue as customer",
+    portalRole: "customer" as const,
     url: portals.customerLogin,
     description:
       "Customers can log in to manage property interest, review opportunities, follow their onboarding progress, and continue a purchase or service journey through the portal.",
@@ -167,6 +168,7 @@ function getLoginRoles(portals: SiteContent["company"]["portals"]) {
     title: "Broker",
     action: "Broker Login",
     cta: "Continue as broker",
+    portalRole: "broker" as const,
     url: portals.brokerLogin,
     description:
       "Brokers can log in to use the portal operationally, manage customer journeys, coordinate tours, and work more efficiently with curated emerging-market opportunities.",
@@ -180,6 +182,7 @@ function getLoginRoles(portals: SiteContent["company"]["portals"]) {
     title: "Developer Partner",
     action: "Developer Login",
     cta: "Continue as developer",
+    portalRole: "developer" as const,
     url: portals.developerLogin,
     description:
       "Developer partners can log in to manage visibility for their listings while benefiting from a platform that still supports customers with a complete 360° service journey.",
@@ -198,6 +201,7 @@ function getRegisterRoles(portals: SiteContent["company"]["portals"]) {
     title: "Why become a customer?",
     action: "Register as Customer",
     cta: "Start customer registration",
+    portalRole: "customer" as const,
     url: portals.customerSignup,
     description:
       "Register as a customer if you want to buy property, explore selected opportunities, or receive a more guided route into selected emerging-market real estate through one organized onboarding form.",
@@ -211,6 +215,7 @@ function getRegisterRoles(portals: SiteContent["company"]["portals"]) {
     title: "Why become a broker?",
     action: "Register as Broker",
     cta: "Start broker registration",
+    portalRole: "broker" as const,
     url: portals.brokerSignup,
     description:
       "Register as a broker to use the AIXCO portal and services for customer tours, curated support, and stronger access to selected and exclusive listings.",
@@ -224,6 +229,7 @@ function getRegisterRoles(portals: SiteContent["company"]["portals"]) {
     title: "Why become a developer partner?",
     action: "Join as Developer Partner",
     cta: "Start developer onboarding",
+    portalRole: "developer" as const,
     url: portals.developerSignup,
     description:
       "Register as a developer partner to advertise listings through AIXCO while ensuring end customers still experience a full 360° service from first inquiry onward.",
@@ -516,8 +522,8 @@ export function Modals() {
           <X className="h-4 w-4" />
         </button>
         <div className="p-5 sm:p-7 md:p-10">
-          {modal === "login" && <AccessModal mode="login" tx={tx} />}
-          {modal === "register" && <AccessModal mode="register" tx={tx} />}
+          {modal === "login" && <AccessModal mode="login" tx={tx} lang={lang} />}
+          {modal === "register" && <AccessModal mode="register" tx={tx} lang={lang} />}
           {modal === "contact" && (
             <ContactRequestModal
               tx={tx}
@@ -906,7 +912,7 @@ function ContactRequestModal({
   );
 }
 
-function AccessModal({ mode, tx }: { mode: "login" | "register"; tx: (text: string) => string }) {
+function AccessModal({ mode, tx, lang }: { mode: "login" | "register"; tx: (text: string) => string; lang: Lang }) {
   const { company } = useSiteContent();
   const isRegister = mode === "register";
   const title = isRegister ? "Register with AIXCO" : "Login to your AIXCO portal";
@@ -914,7 +920,12 @@ function AccessModal({ mode, tx }: { mode: "login" | "register"; tx: (text: stri
     ? "Register opens the relevant onboarding form for each role so the right information can be submitted before portal access is activated."
     : "Login takes each user type to its respective portal so customers, brokers, and developers can continue in the right environment immediately.";
   const roles = (isRegister ? getRegisterRoles(company.portals) : getLoginRoles(company.portals))
-    .map((role) => ({ ...role, url: getSafePortalUrl(role.url, "") }))
+    .map((role) => ({
+      ...role,
+      url: isRegister
+        ? getSafePortalRegistrationUrl(role.url, role.portalRole as PortalRegistrationRole, lang, "")
+        : getSafePortalUrl(role.url, ""),
+    }))
     .filter((role) => role.url);
 
   return (
