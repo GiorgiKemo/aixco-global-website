@@ -7,6 +7,15 @@ const AIXCO_PORTAL_HOSTS = [
   "developer.aixco.global",
 ] as const;
 
+const PORTAL_REGISTRATION_ROUTES = {
+  customer: { host: "customer.aixco.global", path: "/realestate/aixco/customer-signup" },
+  broker: { host: "broker.aixco.global", path: "/realestate/aixco/broker-signup" },
+  developer: { host: "developer.aixco.global", path: "/realestate/aixco/developer-signup" },
+} as const;
+
+export type PortalRegistrationRole = keyof typeof PORTAL_REGISTRATION_ROUTES;
+type PortalLanguage = "en" | "de" | "pl" | "sl" | "ru";
+
 function hasControlCharacter(value: string) {
   return Array.from(value).some((character) => {
     const codePoint = character.codePointAt(0) ?? 0;
@@ -74,6 +83,24 @@ export function getSafePortalUrl(value: unknown, fallback: string) {
   } catch {
     return fallback;
   }
+}
+
+export function getSafePortalRegistrationUrl(
+  value: unknown,
+  role: PortalRegistrationRole,
+  language: PortalLanguage,
+  fallback: string,
+) {
+  const safeRoot = getSafePortalUrl(value, "");
+  if (!safeRoot) return fallback;
+
+  const route = PORTAL_REGISTRATION_ROUTES[role];
+  const rootUrl = new URL(safeRoot);
+  if (rootUrl.hostname !== route.host) return fallback;
+
+  const signupUrl = new URL(`https://workw.com${route.path}`);
+  signupUrl.searchParams.set("lang", language);
+  return signupUrl.toString();
 }
 
 export function isSafePortalUrl(value: unknown) {

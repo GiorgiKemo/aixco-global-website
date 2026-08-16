@@ -120,11 +120,41 @@ describe("Modals", () => {
     expect(screen.getByText("Rozpocznij rejestrację klienta")).toBeInTheDocument();
     expect(screen.getByText("Rozpocznij rejestrację brokera")).toBeInTheDocument();
     expect(screen.getByText("Rozpocznij wdrożenie dewelopera")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Rozpocznij rejestrację klienta" })).toHaveAttribute(
+      "href",
+      "https://workw.com/realestate/aixco/customer-signup?lang=pl",
+    );
 
     const dialog = screen.getByRole("dialog");
     expect(dialog).not.toHaveTextContent("Register with AIXCO");
     expect(dialog).not.toHaveTextContent("Why become a customer?");
     expect(dialog).not.toHaveTextContent("Start customer registration");
+  });
+
+  it("opens the English role-specific signup routes instead of the German portal root", async () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <RegisterTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open register/i }));
+
+    expect(await screen.findByRole("link", { name: "Start customer registration" })).toHaveAttribute(
+      "href",
+      "https://workw.com/realestate/aixco/customer-signup?lang=en",
+    );
+    expect(screen.getByRole("link", { name: "Start broker registration" })).toHaveAttribute(
+      "href",
+      "https://workw.com/realestate/aixco/broker-signup?lang=en",
+    );
+    expect(screen.getByRole("link", { name: "Start developer onboarding" })).toHaveAttribute(
+      "href",
+      "https://workw.com/realestate/aixco/developer-signup?lang=en",
+    );
   });
 
   it("gives legal dialogs an accessible name", () => {
