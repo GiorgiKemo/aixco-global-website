@@ -1386,12 +1386,12 @@ function SceneShell({
 function HeroScene({
   isActive,
   onContact,
-  onRegister,
+  onLogin,
   tx,
 }: {
   isActive: boolean;
   onContact: () => void;
-  onRegister: () => void;
+  onLogin: () => void;
   tx: (copy: string) => string;
 }) {
   const statementLabel = heroStoryStatementLines.map((line) => tx(line)).join(" ");
@@ -1458,8 +1458,8 @@ function HeroScene({
                 {tx("Current project")}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
               </Link>
-              <button type="button" onClick={onRegister} className="btn-ghost-gold story-hero-actions__ghost">
-                {tx("REGISTER")}
+              <button type="button" onClick={onLogin} className="btn-ghost-gold story-hero-actions__ghost">
+                {tx("Login")}
               </button>
               <button type="button" onClick={onContact} className="btn-ghost-gold story-hero-actions__ghost">
                 {tx("CONTACT ME")}
@@ -3780,7 +3780,7 @@ export function DesktopStoryHome() {
       const isRevealed = (index: number) => Boolean(sectionPresence[index] ?? index === 0);
 
       return [
-      <MemoizedHeroScene key="hero" isActive={activeIndex === 0} tx={tx} onContact={openContact} onRegister={openRegister} />,
+      <MemoizedHeroScene key="hero" isActive={activeIndex === 0} tx={tx} onContact={openContact} onLogin={openLogin} />,
       <MemoizedAboutScene
         key="about"
         isActive={activeIndex === 1}
