@@ -18,7 +18,7 @@ import { propertyPageTranslations } from "./property-page-translations";
 import { russianTranslationFixes } from "./russian-translation-fixes";
 import { slovenianClientRevisions } from "./slovenian-client-revisions";
 import { slovenianTranslationFixes } from "./slovenian-translation-fixes";
-import { siteContentTranslations } from "./site-content-translations";
+import { teamContentTranslations } from "./team-content-translations";
 
 export const LANGS = languageOptions;
 const DEFAULT_LANG: Lang = "en";
@@ -1796,7 +1796,7 @@ const baseCatalogSources: TranslationSource[] = [
   germanQualityTranslations,
   supplementalTranslations,
   clientBriefPassthroughTranslations,
-  siteContentTranslations,
+  teamContentTranslations,
 ];
 
 let translationCatalogPromise: Promise<LoadedTranslationCatalogs> | null = null;

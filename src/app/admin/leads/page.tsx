@@ -235,7 +235,7 @@ function AdminTabs({
             key={view.value}
             href={tabHref(view.value)}
             aria-current={active ? "page" : undefined}
-            className={`inline-flex min-h-11 shrink-0 items-center justify-center rounded-[7px] px-3 py-2 text-xs font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17] last:col-span-2 sm:last:col-span-1 sm:px-4 ${
+            className={`inline-flex min-h-11 shrink-0 items-center justify-center rounded-[7px] px-3 py-2 text-xs font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17] sm:px-4 ${
               active
                 ? "bg-[#161616] text-white"
                 : "text-[#6f6e6a] hover:bg-[#f8f6f1] hover:text-[#161616]"

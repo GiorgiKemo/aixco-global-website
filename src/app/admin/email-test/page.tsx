@@ -126,7 +126,7 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
                 maxLength={255}
                 autoComplete="email"
                 placeholder="Optional"
-                className="h-11 rounded-md border border-[#161616]/15 bg-white px-3 text-base outline-none transition-colors placeholder:text-[#6f6e6a] focus:border-[#8b6a18] focus-visible:ring-2 focus-visible:ring-[#7c5d17]"
+                className="admin-email-subject-input h-11 rounded-md border border-[#161616]/15 bg-white px-3 text-base outline-none transition-colors focus:border-[#8b6a18] focus-visible:ring-2 focus-visible:ring-[#7c5d17]"
               />
             </label>
 

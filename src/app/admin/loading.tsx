@@ -5,7 +5,7 @@ export default function AdminLoading() {
       aria-busy="true"
     >
       <section
-        className="w-full max-w-md rounded-xl border border-[#d8d2c6] bg-white p-6 text-center shadow-[0_18px_50px_rgba(54,45,28,0.08)] sm:p-8"
+        className="w-full max-w-md rounded-xl border border-[#d8d2c6] bg-white p-6 text-center shadow-xl sm:p-8"
         role="status"
         aria-live="polite"
         aria-atomic="true"

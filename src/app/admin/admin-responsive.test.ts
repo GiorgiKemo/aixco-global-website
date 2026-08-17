@@ -50,6 +50,10 @@ describe("admin responsive safeguards", () => {
     const leadsPage = readAdminSource("./leads/page.tsx");
 
     expect(emailTestPage).toContain("text-base");
+    expect(emailTestPage).toContain("admin-email-subject-input");
+    expect(readAdminSource("./admin.css")).toMatch(
+      /\.admin-email-subject-input::placeholder\s*{[\s\S]*?color:\s*#6f6e6a;/,
+    );
     expect(privacyPage).toContain("text-base");
     expect(identityPage).toContain("text-base");
     expect(emailTestPage).toContain("min-h-11");

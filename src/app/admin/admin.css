@@ -45,6 +45,11 @@
   color: var(--admin-shell-ink);
 }
 
+.admin-email-subject-input::placeholder {
+  color: #6f6e6a;
+  opacity: 1;
+}
+
 .admin-shell__skip-link {
   position: fixed;
   top: max(12px, env(safe-area-inset-top, 0px));

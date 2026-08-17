@@ -24,7 +24,7 @@ export default function AdminError({ error, reset }: AdminErrorProps) {
       aria-labelledby="admin-error-title"
       aria-describedby="admin-error-description"
     >
-      <section className="w-full max-w-lg rounded-xl border border-[#d8d2c6] bg-white p-6 shadow-[0_18px_50px_rgba(54,45,28,0.08)] sm:p-8">
+      <section className="w-full max-w-lg rounded-xl border border-[#d8d2c6] bg-white p-6 shadow-xl sm:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#735a20]">
           Secure admin workspace
         </p>
