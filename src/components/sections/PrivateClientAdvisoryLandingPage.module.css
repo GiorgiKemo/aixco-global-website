@@ -46,7 +46,7 @@
 .heroIndex i { width: 1px; height: 15rem; background: linear-gradient(var(--gold) 0 23%, var(--line) 23% 100%); }
 .heroCopy { display: flex; flex-direction: column; justify-content: center; padding: clamp(4rem, 8vw, 8rem) clamp(2.5rem, 8vw, 8rem) clamp(4rem, 7vw, 7rem) clamp(4rem, 10vw, 9rem); }
 .eyebrow { margin: 0 0 1.4rem; color: var(--gold-deep); font-size: .63rem; font-weight: 700; letter-spacing: .2em; line-height: 1.5; text-transform: uppercase; }
-.hero h1 { max-width: 13.5ch; margin: 0; font-size: clamp(3.2rem, 5.5vw, 6.5rem); font-weight: 300; letter-spacing: -.07em; line-height: .92; }
+.hero h1 { max-width: 13.5ch; margin: 0; font-size: clamp(3.2rem, 5.5vw, 6.5rem); font-weight: 500; letter-spacing: -.07em; line-height: .92; }
 .hero h1 span { color: var(--gold-deep); }
 .shortRule { width: 3rem; height: 1px; margin: 2.25rem 0 1.65rem; background: var(--gold-deep); }
 .heroBody { max-width: 31rem; margin: 0; color: var(--muted); font-size: clamp(1rem, 1.15vw, 1.2rem); line-height: 1.55; }
@@ -64,7 +64,7 @@
 
 .section { width: min(100% - 3rem, 90rem); margin: 0 auto; padding: clamp(5rem, 10vw, 9rem) clamp(0rem, 3vw, 3.5rem); scroll-margin-top: 4.65rem; }
 .whoSection { display: grid; grid-template-columns: minmax(14rem, .78fr) minmax(0, 1.22fr); gap: clamp(3rem, 9vw, 10rem); border-block-end: 1px solid var(--line); }
-.sectionIntro h2, .marketCopy h2, .structureIntro h2, .closingSection h2, .contactPanel h2 { max-width: 12ch; margin: 0; font-size: clamp(2.5rem, 4.1vw, 5rem); font-weight: 300; letter-spacing: -.065em; line-height: .98; }
+.sectionIntro h2, .marketCopy h2, .structureIntro h2, .closingSection h2, .contactPanel h2 { max-width: 12ch; margin: 0; font-size: clamp(2.5rem, 4.1vw, 5rem); font-weight: 500; letter-spacing: -.065em; line-height: .98; }
 .sectionIntro > p:last-child { max-width: 28rem; margin: 1.7rem 0 0; color: var(--muted); line-height: 1.6; }
 .proseStack { max-width: 43rem; padding-top: 3.9rem; }
 .proseStack p { margin: 0 0 1.6rem; color: var(--muted); font-size: clamp(1rem, 1.25vw, 1.28rem); line-height: 1.62; }
@@ -140,7 +140,7 @@
 .formError { margin: 0 0 1rem; color: #a13b2c; font-size: .85rem; }
 .successPanel { max-width: 34rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--line); }
 .successIcon { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 1px solid var(--gold-deep); color: var(--gold-deep); }
-.successPanel h3 { margin: 1.3rem 0 .65rem; font-size: 1.8rem; font-weight: 400; letter-spacing: -.04em; }
+.successPanel h3 { margin: 1.3rem 0 .65rem; font-size: 1.8rem; font-weight: 500; letter-spacing: -.04em; }
 .successPanel p { margin: 0 0 .7rem; color: var(--muted); line-height: 1.55; }
 .successPanel small { display: block; margin-bottom: 1.5rem; color: var(--gold-deep); font-size: .65rem; letter-spacing: .1em; }
 .footer { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2rem; min-height: 6rem; padding: 1.5rem max(1.5rem, calc((100% - 84rem) / 2)); border-block-start: 1px solid var(--line); }
