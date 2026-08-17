@@ -32,6 +32,7 @@ const analyticsResult: AdminAnalyticsDashboardResult = {
       uniqueCountries: 7,
       latestEventAt: "2026-08-11T11:59:00.000Z",
     },
+    intentActivity: null,
     daily: null,
     breakdowns: null,
     recentSessions: [

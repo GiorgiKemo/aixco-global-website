@@ -102,6 +102,7 @@ function createDashboard(overrides: Partial<AdminAnalyticsDashboard> = {}): Admi
       uniqueCountries: 0,
       latestEventAt: null,
     },
+    intentActivity: null,
     daily: null,
     breakdowns: null,
     recentSessions: [],

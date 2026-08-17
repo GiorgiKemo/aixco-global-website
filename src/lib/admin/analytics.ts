@@ -81,6 +81,66 @@ export type AnalyticsBreakdowns = {
   funnel: AnalyticsFunnelStep[];
 };
 
+export type AnalyticsIntentCount = {
+  name: string;
+  clicks: number;
+  sessions: number;
+  visitors: number;
+};
+
+export type AnalyticsPortalActivity = {
+  id: string;
+  occurredAt: string;
+  mode: string;
+  roleTitle: string;
+  action: string;
+  portalUrl: string;
+  locale: string | null;
+  pagePath: string | null;
+  sessionId: string | null;
+  visitorId: string | null;
+  countryCode: string | null;
+  region: string | null;
+  city: string | null;
+  ipAddress: string | null;
+  ipHash: string | null;
+  userAgent: string | null;
+};
+
+export type AnalyticsWhatsAppActivity = {
+  id: string;
+  occurredAt: string;
+  name: string;
+  targetLabel: string | null;
+  pagePath: string | null;
+  sectionId: string | null;
+  linkHost: string | null;
+  linkPath: string | null;
+  sessionId: string;
+  visitorId: string | null;
+  countryCode: string | null;
+  region: string | null;
+  city: string | null;
+  ipAddress: string | null;
+  ipHash: string | null;
+};
+
+export type AnalyticsIntentActivity = {
+  summary: {
+    totalIntentClicks: number;
+    portalHandoffs: number;
+    whatsappClicks: number;
+    phoneClicks: number;
+    emailClicks: number;
+    downloadRequests: number;
+    socialClicks: number;
+    outboundLinks: number;
+  };
+  counts: AnalyticsIntentCount[];
+  portalHandoffs: AnalyticsPortalActivity[];
+  whatsappClicks: AnalyticsWhatsAppActivity[];
+};
+
 export type RecentSessionJourneyEvent = {
   id: string;
   occurredAt: string;
@@ -167,6 +227,7 @@ export type AdminAnalyticsDashboard = {
   window: AnalyticsWindow;
   generatedAt: string;
   summary: AnalyticsSummary;
+  intentActivity: AnalyticsIntentActivity | null;
   daily: AnalyticsDailyPoint[] | null;
   breakdowns: AnalyticsBreakdowns | null;
   recentSessions: RecentAnalyticsSession[] | null;
@@ -198,6 +259,19 @@ type QueryResult = { data: unknown; error: DatabaseError };
 type AnalyticsRpcClient = {
   rpc: (name: string, args: Record<string, unknown>) => PromiseLike<QueryResult>;
 };
+type AnalyticsTableQuery = PromiseLike<{ data: unknown; error: DatabaseError; count?: number | null }> & {
+  eq: (column: string, value: string) => AnalyticsTableQuery;
+  gte: (column: string, value: string) => AnalyticsTableQuery;
+  lt: (column: string, value: string) => AnalyticsTableQuery;
+  in: (column: string, values: string[]) => AnalyticsTableQuery;
+  order: (column: string, options: { ascending: boolean }) => AnalyticsTableQuery;
+  limit: (count: number) => AnalyticsTableQuery;
+};
+type AnalyticsTableClient = {
+  from: (table: string) => {
+    select: (columns: string, options?: { count?: "exact"; head?: boolean }) => AnalyticsTableQuery;
+  };
+};
 type OperationsCountTable = "contact_submissions" | "chat_transcripts" | "portal_click_events";
 type OperationsCountResult = { count: number | null; error: DatabaseError };
 type OperationsCountQuery = PromiseLike<OperationsCountResult> & {
@@ -215,11 +289,14 @@ type OperationsCountClient = {
 
 const DASHBOARD_RPC = "get_site_analytics_dashboard";
 const COUNTRY_BREAKDOWN_RPC = "get_site_analytics_country_breakdown";
+const INTENT_ACTIVITY_RPC = "get_site_analytics_intent_activity";
 const DASHBOARD_SCHEMA_VERSION = "20260807130642";
 const COUNTRY_BREAKDOWN_SCHEMA_VERSIONS = new Set(["20260813094605", "20260813112500"]);
+const INTENT_ACTIVITY_SCHEMA_VERSION = "20260817150000";
 const RECENT_SESSION_LIMIT = 24;
 const BREAKDOWN_LIMIT = 8;
 const COUNTRY_BREAKDOWN_LIMIT = 100;
+const INTENT_ACTIVITY_LIMIT = 200;
 const MAX_AUDIT_DETAIL_FIELDS = 12;
 const SENSITIVE_AUDIT_DETAIL_KEY = /password|passcode|secret|token|cookie|authorization|api[_-]?key|message|transcript/i;
 const countryDisplayNames = new Intl.DisplayNames(["en"], { type: "region" });
@@ -469,6 +546,104 @@ export function parseAnalyticsBreakdowns(value: unknown): AnalyticsBreakdowns | 
   };
 }
 
+function parseCountryCode(value: unknown) {
+  const code = cleanString(value).toUpperCase();
+  return /^[A-Z]{2}$/.test(code) ? code : null;
+}
+
+export function parseAnalyticsIntentActivity(value: unknown): AnalyticsIntentActivity | null {
+  const row = firstRow(value);
+  if (!isRecord(row)) return null;
+  const summaryRow = isRecord(row.summary) ? row.summary : null;
+  if (!summaryRow) return null;
+
+  const parseCount = (name: string, aliases: string[] = []) => finiteNumber(
+    aliases.reduce<unknown>((candidate, alias) => (
+      candidate === undefined ? summaryRow[alias] : candidate
+    ), summaryRow[name]),
+  );
+  const summary = {
+    totalIntentClicks: parseCount("totalIntentClicks", ["total_intent_clicks"]),
+    portalHandoffs: parseCount("portalHandoffs", ["portal_handoffs"]),
+    whatsappClicks: parseCount("whatsappClicks", ["whatsapp_clicks"]),
+    phoneClicks: parseCount("phoneClicks", ["phone_clicks"]),
+    emailClicks: parseCount("emailClicks", ["email_clicks"]),
+    downloadRequests: parseCount("downloadRequests", ["download_requests"]),
+    socialClicks: parseCount("socialClicks", ["social_clicks"]),
+    outboundLinks: parseCount("outboundLinks", ["outbound_links"]),
+  };
+
+  const counts = Array.isArray(row.counts)
+    ? row.counts.slice(0, 20).flatMap((candidate) => {
+        if (!isRecord(candidate)) return [];
+        const name = cleanString(candidate.name);
+        if (!name) return [];
+        return [{
+          name,
+          clicks: finiteNumber(candidate.clicks ?? candidate.count),
+          sessions: finiteNumber(candidate.sessions),
+          visitors: finiteNumber(candidate.visitors),
+        }];
+      })
+    : [];
+
+  const portalHandoffs = Array.isArray(row.portalHandoffs ?? row.portal_handoffs)
+    ? ((row.portalHandoffs ?? row.portal_handoffs) as unknown[]).slice(0, INTENT_ACTIVITY_LIMIT).flatMap((candidate) => {
+        if (!isRecord(candidate)) return [];
+        const id = identifierString(candidate.id);
+        const occurredAt = safeTimestamp(candidate.occurredAt ?? candidate.occurred_at);
+        if (!id || !occurredAt) return [];
+        return [{
+          id,
+          occurredAt,
+          mode: cleanString(candidate.mode, "unknown"),
+          roleTitle: cleanString(candidate.roleTitle ?? candidate.role_title, "Unknown role"),
+          action: cleanString(candidate.action, "Unknown action"),
+          portalUrl: cleanString(candidate.portalUrl ?? candidate.portal_url, "Unknown portal"),
+          locale: optionalString(candidate.locale),
+          pagePath: optionalString(candidate.pagePath ?? candidate.page_path),
+          sessionId: optionalIdentifier(candidate.sessionId ?? candidate.session_id),
+          visitorId: optionalIdentifier(candidate.visitorId ?? candidate.visitor_id),
+          countryCode: parseCountryCode(candidate.countryCode ?? candidate.country_code),
+          region: optionalString(candidate.region),
+          city: optionalString(candidate.city),
+          ipAddress: optionalString(candidate.ipAddress ?? candidate.ip_address),
+          ipHash: optionalString(candidate.ipHash ?? candidate.ip_hash),
+          userAgent: optionalString(candidate.userAgent ?? candidate.user_agent),
+        }];
+      })
+    : [];
+
+  const whatsappClicks = Array.isArray(row.whatsappClicks ?? row.whatsapp_clicks)
+    ? ((row.whatsappClicks ?? row.whatsapp_clicks) as unknown[]).slice(0, INTENT_ACTIVITY_LIMIT).flatMap((candidate) => {
+        if (!isRecord(candidate)) return [];
+        const id = identifierString(candidate.id);
+        const occurredAt = safeTimestamp(candidate.occurredAt ?? candidate.occurred_at);
+        const sessionId = identifierString(candidate.sessionId ?? candidate.session_id);
+        if (!id || !occurredAt || !sessionId) return [];
+        return [{
+          id,
+          occurredAt,
+          name: cleanString(candidate.name, "whatsapp_click"),
+          targetLabel: optionalString(candidate.targetLabel ?? candidate.target_label),
+          pagePath: optionalString(candidate.pagePath ?? candidate.page_path),
+          sectionId: optionalString(candidate.sectionId ?? candidate.section_id),
+          linkHost: optionalString(candidate.linkHost ?? candidate.link_host),
+          linkPath: optionalString(candidate.linkPath ?? candidate.link_path),
+          sessionId,
+          visitorId: optionalIdentifier(candidate.visitorId ?? candidate.visitor_id),
+          countryCode: parseCountryCode(candidate.countryCode ?? candidate.country_code),
+          region: optionalString(candidate.region),
+          city: optionalString(candidate.city),
+          ipAddress: optionalString(candidate.ipAddress ?? candidate.ip_address),
+          ipHash: optionalString(candidate.ipHash ?? candidate.ip_hash),
+        }];
+      })
+    : [];
+
+  return { summary, counts, portalHandoffs, whatsappClicks };
+}
+
 export function parseRecentSessions(value: unknown): RecentAnalyticsSession[] {
   if (!Array.isArray(value)) return [];
 
@@ -637,6 +812,178 @@ function readPayloadArray(payload: Record<string, unknown>, ...keys: string[]) {
   return null;
 }
 
+const INTENT_EVENT_NAMES = [
+  "whatsapp_click",
+  "phone_click",
+  "email_click",
+  "download_requested",
+  "social_click",
+  "outbound_link",
+] as const;
+
+function getIntentNetwork(
+  networkBySession: Map<string, Record<string, unknown>>,
+  sessionId: string | null,
+) {
+  return sessionId ? networkBySession.get(sessionId) : undefined;
+}
+
+async function loadIntentActivityFromTables(
+  client: AnalyticsTableClient,
+  window: AnalyticsWindow,
+): Promise<AnalyticsIntentActivity | null> {
+  const portalQuery = client.from("portal_click_events").select(
+    "id,created_at,mode,role_title,action,portal_url,locale,page_path,user_agent,metadata",
+    { count: "exact" },
+  );
+  const eventQuery = client.from("site_analytics_events").select(
+    "id,session_id,occurred_at,name,page_path,section_id,target_label,metadata",
+    { count: "exact" },
+  );
+  const [portalResult, eventResult, ...eventCountResults] = await Promise.all([
+    portalQuery.gte("created_at", window.from).lt("created_at", window.to).order("created_at", { ascending: false }).limit(INTENT_ACTIVITY_LIMIT),
+    eventQuery.gte("received_at", window.from).lt("received_at", window.to).in("name", [...INTENT_EVENT_NAMES]).order("occurred_at", { ascending: false }).limit(INTENT_ACTIVITY_LIMIT),
+    ...INTENT_EVENT_NAMES.map((name) => client.from("site_analytics_events").select("id", { count: "exact", head: true })
+      .gte("received_at", window.from)
+      .lt("received_at", window.to)
+      .eq("name", name)),
+  ]);
+  if (portalResult.error || eventResult.error || eventCountResults.some((result) => result.error)) return null;
+
+  const portalRows = Array.isArray(portalResult.data) ? portalResult.data.filter(isRecord) : [];
+  const eventRows = Array.isArray(eventResult.data) ? eventResult.data.filter(isRecord) : [];
+  const sessionIds = [...new Set([
+    ...eventRows.map((event) => identifierString(event.session_id)).filter(Boolean),
+    ...portalRows.map((event) => {
+      const metadata = isRecord(event.metadata) ? event.metadata : {};
+      return metadata.analytics_session_verified === true || metadata.analytics_session_verified === "true"
+        ? identifierString(metadata.analytics_session_id)
+        : "";
+    }).filter(Boolean),
+  ])];
+
+  const sessionResult = sessionIds.length
+    ? await client.from("site_analytics_sessions").select("id,visitor_id").in("id", sessionIds)
+    : { data: [], error: null };
+  const networkResult = sessionIds.length
+    ? await client.from("site_analytics_session_network").select("session_id,ip_address,ip_hash,country_code,region,city").in("session_id", sessionIds)
+    : { data: [], error: null };
+  if (sessionResult.error || networkResult.error) return null;
+
+  const sessionsById = new Map(
+    (Array.isArray(sessionResult.data) ? sessionResult.data.filter(isRecord) : [])
+      .map((session) => [identifierString(session.id), session] as const),
+  );
+  const networkBySession = new Map(
+    (Array.isArray(networkResult.data) ? networkResult.data.filter(isRecord) : [])
+      .map((network) => [identifierString(network.session_id), network] as const),
+  );
+  const eventsByName = new Map<string, number>(INTENT_EVENT_NAMES.map((name, index) => [name, eventCountResults[index]?.count ?? 0]));
+  const eventSessionIdsByName = new Map<string, Set<string>>();
+  for (const event of eventRows) {
+    const name = cleanString(event.name);
+    const sessionId = identifierString(event.session_id);
+    if (!name || !sessionId) continue;
+    const ids = eventSessionIdsByName.get(name) ?? new Set<string>();
+    ids.add(sessionId);
+    eventSessionIdsByName.set(name, ids);
+  }
+  const counts = INTENT_EVENT_NAMES.map((name) => {
+    const sessionIdsForName = eventSessionIdsByName.get(name) ?? new Set<string>();
+    const visitors = new Set(
+      [...sessionIdsForName]
+        .map((sessionId) => identifierString(sessionsById.get(sessionId)?.visitor_id))
+        .filter(Boolean),
+    );
+    return {
+      name,
+      clicks: eventsByName.get(name) ?? 0,
+      sessions: sessionIdsForName.size,
+      visitors: visitors.size,
+    };
+  });
+
+  const rawPortalHandoffs = portalRows.flatMap((event) => {
+    const metadata = isRecord(event.metadata) ? event.metadata : {};
+    const sessionId = metadata.analytics_session_verified === true || metadata.analytics_session_verified === "true"
+      ? optionalIdentifier(metadata.analytics_session_id)
+      : null;
+    const session = sessionId ? sessionsById.get(sessionId) : undefined;
+    const network = getIntentNetwork(networkBySession, sessionId);
+    const occurredAt = safeTimestamp(event.created_at);
+    const id = identifierString(event.id);
+    if (!occurredAt || !id) return [];
+    return [{
+      id,
+      occurredAt,
+      name: "portal_handoff",
+      mode: cleanString(event.mode, "unknown"),
+      roleTitle: cleanString(event.role_title, "Unknown role"),
+      action: cleanString(event.action, "Unknown action"),
+      portalUrl: cleanString(event.portal_url, "Unknown portal"),
+      locale: optionalString(event.locale),
+      pagePath: optionalString(event.page_path),
+      sessionId,
+      visitorId: optionalIdentifier(session?.visitor_id),
+      countryCode: parseCountryCode(network?.country_code),
+      region: optionalString(network?.region),
+      city: optionalString(network?.city),
+      ipAddress: optionalString(network?.ip_address),
+      ipHash: optionalString(network?.ip_hash),
+      userAgent: optionalString(event.user_agent),
+    }];
+  });
+
+  const rawWhatsAppClicks = eventRows.flatMap((event) => {
+    if (event.name !== "whatsapp_click") return [];
+    const sessionId = identifierString(event.session_id);
+    const occurredAt = safeTimestamp(event.occurred_at);
+    const id = identifierString(event.id);
+    if (!sessionId || !occurredAt || !id) return [];
+    const metadata = isRecord(event.metadata) ? event.metadata : {};
+    const session = sessionsById.get(sessionId);
+    const network = getIntentNetwork(networkBySession, sessionId);
+    return [{
+      id,
+      occurredAt,
+      name: "whatsapp_click",
+      targetLabel: optionalString(event.target_label),
+      pagePath: optionalString(event.page_path),
+      sectionId: optionalString(event.section_id),
+      linkHost: optionalString(metadata.linkHost),
+      linkPath: optionalString(metadata.linkPath),
+      sessionId,
+      visitorId: optionalIdentifier(session?.visitor_id),
+      countryCode: parseCountryCode(network?.country_code),
+      region: optionalString(network?.region),
+      city: optionalString(network?.city),
+      ipAddress: optionalString(network?.ip_address),
+      ipHash: optionalString(network?.ip_hash),
+    }];
+  });
+  const portalCount = portalRows.length < (portalResult.count ?? 0) ? portalResult.count ?? portalRows.length : portalRows.length;
+  const whatsappCount = eventsByName.get("whatsapp_click") ?? 0;
+
+  return parseAnalyticsIntentActivity({
+    summary: {
+      totalIntentClicks: counts.reduce((total, item) => total + item.clicks, 0) + portalCount,
+      portalHandoffs: portalCount,
+      whatsappClicks: whatsappCount,
+      phoneClicks: eventsByName.get("phone_click") ?? 0,
+      emailClicks: eventsByName.get("email_click") ?? 0,
+      downloadRequests: eventsByName.get("download_requested") ?? 0,
+      socialClicks: eventsByName.get("social_click") ?? 0,
+      outboundLinks: eventsByName.get("outbound_link") ?? 0,
+    },
+    counts: [
+      ...counts,
+      { name: "portal_handoff", clicks: portalCount, sessions: new Set(rawPortalHandoffs.map((item) => item.sessionId).filter(Boolean)).size, visitors: new Set(rawPortalHandoffs.map((item) => item.visitorId).filter(Boolean)).size },
+    ],
+    portalHandoffs: rawPortalHandoffs,
+    whatsappClicks: rawWhatsAppClicks,
+  });
+}
+
 export async function fetchAdminAnalyticsDashboard(
   rangeInput: unknown,
   options: { now?: Date; client?: AnalyticsRpcClient } = {},
@@ -652,10 +999,11 @@ export async function fetchAdminAnalyticsDashboard(
 
   const now = options.now ?? new Date();
   const window = getAnalyticsWindow(rangeInput, now);
-  const client = options.client ?? ((await getSupabaseAdminClient()) as unknown as AnalyticsRpcClient);
+  const rawClient = options.client ?? await getSupabaseAdminClient();
+  const client = rawClient as unknown as AnalyticsRpcClient;
 
   try {
-    const [result, countryResult] = await Promise.all([
+    const [result, countryResult, intentResult] = await Promise.all([
       client.rpc(DASHBOARD_RPC, {
         p_start: window.from,
         p_end: window.to,
@@ -665,6 +1013,11 @@ export async function fetchAdminAnalyticsDashboard(
         p_start: window.from,
         p_end: window.to,
         p_limit: COUNTRY_BREAKDOWN_LIMIT,
+      }),
+      client.rpc(INTENT_ACTIVITY_RPC, {
+        p_start: window.from,
+        p_end: window.to,
+        p_limit: INTENT_ACTIVITY_LIMIT,
       }),
     ]);
     if (result.error) {
@@ -709,6 +1062,27 @@ export async function fetchAdminAnalyticsDashboard(
       && countryWindowMatches
       ? readPayloadArray(countryPayload, "countries")
       : null;
+    const intentPayload = firstRow(intentResult.data);
+    const intentSchemaVersion = isRecord(intentPayload)
+      ? cleanString(intentPayload.schemaVersion ?? intentPayload.schema_version)
+      : "";
+    const intentWindow = isRecord(intentPayload) && isRecord(intentPayload.window) ? intentPayload.window : null;
+    const intentWindowMatches = timestampsMatch(intentWindow?.start, window.from)
+      && timestampsMatch(intentWindow?.end, window.to);
+    let intentActivity = !intentResult.error
+      && isRecord(intentPayload)
+      && intentSchemaVersion === INTENT_ACTIVITY_SCHEMA_VERSION
+      && intentWindowMatches
+      ? parseAnalyticsIntentActivity(intentPayload)
+      : null;
+    const canQueryIntentTables = typeof (rawClient as unknown as { from?: unknown }).from === "function";
+    if (!intentActivity && canQueryIntentTables) {
+      try {
+        intentActivity = await loadIntentActivityFromTables(rawClient as unknown as AnalyticsTableClient, window);
+      } catch {
+        intentActivity = null;
+      }
+    }
     const parsedBaseBreakdowns = parseAnalyticsBreakdowns(payload);
     const breakdowns = parsedBaseBreakdowns
       ? {
@@ -728,6 +1102,7 @@ export async function fetchAdminAnalyticsDashboard(
     if (!daily) warnings.push("Trend data is unavailable or did not match the supported schema.");
     if (!breakdowns) warnings.push("Traffic breakdowns and funnel data are unavailable.");
     if (countryResult.error || !countryRows) warnings.push("Country quality metrics are temporarily unavailable; session totals remain visible.");
+    if (!intentActivity) warnings.push("Portal and WhatsApp activity details are temporarily unavailable; core analytics remain visible.");
     if (!recentSessions) warnings.push("Recent sessions are unavailable or did not match the supported schema.");
     if (!recentErrors) warnings.push("Recent error details are unavailable or did not match the supported schema.");
     if (!auditEvents) warnings.push("Admin audit history is unavailable or did not match the supported schema.");
@@ -738,6 +1113,7 @@ export async function fetchAdminAnalyticsDashboard(
         window,
         generatedAt: now.toISOString(),
         summary,
+        intentActivity,
         daily,
         breakdowns,
         recentSessions,

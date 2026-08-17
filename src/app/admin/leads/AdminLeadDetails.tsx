@@ -255,7 +255,15 @@ function PortalActivity({ events, total }: { events: PortalEvent[]; total: numbe
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8b6a18]">Portal</p>
           <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.03em] text-[#161616]">Handoffs</h2>
         </div>
-        <span className="rounded-full border border-[#161616]/10 px-2.5 py-1 text-xs font-semibold text-[#6f6e6a]">{total}</span>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/admin/analytics?focus=overview"
+            className="inline-flex min-h-10 items-center rounded-md border border-[#161616]/10 px-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#6f6e6a] transition-colors hover:border-[#e6c767] hover:bg-[#e6c767]/15 hover:text-[#161616]"
+          >
+            View click details
+          </Link>
+          <span className="rounded-full border border-[#161616]/10 px-2.5 py-1 text-xs font-semibold text-[#6f6e6a]">{total}</span>
+        </div>
       </div>
 
       <div className="divide-y divide-[#161616]/10">
@@ -270,6 +278,7 @@ function PortalActivity({ events, total }: { events: PortalEvent[]; total: numbe
                 <div className="min-w-0">
                   <p className="text-sm font-semibold capitalize text-[#161616]">{event.mode}</p>
                   <p className="mt-1 truncate text-xs text-[#6f6e6a]">{event.role_title}</p>
+                  <p className="mt-1 break-words text-xs text-[#6f6e6a]">{event.action}{event.page_path ? ` · ${event.page_path}` : ""}</p>
                   <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[#6f6e6a]">{formatDate(event.created_at)}</p>
                 </div>
                 <a

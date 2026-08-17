@@ -7,6 +7,7 @@ import {
   parseAnalyticsBreakdowns,
   parseAnalyticsCountries,
   parseAnalyticsDaily,
+  parseAnalyticsIntentActivity,
   parseAnalyticsRange,
   parseAnalyticsSummary,
   parseRecentErrors,
@@ -137,6 +138,43 @@ describe("admin analytics payload parsing", () => {
     expect(result.at(-1)).toMatchObject({ countryCode: "GE", countryName: "Georgia" });
   });
 
+  it("parses consent-linked portal and WhatsApp activity without inventing network data", () => {
+    const result = parseAnalyticsIntentActivity({
+      summary: { totalIntentClicks: 3, portalHandoffs: 1, whatsappClicks: 2, phoneClicks: 0, emailClicks: 0 },
+      counts: [{ name: "whatsapp_click", clicks: 2, sessions: 2, visitors: 2 }],
+      portalHandoffs: [{
+        id: "portal-1",
+        occurredAt: "2026-08-07T11:59:00.000Z",
+        mode: "login",
+        roleTitle: "Customer",
+        action: "Continue as customer",
+        portalUrl: "https://portal.example.test/login",
+        countryCode: "ge",
+        city: "Batumi",
+        ipAddress: "203.0.113.10",
+      }],
+      whatsappClicks: [{
+        id: "whatsapp-1",
+        occurredAt: "2026-08-07T11:58:00.000Z",
+        sessionId: "session-1",
+        pagePath: "/contact",
+        linkHost: "wa.me",
+        linkPath: "995555000000",
+      }],
+    });
+
+    expect(result).toMatchObject({
+      summary: { portalHandoffs: 1, whatsappClicks: 2 },
+      portalHandoffs: [{ countryCode: "GE", city: "Batumi", ipAddress: "203.0.113.10" }],
+      whatsappClicks: [{ sessionId: "session-1", linkHost: "wa.me", linkPath: "995555000000" }],
+    });
+    expect(parseAnalyticsIntentActivity({ summary: {} })).toMatchObject({
+      summary: { portalHandoffs: 0, whatsappClicks: 0 },
+      portalHandoffs: [],
+      whatsappClicks: [],
+    });
+  });
+
   it("drops incomplete operational rows and retains admin-only detail", () => {
     expect(parseRecentSessions([{
       id: "session-1",
@@ -262,6 +300,21 @@ describe("admin analytics data access", () => {
           },
           error: null,
         }
+      : name === "get_site_analytics_intent_activity"
+        ? {
+            data: {
+              schemaVersion: "20260817150000",
+              window: {
+                start: "2026-08-06T12:00:00.000Z",
+                end: "2026-08-07T12:00:00.000Z",
+              },
+              summary: { totalIntentClicks: 0, portalHandoffs: 0, whatsappClicks: 0, phoneClicks: 0, emailClicks: 0 },
+              counts: [],
+              portalHandoffs: [],
+              whatsappClicks: [],
+            },
+            error: null,
+          }
       : ({
       data: {
         schemaVersion: "20260807130642",
@@ -316,6 +369,11 @@ describe("admin analytics data access", () => {
       p_start: "2026-08-06T12:00:00.000Z",
       p_end: "2026-08-07T12:00:00.000Z",
       p_limit: 100,
+    });
+    expect(rpc).toHaveBeenNthCalledWith(3, "get_site_analytics_intent_activity", {
+      p_start: "2026-08-06T12:00:00.000Z",
+      p_end: "2026-08-07T12:00:00.000Z",
+      p_limit: 200,
     });
     expect(result).toMatchObject({
       ok: true,
@@ -378,7 +436,10 @@ describe("admin analytics data access", () => {
       ok: true,
       data: {
         breakdowns: { countries: [] },
-        warnings: ["Country quality metrics are temporarily unavailable; session totals remain visible."],
+        warnings: [
+          "Country quality metrics are temporarily unavailable; session totals remain visible.",
+          "Portal and WhatsApp activity details are temporarily unavailable; core analytics remain visible.",
+        ],
       },
     });
   });
@@ -419,7 +480,10 @@ describe("admin analytics data access", () => {
       ok: true,
       data: {
         breakdowns: { countries: [] },
-        warnings: ["Country quality metrics are temporarily unavailable; session totals remain visible."],
+        warnings: [
+          "Country quality metrics are temporarily unavailable; session totals remain visible.",
+          "Portal and WhatsApp activity details are temporarily unavailable; core analytics remain visible.",
+        ],
       },
     });
   });

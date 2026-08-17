@@ -16,6 +16,7 @@ import {
   MessageCircle,
   MonitorSmartphone,
   MousePointerClick,
+  PhoneCall,
   Route,
   ShieldCheck,
   Sparkles,
@@ -28,6 +29,7 @@ import type {
   AnalyticsCountryBreakdownItem,
   AnalyticsDailyPoint,
   AnalyticsFunnelStep,
+  AnalyticsIntentActivity,
   RecentAnalyticsSession,
   RecentSessionJourneyEvent,
 } from "@/lib/admin/analytics";
@@ -835,6 +837,114 @@ function TechnicalRow({ label, value, mono = false }: { label: string; value: st
   );
 }
 
+function activityLocation(countryCode: string | null, region: string | null, city: string | null) {
+  return [countryCode, region, city].filter(Boolean).join(" · ") || "Location unavailable";
+}
+
+function activityNetwork(ipAddress: string | null) {
+  return ipAddress ?? "Raw address expired or unavailable";
+}
+
+function IntentActivityOverview({ activity }: { activity: AnalyticsIntentActivity | null }) {
+  if (!activity) {
+    return <UnavailablePanel label="Portal and WhatsApp activity details could not be loaded from the analytics source." />;
+  }
+
+  const stats = [
+    { label: "WhatsApp clicks", value: activity.summary.whatsappClicks, note: "Consent-linked clicks on WhatsApp links", icon: MessageCircle },
+    { label: "Portal handoffs", value: activity.summary.portalHandoffs, note: "Stored portal handoff records in this window", icon: MousePointerClick },
+    { label: "Phone clicks", value: activity.summary.phoneClicks, note: "Clicks on telephone links", icon: PhoneCall },
+    { label: "Email clicks", value: activity.summary.emailClicks, note: "Clicks on email links", icon: Mail },
+  ];
+
+  return (
+    <section className="mt-8" aria-labelledby="analytics-intent-title">
+      <SectionHeader
+        eyebrow="Intent signals"
+        title="Portal & WhatsApp activity"
+        detail="These are click signals, not completed portal applications. Location and network context is shown only when the visitor granted optional analytics consent and is retained within the existing privacy window."
+        titleId="analytics-intent-title"
+      />
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map((stat) => <OperationStat key={stat.label} {...stat} />)}
+      </div>
+
+      <div className="mt-6 grid gap-6 xl:grid-cols-2">
+        <section className="overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm" aria-labelledby="portal-activity-title">
+          <div className="border-b border-[#161616]/10 px-5 py-5 sm:px-6">
+            <div className="flex items-end justify-between gap-3">
+              <div>
+                <h3 id="portal-activity-title" className="font-display text-lg font-semibold tracking-[-0.02em] text-[#161616]">Portal click activity</h3>
+                <p className="mt-1 text-xs leading-5 text-[#6f6e6a]">Latest {activity.portalHandoffs.length} retained records, including the selected role and destination.</p>
+              </div>
+              <MousePointerClick className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+            </div>
+          </div>
+          {activity.portalHandoffs.length ? (
+            <div className="divide-y divide-border">
+              {activity.portalHandoffs.map((event) => (
+                <article key={event.id} className="px-5 py-4 sm:px-6">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-[#161616]">{event.roleTitle} · {event.mode}</p>
+                      <p className="mt-1 break-words text-xs text-[#6f6e6a]">{event.action} · {event.locale ?? "Locale unavailable"}</p>
+                    </div>
+                    <time dateTime={event.occurredAt} className="shrink-0 text-xs text-[#6f6e6a]">{formatDateTime(event.occurredAt)}</time>
+                  </div>
+                  <a href={event.portalUrl} target="_blank" rel="noreferrer" className="mt-3 block truncate text-xs font-medium text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17]">{event.portalUrl}</a>
+                  <dl className="mt-3 grid gap-x-4 gap-y-2 rounded-lg border border-[#161616]/8 bg-[#fbfaf7] px-3 py-2 text-xs sm:grid-cols-2">
+                    <div><dt className="font-semibold text-[#6f6e6a]">Location</dt><dd className="mt-0.5 break-words text-[#343330]">{activityLocation(event.countryCode, event.region, event.city)}</dd></div>
+                    <div><dt className="font-semibold text-[#6f6e6a]">IP address</dt><dd className="mt-0.5 break-words font-mono text-[#343330]">{activityNetwork(event.ipAddress)}</dd></div>
+                    <div><dt className="font-semibold text-[#6f6e6a]">Page</dt><dd className="mt-0.5 break-words text-[#343330]">{event.pagePath ?? "Unavailable"}</dd></div>
+                    <div><dt className="font-semibold text-[#6f6e6a]">Session</dt><dd className="mt-0.5 break-words font-mono text-[#343330]">{compactIdentifier(event.sessionId)}</dd></div>
+                  </dl>
+                </article>
+              ))}
+            </div>
+          ) : <div className="p-5 sm:p-6"><PanelEmpty label="No stored portal handoffs in this window." compact /></div>}
+        </section>
+
+        <section className="overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm" aria-labelledby="whatsapp-activity-title">
+          <div className="border-b border-[#161616]/10 px-5 py-5 sm:px-6">
+            <div className="flex items-end justify-between gap-3">
+              <div>
+                <h3 id="whatsapp-activity-title" className="font-display text-lg font-semibold tracking-[-0.02em] text-[#161616]">WhatsApp click activity</h3>
+                <p className="mt-1 text-xs leading-5 text-[#6f6e6a]">Latest {activity.whatsappClicks.length} consent-linked clicks and their page context.</p>
+              </div>
+              <MessageCircle className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+            </div>
+          </div>
+          {activity.whatsappClicks.length ? (
+            <div className="divide-y divide-border">
+              {activity.whatsappClicks.map((event) => (
+                <article key={event.id} className="px-5 py-4 sm:px-6">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-[#161616]">{event.targetLabel ?? "WhatsApp"}</p>
+                      <p className="mt-1 break-words text-xs text-[#6f6e6a]">{event.pagePath ?? "Unknown page"}{event.linkPath ? ` · ${event.linkPath}` : ""}</p>
+                    </div>
+                    <time dateTime={event.occurredAt} className="shrink-0 text-xs text-[#6f6e6a]">{formatDateTime(event.occurredAt)}</time>
+                  </div>
+                  <dl className="mt-3 grid gap-x-4 gap-y-2 rounded-lg border border-[#161616]/8 bg-[#fbfaf7] px-3 py-2 text-xs sm:grid-cols-2">
+                    <div><dt className="font-semibold text-[#6f6e6a]">Location</dt><dd className="mt-0.5 break-words text-[#343330]">{activityLocation(event.countryCode, event.region, event.city)}</dd></div>
+                    <div><dt className="font-semibold text-[#6f6e6a]">IP address</dt><dd className="mt-0.5 break-words font-mono text-[#343330]">{activityNetwork(event.ipAddress)}</dd></div>
+                    <div><dt className="font-semibold text-[#6f6e6a]">Link host</dt><dd className="mt-0.5 break-words text-[#343330]">{event.linkHost ?? "Unavailable"}</dd></div>
+                    <div><dt className="font-semibold text-[#6f6e6a]">Session</dt><dd className="mt-0.5 break-words font-mono text-[#343330]">{compactIdentifier(event.sessionId)}</dd></div>
+                  </dl>
+                </article>
+              ))}
+            </div>
+          ) : <div className="p-5 sm:p-6"><PanelEmpty label="No WhatsApp clicks in this window." compact /></div>}
+        </section>
+      </div>
+
+      <p className="mt-4 rounded-[10px] border border-[#161616]/8 bg-[#fbfaf7] px-4 py-3 text-xs leading-5 text-[#6f6e6a]">
+        IP addresses are server-derived, shown only to this protected administrator view, and automatically removed after the existing short retention period. Country, region, city, and hashed identifiers may remain after raw IP removal. Visitors who decline optional analytics still produce operational portal records, but their consent-linked network context is unavailable.
+      </p>
+    </section>
+  );
+}
+
 function ErrorsAndAudit({
   data,
   pagination,
@@ -992,6 +1102,7 @@ export function AnalyticsDashboard({
           <MetricCard label="Errors" value={formatNumber(summary.errorEvents)} note={summary.errorEvents === 0 ? "No captured client or server errors" : "Review details in Errors & security"} icon={AlertTriangle} tone="light" />
           <MetricCard label="Converted sessions" value={formatNumber(summary.convertedSessions)} note={`${summary.convertedSessions === 1 ? "Session" : "Sessions"} with a backend-confirmed contact request`} icon={ShieldCheck} tone="light" />
         </div>
+        <IntentActivityOverview activity={data.intentActivity} />
       </section> : null}
 
       {focus === "operations" ? <OperationsOverview result={operations} windowPortalHandoffs={summary.portalHandoffs} /> : null}
