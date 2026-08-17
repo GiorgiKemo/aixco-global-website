@@ -312,7 +312,6 @@ export function DubaiImageMarquee({
                     <Image
                       src={image.src}
                       alt={setIndex === 0 ? tx(image.title) : ""}
-                      unoptimized
                       loading={tileLoading.loading}
                       fetchPriority={tileLoading.fetchPriority}
                       decoding="async"

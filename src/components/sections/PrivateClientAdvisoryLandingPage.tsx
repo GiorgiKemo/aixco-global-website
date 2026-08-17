@@ -634,7 +634,7 @@ export function PrivateClientAdvisoryLandingPage() {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link href="/" aria-label={content.home} className={styles.logoLink}>
-            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} priority sizes="10rem" />
+            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="10rem" />
           </Link>
           <nav className={styles.desktopNav} aria-label="Primary navigation">
             <button type="button" onClick={() => goTo("who")}>{content.nav.who}</button>
@@ -689,7 +689,7 @@ export function PrivateClientAdvisoryLandingPage() {
             <p className={styles.location}><span className={styles.locationDot} aria-hidden />{content.hero.location}</p>
           </div>
           <div className={styles.heroMedia}>
-            <Image src={heroImage} alt={content.hero.imageAlt} fill priority sizes="(max-width: 800px) 100vw, 58vw" unoptimized />
+            <Image src={heroImage} alt={content.hero.imageAlt} fill preload quality={90} sizes="(max-width: 800px) 180vw, 160vw" />
             <div className={styles.mediaCaption}><span>BATUMI, GEORGIA</span><span>BLACK SEA COAST</span></div>
           </div>
         </section>
@@ -700,7 +700,7 @@ export function PrivateClientAdvisoryLandingPage() {
         </section>
 
         <section id="markets" className={styles.marketSection}>
-          <div className={styles.marketMedia}><Image src={contextImage} alt={content.markets.imageAlt} fill sizes="(max-width: 800px) 100vw, 50vw" unoptimized /></div>
+          <div className={styles.marketMedia}><Image src={contextImage} alt={content.markets.imageAlt} fill quality={90} sizes="(max-width: 800px) 100vw, 60vw" /></div>
           <div className={styles.marketCopy}><p className={styles.eyebrow}>{content.markets.eyebrow}</p><h2>{content.markets.title}</h2><p>{content.markets.body}</p><div className={styles.focusNote}><span>{content.markets.current}</span><strong>{content.markets.currentBody}</strong></div></div>
         </section>
 
@@ -728,7 +728,7 @@ export function PrivateClientAdvisoryLandingPage() {
         </section>
 
         <section id="contact" className={styles.contactSection}>
-          <div className={styles.contactMedia}><Image src={heroImage} alt="Batumi coastline at dusk" fill sizes="(max-width: 800px) 100vw, 42vw" unoptimized /></div>
+          <div className={styles.contactMedia}><Image src={heroImage} alt="Batumi coastline at dusk" fill quality={90} sizes="(max-width: 800px) 220vw, 140vw" /></div>
           <div className={styles.contactPanel}><p className={styles.eyebrow}>{content.contact.eyebrow}</p><h2>{content.contact.title}</h2><p className={styles.contactBody}>{content.contact.body}</p>{submitted ? <div className={styles.successPanel}><div className={styles.successIcon}><ShieldCheck size={20} aria-hidden /></div><h3>{content.contact.successTitle}</h3><p>{content.contact.successBody}</p>{requestReference && <small>{content.contact.reference}: {requestReference}</small>}<button type="button" className={styles.textLink} onClick={() => { setSubmitted(false); setRequestReference(null); formStartedAt.current = Date.now(); }}>{content.contact.another}<ArrowRight size={16} aria-hidden /></button></div> : <form className={styles.contactForm} onSubmit={handleSubmit}><div className={styles.formGrid}><label><span>{content.contact.name}</span><input name="name" required minLength={2} maxLength={100} placeholder={content.contact.namePlaceholder} /></label><label><span>{content.contact.email}</span><input name="email" type="email" required placeholder={content.contact.emailPlaceholder} /></label></div><label><span>{content.contact.interest}</span><select name="interest" defaultValue=""><option value="" disabled>{content.contact.interest}</option>{content.contact.interestOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select><ChevronDown className={styles.selectIcon} size={16} aria-hidden /></label><label><span>{content.contact.message}</span><textarea name="message" required minLength={10} maxLength={1500} placeholder={content.contact.messagePlaceholder} rows={4} /></label><input className={styles.honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" /><label className={styles.consent}><input type="checkbox" required /><span>{content.contact.consent}</span></label>{submitError && <p className={styles.formError} role="alert">{submitError}</p>}<button type="submit" className={styles.goldButton} disabled={submitting}>{submitting ? content.contact.sending : content.contact.submit}<ArrowRight size={17} aria-hidden /></button></form>}</div>
         </section>
       </main>

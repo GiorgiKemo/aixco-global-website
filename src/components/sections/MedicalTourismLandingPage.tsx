@@ -141,12 +141,14 @@ function ExpandableScene({
   alt,
   className,
   objectPosition = "center",
+  sizes = "(min-width: 1024px) 130vw, 220vw",
   expandLabel,
 }: {
   image: { src: string; width: number; height: number };
   alt: string;
   className?: string;
   objectPosition?: string;
+  sizes?: string;
   expandLabel: string;
 }) {
   const { tx } = useI18n();
@@ -159,7 +161,8 @@ function ExpandableScene({
           src={image.src}
           alt={alt}
           fill
-          sizes="(min-width: 1024px) 58vw, 100vw"
+          quality={90}
+          sizes={sizes}
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-[1.03]"
           style={{ objectPosition }}
         />
@@ -287,7 +290,6 @@ export function MedicalTourismLandingPage() {
               alt="AIXCO.Global"
               width={1600}
               height={333}
-              priority
               sizes="(min-width: 1024px) 12rem, 10rem"
               className="h-auto w-[7.25rem] sm:w-36 lg:w-40"
             />
@@ -451,9 +453,9 @@ export function MedicalTourismLandingPage() {
                 src={sceneImages.hero.src}
                 alt={tx("Batumi coastline at golden hour")}
                 fill
-                priority
+                preload
                 quality={90}
-                sizes="(min-width: 1024px) 58vw, 100vw"
+                sizes="(min-width: 1024px) 120vw, 200vw"
                 className="object-cover object-[58%_center] transition-transform duration-[1400ms] ease-out hover:scale-[1.03]"
               />
               <button
@@ -697,6 +699,7 @@ export function MedicalTourismLandingPage() {
                     image={sceneImages.pool}
                     alt={tx("Reverance indoor pool")}
                     expandLabel={tx("Expand the Reverance indoor pool image")}
+                    sizes="(min-width: 1024px) 85vw, 200vw"
                     className="absolute inset-0"
                   />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Indoor pool")}</figcaption>
@@ -706,6 +709,7 @@ export function MedicalTourismLandingPage() {
                     image={sceneImages.garden}
                     alt={tx("Reverance garden pool")}
                     expandLabel={tx("Expand the Reverance garden pool image")}
+                    sizes="(min-width: 1024px) 58vw, 140vw"
                     className="absolute inset-0"
                   />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Garden pool")}</figcaption>
@@ -715,6 +719,7 @@ export function MedicalTourismLandingPage() {
                     image={sceneImages.sauna}
                     alt={tx("Reverance sauna")}
                     expandLabel={tx("Expand the Reverance sauna image")}
+                    sizes="(min-width: 1024px) 58vw, 140vw"
                     className="absolute inset-0"
                   />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Sauna")}</figcaption>

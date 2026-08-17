@@ -218,7 +218,6 @@ export function GeorgiaResidencyLandingPage() {
               alt="AIXCO.Global"
               width={1600}
               height={333}
-              priority
               sizes="10rem"
               className="h-auto w-[7.25rem] sm:w-36"
             />
@@ -329,7 +328,7 @@ export function GeorgiaResidencyLandingPage() {
             src={aixcoLiveImages.batumiMosaicNightSkyline}
             alt={tx("Batumi night skyline")}
             fill
-            priority
+            preload
             sizes="100vw"
             className="object-cover"
           />

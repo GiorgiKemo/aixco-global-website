@@ -583,7 +583,7 @@ function StoryMediaPanel({
       loading={shouldLoadEagerly ? "eager" : "lazy"}
       decoding="async"
       quality={90}
-      sizes={media.sizes ?? "(min-width: 1280px) 56vw, 100vw"}
+      sizes={media.sizes ?? "(min-width: 1280px) 72vw, 140vw"}
       className={cn(
         "story-media-panel__image h-full w-full",
         media.fit === "contain" ? "object-contain" : "object-cover",
@@ -859,7 +859,6 @@ function StoryChrome({
             aria-hidden="true"
             width={1600}
             height={333}
-            unoptimized
             loading="eager"
             sizes="(max-width: 767px) 9rem, 10rem"
             className="h-auto w-[9rem] shrink-0 object-contain sm:w-[10rem]"
@@ -1028,7 +1027,6 @@ function StoryChrome({
             aria-hidden="true"
             width={1600}
             height={333}
-            unoptimized
             loading="eager"
             sizes="12rem"
             className="h-auto w-[10.75rem] shrink-0 object-contain 2xl:w-[11.5rem]"
@@ -1223,7 +1221,7 @@ function FixedHeroBackdrop({ mediaReady, visible }: { mediaReady: boolean; visib
           fetchPriority="high"
           loading="eager"
           quality={78}
-          sizes="100vw"
+          sizes="120vw"
           className="object-cover brightness-[1.08] saturate-[1.08]"
         />
         {shouldRenderVideo && canAnimate && videoSrc ? (
@@ -2076,7 +2074,7 @@ function AboutScene({
                 className="story-about-cinematic-poster object-cover"
                 loading="lazy"
                 fetchPriority="auto"
-                sizes="100vw"
+                sizes="130vw"
                 decoding="async"
               />
             </div>
@@ -2471,7 +2469,7 @@ function AboutAccessScene({
               loading="lazy"
               decoding="async"
               quality={75}
-              sizes="100vw"
+              sizes="120vw"
               className="h-full w-full object-cover"
               style={{ objectPosition: "58% 56%" }}
             />

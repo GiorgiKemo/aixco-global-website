@@ -831,7 +831,7 @@ export function GeorgiaTaxResidencyLandingPage() {
       <header className={`${styles.header} ${scrolled || menuOpen ? styles.headerScrolled : ""}`}>
         <div className={styles.headerInner}>
           <Link href="/" aria-label={content.home} className={styles.logoLink}>
-            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} priority sizes="9rem" />
+            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="9rem" />
           </Link>
           <nav aria-label="Primary navigation" className={styles.desktopNav}>
             <button type="button" onClick={() => handleNav("clock")}>{content.nav.clock}</button>
@@ -891,7 +891,7 @@ export function GeorgiaTaxResidencyLandingPage() {
           </div>
           <div className={styles.heroMedia}>
             <motion.div className={styles.heroImageInner} style={reducedMotion ? undefined : { y: heroImageY }}>
-              <Image src={heroImage} alt="Batumi coastline and modern architecture in Georgia" fill priority quality={90} sizes="(min-width: 1600px) 115vw, (min-width: 980px) 160vw, 200vw" />
+              <Image src={heroImage} alt="Batumi coastline and modern architecture in Georgia" fill preload quality={90} sizes="(min-width: 1600px) 115vw, (min-width: 980px) 160vw, 200vw" />
             </motion.div>
             <div className={styles.heroMediaCaption}><span>{content.hero.location}</span><span>41.6168° N · 41.6367° E</span></div>
           </div>

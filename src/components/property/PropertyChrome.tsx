@@ -308,7 +308,7 @@ export function PropertyChrome() {
       <header ref={headerRef} data-property-chrome="true" className="property-chrome sticky inset-x-0 top-0 z-[60] border-b border-[#161616]/10 bg-[#F3EDE1]/95 text-[#161616] shadow-[0_18px_46px_-42px_rgba(22,22,22,0.45)] backdrop-blur-xl">
         <div className="property-chrome__inner mx-auto flex min-h-[4.75rem] max-w-[96rem] items-center gap-4 px-4 sm:px-7 xl:min-h-[5.75rem] xl:px-6 2xl:px-8">
           <Link href="/" prefetch={false} onClick={closeAll} aria-label={tx("AIXCO.GLOBAL home")} className="property-chrome__brand inline-flex min-h-11 min-w-0 items-center transition-opacity hover:opacity-72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45">
-            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="" aria-hidden="true" width={1600} height={333} sizes="(min-width: 1280px) 10.75rem, 9.5rem" unoptimized className="h-auto w-[9.5rem] shrink-0 object-contain xl:w-[10.75rem]" />
+            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="" aria-hidden="true" width={1600} height={333} sizes="(min-width: 1280px) 10.75rem, 9.5rem" className="h-auto w-[9.5rem] shrink-0 object-contain xl:w-[10.75rem]" />
             <span className="sr-only">AIXCO.GLOBAL</span>
           </Link>
 

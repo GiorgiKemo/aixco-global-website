@@ -9,7 +9,7 @@ import styles from "./InitialSiteAnimation.module.css";
 const INTRO_FAILSAFE_MS = 4_400;
 const REDUCED_MOTION_VISIBLE_MS = 0;
 const INTRO_FADE_MS = 360;
-const INTRO_POSTER = "/aixco-global-op2/media/aixco-intro-black-poster.webp";
+const INTRO_POSTER = "/aixco-global-op2/media/aixco-intro-black-poster-hd.webp";
 const INTRO_DESKTOP_VIDEO = "/aixco-global-op2/media/aixco-intro-black-1080.mp4";
 const INTRO_PORTRAIT_VIDEO = "/aixco-global-op2/media/aixco-intro-black-portrait-1080.mp4";
 
@@ -110,7 +110,7 @@ export function InitialSiteAnimation() {
         alt=""
         fill
         sizes="100vw"
-        priority
+        preload
         decoding="async"
         className={styles.poster}
         aria-hidden="true"

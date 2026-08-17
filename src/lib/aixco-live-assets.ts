@@ -63,7 +63,7 @@ export const aixcoLiveImages = {
   batumiMosaicThumbNightSkyline: `${liveImageBase}/batumi-mosaic-thumbs/batumi-night-skyline.webp`,
   batumiMosaicThumbNatureAerial: `${liveImageBase}/batumi-mosaic-thumbs/batumi-nature-aerial.webp`,
   batumiMosaicThumbBlueTower: `${liveImageBase}/batumi-mosaic-thumbs/batumi-blue-tower.webp`,
-  taxResidencyHeroGenerated: `${taxResidencyImageBase}/batumi-tax-residency-hero-generated-v2.png`,
+  taxResidencyHeroGenerated: `${taxResidencyImageBase}/batumi-tax-residency-hero-generated-v3.webp`,
   taxResidencyRouteArchitecture: `${taxResidencyImageBase}/batumi-modern-skyline-esra-kaya.jpg`,
   taxResidencyRouteNight: `${taxResidencyImageBase}/batumi-night-panorama-giorgi-nakashidze.jpg`,
   taxResidencyWhyGeorgia: `${taxResidencyImageBase}/batumi-sunset-dmitry-mottl.jpg`,

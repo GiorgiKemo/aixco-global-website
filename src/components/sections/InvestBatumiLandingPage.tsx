@@ -629,7 +629,7 @@ export function InvestBatumiLandingPage() {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link href="/" aria-label="AIXCO.Global home" className={styles.logoLink}>
-            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} priority sizes="(min-width: 768px) 10rem, 8.5rem" />
+            <Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="(min-width: 768px) 10rem, 8.5rem" />
           </Link>
           <nav aria-label="Primary navigation" className={styles.desktopNav}>
             {navItems.map((item) => (
@@ -675,7 +675,7 @@ export function InvestBatumiLandingPage() {
             <div className={styles.heroMeta}><span>{content.hero.location}</span><span>{content.hero.service}</span></div>
           </div>
           <div className={styles.heroImageFrame}>
-            <Image src={images.hero.src} alt="Batumi skyline and Black Sea from above" fill priority quality={90} sizes="100vw" className={styles.heroImage} />
+            <Image src={images.hero.src} alt="Batumi skyline and Black Sea from above" fill preload quality={90} sizes="(max-width: 850px) 200vw, 110vw" className={styles.heroImage} />
           </div>
         </section>
 
@@ -702,11 +702,11 @@ export function InvestBatumiLandingPage() {
             <button type="button" className={styles.textButton} onClick={() => scrollTo("#contact")}>{content.batumi.cta}<ArrowUpRight size={16} /></button>
           </div>
           <button type="button" className={`${styles.imageFrame} ${styles.imageFrameOne}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(1)}>
-            <Image src={images.verticalCity.src} alt={content.gallery.captions[1]} fill quality={90} sizes="100vw" />
+            <Image src={images.verticalCity.src} alt={content.gallery.captions[1]} fill quality={90} sizes="(max-width: 560px) 180vw, (max-width: 960px) 100vw, 80vw" />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
           <button type="button" className={`${styles.imageFrame} ${styles.imageFrameTwo}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(2)}>
-            <Image src={images.verticalTower.src} alt={content.gallery.captions[2]} fill quality={90} sizes="100vw" />
+            <Image src={images.verticalTower.src} alt={content.gallery.captions[2]} fill quality={90} sizes="(max-width: 560px) 180vw, (max-width: 960px) 100vw, 45vw" />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
         </section>
@@ -734,7 +734,7 @@ export function InvestBatumiLandingPage() {
           <div className={styles.galleryGrid}>
             {images.gallery.map((image, index) => (
               <button key={image.src} type="button" aria-label={content.gallery.captions[index]} onClick={() => setGalleryIndex(index)}>
-                <Image src={image.src} alt={content.gallery.captions[index]} fill quality={90} sizes="(min-width: 961px) 80vw, 100vw" />
+                <Image src={image.src} alt={content.gallery.captions[index]} fill quality={90} sizes="(max-width: 560px) 140vw, (max-width: 960px) 120vw, 75vw" />
                 <span>{content.gallery.captions[index]}</span>
               </button>
             ))}
@@ -756,7 +756,7 @@ export function InvestBatumiLandingPage() {
 
         <section id="contact" className={styles.contactSection}>
           <div className={styles.contactMedia}>
-            <Image src={images.contact.src} alt="Premium indoor pool and resident wellness area" fill quality={90} sizes="(min-width: 900px) 120vw, 100vw" />
+            <Image src={images.contact.src} alt="Premium indoor pool and resident wellness area" fill quality={90} sizes="(max-width: 899px) 220vw, 120vw" />
           </div>
           <div className={styles.contactPanel}>
             <p className={styles.eyebrowGold}>{content.contact.eyebrow}</p>

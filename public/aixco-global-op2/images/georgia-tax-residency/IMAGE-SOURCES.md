@@ -4,7 +4,7 @@ The following photographs are used on the AIXCO.Global Georgia tax residency lan
 
 ## Batumi tax residency hero
 
-- Bespoke visual generated for AIXCO.Global.
+- Bespoke visual generated for AIXCO.Global (high-resolution WebP delivery derivative).
 - Concept: Batumi private-client advisory setting and the statutory 183-day theme.
 - Changes: responsive cropping and web delivery performed by the website.
 

@@ -14,7 +14,7 @@ function NotFoundContent() {
       <a href="#main-content" className="skip-link">{tx("Skip to main content")}</a>
       <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-white/10 bg-[#11100e]/80 pb-3 pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pt-[max(0.75rem,env(safe-area-inset-top,0px))] text-white backdrop-blur-xl">
         <Link href="/" aria-label={tx("AIXCO.GLOBAL home")} className="inline-flex min-w-0 items-center gap-2">
-          <Image src={aixcoLiveLogos.aixcoHorizontalLight} alt="" aria-hidden="true" width={1600} height={333} sizes="10rem" unoptimized className="h-auto w-40 shrink-0 object-contain" />
+          <Image src={aixcoLiveLogos.aixcoHorizontalLight} alt="" aria-hidden="true" width={1600} height={333} sizes="10rem" className="h-auto w-40 shrink-0 object-contain" />
           <span className="sr-only">AIXCO.GLOBAL</span>
         </Link>
       </header>

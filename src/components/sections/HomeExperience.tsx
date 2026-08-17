@@ -28,7 +28,7 @@ function StoryBootSurface() {
         preload
         fetchPriority="high"
         quality={78}
-        sizes="100vw"
+        sizes="120vw"
         className="-z-20 object-cover"
       />
       <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(17,16,14,0.76),rgba(17,16,14,0.30)_55%,rgba(17,16,14,0.58)),linear-gradient(180deg,rgba(17,16,14,0.18),rgba(17,16,14,0.64))]" />

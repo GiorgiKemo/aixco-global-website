@@ -34,7 +34,7 @@ describe("InitialSiteAnimation", () => {
     expect(container.querySelector("video")).toHaveAttribute("playsinline");
     expect(container.querySelector("video")).toHaveAttribute(
       "poster",
-      "/aixco-global-op2/media/aixco-intro-black-poster.webp",
+      "/aixco-global-op2/media/aixco-intro-black-poster-hd.webp",
     );
 
     const sources = Array.from(container.querySelectorAll("source"));
@@ -54,7 +54,7 @@ describe("InitialSiteAnimation", () => {
 
     expect(container.querySelectorAll("img")).toHaveLength(1);
     expect(decodeURIComponent(container.querySelector("img")?.getAttribute("src") ?? "")).toContain(
-      "/aixco-global-op2/media/aixco-intro-black-poster.webp",
+      "/aixco-global-op2/media/aixco-intro-black-poster-hd.webp",
     );
   });
 });

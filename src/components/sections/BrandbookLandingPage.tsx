@@ -223,7 +223,6 @@ export function BrandbookLandingPage() {
               alt="AIXCO.Global"
               width={1600}
               height={333}
-              priority
               sizes="(min-width: 1024px) 12rem, 10rem"
               className="h-auto w-[7.25rem] sm:w-36 lg:w-40"
             />
@@ -395,9 +394,9 @@ export function BrandbookLandingPage() {
                 src={projectImages.hero.src}
                 alt={tx("The Reverance residence exterior in Batumi")}
                 fill
-                priority
+                preload
                 quality={90}
-                sizes="(min-width: 1024px) 60vw, 100vw"
+                sizes="(min-width: 1024px) 65vw, 120vw"
                 className="object-cover object-[58%_center] transition-transform duration-[1400ms] ease-out hover:scale-[1.03]"
               />
               <button
@@ -466,7 +465,7 @@ export function BrandbookLandingPage() {
             </div>
 
             <div className="relative min-h-[28rem] overflow-hidden bg-[#D9D0C0] lg:min-h-[44rem]">
-              <Image src={projectImages.sunset.src} alt={tx("Sunset over the residence facade")} fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover object-center" />
+              <Image src={projectImages.sunset.src} alt={tx("Sunset over the residence facade")} fill quality={90} sizes="(min-width: 1024px) 75vw, 140vw" className="object-cover object-center" />
               <button
                 type="button"
                 aria-label={tx("Expand image")}
@@ -528,7 +527,7 @@ export function BrandbookLandingPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <figure className="group relative aspect-[0.92] overflow-hidden bg-[#D9D0C0] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
-                      <Image src={projectImages.lounge.src} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                      <Image src={projectImages.lounge.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 65vw, 140vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance residential towers image")} onClick={() => setExpandedImage({ ...projectImages.lounge, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
@@ -538,7 +537,7 @@ export function BrandbookLandingPage() {
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
-                      <Image src={projectImages.arrival.src} alt={tx("Reverance arrival and landscaped exterior project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                      <Image src={projectImages.arrival.src} alt={tx("Reverance arrival and landscaped exterior project render")} fill quality={90} sizes="(min-width: 1024px) 35vw, 70vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ ...projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
@@ -548,7 +547,7 @@ export function BrandbookLandingPage() {
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
-                      <Image src={projectImages.gym.src} alt={tx("Reverance residential towers project render")} fill sizes="(min-width: 1024px) 28vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                      <Image src={projectImages.gym.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 35vw, 70vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ ...projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
