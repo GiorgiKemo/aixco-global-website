@@ -385,6 +385,93 @@ try {
 
     try {
       await page.goto(propertyUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
+
+      // The legacy property detail URL is intentionally consolidated into the
+      // canonical Reverance landing page. Keep this browser gate aligned with
+      // the live route while retaining the legacy checks below as a loud
+      // fallback if that redirect is ever removed intentionally.
+      if (new URL(page.url()).pathname === "/reverance-batumi") {
+        const heroTitle = page.locator("main > section:first-of-type h1");
+        await heroTitle.waitFor({ state: "visible", timeout: 30_000 });
+        await page.evaluate(() => document.fonts.ready);
+        await page.waitForFunction(() => {
+          const image = document.querySelector("main > section:first-of-type img");
+          return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
+        }, undefined, { timeout: 30_000 });
+
+        await heroTitle.evaluate((element) => element.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" }));
+        const canonicalMetrics = await page.evaluate(() => {
+          const root = document.documentElement;
+          const hero = document.querySelector("main > section:first-of-type");
+          const title = hero?.querySelector("h1");
+          const image = hero?.querySelector("img");
+          const menuButton = document.querySelector('button[aria-label="Open navigation"]');
+          const languageButton = document.querySelector('[data-language-trigger="true"]');
+          const titleRect = title?.getBoundingClientRect();
+          const titleStyle = title ? getComputedStyle(title) : null;
+          const menuRect = menuButton?.getBoundingClientRect();
+          const languageRect = languageButton?.getBoundingClientRect();
+          return {
+            horizontalOverflow: root.scrollWidth - root.clientWidth,
+            imageLoaded: image instanceof HTMLImageElement && image.naturalWidth > 0,
+            title: (title?.textContent ?? "").replace(/\s+/g, " ").trim(),
+            titleOverflow: title instanceof HTMLElement ? title.scrollWidth - title.clientWidth : Number.POSITIVE_INFINITY,
+            titleFullyVisible: Boolean(
+              titleRect
+                && titleStyle?.display !== "none"
+                && titleStyle?.visibility !== "hidden"
+                && titleRect.width > 0
+                && titleRect.height > 0
+                && titleRect.top >= -3
+                && titleRect.right <= root.clientWidth + 3
+                && titleRect.bottom <= window.innerHeight + 3
+                && titleRect.left >= -3
+            ),
+            menuTarget: menuRect ? { width: menuRect.width, height: menuRect.height } : null,
+            languageTarget: languageRect ? { width: languageRect.width, height: languageRect.height } : null,
+          };
+        });
+
+        const label = viewport.name;
+        if (canonicalMetrics.horizontalOverflow > 4) errors.push(`${label}: canonical project page has horizontal overflow`);
+        if (!canonicalMetrics.imageLoaded) errors.push(`${label}: canonical project hero image did not load`);
+        if (!canonicalMetrics.title.includes("Reverance")) errors.push(`${label}: canonical project title is missing`);
+        if (!canonicalMetrics.titleFullyVisible || canonicalMetrics.titleOverflow > 3) {
+          errors.push(`${label}: canonical project title is clipped or overflowing`);
+        }
+        if (!canonicalMetrics.menuTarget || canonicalMetrics.menuTarget.width < 44 || canonicalMetrics.menuTarget.height < 44) {
+          errors.push(`${label}: canonical project menu target is below 44px`);
+        }
+        if (!canonicalMetrics.languageTarget || canonicalMetrics.languageTarget.width < 44 || canonicalMetrics.languageTarget.height < 44) {
+          errors.push(`${label}: canonical project language target is below 44px`);
+        }
+
+        await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+        const menuButton = page.getByRole("button", { name: "Open navigation" });
+        await menuButton.click();
+        const mobileNavigation = page.getByRole("navigation", { name: "Mobile navigation" });
+        await mobileNavigation.waitFor({ state: "visible" });
+        const menuMetrics = await mobileNavigation.evaluate((navigation) => {
+          const root = document.documentElement;
+          const targets = [...navigation.querySelectorAll("a, button")].map((target) => {
+            const rect = target.getBoundingClientRect();
+            return { width: rect.width, height: rect.height };
+          });
+          return {
+            horizontalOverflow: root.scrollWidth - root.clientWidth,
+            undersizedTarget: targets.some(({ width, height }) => width < 44 || height < 44),
+          };
+        });
+        if (menuMetrics.horizontalOverflow > 4) errors.push(`${label}/menu: canonical project navigation overflows horizontally`);
+        if (menuMetrics.undersizedTarget) errors.push(`${label}/menu: canonical project navigation has a target below 44px`);
+        await page.getByRole("button", { name: "Close navigation" }).click();
+        await mobileNavigation.waitFor({ state: "detached" });
+
+        if (consoleErrors.length) errors.push(`${label}: console errors ${consoleErrors.join(" | ")}`);
+        continue;
+      }
+
+      errors.push(`${viewport.name}: legacy project URL did not redirect to /reverance-batumi`);
       await page.waitForSelector("main > section:first-of-type h1", { state: "visible", timeout: 30_000 });
       await page.evaluate(() => document.fonts.ready);
       await page.waitForFunction(() => {
@@ -566,4 +653,4 @@ if (errors.length) {
 }
 
 console.log(`Mobile experience smoke passed at ${viewports.map(({ width, height }) => `${width}x${height}`).join(", ")}.`);
-console.log(`Property mobile smoke passed at ${propertyViewports.map(({ width, height }) => `${width}x${height}`).join(", ")}.`);
+console.log(`Canonical project mobile smoke passed at ${propertyViewports.map(({ width, height }) => `${width}x${height}`).join(", ")}.`);
