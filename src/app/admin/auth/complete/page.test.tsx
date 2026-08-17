@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const auth = vi.hoisted(() => ({
   setSession: vi.fn(),
   getUser: vi.fn(),
+  signOut: vi.fn(),
 }));
 const router = vi.hoisted(() => ({ replace: vi.fn() }));
 
@@ -18,6 +19,7 @@ import AdminAuthCompletePage from "./page";
 describe("default Supabase admin invite completion", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    auth.signOut.mockResolvedValue({ error: null });
     window.history.replaceState(null, "", "/admin/auth/complete");
   });
 
@@ -37,6 +39,7 @@ describe("default Supabase admin invite completion", () => {
     }));
     await waitFor(() => expect(auth.getUser).toHaveBeenCalled());
     await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/admin/login?setup=1"));
+    expect(auth.signOut).not.toHaveBeenCalled();
   });
 
   it("fails closed and keeps the URL clean when the fragment is invalid", async () => {
@@ -47,5 +50,17 @@ describe("default Supabase admin invite completion", () => {
     expect(await screen.findByRole("heading", { name: "Invitation could not be verified" })).toBeInTheDocument();
     expect(window.location.hash).toBe("");
     expect(document.body.textContent).not.toContain("rejected-secret");
+    expect(auth.signOut).toHaveBeenCalledWith({ scope: "local" });
+  });
+
+  it("clears a restored invite session when invited-user validation fails", async () => {
+    window.history.replaceState(null, "", "/admin/auth/complete#access_token=access-secret&refresh_token=refresh-secret");
+    auth.setSession.mockResolvedValue({ data: { session: {} }, error: null });
+    auth.getUser.mockResolvedValue({ data: { user: null }, error: new Error("Rejected user") });
+    render(<AdminAuthCompletePage />);
+
+    expect(await screen.findByRole("heading", { name: "Invitation could not be verified" })).toBeInTheDocument();
+    expect(auth.signOut).toHaveBeenCalledWith({ scope: "local" });
+    expect(router.replace).not.toHaveBeenCalled();
   });
 });

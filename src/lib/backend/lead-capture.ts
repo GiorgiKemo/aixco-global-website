@@ -37,17 +37,25 @@ function getBrowserContext(locale?: string): BrowserContextInput {
   }
 
   let analyticsSessionId: string | null = null;
+  let analyticsSessionToken: string | null = null;
   try {
     const stored = JSON.parse(window.sessionStorage.getItem(ANALYTICS_SESSION_STORAGE_KEY) ?? "null") as {
       id?: unknown;
+      linkToken?: unknown;
     } | null;
     analyticsSessionId = analyticsCollectionAllowed()
       && typeof stored?.id === "string"
       && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(stored.id)
       ? stored.id
       : null;
+    analyticsSessionToken = analyticsSessionId
+      && typeof stored?.linkToken === "string"
+      && /^[a-f0-9]{64}$/.test(stored.linkToken)
+      ? stored.linkToken
+      : null;
   } catch {
     analyticsSessionId = null;
+    analyticsSessionToken = null;
   }
 
   const safeHash = /^#[a-z0-9][a-z0-9_-]{0,119}$/i.test(window.location.hash)
@@ -63,6 +71,7 @@ function getBrowserContext(locale?: string): BrowserContextInput {
       viewport_height: window.innerHeight,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || null,
       analytics_session_id: analyticsSessionId,
+      analytics_session_token: analyticsSessionToken,
     },
   };
 }

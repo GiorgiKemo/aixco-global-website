@@ -71,12 +71,21 @@ describe("AdminShell navigation", () => {
     );
 
     const menuButton = screen.getByRole("button", { name: "Open admin navigation" });
+    const background = document.querySelector(".admin-shell__background");
+    expect(background).not.toHaveAttribute("inert");
+    expect(background).not.toHaveAttribute("aria-hidden");
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
     fireEvent.click(menuButton);
 
     const drawer = screen.getByRole("dialog", { name: "Admin navigation" });
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
+    expect(menuButton).toHaveAttribute("aria-label", "Close admin navigation");
+    expect(background).toHaveAttribute("inert");
+    expect(background).toHaveAttribute("aria-hidden", "true");
+    expect(screen.queryByRole("link", { name: "Skip to admin content" })).not.toBeInTheDocument();
     expect(within(drawer).getByRole("navigation", { name: "Mobile admin navigation" })).toBeInTheDocument();
+    const firstDrawerLink = within(drawer).getByRole("link", { name: /Operations/ });
+    expect(firstDrawerLink).toHaveFocus();
     expect(within(drawer).getByRole("link", { name: /Website analytics/ })).toHaveAttribute(
       "href",
       "/admin/analytics?focus=overview",
@@ -88,6 +97,10 @@ describe("AdminShell navigation", () => {
     fireEvent.keyDown(drawer, { key: "Escape" });
     await waitFor(() => expect(screen.queryByRole("dialog", { name: "Admin navigation" })).not.toBeInTheDocument());
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(menuButton).toHaveAccessibleName("Open admin navigation");
+    expect(background).not.toHaveAttribute("inert");
+    expect(background).not.toHaveAttribute("aria-hidden");
+    await waitFor(() => expect(menuButton).toHaveFocus());
   });
 
   it("closes the mobile drawer when a destination is selected", async () => {

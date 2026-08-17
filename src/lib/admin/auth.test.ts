@@ -36,7 +36,6 @@ const originalEnv = Object.fromEntries(ENV_KEYS.map((key) => [key, process.env[k
 
 function setIdentityEnvironment() {
   process.env.ADMIN_AUTH_MODE = "identity";
-  process.env.ADMIN_REQUIRE_MFA = "true";
   process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co";
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_example";
 }
@@ -160,9 +159,27 @@ describe("admin identity authorization", () => {
     await expect(getAdminAuthDecision()).resolves.toEqual({ ok: false, reason: "mfa-required" });
   });
 
-  it("accepts a role-authorized password session when MFA is disabled", async () => {
+  it("rejects a stale AAL2 session after its MFA factor is no longer active", async () => {
     setIdentityEnvironment();
-    process.env.ADMIN_REQUIRE_MFA = "false";
+    mocks.getUser.mockResolvedValue({
+      data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
+      error: null,
+    });
+    mocks.getAssurance.mockResolvedValue({
+      data: { currentLevel: "aal2", nextLevel: "aal1" },
+      error: null,
+    });
+
+    await expect(getAdminAuthDecision()).resolves.toEqual({ ok: false, reason: "mfa-required" });
+  });
+
+  it.each([
+    ["is absent", undefined],
+    ["is false", "false"],
+  ])("rejects an AAL1 named admin when ADMIN_REQUIRE_MFA %s", async (_label, flag) => {
+    setIdentityEnvironment();
+    if (flag === undefined) delete process.env.ADMIN_REQUIRE_MFA;
+    else process.env.ADMIN_REQUIRE_MFA = flag;
     mocks.getUser.mockResolvedValue({
       data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
       error: null,
@@ -172,17 +189,9 @@ describe("admin identity authorization", () => {
       error: null,
     });
 
-    await expect(getAdminAuthDecision()).resolves.toEqual({
-      ok: true,
-      principal: {
-        id: "admin-id",
-        email: "admin@aixco.global",
-        authentication: "supabase-password",
-        aal: "aal1",
-      },
-    });
-    expect(mocks.getAssurance).not.toHaveBeenCalled();
-    await expect(getAal2AdminAuthDecision()).resolves.toMatchObject({ ok: true });
+    await expect(getAdminAuthDecision()).resolves.toEqual({ ok: false, reason: "mfa-required" });
+    await expect(getAal2AdminAuthDecision()).resolves.toEqual({ ok: false, reason: "mfa-required" });
+    expect(mocks.getAssurance).toHaveBeenCalledTimes(2);
   });
 
   it("accepts a valid legacy token only during migration mode", async () => {

@@ -10,6 +10,7 @@ import {
   type PortalEventInput,
 } from "@/lib/backend/lead-capture-contracts";
 import { isSafePortalUrl } from "@/lib/security/urls";
+import { verifyAnalyticsSessionLink } from "@/lib/backend/analytics-session-link";
 import { getSupabaseAdminClient, getSupabaseAdminConfig } from "@/lib/supabase/admin";
 import type { Database, Json } from "@/lib/supabase/database.types";
 
@@ -84,13 +85,18 @@ function safeReferrer(value: string | null | undefined) {
 
 function normalizeMetadata(context?: BrowserContextInput, headers?: Headers): Json {
   const metadata = context?.metadata ?? {};
+  const analyticsSessionVerified = verifyAnalyticsSessionLink(
+    metadata.analytics_session_id,
+    metadata.analytics_session_token,
+  );
 
   return {
     referrer: safeReferrer(metadata.referrer ?? headers?.get("referer")),
     viewport_width: metadata.viewport_width ?? null,
     viewport_height: metadata.viewport_height ?? null,
     timezone: cleanOptionalText(metadata.timezone, 80),
-    analytics_session_id: metadata.analytics_session_id ?? null,
+    analytics_session_id: analyticsSessionVerified ? metadata.analytics_session_id ?? null : null,
+    analytics_session_verified: analyticsSessionVerified,
   };
 }
 
@@ -313,6 +319,11 @@ export async function captureChatTranscript(
   if (!parsed.success) return validationFailure("chat transcript");
 
   const messages = parsed.data.messages;
+  const visitorMessageCount = messages.filter((message) => message.role === "visitor").length;
+  // The assistant greeting alone is not a lead. Treat it as a successful
+  // no-op so background syncing remains quiet until a visitor participates.
+  if (visitorMessageCount === 0) return { ok: true };
+
   const transcript = buildTranscript(messages);
   if (transcript.length > 10000) {
     return { ok: false, reason: "Chat transcript is too long." };
@@ -329,6 +340,7 @@ export async function captureChatTranscript(
     transcript,
     messages: messages as unknown as Json,
     message_count: messages.length,
+    visitor_message_count: visitorMessageCount,
     locale: serverContext.locale,
     page_path: serverContext.page_path,
     user_agent: serverContext.user_agent,

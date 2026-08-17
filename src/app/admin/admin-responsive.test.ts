@@ -32,7 +32,8 @@ describe("admin responsive safeguards", () => {
 
     expect(analyticsPage).toContain("requireAal2AdminSession");
     expect(analyticsPage).not.toContain("requireAdminSession");
-    expect(analyticsPage).toContain("{ required: true }");
+    expect(analyticsPage).toContain("after(() => auditAdminAction");
+    expect(analyticsPage).not.toContain("{ required: true }");
     expect(adminIndex).toContain("getAdminAuthDecision");
     expect(adminIndex).toContain("loadAdminLaunchpadData");
     expect(adminIndex).toContain("<AdminShell");
@@ -41,7 +42,10 @@ describe("admin responsive safeguards", () => {
 
   it("uses mobile-safe form text and 44px action floors", () => {
     const emailTestPage = readAdminSource("./email-test/page.tsx");
-    const privacyPage = readAdminSource("./privacy/page.tsx");
+    const privacyPage = [
+      readAdminSource("./privacy/page.tsx"),
+      readAdminSource("./privacy/PrivacyControls.tsx"),
+    ].join("\n");
     const identityPage = readAdminSource("./identity-migration/page.tsx");
     const leadsPage = readAdminSource("./leads/page.tsx");
 
@@ -53,12 +57,12 @@ describe("admin responsive safeguards", () => {
     expect(leadsPage).toContain("min-h-11");
   });
 
-  it("describes password-only identity access without requiring an authenticator", () => {
+  it("keeps identity migration messaging aligned with mandatory MFA", () => {
     const identityPage = readAdminSource("./identity-migration/page.tsx");
 
-    expect(identityPage).toContain("const passwordOnlyAccess = !config.mfaRequired");
-    expect(identityPage).toContain("Password-only admin access is active");
-    expect(identityPage).toContain("Password access active");
+    expect(identityPage).not.toContain("passwordOnlyAccess");
+    expect(identityPage).toContain("The recipient must accept it, set a password, and enroll an authenticator.");
+    expect(identityPage).toContain('admin.verifiedTotpFactors ? "TOTP verified" : "TOTP pending"');
   });
 
   it("uses AA-safe admin metadata colors and honest active-lead labels", () => {

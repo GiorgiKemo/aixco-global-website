@@ -50,7 +50,6 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
             missing: config.missing,
             mode: config.mode,
             role: config.role,
-            mfaRequired: config.mfaRequired,
             identityAvailable: config.identity.configured,
             legacyAvailable: config.legacy.enabled && config.legacy.configured,
           }}

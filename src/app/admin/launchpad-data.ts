@@ -125,10 +125,10 @@ export async function loadAdminLaunchpadData(
             : null,
       }
     : null;
-  const admins = identityResult
+  const admins = identityResult?.sourceStatus === "available"
     ? {
         total: identityResult.admins.length,
-        verified: identityResult.admins.filter((admin) => admin.verifiedTotpFactors > 0).length,
+        verified: identityResult.admins.filter((admin) => (admin.verifiedTotpFactors ?? 0) > 0).length,
       }
     : null;
 

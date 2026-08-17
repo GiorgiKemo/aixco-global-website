@@ -39,7 +39,6 @@ type AdminAuthConfig = {
   configured: boolean;
   mode: AdminAuthMode;
   role: string;
-  mfaRequired: boolean;
   identity: {
     configured: boolean;
     missing: string[];
@@ -70,9 +69,6 @@ function readAdminAuthMode(): { mode: AdminAuthMode; valid: boolean } {
 export function getAdminAuthConfig(): AdminAuthConfig {
   const modeResult = readAdminAuthMode();
   const role = readEnv("ADMIN_AUTH_ROLE") || DEFAULT_ADMIN_AUTH_ROLE;
-  // Keep MFA available as a production hardening option while allowing the
-  // local dashboard to use the requested simple email + password flow.
-  const mfaRequired = readEnv("ADMIN_REQUIRE_MFA") === "true";
   const supabaseAuth = getSupabaseAuthPublicConfig();
   const password = readEnv("ADMIN_DASHBOARD_PASSWORD");
   const sessionSecret = readEnv("ADMIN_SESSION_SECRET");
@@ -101,7 +97,6 @@ export function getAdminAuthConfig(): AdminAuthConfig {
     configured: modeResult.valid && missing.length === 0,
     mode: modeResult.mode,
     role,
-    mfaRequired,
     identity: {
       configured: identityConfigured,
       missing: supabaseAuth.missing,
@@ -141,20 +136,12 @@ async function getIdentityDecision(config: AdminAuthConfig): Promise<AdminAuthDe
     if (error || !user) return { ok: false, reason: "not-authenticated" };
     if (!hasAdminRole(user.app_metadata, config.role)) return { ok: false, reason: "not-authorized" };
 
-    if (!config.mfaRequired) {
-      return {
-        ok: true,
-        principal: {
-          id: user.id,
-          email: user.email ?? null,
-          authentication: "supabase-password",
-          aal: "aal1",
-        },
-      };
-    }
-
     const assurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-    if (assurance.error || assurance.data.currentLevel !== "aal2") {
+    if (
+      assurance.error
+      || assurance.data.currentLevel !== "aal2"
+      || assurance.data.nextLevel !== "aal2"
+    ) {
       return { ok: false, reason: "mfa-required" };
     }
 
@@ -212,10 +199,6 @@ export async function getAdminAuthDecision(): Promise<AdminAuthDecision> {
 export async function getAal2AdminAuthDecision(): Promise<AdminAuthDecision> {
   const decision = await getAdminAuthDecision();
   if (!decision.ok) return decision;
-
-  if (!getAdminAuthConfig().mfaRequired && decision.principal.authentication === "supabase-password") {
-    return decision;
-  }
 
   if (
     decision.principal.authentication !== "supabase-mfa"

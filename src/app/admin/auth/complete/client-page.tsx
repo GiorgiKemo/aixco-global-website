@@ -22,15 +22,22 @@ export default function AdminAuthCompleteClient() {
       try {
         if (!accessToken || !refreshToken) throw new Error("Missing invite session.");
         const supabase = getSupabaseAuthBrowserClient();
-        const session = await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: refreshToken,
-        });
-        if (session.error || !session.data.session) throw session.error ?? new Error("Invalid invite session.");
+        try {
+          const session = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (session.error || !session.data.session) throw session.error ?? new Error("Invalid invite session.");
 
-        const user = await supabase.auth.getUser();
-        if (user.error || !user.data.user) throw user.error ?? new Error("Invalid invited user.");
-        if (!cancelled) router.replace("/admin/login?setup=1");
+          const user = await supabase.auth.getUser();
+          if (user.error || !user.data.user) throw user.error ?? new Error("Invalid invited user.");
+          if (!cancelled) router.replace("/admin/login?setup=1");
+        } catch (error) {
+          // setSession may already have persisted the invite session locally.
+          // Always clear it before exposing a failed completion state.
+          await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
+          throw error;
+        }
       } catch {
         if (!cancelled) setFailed(true);
       }

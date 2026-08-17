@@ -4,12 +4,16 @@ import { resetRateLimitStore } from "@/lib/security/rate-limit";
 
 const mocks = vi.hoisted(() => ({
   distributedGuard: vi.fn(),
+  linkToken: vi.fn(),
   origin: vi.fn(),
   store: vi.fn(),
 }));
 
 vi.mock("@/lib/backend/lead-capture-abuse", () => ({
   checkDistributedLeadCaptureLimit: mocks.distributedGuard,
+}));
+vi.mock("@/lib/backend/analytics-session-link", () => ({
+  createAnalyticsSessionLinkToken: mocks.linkToken,
 }));
 vi.mock("@/lib/backend/lead-capture-route", () => ({
   isTrustedLeadCaptureOrigin: mocks.origin,
@@ -66,6 +70,7 @@ describe("analytics ingestion route", () => {
     resetRateLimitStore();
     mocks.origin.mockReturnValue(true);
     mocks.distributedGuard.mockResolvedValue({ allowed: true });
+    mocks.linkToken.mockReturnValue("a".repeat(64));
     mocks.store.mockResolvedValue({ eventCount: 1, receipt: "receipt-123" });
   });
 
@@ -79,6 +84,8 @@ describe("analytics ingestion route", () => {
       stored: true,
       accepted: 1,
       receipt: "receipt-123",
+      sessionId: payload.session.id,
+      linkToken: "a".repeat(64),
     });
     expect(mocks.distributedGuard).toHaveBeenCalledWith("telemetry", null, expect.any(Headers));
     expect(mocks.store).toHaveBeenCalledWith(payload, expect.any(Headers));

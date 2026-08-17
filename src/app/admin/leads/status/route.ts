@@ -9,11 +9,19 @@ import {
   updateLeadStatus,
 } from "@/lib/admin/leads";
 import { readBoundedJson } from "@/lib/security/request-body";
+import {
+  buildAdminLeadsFeedbackRedirect,
+  sanitizeAdminLeadsReturnTo,
+} from "../navigation";
 
 const statusUpdateSchema = z.object({
   resource: leadResourceSchema,
   id: z.string().uuid(),
   status: leadStatusSchema,
+  returnTo: z.preprocess(
+    (value) => value === null || value === "" ? undefined : value,
+    z.string().max(2048).optional(),
+  ),
 });
 
 function redirectTo(request: Request, path: string) {
@@ -33,7 +41,13 @@ async function readStatusUpdatePayload(request: Request, wantsJson: boolean) {
     resource: formData.get("resource"),
     id: formData.get("id"),
     status: formData.get("status"),
+    returnTo: formData.get("returnTo"),
   };
+}
+
+function readReturnTo(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+  return (value as Record<string, unknown>).returnTo;
 }
 
 export async function POST(request: Request) {
@@ -54,11 +68,13 @@ export async function POST(request: Request) {
     return new NextResponse("Forbidden", { status: 403 });
   }
 
-  const parsed = statusUpdateSchema.safeParse(await readStatusUpdatePayload(request, wantsJson));
+  const payload = await readStatusUpdatePayload(request, wantsJson);
+  const returnTo = sanitizeAdminLeadsReturnTo(readReturnTo(payload), "/admin/leads?tab=new");
+  const parsed = statusUpdateSchema.safeParse(payload);
 
   if (!parsed.success) {
     if (wantsJson) return NextResponse.json({ ok: false, error: "invalid-status-update" }, { status: 400 });
-    return redirectTo(request, "/admin/leads?error=invalid-status-update");
+    return redirectTo(request, buildAdminLeadsFeedbackRedirect(returnTo, { error: "invalid-status-update" }));
   }
 
   try {
@@ -81,7 +97,11 @@ export async function POST(request: Request) {
       headers: request.headers,
     });
     if (wantsJson) return NextResponse.json({ ok: true });
-    return redirectTo(request, `/admin/leads?updated=1#${parsed.data.resource}-${parsed.data.id}`);
+    return redirectTo(request, buildAdminLeadsFeedbackRedirect(
+      returnTo,
+      { updated: "1" },
+      `${parsed.data.resource}-${parsed.data.id}`,
+    ));
   } catch (error) {
     await auditAdminAction({
       action: "lead.status.update",
@@ -98,6 +118,10 @@ export async function POST(request: Request) {
         { status: notFound ? 404 : 500 },
       );
     }
-    return redirectTo(request, `/admin/leads?error=${notFound ? "lead-not-found" : "status-update-failed"}`);
+    return redirectTo(request, buildAdminLeadsFeedbackRedirect(
+      returnTo,
+      { error: notFound ? "lead-not-found" : "status-update-failed" },
+      `${parsed.data.resource}-${parsed.data.id}`,
+    ));
   }
 }

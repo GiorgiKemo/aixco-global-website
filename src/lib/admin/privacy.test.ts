@@ -12,14 +12,24 @@ import {
 function createPagedClient(dataByTable: Record<string, Record<string, unknown>[]>) {
   const ranges: { table: string; from: number; to: number }[] = [];
   const inCalls: { table: string; column: string; values: unknown[] }[] = [];
+  const eqCalls: { table: string; column: string; value: unknown }[] = [];
+  const ilikeCalls: { table: string; column: string; value: unknown }[] = [];
   return {
     ranges,
     inCalls,
+    eqCalls,
+    ilikeCalls,
     from(table: string) {
       const builder = {
         select: () => builder,
-        eq: () => builder,
-        ilike: () => builder,
+        eq(column: string, value: unknown) {
+          eqCalls.push({ table, column, value });
+          return builder;
+        },
+        ilike(column: string, value: unknown) {
+          ilikeCalls.push({ table, column, value });
+          return builder;
+        },
         in(column: string, values: unknown[]) {
           inCalls.push({ table, column, values });
           return builder;
@@ -39,68 +49,28 @@ const linkedSessionId = "2e62b77e-cc8c-4e04-b26c-809b5813f455";
 const secondLinkedSessionId = "a8756294-bbea-4b07-a657-986641ff49b2";
 
 function createDeletionClient(options?: {
-  contacts?: Record<string, unknown>[];
-  chats?: Record<string, unknown>[];
-  lookupError?: { code?: string; message: string } | null;
   rpcError?: { code?: string; message: string } | null;
-  analyticsDeleteError?: { code?: string; message: string } | null;
+  analyticsSessionsDeleted?: number;
 }) {
   const actions: string[] = [];
-  const deleteIds: unknown[][] = [];
   const rpc = vi.fn(async () => {
     actions.push("rpc");
     return {
       data: options?.rpcError
         ? null
-        : [{ contacts_deleted: 2, chats_deleted: 1, abuse_attempts_deleted: 4 }],
+        : [{
+            contacts_deleted: 2,
+            chats_deleted: 0,
+            abuse_attempts_deleted: 4,
+            analytics_sessions_deleted: options?.analyticsSessionsDeleted ?? 2,
+          }],
       error: options?.rpcError ?? null,
     };
   });
 
   return {
     actions,
-    deleteIds,
     rpc,
-    from(table: string) {
-      if (table === "contact_submissions" || table === "chat_transcripts") {
-        const builder = {
-          select: () => builder,
-          eq: () => builder,
-          ilike: () => builder,
-          order: () => builder,
-          async range() {
-            actions.push(`lookup:${table}`);
-            return options?.lookupError
-              ? { data: null, error: options.lookupError }
-              : {
-                  data: table === "contact_submissions"
-                    ? options?.contacts ?? []
-                    : options?.chats ?? [],
-                  error: null,
-                };
-          },
-        };
-        return builder;
-      }
-
-      if (table !== "site_analytics_sessions") throw new Error(`Unexpected table: ${table}`);
-      const builder = {
-        delete() {
-          return builder;
-        },
-        in(_column: string, ids: unknown[]) {
-          deleteIds.push(ids);
-          return builder;
-        },
-        async select() {
-          actions.push("delete");
-          return options?.analyticsDeleteError
-            ? { data: null, error: options.analyticsDeleteError }
-            : { data: deleteIds.at(-1)?.map((id) => ({ id })) ?? [], error: null };
-        },
-      };
-      return builder;
-    },
   };
 }
 
@@ -135,19 +105,20 @@ describe("admin subject privacy operations", () => {
     expect(client.ranges.filter((range) => range.table === "contact_email_events").length).toBeGreaterThan(2);
   });
 
-  it("exports analytics only for unique, validated session IDs linked by subject records", async () => {
+  it("never treats an anonymous analytics session as exclusively attributable to an email", async () => {
     const client = createPagedClient({
       contact_submissions: [
-        { id: "contact-1", metadata: { analytics_session_id: linkedSessionId } },
-        { id: "contact-2", metadata: { analytics_session_id: linkedSessionId.toUpperCase() } },
-        { id: "contact-3", metadata: { analytics_session_id: secondLinkedSessionId } },
-        { id: "contact-4", metadata: { analytics_session_id: "not-a-uuid" } },
-        { id: "contact-5", metadata: { analytics_session_id: 123 } },
+        { id: "contact-1", metadata: { analytics_session_id: linkedSessionId, analytics_session_verified: true } },
+        { id: "contact-2", metadata: { analytics_session_id: linkedSessionId.toUpperCase(), analytics_session_verified: true } },
+        { id: "contact-3", metadata: { analytics_session_id: secondLinkedSessionId, analytics_session_verified: true } },
+        { id: "contact-4", metadata: { analytics_session_id: "not-a-uuid", analytics_session_verified: true } },
+        { id: "contact-5", metadata: { analytics_session_id: 123, analytics_session_verified: true } },
         { id: "contact-6", metadata: [linkedSessionId] },
         { id: "contact-7", metadata: { unrelated: linkedSessionId } },
+        { id: "contact-8", metadata: { analytics_session_id: "6527dba7-3040-40fe-b965-9b278610f7b7" } },
       ],
       chat_transcripts: [
-        { id: "chat-1", metadata: { analytics_session_id: secondLinkedSessionId } },
+        { id: "chat-1", metadata: { analytics_session_id: secondLinkedSessionId, analytics_session_verified: true } },
       ],
       contact_email_deliveries: [],
       contact_email_events: [],
@@ -169,125 +140,58 @@ describe("admin subject privacy operations", () => {
 
     const result = await exportContactSubjectData("Subject@Example.com");
 
-    expect(result.analyticsSessions).toHaveLength(2);
-    expect(result.analyticsSessionNetwork).toHaveLength(2);
-    expect(result.analyticsEvents).toHaveLength(2);
+    expect(result).not.toHaveProperty("analyticsSessions");
+    expect(result).not.toHaveProperty("analyticsSessionNetwork");
+    expect(result).not.toHaveProperty("analyticsEvents");
     const analyticsInCalls = client.inCalls.filter(({ table }) => table.startsWith("site_analytics_"));
-    expect(analyticsInCalls).toHaveLength(3);
-    for (const call of analyticsInCalls) {
-      expect(call.values).toEqual([linkedSessionId, secondLinkedSessionId]);
-    }
+    expect(analyticsInCalls).toHaveLength(0);
+    expect(result.chatTranscripts).toEqual([]);
+    expect(client.ranges.some(({ table }) => table === "chat_transcripts")).toBe(false);
+    expect(client.ilikeCalls).toEqual([]);
   });
 
-  it("does not query analytics tables when contact metadata has no valid linked session", async () => {
-    const client = createPagedClient({
-      contact_submissions: [
-        { id: "contact-1", metadata: null },
-        { id: "contact-2", metadata: { analytics_session_id: "invalid" } },
-        { id: "contact-3", metadata: { analytics_session_id: { nested: linkedSessionId } } },
-      ],
-      chat_transcripts: [],
-      contact_email_deliveries: [],
-      contact_email_events: [],
-      lead_capture_attempts: [],
-    });
-    mocks.getClient.mockResolvedValue(client);
-
-    const result = await exportContactSubjectData("Subject@Example.com");
-
-    expect(result.analyticsSessions).toEqual([]);
-    expect(result.analyticsSessionNetwork).toEqual([]);
-    expect(result.analyticsEvents).toEqual([]);
-    expect(client.ranges.some(({ table }) => table.startsWith("site_analytics_"))).toBe(false);
-  });
-
-  it("captures analytics links and removes linked sessions before deleting contact metadata", async () => {
-    const client = createDeletionClient({
-      contacts: [
-        { metadata: { analytics_session_id: linkedSessionId } },
-        { metadata: { analytics_session_id: linkedSessionId } },
-        { metadata: { analytics_session_id: "invalid" } },
-      ],
-      chats: [
-        { metadata: { analytics_session_id: secondLinkedSessionId } },
-      ],
-    });
+  it("delegates the complete subject deletion to one transactional RPC", async () => {
+    const client = createDeletionClient({ analyticsSessionsDeleted: 0 });
     mocks.getClient.mockResolvedValue(client);
 
     await expect(deleteContactSubjectData("Subject@Example.com")).resolves.toEqual({
       subject: "subject@example.com",
       contactsDeleted: 2,
-      chatsDeleted: 1,
+      chatsDeleted: 0,
       abuseAttemptsDeleted: 4,
-      analyticsSessionsDeleted: 2,
-      deleted: 9,
+      analyticsSessionsDeleted: 0,
+      deleted: 6,
     });
     expect(client.rpc).toHaveBeenCalledWith("delete_contact_subject_data", {
       p_email: "subject@example.com",
       p_recipient_hash: expect.stringMatching(/^[a-f0-9]{64}$/),
     });
-    expect(client.deleteIds).toEqual([[linkedSessionId, secondLinkedSessionId]]);
-    expect(client.actions).toEqual([
-      "lookup:contact_submissions",
-      "lookup:chat_transcripts",
-      "delete",
-      "rpc",
-    ]);
+    expect(client.actions).toEqual(["rpc"]);
     expect(privacySubjectAuditTarget("Subject@Example.com")).toMatch(/^email-hmac:[a-f0-9]{24}$/);
     expect(privacySubjectAuditTarget("Subject@Example.com")).not.toContain("subject@example.com");
   });
 
-  it("returns zero analytics deletions and never issues an unfiltered delete for malformed links", async () => {
-    const client = createDeletionClient({
-      contacts: [
-        { metadata: { analytics_session_id: "invalid" } },
-        { metadata: {} },
-        { metadata: null },
-      ],
-    });
+  it("returns the atomic RPC summary when there are no linked analytics sessions", async () => {
+    const client = createDeletionClient({ analyticsSessionsDeleted: 0 });
     mocks.getClient.mockResolvedValue(client);
 
     await expect(deleteContactSubjectData("subject@example.com")).resolves.toMatchObject({
       analyticsSessionsDeleted: 0,
-      deleted: 7,
+      chatsDeleted: 0,
+      deleted: 6,
     });
-    expect(client.deleteIds).toEqual([]);
-    expect(client.actions).toEqual([
-      "lookup:contact_submissions",
-      "lookup:chat_transcripts",
-      "rpc",
-    ]);
+    expect(client.actions).toEqual(["rpc"]);
   });
 
-  it("fails closed when deleting a linked analytics session returns a database error", async () => {
+  it("fails closed when the transactional deletion RPC fails", async () => {
     const client = createDeletionClient({
-      contacts: [{ metadata: { analytics_session_id: linkedSessionId } }],
-      analyticsDeleteError: { code: "42501", message: "denied" },
+      rpcError: { code: "42501", message: "denied" },
     });
     mocks.getClient.mockResolvedValue(client);
 
     await expect(deleteContactSubjectData("subject@example.com")).rejects.toThrow(
-      "Contact analytics deletion failed (42501).",
+      "Contact subject deletion failed (42501).",
     );
-    expect(client.actions).toEqual([
-      "lookup:contact_submissions",
-      "lookup:chat_transcripts",
-      "delete",
-    ]);
-    expect(client.rpc).not.toHaveBeenCalled();
-  });
-
-  it("fails before the destructive RPC when analytics linkage lookup fails", async () => {
-    const client = createDeletionClient({
-      lookupError: { code: "08006", message: "connection failure" },
-    });
-    mocks.getClient.mockResolvedValue(client);
-
-    await expect(deleteContactSubjectData("subject@example.com")).rejects.toThrow(
-      "Contact analytics linkage lookup failed (08006).",
-    );
-    expect(client.rpc).not.toHaveBeenCalled();
-    expect(client.deleteIds).toEqual([]);
-    expect(client.actions).toEqual(["lookup:contact_submissions"]);
+    expect(client.actions).toEqual(["rpc"]);
   });
 });

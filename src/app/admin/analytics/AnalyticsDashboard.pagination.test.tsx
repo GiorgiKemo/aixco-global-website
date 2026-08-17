@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import type {
   AdminAnalyticsDashboard,
@@ -146,6 +146,7 @@ describe("analytics dashboard list pagination", () => {
     const austriaRow = within(countryTable).getByRole("row", { name: /AustriaAT 1 2\(5 sessions\) 1 1 local \/ automated QA session/i });
     expect(austriaRow).toBeInTheDocument();
     expect(within(countryTable).getByText("Georgia")).toBeInTheDocument();
+    expect(within(countryTable).getAllByText("(1 session)")).toHaveLength(9);
     expect(within(countryTable).getAllByRole("row")).toHaveLength(11);
     expect(screen.getByText(/does not claim to identify VPN usage/i)).toBeInTheDocument();
   });
@@ -174,6 +175,7 @@ describe("analytics dashboard list pagination", () => {
 
   it("uses a compact responsive disclosure with human-readable timeline and private details", () => {
     const session = createSession(1);
+    session.lastSeenAt = "2026-08-11T12:05:00.000Z";
     session.landingPage = "/#materials";
     session.exitPage = "/#contact";
     session.referrer = "google.com";
@@ -222,6 +224,8 @@ describe("analytics dashboard list pagination", () => {
 
     expect(screen.getByLabelText("Sessions on this page")).toBeInTheDocument();
     expect(screen.getByText("Visitor path")).toBeInTheDocument();
+    expect(screen.getByText(/Last active Aug 11, 12:05 PM UTC/)).toBeInTheDocument();
+    expect(screen.queryByText(/Started Aug 11/)).not.toBeInTheDocument();
     expect(screen.getByText("Activity timeline")).toBeInTheDocument();
     expect(screen.getByText("Opened WhatsApp")).toBeInTheDocument();
     expect(screen.getByText(/Campaign: google · cpc · swiss-investors/)).toBeInTheDocument();
@@ -261,5 +265,113 @@ describe("analytics dashboard list pagination", () => {
       "href",
       "/admin/analytics?range=30d&focus=reliability&errorsPage=2&auditPage=2",
     );
+  });
+
+  it("names the focused region, announces a concise load status, and renders one conversion heading", () => {
+    const data = createDashboard({
+      breakdowns: {
+        topPages: [],
+        topReferrers: [],
+        devices: [],
+        countries: [],
+        funnel: [
+          { label: "Sessions", count: 1, ratePercent: 100 },
+          { label: "Contact request confirmed", count: 1, ratePercent: 100 },
+        ],
+      },
+    });
+    const pagination = createAnalyticsPaginationState({
+      totals: { sessions: 0, errors: 0, audit: 0 },
+      requestedPages: { sessions: 1, errors: 1, audit: 1 },
+    });
+
+    render(<AnalyticsDashboard data={data} operations={unavailableOperations} focus="journey" range="7d" pagination={pagination} />);
+
+    const focusRegion = screen.getByRole("region", { name: "Conversion funnel" });
+    expect(focusRegion).not.toHaveAttribute("aria-live");
+    expect(within(focusRegion).getAllByRole("heading", { name: "Conversion funnel" })).toHaveLength(1);
+    expect(screen.getByRole("status")).toHaveTextContent("Conversion funnel loaded for Last 7 days.");
+    expect(within(focusRegion).getAllByText("1 session")).toHaveLength(2);
+    expect(within(focusRegion).queryByText("1 sessions")).not.toBeInTheDocument();
+    expect(within(focusRegion).getAllByText("100% of all sessions")).toHaveLength(2);
+  });
+
+  it("provides exact daily chart values in an accessible table and keeps SVG labels out of the scaled plot", () => {
+    const data = createDashboard({
+      daily: [
+        {
+          date: "2026-08-10",
+          sessions: 1,
+          visitors: 1,
+          engagedSessions: 1,
+          pageViews: 3,
+          events: 4,
+          webVitals: 0,
+          interactions: 1,
+          conversions: 0,
+          errorEvents: 0,
+          activeSeconds: 20,
+        },
+        {
+          date: "2026-08-11",
+          sessions: 2,
+          visitors: 2,
+          engagedSessions: 1,
+          pageViews: 5,
+          events: 8,
+          webVitals: 1,
+          interactions: 2,
+          conversions: 1,
+          errorEvents: 0,
+          activeSeconds: 42,
+        },
+      ],
+    });
+    const pagination = createAnalyticsPaginationState({
+      totals: { sessions: 0, errors: 0, audit: 0 },
+      requestedPages: { sessions: 1, errors: 1, audit: 1 },
+    });
+
+    render(<AnalyticsDashboard data={data} operations={unavailableOperations} focus="traffic" range="7d" pagination={pagination} />);
+
+    const chart = screen.getByRole("img", { name: "Daily sessions and page views" });
+    expect(chart.querySelector("desc")).toHaveTextContent("Exact daily values are available in the table after the chart.");
+    expect(chart.querySelector("text")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText("View daily values"));
+    const valuesTable = screen.getByRole("table", { name: "Daily sessions and page views values" });
+    expect(within(valuesTable).getByRole("row", { name: "Aug 10 1 3" })).toBeInTheDocument();
+    expect(within(valuesTable).getByRole("row", { name: "Aug 11 2 5" })).toBeInTheDocument();
+  });
+
+  it("uses explicit singular units and points error summaries to the correct workspace", () => {
+    const base = createDashboard();
+    const data = createDashboard({
+      summary: {
+        ...base.summary,
+        sessions: 1,
+        visitors: 1,
+        pageViews: 1,
+        events: 1,
+        webVitalEvents: 1,
+        interactions: 1,
+        convertedSessions: 1,
+        formSubmissions: 1,
+        portalHandoffs: 1,
+        errorEvents: 2,
+      },
+    });
+    const pagination = createAnalyticsPaginationState({
+      totals: { sessions: 0, errors: 0, audit: 0 },
+      requestedPages: { sessions: 1, errors: 1, audit: 1 },
+    });
+
+    render(<AnalyticsDashboard data={data} operations={unavailableOperations} focus="overview" range="7d" pagination={pagination} />);
+
+    expect(screen.getByText("1 page per session · 1 interaction")).toBeInTheDocument();
+    expect(screen.getByText("1 backend-confirmed contact request · 1 portal handoff")).toBeInTheDocument();
+    expect(screen.getByText("1 total event · 1 web vital")).toBeInTheDocument();
+    expect(screen.getByText("Session with a backend-confirmed contact request")).toBeInTheDocument();
+    expect(screen.getByText("Review details in Errors & security")).toBeInTheDocument();
+    expect(screen.queryByText(/reliability panel below/i)).not.toBeInTheDocument();
   });
 });

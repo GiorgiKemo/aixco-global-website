@@ -21,18 +21,19 @@ const sensitiveEntrypoints = [
   ["analytics/page.tsx", "requireAal2AdminSession"],
   ["email-test/page.tsx", "requireAal2AdminSession"],
   ["email-test/send/route.ts", "getAal2AdminAuthDecision"],
+  ["login/audit/route.ts", "getAal2AdminAuthDecision"],
   ["leads/page.tsx", "requireAal2AdminSession"],
   ["leads/requeue-email/route.ts", "getAal2AdminAuthDecision"],
   ["leads/status/route.ts", "getAal2AdminAuthDecision"],
   ["privacy/page.tsx", "requireAal2AdminSession"],
   ["privacy/delete/route.ts", "getAal2AdminAuthDecision"],
   ["privacy/export/route.ts", "getAal2AdminAuthDecision"],
+  ["privacy/preview/route.ts", "getAal2AdminAuthDecision"],
 ] as const;
 
 const migrationAuthAllowlist = [
   "identity-migration/invite/route.ts",
   "identity-migration/page.tsx",
-  "login/audit/route.ts",
   "login/page.tsx",
   "logout/route.ts",
   "page.tsx",

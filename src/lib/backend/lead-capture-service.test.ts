@@ -4,6 +4,7 @@ import {
   captureContactSubmission,
   capturePortalEvent,
 } from "./lead-capture-service";
+import { createAnalyticsSessionLinkToken } from "./analytics-session-link";
 
 type InsertRecord = {
   table: string;
@@ -120,6 +121,58 @@ describe("lead capture service", () => {
     });
   });
 
+  it("stores analytics linkage only when the server-issued session proof is valid", async () => {
+    const sessionId = "4427dba7-3040-40fe-b965-9b278610f7b7";
+    const linkToken = createAnalyticsSessionLinkToken(sessionId);
+    if (!linkToken) throw new Error("Missing test analytics link token.");
+    const valid = createCaptureClient();
+
+    await captureContactSubmission(
+      {
+        name: "Verified Link",
+        email: "verified@example.com",
+        message: "Please send the full project availability details.",
+      },
+      {
+        metadata: {
+          analytics_session_id: sessionId,
+          analytics_session_token: linkToken,
+        },
+      },
+      { client: valid.client, headers },
+    );
+
+    expect(valid.rpcCalls[0]?.args.p_submission).toMatchObject({
+      metadata: {
+        analytics_session_id: sessionId,
+        analytics_session_verified: true,
+      },
+    });
+
+    const forged = createCaptureClient();
+    await captureContactSubmission(
+      {
+        name: "Forged Link",
+        email: "forged@example.com",
+        message: "Please send the full project availability details.",
+      },
+      {
+        metadata: {
+          analytics_session_id: sessionId,
+          analytics_session_token: "a".repeat(64),
+        },
+      },
+      { client: forged.client, headers },
+    );
+
+    expect(forged.rpcCalls[0]?.args.p_submission).toMatchObject({
+      metadata: {
+        analytics_session_id: null,
+        analytics_session_verified: false,
+      },
+    });
+  });
+
   it("returns a truthful queued state without sending email inside the form request", async () => {
     const { client, inserts, rpcCalls } = createCaptureClient();
 
@@ -221,9 +274,54 @@ describe("lead capture service", () => {
         source: "live_chat",
         interest: "Broker partnership",
         message_count: 2,
+        visitor_message_count: 1,
         transcript: "AIXCO: Welcome\nVisitor: I am interested in the broker route.",
       },
     });
+  });
+
+  it("does not create a lead for an assistant-only greeting", async () => {
+    const { client, inserts, upserts } = createCaptureClient();
+
+    await expect(
+      captureChatTranscript(
+        { sessionId: "greeting-only", messages: [{ role: "aixco", text: "Welcome" }] },
+        {},
+        { client, headers },
+      ),
+    ).resolves.toEqual({ ok: true });
+
+    expect(inserts).toEqual([]);
+    expect(upserts).toEqual([]);
+  });
+
+  it("never promotes a free-text email mention into a verified chat subject", async () => {
+    const first = createCaptureClient();
+    await captureChatTranscript(
+      {
+        messages: [
+          { role: "visitor", text: "Please contact Subject@Example.com." },
+          { role: "aixco", text: "We can also be reached at support@aixco.global." },
+        ],
+      },
+      {},
+      { client: first.client, headers },
+    );
+    expect(first.inserts[0]?.payload).toMatchObject({ visitor_message_count: 1 });
+    expect(first.inserts[0]?.payload).not.toHaveProperty("subject_email_normalized");
+
+    const second = createCaptureClient();
+    await captureChatTranscript(
+      {
+        messages: [
+          { role: "visitor", text: "Use first@example.com or second@example.com." },
+        ],
+      },
+      {},
+      { client: second.client, headers },
+    );
+    expect(second.inserts[0]?.payload).toMatchObject({ visitor_message_count: 1 });
+    expect(second.inserts[0]?.payload).not.toHaveProperty("subject_email_normalized");
   });
 
   it("sanitizes database failures from public chat results", async () => {

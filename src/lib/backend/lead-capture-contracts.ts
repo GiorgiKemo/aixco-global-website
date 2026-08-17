@@ -99,6 +99,7 @@ export const browserContextSchema = z
         viewport_height: z.number().int().min(0).max(10000).nullable().optional(),
         timezone: z.string().trim().max(80).nullable().optional(),
         analytics_session_id: z.string().uuid().nullable().optional(),
+        analytics_session_token: z.string().regex(/^[a-f0-9]{64}$/).nullable().optional(),
       })
       .strict()
       .optional(),

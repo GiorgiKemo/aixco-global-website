@@ -23,6 +23,8 @@ import {
   type PortalEvent,
 } from "@/lib/admin/leads";
 import { AdminLeadDetails } from "./AdminLeadDetails";
+import { LeadFeedback } from "./LeadFeedback";
+import { sanitizeAdminLeadsReturnTo } from "./navigation";
 import { PipelineBoard, type DashboardLead } from "./PipelineBoard";
 
 export const dynamic = "force-dynamic";
@@ -80,12 +82,16 @@ function toChatLead(lead: ChatLead): DashboardLead {
     status: lead.status,
     createdAt: lead.created_at,
     title: lead.interest ?? "Live chat visitor",
-    contactLabel: `${lead.message_count} messages`,
+    contactLabel: formatChatMessageCount(lead.message_count),
     interest: lead.interest ?? "Unclassified",
     body: trimText(lead.transcript, 320),
     pagePath: lead.page_path ?? "Unknown page",
     meta: "Live chat transcript",
   };
+}
+
+export function formatChatMessageCount(count: number) {
+  return `${count} ${count === 1 ? "message" : "messages"}`;
 }
 
 function sortNewest<T extends { createdAt: string }>(items: T[]) {
@@ -221,7 +227,7 @@ function AdminTabs({
   counts: Record<AdminView, number>;
 }) {
   return (
-    <nav className="mb-6 flex max-w-full gap-1 overflow-x-auto rounded-[10px] border border-[#161616]/10 bg-white p-1 shadow-sm" aria-label="Lead workspace views">
+    <nav className="mb-6 grid w-full grid-cols-2 gap-1 rounded-[10px] border border-[#161616]/10 bg-white p-1 shadow-sm sm:flex sm:w-fit" aria-label="Lead workspace views">
       {adminViews.map((view) => {
         const active = activeView === view.value;
         return (
@@ -229,7 +235,7 @@ function AdminTabs({
             key={view.value}
             href={tabHref(view.value)}
             aria-current={active ? "page" : undefined}
-            className={`inline-flex min-h-10 shrink-0 items-center rounded-[7px] px-3 py-2 text-xs font-semibold transition-colors sm:px-4 ${
+            className={`inline-flex min-h-11 shrink-0 items-center justify-center rounded-[7px] px-3 py-2 text-xs font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17] last:col-span-2 sm:last:col-span-1 sm:px-4 ${
               active
                 ? "bg-[#161616] text-white"
                 : "text-[#6f6e6a] hover:bg-[#f8f6f1] hover:text-[#161616]"
@@ -268,11 +274,13 @@ function StatusActionForm({
   lead,
   status,
   label,
+  returnTo,
   variant = "primary",
 }: {
   lead: DashboardLead;
   status: LeadStatus;
   label: string;
+  returnTo: string;
   variant?: "primary" | "secondary";
 }) {
   return (
@@ -280,6 +288,7 @@ function StatusActionForm({
       <input type="hidden" name="resource" value={lead.resource} />
       <input type="hidden" name="id" value={lead.id} />
       <input type="hidden" name="status" value={status} />
+      <input type="hidden" name="returnTo" value={returnTo} />
       <button
         type="submit"
         className={
@@ -299,10 +308,12 @@ function LeadRows({
   leads,
   emptyLabel,
   showActions = false,
+  returnTo = "/admin/leads?tab=new",
 }: {
   leads: DashboardLead[];
   emptyLabel: string;
   showActions?: boolean;
+  returnTo?: string;
 }) {
   if (leads.length === 0) {
     return (
@@ -315,7 +326,7 @@ function LeadRows({
   return (
     <div className="rounded-lg border border-[#161616]/10 bg-white divide-y divide-[#161616]/10">
       {leads.map((lead) => (
-        <article key={`${lead.resource}-${lead.id}`} className="flex flex-col gap-3 px-5 py-4 lg:flex-row lg:items-start lg:justify-between">
+        <article id={`${lead.resource}-${lead.id}`} key={`${lead.resource}-${lead.id}`} className="flex flex-col gap-3 px-5 py-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex flex-wrap items-center gap-2">
               <p className="break-words text-sm font-semibold text-[#161616]">{lead.title}</p>
@@ -346,8 +357,8 @@ function LeadRows({
 
           {showActions && (
             <div className="grid shrink-0 gap-2 sm:grid-cols-2 lg:w-56 lg:grid-cols-1">
-              <StatusActionForm lead={lead} status="contacted" label="Mark contacted" />
-              <StatusActionForm lead={lead} status="archived" label="Archive" variant="secondary" />
+              <StatusActionForm lead={lead} status="contacted" label="Mark contacted" returnTo={returnTo} />
+              <StatusActionForm lead={lead} status="archived" label="Archive" returnTo={returnTo} variant="secondary" />
             </div>
           )}
         </article>
@@ -385,6 +396,8 @@ function PortalRows({ events, limit }: { events: PortalEvent[]; limit?: number }
             href={event.portal_url}
             target="_blank"
             rel="noreferrer"
+            aria-label={`Open ${event.action} for ${event.role_title} in a new tab`}
+            title={`Open ${event.action} for ${event.role_title} in a new tab`}
             className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-md border border-[#161616]/10 px-3 text-xs font-semibold text-[#161616] transition-colors hover:bg-[#f6f4ef]"
           >
             Open
@@ -495,6 +508,10 @@ function NewLeadQueue({
   chatPagination: AdminLeadPage;
 }) {
   const total = contactPagination.total + chatPagination.total;
+  const returnQuery = new URLSearchParams({ tab: "new" });
+  if (contactPagination.page > 1) returnQuery.set("contactPage", String(contactPagination.page));
+  if (chatPagination.page > 1) returnQuery.set("chatPage", String(chatPagination.page));
+  const returnTo = sanitizeAdminLeadsReturnTo(`/admin/leads?${returnQuery.toString()}`);
   const hrefForPage = (resource: "contact" | "chat", page: number) => {
     const query = new URLSearchParams({ tab: "new" });
     if (resource === "contact" && page > 1) query.set("contactPage", String(page));
@@ -509,7 +526,7 @@ function NewLeadQueue({
       <SectionHeading title="New Leads" count={total} />
       <section>
         <SectionHeading title="Contact form requests" count={contactPagination.total} />
-        <LeadRows leads={contactLeads} emptyLabel="No new contact requests right now." showActions />
+        <LeadRows leads={contactLeads} emptyLabel="No new contact requests right now." showActions returnTo={returnTo} />
         <Pagination
           pagination={contactPagination}
           hrefForPage={(page) => hrefForPage("contact", page)}
@@ -518,7 +535,7 @@ function NewLeadQueue({
       </section>
       <section>
         <SectionHeading title="Live chat transcripts" count={chatPagination.total} />
-        <LeadRows leads={chatLeads} emptyLabel="No new chat transcripts right now." showActions />
+        <LeadRows leads={chatLeads} emptyLabel="No new chat transcripts right now." showActions returnTo={returnTo} />
         <Pagination
           pagination={chatPagination}
           hrefForPage={(page) => hrefForPage("chat", page)}
@@ -536,6 +553,9 @@ type AdminLeadsPageProps = {
     contactPage?: string | string[];
     chatPage?: string | string[];
     portalPage?: string | string[];
+    updated?: string | string[];
+    requeued?: string | string[];
+    error?: string | string[];
   }>;
 };
 
@@ -576,6 +596,9 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
                 ))}
               </ul>
             )}
+            <Link href="/admin/leads" className="mt-5 inline-flex min-h-11 items-center justify-center rounded-[9px] bg-[#161616] px-4 text-sm font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17]">
+              Retry lead dashboard
+            </Link>
           </section>
         ) : (
           (() => {
@@ -595,6 +618,11 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
             return (
               <>
                 <AdminTabs activeView={activeView} counts={counts} />
+                <LeadFeedback
+                  updated={getQueryParam(params.updated)}
+                  requeued={getQueryParam(params.requeued)}
+                  error={getQueryParam(params.error)}
+                />
 
                 {activeView === "overview" && (
                   <OverviewSection
@@ -619,7 +647,7 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
                       Pipeline shows the {result.data.window.perResourceLimit} most recent contact requests and the {result.data.window.perResourceLimit} most recent chat transcripts
                       ({allLeads.length} of {totalLeads} active leads). Older active leads remain available in Active records.
                     </div>
-                    <PipelineBoard leads={allLeads} />
+                    <PipelineBoard leads={allLeads} returnTo="/admin/leads?tab=pipeline" />
                   </section>
                 )}
 

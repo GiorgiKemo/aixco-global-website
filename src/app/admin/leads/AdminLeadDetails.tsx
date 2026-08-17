@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, RotateCcw } from "lucide-react";
 import type { AdminLeadPage, LeadStatus, PortalEvent } from "@/lib/admin/leads";
 import type { DashboardLead } from "./PipelineBoard";
+import { sanitizeAdminLeadsReturnTo } from "./navigation";
 
 const statusTabs: { label: string; value?: LeadStatus }[] = [
   { label: "Active" },
@@ -29,17 +30,6 @@ function formatDate(value: string) {
 
 function getReadablePagePath(value: string) {
   return value === "/" || value === "Unknown page" ? "" : value;
-}
-
-function getFeedbackMessage(updated: string | null, requeued: string | null, error: string | null) {
-  if (updated === "1") return { tone: "success", text: "Lead status updated." };
-  if (requeued) return { tone: "success", text: `${requeued} failed email delivery attempt(s) requeued.` };
-  if (error === "invalid-status-update") return { tone: "error", text: "That status update was invalid." };
-  if (error === "lead-not-found") return { tone: "error", text: "That lead no longer exists." };
-  if (error === "no-email-to-requeue") return { tone: "error", text: "No API-failed email is eligible for a safe retry." };
-  if (error === "email-requeue-failed") return { tone: "error", text: "Could not requeue the failed email." };
-  if (error === "status-update-failed") return { tone: "error", text: "Could not update lead status." };
-  return null;
 }
 
 function getStatusClass(status: LeadStatus) {
@@ -137,7 +127,7 @@ function Pagination({
   );
 }
 
-function LeadRecords({ leads }: { leads: DashboardLead[] }) {
+function LeadRecords({ leads, returnTo }: { leads: DashboardLead[]; returnTo: string }) {
   return (
     <div className="divide-y divide-[#161616]/10">
       {leads.length === 0 ? (
@@ -146,7 +136,7 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
         </div>
       ) : (
         leads.map((lead) => (
-          <article key={`${lead.resource}-${lead.id}`} className="grid gap-3 px-4 py-4 transition-colors hover:bg-[#f8f7f3] lg:grid-cols-[minmax(0,1.2fr)_minmax(180px,0.5fr)_120px_120px] lg:items-center">
+          <article id={`${lead.resource}-${lead.id}`} key={`${lead.resource}-${lead.id}`} className="grid gap-3 px-4 py-4 transition-colors hover:bg-[#f8f7f3] lg:grid-cols-[minmax(0,1.2fr)_minmax(180px,0.5fr)_150px_120px] lg:items-center">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="break-words text-sm font-semibold leading-tight text-[#161616]">{lead.title}</h3>
@@ -189,6 +179,7 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
                   {lead.emailDeliveryStatus === "failed" || lead.emailDeliveryStatus === "delivery_issue" ? (
                     <form action="/admin/leads/requeue-email" method="post" className="pt-1">
                       <input type="hidden" name="contactId" value={lead.id} />
+                      <input type="hidden" name="returnTo" value={returnTo} />
                       <button type="submit" className="inline-flex min-h-11 items-center rounded border border-[#8b6a18]/30 bg-[#e6c767]/15 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6f5112] hover:bg-[#e6c767]/25">
                         Retry failed email
                       </button>
@@ -198,7 +189,21 @@ function LeadRecords({ leads }: { leads: DashboardLead[] }) {
               ) : null}
             </div>
 
-            <StatusBadge status={lead.status} />
+            <div className="flex flex-col items-start gap-2">
+              <StatusBadge status={lead.status} />
+              {lead.status === "archived" ? (
+                <form action="/admin/leads/status" method="post">
+                  <input type="hidden" name="resource" value={lead.resource} />
+                  <input type="hidden" name="id" value={lead.id} />
+                  <input type="hidden" name="status" value="new" />
+                  <input type="hidden" name="returnTo" value={returnTo} />
+                  <button type="submit" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded border border-[#8b6a18]/30 bg-[#e6c767]/15 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6f5112] hover:bg-[#e6c767]/25">
+                    <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+                    Reopen lead
+                  </button>
+                </form>
+              ) : null}
+            </div>
 
             <time dateTime={lead.createdAt} className="text-xs font-medium uppercase tracking-[0.08em] text-[#6f6e6a]">
               {formatDate(lead.createdAt)}
@@ -216,12 +221,14 @@ function LeadRecordGroup({
   leads,
   pagination,
   hrefForPage,
+  returnTo,
 }: {
   title: string;
   eyebrow: string;
   leads: DashboardLead[];
   pagination: AdminLeadPage;
   hrefForPage: (page: number) => string;
+  returnTo: string;
 }) {
   return (
     <section>
@@ -233,7 +240,7 @@ function LeadRecordGroup({
           </div>
           <span className="rounded-full border border-[#161616]/10 px-2.5 py-1 text-xs font-semibold text-[#6f6e6a]">{pagination.total}</span>
         </div>
-        <LeadRecords leads={leads} />
+        <LeadRecords leads={leads} returnTo={returnTo} />
       </div>
       <Pagination pagination={pagination} hrefForPage={hrefForPage} label={title} />
     </section>
@@ -270,8 +277,8 @@ function PortalActivity({ events, total }: { events: PortalEvent[]; total: numbe
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-[#161616]/10 text-[#161616] transition-colors hover:border-[#e6c767] hover:bg-[#e6c767]/15"
-                  aria-label={event.action}
-                  title={event.action}
+                  aria-label={`Open ${event.action} for ${event.role_title} in a new tab`}
+                  title={`Open ${event.action} for ${event.role_title} in a new tab`}
                 >
                   <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                 </a>
@@ -305,13 +312,14 @@ export function AdminLeadDetails({
   const requestedStatus = params?.get("status") ?? null;
   const requestedTab = params?.get("tab") ?? null;
   const activeStatus = isLeadStatus(requestedStatus) ? requestedStatus : undefined;
-  const feedback = getFeedbackMessage(
-    params?.get("updated") ?? null,
-    params?.get("requeued") ?? null,
-    params?.get("error") ?? null,
-  );
   const showRecords = section === "all" || section === "records";
   const showPortal = section === "all" || section === "portal";
+  const returnFallback = showRecords ? "/admin/leads?tab=records" : "/admin/leads?tab=portal";
+  const search = params?.toString() ?? "";
+  const returnTo = sanitizeAdminLeadsReturnTo(
+    search ? `/admin/leads?${search}` : returnFallback,
+    returnFallback,
+  );
   const filterBaseHref = requestedTab ? `/admin/leads?tab=${requestedTab}` : "/admin/leads";
   const createPageHref = (key: "contactPage" | "chatPage" | "portalPage", page: number) => {
     const query = new URLSearchParams();
@@ -333,19 +341,6 @@ export function AdminLeadDetails({
 
   return (
     <>
-      {feedback && (
-        <p
-          role="status"
-          className={`mt-5 rounded-lg border px-4 py-3 text-sm font-medium ${
-            feedback.tone === "success"
-              ? "border-[#e6c767]/60 bg-[#e6c767]/15 text-[#161616]"
-              : "border-destructive/30 bg-destructive/10 text-destructive"
-          }`}
-        >
-          {feedback.text}
-        </p>
-      )}
-
       <section className="grid gap-6">
         {showRecords && (
           <>
@@ -382,6 +377,7 @@ export function AdminLeadDetails({
               leads={contactLeads}
               pagination={contactPagination}
               hrefForPage={(page) => createPageHref("contactPage", page)}
+              returnTo={returnTo}
             />
             <LeadRecordGroup
               title="Live chat transcripts"
@@ -389,6 +385,7 @@ export function AdminLeadDetails({
               leads={chatLeads}
               pagination={chatPagination}
               hrefForPage={(page) => createPageHref("chatPage", page)}
+              returnTo={returnTo}
             />
           </>
         )}

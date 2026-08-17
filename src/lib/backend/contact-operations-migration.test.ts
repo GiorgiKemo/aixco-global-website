@@ -5,7 +5,11 @@ import { describe, expect, it } from "vitest";
 const migration = readFileSync(
   resolve(process.cwd(), "supabase/migrations/20260715231001_harden_contact_operations.sql"),
   "utf8",
-);
+).replace(/\r\n/g, "\n");
+const privacyHardeningMigration = readFileSync(
+  resolve(process.cwd(), "supabase/migrations/20260817114531_harden_admin_privacy_and_chat_quality.sql"),
+  "utf8",
+).replace(/\r\n/g, "\n");
 
 describe("contact operations hardening migration", () => {
   it("fails closed on blank or invalid privacy subjects before any deletion", () => {
@@ -58,5 +62,55 @@ describe("contact operations hardening migration", () => {
     expect(migration).toContain("contact_email_delivery_id is null");
     expect(migration).toContain("make_interval(days => p_email_event_days)");
     expect(migration).toContain("orphan_email_events_deleted bigint");
+  });
+
+  it("derives truthful chat quality and keeps contact deletion atomic without unsafe attribution", () => {
+    const functionStart = privacyHardeningMigration.indexOf(
+      "create function public.delete_contact_subject_data",
+    );
+    const analyticsDelete = privacyHardeningMigration.indexOf(
+      "delete from public.site_analytics_sessions",
+      functionStart,
+    );
+    const contactDelete = privacyHardeningMigration.indexOf(
+      "delete from public.contact_submissions",
+      functionStart,
+    );
+    const chatDelete = privacyHardeningMigration.indexOf(
+      "delete from public.chat_transcripts",
+      functionStart,
+    );
+
+    expect(privacyHardeningMigration).not.toContain("subject_email_normalized");
+    expect(privacyHardeningMigration).toContain("visitor_message_count");
+    expect(privacyHardeningMigration).toContain(
+      "create or replace function public.derive_chat_quality_fields()",
+    );
+    expect(privacyHardeningMigration).toContain(
+      "before insert or update of messages on public.chat_transcripts",
+    );
+    expect(privacyHardeningMigration).toContain(
+      "create or replace function public.sanitize_lead_analytics_session_link()",
+    );
+    expect(privacyHardeningMigration).toContain(
+      "metadata -> 'analytics_session_verified' = 'true'::jsonb",
+    );
+    expect(privacyHardeningMigration.slice(functionStart)).not.toContain(
+      "lower(transcript) like",
+    );
+    expect(analyticsDelete).toBe(-1);
+    expect(privacyHardeningMigration.slice(functionStart, contactDelete))
+      .toContain("analytics_sessions_deleted := 0");
+    expect(contactDelete).toBeGreaterThan(functionStart);
+    expect(chatDelete).toBe(-1);
+    expect(privacyHardeningMigration.slice(functionStart))
+      .toContain("chats_deleted := 0");
+    expect(privacyHardeningMigration).toContain("analytics_sessions_deleted bigint");
+    expect(privacyHardeningMigration).toContain(
+      "revoke all on function public.delete_contact_subject_data(text, text)",
+    );
+    expect(privacyHardeningMigration).toContain(
+      "grant execute on function public.delete_contact_subject_data(text, text)\nto service_role",
+    );
   });
 });

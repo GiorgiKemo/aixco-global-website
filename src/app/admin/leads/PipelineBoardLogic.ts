@@ -1,6 +1,7 @@
 import type { LeadStatus } from "@/lib/admin/leads";
 import type { DashboardLead } from "./PipelineBoardTypes";
 import type { PipelineStage } from "./PipelineStageColumn";
+import { sanitizeAdminLeadsReturnTo } from "./navigation";
 
 export const pipelineStages: PipelineStage[] = [
   {
@@ -42,10 +43,14 @@ export function getStageStatusFromPoint(clientX: number, clientY: number) {
 
 export function canStartCardDrag(target: EventTarget | null) {
   const element = target instanceof HTMLElement ? target : null;
-  return Boolean(element && !element.closest("a,button,input,select,textarea,label"));
+  return Boolean(element?.closest("[data-pipeline-drag-handle]"));
 }
 
-export async function updateDraggedLeadStatus(lead: DashboardLead, status: LeadStatus) {
+export async function postPipelineLeadStatus(
+  lead: DashboardLead,
+  status: LeadStatus,
+  returnTo = "/admin/leads?tab=pipeline",
+) {
   const response = await fetch("/admin/leads/status", {
     method: "POST",
     credentials: "same-origin",
@@ -57,6 +62,7 @@ export async function updateDraggedLeadStatus(lead: DashboardLead, status: LeadS
       resource: lead.resource,
       id: lead.id,
       status,
+      returnTo: sanitizeAdminLeadsReturnTo(returnTo, "/admin/leads?tab=pipeline"),
     }),
   });
 

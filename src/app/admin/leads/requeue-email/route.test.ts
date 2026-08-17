@@ -7,9 +7,13 @@ vi.mock("@/lib/admin/leads", () => ({ requeueContactEmailDeliveries: mocks.reque
 
 import { POST } from "./route";
 
-function request(origin = "https://www.aixco.global") {
+function request(
+  origin = "https://www.aixco.global",
+  returnTo?: string,
+) {
   const body = new FormData();
   body.set("contactId", "11111111-1111-4111-8111-111111111111");
+  if (returnTo) body.set("returnTo", returnTo);
   return new Request("https://www.aixco.global/admin/leads/requeue-email", {
     method: "POST",
     headers: { origin },
@@ -37,9 +41,14 @@ describe("failed email requeue route", () => {
 
   it("audits and redirects after requeueing only eligible failed deliveries", async () => {
     mocks.requeue.mockResolvedValue(1);
-    const response = await POST(request());
+    const response = await POST(request(
+      "https://www.aixco.global",
+      "/admin/leads?tab=records&status=archived&contactPage=2&chatPage=3",
+    ));
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toContain("requeued=1");
+    expect(response.headers.get("location")).toBe(
+      "https://www.aixco.global/admin/leads?tab=records&status=archived&contactPage=2&chatPage=3&requeued=1#contact-11111111-1111-4111-8111-111111111111",
+    );
     expect(mocks.audit).toHaveBeenNthCalledWith(1, expect.objectContaining({
       action: "contact.email.requeue.requested",
     }), { required: true });

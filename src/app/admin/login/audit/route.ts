@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auditAdminLoginAttempt } from "@/lib/admin/audit";
-import { getAdminAuthDecision } from "@/lib/admin/auth";
+import { getAal2AdminAuthDecision } from "@/lib/admin/auth";
 import { checkDistributedLeadCaptureLimit } from "@/lib/backend/lead-capture-abuse";
 import { readBoundedJson } from "@/lib/security/request-body";
 import { checkRateLimit, getRateLimitClientId } from "@/lib/security/rate-limit";
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     if (parsed.data.phase !== "mfa" && parsed.data.phase !== "session") {
       return NextResponse.json({ ok: false }, { status: 400, headers });
     }
-    const auth = await getAdminAuthDecision();
+    const auth = await getAal2AdminAuthDecision();
     if (!auth.ok) {
       return NextResponse.json({ ok: false }, { status: 401, headers });
     }

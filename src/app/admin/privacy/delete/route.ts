@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAal2AdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
+import { verifyPrivacyPreviewToken } from "@/lib/admin/privacy-preview-token";
 import {
   deleteContactSubjectData,
   privacyEmailSchema,
@@ -18,8 +19,20 @@ export async function POST(request: Request) {
 
   const formData = await request.formData().catch(() => null);
   const email = privacyEmailSchema.safeParse(formData?.get("email"));
+  const previewedEmail = privacyEmailSchema.safeParse(formData?.get("previewed_email"));
+  const confirmationEmail = privacyEmailSchema.safeParse(formData?.get("confirmation_email"));
+  const previewToken = formData?.get("preview_token");
   const confirmed = formData?.get("confirmation") === "DELETE";
-  if (!email.success || !confirmed) {
+  const exactSubjectConfirmed = Boolean(
+    email.success
+      && previewedEmail.success
+      && confirmationEmail.success
+      && previewedEmail.data === email.data
+      && confirmationEmail.data === email.data
+      && typeof previewToken === "string"
+      && verifyPrivacyPreviewToken(previewToken, email.data, auth.principal.id),
+  );
+  if (!email.success || !confirmed || !exactSubjectConfirmed) {
     return NextResponse.redirect(new URL("/admin/privacy?error=invalid-deletion", request.url), { status: 303 });
   }
 
@@ -40,7 +53,6 @@ export async function POST(request: Request) {
       target: privacySubjectAuditTarget(email.data),
       details: {
         records: result.deleted,
-        analyticsSessions: result.analyticsSessionsDeleted,
       },
       headers: request.headers,
     });

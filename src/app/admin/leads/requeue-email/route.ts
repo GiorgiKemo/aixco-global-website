@@ -3,8 +3,18 @@ import { z } from "zod";
 import { getAal2AdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
 import { requeueContactEmailDeliveries } from "@/lib/admin/leads";
+import {
+  buildAdminLeadsFeedbackRedirect,
+  sanitizeAdminLeadsReturnTo,
+} from "../navigation";
 
-const requeueSchema = z.object({ contactId: z.string().uuid() });
+const requeueSchema = z.object({
+  contactId: z.string().uuid(),
+  returnTo: z.preprocess(
+    (value) => value === null || value === "" ? undefined : value,
+    z.string().max(2048).optional(),
+  ),
+});
 
 function redirectTo(request: Request, path: string) {
   return NextResponse.redirect(new URL(path, request.url), { status: 303 });
@@ -20,8 +30,14 @@ export async function POST(request: Request) {
   }
 
   const formData = await request.formData().catch(() => null);
-  const parsed = requeueSchema.safeParse({ contactId: formData?.get("contactId") });
-  if (!parsed.success) return redirectTo(request, "/admin/leads?error=invalid-email-requeue");
+  const returnTo = sanitizeAdminLeadsReturnTo(formData?.get("returnTo"), "/admin/leads?tab=records");
+  const parsed = requeueSchema.safeParse({
+    contactId: formData?.get("contactId"),
+    returnTo: formData?.get("returnTo"),
+  });
+  if (!parsed.success) {
+    return redirectTo(request, buildAdminLeadsFeedbackRedirect(returnTo, { error: "invalid-email-requeue" }));
+  }
 
   try {
     await auditAdminAction({
@@ -42,7 +58,11 @@ export async function POST(request: Request) {
         details: { reason: "no-eligible-failed-deliveries" },
         headers: request.headers,
       });
-      return redirectTo(request, "/admin/leads?error=no-email-to-requeue");
+      return redirectTo(request, buildAdminLeadsFeedbackRedirect(
+        returnTo,
+        { error: "no-email-to-requeue" },
+        `contact-${parsed.data.contactId}`,
+      ));
     }
 
     await auditAdminAction({
@@ -53,7 +73,11 @@ export async function POST(request: Request) {
       details: { deliveries: count },
       headers: request.headers,
     });
-    return redirectTo(request, `/admin/leads?requeued=${count}#contact-${parsed.data.contactId}`);
+    return redirectTo(request, buildAdminLeadsFeedbackRedirect(
+      returnTo,
+      { requeued: count },
+      `contact-${parsed.data.contactId}`,
+    ));
   } catch {
     await auditAdminAction({
       action: "contact.email.requeue",
@@ -63,6 +87,10 @@ export async function POST(request: Request) {
       details: { reason: "storage-failure" },
       headers: request.headers,
     });
-    return redirectTo(request, "/admin/leads?error=email-requeue-failed");
+    return redirectTo(request, buildAdminLeadsFeedbackRedirect(
+      returnTo,
+      { error: "email-requeue-failed" },
+      `contact-${parsed.data.contactId}`,
+    ));
   }
 }

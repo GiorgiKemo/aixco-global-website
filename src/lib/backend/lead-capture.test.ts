@@ -88,8 +88,12 @@ describe("lead capture backend helpers", () => {
 
   it("attaches a consented analytics session to the durable contact context", async () => {
     const sessionId = "4427dba7-3040-40fe-b965-9b278610f7b7";
+    const linkToken = "a".repeat(64);
     analyticsMocks.allowed.mockReturnValue(true);
-    window.sessionStorage.setItem(ANALYTICS_SESSION_STORAGE_KEY, JSON.stringify({ id: sessionId }));
+    window.sessionStorage.setItem(ANALYTICS_SESSION_STORAGE_KEY, JSON.stringify({
+      id: sessionId,
+      linkToken,
+    }));
     vi.stubEnv("NODE_ENV", "development");
     vi.stubEnv("VITEST", "false");
     const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) => new Response(JSON.stringify({
@@ -106,9 +110,13 @@ describe("lead capture backend helpers", () => {
     });
 
     const requestBody = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body)) as {
-      context?: { metadata?: { analytics_session_id?: unknown } };
+      context?: { metadata?: {
+        analytics_session_id?: unknown;
+        analytics_session_token?: unknown;
+      } };
     };
     expect(requestBody.context?.metadata?.analytics_session_id).toBe(sessionId);
+    expect(requestBody.context?.metadata?.analytics_session_token).toBe(linkToken);
   });
 
   it("does not count a rejected contact capture as a conversion", async () => {

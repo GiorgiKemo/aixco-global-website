@@ -66,6 +66,10 @@ function formatNumber(value: number) {
   return numberFormatter.format(value);
 }
 
+function formatCount(value: number, singular: string, plural = `${singular}s`) {
+  return `${formatNumber(value)} ${value === 1 ? singular : plural}`;
+}
+
 function formatPercent(value: number) {
   return `${numberFormatter.format(value)}%`;
 }
@@ -139,6 +143,12 @@ function maskIpAddress(value: string | null) {
   return octets.length === 4 ? `${octets[0]}.${octets[1]}.x.x` : "Address retained";
 }
 
+function compactIdentifier(value: string | null, head = 8, tail = 4) {
+  if (!value) return "Unavailable";
+  if (value.length <= head + tail + 1) return value;
+  return `${value.slice(0, head)}…${tail > 0 ? value.slice(-tail) : ""}`;
+}
+
 function formatAuditDetail(value: string | number | boolean | null) {
   if (value === null) return "null";
   if (typeof value === "boolean") return value ? "true" : "false";
@@ -176,7 +186,7 @@ function MetricCard({
   const content = (
     <>
       <div className="flex items-center justify-between gap-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#77746d]">{label}</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#77746d]">{label}</p>
         <span className="grid h-9 w-9 place-items-center rounded-[9px] bg-[#f4eddd] text-primary transition-transform group-hover:scale-105">
           <Icon className="h-4 w-4" aria-hidden="true" />
         </span>
@@ -230,12 +240,22 @@ const focusCopy: Record<DashboardFocus, { eyebrow: string; title: string; descri
   },
 };
 
-function SectionHeader({ eyebrow, title, detail }: { eyebrow: string; title: string; detail?: string }) {
+function SectionHeader({
+  eyebrow,
+  title,
+  detail,
+  titleId,
+}: {
+  eyebrow: string;
+  title: string;
+  detail?: string;
+  titleId?: string;
+}) {
   return (
     <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">{eyebrow}</p>
-        <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.035em] text-[#161616] sm:text-3xl">{title}</h2>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{eyebrow}</p>
+        <h2 id={titleId} className="mt-2 font-display text-2xl font-semibold tracking-[-0.035em] text-[#161616] sm:text-3xl">{title}</h2>
       </div>
       {detail ? <p className="max-w-xl text-xs leading-5 text-[#6f6e6a] sm:text-right">{detail}</p> : null}
     </div>
@@ -251,10 +271,10 @@ function TrendChart({ points }: { points: AnalyticsDailyPoint[] | null }) {
   }
 
   const width = 900;
-  const height = 260;
+  const height = 222;
   const insetX = 24;
   const insetTop = 22;
-  const insetBottom = 38;
+  const insetBottom = 22;
   const plotHeight = height - insetTop - insetBottom;
   const maximum = Math.max(1, ...points.flatMap((point) => [point.pageViews, point.sessions]));
   const xFor = (index: number) => points.length === 1
@@ -266,12 +286,20 @@ function TrendChart({ points }: { points: AnalyticsDailyPoint[] | null }) {
   const labelIndexes = [...new Set([0, Math.floor((points.length - 1) / 2), points.length - 1])];
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#161616]/10 bg-white p-4 shadow-sm sm:p-6">
+    <figure className="overflow-hidden rounded-xl border border-[#161616]/10 bg-white p-4 shadow-sm sm:p-6">
       <div className="mb-5 flex flex-wrap gap-x-6 gap-y-2 text-xs text-[#6f6e6a]">
-        <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#161616]" />Sessions</span>
-        <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-primary" />Page views</span>
+        <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#161616]" aria-hidden="true" />Sessions</span>
+        <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-primary" aria-hidden="true" />Page views</span>
       </div>
-      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Daily sessions and page views" className="h-auto w-full overflow-visible">
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        role="img"
+        aria-labelledby="analytics-trend-title"
+        aria-describedby="analytics-trend-description"
+        className="h-auto w-full overflow-visible"
+      >
+        <title id="analytics-trend-title">Daily sessions and page views</title>
+        <desc id="analytics-trend-description">Line chart for the selected UTC reporting window. Exact daily values are available in the table after the chart.</desc>
         {[0, 0.5, 1].map((ratio) => {
           const y = insetTop + plotHeight * ratio;
           return <line key={ratio} x1={insetX} x2={width - insetX} y1={y} y2={y} stroke="rgba(22,22,22,.09)" strokeWidth="1" />;
@@ -284,13 +312,40 @@ function TrendChart({ points }: { points: AnalyticsDailyPoint[] | null }) {
             <circle cx={width / 2} cy={yFor(points[0].sessions)} r="7" fill="#161616" />
           </>
         ) : null}
-        {labelIndexes.map((index) => (
-          <text key={index} x={xFor(index)} y={height - 8} textAnchor={index === 0 ? "start" : index === points.length - 1 ? "end" : "middle"} fill="#6f6e6a" fontSize="14">
-            {formatShortDate(points[index].date)}
-          </text>
-        ))}
       </svg>
-    </div>
+      <div
+        className={`mt-2 text-xs font-medium text-[#6f6e6a] ${labelIndexes.length === 1 ? "text-center" : "flex items-center justify-between"}`}
+        aria-hidden="true"
+      >
+        {labelIndexes.map((index) => <span key={index}>{formatShortDate(points[index].date)}</span>)}
+      </div>
+      <details className="mt-4 rounded-lg border border-[#161616]/10 bg-background">
+        <summary className="flex min-h-11 cursor-pointer items-center px-3 py-2 text-xs font-semibold text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#7c5d17]">
+          View daily values
+        </summary>
+        <div className="overflow-x-auto border-t border-[#161616]/10">
+          <table className="w-full min-w-[28rem] border-collapse text-left text-xs">
+            <caption className="sr-only">Daily sessions and page views values</caption>
+            <thead className="bg-white text-[#6f6e6a]">
+              <tr>
+                <th scope="col" className="px-3 py-2 font-semibold">Date (UTC)</th>
+                <th scope="col" className="px-3 py-2 text-right font-semibold">Sessions</th>
+                <th scope="col" className="px-3 py-2 text-right font-semibold">Page views</th>
+              </tr>
+            </thead>
+            <tbody>
+              {points.map((point) => (
+                <tr key={point.date} className="border-t border-[#161616]/10">
+                  <th scope="row" className="px-3 py-2 font-medium text-[#161616]">{formatShortDate(point.date)}</th>
+                  <td className="px-3 py-2 text-right text-[#161616]">{formatNumber(point.sessions)}</td>
+                  <td className="px-3 py-2 text-right text-[#161616]">{formatNumber(point.pageViews)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </figure>
   );
 }
 
@@ -327,6 +382,16 @@ function BreakdownCard({ title, items, emptyLabel }: { title: string; items: Ana
 function Funnel({ steps }: { steps: AnalyticsFunnelStep[] }) {
   if (!steps.length) return <PanelEmpty label="No funnel activity has been recorded in this window." />;
   const maximum = Math.max(1, steps[0]?.count ?? 0, ...steps.map((step) => step.count));
+  const readableLabels: Record<string, string> = {
+    Sessions: "Started a session",
+    "Page viewed": "Viewed at least one page",
+    Engaged: "Met the engagement threshold",
+    "Form started": "Started a contact form",
+    "Submit attempted": "Attempted a form submission",
+    "Contact request confirmed": "Confirmed a contact request",
+    "Portal handoff": "Opened a portal handoff",
+  };
+  const readableLabel = (label: string) => readableLabels[label] ?? label;
 
   return (
     <div className="grid gap-3 lg:grid-cols-4">
@@ -336,11 +401,11 @@ function Funnel({ steps }: { steps: AnalyticsFunnelStep[] }) {
             <div className="h-full bg-primary" style={{ width: `${(step.count / maximum) * 100}%` }} />
           </div>
           <div className="flex items-center justify-between gap-3">
-            <span className="grid h-7 w-7 place-items-center rounded-lg bg-background text-[10px] font-bold text-primary">{index + 1}</span>
-            {step.ratePercent !== null ? <span className="text-[10px] font-semibold text-[#6f6e6a]">{formatPercent(step.ratePercent)}</span> : null}
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-background text-xs font-bold text-primary">{index + 1}</span>
+            {step.ratePercent !== null ? <span className="text-xs font-semibold text-[#6f6e6a]">{formatPercent(step.ratePercent)} of all sessions</span> : null}
           </div>
-          <p className="mt-5 font-display text-3xl font-semibold tracking-tight text-[#161616]">{formatNumber(step.count)}</p>
-          <p className="mt-2 text-xs leading-5 text-[#6f6e6a]">{step.label}</p>
+          <p className="mt-5 font-display text-3xl font-semibold tracking-tight text-[#161616]">{formatCount(step.count, "session")}</p>
+          <p className="mt-2 text-xs leading-5 text-[#6f6e6a]">{readableLabel(step.label)}</p>
         </article>
       ))}
     </div>
@@ -383,7 +448,7 @@ function ListPagination({
   hrefForPage: (page: number) => string;
 }) {
   const { page, total, totalPages, start, end } = pagination;
-  const buttonClass = "inline-flex min-h-11 flex-1 items-center justify-center rounded-[8px] border border-[#161616]/10 bg-white px-3 text-xs font-semibold text-[#161616] transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 sm:flex-none";
+  const buttonClass = "inline-flex min-h-11 flex-1 items-center justify-center rounded-[8px] border border-[#161616]/10 bg-white px-3 text-xs font-semibold text-[#161616] transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17] sm:flex-none";
   const disabledClass = "inline-flex min-h-11 flex-1 items-center justify-center rounded-[8px] border border-[#161616]/10 bg-[#f1efe8] px-3 text-xs font-semibold text-[#6f6e6a] sm:flex-none";
 
   return (
@@ -412,7 +477,7 @@ function ListPagination({
                 scroll={false}
                 aria-current={item === page ? "page" : undefined}
                 aria-label={`${label}, page ${item}`}
-                className={`grid h-11 min-w-11 place-items-center rounded-[8px] border text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${item === page ? "border-[#161616] bg-[#161616] text-white" : "border-[#161616]/10 bg-white text-[#6f6e6a] hover:border-primary hover:text-primary"}`}
+                className={`grid h-11 min-w-11 place-items-center rounded-[8px] border text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17] ${item === page ? "border-[#161616] bg-[#161616] text-white" : "border-[#161616]/10 bg-white text-[#6f6e6a] hover:border-primary hover:text-primary"}`}
               >
                 {item}
               </Link>
@@ -440,7 +505,7 @@ function OperationStat({ label, value, note, icon: Icon }: { label: string; valu
     <article className="rounded-xl border border-[#161616]/10 bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{label}</p>
           <p className="mt-4 font-display text-3xl font-semibold tracking-tight text-[#161616]">{formatNumber(value)}</p>
         </div>
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-background text-primary">
@@ -469,8 +534,8 @@ export function OperationsOverview({
       {result.ok ? (
         <>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-            <OperationStat label="Contact requests" value={result.data.totalContacts} note={`${formatNumber(result.data.newContacts)} currently new`} icon={Mail} />
-            <OperationStat label="Chat conversations" value={result.data.totalChats} note={`${formatNumber(result.data.newChats)} currently new`} icon={MessageCircle} />
+            <OperationStat label="Contact requests" value={result.data.totalContacts} note={formatCount(result.data.newContacts, "new contact request")} icon={Mail} />
+            <OperationStat label="Chat conversations" value={result.data.totalChats} note={formatCount(result.data.newChats, "new chat conversation")} icon={MessageCircle} />
             <OperationStat label="Open queue" value={result.data.newContacts + result.data.newChats} note="New contacts and chats awaiting follow-up" icon={Inbox} />
             <OperationStat label="Qualified records" value={result.data.qualifiedContacts + result.data.qualifiedChats} note="Qualified contacts and chat leads" icon={FileCheck2} />
             <OperationStat
@@ -560,7 +625,7 @@ function CountryBreakdown({ items }: { items: AnalyticsCountryBreakdownItem[] })
             <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-[#161616]">Countries</h3>
             <p className="mt-1 text-xs leading-5 text-[#6f6e6a]">Country totals are aggregated across cities and regions. Engaged visitors are the closest first-party comparison to Google Analytics active users. Only visitors who permitted website analytics appear here.</p>
           </div>
-          <span className="rounded-full border border-[#7c5d17]/25 bg-[#f8f3e7] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#7c5d17]">Vercel IP location</span>
+          <span className="rounded-full border border-[#7c5d17]/25 bg-[#f8f3e7] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#7c5d17]">Vercel IP location</span>
         </div>
       </div>
       <div className="divide-y divide-[#161616]/8 md:hidden">
@@ -568,20 +633,20 @@ function CountryBreakdown({ items }: { items: AnalyticsCountryBreakdownItem[] })
           <section key={country.countryCode} className="space-y-3 px-5 py-5">
             <div className="flex items-baseline justify-between gap-4">
               <strong className="text-sm text-foreground">{country.countryName}</strong>
-              <span className="font-mono text-[10px] text-[#6f6e6a]">{country.countryCode}</span>
+              <span className="font-mono text-xs text-[#6f6e6a]">{country.countryCode}</span>
             </div>
             <dl className="grid grid-cols-3 gap-3 text-center">
-              <div><dt className="text-[9px] font-semibold uppercase tracking-wider text-[#6f6e6a]">Visitors</dt><dd className="mt-1 text-base font-semibold text-foreground">{formatNumber(country.visitors)}</dd></div>
-              <div><dt className="text-[9px] font-semibold uppercase tracking-wider text-[#6f6e6a]">Engaged</dt><dd className="mt-1 text-base font-semibold text-[#7c5d17]">{formatNumber(country.engagedVisitors)}</dd></div>
-              <div><dt className="text-[9px] font-semibold uppercase tracking-wider text-[#6f6e6a]">Sessions</dt><dd className="mt-1 text-base font-semibold text-foreground">{formatNumber(country.sessions)}</dd></div>
+              <div><dt className="text-xs font-semibold uppercase tracking-wide text-[#6f6e6a]">Visitors</dt><dd className="mt-1 text-base font-semibold text-foreground">{formatNumber(country.visitors)}</dd></div>
+              <div><dt className="text-xs font-semibold uppercase tracking-wide text-[#6f6e6a]">Engaged</dt><dd className="mt-1 text-base font-semibold text-[#7c5d17]">{formatNumber(country.engagedVisitors)}</dd></div>
+              <div><dt className="text-xs font-semibold uppercase tracking-wide text-[#6f6e6a]">Sessions</dt><dd className="mt-1 text-base font-semibold text-foreground">{formatNumber(country.sessions)}</dd></div>
             </dl>
-            <p className="rounded-lg bg-background px-3 py-2 text-[10px] leading-4 text-[#55534f]">{reviewSignal(country)}</p>
+            <p className="rounded-lg bg-background px-3 py-2 text-xs leading-5 text-[#55534f]">{reviewSignal(country)}</p>
           </section>
         ))}
       </div>
       <div className="hidden overflow-x-auto md:block" role="region" tabIndex={0} aria-label="Country analytics comparison">
         <table className="w-full border-collapse text-left text-xs" style={{ minWidth: "720px" }}>
-          <thead className="bg-background text-[10px] uppercase tracking-widest text-[#6f6e6a]">
+          <thead className="bg-background text-xs uppercase tracking-[0.14em] text-[#6f6e6a]">
             <tr>
               <th scope="col" className="px-5 py-3 font-semibold sm:px-6">Country</th>
               <th scope="col" className="px-4 py-3 text-right font-semibold">Unique visitors</th>
@@ -593,9 +658,9 @@ function CountryBreakdown({ items }: { items: AnalyticsCountryBreakdownItem[] })
           <tbody>
             {items.map((country) => (
               <tr key={country.countryCode} className="border-t border-[#161616]/8">
-                <td className="px-5 py-4 sm:px-6"><strong className="text-sm text-foreground">{country.countryName}</strong><span className="ml-2 font-mono text-[10px] text-[#6f6e6a]">{country.countryCode}</span></td>
+                <td className="px-5 py-4 sm:px-6"><strong className="text-sm text-foreground">{country.countryName}</strong><span className="ml-2 font-mono text-xs text-[#6f6e6a]">{country.countryCode}</span></td>
                 <td className="px-4 py-4 text-right font-semibold text-foreground">{formatNumber(country.visitors)}</td>
-                <td className="px-4 py-4 text-right"><span className="font-semibold text-[#7c5d17]">{formatNumber(country.engagedVisitors)}</span><span className="ml-1 text-[10px] text-[#6f6e6a]">({formatNumber(country.engagedSessions)} sessions)</span></td>
+                <td className="px-4 py-4 text-right"><span className="font-semibold text-[#7c5d17]">{formatNumber(country.engagedVisitors)}</span><span className="ml-1 text-xs text-[#6f6e6a]">({formatCount(country.engagedSessions, "session")})</span></td>
                 <td className="px-4 py-4 text-right font-semibold text-foreground">{formatNumber(country.sessions)}</td>
                 <td className="px-5 py-4 text-[#55534f] sm:px-6">{reviewSignal(country)}</td>
               </tr>
@@ -603,7 +668,7 @@ function CountryBreakdown({ items }: { items: AnalyticsCountryBreakdownItem[] })
           </tbody>
         </table>
       </div>
-      <p className="border-t border-[#161616]/10 bg-background px-5 py-3 text-[10px] leading-4 text-[#6f6e6a] sm:px-6">VPNs, corporate gateways, carrier routing, Apple Private Relay, and different geolocation databases can change the detected country. This dashboard does not claim to identify VPN usage.</p>
+      <p className="border-t border-[#161616]/10 bg-background px-5 py-3 text-xs leading-5 text-[#6f6e6a] sm:px-6">VPNs, corporate gateways, carrier routing, Apple Private Relay, and different geolocation databases can change the detected country. This dashboard does not claim to identify VPN usage.</p>
     </article>
   );
 }
@@ -653,7 +718,7 @@ function SessionCard({ session, visibleNumber }: { session: RecentAnalyticsSessi
                 {session.isReturning ? "Returning visitor" : "New visitor"}
               </span>
             </div>
-            <time dateTime={session.startedAt} className="mt-1 block text-xs text-[#6f6e6a]">Started {formatDateTime(session.startedAt)}</time>
+            <time dateTime={session.lastSeenAt} className="mt-1 block text-xs text-[#6f6e6a]">Last active {formatDateTime(session.lastSeenAt)}</time>
           </div>
         </div>
 
@@ -726,9 +791,9 @@ function SessionCard({ session, visibleNumber }: { session: RecentAnalyticsSessi
               </summary>
               <dl className="space-y-3 border-t border-[#161616]/8 px-4 py-3 text-xs">
                 <TechnicalRow label="Network" value={maskIpAddress(session.ipAddress)} />
-                <TechnicalRow label="Session ID" value={session.id} mono />
-                {session.visitorId ? <TechnicalRow label="Visitor ID" value={session.visitorId} mono /> : null}
-                {session.ipHash ? <TechnicalRow label="IP hash" value={session.ipHash} mono /> : null}
+                <TechnicalRow label="Session ID" value={compactIdentifier(session.id)} mono />
+                {session.visitorId ? <TechnicalRow label="Visitor ID" value={compactIdentifier(session.visitorId)} mono /> : null}
+                {session.ipHash ? <TechnicalRow label="IP hash" value={`hash:${session.ipHash.slice(0, 12)}…`} mono /> : null}
                 {session.userAgent ? <TechnicalRow label="User agent" value={session.userAgent} /> : null}
               </dl>
             </details>
@@ -742,7 +807,7 @@ function SessionCard({ session, visibleNumber }: { session: RecentAnalyticsSessi
 function CompactStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-[8px] border border-[#161616]/8 bg-white px-2.5 py-2 text-center">
-      <dt className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#6f6e6a]">{label}</dt>
+      <dt className="text-xs font-semibold uppercase tracking-[0.1em] text-[#6f6e6a]">{label}</dt>
       <dd className="mt-1 text-sm font-semibold text-[#161616]">{value}</dd>
     </div>
   );
@@ -765,7 +830,7 @@ function TechnicalRow({ label, value, mono = false }: { label: string; value: st
   return (
     <div>
       <dt className="font-semibold text-[#6f6e6a]">{label}</dt>
-      <dd className={`mt-1 break-words text-[#343330] ${mono ? "font-mono text-[11px]" : "leading-5"}`}>{value}</dd>
+      <dd className={`mt-1 break-words text-[#343330] ${mono ? "font-mono text-xs" : "leading-5"}`}>{value}</dd>
     </div>
   );
 }
@@ -795,13 +860,13 @@ function ErrorsAndAudit({
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="break-words text-sm font-semibold text-[#161616]">{error.name}</p>
-                    <time dateTime={error.occurredAt} className="text-[10px] text-[#6f6e6a]">{formatDateTime(error.occurredAt)}</time>
+                    <time dateTime={error.occurredAt} className="text-xs text-[#6f6e6a]">{formatDateTime(error.occurredAt)}</time>
                   </div>
                   <p className="mt-1 truncate text-xs text-[#6f6e6a]">{error.pagePath ?? "Unknown page"}{error.sectionId ? ` · ${error.sectionId}` : ""}</p>
-                  {error.targetLabel || error.eventType ? <p className="mt-1 truncate text-[10px] text-muted-foreground">{[error.eventType, error.targetLabel].filter(Boolean).join(" · ")}</p> : null}
-                  {error.sessionId ? <p className="mt-1 truncate font-mono text-[10px] text-[#6f6e6a]">session:{error.sessionId}</p> : null}
-                  {error.fingerprint ? <p className="mt-1 truncate font-mono text-[10px] text-[#6f6e6a]">fingerprint:{error.fingerprint}</p> : null}
-                  {error.message ? <p className="mt-2 line-clamp-2 break-words font-mono text-[10px] leading-4 text-[#55534f]">{error.message}</p> : null}
+                  {error.targetLabel || error.eventType ? <p className="mt-1 truncate text-xs text-muted-foreground">{[error.eventType, error.targetLabel].filter(Boolean).join(" · ")}</p> : null}
+                  {error.sessionId ? <p className="mt-1 truncate font-mono text-xs text-[#6f6e6a]">session:{compactIdentifier(error.sessionId)}</p> : null}
+                  {error.fingerprint ? <p className="mt-1 truncate font-mono text-xs text-[#6f6e6a]">fingerprint:{compactIdentifier(error.fingerprint, 12, 0)}</p> : null}
+                  {error.message ? <p className="mt-2 line-clamp-2 break-words font-mono text-xs leading-5 text-[#55534f]">{error.message}</p> : null}
                 </div>
               </article>
               ))}
@@ -821,26 +886,26 @@ function ErrorsAndAudit({
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="break-words text-sm font-semibold text-[#161616]">{event.action}</p>
-                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${event.outcome === "success" ? "bg-emerald-100 text-emerald-900" : event.outcome === "denied" ? "bg-amber-100 text-amber-950" : "bg-red-100 text-red-900"}`}>{event.outcome}</span>
+                    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${event.outcome === "success" ? "bg-emerald-100 text-emerald-900" : event.outcome === "denied" ? "bg-amber-100 text-amber-950" : "bg-red-100 text-red-900"}`}>{event.outcome}</span>
                     {event.provenance === "client-reported-unverified" ? (
-                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-950">
+                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-950">
                         Unverified client signal
                       </span>
                     ) : null}
                   </div>
                   {event.provenance === "client-reported-unverified" ? (
-                    <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-amber-50 px-2.5 py-2 text-[10px] leading-4 text-amber-950">
+                    <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-amber-50 px-2.5 py-2 text-xs leading-5 text-amber-950">
                       <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" aria-hidden="true" />
                       Client-reported sign-in failure; this was not verified by the authentication provider.
                     </p>
                   ) : null}
-                  <p className="mt-1 truncate text-xs text-[#6f6e6a]">Actor: {event.actorId} · {event.authentication}</p>
-                  {event.actorEmailHash ? <p className="mt-1 truncate font-mono text-[10px] text-muted-foreground">actor-hash:{event.actorEmailHash}</p> : null}
-                  {event.targetType || event.targetId ? <p className="mt-1 truncate text-[10px] text-muted-foreground">Target: {[event.targetType, event.targetId].filter(Boolean).join(":")}</p> : null}
-                  <p className="mt-1 truncate font-mono text-[10px] text-[#6f6e6a]">{event.ipAddress ?? (event.ipHash ? `hash:${event.ipHash.slice(0, 12)}` : "network unavailable")}</p>
-                  {event.requestId ? <p className="mt-1 truncate font-mono text-[10px] text-[#6f6e6a]">request:{event.requestId}</p> : null}
+                  <p className="mt-1 truncate text-xs text-[#6f6e6a]">Actor: {compactIdentifier(event.actorId)} · {event.authentication}</p>
+                  {event.actorEmailHash ? <p className="mt-1 truncate font-mono text-xs text-muted-foreground">actor-hash:{event.actorEmailHash.slice(0, 12)}…</p> : null}
+                  {event.targetType || event.targetId ? <p className="mt-1 truncate text-xs text-muted-foreground">Target: {[event.targetType, event.targetId ? compactIdentifier(event.targetId, 12, 4) : null].filter(Boolean).join(":")}</p> : null}
+                  <p className="mt-1 truncate font-mono text-xs text-[#6f6e6a]">{event.ipAddress ? maskIpAddress(event.ipAddress) : event.ipHash ? `hash:${event.ipHash.slice(0, 12)}…` : "network unavailable"}</p>
+                  {event.requestId ? <p className="mt-1 truncate font-mono text-xs text-[#6f6e6a]">request:{compactIdentifier(event.requestId, 12, 4)}</p> : null}
                   {Object.keys(event.details).length ? (
-                    <dl className="mt-3 grid gap-x-4 gap-y-1 rounded-lg border border-[#161616]/10 bg-background px-3 py-2 text-[10px] leading-4 sm:grid-cols-2">
+                    <dl className="mt-3 grid gap-x-4 gap-y-1 rounded-lg border border-[#161616]/10 bg-background px-3 py-2 text-xs leading-5 sm:grid-cols-2">
                       {Object.entries(event.details).map(([key, value]) => (
                         <div key={key} className="min-w-0">
                           <dt className="font-semibold text-[#6f6e6a]">{key}</dt>
@@ -850,7 +915,7 @@ function ErrorsAndAudit({
                     </dl>
                   ) : null}
                 </div>
-                <time dateTime={event.occurredAt} className="text-[10px] text-[#6f6e6a]">{formatDateTime(event.occurredAt)}</time>
+                <time dateTime={event.occurredAt} className="text-xs text-[#6f6e6a]">{formatDateTime(event.occurredAt)}</time>
               </article>
               ))}
             </div>
@@ -895,6 +960,9 @@ export function AnalyticsDashboard({
 
   return (
     <div className="space-y-8">
+      <p className="sr-only" role="status">
+        {focusDetails.title} loaded for {data.window.label}.
+      </p>
       {data.warnings.length ? (
         <aside className="flex items-start gap-3 rounded-xl border border-amber-800/20 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-950" role="status">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
@@ -904,25 +972,25 @@ export function AnalyticsDashboard({
 
       <section
         id="analytics-focus-panel"
-        aria-labelledby={focus === "sessions" ? undefined : "analytics-focus-title"}
-        aria-label={focus === "sessions" ? "Recent visitor sessions" : undefined}
-        aria-live="polite"
+        aria-labelledby="analytics-focus-title"
         className="scroll-mt-6 rounded-[14px] border border-[#161616]/10 bg-white p-5 shadow-sm sm:p-7"
       >
-        {focus === "sessions" ? null : (
-          <SectionHeader eyebrow={focusDetails.eyebrow} title={focusDetails.title} detail={focusDetails.description} />
+        {focus === "sessions" ? (
+          <h2 id="analytics-focus-title" className="sr-only">Recent visitor sessions</h2>
+        ) : (
+          <SectionHeader eyebrow={focusDetails.eyebrow} title={focusDetails.title} detail={focusDetails.description} titleId="analytics-focus-title" />
         )}
       {focus === "overview" ? <section aria-labelledby="analytics-overview-title">
         <div className="sr-only" id="analytics-overview-title">Analytics overview</div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <MetricCard label="Sessions" value={formatNumber(summary.sessions)} note={`${formatPercent(engagedRate)} engaged · ${formatNumber(summary.visitors)} unique visitors`} icon={Users} tone="dark" />
-          <MetricCard label="Page views" value={formatNumber(summary.pageViews)} note={`${formatNumber(pageDepth)} pages per session · ${formatNumber(summary.interactions)} interactions`} icon={Eye} tone="gold" />
+          <MetricCard label="Sessions" value={formatNumber(summary.sessions)} note={`${formatPercent(engagedRate)} engaged · ${formatCount(summary.visitors, "unique visitor")}`} icon={Users} tone="dark" />
+          <MetricCard label="Page views" value={formatNumber(summary.pageViews)} note={`${formatCount(pageDepth, "page")} per session · ${formatCount(summary.interactions, "interaction")}`} icon={Eye} tone="gold" />
           <MetricCard label="Average active time" value={formatDuration(summary.averageActiveSeconds)} note={`Foreground engagement · ${formatPercent(summary.bounceRatePercent)} bounce rate`} icon={Clock3} tone="light" />
-          <MetricCard label="Conversion rate" value={formatPercent(conversionRate)} note={`${formatNumber(summary.formSubmissions)} confirmed contact requests · ${formatNumber(summary.portalHandoffs)} portal handoffs`} icon={FileCheck2} tone="light" />
-          <MetricCard label="Interactions" value={formatNumber(summary.interactions)} note={`${formatNumber(summary.events)} total events · ${formatNumber(summary.webVitalEvents)} web vitals`} icon={MousePointerClick} tone="light" />
+          <MetricCard label="Conversion rate" value={formatPercent(conversionRate)} note={`${formatCount(summary.formSubmissions, "backend-confirmed contact request")} · ${formatCount(summary.portalHandoffs, "portal handoff")}`} icon={FileCheck2} tone="light" />
+          <MetricCard label="Interactions" value={formatNumber(summary.interactions)} note={`${formatCount(summary.events, "total event")} · ${formatCount(summary.webVitalEvents, "web vital")}`} icon={MousePointerClick} tone="light" />
           <MetricCard label="Countries" value={formatNumber(summary.uniqueCountries)} note="Unique known country codes in this window" icon={Globe2} tone="light" />
-          <MetricCard label="Errors" value={formatNumber(summary.errorEvents)} note={summary.errorEvents === 0 ? "No captured client or server errors" : "Review the reliability panel below"} icon={AlertTriangle} tone="light" />
-          <MetricCard label="Converted sessions" value={formatNumber(summary.convertedSessions)} note="Sessions with a confirmed contact request" icon={ShieldCheck} tone="light" />
+          <MetricCard label="Errors" value={formatNumber(summary.errorEvents)} note={summary.errorEvents === 0 ? "No captured client or server errors" : "Review details in Errors & security"} icon={AlertTriangle} tone="light" />
+          <MetricCard label="Converted sessions" value={formatNumber(summary.convertedSessions)} note={`${summary.convertedSessions === 1 ? "Session" : "Sessions"} with a backend-confirmed contact request`} icon={ShieldCheck} tone="light" />
         </div>
       </section> : null}
 
@@ -947,11 +1015,11 @@ export function AnalyticsDashboard({
       </section>
       </div> : null}
 
-      {focus === "journey" ? <section>
-        <SectionHeader eyebrow="Journey" title="Conversion funnel" detail="Stages distinguish attempts and intent clicks from confirmed contact requests. Portal handoffs are not completed applications." />
-        {data.breakdowns ? <Funnel steps={data.breakdowns.funnel} /> : <UnavailablePanel label="Conversion funnel data could not be loaded." />}
-      </section>
-      : null}
+      {focus === "journey"
+        ? data.breakdowns
+          ? <Funnel steps={data.breakdowns.funnel} />
+          : <UnavailablePanel label="Conversion funnel data could not be loaded." />
+        : null}
 
       {focus === "sessions" ? <section>
         <RecentSessions data={data.recentSessions} pagination={pagination.sessions} hrefForPage={(page) => hrefForPage("sessions", page)} />
@@ -962,7 +1030,7 @@ export function AnalyticsDashboard({
       </section>
 
       <details className="rounded-xl border border-[#161616]/10 bg-white px-5 py-4 text-xs text-[#55534f]">
-        <summary className="flex cursor-pointer items-center font-semibold text-[#161616]">Metric definitions and coverage</summary>
+        <summary className="flex min-h-11 cursor-pointer items-center font-semibold text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#7c5d17]">Metric definitions and coverage</summary>
         <div className="mt-3 grid gap-3 leading-5 sm:grid-cols-2 xl:grid-cols-4">
           <p><strong>Visitor:</strong> one privacy-preserving anonymous identifier in the selected window.</p>
           <p><strong>Session:</strong> a bounded period of activity for one anonymous visitor.</p>
@@ -972,7 +1040,7 @@ export function AnalyticsDashboard({
         </div>
       </details>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#161616]/10 pt-5 text-[10px] uppercase tracking-widest text-muted-foreground">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#161616]/10 pt-5 text-xs uppercase tracking-[0.14em] text-muted-foreground">
         <span>Window: {data.window.label}</span>
         <span className="inline-flex items-center gap-1.5">
           {summary.latestEventAt ? <><Activity className="h-3 w-3" aria-hidden="true" /> Latest event {formatDateTime(summary.latestEventAt)}</> : "No captured events yet"}

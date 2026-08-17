@@ -2,14 +2,20 @@
 
 import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type PointerEvent } from "react";
 import type { LeadStatus } from "@/lib/admin/leads";
-import { canStartCardDrag, getStageStatusFromPoint, pipelineStages, updateDraggedLeadStatus } from "./PipelineBoardLogic";
+import { canStartCardDrag, getStageStatusFromPoint, pipelineStages, postPipelineLeadStatus } from "./PipelineBoardLogic";
 import { getLeadKey, PipelineDragOverlay } from "./PipelineLeadCard";
 import { PipelineStageColumn } from "./PipelineStageColumn";
 import type { DashboardLead } from "./PipelineBoardTypes";
 
 export type { DashboardLead } from "./PipelineBoardTypes";
 
-export function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
+export function PipelineBoard({
+  leads,
+  returnTo = "/admin/leads?tab=pipeline",
+}: {
+  leads: DashboardLead[];
+  returnTo?: string;
+}) {
   const [items, setItems] = useState(leads);
   const [draggedLeadKey, setDraggedLeadKey] = useState<string | null>(null);
   const [activeDropStatus, setActiveDropStatus] = useState<LeadStatus | null>(null);
@@ -59,7 +65,7 @@ export function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
     setItems((currentItems) => currentItems.map((lead) => (getLeadKey(lead) === leadKey ? { ...lead, status } : lead)));
 
     try {
-      await updateDraggedLeadStatus(draggedLead, status);
+      await postPipelineLeadStatus(draggedLead, status, returnTo);
       setFeedback({ tone: "success", text: `${draggedLead.title} moved to ${status}.` });
     } catch {
       setItems(previousItems);
@@ -128,7 +134,9 @@ export function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
     if (event.pointerType === "mouse") return;
     if (event.button !== 0 || pendingLeadKey || !canStartCardDrag(event.target)) return;
 
-    startManualDrag(lead, event.clientX, event.clientY, event.currentTarget.getBoundingClientRect(), event.pointerId);
+    const card = event.currentTarget.closest<HTMLElement>("[data-pipeline-lead-card]");
+    if (!card) return;
+    startManualDrag(lead, event.clientX, event.clientY, card.getBoundingClientRect(), event.pointerId);
   }
 
   function handlePointerMove(event: PointerEvent<HTMLElement>) {
@@ -185,8 +193,9 @@ export function PipelineBoard({ leads }: { leads: DashboardLead[] }) {
   function handleMouseDown(event: ReactMouseEvent<HTMLElement>, lead: DashboardLead) {
     if (event.button !== 0 || pendingLeadKey || pointerDragRef.current || !canStartCardDrag(event.target)) return;
 
-    event.preventDefault();
-    startManualDrag(lead, event.clientX, event.clientY, event.currentTarget.getBoundingClientRect());
+    const card = event.currentTarget.closest<HTMLElement>("[data-pipeline-lead-card]");
+    if (!card) return;
+    startManualDrag(lead, event.clientX, event.clientY, card.getBoundingClientRect());
 
     function handleWindowMouseMove(moveEvent: MouseEvent) {
       moveEvent.preventDefault();

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { type FormEvent, useCallback, useEffect, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { hasAdminRole } from "@/lib/admin/policy";
 import { getSupabaseAuthBrowserClient } from "@/lib/supabase/auth-browser";
@@ -12,7 +12,6 @@ type AdminLoginFormProps = {
     missing: string[];
     mode: "identity" | "migration";
     role: string;
-    mfaRequired: boolean;
     identityAvailable: boolean;
     legacyAvailable: boolean;
   };
@@ -105,6 +104,13 @@ export function AdminLoginForm({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(queryError);
   const [working, setWorking] = useState(false);
+  const stageHeadingRef = useRef<HTMLHeadingElement>(null);
+  const previousStageRef = useRef(stage);
+
+  useEffect(() => {
+    if (previousStageRef.current !== stage) stageHeadingRef.current?.focus();
+    previousStageRef.current = stage;
+  }, [stage]);
 
   const finalizeVerifiedSignIn = useCallback(
     async (email: string | null, phase: SuccessfulAuditPhase) => {
@@ -132,22 +138,17 @@ export function AdminLoginForm({
       const supabase = getSupabaseAuthBrowserClient();
       if (!hasAdminRole(user.app_metadata, config.role)) {
         await reportAdminLogin(user.email ?? null, "authorization", "failure", "role_missing");
-        await supabase.auth.signOut();
+        await revokeIncompleteAdminSignIn();
         setStage("credentials");
         setErrorMessage("This identity is not assigned the AIXCO admin role.");
         return;
       }
 
       setIdentityEmail(user.email ?? "your admin account");
-      if (!config.mfaRequired) {
-        await finalizeVerifiedSignIn(user.email ?? null, "session");
-        return;
-      }
-
       const assurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
       if (assurance.error) throw assurance.error;
 
-      if (assurance.data.currentLevel === "aal2") {
+      if (assurance.data.currentLevel === "aal2" && assurance.data.nextLevel === "aal2") {
         await finalizeVerifiedSignIn(user.email ?? null, "session");
         return;
       }
@@ -167,7 +168,11 @@ export function AdminLoginForm({
       const staleFactors = factors.data.all.filter(
         (factor) => factor.factor_type === "totp" && factor.status === "unverified",
       );
-      await Promise.all(staleFactors.map((factor) => supabase.auth.mfa.unenroll({ factorId: factor.id })));
+      const staleFactorResults = await Promise.all(
+        staleFactors.map((factor) => supabase.auth.mfa.unenroll({ factorId: factor.id })),
+      );
+      const staleFactorError = staleFactorResults.find((result) => result.error)?.error;
+      if (staleFactorError) throw staleFactorError;
 
       const enrollment = await supabase.auth.mfa.enroll({
         factorType: "totp",
@@ -180,7 +185,7 @@ export function AdminLoginForm({
       setTotpSecret(enrollment.data.totp.secret);
       setStage("enroll");
     },
-    [config.mfaRequired, config.role, finalizeVerifiedSignIn],
+    [config.role, finalizeVerifiedSignIn],
   );
 
   useEffect(() => {
@@ -196,7 +201,7 @@ export function AdminLoginForm({
       try {
         if (setupRequested) {
           if (!hasAdminRole(currentUser.data.user.app_metadata, config.role)) {
-            await supabase.auth.signOut();
+            await revokeIncompleteAdminSignIn();
             setErrorMessage("This identity is not assigned the AIXCO admin role.");
           } else {
             setIdentityEmail(currentUser.data.user.email ?? "your admin account");
@@ -206,7 +211,10 @@ export function AdminLoginForm({
           await prepareMfa(currentUser.data.user);
         }
       } catch (error) {
+        await revokeIncompleteAdminSignIn();
         if (!cancelled) {
+          setStage("credentials");
+          setIdentityEmail("");
           setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
         }
       } finally {
@@ -236,6 +244,7 @@ export function AdminLoginForm({
       credentialsAccepted = true;
       await prepareMfa(result.data.user);
     } catch (error) {
+      if (credentialsAccepted) await revokeIncompleteAdminSignIn();
       await reportAdminLogin(
         email || null,
         credentialsAccepted ? "authorization" : "credentials",
@@ -288,6 +297,11 @@ export function AdminLoginForm({
       setConfirmPassword("");
       await prepareMfa(updated.data.user);
     } catch (error) {
+      await revokeIncompleteAdminSignIn();
+      setStage("credentials");
+      setIdentityEmail("");
+      setNewPassword("");
+      setConfirmPassword("");
       setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
     } finally {
       setWorking(false);
@@ -297,7 +311,7 @@ export function AdminLoginForm({
   async function resetIdentity() {
     setWorking(true);
     try {
-      await getSupabaseAuthBrowserClient().auth.signOut();
+      await getSupabaseAuthBrowserClient().auth.signOut({ scope: "local" });
     } finally {
       setStage("credentials");
       setFactorId("");
@@ -339,7 +353,7 @@ export function AdminLoginForm({
           {config.identityAvailable && stage === "credentials" && (
             <form onSubmit={handleIdentityLogin} className="grid gap-5">
               <div>
-                <h2 className="font-display text-xl">Individual admin sign-in</h2>
+                <h2 ref={stageHeadingRef} tabIndex={-1} className="font-display text-xl outline-none">Individual admin sign-in</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   Use your invited AIXCO admin account and password to continue.
                 </p>
@@ -369,11 +383,11 @@ export function AdminLoginForm({
             </form>
           )}
 
-          {config.identityAvailable && config.mfaRequired && stage === "enroll" && (
+          {config.identityAvailable && stage === "enroll" && (
             <div className="grid gap-5">
               <div>
                 <p className="eyebrow">One-time setup</p>
-                <h2 className="mt-2 font-display text-xl">Protect your admin account</h2>
+                <h2 ref={stageHeadingRef} tabIndex={-1} className="mt-2 font-display text-xl outline-none">Protect your admin account</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   Scan this QR code with 1Password, Google Authenticator, Microsoft Authenticator, or another TOTP app.
                 </p>
@@ -414,30 +428,31 @@ export function AdminLoginForm({
             <form onSubmit={handlePasswordSetup} className="grid gap-5">
               <div>
                 <p className="eyebrow">Invitation setup</p>
-                <h2 className="mt-2 font-display text-xl">Create your admin password</h2>
+                <h2 ref={stageHeadingRef} tabIndex={-1} className="mt-2 font-display text-xl outline-none">Create your admin password</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   This password is required for future sign-ins.
                 </p>
               </div>
               <p className="text-xs text-muted-foreground">Setting up {identityEmail}</p>
+              <p id="admin-password-requirements" className="text-xs text-muted-foreground">Use at least 12 characters.</p>
               <div>
                 <label htmlFor="admin-new-password" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">New password</label>
-                <input id="admin-new-password" type="password" autoComplete="new-password" minLength={12} required value={newPassword} onChange={(event) => setNewPassword(event.target.value)} className="form-control" />
+                <input id="admin-new-password" type="password" autoComplete="new-password" minLength={12} required aria-describedby="admin-password-requirements" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} className="form-control" />
               </div>
               <div>
                 <label htmlFor="admin-confirm-password" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Confirm password</label>
-                <input id="admin-confirm-password" type="password" autoComplete="new-password" minLength={12} required value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="form-control" />
+                <input id="admin-confirm-password" type="password" autoComplete="new-password" minLength={12} required aria-describedby="admin-password-requirements" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} className="form-control" />
               </div>
               <button type="submit" disabled={working} className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60">{working ? "Saving…" : "Save password and continue"}</button>
               <button type="button" disabled={working} onClick={resetIdentity} className="inline-flex min-h-11 items-center justify-center text-sm text-muted-foreground underline-offset-4 hover:underline">Cancel setup</button>
             </form>
           )}
 
-          {config.identityAvailable && config.mfaRequired && stage === "challenge" && (
+          {config.identityAvailable && stage === "challenge" && (
             <div className="grid gap-5">
               <div>
                 <p className="eyebrow">Second factor</p>
-                <h2 className="mt-2 font-display text-xl">Authenticator code</h2>
+                <h2 ref={stageHeadingRef} tabIndex={-1} className="mt-2 font-display text-xl outline-none">Authenticator code</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   Open your authenticator app and enter the current six-digit code.
                 </p>

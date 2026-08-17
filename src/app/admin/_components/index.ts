@@ -6,3 +6,4 @@ export {
   type AdminNavigationItemId,
   type AdminShellProps,
 } from "./AdminShell";
+export { AdminPendingSubmitButton } from "./AdminPendingSubmitButton";

@@ -132,15 +132,15 @@ describe("admin operations launchpad", () => {
     expect(modules.every((module) => module.status === "Production source unavailable")).toBe(true);
   });
 
-  it("describes a password-only identity as configured admin access", () => {
+  it("flags a named identity without MFA as pending enrollment", () => {
     const modules = buildLaunchpadModules({
       ...launchpadData,
       admins: { total: 1, verified: 0 },
     });
 
     expect(modules.find((module) => module.id === "privacy")).toMatchObject({
-      status: "Password access active",
-      tone: "healthy",
+      status: "MFA enrollment pending",
+      tone: "attention",
     });
   });
 });

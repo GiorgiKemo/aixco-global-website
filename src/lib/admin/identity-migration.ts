@@ -10,39 +10,148 @@ export type AdminIdentityStatus = {
   email: string | null;
   invitedAt: string | null;
   lastSignInAt: string | null;
-  verifiedTotpFactors: number;
+  verifiedTotpFactors: number | null;
 };
 
-export async function getAdminIdentityMigrationStatus(requiredRole: string) {
+export type AdminIdentityMigrationSourceStatus = "available" | "partial" | "unavailable";
+export type AdminIdentityMigrationSourceIssue = "admin-client" | "user-list" | "mfa-factors";
+
+export type AdminIdentityMigrationStatus = {
+  admins: AdminIdentityStatus[];
+  safeToDisableLegacyAccess: boolean;
+  sourceStatus: AdminIdentityMigrationSourceStatus;
+  sourceIssues: AdminIdentityMigrationSourceIssue[];
+};
+
+async function runBootstrapClaimRpc(
+  fn:
+    | "claim_admin_identity_bootstrap"
+    | "release_admin_identity_bootstrap"
+    | "complete_admin_identity_bootstrap",
+  args: { p_claim_id: string; p_user_id?: string },
+) {
   const supabase = await getSupabaseAdminClient();
+  const bootstrapRpcClient = supabase as unknown as {
+    rpc: (
+      functionName: typeof fn,
+      functionArgs: typeof args,
+    ) => Promise<{
+      data: boolean | null;
+      error: { code?: string; message: string } | null;
+    }>;
+  };
+  const { data, error } = await bootstrapRpcClient.rpc(fn, args);
+  if (error) {
+    throw new Error(`Administrator bootstrap claim failed (${error.code ?? "database_error"}).`);
+  }
+  return data === true;
+}
+
+export function claimAdminIdentityBootstrap(claimId: string) {
+  return runBootstrapClaimRpc("claim_admin_identity_bootstrap", {
+    p_claim_id: z.string().uuid().parse(claimId),
+  });
+}
+
+export function releaseAdminIdentityBootstrap(claimId: string) {
+  return runBootstrapClaimRpc("release_admin_identity_bootstrap", {
+    p_claim_id: z.string().uuid().parse(claimId),
+  });
+}
+
+export function completeAdminIdentityBootstrap(claimId: string, userId: string) {
+  return runBootstrapClaimRpc("complete_admin_identity_bootstrap", {
+    p_claim_id: z.string().uuid().parse(claimId),
+    p_user_id: z.string().uuid().parse(userId),
+  });
+}
+
+function buildMigrationStatus(
+  admins: AdminIdentityStatus[],
+  sourceStatus: AdminIdentityMigrationSourceStatus,
+  sourceIssues: AdminIdentityMigrationSourceIssue[],
+): AdminIdentityMigrationStatus {
+  return {
+    admins,
+    sourceStatus,
+    sourceIssues: [...new Set(sourceIssues)],
+    // A partial response must never be treated as proof that migration is safe.
+    safeToDisableLegacyAccess: sourceStatus === "available"
+      && admins.some((admin) => (admin.verifiedTotpFactors ?? 0) > 0),
+  };
+}
+
+export async function getAdminIdentityMigrationStatus(
+  requiredRole: string,
+): Promise<AdminIdentityMigrationStatus> {
+  let supabase;
+  try {
+    supabase = await getSupabaseAdminClient();
+  } catch {
+    return buildMigrationStatus([], "unavailable", ["admin-client"]);
+  }
+
   const admins: AdminIdentityStatus[] = [];
+  const sourceIssues: AdminIdentityMigrationSourceIssue[] = [];
+  let completedUserPage = false;
 
   for (let page = 1; ; page += 1) {
-    const { data, error } = await supabase.auth.admin.listUsers({ page, perPage: 200 });
-    if (error) throw new Error(`Could not list admin identities: ${error.message}`);
+    let usersResult;
+    try {
+      usersResult = await supabase.auth.admin.listUsers({ page, perPage: 200 });
+    } catch {
+      sourceIssues.push("user-list");
+      return buildMigrationStatus(
+        admins,
+        completedUserPage ? "partial" : "unavailable",
+        sourceIssues,
+      );
+    }
 
-    for (const user of data.users) {
+    if (usersResult.error || !Array.isArray(usersResult.data?.users)) {
+      sourceIssues.push("user-list");
+      return buildMigrationStatus(
+        admins,
+        completedUserPage ? "partial" : "unavailable",
+        sourceIssues,
+      );
+    }
+    completedUserPage = true;
+
+    for (const user of usersResult.data.users) {
       if (!hasAdminRole(user.app_metadata, requiredRole)) continue;
-      const factors = await supabase.auth.admin.mfa.listFactors({ userId: user.id });
-      if (factors.error) throw new Error(`Could not inspect MFA status: ${factors.error.message}`);
+
+      let verifiedTotpFactors: number | null = null;
+      try {
+        const factors = await supabase.auth.admin.mfa.listFactors({ userId: user.id });
+        if (factors.error || !Array.isArray(factors.data?.factors)) {
+          sourceIssues.push("mfa-factors");
+        } else {
+          verifiedTotpFactors = factors.data.factors.filter(
+            (factor) => factor.factor_type === "totp" && factor.status === "verified",
+          ).length;
+        }
+      } catch {
+        sourceIssues.push("mfa-factors");
+      }
+
       admins.push({
         id: user.id,
         email: user.email ?? null,
         invitedAt: user.invited_at ?? null,
         lastSignInAt: user.last_sign_in_at ?? null,
-        verifiedTotpFactors: factors.data.factors.filter(
-          (factor) => factor.factor_type === "totp" && factor.status === "verified",
-        ).length,
+        verifiedTotpFactors,
       });
     }
 
-    if (data.users.length < 200) break;
+    if (usersResult.data.users.length < 200) break;
   }
 
-  return {
+  return buildMigrationStatus(
     admins,
-    safeToDisableLegacyAccess: admins.some((admin) => admin.verifiedTotpFactors > 0),
-  };
+    sourceIssues.length ? "partial" : "available",
+    sourceIssues,
+  );
 }
 
 export async function inviteAdminIdentity(

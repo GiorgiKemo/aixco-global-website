@@ -38,6 +38,25 @@ function request() {
   });
 }
 
+function formRequest({
+  returnTo = "/admin/leads?tab=records&status=archived&contactPage=2&chatPage=3",
+  status = "new",
+}: {
+  returnTo?: string;
+  status?: string;
+} = {}) {
+  const body = new FormData();
+  body.set("resource", "contact");
+  body.set("id", "11111111-1111-4111-8111-111111111111");
+  body.set("status", status);
+  body.set("returnTo", returnTo);
+  return new Request("https://www.aixco.global/admin/leads/status", {
+    method: "POST",
+    headers: { origin: "https://www.aixco.global" },
+    body,
+  });
+}
+
 describe("admin lead status route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -73,6 +92,33 @@ describe("admin lead status route", () => {
     expect(mocks.audit).toHaveBeenNthCalledWith(1, expect.objectContaining({
       action: "lead.status.update.requested",
     }), { required: true });
+  });
+
+  it("uses PRG while preserving validated record filters and pages when reopening", async () => {
+    mocks.maybeSingle.mockResolvedValue({ data: { id: "11111111-1111-4111-8111-111111111111" }, error: null });
+
+    const response = await POST(formRequest());
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe(
+      "https://www.aixco.global/admin/leads?tab=records&status=archived&contactPage=2&chatPage=3&updated=1#contact-11111111-1111-4111-8111-111111111111",
+    );
+  });
+
+  it("rejects unsafe return destinations and keeps form errors in the safe PRG context", async () => {
+    mocks.maybeSingle.mockResolvedValue({ data: { id: "11111111-1111-4111-8111-111111111111" }, error: null });
+
+    const unsafeResponse = await POST(formRequest({ returnTo: "https://evil.example/admin/leads" }));
+    expect(unsafeResponse.status).toBe(303);
+    expect(unsafeResponse.headers.get("location")).toBe(
+      "https://www.aixco.global/admin/leads?tab=new&updated=1#contact-11111111-1111-4111-8111-111111111111",
+    );
+
+    const invalidResponse = await POST(formRequest({ status: "deleted" }));
+    expect(invalidResponse.status).toBe(303);
+    expect(invalidResponse.headers.get("location")).toBe(
+      "https://www.aixco.global/admin/leads?tab=records&status=archived&contactPage=2&chatPage=3&error=invalid-status-update",
+    );
   });
 
   it("does not update the lead when the required pre-action audit cannot persist", async () => {

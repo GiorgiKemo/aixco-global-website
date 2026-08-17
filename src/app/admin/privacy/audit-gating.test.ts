@@ -5,10 +5,14 @@ const mocks = vi.hoisted(() => ({
   audit: vi.fn(),
   exportSubject: vi.fn(),
   deleteSubject: vi.fn(),
+  verifyPreview: vi.fn(),
 }));
 
 vi.mock("@/lib/admin/auth", () => ({ getAal2AdminAuthDecision: mocks.auth }));
 vi.mock("@/lib/admin/audit", () => ({ auditAdminAction: mocks.audit }));
+vi.mock("@/lib/admin/privacy-preview-token", () => ({
+  verifyPrivacyPreviewToken: mocks.verifyPreview,
+}));
 vi.mock("@/lib/admin/privacy", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/lib/admin/privacy")>();
   return {
@@ -25,7 +29,12 @@ import { POST as deleteSubject } from "./delete/route";
 function request(path: "export" | "delete") {
   const body = new FormData();
   body.set("email", "subject@example.com");
-  if (path === "delete") body.set("confirmation", "DELETE");
+  body.set("preview_token", "signed-preview-proof");
+  if (path === "delete") {
+    body.set("previewed_email", "subject@example.com");
+    body.set("confirmation_email", "subject@example.com");
+    body.set("confirmation", "DELETE");
+  }
   return new Request(`https://www.aixco.global/admin/privacy/${path}`, {
     method: "POST",
     headers: { origin: "https://www.aixco.global" },
@@ -36,6 +45,7 @@ function request(path: "export" | "delete") {
 describe("privacy operation audit gates", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.verifyPreview.mockReturnValue(true);
     mocks.auth.mockResolvedValue({
       ok: true,
       principal: {
@@ -79,5 +89,43 @@ describe("privacy operation audit gates", () => {
       action: "privacy.subject.delete.requested",
       target: "email-hmac:subject",
     }), { required: true });
+  });
+
+  it("does not export without a valid actor-bound preview proof", async () => {
+    mocks.verifyPreview.mockReturnValueOnce(false);
+    const response = await exportSubject(request("export"));
+
+    expect(response.headers.get("location")).toContain("error=invalid-export-preview");
+    expect(mocks.exportSubject).not.toHaveBeenCalled();
+    expect(mocks.audit).not.toHaveBeenCalled();
+  });
+
+  it("does not delete before the exact preview subject is re-confirmed", async () => {
+    const unconfirmed = request("delete");
+    const body = await unconfirmed.formData();
+    body.set("confirmation_email", "different@example.com");
+    const response = await deleteSubject(new Request(unconfirmed.url, {
+      method: "POST",
+      headers: { origin: "https://www.aixco.global" },
+      body,
+    }));
+
+    expect(response.headers.get("location")).toContain("error=invalid-deletion");
+    expect(mocks.deleteSubject).not.toHaveBeenCalled();
+    expect(mocks.audit).not.toHaveBeenCalled();
+  });
+
+  it("does not delete with a missing, expired, or actor-mismatched preview proof", async () => {
+    mocks.verifyPreview.mockReturnValueOnce(false);
+    const response = await deleteSubject(request("delete"));
+
+    expect(response.headers.get("location")).toContain("error=invalid-deletion");
+    expect(mocks.verifyPreview).toHaveBeenCalledWith(
+      "signed-preview-proof",
+      "subject@example.com",
+      "4427dba7-3040-40fe-b965-9b278610f7b7",
+    );
+    expect(mocks.deleteSubject).not.toHaveBeenCalled();
+    expect(mocks.audit).not.toHaveBeenCalled();
   });
 });

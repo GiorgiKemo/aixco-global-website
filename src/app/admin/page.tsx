@@ -182,9 +182,9 @@ export function buildLaunchpadModules(data: AdminLaunchpadData): LaunchpadModule
         status: data.admins.verified
           ? `${count(data.admins.verified)} MFA-enrolled administrator${data.admins.verified === 1 ? "" : "s"}`
           : data.admins.total
-            ? "Password access active"
+            ? "MFA enrollment pending"
             : "No administrator identities",
-        tone: data.admins.total ? ("healthy" as const) : ("attention" as const),
+        tone: data.admins.verified ? ("healthy" as const) : ("attention" as const),
         available: true,
       }
     : unavailableModule(privacyBase);

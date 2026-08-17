@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { after } from "next/server";
 import Link from "next/link";
 import {
   BarChart3,
@@ -104,19 +105,19 @@ export default async function AdminAnalyticsPage({ searchParams }: AdminAnalytic
     audit: parseAnalyticsPage(params.auditPage),
   };
   const requestHeaders = await headers();
+  after(() => auditAdminAction({
+    action: "admin.analytics.view",
+    actor: adminPrincipal,
+    outcome: "success",
+    target: "website-analytics",
+    details: { range, focus },
+    headers: requestHeaders,
+  }));
   const [result, operations] = await Promise.all([
     fetchAdminAnalyticsDashboard(range),
     focus === "operations"
       ? fetchAdminOperationsSnapshot()
       : Promise.resolve({ ok: false as const, reason: "Operational totals were not requested for this view." }),
-    auditAdminAction({
-      action: "admin.analytics.view",
-      actor: adminPrincipal,
-      outcome: "success",
-      target: "website-analytics",
-      details: { range },
-      headers: requestHeaders,
-    }, { required: true }),
   ]);
   const pagination = result.ok ? createAnalyticsPaginationState({
     totals: {
@@ -148,7 +149,7 @@ export default async function AdminAnalyticsPage({ searchParams }: AdminAnalytic
                       key={item.focus}
                       href={`/admin/analytics?range=${range}&focus=${item.focus}`}
                       aria-current={active ? "page" : undefined}
-                      className={`inline-flex min-h-10 items-center justify-center rounded-[7px] px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${active ? "bg-[#161616] text-white" : "text-[#6f6e6a] hover:bg-[#f8f6f1] hover:text-[#161616]"}`}
+                      className={`inline-flex min-h-11 items-center justify-center rounded-[7px] px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17] ${active ? "bg-[#161616] text-white" : "text-[#6f6e6a] hover:bg-[#f8f6f1] hover:text-[#161616]"}`}
                     >
                       {item.label}
                     </Link>
@@ -196,7 +197,7 @@ export default async function AdminAnalyticsPage({ searchParams }: AdminAnalytic
                     <DatabaseZap className="h-5 w-5" aria-hidden="true" />
                   </span>
                   <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Source unavailable</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Source unavailable</p>
                     <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.03em]">Analytics is not ready</h2>
                     <p className="mt-3 text-sm leading-6 text-[#6f6e6a]">{result.reason}</p>
                     {result.missing?.length ? (
@@ -210,6 +211,12 @@ export default async function AdminAnalyticsPage({ searchParams }: AdminAnalytic
                       <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
                       No placeholder or estimated metrics are shown when the production source cannot be verified.
                     </p>
+                    <Link
+                      href={`/admin/analytics?range=${range}&focus=${focus}`}
+                      className="mt-5 inline-flex min-h-11 items-center justify-center rounded-[9px] bg-[#161616] px-4 text-sm font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17]"
+                    >
+                      Retry analytics
+                    </Link>
                   </div>
                 </div>
               </section>

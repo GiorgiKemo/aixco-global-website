@@ -140,7 +140,10 @@ async function fetchContacts(client: AdminClient, page: AdminLeadPage, status?: 
   const { from, to } = getRange(page);
   const query = client.from("contact_submissions").select(CONTACT_COLUMNS);
   const filteredQuery = status ? query.eq("status", status) : query.neq("status", "archived");
-  const { data, error } = await filteredQuery.order("created_at", { ascending: false }).range(from, to);
+  const { data, error } = await filteredQuery
+    .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
+    .range(from, to);
 
   if (error) throw new Error(error.message);
   return (data ?? []) as ContactLead[];
@@ -150,7 +153,10 @@ async function fetchChats(client: AdminClient, page: AdminLeadPage, status?: Lea
   const { from, to } = getRange(page);
   const query = client.from("chat_transcripts").select(CHAT_COLUMNS);
   const filteredQuery = status ? query.eq("status", status) : query.neq("status", "archived");
-  const { data, error } = await filteredQuery.order("created_at", { ascending: false }).range(from, to);
+  const { data, error } = await filteredQuery
+    .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
+    .range(from, to);
 
   if (error) throw new Error(error.message);
   return (data ?? []) as ChatLead[];
@@ -162,6 +168,7 @@ async function fetchPortalEvents(client: AdminClient, page: AdminLeadPage) {
     .from("portal_click_events")
     .select(PORTAL_COLUMNS)
     .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
     .range(from, to);
 
   if (error) throw new Error(error.message);

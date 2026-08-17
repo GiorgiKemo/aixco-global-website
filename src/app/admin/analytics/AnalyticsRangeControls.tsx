@@ -65,7 +65,7 @@ export function AnalyticsRangeControls({
               data-selected={selected ? "true" : "false"}
               onClick={() => setSelectedRange(option.value)}
               aria-current={active ? "page" : undefined}
-              className={`inline-flex min-h-10 min-w-[3.25rem] items-center justify-center rounded-[6px] px-3 text-[11px] font-semibold transition-[background-color,color,box-shadow] duration-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${selected ? "bg-white text-[#161616] shadow-sm" : "text-[#6f6e6a] hover:bg-white/65 hover:text-[#161616] active:bg-white active:text-[#161616] active:shadow-sm"}`}
+              className={`inline-flex min-h-11 min-w-[3.25rem] items-center justify-center rounded-[6px] px-3 text-xs font-semibold transition-[background-color,color,box-shadow] duration-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17] ${selected ? "bg-white text-[#161616] shadow-sm" : "text-[#6f6e6a] hover:bg-white/65 hover:text-[#161616] active:bg-white active:text-[#161616] active:shadow-sm"}`}
             >
               <PendingRangeLabel label={option.label} />
             </Link>
@@ -75,7 +75,7 @@ export function AnalyticsRangeControls({
       <Link
         href={`/admin/analytics?range=${range}&focus=${focus}`}
         prefetch={false}
-        className="inline-flex min-h-11 min-w-[6.25rem] items-center justify-center gap-2 rounded-[9px] border border-[#161616]/10 bg-white px-3 text-xs font-semibold text-[#161616] transition-[border-color,color,background-color] duration-75 hover:border-primary hover:text-primary active:bg-[#f8f6f1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        className="inline-flex min-h-11 min-w-[6.25rem] items-center justify-center gap-2 rounded-[9px] border border-[#161616]/10 bg-white px-3 text-xs font-semibold text-[#161616] transition-[border-color,color,background-color] duration-75 hover:border-primary hover:text-primary active:bg-[#f8f6f1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c5d17]"
       >
         <PendingRefreshLabel />
       </Link>

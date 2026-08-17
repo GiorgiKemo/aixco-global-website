@@ -191,6 +191,7 @@ export function AdminShell({ children, adminName, adminEmail }: AdminShellProps)
   const [drawerOpen, setDrawerOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
+  const restoreMenuFocusRef = useRef(false);
   const initials = getInitials(adminName, adminEmail);
 
   useEffect(() => {
@@ -210,9 +211,17 @@ export function AdminShell({ children, adminName, adminEmail }: AdminShellProps)
     };
   }, [drawerOpen]);
 
+  useEffect(() => {
+    if (drawerOpen || !restoreMenuFocusRef.current) return;
+
+    restoreMenuFocusRef.current = false;
+    const animationFrame = requestAnimationFrame(() => menuButtonRef.current?.focus());
+    return () => cancelAnimationFrame(animationFrame);
+  }, [drawerOpen]);
+
   const closeDrawer = (restoreFocus = false) => {
+    restoreMenuFocusRef.current = restoreFocus;
     setDrawerOpen(false);
-    if (restoreFocus) requestAnimationFrame(() => menuButtonRef.current?.focus());
   };
 
   const handleDrawerKeyDown = (event: KeyboardEvent<HTMLElement>) => {
@@ -243,55 +252,61 @@ export function AdminShell({ children, adminName, adminEmail }: AdminShellProps)
 
   return (
     <div className="admin-shell">
-      <a className="admin-shell__skip-link" href="#admin-main-content">
-        Skip to admin content
-      </a>
-      <aside className="admin-shell__rail" aria-label="Admin workspace shortcuts">
-        <Link href="/admin" className="admin-shell__rail-brand" aria-label="AIXCO admin operations">
-          <span className="admin-shell__rail-brand-image" aria-hidden="true" />
-        </Link>
-        <NavigationLinks activeItem={activeItem} />
-        <div className="admin-shell__rail-footer">
-          <Link
-            href="/admin/identity-migration"
-            className="admin-shell__rail-avatar"
-            aria-label="Open admin profile"
-            title="Admin profile"
-          >
-            {initials}
+      <div
+        className="admin-shell__background"
+        aria-hidden={drawerOpen ? true : undefined}
+        inert={drawerOpen ? true : undefined}
+      >
+        <a className="admin-shell__skip-link" href="#admin-main-content">
+          Skip to admin content
+        </a>
+        <aside className="admin-shell__rail" aria-label="Admin workspace shortcuts">
+          <Link href="/admin" className="admin-shell__rail-brand" aria-label="AIXCO admin operations">
+            <span className="admin-shell__rail-brand-image" aria-hidden="true" />
           </Link>
-          <SignOutButton />
+          <NavigationLinks activeItem={activeItem} />
+          <div className="admin-shell__rail-footer">
+            <Link
+              href="/admin/identity-migration"
+              className="admin-shell__rail-avatar"
+              aria-label="Open admin profile"
+              title="Admin profile"
+            >
+              {initials}
+            </Link>
+            <SignOutButton />
+          </div>
+        </aside>
+
+        <header className="admin-shell__topbar">
+          <Link href="/admin" className="admin-shell__wordmark" aria-label="AIXCO admin operations">
+            <span className="admin-shell__wordmark-image" aria-hidden="true" />
+          </Link>
+
+          <div className="admin-shell__topbar-profile" aria-label="Signed-in administrator">
+            <span className="admin-shell__avatar" aria-hidden="true">{initials}</span>
+            <span className="admin-shell__profile-copy">
+              <strong>{adminName?.trim() || "Administrator"}</strong>
+              {adminEmail ? <small>{adminEmail}</small> : null}
+            </span>
+          </div>
+
+          <button
+            ref={menuButtonRef}
+            type="button"
+            className="admin-shell__menu-button"
+            aria-label={drawerOpen ? "Close admin navigation" : "Open admin navigation"}
+            aria-expanded={drawerOpen}
+            aria-controls="admin-mobile-drawer"
+            onClick={() => drawerOpen ? closeDrawer(true) : setDrawerOpen(true)}
+          >
+            <Menu aria-hidden="true" />
+          </button>
+        </header>
+
+        <div id="admin-main-content" className="admin-shell__content" tabIndex={-1}>
+          {children}
         </div>
-      </aside>
-
-      <header className="admin-shell__topbar">
-        <Link href="/admin" className="admin-shell__wordmark" aria-label="AIXCO admin operations">
-          <span className="admin-shell__wordmark-image" aria-hidden="true" />
-        </Link>
-
-        <div className="admin-shell__topbar-profile" aria-label="Signed-in administrator">
-          <span className="admin-shell__avatar" aria-hidden="true">{initials}</span>
-          <span className="admin-shell__profile-copy">
-            <strong>{adminName?.trim() || "Administrator"}</strong>
-            {adminEmail ? <small>{adminEmail}</small> : null}
-          </span>
-        </div>
-
-        <button
-          ref={menuButtonRef}
-          type="button"
-          className="admin-shell__menu-button"
-          aria-label="Open admin navigation"
-          aria-expanded={drawerOpen}
-          aria-controls="admin-mobile-drawer"
-          onClick={() => setDrawerOpen(true)}
-        >
-          <Menu aria-hidden="true" />
-        </button>
-      </header>
-
-      <div id="admin-main-content" className="admin-shell__content" tabIndex={-1}>
-        {children}
       </div>
 
       {drawerOpen ? (

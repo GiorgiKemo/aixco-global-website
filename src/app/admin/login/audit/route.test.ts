@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("@/lib/admin/audit", () => ({ auditAdminLoginAttempt: mocks.audit }));
-vi.mock("@/lib/admin/auth", () => ({ getAdminAuthDecision: mocks.auth }));
+vi.mock("@/lib/admin/auth", () => ({ getAal2AdminAuthDecision: mocks.auth }));
 vi.mock("@/lib/backend/lead-capture-abuse", () => ({
   checkDistributedLeadCaptureLimit: mocks.distributedGuard,
 }));
@@ -98,17 +98,8 @@ describe("admin login audit route", () => {
     expect(mocks.distributedGuard).not.toHaveBeenCalled();
   });
 
-  it("authenticates a verified password-only success before anonymous abuse controls", async () => {
-    mocks.auth.mockResolvedValueOnce({
-      ok: true,
-      principal: {
-        id: "4427dba7-3040-40fe-b965-9b278610f7b7",
-        email: "admin@aixco.global",
-        authentication: "supabase-password",
-        aal: "aal1",
-      },
-    });
-    mocks.distributedGuard.mockResolvedValue({ allowed: false });
+  it("rejects a password-only success before writing a trusted audit record", async () => {
+    mocks.auth.mockResolvedValueOnce({ ok: false, reason: "mfa-required" });
 
     const response = await POST(request({
       email: "admin@aixco.global",
@@ -116,17 +107,10 @@ describe("admin login audit route", () => {
       phase: "session",
     }));
 
-    expect(response.status).toBe(202);
-    await expect(response.json()).resolves.toEqual({ ok: true, stored: true });
+    expect(response.status).toBe(401);
     expect(mocks.auth).toHaveBeenCalledOnce();
     expect(mocks.distributedGuard).not.toHaveBeenCalled();
-    expect(mocks.audit).toHaveBeenCalledWith(expect.objectContaining({
-      principal: expect.objectContaining({
-        authentication: "supabase-password",
-        aal: "aal1",
-      }),
-    }));
-    expect(mocks.serverSignOut).not.toHaveBeenCalled();
+    expect(mocks.audit).not.toHaveBeenCalled();
   });
 
   it("does not let exhausted anonymous audit buckets block a verified success", async () => {

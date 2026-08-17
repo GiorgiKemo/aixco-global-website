@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { ShieldCheck, UserPlus } from "lucide-react";
-import { AdminShell } from "@/app/admin/_components";
+import type { ReactNode } from "react";
+import { AlertTriangle, LogOut, ShieldCheck } from "lucide-react";
+import { AdminPendingSubmitButton, AdminShell } from "@/app/admin/_components";
 import { getAdminAuthConfig, requireAdminSession } from "@/lib/admin/auth";
 import { getAdminIdentityMigrationStatus } from "@/lib/admin/identity-migration";
 
@@ -9,14 +10,49 @@ export const metadata: Metadata = { title: "Admin identity migration | AIXCO.Glo
 
 type PageProps = { searchParams?: Promise<{ invited?: string; error?: string }> };
 
+function inviteErrorMessage(error: string | undefined) {
+  if (error === "invalid-email") return "Enter a valid administrator email address.";
+  if (error === "source-unavailable") {
+    return "The invitation was not sent because administrator identity status could not be verified.";
+  }
+  if (error === "migration-invite-closed") {
+    return "Temporary migration access cannot invite more administrators. Sign in with a named MFA-protected account.";
+  }
+  return "The invitation could not be completed. The address may already have an account.";
+}
+
+function LegacyMigrationShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="min-h-screen bg-[#f8f6f1] text-[#161616]">
+      <header className="border-b border-[#161616]/10 bg-white px-4 py-3 sm:px-7">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">AIXCO Admin</p>
+            <p className="mt-1 text-xs text-[#6f6e6a]">Temporary migration access</p>
+          </div>
+          <form action="/admin/logout" method="post">
+            <button type="submit" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[9px] border border-[#161616]/15 bg-white px-4 text-sm font-semibold">
+              <LogOut className="h-4 w-4" aria-hidden="true" />
+              Sign out
+            </button>
+          </form>
+        </div>
+      </header>
+      {children}
+    </div>
+  );
+}
+
 export default async function AdminIdentityMigrationPage({ searchParams }: PageProps) {
   const adminPrincipal = await requireAdminSession();
   const config = getAdminAuthConfig();
   const status = await getAdminIdentityMigrationStatus(config.role);
   const params = searchParams ? await searchParams : {};
-  const passwordOnlyAccess = !config.mfaRequired;
-  const hasNamedAdministrator = status.admins.length > 0;
-  const accessReady = passwordOnlyAccess ? hasNamedAdministrator : status.safeToDisableLegacyAccess;
+  const sourceAvailable = status.sourceStatus === "available";
+  const accessReady = sourceAvailable && status.safeToDisableLegacyAccess;
+  const legacyInviteClosed = adminPrincipal.authentication === "legacy-shared-password"
+    && status.admins.length > 0;
+  const canInvite = sourceAvailable && !legacyInviteClosed;
 
   const content = (
     <main className="admin-safe-page admin-safe-page--dashboard bg-[#f8f6f1] px-4 py-5 text-[#161616] sm:px-7 sm:py-8 lg:px-10">
@@ -27,33 +63,62 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
           <p className="mt-3 max-w-2xl text-sm leading-6 text-[#6f6e6a]">Invite a named administrator and review the security state of every admin identity.</p>
         </header>
 
-        {params.invited ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">{passwordOnlyAccess ? "Invitation sent. The recipient can sign in after accepting it and setting a password." : "Invitation sent. The recipient must accept it and enroll an authenticator."}</p> : null}
-        {params.error ? <p role="alert" className="mt-5 border border-red-700/20 bg-red-50 px-4 py-3 text-sm font-medium text-red-900">The invitation could not be completed. The address may already have an account.</p> : null}
+        {params.invited ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">Invitation sent. The recipient must accept it, set a password, and enroll an authenticator.</p> : null}
+        {params.error ? <p role="alert" className="mt-5 border border-red-700/20 bg-red-50 px-4 py-3 text-sm font-medium text-red-900">{inviteErrorMessage(params.error)}</p> : null}
+        {!sourceAvailable ? (
+          <div id="identity-source-warning" role="alert" className="mt-5 flex gap-3 border border-amber-700/25 bg-amber-50 px-4 py-3 text-amber-950">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+            <div>
+              <p className="text-sm font-semibold">
+                {status.sourceStatus === "unavailable"
+                  ? "Administrator identity status is temporarily unavailable."
+                  : "Administrator identity status is incomplete."}
+              </p>
+              <p className="mt-1 text-sm leading-6">
+                Invitations and migration readiness are disabled. Keep ADMIN_AUTH_MODE set to migration and try again later.
+              </p>
+            </div>
+          </div>
+        ) : null}
+        {legacyInviteClosed ? (
+          <div id="legacy-invite-warning" role="alert" className="mt-5 flex gap-3 border border-amber-700/25 bg-amber-50 px-4 py-3 text-amber-950">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+            <div>
+              <p className="text-sm font-semibold">Temporary invitation access is closed.</p>
+              <p className="mt-1 text-sm leading-6">
+                A named administrator already exists. Sign in with that MFA-protected identity to invite another administrator.
+              </p>
+            </div>
+          </div>
+        ) : null}
 
-        <section className="mt-6 rounded-[12px] border border-[#161616]/10 bg-white p-6 shadow-sm">
+        <section data-source-status={status.sourceStatus} className="mt-6 rounded-[12px] border border-[#161616]/10 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-3">
             <span className="grid h-11 w-11 place-items-center rounded-[10px] bg-[#f4eddd] text-primary"><ShieldCheck className="h-5 w-5" aria-hidden="true" /></span>
             <h2 className="font-display text-xl font-semibold">Migration safety</h2>
           </div>
           <p className={`mt-4 rounded-[9px] border px-4 py-3 text-sm font-semibold ${accessReady ? "border-emerald-700/20 bg-emerald-50 text-emerald-900" : "border-amber-700/20 bg-amber-50 text-amber-950"}`}>
-            {passwordOnlyAccess
-              ? hasNamedAdministrator
-                ? "Password-only admin access is active. Verify that a named administrator can sign in before removing any legacy migration credentials."
-                : "Create a named administrator before removing any legacy migration credentials."
+            {!sourceAvailable
+              ? "Migration readiness could not be verified. Do not disable legacy migration access."
               : status.safeToDisableLegacyAccess
                 ? "At least one named administrator has verified TOTP. After that administrator confirms a fresh login, ADMIN_AUTH_MODE can be changed to identity."
                 : "Do not disable migration access yet. No named administrator has a verified TOTP factor."}
           </p>
 
-          <form action="/admin/identity-migration/invite" method="post" className="mt-6 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
-            <label className="grid gap-2 text-sm font-semibold">
-              Administrator email
-              <input name="email" type="email" required maxLength={255} className="h-11 border border-[#161616]/20 px-3 text-base font-normal" />
-            </label>
-            <button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-[9px] bg-[#161616] px-5 text-sm font-semibold text-white">
-              <UserPlus className="h-4 w-4" aria-hidden="true" />
-              Send secure invite
-            </button>
+          <form action="/admin/identity-migration/invite" method="post" aria-describedby={!sourceAvailable ? "identity-source-warning" : legacyInviteClosed ? "legacy-invite-warning" : undefined}>
+            <fieldset disabled={!canInvite} className="mt-6 grid min-w-0 gap-3 border-0 p-0 disabled:opacity-50 sm:grid-cols-[1fr_auto] sm:items-end">
+              <label className="grid gap-2 text-sm font-semibold">
+                Administrator email
+                <input name="email" type="email" required maxLength={255} disabled={!canInvite} className="h-11 border border-[#161616]/20 px-3 text-base font-normal" />
+              </label>
+              <AdminPendingSubmitButton
+                idleLabel="Send secure invite"
+                pendingLabel="Sending secure invite…"
+                icon="user-plus"
+                disabled={!canInvite}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-[9px] bg-[#161616] px-5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+              />
+            </fieldset>
           </form>
         </section>
 
@@ -62,17 +127,17 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
           <div className="mt-4 divide-y divide-[#161616]/10">
             {status.admins.length ? status.admins.map((admin) => (
               <article key={admin.id} className="grid gap-1 py-4 text-sm sm:grid-cols-[1fr_auto] sm:items-center">
-                <div><p className="font-semibold">{admin.email ?? "Email unavailable"}</p><p className="mt-1 text-xs text-[#6f6e6a]">Last sign-in: {admin.lastSignInAt ? new Date(admin.lastSignInAt).toLocaleString("en") : "Never"}</p></div>
-                <span className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${passwordOnlyAccess || admin.verifiedTotpFactors ? "bg-emerald-100 text-emerald-900" : "bg-amber-100 text-amber-950"}`}>{passwordOnlyAccess ? "Password access active" : admin.verifiedTotpFactors ? "TOTP verified" : "TOTP pending"}</span>
+                <div><p className="font-semibold">{admin.email ?? "Email unavailable"}</p><p className="mt-1 text-xs text-[#6f6e6a]">Last sign-in: {admin.lastSignInAt ? `${new Date(admin.lastSignInAt).toLocaleString("en", { timeZone: "UTC" })} UTC` : "Never"}</p></div>
+                <span className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${admin.verifiedTotpFactors ? "bg-emerald-100 text-emerald-900" : "bg-amber-100 text-amber-950"}`}>{admin.verifiedTotpFactors === null ? "MFA status unavailable" : admin.verifiedTotpFactors ? "TOTP verified" : "TOTP pending"}</span>
               </article>
-            )) : <p className="py-4 text-sm text-[#6f6e6a]">No named administrators exist yet.</p>}
+            )) : <p className="py-4 text-sm text-[#6f6e6a]">{sourceAvailable ? "No named administrators exist yet." : "Administrator identities could not be fully loaded."}</p>}
           </div>
         </section>
       </div>
     </main>
   );
 
-  return adminPrincipal.authentication === "legacy-shared-password" ? content : (
-    <AdminShell adminEmail={adminPrincipal.email}>{content}</AdminShell>
-  );
+  return adminPrincipal.authentication === "legacy-shared-password"
+    ? <LegacyMigrationShell>{content}</LegacyMigrationShell>
+    : <AdminShell adminEmail={adminPrincipal.email}>{content}</AdminShell>;
 }

@@ -42,7 +42,6 @@ const identityConfig = {
   missing: [],
   mode: "identity" as const,
   role: "admin",
-  mfaRequired: true,
   identityAvailable: true,
   legacyAvailable: false,
 };
@@ -97,7 +96,6 @@ describe("AdminLoginForm", () => {
           missing: [],
           mode: "migration",
           role: "admin",
-          mfaRequired: false,
           identityAvailable: false,
           legacyAvailable: true,
         }}
@@ -109,42 +107,22 @@ describe("AdminLoginForm", () => {
     expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
   });
 
-  it("completes a password-only admin sign-in without showing MFA setup", async () => {
-    const onAuthenticated = vi.fn();
-    const passwordOnlyConfig = { ...identityConfig, mfaRequired: false };
-    authMocks.signInWithPassword.mockResolvedValue({
-      data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
-      error: null,
-    });
-
-    render(<AdminLoginForm config={passwordOnlyConfig} onAuthenticated={onAuthenticated} />);
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "admin@aixco.global" } });
-    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct-password" } });
-    fireEvent.submit(screen.getByRole("button", { name: "Continue securely" }).closest("form")!);
-
-    await waitFor(() => expect(onAuthenticated).toHaveBeenCalledOnce());
-    expect(screen.queryByRole("heading", { name: "Protect your admin account" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Authenticator code" })).not.toBeInTheDocument();
-    expect(authMocks.getAssurance).not.toHaveBeenCalled();
-  });
-
-  it("fails closed and signs out a password-only session when its audit cannot persist", async () => {
-    const onAuthenticated = vi.fn();
-    const passwordOnlyConfig = { ...identityConfig, mfaRequired: false };
+  it("signs out locally when MFA preparation fails after accepting credentials", async () => {
     authMocks.signInWithPassword.mockResolvedValue({ data: { user: adminUser }, error: null });
-    fetchMock
-      .mockResolvedValueOnce(auditResponse(false))
-      .mockResolvedValueOnce(new Response(null, { status: 204 }));
+    authMocks.getAssurance.mockResolvedValue({ data: null, error: new Error("MFA unavailable") });
 
-    render(<AdminLoginForm config={passwordOnlyConfig} onAuthenticated={onAuthenticated} />);
+    render(<AdminLoginForm config={identityConfig} />);
     fireEvent.change(screen.getByLabelText("Email"), { target: { value: "admin@aixco.global" } });
     fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct-password" } });
     fireEvent.submit(screen.getByRole("button", { name: "Continue securely" }).closest("form")!);
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/authenticated session was signed out/i);
-    expect(onAuthenticated).not.toHaveBeenCalled();
+    expect(await screen.findByRole("alert")).toHaveTextContent(/authenticator code could not be verified/i);
     expect(authMocks.signOut).toHaveBeenCalledWith({ scope: "local" });
-    expect(authMocks.getAssurance).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledWith("/admin/logout", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store",
+    });
   });
 
   it("moves an authorized user with an enrolled factor to the TOTP challenge", async () => {
@@ -170,7 +148,8 @@ describe("AdminLoginForm", () => {
     fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct-password" } });
     fireEvent.submit(screen.getByRole("button", { name: "Continue securely" }).closest("form")!);
 
-    expect(await screen.findByRole("heading", { name: "Authenticator code" })).toBeInTheDocument();
+    const challengeHeading = await screen.findByRole("heading", { name: "Authenticator code" });
+    await waitFor(() => expect(challengeHeading).toHaveFocus());
     expect(screen.getByLabelText("Six-digit code")).toHaveAttribute("autocomplete", "one-time-code");
     expect(screen.getByText(/signed in as admin@aixco.global/i)).toBeInTheDocument();
   });
@@ -226,7 +205,32 @@ describe("AdminLoginForm", () => {
     fireEvent.submit(screen.getByRole("button", { name: "Save password and continue" }).closest("form")!);
 
     await waitFor(() => expect(authMocks.updateUser).toHaveBeenCalledWith({ password: "long-secure-password" }));
-    expect(await screen.findByRole("heading", { name: "Protect your admin account" })).toBeInTheDocument();
+    const enrollmentHeading = await screen.findByRole("heading", { name: "Protect your admin account" });
+    await waitFor(() => expect(enrollmentHeading).toHaveFocus());
+  });
+
+  it("signs out locally when invited-user password setup fails", async () => {
+    authMocks.searchParams = new URLSearchParams("setup=1");
+    authMocks.getUser.mockResolvedValue({ data: { user: adminUser }, error: null });
+    authMocks.updateUser.mockResolvedValue({ data: { user: null }, error: new Error("Password update rejected") });
+
+    render(<AdminLoginForm config={identityConfig} />);
+    const passwordHeading = await screen.findByRole("heading", { name: "Create your admin password" });
+    await waitFor(() => expect(passwordHeading).toHaveFocus());
+    expect(screen.getByLabelText("New password")).toHaveAttribute("aria-describedby", "admin-password-requirements");
+    expect(screen.getByText("Use at least 12 characters.")).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("New password"), { target: { value: "long-secure-password" } });
+    fireEvent.change(screen.getByLabelText("Confirm password"), { target: { value: "long-secure-password" } });
+    fireEvent.submit(screen.getByRole("button", { name: "Save password and continue" }).closest("form")!);
+
+    const credentialsHeading = await screen.findByRole("heading", { name: "Individual admin sign-in" });
+    await waitFor(() => expect(credentialsHeading).toHaveFocus());
+    expect(authMocks.signOut).toHaveBeenCalledWith({ scope: "local" });
+    expect(fetchMock).toHaveBeenCalledWith("/admin/logout", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store",
+    });
   });
 
   it("navigates only after an existing AAL2 session audit is durably stored", async () => {

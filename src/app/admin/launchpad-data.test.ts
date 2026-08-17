@@ -136,6 +136,8 @@ describe("admin launchpad data", () => {
             },
           ],
           safeToDisableLegacyAccess: true,
+          sourceStatus: "available",
+          sourceIssues: [],
         }),
       },
     });
@@ -168,7 +170,18 @@ describe("admin launchpad data", () => {
         fetchOperations: fail,
         fetchAnalytics: fail,
         fetchEmailReadiness: fail,
-        fetchAdminIdentities: fail,
+        fetchAdminIdentities: async () => ({
+          admins: [{
+            id: "partial-admin",
+            email: "private-admin@example.com",
+            invitedAt: null,
+            lastSignInAt: null,
+            verifiedTotpFactors: null,
+          }],
+          safeToDisableLegacyAccess: false,
+          sourceStatus: "partial",
+          sourceIssues: ["mfa-factors"],
+        }),
       },
     });
 
@@ -208,7 +221,12 @@ describe("admin launchpad data", () => {
           schema: { ready: false, version: null, queued: null, failed: null },
           operations: { ready: false, issues: ["environment_not_ready"] },
         }),
-        fetchAdminIdentities: async () => ({ admins: [], safeToDisableLegacyAccess: false }),
+        fetchAdminIdentities: async () => ({
+          admins: [],
+          safeToDisableLegacyAccess: false,
+          sourceStatus: "available",
+          sourceIssues: [],
+        }),
       },
     });
 
@@ -243,7 +261,12 @@ describe("admin launchpad data", () => {
           schema: { ready: false, version: null, queued: null, failed: null },
           operations: { ready: false, issues: ["environment_not_ready"] },
         }),
-        fetchAdminIdentities: async () => ({ admins: [], safeToDisableLegacyAccess: false }),
+        fetchAdminIdentities: async () => ({
+          admins: [],
+          safeToDisableLegacyAccess: false,
+          sourceStatus: "available",
+          sourceIssues: [],
+        }),
       },
     });
 

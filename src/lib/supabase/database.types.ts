@@ -3,6 +3,29 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      admin_identity_bootstrap_claims: {
+        Row: {
+          singleton: boolean;
+          claim_id: string;
+          claimed_at: string;
+          completed_at: string | null;
+          completed_user_id: string | null;
+        };
+        Insert: {
+          singleton?: boolean;
+          claim_id: string;
+          claimed_at?: string;
+          completed_at?: string | null;
+          completed_user_id?: string | null;
+        };
+        Update: {
+          singleton?: boolean;
+          claim_id?: string;
+          claimed_at?: string;
+          completed_at?: string | null;
+          completed_user_id?: string | null;
+        };
+      };
       profiles: {
         Row: {
           id: string;
@@ -534,6 +557,7 @@ export type Database = {
           transcript: string;
           messages: Json;
           message_count: number;
+          visitor_message_count: number;
           locale: string | null;
           page_path: string | null;
           user_agent: string | null;
@@ -550,6 +574,7 @@ export type Database = {
           transcript: string;
           messages: Json;
           message_count: number;
+          visitor_message_count?: number;
           locale?: string | null;
           page_path?: string | null;
           user_agent?: string | null;
@@ -564,6 +589,7 @@ export type Database = {
           transcript?: string;
           messages?: Json;
           message_count?: number;
+          visitor_message_count?: number;
           locale?: string | null;
           page_path?: string | null;
           user_agent?: string | null;
@@ -646,6 +672,14 @@ export type Database = {
     };
     Views: Record<string, never>;
     Functions: {
+      claim_admin_identity_bootstrap: {
+        Args: { p_claim_id: string };
+        Returns: boolean;
+      };
+      complete_admin_identity_bootstrap: {
+        Args: { p_claim_id: string; p_user_id: string };
+        Returns: boolean;
+      };
       create_contact_submission: {
         Args: { p_submission: Json };
         Returns: { request_reference: string; delivery_status: string }[];
@@ -676,12 +710,17 @@ export type Database = {
         Args: { p_contact_submission_id: string };
         Returns: number;
       };
+      release_admin_identity_bootstrap: {
+        Args: { p_claim_id: string };
+        Returns: boolean;
+      };
       delete_contact_subject_data: {
         Args: { p_email: string; p_recipient_hash: string };
         Returns: {
           contacts_deleted: number;
           chats_deleted: number;
           abuse_attempts_deleted: number;
+          analytics_sessions_deleted: number;
         }[];
       };
       record_lead_capture_attempt: {

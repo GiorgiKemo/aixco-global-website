@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { analyticsBatchSchema } from "@/lib/analytics/contracts";
+import { createAnalyticsSessionLinkToken } from "@/lib/backend/analytics-session-link";
 import { checkDistributedLeadCaptureLimit } from "@/lib/backend/lead-capture-abuse";
 import { isTrustedLeadCaptureOrigin } from "@/lib/backend/lead-capture-route";
 import { storeAnalyticsBatch } from "@/lib/backend/site-analytics";
@@ -71,8 +72,17 @@ export async function POST(request: Request) {
 
   try {
     const result = await storeAnalyticsBatch(parsed.data, request.headers);
+    const sessionId = parsed.data.session.id.toLowerCase();
+    const linkToken = createAnalyticsSessionLinkToken(sessionId);
     return NextResponse.json(
-      { ok: true, stored: true, accepted: result.eventCount, receipt: result.receipt },
+      {
+        ok: true,
+        stored: true,
+        accepted: result.eventCount,
+        receipt: result.receipt,
+        sessionId,
+        ...(linkToken ? { linkToken } : {}),
+      },
       { status: 202, headers: noStoreHeaders },
     );
   } catch (error) {

@@ -31,6 +31,7 @@ type StoredSession = {
   lastSeenAt: string;
   landingPath: string;
   activeSeconds: number;
+  linkToken?: string;
 };
 
 type StoredOutboxBatch = {
@@ -46,6 +47,7 @@ const OUTBOX_MAX_EVENTS = 120;
 const OUTBOX_MAX_PAYLOAD_BYTES = 64 * 1024;
 const OUTBOX_MAX_STORAGE_CHARACTERS = 280 * 1024;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const SESSION_LINK_TOKEN_PATTERN = /^[a-f0-9]{64}$/;
 
 type Copy = {
   eyebrow: string;
@@ -242,6 +244,8 @@ function readStoredSession(): StoredSession | null {
       && typeof value.lastSeenAt === "string"
       && typeof value.landingPath === "string"
       && typeof value.activeSeconds === "number"
+      && (value.linkToken === undefined
+        || (typeof value.linkToken === "string" && SESSION_LINK_TOKEN_PATTERN.test(value.linkToken)))
     ) {
       const lastSeenAt = Date.parse(value.lastSeenAt);
       const age = Date.now() - lastSeenAt;
@@ -551,8 +555,21 @@ function useAnalyticsCollection(enabled: boolean) {
           keepalive: true,
           credentials: "same-origin",
         });
-        const result = await response.json().catch(() => null) as { stored?: unknown } | null;
+        const result = await response.json().catch(() => null) as {
+          stored?: unknown;
+          sessionId?: unknown;
+          linkToken?: unknown;
+        } | null;
         if (response.ok && result?.stored === true) {
+          if (
+            typeof result.sessionId === "string"
+            && result.sessionId.toLowerCase() === session.id.toLowerCase()
+            && typeof result.linkToken === "string"
+            && SESSION_LINK_TOKEN_PATTERN.test(result.linkToken)
+          ) {
+            session.linkToken = result.linkToken;
+            writeStoredSession(session);
+          }
           acknowledgeIds(eventIds);
           failedFlushes = 0;
           nextFlushAt = 0;

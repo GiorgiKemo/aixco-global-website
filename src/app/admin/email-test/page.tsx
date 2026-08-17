@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { CheckCircle2, MailCheck, Send, TriangleAlert } from "lucide-react";
-import { AdminShell } from "@/app/admin/_components";
+import { CheckCircle2, MailCheck, TriangleAlert } from "lucide-react";
+import { AdminPendingSubmitButton, AdminShell } from "@/app/admin/_components";
 import { requireAal2AdminSession } from "@/lib/admin/auth";
 import { getLeadNotificationConfig } from "@/lib/backend/lead-notification-email";
 
@@ -126,7 +126,7 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
                 maxLength={255}
                 autoComplete="email"
                 placeholder="Optional"
-                className="h-11 rounded-md border border-[#161616]/15 bg-white px-3 text-base outline-none transition-colors placeholder:text-[#9e9d9d] focus:border-[#8b6a18]"
+                className="h-11 rounded-md border border-[#161616]/15 bg-white px-3 text-base outline-none transition-colors placeholder:text-[#6f6e6a] focus:border-[#8b6a18] focus-visible:ring-2 focus-visible:ring-[#7c5d17]"
               />
             </label>
 
@@ -139,20 +139,19 @@ export default async function EmailTestPage({ searchParams }: EmailTestPageProps
                 maxLength={1500}
                 rows={6}
                 defaultValue={DEFAULT_TEST_MESSAGE}
-                className="min-h-36 resize-y rounded-md border border-[#161616]/15 bg-white px-3 py-3 text-base leading-6 outline-none transition-colors focus:border-[#8b6a18]"
+                className="min-h-36 resize-y rounded-md border border-[#161616]/15 bg-white px-3 py-3 text-base leading-6 outline-none transition-colors focus:border-[#8b6a18] focus-visible:ring-2 focus-visible:ring-[#7c5d17]"
               />
             </label>
 
             <div className="flex flex-col gap-3 border-t border-[#161616]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs leading-5 text-[#6f6e6a]">No lead record is created by this test.</p>
-              <button
-                type="submit"
+              <AdminPendingSubmitButton
+                idleLabel="Send test email"
+                pendingLabel="Sending test email…"
+                icon="send"
                 disabled={!ready}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#161616] px-4 text-sm font-semibold text-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:bg-[#c7c5bf]"
-              >
-                <Send className="h-4 w-4" aria-hidden="true" />
-                Send test email
-              </button>
+              />
             </div>
           </form>
         </section>

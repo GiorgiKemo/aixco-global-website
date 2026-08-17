@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAal2AdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
+import { verifyPrivacyPreviewToken } from "@/lib/admin/privacy-preview-token";
 import {
   exportContactSubjectData,
   privacyEmailSchema,
@@ -18,7 +19,14 @@ export async function POST(request: Request) {
 
   const formData = await request.formData().catch(() => null);
   const email = privacyEmailSchema.safeParse(formData?.get("email"));
-  if (!email.success) return NextResponse.redirect(new URL("/admin/privacy?error=invalid-email", request.url), { status: 303 });
+  const previewToken = formData?.get("preview_token");
+  if (
+    !email.success
+    || typeof previewToken !== "string"
+    || !verifyPrivacyPreviewToken(previewToken, email.data, auth.principal.id)
+  ) {
+    return NextResponse.redirect(new URL("/admin/privacy?error=invalid-export-preview", request.url), { status: 303 });
+  }
 
   try {
     await auditAdminAction({
@@ -41,8 +49,6 @@ export async function POST(request: Request) {
         deliveries: data.emailDeliveries.length,
         deliveryEvents: data.emailEvents.length,
         abuseAttempts: data.leadCaptureAttempts.length,
-        analyticsSessions: data.analyticsSessions.length,
-        analyticsEvents: data.analyticsEvents.length,
       },
       headers: request.headers,
     });

@@ -134,6 +134,29 @@ describe("AnalyticsTracker consent and session lifecycle", () => {
     expect(Date.parse(stored.lastSeenAt)).toBeGreaterThanOrEqual(Date.parse(stored.startedAt));
   });
 
+  it("stores only a server-issued link proof for the matching analytics session", async () => {
+    const linkToken = "a".repeat(64);
+    fetchMock.mockImplementation(async (_input, init) => {
+      const payload = JSON.parse(String(init?.body)) as AnalyticsPayload;
+      return new Response(JSON.stringify({
+        ok: true,
+        stored: true,
+        sessionId: payload.session.id,
+        linkToken,
+      }), { status: 202, headers: { "Content-Type": "application/json" } });
+    });
+    writeAnalyticsConsent("granted");
+
+    render(<AnalyticsTracker />);
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+    await waitFor(() => {
+      const stored = JSON.parse(
+        window.sessionStorage.getItem(ANALYTICS_SESSION_STORAGE_KEY) ?? "{}",
+      ) as { linkToken?: string };
+      expect(stored.linkToken).toBe(linkToken);
+    });
+  });
+
   it("persists lifecycle beacon events without treating transport acceptance as storage", async () => {
     const sendBeacon = vi.fn<(url: string | URL, data?: BodyInit | null) => boolean>(() => true);
     Object.defineProperty(navigator, "sendBeacon", { configurable: true, value: sendBeacon });

@@ -27,15 +27,20 @@ describe("AnalyticsRangeControls", () => {
       />,
     );
 
-    expect(screen.getByRole("link", { name: "7d" })).toHaveAttribute("aria-current", "page");
-    expect(screen.getByRole("link", { name: "7d" })).toHaveAttribute("data-selected", "true");
+    const selectedRange = screen.getByRole("link", { name: "7d" });
+    expect(selectedRange).toHaveAttribute("aria-current", "page");
+    expect(selectedRange).toHaveAttribute("data-selected", "true");
+    expect(selectedRange).toHaveClass("min-h-11", "focus-visible:ring-[#7c5d17]");
+    expect(selectedRange).not.toHaveClass("min-h-10", "focus-visible:ring-primary/50");
     expect(screen.getByRole("link", { name: "24 hours" })).toHaveAttribute(
       "href",
       "/admin/analytics?range=24h&focus=sessions",
     );
-    expect(screen.getByRole("link", { name: "Refresh" })).toHaveAttribute(
+    const refresh = screen.getByRole("link", { name: "Refresh" });
+    expect(refresh).toHaveAttribute(
       "href",
       "/admin/analytics?range=7d&focus=sessions",
     );
+    expect(refresh).toHaveClass("min-h-11", "focus-visible:ring-[#7c5d17]");
   });
 });
