@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ANALYTICS_CONSENT_EVENT } from "@/lib/analytics/constants";
 import {
   analyticsCollectionAllowed,
+  hasBrowserPrivacySignal,
 } from "@/lib/analytics/client";
 import { isAnalyticsExcludedPath } from "@/lib/analytics/routes";
 import { WebVitals } from "./web-vitals";
@@ -99,8 +100,14 @@ function useGoogleAnalyticsConsent(excludedRoute: boolean) {
   const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
-    const sync = () => {
-      const nextAllowed = !excludedRoute && analyticsCollectionAllowed();
+    const sync = (event?: Event) => {
+      const status = (event as CustomEvent<{ status?: unknown }> | undefined)?.detail?.status;
+      const consentAllowed = status === "granted"
+        ? true
+        : status === "denied"
+          ? false
+          : analyticsCollectionAllowed();
+      const nextAllowed = !excludedRoute && consentAllowed && !hasBrowserPrivacySignal();
       setAllowed(nextAllowed);
       updateGoogleConsent(nextAllowed ? "granted" : "denied");
     };

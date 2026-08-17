@@ -481,4 +481,26 @@ describe("AnalyticsTracker consent and session lifecycle", () => {
     expect(window.sessionStorage.getItem(ANALYTICS_SESSION_STORAGE_KEY)).toBeNull();
     expect(fetchMock).not.toHaveBeenCalled();
   });
+
+  it("keeps the current-page choice working when localStorage is blocked", async () => {
+    const getItem = vi.spyOn(window.localStorage, "getItem")
+      .mockImplementation(() => { throw new Error("storage blocked"); });
+    const setItem = vi.spyOn(window.localStorage, "setItem")
+      .mockImplementation(() => { throw new Error("storage blocked"); });
+
+    try {
+      render(<AnalyticsTracker />);
+      expect(await screen.findByRole("dialog", { name: "Cookies & analytics" }))
+        .toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole("button", { name: "Accept analytics" }));
+
+      await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+      expect(readAnalyticsConsent()).toBe("granted");
+      await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+    } finally {
+      getItem.mockRestore();
+      setItem.mockRestore();
+    }
+  });
 });

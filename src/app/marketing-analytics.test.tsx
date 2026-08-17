@@ -107,4 +107,20 @@ describe("route-aware marketing analytics", () => {
       ]));
     },
   );
+
+  it("honors an in-memory grant when localStorage is blocked", async () => {
+    const getItem = vi.spyOn(window.localStorage, "getItem")
+      .mockImplementation(() => { throw new Error("storage blocked"); });
+    const setItem = vi.spyOn(window.localStorage, "setItem")
+      .mockImplementation(() => { throw new Error("storage blocked"); });
+
+    try {
+      const { getByTestId } = render(<MarketingAnalytics />);
+      act(() => writeAnalyticsConsent("granted"));
+      await waitFor(() => expect(getByTestId("google-tag-manager")).toBeInTheDocument());
+    } finally {
+      getItem.mockRestore();
+      setItem.mockRestore();
+    }
+  });
 });

@@ -14,6 +14,14 @@ import type {
   AnalyticsEventType,
 } from "./contracts";
 
+type StoredAnalyticsConsent = Exclude<AnalyticsConsentStatus, "unset">;
+
+// A privacy-restricted browser can throw for both localStorage reads and
+// writes. Keep the current-page choice in memory so the banner can still close
+// and the user’s choice still governs collection until the document closes.
+let inMemoryConsent: StoredAnalyticsConsent | null = null;
+let inMemoryConsentIsFallback = false;
+
 export type AnalyticsTrackDetail = {
   type: AnalyticsEventType;
   name: AnalyticsEventInput["name"];
@@ -36,19 +44,34 @@ export function hasBrowserPrivacySignal() {
 
 export function readAnalyticsConsent(): AnalyticsConsentStatus {
   if (typeof window === "undefined") return "unset";
+  let raw: string | null;
   try {
-    const raw = window.localStorage.getItem(ANALYTICS_CONSENT_STORAGE_KEY);
-    if (!raw) return "unset";
+    raw = window.localStorage.getItem(ANALYTICS_CONSENT_STORAGE_KEY);
+  } catch {
+    // Analytics remains optional when storage is unavailable. The current-page
+    // choice still applies through the in-memory fallback.
+    return inMemoryConsent ?? "unset";
+  }
+  if (!raw) {
+    if (inMemoryConsentIsFallback) return inMemoryConsent ?? "unset";
+    inMemoryConsent = null;
+    return "unset";
+  }
+  try {
     const value = JSON.parse(raw) as { status?: unknown; version?: unknown };
     if (
       value.version === ANALYTICS_CONSENT_VERSION
       && (value.status === "granted" || value.status === "denied")
     ) {
+      inMemoryConsent = value.status;
+      inMemoryConsentIsFallback = false;
       return value.status;
     }
   } catch {
-    // Analytics remains optional when storage is unavailable or malformed.
+    // Treat malformed consent as unset rather than inheriting an old choice.
   }
+  inMemoryConsent = null;
+  inMemoryConsentIsFallback = false;
   return "unset";
 }
 
@@ -58,15 +81,18 @@ export function analyticsCollectionAllowed() {
 
 export function writeAnalyticsConsent(status: Exclude<AnalyticsConsentStatus, "unset">) {
   if (typeof window === "undefined") return;
+  inMemoryConsent = status;
   try {
     window.localStorage.setItem(ANALYTICS_CONSENT_STORAGE_KEY, JSON.stringify({
       status,
       version: ANALYTICS_CONSENT_VERSION,
       updatedAt: new Date().toISOString(),
     }));
+    inMemoryConsentIsFallback = false;
     if (status === "denied") window.localStorage.removeItem(ANALYTICS_VISITOR_STORAGE_KEY);
   } catch {
     // Consent still applies in memory when optional storage is blocked.
+    inMemoryConsentIsFallback = true;
   }
   if (status === "denied") {
     try {

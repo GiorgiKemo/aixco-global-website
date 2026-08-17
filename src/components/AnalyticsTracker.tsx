@@ -667,8 +667,13 @@ function useAnalyticsCollection(enabled: boolean) {
         enqueue(detail);
       }
     };
-    const onConsentChange = () => {
-      collectionEnabled = analyticsCollectionAllowed();
+    const onConsentChange = (event: Event) => {
+      const status = (event as CustomEvent<{ status?: unknown }>).detail?.status;
+      collectionEnabled = status === "granted"
+        ? !hasBrowserPrivacySignal()
+        : status === "denied"
+          ? false
+          : analyticsCollectionAllowed();
       if (!collectionEnabled) {
         queue.splice(0, queue.length);
         outbox = [];
@@ -891,7 +896,10 @@ export function AnalyticsTracker() {
     setConsent(readAnalyticsConsent());
     setLanguage(normalizeConsentLanguage(document.documentElement.lang || "en"));
     setReady(true);
-    const onConsent = () => setConsent(readAnalyticsConsent());
+    const onConsent = (event: Event) => {
+      const status = (event as CustomEvent<{ status?: unknown }>).detail?.status;
+      setConsent(status === "granted" || status === "denied" ? status : readAnalyticsConsent());
+    };
     const onPreferences = () => setPreferencesOpen(true);
     const languageObserver = new MutationObserver(() => {
       setLanguage(normalizeConsentLanguage(document.documentElement.lang || "en"));
