@@ -11,13 +11,11 @@ import {
   Globe2,
   House,
   Menu,
-  Plus,
   ShieldCheck,
-  Trash2,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform, type Variants } from "framer-motion";
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { LANGS, useI18n } from "@/i18n/I18nProvider";
 import type { Lang } from "@/i18n/languages";
 import { useSiteContent } from "@/data/site-content-context";
@@ -26,7 +24,6 @@ import { aixcoLiveDocuments, aixcoLiveImages, aixcoLiveLogos } from "@/lib/aixco
 import { recordContactSubmission } from "@/lib/backend/lead-capture";
 import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
 import { openAnalyticsPreferences } from "@/lib/analytics/client";
-import { calculateBestWindow, isBackwardsStay, isValidStay, type StayPeriod } from "@/lib/georgia-tax-residency-calculator";
 import { scrollToHash } from "@/lib/smooth-scroll";
 import styles from "./GeorgiaTaxResidencyLandingPage.module.css";
 
@@ -103,6 +100,25 @@ type TaxCopy = {
   close: string;
   home: string;
   consultation: string;
+};
+
+type PathwayStage = {
+  number: string;
+  title: string;
+  body: string;
+  details: string[];
+  action: string;
+  target: "contact" | "why";
+};
+
+type PathwayCopy = {
+  eyebrow: string;
+  title: string;
+  body: string;
+  primary: string;
+  education: string;
+  disclaimer: string;
+  stages: PathwayStage[];
 };
 
 const copyByLanguage: Record<Lang, TaxCopy> = {
@@ -548,133 +564,71 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
   },
 };
 
-type CalculatorCopy = {
-  title: string;
-  intro: string;
-  targetYear: string;
-  stays: string;
-  stay: string;
-  arrival: string;
-  departure: string;
-  addStay: string;
-  removeStay: string;
-  incomplete: string;
-  invalid: string;
-  result: string;
-  day: string;
-  days: string;
-  bestWindow: string;
-  waiting: string;
-  noDaysInYear: string;
-  method: string;
-  caveat: string;
-};
-
-const calculatorCopyByLanguage: Record<Lang, CalculatorCopy> = {
+const pathwayCopyByLanguage: Record<Lang, PathwayCopy> = {
   en: {
-    title: "Check your stay dates",
-    intro: "Enter every period you were physically present in Georgia. The result updates automatically.",
-    targetYear: "Tax year to test",
-    stays: "Stays in Georgia",
-    stay: "Stay",
-    arrival: "Arrival date",
-    departure: "Departure date",
-    addStay: "Add another stay",
-    removeStay: "Remove stay",
-    incomplete: "Enter both dates.",
-    invalid: "Departure must be on or after arrival.",
-    result: "Best 12-month result",
-    day: "day",
-    days: "days",
-    bestWindow: "Best qualifying window",
-    waiting: "Add complete stay dates to calculate.",
-    noDaysInYear: "No entered days fall within a 12-month window ending in this tax year.",
-    method: "Arrival and departure days are counted. Overlapping stays are counted once. The calculator checks every continuous 12-month window ending in the selected tax year.",
-    caveat: "Preliminary check only: Article 34 contains special inclusion and exclusion rules and prevents reusing days applied to a previous tax period. AIXCO should verify the result before it is relied upon.",
+    eyebrow: "The AIXCO pathway",
+    title: "From question to position.",
+    body: "AIXCO brings residence, property and practical guidance into one considered route.",
+    primary: "Start with a conversation",
+    education: "Read the 183-day rule",
+    disclaimer: "General guidance only — not tax or legal advice. Individual outcomes depend on specific facts.",
+    stages: [
+      { number: "01", title: "Understand your priorities", body: "Tell us what matters most — mobility, privacy, business, family or lifestyle — so we can focus on what is right for you.", details: ["Clarify your objectives and constraints", "Map the factors that will shape your decisions"], action: "Start with a conversation", target: "contact" },
+      { number: "02", title: "Explore the right structure", body: "Separate the questions that often get mixed together: tax residence, a residence permit, property and the practical route between them.", details: ["Understand the 183-day baseline", "Review the relevant residence and HNWI routes"], action: "Explore the framework", target: "why" },
+      { number: "03", title: "Speak with the right advisor", body: "Bring your facts into a focused conversation and leave with a clearer next step, the right documents and the right people involved.", details: ["Prepare a concise private-client brief", "Move forward with a considered plan"], action: "Book a consultation", target: "contact" },
+    ],
   },
   de: {
-    title: "Aufenthaltsdaten prüfen",
-    intro: "Tragen Sie jeden Zeitraum ein, in dem Sie sich tatsächlich in Georgien aufgehalten haben. Das Ergebnis wird automatisch aktualisiert.",
-    targetYear: "Zu prüfendes Steuerjahr",
-    stays: "Aufenthalte in Georgien",
-    stay: "Aufenthalt",
-    arrival: "Einreisedatum",
-    departure: "Ausreisedatum",
-    addStay: "Weiteren Aufenthalt hinzufügen",
-    removeStay: "Aufenthalt entfernen",
-    incomplete: "Bitte beide Daten eingeben.",
-    invalid: "Die Ausreise darf nicht vor der Einreise liegen.",
-    result: "Bestes 12-Monats-Ergebnis",
-    day: "Tag",
-    days: "Tage",
-    bestWindow: "Maßgeblicher Zeitraum",
-    waiting: "Vollständige Aufenthaltsdaten eingeben, um zu berechnen.",
-    noDaysInYear: "Keiner der eingegebenen Tage liegt in einem 12-Monats-Zeitraum, der in diesem Steuerjahr endet.",
-    method: "Einreise- und Ausreisetage werden mitgezählt. Überschneidungen zählen nur einmal. Geprüft wird jeder zusammenhängende 12-Monats-Zeitraum, der im gewählten Steuerjahr endet.",
-    caveat: "Nur eine vorläufige Prüfung: Artikel 34 enthält besondere Ein- und Ausschlussregeln und untersagt die erneute Verwendung von Tagen, die bereits einem früheren Steuerzeitraum zugeordnet wurden. AIXCO sollte das Ergebnis vor einer Verwendung prüfen.",
+    eyebrow: "Der AIXCO-Weg",
+    title: "Von der Frage zur Klarheit.",
+    body: "AIXCO verbindet Aufenthalt, Immobilie und praktische Orientierung zu einem durchdachten Weg.",
+    primary: "Mit einem Gespräch beginnen",
+    education: "Die 183-Tage-Regel lesen",
+    disclaimer: "Nur allgemeine Orientierung — keine Steuer- oder Rechtsberatung. Das Ergebnis hängt von den konkreten Fakten ab.",
+    stages: [
+      { number: "01", title: "Ihre Prioritäten verstehen", body: "Erzählen Sie uns, was Ihnen wichtig ist — Mobilität, Privatsphäre, Geschäft, Familie oder Lebensstil — damit wir uns auf das Richtige konzentrieren.", details: ["Ziele und Rahmenbedingungen klären", "Die Faktoren ordnen, die Ihre Entscheidungen prägen"], action: "Mit einem Gespräch beginnen", target: "contact" },
+      { number: "02", title: "Die passende Struktur prüfen", body: "Trennen Sie Fragen, die oft vermischt werden: Steuerresidenz, Aufenthaltstitel, Immobilie und der praktische Weg dazwischen.", details: ["Die 183-Tage-Basis verstehen", "Passende Aufenthalts- und HNWI-Wege prüfen"], action: "Den Rahmen erkunden", target: "why" },
+      { number: "03", title: "Mit dem richtigen Berater sprechen", body: "Bringen Sie Ihre Fakten in ein fokussiertes Gespräch und gehen Sie mit einem klareren nächsten Schritt und den richtigen Ansprechpartnern weiter.", details: ["Ein kompaktes Privatkunden-Briefing vorbereiten", "Mit einem durchdachten Plan weitergehen"], action: "Beratung buchen", target: "contact" },
+    ],
   },
   pl: {
-    title: "Sprawdź daty pobytu",
-    intro: "Wprowadź każdy okres faktycznego pobytu w Gruzji. Wynik zaktualizuje się automatycznie.",
-    targetYear: "Sprawdzany rok podatkowy",
-    stays: "Pobyty w Gruzji",
-    stay: "Pobyt",
-    arrival: "Data przyjazdu",
-    departure: "Data wyjazdu",
-    addStay: "Dodaj kolejny pobyt",
-    removeStay: "Usuń pobyt",
-    incomplete: "Wprowadź obie daty.",
-    invalid: "Data wyjazdu nie może być wcześniejsza niż data przyjazdu.",
-    result: "Najlepszy wynik za 12 miesięcy",
-    day: "dzień",
-    days: "dni",
-    bestWindow: "Najkorzystniejszy okres",
-    waiting: "Dodaj kompletne daty pobytu, aby wykonać obliczenie.",
-    noDaysInYear: "Żaden z wprowadzonych dni nie przypada na okres 12 miesięcy kończący się w tym roku podatkowym.",
-    method: "Dzień przyjazdu i wyjazdu są wliczane. Nakładające się pobyty liczą się tylko raz. Kalkulator sprawdza każdy ciągły okres 12 miesięcy kończący się w wybranym roku podatkowym.",
-    caveat: "To wyłącznie wstępna ocena: art. 34 zawiera szczególne zasady włączeń i wyłączeń oraz zakazuje ponownego użycia dni przypisanych do poprzedniego okresu podatkowego. AIXCO powinno zweryfikować wynik przed jego wykorzystaniem.",
+    eyebrow: "Droga AIXCO",
+    title: "Od pytania do jasnej sytuacji.",
+    body: "AIXCO łączy rezydencję, nieruchomości i praktyczne wskazówki w jedną przemyślaną drogę.",
+    primary: "Zacznij od rozmowy",
+    education: "Przeczytaj regułę 183 dni",
+    disclaimer: "To ogólne informacje — nie porada podatkowa ani prawna. Wynik zależy od konkretnych faktów.",
+    stages: [
+      { number: "01", title: "Zrozum swoje priorytety", body: "Powiedz nam, co jest najważniejsze — mobilność, prywatność, biznes, rodzina czy styl życia — abyśmy mogli skupić się na właściwym rozwiązaniu.", details: ["Doprecyzuj cele i ograniczenia", "Uporządkuj czynniki wpływające na decyzje"], action: "Zacznij od rozmowy", target: "contact" },
+      { number: "02", title: "Poznaj właściwą strukturę", body: "Oddziel pytania, które często są łączone: rezydencję podatkową, pobyt, nieruchomość i praktyczną drogę między nimi.", details: ["Zrozum podstawę 183 dni", "Sprawdź właściwe ścieżki pobytowe i HNWI"], action: "Poznaj ramy", target: "why" },
+      { number: "03", title: "Porozmawiaj z właściwym doradcą", body: "Przedstaw swoje fakty w konkretnej rozmowie i wyjdź z jaśniejszym kolejnym krokiem oraz właściwymi osobami po swojej stronie.", details: ["Przygotuj zwięzły brief klienta prywatnego", "Ruszaj dalej z przemyślanym planem"], action: "Umów konsultację", target: "contact" },
+    ],
   },
   sl: {
-    title: "Preverite datume bivanja",
-    intro: "Vnesite vsako obdobje dejanske prisotnosti v Gruziji. Rezultat se posodobi samodejno.",
-    targetYear: "Davčno leto za preverjanje",
-    stays: "Bivanja v Gruziji",
-    stay: "Bivanje",
-    arrival: "Datum prihoda",
-    departure: "Datum odhoda",
-    addStay: "Dodaj bivanje",
-    removeStay: "Odstrani bivanje",
-    incomplete: "Vnesite oba datuma.",
-    invalid: "Datum odhoda ne sme biti pred datumom prihoda.",
-    result: "Najboljši 12-mesečni rezultat",
-    day: "dan",
-    days: "dni",
-    bestWindow: "Upoštevano obdobje",
-    waiting: "Za izračun dodajte popolne datume bivanja.",
-    noDaysInYear: "Noben vneseni dan ne spada v 12-mesečno obdobje, ki se konča v tem davčnem letu.",
-    method: "Dan prihoda in odhoda se vštevata. Prekrivajoča se bivanja se štejejo samo enkrat. Kalkulator preveri vsako neprekinjeno 12-mesečno obdobje, ki se konča v izbranem davčnem letu.",
-    caveat: "To je le predhodno preverjanje: 34. člen vsebuje posebna pravila o vključitvah in izključitvah ter prepoveduje ponovno uporabo dni, pripisanih prejšnjemu davčnemu obdobju. AIXCO mora rezultat preveriti, preden se nanj zanesete.",
+    eyebrow: "Pot AIXCO",
+    title: "Od vprašanja do jasnega položaja.",
+    body: "AIXCO povezuje bivanje, nepremičnine in praktično usmerjanje v premišljeno celoto.",
+    primary: "Začnite s pogovorom",
+    education: "Preberite pravilo 183 dni",
+    disclaimer: "Splošne informacije — ne davčno ali pravno svetovanje. Rezultat je odvisen od konkretnih dejstev.",
+    stages: [
+      { number: "01", title: "Razumite svoje prioritete", body: "Povejte nam, kaj vam največ pomeni — mobilnost, zasebnost, posel, družina ali življenjski slog — da se osredotočimo na pravo rešitev.", details: ["Pojasnite cilje in omejitve", "Uredite dejavnike, ki bodo oblikovali vaše odločitve"], action: "Začnite s pogovorom", target: "contact" },
+      { number: "02", title: "Raziščite pravo strukturo", body: "Ločite vprašanja, ki se pogosto prepletajo: davčno rezidentstvo, dovoljenje za prebivanje, nepremičnino in praktično pot med njimi.", details: ["Razumite osnovo 183 dni", "Preglejte ustrezne poti prebivanja in HNWI"], action: "Raziščite okvir", target: "why" },
+      { number: "03", title: "Pogovorite se s pravim svetovalcem", body: "Svoja dejstva prinesite v osredotočen pogovor in odidite z jasnejšim naslednjim korakom ter pravimi sogovorniki.", details: ["Pripravite zgoščen brief za zasebno stranko", "Nadaljujte s premišljenim načrtom"], action: "Rezervirajte posvet", target: "contact" },
+    ],
   },
   ru: {
-    title: "Проверьте даты пребывания",
-    intro: "Укажите каждый период фактического пребывания в Грузии. Результат обновится автоматически.",
-    targetYear: "Проверяемый налоговый год",
-    stays: "Периоды пребывания в Грузии",
-    stay: "Период",
-    arrival: "Дата въезда",
-    departure: "Дата выезда",
-    addStay: "Добавить период",
-    removeStay: "Удалить период",
-    incomplete: "Укажите обе даты.",
-    invalid: "Дата выезда не может быть раньше даты въезда.",
-    result: "Лучший результат за 12 месяцев",
-    day: "день",
-    days: "дней",
-    bestWindow: "Расчётный период",
-    waiting: "Для расчёта добавьте полные даты пребывания.",
-    noDaysInYear: "Ни один из введённых дней не входит в 12-месячный период, заканчивающийся в этом налоговом году.",
-    method: "Дни въезда и выезда учитываются. Пересекающиеся периоды считаются один раз. Калькулятор проверяет каждый непрерывный 12-месячный период, заканчивающийся в выбранном налоговом году.",
-    caveat: "Только предварительная оценка: статья 34 содержит специальные правила включения и исключения дней и запрещает повторно учитывать дни, использованные для предыдущего налогового периода. Перед использованием результата AIXCO должен его проверить.",
+    eyebrow: "Путь AIXCO",
+    title: "От вопроса к ясной позиции.",
+    body: "AIXCO объединяет вопросы проживания, недвижимости и практические решения в один продуманный маршрут.",
+    primary: "Начать с разговора",
+    education: "Прочитать правило 183 дней",
+    disclaimer: "Общая информация — не налоговая и не юридическая консультация. Результат зависит от конкретных обстоятельств.",
+    stages: [
+      { number: "01", title: "Понять ваши приоритеты", body: "Расскажите, что для вас важнее всего — мобильность, конфиденциальность, бизнес, семья или образ жизни — чтобы мы сосредоточились на подходящем решении.", details: ["Уточнить цели и ограничения", "Определить факторы, которые повлияют на решения"], action: "Начать с разговора", target: "contact" },
+      { number: "02", title: "Выбрать подходящую структуру", body: "Разделить вопросы, которые часто смешивают: налоговое резидентство, вид на жительство, недвижимость и практический путь между ними.", details: ["Понять основу правила 183 дней", "Рассмотреть подходящие процедуры проживания и HNWI"], action: "Изучить рамки", target: "why" },
+      { number: "03", title: "Поговорить с нужным консультантом", body: "Обсудите свои обстоятельства в сфокусированном разговоре и получите более ясный следующий шаг и нужных специалистов.", details: ["Подготовить краткий бриф частного клиента", "Продолжить с продуманным планом"], action: "Записаться на консультацию", target: "contact" },
+    ],
   },
 };
 
@@ -685,12 +639,6 @@ const chapterImages = [
   aixcoLiveImages.taxResidencyRouteNight,
 ] as const;
 
-const officialSourceLinks = {
-  taxCode: "https://www.matsne.gov.ge/en/document/view/1043717?publication=230",
-  hnwi: "https://matsne.gov.ge/ka/document/view/5739890",
-  permits: "https://sda.gov.ge/en/products/migration-residence-permits/",
-} as const;
-
 const reveal: Variants = {
   hidden: { opacity: 0, y: 36 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.82, ease: [0.16, 1, 0.3, 1] } },
@@ -700,35 +648,20 @@ function scrollToSection(id: string) {
   scrollToHash(`#${id}`);
 }
 
-function getPositionCopy(days: number, content: TaxCopy["clock"]) {
-  return days >= 183
-    ? { title: content.resident, body: content.residentBody }
-    : { title: content.emerging, body: content.emergingBody };
-}
-
-const INITIAL_TAX_YEAR = new Date().getUTCFullYear();
-
-function formatCalculatorDate(timestamp: number, lang: Lang) {
-  const locale = { en: "en-GB", de: "de-DE", pl: "pl-PL", sl: "sl-SI", ru: "ru-RU" }[lang];
-  return new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(timestamp));
-}
-
 export function GeorgiaTaxResidencyLandingPage() {
   const { lang, setLang } = useI18n();
   const { company } = useSiteContent();
   const { openPrivacy, openTerms } = useUI();
   const content = copyByLanguage[lang] ?? copyByLanguage.en;
-  const calculator = calculatorCopyByLanguage[lang] ?? calculatorCopyByLanguage.en;
+  const pathway = pathwayCopyByLanguage[lang] ?? pathwayCopyByLanguage.en;
   const [menuOpen, setMenuOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
-  const [taxYear, setTaxYear] = useState(INITIAL_TAX_YEAR);
-  const [stays, setStays] = useState<StayPeriod[]>([{ id: 1, arrival: "", departure: "" }]);
+  const [openPathStage, setOpenPathStage] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [requestReference, setRequestReference] = useState<string | null>(null);
   const languageRef = useRef<HTMLDivElement | null>(null);
-  const nextStayId = useRef(2);
   const formStartedAt = useRef(Date.now());
   const reducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
@@ -737,15 +670,6 @@ export function GeorgiaTaxResidencyLandingPage() {
   const progressWidth = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
   const [scrolled, setScrolled] = useState(false);
   const currentLanguage = LANGS.find((option) => option.code === lang)?.native ?? lang.toUpperCase();
-  const calculation = useMemo(() => calculateBestWindow(stays, taxYear), [stays, taxYear]);
-  const hasValidStays = useMemo(() => stays.some(isValidStay), [stays]);
-  const days = calculation.days;
-  const position = useMemo(() => getPositionCopy(days, content.clock), [content.clock, days]);
-  const daysRemaining = Math.max(0, 183 - days);
-  const taxYearOptions = useMemo(
-    () => Array.from({ length: 8 }, (_, index) => INITIAL_TAX_YEAR + 1 - index),
-    [],
-  );
 
   useEffect(() => {
     document.title = content.metaTitle;
@@ -780,22 +704,6 @@ export function GeorgiaTaxResidencyLandingPage() {
   const handleNav = (id: string) => {
     setMenuOpen(false);
     setTimeout(() => scrollToSection(id), 0);
-  };
-
-  const updateStay = (id: number, field: "arrival" | "departure", value: string) => {
-    setStays((current) => current.map((stay) => (stay.id === id ? { ...stay, [field]: value } : stay)));
-  };
-
-  const addStay = () => {
-    const id = nextStayId.current;
-    nextStayId.current += 1;
-    setStays((current) => [...current, { id, arrival: "", departure: "" }]);
-  };
-
-  const removeStay = (id: number) => {
-    setStays((current) => current.length === 1
-      ? [{ ...current[0], arrival: "", departure: "" }]
-      : current.filter((stay) => stay.id !== id));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -898,102 +806,55 @@ export function GeorgiaTaxResidencyLandingPage() {
           <div className={styles.heroIndex} aria-hidden="true"><span>01</span><span /><span>04</span></div>
         </section>
 
-        <section id="clock" className={styles.clockSection} aria-labelledby="clock-title">
-          <div className={styles.sectionGrid}>
-            <motion.div className={styles.clockIntro} initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal}>
-              <p className={styles.eyebrow}><span />{content.clock.eyebrow}</p>
-              <h2 id="clock-title">{content.clock.title}</h2>
-              <p>{content.clock.body}</p>
-              <button type="button" className={styles.inlineLink} onClick={() => handleNav("position")}>{content.nav.position}<ArrowDown size={15} aria-hidden /></button>
-            </motion.div>
-            <motion.div className={styles.clockPanel} initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.15 }} variants={reveal}>
-              <div className={styles.calculatorHeader}>
-                <div>
-                  <h3>{calculator.title}</h3>
-                  <p>{calculator.intro}</p>
-                </div>
-                <label className={styles.taxYearField}>
-                  <span>{calculator.targetYear}</span>
-                  <select value={taxYear} onChange={(event) => setTaxYear(Number(event.target.value))}>
-                    {taxYearOptions.map((year) => <option key={year} value={year}>{year}</option>)}
-                  </select>
-                </label>
-              </div>
-
-              <fieldset className={styles.stayFieldset}>
-                <legend>{calculator.stays}</legend>
-                <div className={styles.periodList}>
-                  {stays.map((stay, index) => {
-                    const incomplete = Boolean(stay.arrival || stay.departure) && (!stay.arrival || !stay.departure);
-                    const invalid = isBackwardsStay(stay);
-                    const error = incomplete ? calculator.incomplete : invalid ? calculator.invalid : null;
-                    return (
-                      <div key={stay.id} className={styles.periodItem}>
-                        <div className={styles.periodHeading}>
-                          <span>{calculator.stay} {index + 1}</span>
-                          <button type="button" onClick={() => removeStay(stay.id)} aria-label={`${calculator.removeStay} ${index + 1}`}>
-                            <Trash2 size={15} aria-hidden />{calculator.removeStay}
-                          </button>
-                        </div>
-                        <div className={styles.periodFields}>
-                          <label className={styles.dateField}>
-                            <span>{calculator.arrival}</span>
-                            <input type="date" value={stay.arrival} onChange={(event) => updateStay(stay.id, "arrival", event.target.value)} onInput={(event) => updateStay(stay.id, "arrival", (event.target as HTMLInputElement).value)} aria-invalid={error ? true : undefined} />
-                          </label>
-                          <label className={styles.dateField}>
-                            <span>{calculator.departure}</span>
-                            <input type="date" value={stay.departure} onChange={(event) => updateStay(stay.id, "departure", event.target.value)} onInput={(event) => updateStay(stay.id, "departure", (event.target as HTMLInputElement).value)} aria-invalid={error ? true : undefined} />
-                          </label>
-                        </div>
-                        {error ? <p className={styles.periodError} role="alert">{error}</p> : null}
-                      </div>
-                    );
-                  })}
-                </div>
-                <button type="button" className={styles.addPeriod} onClick={addStay} disabled={stays.length >= 10}>
-                  <Plus size={16} aria-hidden />{calculator.addStay}
+        <section id="clock" className={`${styles.clockSection} ${styles.pathwaySection}`} aria-labelledby="pathway-title">
+          <div className={styles.pathwayGrid}>
+            <motion.div className={styles.pathwayIntro} initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal}>
+              <p className={styles.eyebrow}><span />{pathway.eyebrow}</p>
+              <h2 id="pathway-title">{pathway.title}</h2>
+              <p>{pathway.body}</p>
+              <div className={styles.pathwayLinks}>
+                <button type="button" className={styles.goldButton} onClick={() => handleNav("contact")}>
+                  {pathway.primary}<ArrowUpRight size={16} aria-hidden />
                 </button>
-              </fieldset>
-
-              <div id="position" className={styles.resultPanel} aria-live="polite">
-                <div className={styles.resultPrimary}>
-                  <span>{calculator.result}</span>
-                  <strong>{days}<small>{days === 1 ? calculator.day : calculator.days}</small></strong>
-                </div>
-                <div className={`${styles.resultThreshold} ${days >= 183 ? styles.resultThresholdReached : ""}`}>
-                  <div><span>{content.clock.threshold}</span><strong>183</strong></div>
-                  <div>
-                    {days >= 183 ? <Check size={25} strokeWidth={1.7} aria-hidden /> : <strong>{daysRemaining}</strong>}
-                    <span>{days >= 183 ? content.clock.reached : content.clock.remaining}</span>
+                <button type="button" className={styles.inlineLink} onClick={() => handleNav("position")}>
+                  {pathway.education}<ArrowDown size={15} aria-hidden />
+                </button>
+              </div>
+              <p className={styles.pathwayDisclaimer}>{pathway.disclaimer}</p>
+            </motion.div>
+            <motion.div id="position" className={styles.pathwayList} initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.15 }} variants={reveal}>
+              {pathway.stages.map((stage, index) => {
+                const isOpen = openPathStage === index;
+                const panelId = `pathway-stage-${lang}-${index}`;
+                return (
+                  <div key={stage.number} className={`${styles.pathwayStage} ${isOpen ? styles.pathwayStageOpen : ""}`}>
+                    <button
+                      type="button"
+                      className={styles.pathwayStageTrigger}
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => setOpenPathStage(isOpen ? -1 : index)}
+                    >
+                      <span className={styles.pathwayNumber}>{stage.number}</span>
+                      <span className={styles.pathwayStageTitle}>{stage.title}</span>
+                      <ChevronDown className={styles.pathwayChevron} size={22} strokeWidth={1.4} aria-hidden />
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {isOpen ? (
+                        <motion.div id={panelId} className={styles.pathwayStagePanel} initial={reducedMotion ? false : { opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={reducedMotion ? undefined : { opacity: 0, height: 0 }} transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}>
+                          <p>{stage.body}</p>
+                          <ul>
+                            {stage.details.map((detail) => <li key={detail}><Check size={15} strokeWidth={1.8} aria-hidden />{detail}</li>)}
+                          </ul>
+                          <button type="button" className={styles.pathwayAction} onClick={() => handleNav(stage.target)}>
+                            {stage.action}<ArrowUpRight size={15} aria-hidden />
+                          </button>
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
                   </div>
-                </div>
-                <div className={styles.windowResult}>
-                  <span>{calculator.bestWindow}</span>
-                  <strong>{calculation.start !== null && calculation.end !== null
-                    ? `${formatCalculatorDate(calculation.start, lang)} — ${formatCalculatorDate(calculation.end, lang)}`
-                    : hasValidStays ? calculator.noDaysInYear : calculator.waiting}</strong>
-                </div>
-              </div>
-              <p className={styles.calculationMethod}>{calculator.method}</p>
-              <AnimatePresence mode="wait">
-                {calculation.start !== null ? (
-                  <motion.div key={days >= 183 ? "resident" : "route"} className={styles.positionNote} initial={reducedMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={reducedMotion ? undefined : { opacity: 0, y: -8 }} transition={{ duration: 0.3 }} aria-live="polite">
-                    <span className={styles.positionDot} />
-                    <div><strong>{position.title}</strong><p>{position.body}</p></div>
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
-              <p className={styles.calculatorCaveat}>{calculator.caveat}</p>
-              <p className={styles.disclaimer}>{content.clock.disclaimer}</p>
-              <div className={styles.sourceLinks}>
-                <p>{content.clock.sources.label}</p>
-                <div>
-                  <a href={officialSourceLinks.taxCode} target="_blank" rel="noreferrer">{content.clock.sources.taxCode}</a>
-                  <a href={officialSourceLinks.hnwi} target="_blank" rel="noreferrer">{content.clock.sources.hnwi}</a>
-                  <a href={officialSourceLinks.permits} target="_blank" rel="noreferrer">{content.clock.sources.permits}</a>
-                </div>
-                <small>{content.clock.sourceNote}</small>
-              </div>
+                );
+              })}
             </motion.div>
           </div>
         </section>
