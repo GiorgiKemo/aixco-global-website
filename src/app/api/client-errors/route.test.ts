@@ -40,13 +40,13 @@ describe("client error telemetry route", () => {
     ["route-render", "error_boundary"],
     ["root-render", "global_error"],
   ])("accepts the %s boundary payload without raw error text", async (kind, eventName) => {
-    const response = await POST(request({ kind, digest: "safe-digest", locale: "en" }));
+    const response = await POST(request({ kind, digest: "safe-digest", locale: "en", pagePath: "/admin/analytics" }));
     expect(response.status).toBe(202);
     expect(mocks.store).toHaveBeenCalledWith({
       eventKind: "client_error",
       eventName,
       eventId: "safe-digest",
-      pagePath: null,
+      pagePath: "/admin/analytics",
       metadata: { digest: "safe-digest", source: kind },
     });
     expect(mocks.guard).toHaveBeenCalledWith("telemetry", null, expect.any(Headers));

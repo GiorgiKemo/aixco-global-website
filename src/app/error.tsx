@@ -31,7 +31,7 @@ function reportClientError(kind: string, digest: string | undefined, locale: Rec
   void fetch("/api/client-errors", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ kind, digest: safeDigest, locale }),
+    body: JSON.stringify({ kind, digest: safeDigest, locale, pagePath: window.location.pathname }),
     credentials: "same-origin",
     keepalive: true,
   }).catch(() => undefined);

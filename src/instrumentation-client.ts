@@ -1,6 +1,8 @@
 const consentKey = "aixco-analytics-consent-v1";
 const consentVersion = "2026-08-13-google-analytics-policy-refresh";
 const sessionKey = "aixco-analytics-session-v1";
+const duplicateReportWindowMs = 30_000;
+const recentReports = new Map<string, number>();
 
 function analyticsAllowed() {
   try {
@@ -41,6 +43,15 @@ function report(
   component?: string,
 ) {
   if (!analyticsAllowed()) return;
+  const reportKey = `${eventName}:${window.location.pathname}:${sourceValue.slice(0, 2_000)}`;
+  const now = Date.now();
+  const previousReportAt = recentReports.get(reportKey);
+  if (previousReportAt && now - previousReportAt < duplicateReportWindowMs) return;
+  recentReports.set(reportKey, now);
+  if (recentReports.size > 100) {
+    const oldestKey = recentReports.keys().next().value;
+    if (oldestKey) recentReports.delete(oldestKey);
+  }
   const payload = JSON.stringify({
     eventName,
     eventId: fingerprint(sourceValue.slice(0, 2_000)),

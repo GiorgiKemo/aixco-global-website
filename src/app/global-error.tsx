@@ -38,7 +38,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
       void fetch("/api/client-errors", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ kind: "root-render", digest: safeDigest, locale: storedLang }),
+        body: JSON.stringify({ kind: "root-render", digest: safeDigest, locale: storedLang, pagePath: window.location.pathname }),
         credentials: "same-origin",
         keepalive: true,
       }).catch(() => undefined);

@@ -28,6 +28,7 @@ const boundaryClientErrorSchema = z.object({
   kind: z.enum(["route-render", "root-render"]),
   digest: z.string().trim().min(1).max(255).nullable().optional(),
   locale: z.string().trim().min(1).max(35).nullable().optional(),
+  pagePath: z.string().trim().max(800).nullable().optional(),
 }).strict();
 
 const clientErrorSchema = z.union([structuredClientErrorSchema, boundaryClientErrorSchema]);
@@ -98,7 +99,7 @@ export async function POST(request: Request) {
       ? {
           eventName: parsed.data.kind === "root-render" ? "global_error" as const : "error_boundary" as const,
           eventId: parsed.data.digest ?? null,
-          pagePath: null,
+          pagePath: parsed.data.pagePath ?? null,
           metadata: {
             digest: parsed.data.digest ?? undefined,
             source: parsed.data.kind,
