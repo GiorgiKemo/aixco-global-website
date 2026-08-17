@@ -9,4 +9,8 @@ pnpm-debug.log*
 test-results
 playwright-report
 output
+artifacts
+audit-output
+tmp
+*.log
 /*.png
