@@ -5,6 +5,7 @@ import {
   getAnalyticsWindow,
   parseAdminAuditEvents,
   parseAnalyticsBreakdowns,
+  parseAnalyticsCountries,
   parseAnalyticsDaily,
   parseAnalyticsRange,
   parseAnalyticsSummary,
@@ -84,7 +85,7 @@ describe("admin analytics payload parsing", () => {
     const result = parseAnalyticsBreakdowns({
       topPages: [{ pagePath: "/about", pageViews: 20, sessions: 12 }],
       topReferrers: [{ host: "google.com", path: "/search", sessions: 8 }],
-      countries: [{ countryCode: "CH", region: "ZH", city: "Zurich", sessions: 6 }],
+      countries: [{ countryCode: "CH", sessions: 6, visitors: 4, engagedSessions: 3, engagedVisitors: 2, briefSessions: 3, localOrQaSessions: 0 }],
       devices: [{ deviceType: "mobile", browserName: "Safari", osName: "iOS", sessions: 10 }],
       funnel: [
         { step: 1, label: "Sessions", sessions: 20 },
@@ -95,7 +96,7 @@ describe("admin analytics payload parsing", () => {
     expect(result).toEqual({
       topPages: [{ label: "/about", count: 20 }],
       topReferrers: [{ label: "google.com/search", count: 8 }],
-      countries: [{ label: "Zurich, ZH, CH", count: 6 }],
+      countries: [{ countryCode: "CH", countryName: "Switzerland", sessions: 6, visitors: 4, engagedSessions: 3, engagedVisitors: 2, briefSessions: 3, localOrQaSessions: 0 }],
       devices: [{ label: "mobile · Safari · iOS", count: 10 }],
       funnel: [
         { label: "Sessions", count: 20, ratePercent: 100 },
@@ -103,6 +104,37 @@ describe("admin analytics payload parsing", () => {
       ],
     });
     expect(parseAnalyticsBreakdowns({ summary: {} })).toBeNull();
+  });
+
+  it("keeps country metrics at country grain, rejects invalid codes, and does not truncate the first ten countries", () => {
+    const countries = [
+      { countryCode: "at", sessions: 21, visitors: 3, engagedSessions: 5, engagedVisitors: 2, briefSessions: 16, localOrQaSessions: 1 },
+      ...Array.from({ length: 9 }, (_, index) => ({
+        countryCode: ["DE", "CH", "SI", "ES", "GB", "IT", "MT", "US", "GE"][index],
+        sessions: index + 1,
+        visitors: 1,
+        engagedSessions: 1,
+        engagedVisitors: 1,
+        briefSessions: 0,
+        localOrQaSessions: 0,
+      })),
+      { countryCode: "Austria", sessions: 99 },
+    ];
+
+    const result = parseAnalyticsCountries(countries);
+
+    expect(result).toHaveLength(10);
+    expect(result[0]).toEqual({
+      countryCode: "AT",
+      countryName: "Austria",
+      sessions: 21,
+      visitors: 3,
+      engagedSessions: 5,
+      engagedVisitors: 2,
+      briefSessions: 16,
+      localOrQaSessions: 1,
+    });
+    expect(result.at(-1)).toMatchObject({ countryCode: "GE", countryName: "Georgia" });
   });
 
   it("drops incomplete operational rows and retains admin-only detail", () => {
@@ -217,8 +249,20 @@ describe("admin analytics payload parsing", () => {
 });
 
 describe("admin analytics data access", () => {
-  it("calls the single bounded dashboard RPC and parses its result", async () => {
-    const rpc = vi.fn().mockResolvedValue({
+  it("calls the bounded dashboard and country RPCs and parses their results", async () => {
+    const rpc = vi.fn().mockImplementation(async (name: string) => name === "get_site_analytics_country_breakdown"
+      ? {
+          data: {
+            schemaVersion: "20260813112500",
+            window: {
+              start: "2026-08-06T12:00:00.000Z",
+              end: "2026-08-07T12:00:00.000Z",
+            },
+            countries: [{ countryCode: "AT", sessions: 2, visitors: 2, engagedSessions: 1, engagedVisitors: 1, briefSessions: 1, localOrQaSessions: 0 }],
+          },
+          error: null,
+        }
+      : ({
       data: {
         schemaVersion: "20260807130642",
         window: {
@@ -256,23 +300,126 @@ describe("admin analytics data access", () => {
         recentAdminAudit: [],
       },
       error: null,
-    });
+    }));
 
     const result = await fetchAdminAnalyticsDashboard("24h", {
       now: new Date("2026-08-07T12:00:00.000Z"),
       client: { rpc },
     });
 
-    expect(rpc).toHaveBeenCalledWith("get_site_analytics_dashboard", {
+    expect(rpc).toHaveBeenNthCalledWith(1, "get_site_analytics_dashboard", {
       p_start: "2026-08-06T12:00:00.000Z",
       p_end: "2026-08-07T12:00:00.000Z",
       p_limit: 24,
+    });
+    expect(rpc).toHaveBeenNthCalledWith(2, "get_site_analytics_country_breakdown", {
+      p_start: "2026-08-06T12:00:00.000Z",
+      p_end: "2026-08-07T12:00:00.000Z",
+      p_limit: 100,
     });
     expect(result).toMatchObject({
       ok: true,
       data: {
         summary: { sessions: 2, visitors: 2, pageViews: 5 },
+        breakdowns: { countries: [{ countryCode: "AT", countryName: "Austria" }] },
         warnings: [],
+      },
+    });
+  });
+
+  it("does not display the legacy city-grain country list when the country RPC is unavailable", async () => {
+    const from = "2026-08-06T12:00:00.000Z";
+    const to = "2026-08-07T12:00:00.000Z";
+    const rpc = vi.fn().mockImplementation(async (name: string) => name === "get_site_analytics_country_breakdown"
+      ? { data: null, error: { code: "PGRST202", message: "missing function" } }
+      : {
+          data: {
+            schemaVersion: "20260807130642",
+            window: { start: from, end: to },
+            summary: {
+              totalSessions: 2,
+              totalVisitors: 2,
+              returningSessions: 0,
+              engagedSessions: 1,
+              conversions: 0,
+              totalPageViews: 2,
+              totalEvents: 2,
+              telemetryEvents: 0,
+              webVitalEvents: 0,
+              totalInteractions: 0,
+              totalActiveSeconds: 12,
+              averageActiveSeconds: 6,
+              bounceRatePercent: 50,
+              errorEvents: 0,
+              formSubmissions: 0,
+              portalHandoffs: 0,
+              uniqueCountries: 1,
+              latestEventAt: to,
+            },
+            daily: [],
+            topPages: [],
+            topReferrers: [],
+            countries: [{ countryCode: "AT", region: "9", city: "Vienna", sessions: 8 }],
+            devices: [],
+            funnel: [],
+            recentSessions: [],
+            recentErrors: [],
+            recentAdminAudit: [],
+          },
+          error: null,
+        });
+
+    const result = await fetchAdminAnalyticsDashboard("24h", {
+      now: new Date(to),
+      client: { rpc },
+    });
+
+    expect(result).toMatchObject({
+      ok: true,
+      data: {
+        breakdowns: { countries: [] },
+        warnings: ["Country quality metrics are temporarily unavailable; session totals remain visible."],
+      },
+    });
+  });
+
+  it("rejects a country payload for a different reporting window", async () => {
+    const from = "2026-08-06T12:00:00.000Z";
+    const to = "2026-08-07T12:00:00.000Z";
+    const dashboard = {
+      schemaVersion: "20260807130642",
+      window: { start: from, end: to },
+      summary: {
+        totalSessions: 1, totalVisitors: 1, returningSessions: 0, engagedSessions: 1,
+        conversions: 0, totalPageViews: 1, totalEvents: 1, telemetryEvents: 0,
+        webVitalEvents: 0, totalInteractions: 0, totalActiveSeconds: 12,
+        averageActiveSeconds: 12, bounceRatePercent: 0, errorEvents: 0,
+        formSubmissions: 0, portalHandoffs: 0, uniqueCountries: 1, latestEventAt: to,
+      },
+      daily: [], topPages: [], topReferrers: [], countries: [], devices: [], funnel: [],
+      recentSessions: [], recentErrors: [], recentAdminAudit: [],
+    };
+    const rpc = vi.fn().mockImplementation(async (name: string) => name === "get_site_analytics_country_breakdown"
+      ? {
+          data: {
+            schemaVersion: "20260813112500",
+            window: { start: "2026-08-01T00:00:00.000Z", end: "2026-08-02T00:00:00.000Z" },
+            countries: [{ countryCode: "ES", sessions: 2, visitors: 1, engagedSessions: 2, engagedVisitors: 1, briefSessions: 0, localOrQaSessions: 0 }],
+          },
+          error: null,
+        }
+      : { data: dashboard, error: null });
+
+    const result = await fetchAdminAnalyticsDashboard("24h", {
+      now: new Date(to),
+      client: { rpc },
+    });
+
+    expect(result).toMatchObject({
+      ok: true,
+      data: {
+        breakdowns: { countries: [] },
+        warnings: ["Country quality metrics are temporarily unavailable; session totals remain visible."],
       },
     });
   });

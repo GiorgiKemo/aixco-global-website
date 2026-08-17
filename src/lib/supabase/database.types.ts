@@ -743,6 +743,14 @@ export type Database = {
         };
         Returns: Json;
       };
+      get_site_analytics_country_breakdown: {
+        Args: {
+          p_start?: string;
+          p_end?: string;
+          p_limit?: number;
+        };
+        Returns: Json;
+      };
       consume_admin_login_rate_limit: {
         Args: {
           p_client_hash: string;

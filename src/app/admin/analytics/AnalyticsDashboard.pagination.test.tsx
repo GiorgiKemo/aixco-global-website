@@ -115,6 +115,41 @@ function createDashboard(overrides: Partial<AdminAnalyticsDashboard> = {}): Admi
 const unavailableOperations = { ok: false as const, reason: "Not needed for this focused view." };
 
 describe("analytics dashboard list pagination", () => {
+  it("shows every country at country grain with visitor, engagement, session, and QA metrics", () => {
+    const countryCodes = ["AT", "DE", "CH", "SI", "ES", "GB", "IT", "MT", "US", "GE"];
+    const data = createDashboard({
+      breakdowns: {
+        topPages: [],
+        topReferrers: [],
+        devices: [],
+        funnel: [],
+        countries: countryCodes.map((countryCode, index) => ({
+          countryCode,
+          countryName: new Intl.DisplayNames(["en"], { type: "region" }).of(countryCode) ?? countryCode,
+          sessions: index + 1,
+          visitors: index + 1,
+          engagedSessions: index === 0 ? 5 : 1,
+          engagedVisitors: index === 0 ? 2 : 1,
+          briefSessions: 0,
+          localOrQaSessions: index === 0 ? 1 : 0,
+        })),
+      },
+    });
+    const pagination = createAnalyticsPaginationState({
+      totals: { sessions: 0, errors: 0, audit: 0 },
+      requestedPages: { sessions: 1, errors: 1, audit: 1 },
+    });
+
+    render(<AnalyticsDashboard data={data} operations={unavailableOperations} focus="traffic" range="7d" pagination={pagination} />);
+
+    const countryTable = screen.getByRole("table");
+    const austriaRow = within(countryTable).getByRole("row", { name: /AustriaAT 1 2\(5 sessions\) 1 1 local \/ automated QA session/i });
+    expect(austriaRow).toBeInTheDocument();
+    expect(within(countryTable).getByText("Georgia")).toBeInTheDocument();
+    expect(within(countryTable).getAllByRole("row")).toHaveLength(11);
+    expect(screen.getByText(/does not claim to identify VPN usage/i)).toBeInTheDocument();
+  });
+
   it("renders only the selected six-item session page with accessible links", () => {
     const data = createDashboard({ recentSessions: Array.from({ length: 8 }, (_, index) => createSession(index + 1)) });
     const pagination = createAnalyticsPaginationState({

@@ -23,7 +23,7 @@ import {
   writeAnalyticsConsent,
   type AnalyticsTrackDetail,
 } from "@/lib/analytics/client";
-import { isAdminAnalyticsExcludedPath } from "@/lib/analytics/routes";
+import { isAnalyticsExcludedPath } from "@/lib/analytics/routes";
 
 type StoredSession = {
   id: string;
@@ -861,8 +861,8 @@ export function AnalyticsTracker() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [language, setLanguage] = useState("en");
   const privacySignal = ready && hasBrowserPrivacySignal();
-  const adminRoute = isAdminAnalyticsExcludedPath(pathname);
-  const enabled = ready && consent === "granted" && !privacySignal && !adminRoute;
+  const excludedRoute = isAnalyticsExcludedPath(pathname);
+  const enabled = ready && consent === "granted" && !privacySignal && !excludedRoute;
   useAnalyticsCollection(enabled);
 
   useEffect(() => {
@@ -889,7 +889,7 @@ export function AnalyticsTracker() {
     window.dispatchEvent(new Event(ANALYTICS_NAVIGATION_EVENT));
   }, [pathname, ready]);
 
-  if (!ready || adminRoute) return null;
+  if (!ready || excludedRoute) return null;
   if (consent !== "unset" && !preferencesOpen) return null;
 
   const copy = copyByLanguage[language] ?? copyByLanguage.en;

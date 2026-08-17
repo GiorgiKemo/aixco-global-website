@@ -3,6 +3,15 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { writeAnalyticsConsent } from "@/lib/analytics/client";
 
 const navigation = vi.hoisted(() => ({ pathname: "/" }));
+type AnalyticsWindow = Window & {
+  dataLayer?: unknown[];
+  __aixcoGoogleConsentDefaulted?: boolean;
+};
+
+function googleCommands() {
+  return ((window as AnalyticsWindow).dataLayer ?? []).map((entry) =>
+    Array.from(entry as ArrayLike<unknown>));
+}
 
 vi.mock("next/navigation", () => ({
   usePathname: () => navigation.pathname,
@@ -21,9 +30,11 @@ import { MarketingAnalytics } from "./marketing-analytics";
 describe("route-aware marketing analytics", () => {
   beforeEach(() => {
     navigation.pathname = "/";
+    window.history.replaceState({}, "", "/");
     window.localStorage.clear();
     window.sessionStorage.clear();
-    delete (window as Window & { dataLayer?: unknown[] }).dataLayer;
+    delete (window as AnalyticsWindow).dataLayer;
+    delete (window as AnalyticsWindow).__aixcoGoogleConsentDefaulted;
   });
 
   it("holds GTM until analytics consent is granted on public routes", async () => {
@@ -36,13 +47,55 @@ describe("route-aware marketing analytics", () => {
     await waitFor(() => expect(getByTestId("google-tag-manager")).toBeInTheDocument());
   });
 
-  it.each(["/admin", "/admin/login", "/admin/analytics?focus=traffic"])(
+  it("queues denied defaults before consent updates", async () => {
+    render(<MarketingAnalytics />);
+
+    await waitFor(() => expect((window as AnalyticsWindow).dataLayer).toHaveLength(2));
+    expect(googleCommands()).toEqual([
+      ["consent", "default", expect.objectContaining({ analytics_storage: "denied", ad_storage: "denied" })],
+      ["consent", "update", expect.objectContaining({ analytics_storage: "denied", ad_storage: "denied" })],
+    ]);
+
+    act(() => writeAnalyticsConsent("granted"));
+    await waitFor(() => expect(googleCommands().at(-1)).toEqual([
+      "consent",
+      "update",
+      expect.objectContaining({ analytics_storage: "granted", ad_storage: "denied" }),
+    ]));
+  });
+
+  it("denies Google Analytics and clears its cookies after a public-to-admin transition", async () => {
+    writeAnalyticsConsent("granted");
+    document.cookie = "_ga=test-value; path=/";
+    const view = render(<MarketingAnalytics />);
+    await waitFor(() => expect(view.getByTestId("google-tag-manager")).toBeInTheDocument());
+
+    navigation.pathname = "/admin/analytics";
+    window.history.replaceState({}, "", navigation.pathname);
+    view.rerender(<MarketingAnalytics />);
+
+    await waitFor(() => expect(view.container).toBeEmptyDOMElement());
+    expect(googleCommands().at(-1)).toEqual([
+      "consent",
+      "update",
+      expect.objectContaining({ analytics_storage: "denied" }),
+    ]);
+    expect(document.cookie).not.toContain("_ga=");
+  });
+
+  it.each(["/admin", "/admin/login", "/admin/analytics?focus=traffic", "/api/private", "/portal/broker"])(
     "renders no marketing instrumentation on %s",
-    (pathname) => {
+    async (pathname) => {
       navigation.pathname = pathname;
+      window.history.replaceState({}, "", pathname);
       const { container } = render(<MarketingAnalytics />);
 
       expect(container).toBeEmptyDOMElement();
+      await waitFor(() => expect(googleCommands().at(-1)).toEqual([
+        "consent",
+        "update",
+        expect.objectContaining({ analytics_storage: "denied" }),
+      ]));
     },
   );
 });

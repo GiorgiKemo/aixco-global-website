@@ -58,6 +58,17 @@ export type AnalyticsBreakdownItem = {
   count: number;
 };
 
+export type AnalyticsCountryBreakdownItem = {
+  countryCode: string;
+  countryName: string;
+  sessions: number;
+  visitors: number;
+  engagedSessions: number;
+  engagedVisitors: number;
+  briefSessions: number;
+  localOrQaSessions: number;
+};
+
 export type AnalyticsFunnelStep = AnalyticsBreakdownItem & {
   ratePercent: number | null;
 };
@@ -65,7 +76,7 @@ export type AnalyticsFunnelStep = AnalyticsBreakdownItem & {
 export type AnalyticsBreakdowns = {
   topPages: AnalyticsBreakdownItem[];
   topReferrers: AnalyticsBreakdownItem[];
-  countries: AnalyticsBreakdownItem[];
+  countries: AnalyticsCountryBreakdownItem[];
   devices: AnalyticsBreakdownItem[];
   funnel: AnalyticsFunnelStep[];
 };
@@ -203,11 +214,15 @@ type OperationsCountClient = {
 };
 
 const DASHBOARD_RPC = "get_site_analytics_dashboard";
+const COUNTRY_BREAKDOWN_RPC = "get_site_analytics_country_breakdown";
 const DASHBOARD_SCHEMA_VERSION = "20260807130642";
+const COUNTRY_BREAKDOWN_SCHEMA_VERSIONS = new Set(["20260813094605", "20260813112500"]);
 const RECENT_SESSION_LIMIT = 24;
 const BREAKDOWN_LIMIT = 8;
+const COUNTRY_BREAKDOWN_LIMIT = 100;
 const MAX_AUDIT_DETAIL_FIELDS = 12;
 const SENSITIVE_AUDIT_DETAIL_KEY = /password|passcode|secret|token|cookie|authorization|api[_-]?key|message|transcript/i;
+const countryDisplayNames = new Intl.DisplayNames(["en"], { type: "region" });
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -235,6 +250,14 @@ function identifierString(value: unknown, fallback = "") {
 function optionalString(value: unknown) {
   const cleaned = cleanString(value);
   return cleaned || null;
+}
+
+function timestampsMatch(left: unknown, right: unknown) {
+  const leftTimestamp = safeTimestamp(left);
+  const rightTimestamp = safeTimestamp(right);
+  return leftTimestamp !== null
+    && rightTimestamp !== null
+    && Date.parse(leftTimestamp) === Date.parse(rightTimestamp);
 }
 
 function optionalIdentifier(value: unknown) {
@@ -365,6 +388,34 @@ function parseBreakdownList(
   });
 }
 
+function countryName(countryCode: string) {
+  try {
+    return countryDisplayNames.of(countryCode) ?? countryCode;
+  } catch {
+    return countryCode;
+  }
+}
+
+export function parseAnalyticsCountries(value: unknown): AnalyticsCountryBreakdownItem[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.slice(0, COUNTRY_BREAKDOWN_LIMIT).flatMap((candidate) => {
+    if (!isRecord(candidate)) return [];
+    const code = cleanString(candidate.countryCode ?? candidate.country_code).toUpperCase();
+    if (!/^[A-Z]{2}$/.test(code)) return [];
+    return [{
+      countryCode: code,
+      countryName: countryName(code),
+      sessions: finiteNumber(candidate.sessions ?? candidate.count),
+      visitors: finiteNumber(candidate.visitors),
+      engagedSessions: finiteNumber(candidate.engagedSessions ?? candidate.engaged_sessions),
+      engagedVisitors: finiteNumber(candidate.engagedVisitors ?? candidate.engaged_visitors),
+      briefSessions: finiteNumber(candidate.briefSessions ?? candidate.brief_sessions),
+      localOrQaSessions: finiteNumber(candidate.localOrQaSessions ?? candidate.local_or_qa_sessions),
+    }];
+  });
+}
+
 export function parseAnalyticsBreakdowns(value: unknown): AnalyticsBreakdowns | null {
   const row = firstRow(value);
   const payload = isRecord(row) && isRecord(row.breakdowns) ? row.breakdowns : row;
@@ -405,14 +456,7 @@ export function parseAnalyticsBreakdowns(value: unknown): AnalyticsBreakdowns | 
       },
       (candidate) => candidate.sessions ?? candidate.count,
     ),
-    countries: parseBreakdownList(
-      payload.countries,
-      (candidate) => [candidate.city, candidate.region, candidate.countryCode ?? candidate.country_code]
-        .map(optionalString)
-        .filter(Boolean)
-        .join(", ") || "Unknown country",
-      (candidate) => candidate.sessions ?? candidate.count,
-    ),
+    countries: parseAnalyticsCountries(payload.countries),
     devices: parseBreakdownList(
       payload.devices,
       (candidate) => [candidate.deviceType ?? candidate.device_type, candidate.browserName ?? candidate.browser_name, candidate.osName ?? candidate.os_name]
@@ -611,11 +655,18 @@ export async function fetchAdminAnalyticsDashboard(
   const client = options.client ?? ((await getSupabaseAdminClient()) as unknown as AnalyticsRpcClient);
 
   try {
-    const result = await client.rpc(DASHBOARD_RPC, {
-      p_start: window.from,
-      p_end: window.to,
-      p_limit: RECENT_SESSION_LIMIT,
-    });
+    const [result, countryResult] = await Promise.all([
+      client.rpc(DASHBOARD_RPC, {
+        p_start: window.from,
+        p_end: window.to,
+        p_limit: RECENT_SESSION_LIMIT,
+      }),
+      client.rpc(COUNTRY_BREAKDOWN_RPC, {
+        p_start: window.from,
+        p_end: window.to,
+        p_limit: COUNTRY_BREAKDOWN_LIMIT,
+      }),
+    ]);
     if (result.error) {
       return { ok: false, reason: `Analytics data is unavailable (${result.error.code ?? "database_error"}).` };
     }
@@ -647,7 +698,24 @@ export async function fetchAdminAnalyticsDashboard(
     const sessionRows = readPayloadArray(payload, "recentSessions", "recent_sessions");
     const errorRows = readPayloadArray(payload, "recentErrors", "recent_errors");
     const auditRows = readPayloadArray(payload, "recentAdminAudit", "recent_admin_audit", "auditEvents");
-    const breakdowns = parseAnalyticsBreakdowns(payload);
+    const parsedCountryPayload = firstRow(countryResult.data);
+    const countryPayload = isRecord(parsedCountryPayload) ? parsedCountryPayload : null;
+    const countrySchemaVersion = cleanString(countryPayload?.schemaVersion ?? countryPayload?.schema_version);
+    const countryWindow = countryPayload && isRecord(countryPayload.window) ? countryPayload.window : null;
+    const countryWindowMatches = timestampsMatch(countryWindow?.start, window.from)
+      && timestampsMatch(countryWindow?.end, window.to);
+    const countryRows = countryPayload
+      && COUNTRY_BREAKDOWN_SCHEMA_VERSIONS.has(countrySchemaVersion)
+      && countryWindowMatches
+      ? readPayloadArray(countryPayload, "countries")
+      : null;
+    const parsedBaseBreakdowns = parseAnalyticsBreakdowns(payload);
+    const breakdowns = parsedBaseBreakdowns
+      ? {
+          ...parsedBaseBreakdowns,
+          countries: countryRows && !countryResult.error ? parseAnalyticsCountries(countryRows) : [],
+        }
+      : null;
     const parsedDaily = dailyRows ? parseAnalyticsDaily(dailyRows) : null;
     const parsedSessions = sessionRows ? parseRecentSessions(sessionRows) : null;
     const parsedErrors = errorRows ? parseRecentErrors(errorRows) : null;
@@ -659,6 +727,7 @@ export async function fetchAdminAnalyticsDashboard(
     const warnings: string[] = [];
     if (!daily) warnings.push("Trend data is unavailable or did not match the supported schema.");
     if (!breakdowns) warnings.push("Traffic breakdowns and funnel data are unavailable.");
+    if (countryResult.error || !countryRows) warnings.push("Country quality metrics are temporarily unavailable; session totals remain visible.");
     if (!recentSessions) warnings.push("Recent sessions are unavailable or did not match the supported schema.");
     if (!recentErrors) warnings.push("Recent error details are unavailable or did not match the supported schema.");
     if (!auditEvents) warnings.push("Admin audit history is unavailable or did not match the supported schema.");

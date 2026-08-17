@@ -7,30 +7,54 @@ import { ANALYTICS_CONSENT_EVENT } from "@/lib/analytics/constants";
 import {
   analyticsCollectionAllowed,
 } from "@/lib/analytics/client";
-import { isAdminAnalyticsExcludedPath } from "@/lib/analytics/routes";
+import { isAnalyticsExcludedPath } from "@/lib/analytics/routes";
 import { WebVitals } from "./web-vitals";
 
 const googleTagManagerId = "GTM-KCZJW8NN";
 type GoogleConsentStatus = "granted" | "denied";
+type GoogleConsentValues = {
+  analytics_storage: GoogleConsentStatus;
+  ad_storage: "denied";
+  ad_user_data: "denied";
+  ad_personalization: "denied";
+};
+type AnalyticsWindow = Window & {
+  dataLayer?: unknown[];
+  __aixcoGoogleConsentDefaulted?: boolean;
+};
+
+const deniedGoogleConsent = {
+  analytics_storage: "denied",
+  ad_storage: "denied",
+  ad_user_data: "denied",
+  ad_personalization: "denied",
+} as const;
+
+function queueGoogleConsent(
+  dataLayer: unknown[],
+  action: "default" | "update",
+  values: GoogleConsentValues,
+) {
+  function gtag(..._command: unknown[]) {
+    // GTM consent commands require the native Arguments object used by Google's gtag stub.
+    // eslint-disable-next-line prefer-rest-params
+    dataLayer.push(arguments);
+  }
+
+  gtag("consent", action, values);
+}
 
 function updateGoogleConsent(status: GoogleConsentStatus) {
   if (typeof window === "undefined") return;
 
-  const browserWindow = window as Window & { dataLayer?: unknown[] };
-  const dataLayer = browserWindow.dataLayer;
-  if (dataLayer || status === "granted") {
-    browserWindow.dataLayer = dataLayer ?? [];
-    browserWindow.dataLayer.push([
-      "consent",
-      "update",
-      {
-        analytics_storage: status,
-        ad_storage: "denied",
-        ad_user_data: "denied",
-        ad_personalization: "denied",
-      },
-    ]);
+  const browserWindow = window as AnalyticsWindow;
+  const dataLayer = browserWindow.dataLayer ?? [];
+  browserWindow.dataLayer = dataLayer;
+  if (!browserWindow.__aixcoGoogleConsentDefaulted) {
+    queueGoogleConsent(dataLayer, "default", deniedGoogleConsent);
+    browserWindow.__aixcoGoogleConsentDefaulted = true;
   }
+  queueGoogleConsent(dataLayer, "update", { ...deniedGoogleConsent, analytics_storage: status });
 
   if (status !== "denied") return;
 
@@ -44,42 +68,47 @@ function updateGoogleConsent(status: GoogleConsentStatus) {
   }
 }
 
-function useGoogleAnalyticsConsent() {
+function useGoogleAnalyticsConsent(excludedRoute: boolean) {
   const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
     const sync = () => {
-      const nextAllowed = analyticsCollectionAllowed();
+      const nextAllowed = !excludedRoute && analyticsCollectionAllowed();
       setAllowed(nextAllowed);
       updateGoogleConsent(nextAllowed ? "granted" : "denied");
     };
 
     sync();
     window.addEventListener(ANALYTICS_CONSENT_EVENT, sync);
-    return () => window.removeEventListener(ANALYTICS_CONSENT_EVENT, sync);
-  }, []);
+    return () => {
+      window.removeEventListener(ANALYTICS_CONSENT_EVENT, sync);
+      if (isAnalyticsExcludedPath(window.location.pathname)) {
+        updateGoogleConsent("denied");
+      }
+    };
+  }, [excludedRoute]);
 
   return allowed;
 }
 
 export function MarketingAnalytics() {
   const pathname = usePathname();
-  const googleAnalyticsAllowed = useGoogleAnalyticsConsent();
+  const excludedRoute = isAnalyticsExcludedPath(pathname);
+  const googleAnalyticsAllowed = useGoogleAnalyticsConsent(excludedRoute);
 
-  if (isAdminAnalyticsExcludedPath(pathname)) return null;
+  if (excludedRoute) return null;
 
   return (
     <>
-      {/* Load marketing analytics after the first render and an idle window so
-          the public story can paint its hero and intro animation without
-          third-party script work on the critical path. The inline route check
-          also prevents a queued load after an SPA navigation into /admin. */}
+      {/* Next.js already defers lazyOnload scripts until browser idle. The inline
+          route check prevents a queued load after an SPA navigation into a
+          private or non-page route. */}
       {googleAnalyticsAllowed && <Script id="google-tag-manager" strategy="lazyOnload">
-        {`(function(w,d,s,l,i){function load(){if(/^\\/admin(?:\\/|$)/.test(w.location.pathname))return;if(w.__aixcoGtmLoaded)return;w.__aixcoGtmLoaded=true;w[l]=w[l]||[];function gtag(){w[l].push(arguments);}gtag('consent','update',{'analytics_storage':'granted','ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied'});w[l].push({'gtm.start':
+        {`(function(w,d,s,l,i){function load(){if(/^\\/(?:admin|api|portal)(?:\\/|$)/.test(w.location.pathname))return;if(w.__aixcoGtmLoaded)return;w.__aixcoGtmLoaded=true;w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);}
-if('requestIdleCallback' in w){w.requestIdleCallback(load,{timeout:4000});}else{w.setTimeout(load,4000);}
+load();
 })(window,document,'script','dataLayer','${googleTagManagerId}');`}
       </Script>}
       <WebVitals />

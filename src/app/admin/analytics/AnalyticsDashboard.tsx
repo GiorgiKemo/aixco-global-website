@@ -25,6 +25,7 @@ import type {
   AdminAnalyticsDashboard,
   AdminOperationsSnapshotResult,
   AnalyticsBreakdownItem,
+  AnalyticsCountryBreakdownItem,
   AnalyticsDailyPoint,
   AnalyticsFunnelStep,
   RecentAnalyticsSession,
@@ -536,6 +537,76 @@ function RecentSessions({
     </div>
   );
 }
+
+function CountryBreakdown({ items }: { items: AnalyticsCountryBreakdownItem[] }) {
+  if (!items.length) return <PanelEmpty label="No country data recorded." compact />;
+
+  const reviewSignal = (country: AnalyticsCountryBreakdownItem) => {
+    const lowEngagement = country.sessions > 0 && country.briefSessions / country.sessions >= 0.5;
+    if (country.localOrQaSessions > 0) {
+      return `${formatNumber(country.localOrQaSessions)} local / automated QA session${country.localOrQaSessions === 1 ? "" : "s"}`;
+    }
+    if (lowEngagement) {
+      return `${formatNumber(country.briefSessions)} brief session${country.briefSessions === 1 ? "" : "s"}; may differ from Google Analytics`;
+    }
+    return "No obvious QA signal";
+  };
+
+  return (
+    <article className="overflow-hidden rounded-xl border border-[#161616]/10 bg-white shadow-sm md:col-span-2 xl:col-span-3">
+      <div className="border-b border-[#161616]/10 px-5 py-5 sm:px-6">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-[#161616]">Countries</h3>
+            <p className="mt-1 text-xs leading-5 text-[#6f6e6a]">Country totals are aggregated across cities and regions. Engaged visitors are the closest first-party comparison to Google Analytics active users. Only visitors who permitted website analytics appear here.</p>
+          </div>
+          <span className="rounded-full border border-[#7c5d17]/25 bg-[#f8f3e7] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#7c5d17]">Vercel IP location</span>
+        </div>
+      </div>
+      <div className="divide-y divide-[#161616]/8 md:hidden">
+        {items.map((country) => (
+          <section key={country.countryCode} className="space-y-3 px-5 py-5">
+            <div className="flex items-baseline justify-between gap-4">
+              <strong className="text-sm text-foreground">{country.countryName}</strong>
+              <span className="font-mono text-[10px] text-[#6f6e6a]">{country.countryCode}</span>
+            </div>
+            <dl className="grid grid-cols-3 gap-3 text-center">
+              <div><dt className="text-[9px] font-semibold uppercase tracking-wider text-[#6f6e6a]">Visitors</dt><dd className="mt-1 text-base font-semibold text-foreground">{formatNumber(country.visitors)}</dd></div>
+              <div><dt className="text-[9px] font-semibold uppercase tracking-wider text-[#6f6e6a]">Engaged</dt><dd className="mt-1 text-base font-semibold text-[#7c5d17]">{formatNumber(country.engagedVisitors)}</dd></div>
+              <div><dt className="text-[9px] font-semibold uppercase tracking-wider text-[#6f6e6a]">Sessions</dt><dd className="mt-1 text-base font-semibold text-foreground">{formatNumber(country.sessions)}</dd></div>
+            </dl>
+            <p className="rounded-lg bg-background px-3 py-2 text-[10px] leading-4 text-[#55534f]">{reviewSignal(country)}</p>
+          </section>
+        ))}
+      </div>
+      <div className="hidden overflow-x-auto md:block" role="region" tabIndex={0} aria-label="Country analytics comparison">
+        <table className="w-full border-collapse text-left text-xs" style={{ minWidth: "720px" }}>
+          <thead className="bg-background text-[10px] uppercase tracking-widest text-[#6f6e6a]">
+            <tr>
+              <th scope="col" className="px-5 py-3 font-semibold sm:px-6">Country</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">Unique visitors</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">Engaged visitors</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">Sessions</th>
+              <th scope="col" className="px-5 py-3 font-semibold sm:px-6">Review signal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((country) => (
+              <tr key={country.countryCode} className="border-t border-[#161616]/8">
+                <td className="px-5 py-4 sm:px-6"><strong className="text-sm text-foreground">{country.countryName}</strong><span className="ml-2 font-mono text-[10px] text-[#6f6e6a]">{country.countryCode}</span></td>
+                <td className="px-4 py-4 text-right font-semibold text-foreground">{formatNumber(country.visitors)}</td>
+                <td className="px-4 py-4 text-right"><span className="font-semibold text-[#7c5d17]">{formatNumber(country.engagedVisitors)}</span><span className="ml-1 text-[10px] text-[#6f6e6a]">({formatNumber(country.engagedSessions)} sessions)</span></td>
+                <td className="px-4 py-4 text-right font-semibold text-foreground">{formatNumber(country.sessions)}</td>
+                <td className="px-5 py-4 text-[#55534f] sm:px-6">{reviewSignal(country)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="border-t border-[#161616]/10 bg-background px-5 py-3 text-[10px] leading-4 text-[#6f6e6a] sm:px-6">VPNs, corporate gateways, carrier routing, Apple Private Relay, and different geolocation databases can change the detected country. This dashboard does not claim to identify VPN usage.</p>
+    </article>
+  );
+}
 function SessionMiniMetric({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-[#fbfaf7] px-4 py-3">
@@ -866,11 +937,11 @@ export function AnalyticsDashboard({
       <section>
         <SectionHeader eyebrow="Acquisition & mix" title="What is driving activity" detail="Only first-party, consent-aware session data is included. Unknown values remain explicit." />
         {data.breakdowns ? (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <BreakdownCard title="Top pages" items={data.breakdowns.topPages} emptyLabel="No page views recorded." />
             <BreakdownCard title="Referrers" items={data.breakdowns.topReferrers} emptyLabel="No referral sources recorded." />
-            <BreakdownCard title="Countries" items={data.breakdowns.countries} emptyLabel="No country data recorded." />
             <BreakdownCard title="Devices" items={data.breakdowns.devices} emptyLabel="No device data recorded." />
+            <CountryBreakdown items={data.breakdowns.countries} />
           </div>
         ) : <UnavailablePanel label="Traffic breakdowns could not be loaded from the analytics source." />}
       </section>
@@ -895,6 +966,7 @@ export function AnalyticsDashboard({
         <div className="mt-3 grid gap-3 leading-5 sm:grid-cols-2 xl:grid-cols-4">
           <p><strong>Visitor:</strong> one privacy-preserving anonymous identifier in the selected window.</p>
           <p><strong>Session:</strong> a bounded period of activity for one anonymous visitor.</p>
+          <p><strong>Engaged visitor:</strong> a unique visitor with at least one session lasting 10 seconds or producing at least two page views; this is the nearest first-party comparison to Google Analytics active users.</p>
           <p><strong>Active time:</strong> foreground time with visible, recent interaction—not elapsed wall-clock time.</p>
           <p><strong>Conversion:</strong> a contact request confirmed by the website backend. Chat, call, WhatsApp, and portal actions remain separate intent signals.</p>
         </div>

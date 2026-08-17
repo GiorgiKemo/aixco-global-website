@@ -25,6 +25,9 @@ describe("marketing analytics route boundary", () => {
     const medicalTourismPage = source("src/app/medical-tourism/page.tsx");
     const georgiaResidencyPage = source("src/app/georgia-residency/page.tsx");
     const georgiaTaxResidencyPage = source("src/app/georgia-tax-residency/page.tsx");
+    const investInBatumiPage = source("src/app/invest-in-batumi/page.tsx");
+    const globalBondPage = source("src/app/aixco-global-bond/page.tsx");
+    const notFoundPage = source("src/app/not-found.tsx");
 
     expect(clientShell).toContain('import { MarketingAnalytics } from "./marketing-analytics"');
     expect(clientShell).toContain("<MarketingAnalytics />");
@@ -34,5 +37,16 @@ describe("marketing analytics route boundary", () => {
     expect(medicalTourismPage).toContain("<ClientShell");
     expect(georgiaResidencyPage).toContain("<ClientShell");
     expect(georgiaTaxResidencyPage).toContain("<ClientShell");
+    expect(investInBatumiPage).toContain("<ClientShell");
+    expect(globalBondPage).toContain("<ClientShell");
+    expect(notFoundPage).toContain("<MarketingAnalytics />");
+  });
+
+  it("does not add a second delay after Next.js schedules the lazy GTM script", () => {
+    const marketingAnalytics = source("src/app/marketing-analytics.tsx");
+
+    expect(marketingAnalytics).toContain('strategy="lazyOnload"');
+    expect(marketingAnalytics).not.toContain("requestIdleCallback(load");
+    expect(marketingAnalytics).not.toContain("setTimeout(load,4000)");
   });
 });
