@@ -15,6 +15,7 @@ import { polishTranslationsFinal } from "./polish-translations-final";
 import { polishContentTranslations } from "./polish-content-translations";
 import { polishRuntimeTranslations } from "./polish-runtime-translations";
 import { propertyPageTranslations } from "./property-page-translations";
+import { reveranceCalculatorTranslations } from "./reverance-calculator-translations";
 import { russianTranslationFixes } from "./russian-translation-fixes";
 import { slovenianClientRevisions } from "./slovenian-client-revisions";
 import { slovenianTranslationFixes } from "./slovenian-translation-fixes";
@@ -37,12 +38,16 @@ const GEORGIA_RESIDENCY_METADATA_DESCRIPTION =
 const GEORGIA_TAX_RESIDENCY_METADATA_TITLE = "Georgia Tax Residency for HNWI | AIXCO.Global";
 const GEORGIA_TAX_RESIDENCY_METADATA_DESCRIPTION =
   "AIXCO.Global helps internationally mobile individuals map a clear, compliant route to Georgia tax residency with private guidance across residence, documentation and cross-border context.";
+const REVERANCE_CALCULATOR_METADATA_TITLE = "Project Reverance investment calculator | AIXCO.Global";
+const REVERANCE_CALCULATOR_METADATA_DESCRIPTION =
+  "Model Reverance apartments in Batumi with transparent price, financing, rental and growth assumptions, then download a localized PDF brief.";
 const ROUTE_METADATA = {
   "/": { title: HOME_METADATA_TITLE, description: HOME_METADATA_DESCRIPTION },
   "/reverance-batumi": { title: REVERANCE_METADATA_TITLE, description: REVERANCE_METADATA_DESCRIPTION },
   "/medical-tourism": { title: MEDICAL_TOURISM_METADATA_TITLE, description: MEDICAL_TOURISM_METADATA_DESCRIPTION },
   "/georgia-residency": { title: GEORGIA_RESIDENCY_METADATA_TITLE, description: GEORGIA_RESIDENCY_METADATA_DESCRIPTION },
   "/georgia-tax-residency": { title: GEORGIA_TAX_RESIDENCY_METADATA_TITLE, description: GEORGIA_TAX_RESIDENCY_METADATA_DESCRIPTION },
+  "/reverance-batumi/calculator": { title: REVERANCE_CALCULATOR_METADATA_TITLE, description: REVERANCE_CALCULATOR_METADATA_DESCRIPTION },
 } as const;
 
 function isLang(value: string | null): value is Lang {
@@ -1793,6 +1798,7 @@ const baseCatalogSources: TranslationSource[] = [
   polishContentTranslations,
   curatedVisibleTranslations,
   propertyPageTranslations,
+  reveranceCalculatorTranslations,
   germanQualityTranslations,
   supplementalTranslations,
   clientBriefPassthroughTranslations,
@@ -1832,6 +1838,7 @@ function loadTranslationCatalogs() {
         polishContentTranslations,
         curatedVisibleTranslations,
         propertyPageTranslations,
+        reveranceCalculatorTranslations,
         germanQualityTranslations,
         supplementalTranslations,
         translations.textTranslations,

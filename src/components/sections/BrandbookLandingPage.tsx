@@ -522,7 +522,10 @@ export function BrandbookLandingPage() {
                 <p className="brandbook-eyebrow">03 — {tx("The investment case")}</p>
                 <h2 className="mt-8 max-w-[8ch] text-[clamp(3.2rem,5.7vw,6.8rem)] font-medium leading-[0.88] tracking-[-0.065em]">{tx("Reverance")}</h2>
                 <p className="mt-9 max-w-[24rem] text-lg leading-[1.55] text-[#161616]/62">{tx("Reverance is a premium residential complex on Batumi's New Boulevard.")}</p>
-                <Link href={currentProjectHref} className="brandbook-text-link mt-10 inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em]">{tx("View the complete residence")} <MoveRight size={17} strokeWidth={1.6} /></Link>
+                <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+                  <Link href={currentProjectHref} className="brandbook-text-link inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em]">{tx("View the complete residence")} <MoveRight size={17} strokeWidth={1.6} /></Link>
+                  <Link href="/reverance-batumi/calculator" className="inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#8B6A18] transition-colors hover:text-[#161616]">{tx("Model your investment")} <ArrowUpRight size={17} strokeWidth={1.6} /></Link>
+                </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
