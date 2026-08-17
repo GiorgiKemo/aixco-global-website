@@ -511,17 +511,17 @@ const copy: Record<Lang, LandingCopy> = {
 };
 
 const images = {
-  hero: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-day-aerial.jpg", width: 7360, height: 4912 },
-  verticalCity: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-modern-coastline.jpg", width: 3024, height: 4032 },
-  verticalTower: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-blue-tower.jpg", width: 3903, height: 5854 },
+  hero: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-golden-hour-coastline.webp", width: 3840, height: 2160 },
+  verticalCity: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-dusk-aerial-central.webp", width: 3840, height: 2160 },
+  verticalTower: { src: "/aixco-global-op2/images/project-gallery-2026/05-front-facade.webp", width: 4000, height: 4000 },
   gallery: [
     { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-sunset-panorama.webp", width: 3840, height: 2160 },
-    { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-day-aerial.jpg", width: 7360, height: 4912 },
-    { src: "/aixco-global-op2/images/project-gallery-2026/01-hero-exterior-2048.webp", width: 2048, height: 2048 },
-    { src: "/aixco-global-op2/images/project-gallery-2026/13-lobby-lounge.webp", width: 3935, height: 2733 },
-    { src: "/aixco-global-op2/images/project-gallery-2026/19-garden-pool.webp", width: 3840, height: 2160 },
+    { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-evening-waterfront.webp", width: 3840, height: 1946 },
+    { src: "/aixco-global-op2/images/project-gallery-2026/10-low-angle-facade.webp", width: 4096, height: 4096 },
+    { src: "/aixco-global-op2/images/project-gallery-2026/15-business-lounge.webp", width: 1920, height: 1080 },
+    { src: "/aixco-global-op2/images/project-gallery-2026/09-pool-terrace.webp", width: 4000, height: 4000 },
   ],
-  contact: { src: "/aixco-global-op2/images/project-gallery-2026/14-private-lounge.webp", width: 4096, height: 4096 },
+  contact: { src: "/aixco-global-op2/images/project-gallery-2026/17-indoor-pool.webp", width: 4096, height: 2731 },
 } as const;
 
 const processIcons = [Search, Scale, ShieldCheck, KeyRound] as const;
@@ -675,7 +675,7 @@ export function InvestBatumiLandingPage() {
             <div className={styles.heroMeta}><span>{content.hero.location}</span><span>{content.hero.service}</span></div>
           </div>
           <div className={styles.heroImageFrame}>
-            <Image src={images.hero.src} alt="Batumi skyline and Black Sea from above" fill priority quality={90} sizes="(min-width: 961px) 58vw, 100vw" className={styles.heroImage} />
+            <Image src={images.hero.src} alt="Batumi skyline and Black Sea from above" fill priority quality={90} sizes="100vw" className={styles.heroImage} />
           </div>
         </section>
 
@@ -702,11 +702,11 @@ export function InvestBatumiLandingPage() {
             <button type="button" className={styles.textButton} onClick={() => scrollTo("#contact")}>{content.batumi.cta}<ArrowUpRight size={16} /></button>
           </div>
           <button type="button" className={`${styles.imageFrame} ${styles.imageFrameOne}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(1)}>
-            <Image src={images.verticalCity.src} alt={content.gallery.captions[1]} fill sizes="(min-width: 900px) 27vw, 56vw" />
+            <Image src={images.verticalCity.src} alt={content.gallery.captions[1]} fill quality={90} sizes="100vw" />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
           <button type="button" className={`${styles.imageFrame} ${styles.imageFrameTwo}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(2)}>
-            <Image src={images.verticalTower.src} alt={content.gallery.captions[2]} fill sizes="(min-width: 900px) 24vw, 48vw" />
+            <Image src={images.verticalTower.src} alt={content.gallery.captions[2]} fill quality={90} sizes="100vw" />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
         </section>
@@ -734,7 +734,7 @@ export function InvestBatumiLandingPage() {
           <div className={styles.galleryGrid}>
             {images.gallery.map((image, index) => (
               <button key={image.src} type="button" aria-label={content.gallery.captions[index]} onClick={() => setGalleryIndex(index)}>
-                <Image src={image.src} alt={content.gallery.captions[index]} fill sizes="(min-width: 900px) 20vw, 50vw" />
+                <Image src={image.src} alt={content.gallery.captions[index]} fill quality={90} sizes="(min-width: 961px) 80vw, 100vw" />
                 <span>{content.gallery.captions[index]}</span>
               </button>
             ))}
@@ -756,7 +756,7 @@ export function InvestBatumiLandingPage() {
 
         <section id="contact" className={styles.contactSection}>
           <div className={styles.contactMedia}>
-            <Image src={images.contact.src} alt="Contemporary private lounge interior" fill sizes="(min-width: 900px) 50vw, 100vw" />
+            <Image src={images.contact.src} alt="Premium indoor pool and resident wellness area" fill quality={90} sizes="(min-width: 900px) 120vw, 100vw" />
           </div>
           <div className={styles.contactPanel}>
             <p className={styles.eyebrowGold}>{content.contact.eyebrow}</p>
@@ -802,7 +802,7 @@ export function InvestBatumiLandingPage() {
           <button type="button" className={styles.lightboxClose} aria-label={content.gallery.close} onClick={() => setGalleryIndex(null)}><X size={22} /></button>
           <button type="button" className={styles.lightboxPrevious} aria-label={content.gallery.previous} onClick={() => setGalleryIndex((galleryIndex - 1 + images.gallery.length) % images.gallery.length)}><ChevronLeft size={28} /></button>
           <figure>
-            <Image src={images.gallery[galleryIndex].src} alt={content.gallery.captions[galleryIndex]} width={images.gallery[galleryIndex].width} height={images.gallery[galleryIndex].height} sizes="92vw" />
+            <Image src={images.gallery[galleryIndex].src} alt={content.gallery.captions[galleryIndex]} width={images.gallery[galleryIndex].width} height={images.gallery[galleryIndex].height} quality={90} sizes="92vw" />
             <figcaption><span>{String(galleryIndex + 1).padStart(2, "0")} / {String(images.gallery.length).padStart(2, "0")}</span>{content.gallery.captions[galleryIndex]}</figcaption>
           </figure>
           <button type="button" className={styles.lightboxNext} aria-label={content.gallery.next} onClick={() => setGalleryIndex((galleryIndex + 1) % images.gallery.length)}><ChevronRight size={28} /></button>
