@@ -201,7 +201,7 @@ export const team = [
     image: "team-benjamin",
     summary: "Leadership, vision, and overall group direction.",
     bio:
-      "Benjamin Fischer is presented in the AIXCO team section as Founder, reflecting his leadership role across the group’s strategic direction and overall platform development.",
+      "20+ years of experience in sales and marketing. Built sales channels across Europe with more than 300 active sales partners. Co-founded a major Swiss real estate portfolio now valued at over CHF 1 billion. Executed a successful real estate IPO.",
     points: [
       { title: "Primary role", text: "Leadership and group-level strategic direction." },
       { title: "Focus", text: "Vision, growth, partnerships, and long-term platform positioning." },
@@ -213,7 +213,7 @@ export const team = [
     image: "team-owais",
     summary: "Capital markets, banking relationships, and financial structuring.",
     bio:
-      "Owais Shaikh is listed in the AIXCO team section as Partner covering Banking and Finance, positioning him around financing relationships, transaction structuring, and institutional financial coordination.",
+      "20+ years of experience in digital banking and fintech. Grew a bank's customer base from 5 million to 12.7 million. Held several senior leadership positions across the banking sector. Specialises in AI and digital transformation, building ecosystems that serve millions of customers.",
     points: [
       { title: "Primary role", text: "Banking and finance leadership across transactions and structuring." },
       { title: "Focus", text: "Capital access, financial coordination, and execution support." },
@@ -225,7 +225,7 @@ export const team = [
     image: "team-walter",
     summary: "Product positioning, channel development, and distribution strategy.",
     bio:
-      "Walter Schuster is listed in the AIXCO team section as Partner responsible for Products and Distribution, reflecting his role in product strategy, market positioning, and channel development.",
+      "40 years of experience in sales, product design, and marketing in the financial industry. 30 of those years have been at executive level, including board roles at banks and insurance companies, shaping a modern product landscape. Founded and managed his own companies and investments across the finance, energy, and real estate sectors.",
     points: [
       { title: "Primary role", text: "Products and distribution leadership." },
       { title: "Focus", text: "Go-to-market strategy, product positioning, and partner distribution." },
