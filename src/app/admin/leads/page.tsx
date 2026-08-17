@@ -227,7 +227,7 @@ function AdminTabs({
   counts: Record<AdminView, number>;
 }) {
   return (
-    <nav className="mb-6 grid w-full grid-cols-2 gap-1 rounded-[10px] border border-[#161616]/10 bg-white p-1 shadow-sm sm:flex sm:w-fit" aria-label="Lead workspace views">
+    <nav className="admin-leads-tabs mb-6 grid w-full grid-cols-2 gap-1 rounded-[10px] border border-[#161616]/10 bg-white p-1 shadow-sm sm:flex sm:w-fit" aria-label="Lead workspace views">
       {adminViews.map((view) => {
         const active = activeView === view.value;
         return (

@@ -59,6 +59,10 @@ describe("admin responsive safeguards", () => {
     expect(emailTestPage).toContain("min-h-11");
     expect(privacyPage).toContain("min-h-11");
     expect(leadsPage).toContain("min-h-11");
+    expect(leadsPage).toContain("admin-leads-tabs");
+    expect(readAdminSource("./admin.css")).toMatch(
+      /\.admin-leads-tabs\s*>\s*:last-child\s*{[\s\S]*?grid-column:\s*span 2 \/ span 2;/,
+    );
   });
 
   it("keeps identity migration messaging aligned with mandatory MFA", () => {
