@@ -30,6 +30,42 @@ const deniedGoogleConsent = {
   ad_personalization: "denied",
 } as const;
 
+/**
+ * Google Analytics may set cookies on the parent domain (for example
+ * `.aixco.global`) while the app is running on `www.aixco.global`. A cookie
+ * can only be removed when the deletion uses the same domain scope, so clear
+ * both the current host and the registrable parent where it is safe to do so.
+ */
+export function analyticsCookieDomains(hostname: string) {
+  const normalized = hostname.trim().toLowerCase().replace(/\.$/, "");
+  if (!normalized) return [];
+
+  const labels = normalized.split(".");
+  const domains = new Set([normalized, `.${normalized}`]);
+  const isIpv4 = labels.length === 4 && labels.every((label) => /^\d+$/.test(label));
+  if (!isIpv4 && labels.length >= 3 && labels.every((label) => /^[a-z0-9-]+$/i.test(label))) {
+    domains.add(`.${labels.slice(-2).join(".")}`);
+  }
+
+  return Array.from(domains);
+}
+
+export function clearGoogleAnalyticsCookies() {
+  if (typeof document === "undefined") return;
+
+  const cookieNames = document.cookie
+    .split(";")
+    .map((cookie) => cookie.trim().split("=", 1)[0])
+    .filter((name) => /^(?:_ga(?:_.+)?|_gid|_gat(?:_.+)?|_gcl_au)$/i.test(name));
+
+  for (const name of cookieNames) {
+    document.cookie = `${name}=; Max-Age=0; path=/`;
+    for (const domain of analyticsCookieDomains(window.location.hostname)) {
+      document.cookie = `${name}=; Max-Age=0; path=/; domain=${domain}`;
+    }
+  }
+}
+
 function queueGoogleConsent(
   dataLayer: unknown[],
   action: "default" | "update",
@@ -56,16 +92,7 @@ function updateGoogleConsent(status: GoogleConsentStatus) {
   }
   queueGoogleConsent(dataLayer, "update", { ...deniedGoogleConsent, analytics_storage: status });
 
-  if (status !== "denied") return;
-
-  const cookieNames = document.cookie
-    .split(";")
-    .map((cookie) => cookie.trim().split("=", 1)[0])
-    .filter((name) => /^(?:_ga(?:_.+)?|_gid|_gat(?:_.+)?|_gcl_au)$/i.test(name));
-  for (const name of cookieNames) {
-    document.cookie = `${name}=; Max-Age=0; path=/`;
-    document.cookie = `${name}=; Max-Age=0; path=/; domain=${window.location.hostname}`;
-  }
+  if (status === "denied") clearGoogleAnalyticsCookies();
 }
 
 function useGoogleAnalyticsConsent(excludedRoute: boolean) {

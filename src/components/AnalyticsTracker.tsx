@@ -125,6 +125,11 @@ const copyByLanguage: Record<string, Copy> = {
   },
 };
 
+function normalizeConsentLanguage(value: string) {
+  const baseLanguage = value.trim().toLowerCase().split("-", 1)[0] ?? "en";
+  return copyByLanguage[baseLanguage] ? baseLanguage : "en";
+}
+
 function makeUuid() {
   if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
   const bytes = crypto.getRandomValues(new Uint8Array(16));
@@ -884,12 +889,12 @@ export function AnalyticsTracker() {
 
   useEffect(() => {
     setConsent(readAnalyticsConsent());
-    setLanguage(document.documentElement.lang || "en");
+    setLanguage(normalizeConsentLanguage(document.documentElement.lang || "en"));
     setReady(true);
     const onConsent = () => setConsent(readAnalyticsConsent());
     const onPreferences = () => setPreferencesOpen(true);
     const languageObserver = new MutationObserver(() => {
-      setLanguage(document.documentElement.lang || "en");
+      setLanguage(normalizeConsentLanguage(document.documentElement.lang || "en"));
     });
     languageObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
     window.addEventListener(ANALYTICS_CONSENT_EVENT, onConsent);
@@ -918,7 +923,7 @@ export function AnalyticsTracker() {
       aria-modal="false"
       aria-labelledby="analytics-consent-title"
       data-analytics-ignore="true"
-      className="analytics-consent fixed inset-x-3 z-[120] mx-auto w-auto max-w-[23rem] overflow-hidden border border-primary/30 bg-surface-elevated/95 text-foreground shadow-[0_24px_70px_-30px_rgb(17_16_14/0.58)] backdrop-blur-xl sm:inset-x-auto sm:start-1/2 sm:w-[min(23rem,calc(100vw-2rem))] sm:-translate-x-1/2"
+      className="analytics-consent fixed inset-x-3 z-[120] mx-auto max-h-[calc(100dvh-2rem)] w-auto max-w-[23rem] overflow-y-auto overscroll-contain border border-primary/30 bg-surface-elevated/95 text-foreground shadow-[0_24px_70px_-30px_rgb(17_16_14/0.58)] backdrop-blur-xl sm:inset-x-auto sm:start-1/2 sm:w-[min(23rem,calc(100vw-2rem))] sm:-translate-x-1/2"
       style={{ bottom: "max(1rem, env(safe-area-inset-bottom, 0px))" }}
     >
       {/* Champagne edge accent */}
@@ -937,7 +942,7 @@ export function AnalyticsTracker() {
               setDetailsOpen(false);
             }}
             aria-label={copy.close}
-            className="icon-button-glass absolute end-3 top-3 h-9 w-9 shrink-0"
+            className="icon-button-glass absolute end-3 top-3 h-11 w-11 shrink-0"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>
@@ -973,7 +978,7 @@ export function AnalyticsTracker() {
             open={detailsOpen}
             onToggle={(event) => setDetailsOpen(event.currentTarget.open)}
           >
-            <summary className="cursor-pointer list-none text-sm leading-snug text-foreground/70 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-details-marker]:hidden">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center text-sm leading-snug text-foreground/70 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-details-marker]:hidden">
               {copy.summary}{" "}
               <span className="inline-flex items-center gap-1 whitespace-nowrap align-baseline text-[0.66rem] font-semibold uppercase tracking-[0.13em] text-primary">
                 {detailsOpen ? copy.collapse : copy.expand}
@@ -998,7 +1003,7 @@ export function AnalyticsTracker() {
               setPreferencesOpen(false);
               setDetailsOpen(false);
             }}
-            className="btn-ghost-gold !min-h-10 whitespace-nowrap !px-4 !py-2 !text-[0.7rem]"
+            className="btn-ghost-gold !min-h-11 whitespace-nowrap !px-4 !py-2 !text-[0.7rem]"
           >
             {copy.necessary}
           </button>
@@ -1010,7 +1015,7 @@ export function AnalyticsTracker() {
                 setPreferencesOpen(false);
                 setDetailsOpen(false);
               }}
-              className="btn-gold !min-h-10 whitespace-nowrap !px-4 !py-2 !text-[0.7rem]"
+              className="btn-gold !min-h-11 whitespace-nowrap !px-4 !py-2 !text-[0.7rem]"
             >
               {copy.accept}
             </button>

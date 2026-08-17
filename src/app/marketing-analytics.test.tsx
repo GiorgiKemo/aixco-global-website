@@ -25,7 +25,7 @@ vi.mock("./web-vitals", () => ({
   WebVitals: () => <div data-testid="web-vitals" />,
 }));
 
-import { MarketingAnalytics } from "./marketing-analytics";
+import { analyticsCookieDomains, MarketingAnalytics } from "./marketing-analytics";
 
 describe("route-aware marketing analytics", () => {
   beforeEach(() => {
@@ -35,6 +35,15 @@ describe("route-aware marketing analytics", () => {
     window.sessionStorage.clear();
     delete (window as AnalyticsWindow).dataLayer;
     delete (window as AnalyticsWindow).__aixcoGoogleConsentDefaulted;
+  });
+
+  it("includes the parent domain when clearing analytics cookies from a subdomain", () => {
+    expect(analyticsCookieDomains("www.aixco.global")).toEqual([
+      "www.aixco.global",
+      ".www.aixco.global",
+      ".aixco.global",
+    ]);
+    expect(analyticsCookieDomains("127.0.0.1")).toEqual(["127.0.0.1", ".127.0.0.1"]);
   });
 
   it("holds GTM until analytics consent is granted on public routes", async () => {

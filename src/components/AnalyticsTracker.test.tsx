@@ -134,6 +134,44 @@ describe("AnalyticsTracker consent and session lifecycle", () => {
     expect(Date.parse(stored.lastSeenAt)).toBeGreaterThanOrEqual(Date.parse(stored.startedAt));
   });
 
+  it.each([
+    ["en", "Cookies & analytics", "Necessary only", "Accept analytics"],
+    ["de", "Cookies & Analysen", "Nur notwendige", "Analysen akzeptieren"],
+    ["pl", "Pliki cookie i analityka", "Tylko niezbędne", "Akceptuj analitykę"],
+    ["sl", "Piškotki in analitika", "Samo nujno", "Sprejmi analitiko"],
+    ["ru", "Файлы cookie и аналитика", "Только необходимые", "Принять аналитику"],
+  ])("renders the consent choice in %s", async (lang, title, necessary, accept) => {
+    document.documentElement.lang = lang;
+    render(<AnalyticsTracker />);
+
+    const dialog = await screen.findByRole("dialog", { name: title });
+    expect(dialog).toBeVisible();
+    expect(screen.getByRole("button", { name: necessary })).toBeVisible();
+    expect(screen.getByRole("button", { name: accept })).toBeVisible();
+  });
+
+  it("normalizes a regional language tag before choosing consent copy", async () => {
+    document.documentElement.lang = "pl-PL";
+    render(<AnalyticsTracker />);
+
+    expect(await screen.findByRole("dialog", { name: "Pliki cookie i analityka" }))
+      .toBeInTheDocument();
+  });
+
+  it("honors a browser privacy signal and does not offer analytics acceptance", async () => {
+    Object.defineProperty(navigator, "globalPrivacyControl", {
+      configurable: true,
+      value: true,
+    });
+    render(<AnalyticsTracker />);
+
+    expect(await screen.findByRole("dialog", { name: "Cookies & analytics" }))
+      .toBeInTheDocument();
+    expect(screen.getByText(/Your browser privacy signal is on/)).toBeVisible();
+    expect(screen.getByRole("button", { name: "Necessary only" })).toBeVisible();
+    expect(screen.queryByRole("button", { name: "Accept analytics" })).not.toBeInTheDocument();
+  });
+
   it("stores only a server-issued link proof for the matching analytics session", async () => {
     const linkToken = "a".repeat(64);
     fetchMock.mockImplementation(async (_input, init) => {
