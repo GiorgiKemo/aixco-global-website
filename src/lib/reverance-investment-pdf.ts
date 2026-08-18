@@ -61,6 +61,8 @@ type TextOptions = {
   lineHeight?: number;
 };
 
+type EmbeddedImage = Parameters<PDFPage["drawImage"]>[0];
+
 function textValue(value: string, lang: Lang) {
   return translateReveranceCalculatorText(value, lang);
 }
@@ -199,8 +201,19 @@ function drawEyebrow(page: PDFPage, text: string, x: number, top: number, fonts:
   drawTopText(page, text.toUpperCase(), { x: x + 38, top, size: 8, color, bold: true }, fonts);
 }
 
-function drawPageHeader(page: PDFPage, pageNumber: number, lang: Lang, fonts: FontPack) {
-  drawTopText(page, "AIXCO.GLOBAL", { x: MARGIN, top: 28, size: 11, color: colors.ink, bold: true }, fonts);
+function drawBrandLogo(page: PDFPage, logo: EmbeddedImage, x: number, top: number, height: number) {
+  const width = height * (logo.width / logo.height);
+  page.drawImage(logo, {
+    x,
+    y: PAGE_HEIGHT - top - height,
+    width,
+    height,
+  });
+}
+
+function drawPageHeader(page: PDFPage, pageNumber: number, lang: Lang, fonts: FontPack, logo: EmbeddedImage | null) {
+  if (logo) drawBrandLogo(page, logo, MARGIN, 20, 17);
+  else drawTopText(page, "AIXCO.GLOBAL", { x: MARGIN, top: 28, size: 11, color: colors.ink, bold: true }, fonts);
   drawTopText(page, `REVERANCE · ${String(pageNumber).padStart(2, "0")} / 05`, {
     x: PAGE_WIDTH - MARGIN - 94,
     top: 29,
@@ -289,6 +302,16 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
   doc.setAuthor("AIXCO.Global");
   doc.setSubject(textValue("Illustrative investment brief", lang));
   const fonts = await loadFonts(doc);
+  const logoDirectory = path.join(process.cwd(), "public", "aixco-global-op2", "images");
+  let darkLogo: Awaited<ReturnType<PDFDocument["embedPng"]>> | null = null;
+  let lightLogo: Awaited<ReturnType<PDFDocument["embedPng"]>> | null = null;
+  try {
+    darkLogo = await doc.embedPng(await fs.readFile(path.join(logoDirectory, "AIXCOGlobal-horizontal-dark.png")));
+    lightLogo = await doc.embedPng(await fs.readFile(path.join(logoDirectory, "AIXCOGlobal-horizontal-light.png")));
+  } catch {
+    darkLogo = null;
+    lightLogo = null;
+  }
   const imagePath = path.join(process.cwd(), "public", "aixco-global-op2", "images", "project-gallery-2026", "01-hero-exterior-2048.jpg");
   let heroImage: Awaited<ReturnType<PDFDocument["embedJpg"]>> | null = null;
   try {
@@ -307,7 +330,8 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
     } else {
       drawRectTop(page, 0, 0, PAGE_WIDTH, 286, colors.navy);
     }
-    drawTopText(page, "AIXCO.GLOBAL", { x: MARGIN, top: 36, size: 14, color: colors.white, bold: true }, fonts);
+    if (lightLogo) drawBrandLogo(page, lightLogo, MARGIN, 29, 21);
+    else drawTopText(page, "AIXCO.GLOBAL", { x: MARGIN, top: 36, size: 14, color: colors.white, bold: true }, fonts);
     drawTopText(page, textValue("Illustrative only", lang).toUpperCase(), { x: PAGE_WIDTH - MARGIN - 110, top: 40, size: 7, color: colors.gold, bold: true }, fonts);
     drawLineTop(page, MARGIN, 154, 34, colors.gold, 1.2);
     drawTopText(page, textValue("Project Reverance · Batumi", lang).toUpperCase(), { x: MARGIN, top: 173, size: 8, color: colors.gold, bold: true }, fonts);
@@ -327,7 +351,7 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
   {
     const page = doc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
     drawRectTop(page, 0, 0, PAGE_WIDTH, PAGE_HEIGHT, colors.paper);
-    drawPageHeader(page, 2, lang, fonts);
+    drawPageHeader(page, 2, lang, fonts, darkLogo);
     drawEyebrow(page, textValue("The asset", lang), MARGIN, 82, fonts);
     const assetTitleBottom = drawWrapped(page, textValue("Project Reverance · Batumi", lang), { x: MARGIN, top: 119, size: 29, color: colors.ink, bold: true, maxWidth: 400, lineHeight: 34 }, fonts);
     const assetIntroTop = Math.max(177, assetTitleBottom + 16);
@@ -364,7 +388,7 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
   {
     const page = doc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
     drawRectTop(page, 0, 0, PAGE_WIDTH, PAGE_HEIGHT, colors.paper);
-    drawPageHeader(page, 3, lang, fonts);
+    drawPageHeader(page, 3, lang, fonts, darkLogo);
     drawEyebrow(page, textValue("Price & funding", lang), MARGIN, 82, fonts);
     drawWrapped(page, textValue("Price & funding", lang), { x: MARGIN, top: 119, size: 30, color: colors.ink, bold: true }, fonts);
     drawWrapped(page, textValue("The model keeps the purchase, construction payments and financing visible in one place.", lang), { x: MARGIN, top: 174, size: 11, color: colors.muted, maxWidth: 410, lineHeight: 16 }, fonts);
@@ -386,7 +410,7 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
   {
     const page = doc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
     drawRectTop(page, 0, 0, PAGE_WIDTH, PAGE_HEIGHT, colors.paper);
-    drawPageHeader(page, 4, lang, fonts);
+    drawPageHeader(page, 4, lang, fonts, darkLogo);
     drawEyebrow(page, textValue("Projection", lang), MARGIN, 82, fonts);
     drawWrapped(page, textValue("Net worth over time", lang), { x: MARGIN, top: 119, size: 30, color: colors.ink, bold: true }, fonts);
     drawTopText(page, `${textValue("At your horizon", lang)} · ${calculation.inputs.holdingYears} ${textValue(calculation.inputs.holdingYears === 1 ? "year" : "years", lang)}`, { x: MARGIN, top: 178, size: 10, color: colors.muted }, fonts);
@@ -416,7 +440,7 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
   {
     const page = doc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
     drawRectTop(page, 0, 0, PAGE_WIDTH, PAGE_HEIGHT, colors.paper);
-    drawPageHeader(page, 5, lang, fonts);
+    drawPageHeader(page, 5, lang, fonts, darkLogo);
     drawEyebrow(page, textValue("Assumptions", lang), MARGIN, 82, fonts);
     drawWrapped(page, textValue("How the model works", lang), { x: MARGIN, top: 119, size: 29, color: colors.ink, bold: true }, fonts);
     drawWrapped(page, textValue("AIXCO models the reference scenario transparently so you can change the assumptions and see the effect.", lang), { x: MARGIN, top: 174, size: 11, color: colors.muted, maxWidth: 420, lineHeight: 16 }, fonts);
