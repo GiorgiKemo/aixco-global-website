@@ -55,24 +55,37 @@ async function reportAdminLogin(
   outcome: "success" | "failure",
   reason?: string,
 ): Promise<boolean> {
-  try {
-    const response = await fetch("/admin/login/audit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "same-origin",
-      keepalive: true,
-      body: JSON.stringify({
-        email: email && email.includes("@") ? email : null,
-        phase,
-        outcome,
-        ...(reason ? { reason } : {}),
-      }),
-    });
-    const result = await response.json().catch(() => null) as { stored?: unknown } | null;
-    return response.ok && result?.stored === true;
-  } catch {
-    return false;
+  const payload = JSON.stringify({
+    email: email && email.includes("@") ? email : null,
+    phase,
+    outcome,
+    ...(reason ? { reason } : {}),
+  });
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const response = await fetch("/admin/login/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        keepalive: true,
+        body: payload,
+      });
+      const result = await response.json().catch(() => null) as { stored?: unknown } | null;
+      if (response.ok && result?.stored === true) return true;
+
+      // Supabase's browser client can finish writing the refreshed AAL2
+      // cookie just after challengeAndVerify resolves (most visible in Safari).
+      // A 401 here is therefore retryable once, while the server still
+      // enforces the real AAL2 check on both attempts.
+      if (response.status !== 401 || attempt > 0) return false;
+      await new Promise((resolve) => window.setTimeout(resolve, 250));
+    } catch {
+      return false;
+    }
   }
+
+  return false;
 }
 
 async function revokeIncompleteAdminSignIn() {
