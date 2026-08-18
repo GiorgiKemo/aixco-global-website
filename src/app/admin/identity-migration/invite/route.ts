@@ -64,9 +64,10 @@ export async function POST(request: Request) {
     }, { required: true });
 
     inviteAttempted = true;
-    const inviteOrigin = process.env.NODE_ENV === "production"
-      ? getSiteUrl()
-      : new URL(request.url).origin;
+    // Invitations are sent to another person. Never derive the callback from
+    // the dashboard request host: a local admin session would otherwise send
+    // `http://localhost:3000` (the recipient's own computer) in the email.
+    const inviteOrigin = getSiteUrl();
     const invited = await inviteAdminIdentity(email.data, {
       role: config.role,
       redirectTo: `${inviteOrigin}/admin/auth/complete`,

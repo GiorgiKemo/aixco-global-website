@@ -41,6 +41,16 @@ function request(origin = "https://www.aixco.global") {
   });
 }
 
+function localDevelopmentRequest() {
+  const body = new FormData();
+  body.set("email", "named.admin@example.com");
+  return new Request("http://localhost:3000/admin/identity-migration/invite", {
+    method: "POST",
+    headers: { origin: "http://localhost:3000" },
+    body,
+  });
+}
+
 describe("admin identity invitation route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -69,6 +79,16 @@ describe("admin identity invitation route", () => {
       action: "admin.identity.invite.requested",
     }), { required: true });
     expect(mocks.audit).toHaveBeenCalledWith(expect.objectContaining({ outcome: "success" }));
+  });
+
+  it("never sends a local development callback URL to an invite recipient", async () => {
+    const response = await POST(localDevelopmentRequest());
+
+    expect(response.status).toBe(303);
+    expect(mocks.invite).toHaveBeenCalledWith("named.admin@example.com", {
+      role: "admin",
+      redirectTo: "https://www.aixco.global/admin/auth/complete",
+    });
   });
 
   it("does not send an invite when the required pre-action audit cannot persist", async () => {
