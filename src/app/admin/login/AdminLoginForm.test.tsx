@@ -84,6 +84,7 @@ describe("AdminLoginForm", () => {
     expect(screen.getByRole("heading", { name: "Individual admin sign-in" })).toBeInTheDocument();
     expect(screen.getByLabelText("Email")).toHaveAttribute("autocomplete", "username");
     expect(screen.getByLabelText("Password")).toHaveAttribute("autocomplete", "current-password");
+    expect(screen.getByRole("link", { name: "Forgot password?" })).toHaveAttribute("href", "/admin/login?recover=1");
     expect(screen.queryByLabelText("Migration password")).not.toBeInTheDocument();
     await waitFor(() => expect(authMocks.getUser).toHaveBeenCalled());
   });

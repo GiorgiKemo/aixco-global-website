@@ -15,6 +15,7 @@ type AdminLoginFormProps = {
     identityAvailable: boolean;
     legacyAvailable: boolean;
   };
+  passwordRecoveryNotice?: boolean;
   onAuthenticated?: () => void;
 };
 
@@ -102,6 +103,7 @@ async function revokeIncompleteAdminSignIn() {
 
 export function AdminLoginForm({
   config,
+  passwordRecoveryNotice = false,
   onAuthenticated = navigateToOperations,
 }: AdminLoginFormProps) {
   const params = useSearchParams();
@@ -357,6 +359,11 @@ export function AdminLoginForm({
         </div>
       ) : (
         <div className="grid gap-6">
+          {passwordRecoveryNotice ? (
+            <p role="status" className="rounded-md border border-emerald-700/20 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+              Your password was updated. Sign in again, then complete MFA to access the dashboard.
+            </p>
+          ) : null}
           {errorMessage && (
             <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
               {errorMessage}
@@ -393,6 +400,9 @@ export function AdminLoginForm({
               <button type="submit" disabled={working} className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60">
                 {working ? "Checking account…" : "Continue securely"}
               </button>
+              <a href="/admin/login?recover=1" className="min-h-11 inline-flex items-center justify-center text-sm font-medium text-primary underline-offset-4 hover:underline">
+                Forgot password?
+              </a>
             </form>
           )}
 
