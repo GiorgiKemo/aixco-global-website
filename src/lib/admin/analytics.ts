@@ -69,6 +69,62 @@ export type AnalyticsCountryBreakdownItem = {
   localOrQaSessions: number;
 };
 
+/**
+ * A deliberately pseudonymous visitor summary used by the protected country
+ * drill-down. It contains no name, email, raw IP address, or event metadata.
+ */
+export type AnalyticsCountryVisitor = {
+  visitorId: string;
+  sessions: number;
+  engagedSessions: number;
+  pageViews: number;
+  events: number;
+  activeSeconds: number;
+  firstSeenAt: string;
+  lastSeenAt: string;
+  lastPath: string | null;
+};
+
+export type AnalyticsVisitorActivityEvent = {
+  id: string;
+  occurredAt: string;
+  eventType: string;
+  name: string;
+  pagePath: string | null;
+  sectionId: string | null;
+  targetLabel: string | null;
+  value: number | null;
+  durationMs: number | null;
+  scrollDepth: number | null;
+};
+
+export type AnalyticsVisitorActivitySession = {
+  id: string;
+  startedAt: string;
+  lastSeenAt: string;
+  endedAt: string | null;
+  activeSeconds: number;
+  pageViews: number;
+  events: number;
+  landingPage: string;
+  exitPage: string | null;
+  countryCode: string;
+  region: string | null;
+  city: string | null;
+  device: string | null;
+  browser: string | null;
+  operatingSystem: string | null;
+  eventsTimeline: AnalyticsVisitorActivityEvent[];
+};
+
+export type AnalyticsVisitorActivity = {
+  visitorId: string;
+  countryCode: string;
+  sessions: AnalyticsVisitorActivitySession[];
+  events: number;
+  truncated: boolean;
+};
+
 export type AnalyticsFunnelStep = AnalyticsBreakdownItem & {
   ratePercent: number | null;
 };
@@ -297,6 +353,8 @@ const RECENT_SESSION_LIMIT = 24;
 const BREAKDOWN_LIMIT = 8;
 const COUNTRY_BREAKDOWN_LIMIT = 100;
 const INTENT_ACTIVITY_LIMIT = 200;
+const COUNTRY_VISITOR_SCAN_LIMIT = 5000;
+const VISITOR_ACTIVITY_EVENT_LIMIT = 2000;
 const MAX_AUDIT_DETAIL_FIELDS = 12;
 const SENSITIVE_AUDIT_DETAIL_KEY = /password|passcode|secret|token|cookie|authorization|api[_-]?key|message|transcript/i;
 const countryDisplayNames = new Intl.DisplayNames(["en"], { type: "region" });
@@ -1124,6 +1182,327 @@ export async function fetchAdminAnalyticsDashboard(
     };
   } catch {
     return { ok: false, reason: "The analytics dashboard could not reach its production data source." };
+  }
+}
+
+export type AnalyticsCountryVisitorsResult =
+  | {
+      ok: true;
+      data: {
+        window: AnalyticsWindow;
+        countryCode: string;
+        countryName: string;
+        visitors: AnalyticsCountryVisitor[];
+        page: number;
+        pageSize: number;
+        totalVisitors: number;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+        truncated: boolean;
+      };
+    }
+  | { ok: false; reason: string; status?: number };
+
+export type AnalyticsVisitorActivityResult =
+  | { ok: true; data: { window: AnalyticsWindow; activity: AnalyticsVisitorActivity } }
+  | { ok: false; reason: string; status?: number };
+
+type CountrySessionLookup = {
+  sessions: Record<string, unknown>[];
+  networkBySession: Map<string, Record<string, unknown>>;
+  truncated: boolean;
+};
+
+function rowsFrom(value: unknown) {
+  return Array.isArray(value) ? value.filter(isRecord) : [];
+}
+
+function validUuid(value: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
+async function lookupCountrySessions(
+  client: AnalyticsTableClient,
+  window: AnalyticsWindow,
+  countryCode: string,
+  visitorId?: string,
+): Promise<CountrySessionLookup | { error: string }> {
+  const networkResult = await client
+    .from("site_analytics_session_network")
+    .select("session_id,country_code,region,city")
+    .eq("country_code", countryCode)
+    .order("last_seen_at", { ascending: false })
+    .limit(COUNTRY_VISITOR_SCAN_LIMIT);
+  if (networkResult.error) return { error: "Country visitor data is temporarily unavailable." };
+
+  const networkRows = rowsFrom(networkResult.data);
+  const networkBySession = new Map(
+    networkRows
+      .map((network) => [identifierString(network.session_id), network] as const)
+      .filter(([sessionId]) => Boolean(sessionId)),
+  );
+  const candidateSessionIds = [...networkBySession.keys()];
+  if (!candidateSessionIds.length) {
+    return { sessions: [], networkBySession, truncated: networkRows.length >= COUNTRY_VISITOR_SCAN_LIMIT };
+  }
+
+  // PostgREST encodes `in` values in the URL. Chunk the bounded lookup so a
+  // busy country cannot create an oversized request or silently lose rows.
+  const sessionChunks = Array.from({ length: Math.ceil(candidateSessionIds.length / 200) }, (_, index) => (
+    candidateSessionIds.slice(index * 200, (index + 1) * 200)
+  ));
+  const sessionResults = await Promise.all(sessionChunks.map(async (sessionChunk) => {
+    let sessionQuery = client
+      .from("site_analytics_sessions")
+      .select("id,visitor_id,created_at,started_at,last_seen_at,ended_at,active_seconds,landing_path,exit_path,device_type,browser_name,os_name")
+      .in("id", sessionChunk)
+      .gte("created_at", window.from)
+      .lt("created_at", window.to)
+      .order("last_seen_at", { ascending: false })
+      .limit(sessionChunk.length);
+    if (visitorId) sessionQuery = sessionQuery.eq("visitor_id", visitorId);
+    return sessionQuery;
+  }));
+  if (sessionResults.some((result) => result.error)) return { error: "Country visitor data is temporarily unavailable." };
+  const sessionRows = sessionResults.flatMap((result) => rowsFrom(result.data))
+    .sort((left, right) => safeTimestamp(right.last_seen_at)?.localeCompare(safeTimestamp(left.last_seen_at) ?? "") ?? 0)
+    .slice(0, COUNTRY_VISITOR_SCAN_LIMIT);
+
+  return {
+    sessions: sessionRows,
+    networkBySession,
+    truncated: networkRows.length >= COUNTRY_VISITOR_SCAN_LIMIT,
+  };
+}
+
+async function loadCountryEvents(
+  client: AnalyticsTableClient,
+  window: AnalyticsWindow,
+  sessionIds: string[],
+  limit: number,
+): Promise<
+  | { ok: true; rows: Record<string, unknown>[]; truncated: boolean }
+  | { ok: false; reason: string }
+> {
+  if (!sessionIds.length) return { ok: true, rows: [], truncated: false };
+  const chunks = Array.from({ length: Math.ceil(sessionIds.length / 200) }, (_, index) => (
+    sessionIds.slice(index * 200, (index + 1) * 200)
+  ));
+  const perChunkLimit = Math.max(1, Math.ceil(limit / chunks.length));
+  const results = await Promise.all(chunks.map((sessionChunk) => client
+    .from("site_analytics_events")
+    .select("id,session_id,received_at,occurred_at,event_type,name,page_path,section_id,target_label,value,duration_ms,scroll_depth")
+    .in("session_id", sessionChunk)
+    .gte("received_at", window.from)
+    .lt("received_at", window.to)
+    .order("occurred_at", { ascending: true })
+    .limit(perChunkLimit)));
+  if (results.some((result) => result.error)) return { ok: false, reason: "Visitor activity is temporarily unavailable." };
+  const rows = results.flatMap((result) => rowsFrom(result.data))
+    .sort((left, right) => (safeTimestamp(left.occurred_at ?? left.received_at) ?? "").localeCompare(safeTimestamp(right.occurred_at ?? right.received_at) ?? ""))
+    .slice(0, limit);
+  return { ok: true, rows, truncated: rows.length >= limit || results.some((result) => rowsFrom(result.data).length >= perChunkLimit) };
+}
+
+function parseActivityEvent(row: Record<string, unknown>): AnalyticsVisitorActivityEvent | null {
+  const id = identifierString(row.id);
+  const occurredAt = safeTimestamp(row.occurred_at ?? row.received_at);
+  const name = cleanString(row.name);
+  if (!id || !occurredAt || !name) return null;
+  return {
+    id,
+    occurredAt,
+    eventType: cleanString(row.event_type, "event"),
+    name,
+    pagePath: optionalString(row.page_path)?.slice(0, 512) ?? null,
+    sectionId: optionalString(row.section_id)?.slice(0, 160) ?? null,
+    targetLabel: optionalString(row.target_label)?.slice(0, 240) ?? null,
+    value: optionalFiniteNumber(row.value),
+    durationMs: optionalFiniteNumber(row.duration_ms),
+    scrollDepth: optionalFiniteNumber(row.scroll_depth),
+  };
+}
+
+export async function fetchAdminAnalyticsCountryVisitors(
+  rangeInput: unknown,
+  countryCodeInput: unknown,
+  options: { now?: Date; client?: AnalyticsTableClient; page?: number; pageSize?: number } = {},
+): Promise<AnalyticsCountryVisitorsResult> {
+  const countryCode = parseCountryCode(countryCodeInput);
+  if (!countryCode) return { ok: false, reason: "A valid two-letter country code is required.", status: 400 };
+  const config = getSupabaseAdminConfig();
+  if (!options.client && !config.configured) {
+    return { ok: false, reason: "Supabase admin access is not configured." };
+  }
+
+  const window = getAnalyticsWindow(rangeInput, options.now ?? new Date());
+  try {
+    const client = options.client ?? ((await getSupabaseAdminClient()) as unknown as AnalyticsTableClient);
+    const lookup = await lookupCountrySessions(client, window, countryCode);
+    if ("error" in lookup) return { ok: false, reason: lookup.error };
+
+    const sessionIds = lookup.sessions.map((session) => identifierString(session.id)).filter(Boolean);
+    const eventResult = await loadCountryEvents(client, window, sessionIds, COUNTRY_VISITOR_SCAN_LIMIT * 2);
+    if (!eventResult.ok) return { ok: false, reason: eventResult.reason };
+
+    const pageViewsBySession = new Map<string, number>();
+    const eventsBySession = new Map<string, number>();
+    const lastPathBySession = new Map<string, string>();
+    for (const row of eventResult.rows) {
+      const sessionId = identifierString(row.session_id);
+      if (!sessionId) continue;
+      eventsBySession.set(sessionId, (eventsBySession.get(sessionId) ?? 0) + 1);
+      if (row.event_type === "page_view" || row.name === "page_view") {
+        pageViewsBySession.set(sessionId, (pageViewsBySession.get(sessionId) ?? 0) + 1);
+      }
+      const pagePath = optionalString(row.page_path);
+      if (pagePath) lastPathBySession.set(sessionId, pagePath.slice(0, 512));
+    }
+
+    const visitorMap = new Map<string, AnalyticsCountryVisitor>();
+    for (const session of lookup.sessions) {
+      const visitorId = identifierString(session.visitor_id);
+      const sessionId = identifierString(session.id);
+      const startedAt = safeTimestamp(session.started_at ?? session.created_at);
+      const lastSeenAt = safeTimestamp(session.last_seen_at);
+      if (!visitorId || !validUuid(visitorId) || !sessionId || !startedAt || !lastSeenAt) continue;
+      const activeSeconds = finiteNumber(session.active_seconds);
+      const pageViews = pageViewsBySession.get(sessionId) ?? 0;
+      const eventCount = eventsBySession.get(sessionId) ?? 0;
+      const current = visitorMap.get(visitorId);
+      if (current) {
+        current.sessions += 1;
+        current.engagedSessions += activeSeconds >= 10 || pageViews >= 2 ? 1 : 0;
+        current.pageViews += pageViews;
+        current.events += eventCount;
+        current.activeSeconds += activeSeconds;
+        if (Date.parse(startedAt) < Date.parse(current.firstSeenAt)) current.firstSeenAt = startedAt;
+        if (Date.parse(lastSeenAt) > Date.parse(current.lastSeenAt)) {
+          current.lastSeenAt = lastSeenAt;
+          current.lastPath = optionalString(session.exit_path) ?? lastPathBySession.get(sessionId) ?? current.lastPath;
+        }
+      } else {
+        visitorMap.set(visitorId, {
+          visitorId,
+          sessions: 1,
+          engagedSessions: activeSeconds >= 10 || pageViews >= 2 ? 1 : 0,
+          pageViews,
+          events: eventCount,
+          activeSeconds,
+          firstSeenAt: startedAt,
+          lastSeenAt,
+          lastPath: optionalString(session.exit_path) ?? lastPathBySession.get(sessionId) ?? optionalString(session.landing_path),
+        });
+      }
+    }
+
+    const visitors = [...visitorMap.values()].sort((left, right) => (
+      right.lastSeenAt.localeCompare(left.lastSeenAt)
+      || right.engagedSessions - left.engagedSessions
+      || right.sessions - left.sessions
+      || left.visitorId.localeCompare(right.visitorId)
+    ));
+    const pageSize = Math.min(50, Math.max(1, Math.floor(options.pageSize ?? 20)));
+    const page = Math.max(1, Math.floor(options.page ?? 1));
+    const totalVisitors = visitors.length;
+    const pageStart = (page - 1) * pageSize;
+    return {
+      ok: true,
+      data: {
+        window,
+        countryCode,
+        countryName: countryName(countryCode),
+        visitors: visitors.slice(pageStart, pageStart + pageSize),
+        page,
+        pageSize,
+        totalVisitors,
+        hasNextPage: pageStart + pageSize < totalVisitors,
+        hasPreviousPage: page > 1,
+        truncated: lookup.truncated || eventResult.truncated,
+      },
+    };
+  } catch {
+    return { ok: false, reason: "Country visitor data is temporarily unavailable." };
+  }
+}
+
+export async function fetchAdminAnalyticsVisitorActivity(
+  rangeInput: unknown,
+  countryCodeInput: unknown,
+  visitorIdInput: unknown,
+  options: { now?: Date; client?: AnalyticsTableClient } = {},
+): Promise<AnalyticsVisitorActivityResult> {
+  const countryCode = parseCountryCode(countryCodeInput);
+  const visitorId = cleanString(visitorIdInput).toLowerCase();
+  if (!countryCode || !validUuid(visitorId)) {
+    return { ok: false, reason: "A valid country and anonymous visitor identifier are required.", status: 400 };
+  }
+  const config = getSupabaseAdminConfig();
+  if (!options.client && !config.configured) {
+    return { ok: false, reason: "Supabase admin access is not configured." };
+  }
+
+  const window = getAnalyticsWindow(rangeInput, options.now ?? new Date());
+  try {
+    const client = options.client ?? ((await getSupabaseAdminClient()) as unknown as AnalyticsTableClient);
+    const lookup = await lookupCountrySessions(client, window, countryCode, visitorId);
+    if ("error" in lookup) return { ok: false, reason: lookup.error };
+    const sessions = lookup.sessions.filter((session) => identifierString(session.visitor_id).toLowerCase() === visitorId);
+    const sessionIds = sessions.map((session) => identifierString(session.id)).filter(Boolean);
+    const eventResult = await loadCountryEvents(client, window, sessionIds, VISITOR_ACTIVITY_EVENT_LIMIT);
+    if (!eventResult.ok) return { ok: false, reason: eventResult.reason };
+
+    const eventsBySession = new Map<string, AnalyticsVisitorActivityEvent[]>();
+    for (const row of eventResult.rows) {
+      const event = parseActivityEvent(row);
+      const sessionId = identifierString(row.session_id);
+      if (!event || !sessionId) continue;
+      const events = eventsBySession.get(sessionId) ?? [];
+      events.push(event);
+      eventsBySession.set(sessionId, events);
+    }
+
+    const activitySessions = sessions.flatMap((session) => {
+      const id = identifierString(session.id);
+      const startedAt = safeTimestamp(session.started_at ?? session.created_at);
+      const lastSeenAt = safeTimestamp(session.last_seen_at);
+      if (!id || !startedAt || !lastSeenAt) return [];
+      const network = lookup.networkBySession.get(id);
+      return [{
+        id,
+        startedAt,
+        lastSeenAt,
+        endedAt: safeTimestamp(session.ended_at),
+        activeSeconds: finiteNumber(session.active_seconds),
+        pageViews: eventsBySession.get(id)?.filter((event) => event.eventType === "page_view" || event.name === "page_view").length ?? 0,
+        events: eventsBySession.get(id)?.length ?? 0,
+        landingPage: cleanString(session.landing_path, "/").slice(0, 512),
+        exitPage: optionalString(session.exit_path)?.slice(0, 512) ?? null,
+        countryCode,
+        region: optionalString(network?.region)?.slice(0, 160) ?? null,
+        city: optionalString(network?.city)?.slice(0, 160) ?? null,
+        device: optionalString(session.device_type),
+        browser: optionalString(session.browser_name),
+        operatingSystem: optionalString(session.os_name),
+        eventsTimeline: eventsBySession.get(id) ?? [],
+      }];
+    }).sort((left, right) => right.lastSeenAt.localeCompare(left.lastSeenAt));
+
+    return {
+      ok: true,
+      data: {
+        window,
+        activity: {
+          visitorId,
+          countryCode,
+          sessions: activitySessions,
+          events: activitySessions.reduce((sum, session) => sum + session.eventsTimeline.length, 0),
+          truncated: lookup.truncated || eventResult.truncated,
+        },
+      },
+    };
+  } catch {
+    return { ok: false, reason: "Visitor activity is temporarily unavailable." };
   }
 }
 
