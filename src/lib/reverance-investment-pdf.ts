@@ -3,7 +3,20 @@ import "server-only";
 import fs from "node:fs/promises";
 import path from "node:path";
 import fontkit from "@pdf-lib/fontkit";
-import { PDFDocument, rgb, type PDFFont, type PDFPage, type RGB } from "pdf-lib";
+import {
+  clip,
+  closePath,
+  endPath,
+  lineTo,
+  moveTo,
+  PDFDocument,
+  popGraphicsState,
+  pushGraphicsState,
+  rgb,
+  type PDFFont,
+  type PDFPage,
+  type RGB,
+} from "pdf-lib";
 import type { Lang } from "@/i18n/languages";
 import { translateReveranceCalculatorText } from "@/i18n/reverance-calculator-translations";
 import type { InvestmentCalculation } from "@/lib/reverance-investment-calculator";
@@ -60,14 +73,16 @@ function drawTopText(page: PDFPage, text: string, options: TextOptions, fonts: F
   const runs = splitRuns(text, fonts, Boolean(options.bold));
   let x = options.x;
   for (const run of runs) {
-    page.drawText(run.text, {
-      x,
-      y: topY(options.top, options.size),
-      size: options.size,
-      font: run.font.pdf,
-      color: options.color,
-    });
-    x += run.font.pdf.widthOfTextAtSize(run.text, options.size);
+    for (const character of Array.from(run.text)) {
+      page.drawText(character, {
+        x,
+        y: topY(options.top, options.size),
+        size: options.size,
+        font: run.font.pdf,
+        color: options.color,
+      });
+      x += run.font.pdf.widthOfTextAtSize(character, options.size);
+    }
   }
   return x;
 }
@@ -81,9 +96,9 @@ function chooseFont(fonts: FontPack, character: string, bold: boolean) {
   const primary = bold ? fonts.bold : fonts.regular;
   const ext = bold ? fonts.latinExtBold : fonts.latinExt;
   const cyrillic = bold ? fonts.cyrillicBold : fonts.cyrillic;
-  if (cyrillic.hasGlyph(codePoint)) return cyrillic;
   if (primary.hasGlyph(codePoint)) return primary;
   if (ext.hasGlyph(codePoint)) return ext;
+  if (cyrillic.hasGlyph(codePoint)) return cyrillic;
   return primary;
 }
 
@@ -100,7 +115,10 @@ function splitRuns(text: string, fonts: FontPack, bold: boolean) {
 
 function mixedWidth(text: string, size: number, fonts: FontPack, bold = false) {
   return splitRuns(text, fonts, bold).reduce(
-    (width, run) => width + run.font.pdf.widthOfTextAtSize(run.text, size),
+    (width, run) => width + Array.from(run.text).reduce(
+      (runWidth, character) => runWidth + run.font.pdf.widthOfTextAtSize(character, size),
+      0,
+    ),
     0,
   );
 }
@@ -155,12 +173,25 @@ function drawImageCover(page: PDFPage, image: { width: number; height: number },
     drawHeight = width / imageRatio;
     offsetY = (height - drawHeight) / 2;
   }
+  const bottom = PAGE_HEIGHT - top - height;
+  const topEdge = PAGE_HEIGHT - top;
+  page.pushOperators(
+    pushGraphicsState(),
+    moveTo(x, bottom),
+    lineTo(x + width, bottom),
+    lineTo(x + width, topEdge),
+    lineTo(x, topEdge),
+    closePath(),
+    clip(),
+    endPath(),
+  );
   page.drawImage(imageObject, {
     x: x + offsetX,
-    y: PAGE_HEIGHT - top - height + offsetY,
+    y: bottom + offsetY,
     width: drawWidth,
     height: drawHeight,
   });
+  page.pushOperators(popGraphicsState());
 }
 
 function drawEyebrow(page: PDFPage, text: string, x: number, top: number, fonts: FontPack, color = colors.deepGold) {
@@ -258,7 +289,7 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
   doc.setAuthor("AIXCO.Global");
   doc.setSubject(textValue("Illustrative investment brief", lang));
   const fonts = await loadFonts(doc);
-  const imagePath = path.join(process.cwd(), "public", "aixco-global-op2", "images", "georgia-tax-residency", "batumi-modern-skyline-esra-kaya.jpg");
+  const imagePath = path.join(process.cwd(), "public", "aixco-global-op2", "images", "project-gallery-2026", "01-hero-exterior-2048.jpg");
   let heroImage: Awaited<ReturnType<PDFDocument["embedJpg"]>> | null = null;
   try {
     heroImage = await doc.embedJpg(await fs.readFile(imagePath));
@@ -298,9 +329,11 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
     drawRectTop(page, 0, 0, PAGE_WIDTH, PAGE_HEIGHT, colors.paper);
     drawPageHeader(page, 2, lang, fonts);
     drawEyebrow(page, textValue("The asset", lang), MARGIN, 82, fonts);
-    drawWrapped(page, textValue("Project Reverance · Batumi", lang), { x: MARGIN, top: 119, size: 29, color: colors.ink, bold: true, maxWidth: 400, lineHeight: 34 }, fonts);
-    drawWrapped(page, textValue("A clear view of the numbers before you decide.", lang), { x: MARGIN, top: 177, size: 11, color: colors.muted, maxWidth: 340, lineHeight: 16 }, fonts);
-    drawRectTop(page, MARGIN, 235, PAGE_WIDTH - MARGIN * 2, 125, colors.white);
+    const assetTitleBottom = drawWrapped(page, textValue("Project Reverance · Batumi", lang), { x: MARGIN, top: 119, size: 29, color: colors.ink, bold: true, maxWidth: 400, lineHeight: 34 }, fonts);
+    const assetIntroTop = Math.max(177, assetTitleBottom + 16);
+    const assetIntroBottom = drawWrapped(page, textValue("A clear view of the numbers before you decide.", lang), { x: MARGIN, top: assetIntroTop, size: 11, color: colors.muted, maxWidth: 340, lineHeight: 16 }, fonts);
+    const assetBoxTop = Math.max(235, assetIntroBottom + 24);
+    drawRectTop(page, MARGIN, assetBoxTop, PAGE_WIDTH - MARGIN * 2, 125, colors.white);
     const col = (PAGE_WIDTH - MARGIN * 2) / 3;
     const assetItems = [
       [textValue("Unit", lang), calculation.unit.code],
@@ -312,17 +345,19 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
     ];
     assetItems.forEach(([label, value], index) => {
       const x = MARGIN + (index % 3) * col + 16;
-      const top = 258 + Math.floor(index / 3) * 52;
+      const top = assetBoxTop + 23 + Math.floor(index / 3) * 52;
       drawTopText(page, label.toUpperCase(), { x, top, size: 6.5, color: colors.deepGold, bold: true }, fonts);
       drawTopText(page, value, { x, top: top + 17, size: 11, color: colors.ink, bold: true }, fonts);
     });
-    drawEyebrow(page, textValue("Your scenario", lang), MARGIN, 414, fonts);
-    drawWrapped(page, textValue("The model translates your inputs into purchase price, financing, net monthly rent and a projected net worth.", lang), { x: MARGIN, top: 452, size: 12, color: colors.ink, maxWidth: 450, lineHeight: 18 }, fonts);
-    drawTableRow(page, textValue("Price per m²", lang), formatCurrency(calculation.inputs.pricePerSquareMetre, lang), 526, fonts, colors.deepGold);
-    drawTableRow(page, textValue("Gross rental yield", lang), formatPercent(calculation.inputs.grossYieldPercent, lang), 571, fonts);
-    drawTableRow(page, textValue("Financing", lang), formatPercent(calculation.inputs.financingPercent, lang), 616, fonts);
-    drawTableRow(page, textValue("Annual value growth", lang), formatPercent(calculation.inputs.annualGrowthPercent, lang), 661, fonts);
-    drawTableRow(page, textValue("Holding period", lang), `${calculation.inputs.holdingYears} ${textValue("years", lang)}`, 706, fonts);
+    const scenarioTop = assetBoxTop + 179;
+    drawEyebrow(page, textValue("Your scenario", lang), MARGIN, scenarioTop, fonts);
+    const scenarioDescriptionBottom = drawWrapped(page, textValue("The model translates your inputs into purchase price, financing, net monthly rent and a projected net worth.", lang), { x: MARGIN, top: scenarioTop + 38, size: 12, color: colors.ink, maxWidth: 450, lineHeight: 18 }, fonts);
+    const firstScenarioRowTop = Math.max(526, scenarioDescriptionBottom + 34);
+    drawTableRow(page, textValue("Price per m²", lang), formatCurrency(calculation.inputs.pricePerSquareMetre, lang), firstScenarioRowTop, fonts, colors.deepGold);
+    drawTableRow(page, textValue("Gross rental yield", lang), formatPercent(calculation.inputs.grossYieldPercent, lang), firstScenarioRowTop + 45, fonts);
+    drawTableRow(page, textValue("Financing", lang), formatPercent(calculation.inputs.financingPercent, lang), firstScenarioRowTop + 90, fonts);
+    drawTableRow(page, textValue("Annual value growth", lang), formatPercent(calculation.inputs.annualGrowthPercent, lang), firstScenarioRowTop + 135, fonts);
+    drawTableRow(page, textValue("Holding period", lang), `${calculation.inputs.holdingYears} ${textValue("years", lang)}`, firstScenarioRowTop + 180, fonts);
   }
 
   // Price and funding

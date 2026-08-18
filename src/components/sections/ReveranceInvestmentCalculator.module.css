@@ -48,6 +48,37 @@
   pointer-events: none;
 }
 
+.currencyValue {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.currencyPrefix {
+  display: inline-block;
+  margin-inline-end: 0.06em;
+  line-height: 0.9;
+}
+
+.currencyGlyph {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 0.92em;
+  font-weight: inherit;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  transform: translateY(-0.01em);
+}
+
+.currencyGlyph:first-child {
+  margin-inline-end: 0.08em;
+}
+
+.currencyGlyph:last-child {
+  margin-inline-start: 0.04em;
+}
+
 @media (max-width: 640px) {
   .imageFrame::after {
     inset: 0.7rem;
