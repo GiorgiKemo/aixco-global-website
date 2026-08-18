@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const admin = vi.hoisted(() => ({
   listUsers: vi.fn(),
   mfa: { listFactors: vi.fn() },
-  inviteUserByEmail: vi.fn(),
+  generateLink: vi.fn(),
   updateUserById: vi.fn(),
   deleteUser: vi.fn(),
 }));
@@ -155,24 +155,36 @@ describe("admin identity invitation", () => {
   });
 
   it("normalizes the address and assigns the server-controlled role", async () => {
-    admin.inviteUserByEmail.mockResolvedValue({
-      data: { user: { id: "user-1", app_metadata: { existing: true } } },
+    admin.generateLink.mockResolvedValue({
+      data: {
+        user: { id: "user-1", app_metadata: { existing: true } },
+        properties: { action_link: "https://zrgcrfyxokxcjpdabaoi.supabase.co/auth/v1/verify?token=secret&redirect_to=https%3A%2F%2Fwww.aixco.global%2Fadmin%2Fauth%2Fcomplete", hashed_token: "hashed-secret-value" },
+      },
       error: null,
     });
     admin.updateUserById.mockResolvedValue({ data: { user: {} }, error: null });
 
+    const sendInvite = vi.fn().mockResolvedValue({ providerMessageId: "message-1" });
     await expect(inviteAdminIdentity(" Named.Admin@Example.com ", {
       role: "admin",
       redirectTo: "https://www.aixco.global/admin/auth/complete",
+      sendInvite,
     })).resolves.toEqual({ id: "user-1", email: "named.admin@example.com" });
     expect(admin.updateUserById).toHaveBeenCalledWith("user-1", {
-      app_metadata: { existing: true, role: "admin" },
+      app_metadata: { existing: true, role: "admin", invited_by: "aixco_admin_migration" },
     });
+    expect(sendInvite).toHaveBeenCalledWith(
+      "named.admin@example.com",
+      expect.stringContaining("https://www.aixco.global/admin/auth/callback?token_hash="),
+    );
   });
 
   it("attempts a compensating delete if role assignment fails", async () => {
-    admin.inviteUserByEmail.mockResolvedValue({
-      data: { user: { id: "user-2", app_metadata: {} } },
+    admin.generateLink.mockResolvedValue({
+      data: {
+        user: { id: "user-2", app_metadata: {} },
+        properties: { action_link: "https://zrgcrfyxokxcjpdabaoi.supabase.co/auth/v1/verify?token=secret&redirect_to=https%3A%2F%2Fwww.aixco.global%2Fadmin%2Fauth%2Fcomplete", hashed_token: "hashed-secret-value" },
+      },
       error: null,
     });
     admin.updateUserById.mockResolvedValue({ data: { user: null }, error: { message: "Role rejected" } });
@@ -181,8 +193,28 @@ describe("admin identity invitation", () => {
     await expect(inviteAdminIdentity("admin@example.com", {
       role: "admin",
       redirectTo: "https://www.aixco.global/admin/auth/complete",
+      sendInvite: vi.fn(),
     })).rejects.toThrow("Could not assign the admin role: Role rejected");
     expect(admin.deleteUser).toHaveBeenCalledWith("user-2");
+  });
+
+  it("rolls back the created identity when the custom invitation email fails", async () => {
+    admin.generateLink.mockResolvedValue({
+      data: {
+        user: { id: "user-3", app_metadata: {} },
+        properties: { action_link: "https://zrgcrfyxokxcjpdabaoi.supabase.co/auth/v1/verify?token=secret&redirect_to=https%3A%2F%2Fwww.aixco.global%2Fadmin%2Fauth%2Fcomplete", hashed_token: "hashed-secret-value" },
+      },
+      error: null,
+    });
+    admin.updateUserById.mockResolvedValue({ data: { user: {} }, error: null });
+    admin.deleteUser.mockResolvedValue({ data: null, error: null });
+
+    await expect(inviteAdminIdentity("admin@example.com", {
+      role: "admin",
+      redirectTo: "https://www.aixco.global/admin/auth/complete",
+      sendInvite: vi.fn().mockRejectedValue(new Error("Resend unavailable")),
+    })).rejects.toThrow("Resend unavailable");
+    expect(admin.deleteUser).toHaveBeenCalledWith("user-3");
   });
 });
 

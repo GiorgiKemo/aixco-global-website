@@ -38,7 +38,7 @@ describe("resendAdminIdentityInvite", () => {
     mocks.generateLink.mockResolvedValue({
       data: {
         user: { id: "pending-admin" },
-        properties: { action_link: "https://zrgcrfyxokxcjpdabaoi.supabase.co/auth/v1/verify?token=secret&redirect_to=https%3A%2F%2Fwww.aixco.global%2Fadmin%2Fauth%2Fcomplete" },
+        properties: { action_link: "https://zrgcrfyxokxcjpdabaoi.supabase.co/auth/v1/verify?token=secret&redirect_to=https%3A%2F%2Fwww.aixco.global%2Fadmin%2Fauth%2Fcomplete", hashed_token: "hashed-secret-value" },
       },
       error: null,
     });
@@ -77,7 +77,8 @@ describe("resendAdminIdentityInvite", () => {
     expect(body.to).toEqual(["pending@example.com"]);
     expect(body.text).toContain("AIXCO administrator invitation");
     expect(body.html).toContain("Accept invitation");
-    expect(body.html).toContain("secret");
+    expect(body.html).toContain("/admin/auth/callback");
+    expect(body.html).toContain("hashed-secret-value");
   });
 
   it("refuses to rotate an invitation after the user has signed in", async () => {
@@ -98,7 +99,7 @@ describe("resendAdminIdentityInvite", () => {
     mocks.generateLink.mockResolvedValue({
       data: {
         user: { id: "different-user" },
-        properties: { action_link: "https://example.com/link" },
+        properties: { action_link: "https://example.com/link", hashed_token: "hashed-secret-value" },
       },
       error: null,
     });
@@ -116,7 +117,7 @@ describe("resendAdminIdentityInvite", () => {
     mocks.generateLink.mockResolvedValue({
       data: {
         user: { id: "pending-admin" },
-        properties: { action_link: "https://zrgcrfyxokxcjpdabaoi.supabase.co/auth/v1/verify?token=secret&redirect_to=http%3A%2F%2Flocalhost%3A3000" },
+        properties: { action_link: "https://zrgcrfyxokxcjpdabaoi.supabase.co/auth/v1/verify?token=secret&redirect_to=http%3A%2F%2Flocalhost%3A3000", hashed_token: "hashed-secret-value" },
       },
       error: null,
     });

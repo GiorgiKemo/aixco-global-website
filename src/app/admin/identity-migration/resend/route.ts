@@ -3,9 +3,9 @@ import { getAal2AdminAuthDecision, getAdminAuthConfig } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
 import { resendAdminIdentityInvite } from "@/lib/admin/identity-invite-email";
 import {
-  adminInviteEmailSchema,
   getAdminIdentityMigrationStatus,
 } from "@/lib/admin/identity-migration";
+import { adminInviteEmailSchema } from "@/lib/admin/identity-invite-email";
 import { privacySubjectAuditTarget } from "@/lib/admin/privacy";
 import { getSiteUrl } from "@/lib/site-url";
 

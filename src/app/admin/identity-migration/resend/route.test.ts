@@ -19,9 +19,13 @@ vi.mock("@/lib/admin/identity-migration", async (importOriginal) => {
     getAdminIdentityMigrationStatus: mocks.status,
   };
 });
-vi.mock("@/lib/admin/identity-invite-email", () => ({
-  resendAdminIdentityInvite: mocks.resend,
-}));
+vi.mock("@/lib/admin/identity-invite-email", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/admin/identity-invite-email")>();
+  return {
+    ...actual,
+    resendAdminIdentityInvite: mocks.resend,
+  };
+});
 vi.mock("@/lib/admin/audit", () => ({ auditAdminAction: mocks.audit }));
 vi.mock("@/lib/admin/privacy", () => ({ privacySubjectAuditTarget: () => "email-hash" }));
 

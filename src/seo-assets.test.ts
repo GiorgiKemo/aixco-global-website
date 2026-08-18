@@ -43,6 +43,7 @@ describe("SEO static assets", () => {
     expect(urls).toEqual([
       "https://www.aixco.global",
       "https://www.aixco.global/reverance-batumi",
+      "https://www.aixco.global/reverance-batumi/calculator",
       "https://www.aixco.global/medical-tourism",
       "https://www.aixco.global/georgia-residency",
       "https://www.aixco.global/invest-in-batumi",

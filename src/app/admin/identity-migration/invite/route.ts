@@ -3,13 +3,13 @@ import { NextResponse } from "next/server";
 import { getAdminAuthConfig, getAdminAuthDecision } from "@/lib/admin/auth";
 import { auditAdminAction } from "@/lib/admin/audit";
 import {
-  adminInviteEmailSchema,
   claimAdminIdentityBootstrap,
   completeAdminIdentityBootstrap,
   getAdminIdentityMigrationStatus,
   inviteAdminIdentity,
   releaseAdminIdentityBootstrap,
 } from "@/lib/admin/identity-migration";
+import { adminInviteEmailSchema } from "@/lib/admin/identity-invite-email";
 import { privacySubjectAuditTarget } from "@/lib/admin/privacy";
 import { getSiteUrl } from "@/lib/site-url";
 

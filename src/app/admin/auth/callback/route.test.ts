@@ -4,16 +4,23 @@ const auth = vi.hoisted(() => ({
   exchangeCodeForSession: vi.fn(),
   verifyOtp: vi.fn(),
 }));
+const cookieStore = vi.hoisted(() => ({
+  get: vi.fn(),
+}));
 
 vi.mock("@/lib/supabase/auth-server", () => ({
   getSupabaseAuthServerClient: async () => ({ auth }),
 }));
+vi.mock("next/headers", () => ({
+  cookies: async () => cookieStore,
+}));
 
-import { GET } from "./route";
+import { GET, POST } from "./route";
 
 describe("admin invite callback", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    cookieStore.get.mockReturnValue(undefined);
   });
 
   it("exchanges a one-time code server-side and redirects to a clean setup URL", async () => {
@@ -30,14 +37,38 @@ describe("admin invite callback", () => {
     expect(response.headers.get("x-robots-tag")).toContain("noindex");
   });
 
-  it("verifies a hashed invite token server-side", async () => {
-    auth.verifyOtp.mockResolvedValue({ data: { session: {} }, error: null });
+  it("stages a hashed invite token without consuming it", async () => {
     const response = await GET(new Request(
-      "https://www.aixco.global/admin/auth/callback?token_hash=hashed-secret&type=invite",
+      "https://www.aixco.global/admin/auth/callback?token_hash=hashed-secret-value&type=invite",
     ));
 
-    expect(auth.verifyOtp).toHaveBeenCalledWith({ token_hash: "hashed-secret", type: "invite" });
+    expect(auth.verifyOtp).not.toHaveBeenCalled();
+    expect(response.headers.get("location")).toBe("https://www.aixco.global/admin/auth/accept");
+    expect(response.headers.get("set-cookie")).toContain("aixco_admin_invite_token=hashed-secret-value");
+  });
+
+  it("verifies a staged invite only after the recipient submits Continue", async () => {
+    cookieStore.get.mockReturnValue({ value: "hashed-secret-value" });
+    auth.verifyOtp.mockResolvedValue({ data: { session: {} }, error: null });
+    const response = await POST(new Request(
+      "https://www.aixco.global/admin/auth/callback",
+      { method: "POST", headers: { origin: "https://www.aixco.global" } },
+    ));
+
+    expect(auth.verifyOtp).toHaveBeenCalledWith({ token_hash: "hashed-secret-value", type: "invite" });
     expect(response.headers.get("location")).toBe("https://www.aixco.global/admin/login?setup=1");
+    expect(response.headers.get("set-cookie")).toContain("aixco_admin_invite_token=;");
+  });
+
+  it("rejects a staged invite without the same-origin confirmation", async () => {
+    cookieStore.get.mockReturnValue({ value: "hashed-secret-value" });
+    const response = await POST(new Request(
+      "https://www.aixco.global/admin/auth/callback",
+      { method: "POST", headers: { origin: "https://evil.example" } },
+    ));
+
+    expect(response.status).toBe(403);
+    expect(auth.verifyOtp).not.toHaveBeenCalled();
   });
 
   it("fails closed without reflecting or retaining a rejected credential", async () => {

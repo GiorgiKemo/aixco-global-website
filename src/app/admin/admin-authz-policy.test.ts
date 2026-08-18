@@ -19,6 +19,7 @@ function adminPath(path: string) {
 
 const sensitiveEntrypoints = [
   ["analytics/page.tsx", "requireAal2AdminSession"],
+  ["analytics/visitors/route.ts", "getAal2AdminAuthDecision"],
   ["email-test/page.tsx", "requireAal2AdminSession"],
   ["email-test/send/route.ts", "getAal2AdminAuthDecision"],
   ["login/audit/route.ts", "getAal2AdminAuthDecision"],
@@ -35,6 +36,7 @@ const migrationAuthAllowlist = [
   "identity-migration/invite/route.ts",
   "identity-migration/page.tsx",
   "login/page.tsx",
+  "login/trusted-device/route.ts",
   "logout/route.ts",
   "page.tsx",
 ];

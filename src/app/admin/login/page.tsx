@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getAdminAuthConfig, getAdminAuthDecision } from "@/lib/admin/auth";
+import { getTrustedDeviceSecret } from "@/lib/admin/trusted-device";
 import { getSiteUrl } from "@/lib/site-url";
 import { AdminLoginForm } from "./AdminLoginForm";
 import { AdminPasswordRecoveryForm } from "./AdminPasswordRecoveryForm";
@@ -59,6 +60,7 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
               role: config.role,
               identityAvailable: config.identity.configured,
               legacyAvailable: config.legacy.enabled && config.legacy.configured,
+              trustedDeviceAvailable: Boolean(getTrustedDeviceSecret()),
             }}
             passwordRecoveryNotice={recovered === "1"}
           />

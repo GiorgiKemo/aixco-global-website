@@ -2,8 +2,13 @@ import "server-only";
 import { z } from "zod";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { hasAdminRole } from "./policy";
+import {
+  adminInviteEmailSchema,
+  generateAdminIdentityInvite,
+  sendAdminIdentityInviteEmail,
+} from "./identity-invite-email";
 
-export const adminInviteEmailSchema = z.string().trim().email().max(255).transform((value) => value.toLowerCase());
+export { adminInviteEmailSchema } from "./identity-invite-email";
 
 export type AdminIdentityStatus = {
   id: string;
@@ -156,30 +161,30 @@ export async function getAdminIdentityMigrationStatus(
 
 export async function inviteAdminIdentity(
   email: string,
-  options: { role: string; redirectTo: string },
+  options: {
+    role: string;
+    redirectTo: string;
+    sendInvite?: (email: string, actionLink: string) => Promise<unknown>;
+  },
 ) {
   const normalizedEmail = adminInviteEmailSchema.parse(email);
   const supabase = await getSupabaseAdminClient();
-  const invited = await supabase.auth.admin.inviteUserByEmail(normalizedEmail, {
+  const generated = await generateAdminIdentityInvite(normalizedEmail, {
     redirectTo: options.redirectTo,
-    data: { invited_by: "aixco_admin_migration" },
   });
-  const user = invited.data.user;
-  if (invited.error || !user) {
-    throw new Error(invited.error?.message ?? "Admin invitation did not return a user.");
-  }
 
-  const updated = await supabase.auth.admin.updateUserById(user.id, {
+  const updated = await supabase.auth.admin.updateUserById(generated.id, {
     app_metadata: {
-      ...user.app_metadata,
+      ...generated.appMetadata,
       role: options.role,
+      invited_by: "aixco_admin_migration",
     },
   });
   if (updated.error) {
     // The invite was just created by this operation. Remove it if assigning the
     // server-controlled role fails so an unclassified identity is not left.
     try {
-      const rollback = await supabase.auth.admin.deleteUser(user.id);
+      const rollback = await supabase.auth.admin.deleteUser(generated.id);
       if (rollback.error) console.error("Could not roll back an incomplete admin invitation.");
     } catch {
       console.error("Could not roll back an incomplete admin invitation.");
@@ -187,5 +192,18 @@ export async function inviteAdminIdentity(
     throw new Error(`Could not assign the admin role: ${updated.error.message}`);
   }
 
-  return { id: user.id, email: normalizedEmail };
+  try {
+    await (options.sendInvite ?? ((inviteEmail, actionLink) => sendAdminIdentityInviteEmail(inviteEmail, actionLink)))
+      (normalizedEmail, generated.actionLink);
+  } catch (error) {
+    try {
+      const rollback = await supabase.auth.admin.deleteUser(generated.id);
+      if (rollback.error) console.error("Could not roll back an administrator whose invitation email failed.");
+    } catch {
+      console.error("Could not roll back an administrator whose invitation email failed.");
+    }
+    throw error;
+  }
+
+  return { id: generated.id, email: normalizedEmail };
 }
