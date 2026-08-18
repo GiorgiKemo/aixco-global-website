@@ -271,7 +271,7 @@ describe("admin identity removal", () => {
     });
     admin.listUsers.mockResolvedValue({
       data: { users: [
-        { id: "owner-ignored-not-used", email: "owner@example.com", app_metadata: { role: "admin" } },
+        { id: "5dca2a80-7ddb-4e12-8f39-01fb72c0ac50", email: "owner@example.com", app_metadata: { role: "admin", admin_owner: true } },
         { id: "74f0c177-cb85-4d38-b151-e8f51c36a329", email: "remove@example.com", app_metadata: { role: "admin" } },
       ] },
       error: null,
@@ -295,13 +295,16 @@ describe("admin identity removal", () => {
     expect(admin.deleteUser).not.toHaveBeenCalled();
   });
 
-  it("refuses to remove the last administrator", async () => {
+  it("refuses to remove the designated owner", async () => {
     admin.getUserById.mockResolvedValue({
-      data: { user: { id: "74f0c177-cb85-4d38-b151-e8f51c36a329", email: "remove@example.com", app_metadata: { role: "admin" } } },
+      data: { user: { id: "74f0c177-cb85-4d38-b151-e8f51c36a329", email: "remove@example.com", app_metadata: { role: "admin", admin_owner: true } } },
       error: null,
     });
     admin.listUsers.mockResolvedValue({
-      data: { users: [{ id: "74f0c177-cb85-4d38-b151-e8f51c36a329", email: "remove@example.com", app_metadata: { role: "admin" } }] },
+      data: { users: [
+        { id: "5dca2a80-7ddb-4e12-8f39-01fb72c0ac50", email: "owner@example.com", app_metadata: { role: "admin", admin_owner: true } },
+        { id: "74f0c177-cb85-4d38-b151-e8f51c36a329", email: "remove@example.com", app_metadata: { role: "admin", admin_owner: true } },
+      ] },
       error: null,
     });
 
@@ -309,7 +312,7 @@ describe("admin identity removal", () => {
       "74f0c177-cb85-4d38-b151-e8f51c36a329",
       "5dca2a80-7ddb-4e12-8f39-01fb72c0ac50",
       "admin",
-    )).rejects.toThrow(/last administrator/i);
+    )).rejects.toThrow(/owner cannot be removed/i);
     expect(admin.deleteUser).not.toHaveBeenCalled();
   });
 });

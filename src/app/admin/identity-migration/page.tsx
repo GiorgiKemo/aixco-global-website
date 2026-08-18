@@ -62,6 +62,10 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
     && status.admins.length > 0;
   const canInvite = sourceAvailable && !legacyInviteClosed;
   const canResend = sourceAvailable && adminPrincipal.authentication !== "legacy-shared-password";
+  const currentAdmin = status.admins.find((admin) => admin.id === adminPrincipal.id);
+  const canRemoveAdmins = sourceAvailable
+    && adminPrincipal.authentication !== "legacy-shared-password"
+    && currentAdmin?.isOwner === true;
 
   const content = (
     <main className="admin-safe-page admin-safe-page--dashboard bg-[#f8f6f1] px-4 py-5 text-[#161616] sm:px-7 sm:py-8 lg:px-10">
@@ -163,7 +167,7 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
                       />
                     </form>
                   ) : null}
-                  {sourceAvailable && adminPrincipal.authentication !== "legacy-shared-password" && admin.id !== adminPrincipal.id && status.admins.length > 1 ? (
+                  {canRemoveAdmins && admin.id !== adminPrincipal.id && !admin.isOwner && status.admins.length > 1 ? (
                     <details className="w-full sm:w-auto">
                       <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center rounded-[9px] border border-red-700/30 bg-white px-3 text-xs font-semibold text-red-900 hover:bg-red-50 [&::-webkit-details-marker]:hidden">Remove administrator</summary>
                       <form action="/admin/identity-migration/remove" method="post" className="mt-3 grid gap-3 rounded-[9px] border border-red-700/20 bg-red-50 p-3 text-left sm:min-w-72">
@@ -183,7 +187,7 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
                         />
                       </form>
                     </details>
-                  ) : admin.id === adminPrincipal.id ? <span className="rounded-full bg-[#f4eddd] px-3 py-1 text-xs font-semibold text-primary">You</span> : null}
+                  ) : admin.id === adminPrincipal.id ? <span className="rounded-full bg-[#f4eddd] px-3 py-1 text-xs font-semibold text-primary">{admin.isOwner ? "Owner · You" : "You"}</span> : null}
                 </div>
               </article>
             )) : <p className="py-4 text-sm text-[#6f6e6a]">{sourceAvailable ? "No named administrators exist yet." : "Administrator identities could not be fully loaded."}</p>}

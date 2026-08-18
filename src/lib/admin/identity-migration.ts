@@ -13,6 +13,7 @@ export { adminInviteEmailSchema } from "./identity-invite-email";
 export type AdminIdentityStatus = {
   id: string;
   email: string | null;
+  isOwner?: boolean;
   invitedAt: string | null;
   lastSignInAt: string | null;
   verifiedTotpFactors: number | null;
@@ -146,6 +147,7 @@ export async function getAdminIdentityMigrationStatus(
         invitedAt: user.invited_at ?? null,
         lastSignInAt: user.last_sign_in_at ?? null,
         verifiedTotpFactors,
+        ...(user.app_metadata?.admin_owner === true ? { isOwner: true } : {}),
       });
     }
 
@@ -216,7 +218,7 @@ async function listAdminUsersForRemoval(
   supabase: AdminRemovalClient,
   requiredRole: string,
 ) {
-  const admins: Array<{ id: string; email: string | null }> = [];
+  const admins: Array<{ id: string; email: string | null; isOwner: boolean }> = [];
   for (let page = 1; ; page += 1) {
     const result = await supabase.auth.admin.listUsers({ page, perPage: 200 });
     if (result.error || !Array.isArray(result.data?.users)) {
@@ -224,7 +226,7 @@ async function listAdminUsersForRemoval(
     }
     for (const user of result.data.users) {
       if (hasAdminRole(user.app_metadata, requiredRole)) {
-        admins.push({ id: user.id, email: user.email ?? null });
+        admins.push({ id: user.id, email: user.email ?? null, isOwner: user.app_metadata?.admin_owner === true });
       }
     }
     if (result.data.users.length < 200) break;
@@ -257,6 +259,11 @@ export async function removeAdminIdentity(
   }
 
   const admins = await listAdminUsersForRemoval(supabase, requiredRole);
+  const actor = admins.find((admin) => admin.id === actorId);
+  if (!actor?.isOwner) throw new Error("Only the designated administrator owner can remove administrators.");
+  if (target.app_metadata?.admin_owner === true) {
+    throw new Error("The designated administrator owner cannot be removed.");
+  }
   if (admins.length <= 1) throw new Error("The last administrator cannot be removed.");
 
   const deleted = await supabase.auth.admin.deleteUser(targetId);

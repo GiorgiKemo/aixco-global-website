@@ -34,6 +34,7 @@ const availableStatus = {
   admins: [{
     id: "admin-1",
     email: "admin@example.com",
+    isOwner: true,
     invitedAt: "2026-08-01T00:00:00.000Z",
     lastSignInAt: "2026-08-17T10:00:00.000Z",
     verifiedTotpFactors: 1,
@@ -162,6 +163,7 @@ describe("admin identity migration page", () => {
         {
           id: "admin-2",
           email: "other@example.com",
+          isOwner: false,
           invitedAt: "2026-08-01T00:00:00.000Z",
           lastSignInAt: "2026-08-17T10:00:00.000Z",
           verifiedTotpFactors: 0,
@@ -171,7 +173,7 @@ describe("admin identity migration page", () => {
 
     render(await AdminIdentityMigrationPage({}));
 
-    expect(screen.getByText("You")).toBeInTheDocument();
+    expect(screen.getByText("Owner · You")).toBeInTheDocument();
     const remove = screen.getAllByText("Remove administrator")[0];
     expect(remove).toBeInTheDocument();
     const form = remove.closest("details")?.querySelector("form");
