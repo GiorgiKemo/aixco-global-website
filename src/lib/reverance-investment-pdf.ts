@@ -302,12 +302,11 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
   doc.setAuthor("AIXCO.Global");
   doc.setSubject(textValue("Illustrative investment brief", lang));
   const fonts = await loadFonts(doc);
-  const logoDirectory = path.join(process.cwd(), "public", "aixco-global-op2", "images");
   let darkLogo: Awaited<ReturnType<PDFDocument["embedPng"]>> | null = null;
   let lightLogo: Awaited<ReturnType<PDFDocument["embedPng"]>> | null = null;
   try {
-    darkLogo = await doc.embedPng(await fs.readFile(path.join(logoDirectory, "AIXCOGlobal-horizontal-dark.png")));
-    lightLogo = await doc.embedPng(await fs.readFile(path.join(logoDirectory, "AIXCOGlobal-horizontal-light.png")));
+    darkLogo = await doc.embedPng(await fs.readFile(path.join(process.cwd(), "public", "aixco-global-op2", "images", "AIXCOGlobal-horizontal-dark.png")));
+    lightLogo = await doc.embedPng(await fs.readFile(path.join(process.cwd(), "public", "aixco-global-op2", "images", "AIXCOGlobal-horizontal-light.png")));
   } catch {
     darkLogo = null;
     lightLogo = null;
