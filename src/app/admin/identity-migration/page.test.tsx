@@ -110,6 +110,29 @@ describe("admin identity migration page", () => {
     expect(screen.getByRole("button", { name: "Send secure invite" })).toBeDisabled();
   });
 
+  it("shows resend only for a pending invitation under a named MFA session", async () => {
+    mocks.status.mockResolvedValue({
+      admins: [{
+        id: "pending-admin",
+        email: "pending@example.com",
+        invitedAt: "2026-08-17T10:00:00.000Z",
+        lastSignInAt: null,
+        verifiedTotpFactors: 0,
+      }],
+      safeToDisableLegacyAccess: false,
+      sourceStatus: "available",
+      sourceIssues: [],
+    });
+
+    render(await AdminIdentityMigrationPage({ searchParams: Promise.resolve({ resent: "1" }) }));
+
+    expect(screen.getByText("Invitation pending")).toBeInTheDocument();
+    const resend = screen.getByRole("button", { name: "Resend invitation" });
+    expect(resend).toBeEnabled();
+    expect(resend.closest("form")).toHaveAttribute("action", "/admin/identity-migration/resend");
+    expect(screen.getByRole("status")).toHaveTextContent(/fresh invitation link was sent/i);
+  });
+
   it("shows partial MFA results as unknown and keeps readiness fail-closed", async () => {
     mocks.status.mockResolvedValue({
       admins: [{

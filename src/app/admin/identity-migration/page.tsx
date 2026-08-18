@@ -8,7 +8,7 @@ import { getAdminIdentityMigrationStatus } from "@/lib/admin/identity-migration"
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Admin identity migration | AIXCO.Global", robots: { index: false, follow: false } };
 
-type PageProps = { searchParams?: Promise<{ invited?: string; error?: string }> };
+type PageProps = { searchParams?: Promise<{ invited?: string; resent?: string; error?: string }> };
 
 function inviteErrorMessage(error: string | undefined) {
   if (error === "invalid-email") return "Enter a valid administrator email address.";
@@ -17,6 +17,12 @@ function inviteErrorMessage(error: string | undefined) {
   }
   if (error === "migration-invite-closed") {
     return "Temporary migration access cannot invite more administrators. Sign in with a named MFA-protected account.";
+  }
+  if (error === "invite-not-pending") {
+    return "That administrator no longer has a pending invitation. Resend is available only before the first sign-in.";
+  }
+  if (error === "resend-failed") {
+    return "The new invitation could not be sent. The original account was not deleted; check Supabase Auth URL configuration and email delivery, then try again.";
   }
   return "The invitation could not be completed. The address may already have an account.";
 }
@@ -53,6 +59,7 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
   const legacyInviteClosed = adminPrincipal.authentication === "legacy-shared-password"
     && status.admins.length > 0;
   const canInvite = sourceAvailable && !legacyInviteClosed;
+  const canResend = sourceAvailable && adminPrincipal.authentication === "supabase-mfa";
 
   const content = (
     <main className="admin-safe-page admin-safe-page--dashboard bg-[#f8f6f1] px-4 py-5 text-[#161616] sm:px-7 sm:py-8 lg:px-10">
@@ -64,6 +71,7 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
         </header>
 
         {params.invited ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">Invitation sent. The recipient must accept it, set a password, and enroll an authenticator.</p> : null}
+        {params.resent ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">A fresh invitation link was sent. The previous link is no longer valid.</p> : null}
         {params.error ? <p role="alert" className="mt-5 border border-red-700/20 bg-red-50 px-4 py-3 text-sm font-medium text-red-900">{inviteErrorMessage(params.error)}</p> : null}
         {!sourceAvailable ? (
           <div id="identity-source-warning" role="alert" className="mt-5 flex gap-3 border border-amber-700/25 bg-amber-50 px-4 py-3 text-amber-950">
@@ -127,8 +135,32 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
           <div className="mt-4 divide-y divide-[#161616]/10">
             {status.admins.length ? status.admins.map((admin) => (
               <article key={admin.id} className="grid gap-1 py-4 text-sm sm:grid-cols-[1fr_auto] sm:items-center">
-                <div><p className="font-semibold">{admin.email ?? "Email unavailable"}</p><p className="mt-1 text-xs text-[#6f6e6a]">Last sign-in: {admin.lastSignInAt ? `${new Date(admin.lastSignInAt).toLocaleString("en", { timeZone: "UTC" })} UTC` : "Never"}</p></div>
-                <span className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${admin.verifiedTotpFactors ? "bg-emerald-100 text-emerald-900" : "bg-amber-100 text-amber-950"}`}>{admin.verifiedTotpFactors === null ? "MFA status unavailable" : admin.verifiedTotpFactors ? "TOTP verified" : "TOTP pending"}</span>
+                <div>
+                  <p className="font-semibold">{admin.email ?? "Email unavailable"}</p>
+                  <p className="mt-1 text-xs text-[#6f6e6a]">Last sign-in: {admin.lastSignInAt ? `${new Date(admin.lastSignInAt).toLocaleString("en", { timeZone: "UTC" })} UTC` : "Never"}</p>
+                </div>
+                <div className="flex flex-wrap items-center justify-start gap-2 sm:justify-end">
+                  <span className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${admin.lastSignInAt === null ? "bg-amber-100 text-amber-950" : admin.verifiedTotpFactors ? "bg-emerald-100 text-emerald-900" : "bg-amber-100 text-amber-950"}`}>
+                    {admin.verifiedTotpFactors === null
+                      ? "MFA status unavailable"
+                      : admin.lastSignInAt === null
+                        ? "Invitation pending"
+                        : admin.verifiedTotpFactors
+                          ? "TOTP verified"
+                          : "TOTP pending"}
+                  </span>
+                  {canResend && admin.email && admin.invitedAt !== null && admin.lastSignInAt === null ? (
+                    <form action="/admin/identity-migration/resend" method="post">
+                      <input type="hidden" name="email" value={admin.email} />
+                      <AdminPendingSubmitButton
+                        idleLabel="Resend invitation"
+                        pendingLabel="Resending invitation…"
+                        icon="send"
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[9px] border border-[#161616]/20 bg-white px-3 text-xs font-semibold text-[#161616] hover:bg-[#f8f6f1]"
+                      />
+                    </form>
+                  ) : null}
+                </div>
               </article>
             )) : <p className="py-4 text-sm text-[#6f6e6a]">{sourceAvailable ? "No named administrators exist yet." : "Administrator identities could not be fully loaded."}</p>}
           </div>

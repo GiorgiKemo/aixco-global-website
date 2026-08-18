@@ -70,7 +70,10 @@ describe("admin responsive safeguards", () => {
 
     expect(identityPage).not.toContain("passwordOnlyAccess");
     expect(identityPage).toContain("The recipient must accept it, set a password, and enroll an authenticator.");
-    expect(identityPage).toContain('admin.verifiedTotpFactors ? "TOTP verified" : "TOTP pending"');
+    expect(identityPage).toContain('"Invitation pending"');
+    expect(identityPage).toContain('"TOTP verified"');
+    expect(identityPage).toContain('"TOTP pending"');
+    expect(identityPage).toContain('"Resend invitation"');
   });
 
   it("uses AA-safe admin metadata colors and honest active-lead labels", () => {
