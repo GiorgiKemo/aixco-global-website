@@ -157,6 +157,32 @@ describe("Modals", () => {
     );
   });
 
+  it("opens the English role-specific login routes instead of the German portal root", async () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <LoginTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open login/i }));
+
+    expect(await screen.findByRole("link", { name: "Customer Login" })).toHaveAttribute(
+      "href",
+      "https://workw.com/realestate/aixco/customer-login?lang=en",
+    );
+    expect(screen.getByRole("link", { name: "Broker Login" })).toHaveAttribute(
+      "href",
+      "https://workw.com/realestate/aixco/broker-login?lang=en",
+    );
+    expect(screen.getByRole("link", { name: "Developer Login" })).toHaveAttribute(
+      "href",
+      "https://workw.com/realestate/aixco/developer-login?lang=en",
+    );
+  });
+
   it("gives legal dialogs an accessible name", () => {
     render(
       <I18nProvider>
@@ -367,7 +393,7 @@ describe("Modals", () => {
     expect(screen.queryByRole("link", { name: "Customer Login" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Broker Login" })).toHaveAttribute(
       "href",
-      "https://broker.aixco.global/",
+      "https://workw.com/realestate/aixco/broker-login?lang=en",
     );
   });
 

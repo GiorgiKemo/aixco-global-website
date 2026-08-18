@@ -4,6 +4,7 @@ import {
   getSafeAssetKey,
   getSafeEmail,
   getSafeHttpsUrl,
+  getSafePortalLoginUrl,
   getSafePortalRegistrationUrl,
   getSafePortalUrl,
   getSafePublicAssetHref,
@@ -38,6 +39,21 @@ describe("safe URL helpers", () => {
     expect(getSafePortalRegistrationUrl("https://customer.aixco.global/", "broker", "en", "#")).toBe("#");
     expect(getSafePortalRegistrationUrl("https://customer.aixco.global.evil.example/", "customer", "en", "#")).toBe("#");
   });
+
+  it.each(["en", "de", "pl", "sl", "ru"] as const)(
+    "routes %s login links to the matching Workwise login flow with the selected language",
+    (language) => {
+      expect(getSafePortalLoginUrl("https://customer.aixco.global/", "customer", language, "#")).toBe(
+        `https://workw.com/realestate/aixco/customer-login?lang=${language}`,
+      );
+      expect(getSafePortalLoginUrl("https://broker.aixco.global/", "broker", language, "#")).toBe(
+        `https://workw.com/realestate/aixco/broker-login?lang=${language}`,
+      );
+      expect(getSafePortalLoginUrl("https://developer.aixco.global/", "developer", language, "#")).toBe(
+        `https://workw.com/realestate/aixco/developer-login?lang=${language}`,
+      );
+    },
+  );
 
   it("keeps news and asset links inside the published AIXCO surfaces", () => {
     expect(getSafeAixcoNewsUrl("https://www.aixco.global/op2/index.html#page1", "#")).toBe(

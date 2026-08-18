@@ -6,7 +6,12 @@ import { useSiteContent } from "@/data/site-content-context";
 import type { SiteContent } from "@/lib/backend/site-content";
 import { aixcoLiveImages, aixcoLiveLogos, aixcoLivePartnerPeople } from "@/lib/aixco-live-assets";
 import { recordContactSubmission, recordPortalEvent } from "@/lib/backend/lead-capture";
-import { getSafePortalRegistrationUrl, getSafePortalUrl, type PortalRegistrationRole } from "@/lib/security/urls";
+import {
+  getSafePortalLoginUrl,
+  getSafePortalRegistrationUrl,
+  type PortalLoginRole,
+  type PortalRegistrationRole,
+} from "@/lib/security/urls";
 import {
   markContactNudgeConverted,
   markContactNudgeOpenedThisSession,
@@ -65,16 +70,16 @@ type LegalTitle = "Terms & Conditions" | "Privacy Policy";
 type LegalSection = { heading: string; body: string; items?: string[] };
 
 const analyticsPrivacyBody =
-  "Optional AIXCO analytics and Google Analytics through Google Tag Manager are activated only with your permission. Google Analytics may use analytics cookies or similar identifiers. These tools measure visits, navigation, active time, interactions, device context, performance, errors, and a server-derived IP address and coarse network location. Pseudonymous event data is retained for up to 180 days and session data for up to 395 days; raw IP addresses are automatically removed after 30 days. We do not record form contents or passwords. You may change your choice through Cookie preferences in the footer.";
+  "Optional AIXCO analytics and Google Analytics through Google Tag Manager are activated only with your permission. With that choice, we use limited pseudonymous usage data—such as pages viewed, visit timing, interactions, device context, performance and error signals, and approximate network location—to understand site performance and improve the experience. We do not use analytics to identify you by name, build an advertising profile, or sell your information. Google Analytics receives the described measurement data when enabled. A server-derived IP address may be processed for coarse location and security; raw IP addresses are automatically removed after 30 days. We do not record form contents or passwords. You may change your choice through Cookie preferences in the footer.";
 
 // Modals are lazy-loaded by the client shell, so keep this detailed policy copy
 // with the modal instead of inflating the initial homepage translation catalog.
 const analyticsPrivacyBodyByLanguage: Record<Lang, string> = {
   en: analyticsPrivacyBody,
-  de: "Optionale AIXCO-Analysen und Google Analytics über Google Tag Manager werden nur nach Ihrer Zustimmung aktiviert. Google Analytics kann Analyse-Cookies oder ähnliche Kennungen verwenden. Diese Tools messen Besuche, Navigation, aktive Zeit, Interaktionen, Gerätekontext, Leistung, Fehler sowie eine serverseitig ermittelte IP-Adresse und einen ungefähren Netzwerkstandort. Pseudonyme Ereignisdaten werden bis zu 180 Tage und Sitzungsdaten bis zu 395 Tage gespeichert; rohe IP-Adressen werden nach 30 Tagen automatisch entfernt. Formularinhalte oder Passwörter werden nicht erfasst. Ihre Auswahl können Sie über die Cookie-Einstellungen in der Fußzeile ändern.",
-  pl: "Opcjonalna analityka AIXCO i Google Analytics przez Google Tag Manager są aktywowane wyłącznie za zgodą. Google Analytics może używać plików cookie analitycznych lub podobnych identyfikatorów. Narzędzia mierzą wizyty, nawigację, aktywny czas, interakcje, kontekst urządzenia, wydajność, błędy oraz ustalony przez serwer adres IP i przybliżoną lokalizację sieciową. Pseudonimizowane dane zdarzeń przechowujemy do 180 dni, a dane sesji do 395 dni; surowe adresy IP są automatycznie usuwane po 30 dniach. Nie rejestrujemy treści formularzy ani haseł. Wybór można zmienić w ustawieniach plików cookie w stopce.",
-  sl: "Izbirna analitika AIXCO in Google Analytics prek Google Tag Manager se aktivirata samo z vašim dovoljenjem. Google Analytics lahko uporablja analitične piškotke ali podobne identifikatorje. Orodja merijo obiske, navigacijo, aktivni čas, interakcije, kontekst naprave, delovanje, napake ter strežniško določen naslov IP in približno omrežno lokacijo. Psevdonimizirani podatki o dogodkih se hranijo do 180 dni, podatki o sejah pa do 395 dni; neobdelani naslovi IP se po 30 dneh samodejno odstranijo. Vsebine obrazcev in gesel ne beležimo. Izbiro lahko spremenite v nastavitvah piškotkov v nogi.",
-  ru: "Необязательная аналитика AIXCO и Google Analytics через Google Tag Manager включаются только с вашего разрешения. Google Analytics может использовать аналитические файлы cookie или похожие идентификаторы. Эти инструменты измеряют посещения, навигацию, активное время, взаимодействия, сведения об устройстве, производительность, ошибки, а также определённый сервером IP-адрес и примерное сетевое местоположение. Псевдонимизированные данные о событиях хранятся до 180 дней, данные о сеансах — до 395 дней; исходные IP-адреса автоматически удаляются через 30 дней. Мы не записываем содержимое форм или пароли. Выбор можно изменить в настройках файлов cookie в нижней части сайта.",
+  de: "Optionale AIXCO-Analysen und Google Analytics über Google Tag Manager werden nur nach Ihrer Zustimmung aktiviert. Mit Ihrer Zustimmung verwenden wir begrenzte pseudonyme Nutzungsdaten—zum Beispiel aufgerufene Seiten, Besuchszeiten, Interaktionen, Gerätekontext sowie Leistungs-, Fehler- und ungefähre Standortsignale—um die Website zu verstehen und zu verbessern. Wir verwenden die Analytik nicht, um Sie namentlich zu identifizieren, ein Werbeprofil zu erstellen oder Informationen zu verkaufen. Google Analytics erhält die beschriebenen Messdaten, wenn es aktiviert ist. Eine serverseitig ermittelte IP-Adresse kann für grobe Standort- und Sicherheitszwecke verarbeitet werden; rohe IP-Adressen werden nach 30 Tagen automatisch entfernt. Formularinhalte oder Passwörter werden nicht erfasst. Ihre Auswahl können Sie über die Cookie-Einstellungen in der Fußzeile ändern.",
+  pl: "Opcjonalna analityka AIXCO i Google Analytics przez Google Tag Manager są aktywowane wyłącznie za zgodą. Za zgodą używamy ograniczonych, pseudonimowych danych o korzystaniu—takich jak odwiedzane strony, czas wizyty, interakcje, kontekst urządzenia oraz sygnały wydajności, błędów i przybliżonej lokalizacji—aby rozumieć działanie strony i ją ulepszać. Nie używamy analityki do identyfikowania Cię z imienia i nazwiska, tworzenia profilu reklamowego ani sprzedaży informacji. Po włączeniu Google Analytics otrzymuje opisane dane pomiarowe. Serwerowy adres IP może być przetwarzany do określenia przybliżonej lokalizacji i celów bezpieczeństwa; surowe adresy IP są usuwane po 30 dniach. Nie rejestrujemy treści formularzy ani haseł. Wybór można zmienić w ustawieniach plików cookie w stopce.",
+  sl: "Izbirna analitika AIXCO in Google Analytics prek Google Tag Manager se aktivirata samo z vašim dovoljenjem. Z vašo privolitvijo uporabljamo omejene psevdonimne podatke o uporabi—na primer ogledane strani, čas obiska, interakcije, kontekst naprave ter signale delovanja, napak in približne lokacije—da razumemo delovanje strani in jo izboljšamo. Analitike ne uporabljamo za identifikacijo po imenu, izdelavo oglaševalskega profila ali prodajo vaših podatkov. Ko je omogočen, Google Analytics prejme opisane merilne podatke. Strežniško določen naslov IP se lahko obdela za približno lokacijo in varnost; neobdelani naslovi IP se po 30 dneh samodejno odstranijo. Vsebine obrazcev in gesel ne beležimo. Izbiro lahko spremenite v nastavitvah piškotkov v nogi.",
+  ru: "Необязательная аналитика AIXCO и Google Analytics через Google Tag Manager включаются только с вашего разрешения. При согласии мы используем ограниченные псевдонимные данные об использовании—например, просмотренные страницы, время визита, взаимодействия, сведения об устройстве, сигналы производительности, ошибок и примерного местоположения—чтобы понимать работу сайта и улучшать его. Мы не используем аналитику для идентификации по имени, создания рекламного профиля или продажи информации. При включении Google Analytics получает описанные данные измерений. Серверный IP-адрес может обрабатываться для определения примерного местоположения и безопасности; исходные IP-адреса автоматически удаляются через 30 дней. Мы не записываем содержимое форм или пароли. Выбор можно изменить в настройках файлов cookie в нижней части сайта.",
 };
 
 const dialogFocusableSelector = [
@@ -924,7 +929,7 @@ function AccessModal({ mode, tx, lang }: { mode: "login" | "register"; tx: (text
       ...role,
       url: isRegister
         ? getSafePortalRegistrationUrl(role.url, role.portalRole as PortalRegistrationRole, lang, "")
-        : getSafePortalUrl(role.url, ""),
+        : getSafePortalLoginUrl(role.url, role.portalRole as PortalLoginRole, lang, ""),
     }))
     .filter((role) => role.url);
 
