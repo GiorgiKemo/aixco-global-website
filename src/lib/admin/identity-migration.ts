@@ -207,3 +207,64 @@ export async function inviteAdminIdentity(
 
   return { id: generated.id, email: normalizedEmail };
 }
+
+const adminIdentityIdSchema = z.string().uuid();
+
+type AdminRemovalClient = Awaited<ReturnType<typeof getSupabaseAdminClient>>;
+
+async function listAdminUsersForRemoval(
+  supabase: AdminRemovalClient,
+  requiredRole: string,
+) {
+  const admins: Array<{ id: string; email: string | null }> = [];
+  for (let page = 1; ; page += 1) {
+    const result = await supabase.auth.admin.listUsers({ page, perPage: 200 });
+    if (result.error || !Array.isArray(result.data?.users)) {
+      throw new Error("Administrator identity status is unavailable.");
+    }
+    for (const user of result.data.users) {
+      if (hasAdminRole(user.app_metadata, requiredRole)) {
+        admins.push({ id: user.id, email: user.email ?? null });
+      }
+    }
+    if (result.data.users.length < 200) break;
+  }
+  return admins;
+}
+
+/**
+ * Permanently removes a named admin identity after server-side checks.
+ * The caller must have already authenticated the actor; this function still
+ * re-reads the target and the complete admin set to avoid trusting form data.
+ */
+export async function removeAdminIdentity(
+  targetUserId: string,
+  actorUserId: string,
+  requiredRole: string,
+) {
+  const targetId = adminIdentityIdSchema.parse(targetUserId);
+  const actorId = adminIdentityIdSchema.parse(actorUserId);
+  if (targetId === actorId) throw new Error("You cannot remove your own administrator account.");
+
+  const supabase = await getSupabaseAdminClient();
+  const targetResult = await supabase.auth.admin.getUserById(targetId);
+  if (targetResult.error || !targetResult.data?.user) {
+    throw new Error("Administrator identity was not found.");
+  }
+  const target = targetResult.data.user;
+  if (!hasAdminRole(target.app_metadata, requiredRole)) {
+    throw new Error("The selected identity is not an administrator.");
+  }
+
+  const admins = await listAdminUsersForRemoval(supabase, requiredRole);
+  if (admins.length <= 1) throw new Error("The last administrator cannot be removed.");
+
+  const deleted = await supabase.auth.admin.deleteUser(targetId);
+  if (deleted.error) throw new Error(`Could not remove administrator: ${deleted.error.message}`);
+
+  return {
+    id: targetId,
+    email: target.email ?? null,
+    remainingAdminCount: admins.length - 1,
+  };
+}

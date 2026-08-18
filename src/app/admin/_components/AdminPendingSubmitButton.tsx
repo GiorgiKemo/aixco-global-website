@@ -1,12 +1,12 @@
 "use client";
 
-import { LoaderCircle, Send, UserPlus } from "lucide-react";
+import { LoaderCircle, Send, Trash2, UserPlus } from "lucide-react";
 import { useFormStatus } from "react-dom";
 
 type AdminPendingSubmitButtonProps = {
   idleLabel: string;
   pendingLabel: string;
-  icon: "send" | "user-plus";
+  icon: "send" | "user-plus" | "trash";
   disabled?: boolean;
   className?: string;
 };
@@ -19,7 +19,7 @@ export function AdminPendingSubmitButton({
   className = "",
 }: AdminPendingSubmitButtonProps) {
   const { pending } = useFormStatus();
-  const Icon = pending ? LoaderCircle : icon === "send" ? Send : UserPlus;
+  const Icon = pending ? LoaderCircle : icon === "send" ? Send : icon === "trash" ? Trash2 : UserPlus;
 
   return (
     <button

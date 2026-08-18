@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const admin = vi.hoisted(() => ({
   listUsers: vi.fn(),
+  getUserById: vi.fn(),
   mfa: { listFactors: vi.fn() },
   generateLink: vi.fn(),
   updateUserById: vi.fn(),
@@ -22,6 +23,7 @@ import {
   completeAdminIdentityBootstrap,
   getAdminIdentityMigrationStatus,
   inviteAdminIdentity,
+  removeAdminIdentity,
   releaseAdminIdentityBootstrap,
 } from "./identity-migration";
 
@@ -253,5 +255,61 @@ describe("admin identity bootstrap claim", () => {
 
     await expect(claimAdminIdentityBootstrap("5dca2a80-7ddb-4e12-8f39-01fb72c0ac50"))
       .rejects.toThrow("Administrator bootstrap claim failed (42883).");
+  });
+});
+
+describe("admin identity removal", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    clientState.unavailable = false;
+  });
+
+  it("removes a different named admin only after re-reading the role and full admin set", async () => {
+    admin.getUserById.mockResolvedValue({
+      data: { user: { id: "74f0c177-cb85-4d38-b151-e8f51c36a329", email: "remove@example.com", app_metadata: { role: "admin" } } },
+      error: null,
+    });
+    admin.listUsers.mockResolvedValue({
+      data: { users: [
+        { id: "owner-ignored-not-used", email: "owner@example.com", app_metadata: { role: "admin" } },
+        { id: "74f0c177-cb85-4d38-b151-e8f51c36a329", email: "remove@example.com", app_metadata: { role: "admin" } },
+      ] },
+      error: null,
+    });
+    admin.deleteUser.mockResolvedValue({ data: null, error: null });
+
+    await expect(removeAdminIdentity(
+      "74f0c177-cb85-4d38-b151-e8f51c36a329",
+      "5dca2a80-7ddb-4e12-8f39-01fb72c0ac50",
+      "admin",
+    )).resolves.toMatchObject({ email: "remove@example.com", remainingAdminCount: 1 });
+    expect(admin.deleteUser).toHaveBeenCalledWith("74f0c177-cb85-4d38-b151-e8f51c36a329");
+  });
+
+  it("rejects self-removal and never calls Supabase delete", async () => {
+    await expect(removeAdminIdentity(
+      "74f0c177-cb85-4d38-b151-e8f51c36a329",
+      "74f0c177-cb85-4d38-b151-e8f51c36a329",
+      "admin",
+    )).rejects.toThrow(/own administrator account/i);
+    expect(admin.deleteUser).not.toHaveBeenCalled();
+  });
+
+  it("refuses to remove the last administrator", async () => {
+    admin.getUserById.mockResolvedValue({
+      data: { user: { id: "74f0c177-cb85-4d38-b151-e8f51c36a329", email: "remove@example.com", app_metadata: { role: "admin" } } },
+      error: null,
+    });
+    admin.listUsers.mockResolvedValue({
+      data: { users: [{ id: "74f0c177-cb85-4d38-b151-e8f51c36a329", email: "remove@example.com", app_metadata: { role: "admin" } }] },
+      error: null,
+    });
+
+    await expect(removeAdminIdentity(
+      "74f0c177-cb85-4d38-b151-e8f51c36a329",
+      "5dca2a80-7ddb-4e12-8f39-01fb72c0ac50",
+      "admin",
+    )).rejects.toThrow(/last administrator/i);
+    expect(admin.deleteUser).not.toHaveBeenCalled();
   });
 });

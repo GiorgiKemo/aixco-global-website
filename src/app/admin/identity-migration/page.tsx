@@ -8,7 +8,7 @@ import { getAdminIdentityMigrationStatus } from "@/lib/admin/identity-migration"
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Admin identity migration | AIXCO.Global", robots: { index: false, follow: false } };
 
-type PageProps = { searchParams?: Promise<{ invited?: string; resent?: string; error?: string }> };
+type PageProps = { searchParams?: Promise<{ invited?: string; resent?: string; removed?: string; error?: string }> };
 
 function inviteErrorMessage(error: string | undefined) {
   if (error === "invalid-email") return "Enter a valid administrator email address.";
@@ -24,6 +24,8 @@ function inviteErrorMessage(error: string | undefined) {
   if (error === "resend-failed") {
     return "The new invitation could not be sent. The original account was not deleted; check Supabase Auth URL configuration and email delivery, then try again.";
   }
+  if (error === "remove-confirmation") return "To remove an administrator, retype their exact email and enter REMOVE.";
+  if (error === "remove-failed") return "The administrator could not be removed. No account was changed; refresh the list and try again.";
   return "The invitation could not be completed. The address may already have an account.";
 }
 
@@ -72,6 +74,7 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
 
         {params.invited ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">Invitation sent. The recipient must accept it and set a password. MFA is optional.</p> : null}
         {params.resent ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">A fresh invitation link was sent. The previous link is no longer valid.</p> : null}
+        {params.removed ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">Administrator removed. Their admin access is no longer available.</p> : null}
         {params.error ? <p role="alert" className="mt-5 border border-red-700/20 bg-red-50 px-4 py-3 text-sm font-medium text-red-900">{inviteErrorMessage(params.error)}</p> : null}
         {!sourceAvailable ? (
           <div id="identity-source-warning" role="alert" className="mt-5 flex gap-3 border border-amber-700/25 bg-amber-50 px-4 py-3 text-amber-950">
@@ -160,6 +163,27 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
                       />
                     </form>
                   ) : null}
+                  {sourceAvailable && adminPrincipal.authentication !== "legacy-shared-password" && admin.id !== adminPrincipal.id && status.admins.length > 1 ? (
+                    <details className="w-full sm:w-auto">
+                      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center rounded-[9px] border border-red-700/30 bg-white px-3 text-xs font-semibold text-red-900 hover:bg-red-50 [&::-webkit-details-marker]:hidden">Remove administrator</summary>
+                      <form action="/admin/identity-migration/remove" method="post" className="mt-3 grid gap-3 rounded-[9px] border border-red-700/20 bg-red-50 p-3 text-left sm:min-w-72">
+                        <input type="hidden" name="targetUserId" value={admin.id} />
+                        <p className="text-xs leading-5 text-red-950">This permanently removes <strong>{admin.email ?? "this identity"}</strong>. This cannot be undone.</p>
+                        <label className="grid gap-1 text-xs font-semibold text-red-950">Retype email
+                          <input name="confirmEmail" type="email" required autoComplete="off" className="h-11 border border-red-700/30 bg-white px-2 text-sm font-normal text-[#161616]" />
+                        </label>
+                        <label className="grid gap-1 text-xs font-semibold text-red-950">Type REMOVE to confirm
+                          <input name="confirmText" required pattern="REMOVE" autoComplete="off" className="h-11 border border-red-700/30 bg-white px-2 text-sm font-normal uppercase text-[#161616]" />
+                        </label>
+                        <AdminPendingSubmitButton
+                          idleLabel="Remove administrator"
+                          pendingLabel="Removing administrator…"
+                          icon="trash"
+                          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[9px] bg-red-900 px-3 text-xs font-semibold text-white hover:bg-red-950"
+                        />
+                      </form>
+                    </details>
+                  ) : admin.id === adminPrincipal.id ? <span className="rounded-full bg-[#f4eddd] px-3 py-1 text-xs font-semibold text-primary">You</span> : null}
                 </div>
               </article>
             )) : <p className="py-4 text-sm text-[#6f6e6a]">{sourceAvailable ? "No named administrators exist yet." : "Administrator identities could not be fully loaded."}</p>}

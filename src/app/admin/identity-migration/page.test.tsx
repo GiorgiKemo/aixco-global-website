@@ -153,4 +153,31 @@ describe("admin identity migration page", () => {
     expect(screen.getByText("MFA status unavailable")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send secure invite" })).toBeDisabled();
   });
+
+  it("shows a guarded removal form for another admin but never for the current admin", async () => {
+    mocks.status.mockResolvedValue({
+      ...availableStatus,
+      admins: [
+        ...availableStatus.admins,
+        {
+          id: "admin-2",
+          email: "other@example.com",
+          invitedAt: "2026-08-01T00:00:00.000Z",
+          lastSignInAt: "2026-08-17T10:00:00.000Z",
+          verifiedTotpFactors: 0,
+        },
+      ],
+    });
+
+    render(await AdminIdentityMigrationPage({}));
+
+    expect(screen.getByText("You")).toBeInTheDocument();
+    const remove = screen.getAllByText("Remove administrator")[0];
+    expect(remove).toBeInTheDocument();
+    const form = remove.closest("details")?.querySelector("form");
+    expect(form).toHaveAttribute("action", "/admin/identity-migration/remove");
+    expect(form?.querySelector('input[name="targetUserId"]')).toHaveAttribute("value", "admin-2");
+    expect(screen.getByLabelText("Retype email")).toBeRequired();
+    expect(screen.getByLabelText("Type REMOVE to confirm")).toHaveAttribute("pattern", "REMOVE");
+  });
 });
