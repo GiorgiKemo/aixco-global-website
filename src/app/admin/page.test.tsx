@@ -112,7 +112,7 @@ describe("admin operations launchpad", () => {
     );
     expect(screen.getByRole("link", { name: "Open email delivery" })).toHaveAttribute("href", "/admin/email-test");
     expect(screen.getByRole("link", { name: "Open privacy requests" })).toHaveAttribute("href", "/admin/privacy");
-    expect(screen.getByText("2 MFA-enrolled administrators")).toBeInTheDocument();
+    expect(screen.getByText("2 administrators with optional MFA enabled")).toBeInTheDocument();
     expect(screen.getByText("Administrator signed in")).toBeInTheDocument();
     expect(loadLaunchpad).toHaveBeenCalledWith("admin");
   });
@@ -132,15 +132,15 @@ describe("admin operations launchpad", () => {
     expect(modules.every((module) => module.status === "Production source unavailable")).toBe(true);
   });
 
-  it("flags a named identity without MFA as pending enrollment", () => {
+  it("keeps the admin workspace healthy when MFA is optional", () => {
     const modules = buildLaunchpadModules({
       ...launchpadData,
       admins: { total: 1, verified: 0 },
     });
 
     expect(modules.find((module) => module.id === "privacy")).toMatchObject({
-      status: "MFA enrollment pending",
-      tone: "attention",
+      status: "MFA optional · none enabled",
+      tone: "healthy",
     });
   });
 });

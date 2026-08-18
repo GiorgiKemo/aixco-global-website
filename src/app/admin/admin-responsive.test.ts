@@ -65,14 +65,14 @@ describe("admin responsive safeguards", () => {
     );
   });
 
-  it("keeps identity migration messaging aligned with mandatory MFA", () => {
+  it("keeps identity migration messaging aligned with optional MFA", () => {
     const identityPage = readAdminSource("./identity-migration/page.tsx");
 
     expect(identityPage).not.toContain("passwordOnlyAccess");
-    expect(identityPage).toContain("The recipient must accept it, set a password, and enroll an authenticator.");
+    expect(identityPage).toContain("The recipient must accept it and set a password. MFA is optional.");
     expect(identityPage).toContain('"Invitation pending"');
-    expect(identityPage).toContain('"TOTP verified"');
-    expect(identityPage).toContain('"TOTP pending"');
+    expect(identityPage).toContain('"MFA enabled"');
+    expect(identityPage).toContain('"MFA optional"');
     expect(identityPage).toContain('"Resend invitation"');
   });
 

@@ -171,7 +171,7 @@ export function AdminPasswordRecoveryForm(props: AdminPasswordRecoveryFormProps)
         </>
       ) : (
         <form onSubmit={requestReset} className="mt-6 grid gap-5">
-          <p className="text-sm leading-relaxed text-muted-foreground">Enter your invited admin email. The reset link returns to AIXCO, and MFA is still required for dashboard access.</p>
+          <p className="text-sm leading-relaxed text-muted-foreground">Enter your invited admin email. The reset link returns to AIXCO, and MFA remains optional for dashboard access.</p>
           {errorMessage ? <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">{errorMessage}</p> : null}
           <label className="grid gap-2 text-sm font-medium" htmlFor="admin-recovery-email">
             Email

@@ -60,10 +60,10 @@ describe("admin identity migration page", () => {
     render(await AdminIdentityMigrationPage({}));
 
     expect(screen.getByTestId("admin-shell")).toHaveAttribute("data-admin-email", "admin@example.com");
-    expect(screen.getByText(/at least one named administrator has verified totp/i)).toBeInTheDocument();
+    expect(screen.getByText(/a named administrator exists.*mfa remains optional/i)).toBeInTheDocument();
     expect(screen.getByLabelText("Administrator email")).toBeEnabled();
     expect(screen.getByRole("button", { name: "Send secure invite" })).toBeEnabled();
-    expect(screen.getByText("TOTP verified")).toBeInTheDocument();
+    expect(screen.getByText("MFA enabled")).toBeInTheDocument();
     expect(screen.queryByText("Temporary migration access")).not.toBeInTheDocument();
   });
 

@@ -16,7 +16,7 @@ function inviteErrorMessage(error: string | undefined) {
     return "The invitation was not sent because administrator identity status could not be verified.";
   }
   if (error === "migration-invite-closed") {
-    return "Temporary migration access cannot invite more administrators. Sign in with a named MFA-protected account.";
+    return "Temporary migration access cannot invite more administrators. Sign in with a named administrator account.";
   }
   if (error === "invite-not-pending") {
     return "That administrator no longer has a pending invitation. Resend is available only before the first sign-in.";
@@ -55,11 +55,11 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
   const status = await getAdminIdentityMigrationStatus(config.role);
   const params = searchParams ? await searchParams : {};
   const sourceAvailable = status.sourceStatus === "available";
-  const accessReady = sourceAvailable && status.safeToDisableLegacyAccess;
+  const accessReady = sourceAvailable && status.admins.length > 0;
   const legacyInviteClosed = adminPrincipal.authentication === "legacy-shared-password"
     && status.admins.length > 0;
   const canInvite = sourceAvailable && !legacyInviteClosed;
-  const canResend = sourceAvailable && adminPrincipal.authentication === "supabase-mfa";
+  const canResend = sourceAvailable && adminPrincipal.authentication !== "legacy-shared-password";
 
   const content = (
     <main className="admin-safe-page admin-safe-page--dashboard bg-[#f8f6f1] px-4 py-5 text-[#161616] sm:px-7 sm:py-8 lg:px-10">
@@ -70,7 +70,7 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
           <p className="mt-3 max-w-2xl text-sm leading-6 text-[#6f6e6a]">Invite a named administrator and review the security state of every admin identity.</p>
         </header>
 
-        {params.invited ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">Invitation sent. The recipient must accept it, set a password, and enroll an authenticator.</p> : null}
+        {params.invited ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">Invitation sent. The recipient must accept it and set a password. MFA is optional.</p> : null}
         {params.resent ? <p role="status" className="mt-5 border border-emerald-700/20 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">A fresh invitation link was sent. The previous link is no longer valid.</p> : null}
         {params.error ? <p role="alert" className="mt-5 border border-red-700/20 bg-red-50 px-4 py-3 text-sm font-medium text-red-900">{inviteErrorMessage(params.error)}</p> : null}
         {!sourceAvailable ? (
@@ -94,7 +94,7 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
             <div>
               <p className="text-sm font-semibold">Temporary invitation access is closed.</p>
               <p className="mt-1 text-sm leading-6">
-                A named administrator already exists. Sign in with that MFA-protected identity to invite another administrator.
+                A named administrator already exists. Sign in with that named administrator identity to invite another administrator.
               </p>
             </div>
           </div>
@@ -108,9 +108,9 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
           <p className={`mt-4 rounded-[9px] border px-4 py-3 text-sm font-semibold ${accessReady ? "border-emerald-700/20 bg-emerald-50 text-emerald-900" : "border-amber-700/20 bg-amber-50 text-amber-950"}`}>
             {!sourceAvailable
               ? "Migration readiness could not be verified. Do not disable legacy migration access."
-              : status.safeToDisableLegacyAccess
-                ? "At least one named administrator has verified TOTP. After that administrator confirms a fresh login, ADMIN_AUTH_MODE can be changed to identity."
-                : "Do not disable migration access yet. No named administrator has a verified TOTP factor."}
+              : status.admins.length
+                ? "A named administrator exists. After that administrator confirms a fresh password sign-in, ADMIN_AUTH_MODE can be changed to identity. MFA remains optional."
+                : "Do not disable migration access yet. Create a named administrator first; MFA is optional."}
           </p>
 
           <form action="/admin/identity-migration/invite" method="post" aria-describedby={!sourceAvailable ? "identity-source-warning" : legacyInviteClosed ? "legacy-invite-warning" : undefined}>
@@ -146,8 +146,8 @@ export default async function AdminIdentityMigrationPage({ searchParams }: PageP
                       : admin.lastSignInAt === null
                         ? "Invitation pending"
                         : admin.verifiedTotpFactors
-                          ? "TOTP verified"
-                          : "TOTP pending"}
+                          ? "MFA enabled"
+                          : "MFA optional"}
                   </span>
                   {canResend && admin.email && admin.invitedAt !== null && admin.lastSignInAt === null ? (
                     <form action="/admin/identity-migration/resend" method="post">

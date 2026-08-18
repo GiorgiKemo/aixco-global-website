@@ -14,6 +14,7 @@ type AdminLoginFormProps = {
     role: string;
     identityAvailable: boolean;
     legacyAvailable: boolean;
+    trustedDeviceAvailable?: boolean;
   };
   passwordRecoveryNotice?: boolean;
   onAuthenticated?: () => void;
@@ -75,10 +76,49 @@ async function reportAdminLogin(
       const result = await response.json().catch(() => null) as { stored?: unknown } | null;
       if (response.ok && result?.stored === true) return true;
 
-      // Supabase's browser client can finish writing the refreshed AAL2
-      // cookie just after challengeAndVerify resolves (most visible in Safari).
-      // A 401 here is therefore retryable once, while the server still
-      // enforces the real AAL2 check on both attempts.
+      // The browser client can finish writing the refreshed auth cookie just
+      // after sign-in resolves (most visible in Safari). A 401 is therefore
+      // retryable once while the server still validates the admin identity.
+      if (response.status !== 401 || attempt > 0) return false;
+      await new Promise((resolve) => window.setTimeout(resolve, 250));
+    } catch {
+      return false;
+    }
+  }
+
+  return false;
+}
+
+async function checkTrustedDevice() {
+  try {
+    const response = await fetch("/admin/login/trusted-device", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      cache: "no-store",
+      body: JSON.stringify({ action: "check" }),
+    });
+    const result = await response.json().catch(() => null) as { trusted?: unknown } | null;
+    return response.ok && result?.trusted === true;
+  } catch {
+    // A missing/unreachable trust endpoint must never prevent a normal TOTP
+    // sign-in. The user can still enter their code below.
+    return false;
+  }
+}
+
+async function enableTrustedDevice() {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const response = await fetch("/admin/login/trusted-device", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        cache: "no-store",
+        body: JSON.stringify({ action: "enable" }),
+      });
+      const result = await response.json().catch(() => null) as { trusted?: unknown } | null;
+      if (response.ok && result?.trusted === true) return true;
       if (response.status !== 401 || attempt > 0) return false;
       await new Promise((resolve) => window.setTimeout(resolve, 250));
     } catch {
@@ -114,6 +154,8 @@ export function AdminLoginForm({
   const [qrCode, setQrCode] = useState("");
   const [totpSecret, setTotpSecret] = useState("");
   const [totpCode, setTotpCode] = useState("");
+  const [rememberDevice, setRememberDevice] = useState(false);
+  const trustedDeviceAvailable = config.trustedDeviceAvailable ?? false;
   const [identityEmail, setIdentityEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -161,44 +203,14 @@ export function AdminLoginForm({
 
       setIdentityEmail(user.email ?? "your admin account");
       const assurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-      if (assurance.error) throw assurance.error;
+      const isAal2 = !assurance.error
+        && assurance.data?.currentLevel === "aal2"
+        && assurance.data?.nextLevel === "aal2";
 
-      if (assurance.data.currentLevel === "aal2" && assurance.data.nextLevel === "aal2") {
-        await finalizeVerifiedSignIn(user.email ?? null, "session");
-        return;
-      }
-
-      const factors = await supabase.auth.mfa.listFactors();
-      if (factors.error) throw factors.error;
-
-      const verifiedTotp = factors.data.totp.find((factor) => factor.status === "verified");
-      if (verifiedTotp) {
-        setFactorId(verifiedTotp.id);
-        setStage("challenge");
-        return;
-      }
-
-      // Remove abandoned, unverified enrollments so a fresh QR code and secret
-      // can be presented after a reload.
-      const staleFactors = factors.data.all.filter(
-        (factor) => factor.factor_type === "totp" && factor.status === "unverified",
-      );
-      const staleFactorResults = await Promise.all(
-        staleFactors.map((factor) => supabase.auth.mfa.unenroll({ factorId: factor.id })),
-      );
-      const staleFactorError = staleFactorResults.find((result) => result.error)?.error;
-      if (staleFactorError) throw staleFactorError;
-
-      const enrollment = await supabase.auth.mfa.enroll({
-        factorType: "totp",
-        friendlyName: "AIXCO Admin",
-      });
-      if (enrollment.error) throw enrollment.error;
-
-      setFactorId(enrollment.data.id);
-      setQrCode(enrollment.data.totp.qr_code);
-      setTotpSecret(enrollment.data.totp.secret);
-      setStage("enroll");
+      // MFA remains available to admins who have enabled it, but it is not a
+      // prerequisite for entering the dashboard. A password-authenticated
+      // admin session is sufficient after the server validates app_metadata.
+      await finalizeVerifiedSignIn(user.email ?? null, isAal2 ? "mfa" : "session");
     },
     [config.role, finalizeVerifiedSignIn],
   );
@@ -285,6 +297,9 @@ export function AdminLoginForm({
         code: totpCode.trim(),
       });
       if (result.error) throw result.error;
+      if (rememberDevice && !(await enableTrustedDevice())) {
+        setErrorMessage("Sign-in succeeded, but this device could not be remembered. You will be asked for a code next time.");
+      }
       await finalizeVerifiedSignIn(identityEmail, "mfa");
     } catch (error) {
       await reportAdminLogin(identityEmail, "mfa", "failure", "invalid_code");
@@ -333,6 +348,7 @@ export function AdminLoginForm({
       setQrCode("");
       setTotpSecret("");
       setTotpCode("");
+      setRememberDevice(false);
       setIdentityEmail("");
       setNewPassword("");
       setConfirmPassword("");
@@ -361,7 +377,7 @@ export function AdminLoginForm({
         <div className="grid gap-6">
           {passwordRecoveryNotice ? (
             <p role="status" className="rounded-md border border-emerald-700/20 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
-              Your password was updated. Sign in again, then complete MFA to access the dashboard.
+              Your password was updated. Sign in again to access the dashboard. MFA remains optional.
             </p>
           ) : null}
           {errorMessage && (
@@ -440,6 +456,9 @@ export function AdminLoginForm({
                 code={totpCode}
                 working={working}
                 submitLabel="Enable MFA and sign in"
+                trustedDeviceAvailable={trustedDeviceAvailable}
+                rememberDevice={rememberDevice}
+                onRememberDeviceChange={setRememberDevice}
                 onChange={setTotpCode}
                 onSubmit={handleMfaVerification}
                 onReset={resetIdentity}
@@ -485,6 +504,9 @@ export function AdminLoginForm({
                 code={totpCode}
                 working={working}
                 submitLabel="Verify and sign in"
+                trustedDeviceAvailable={trustedDeviceAvailable}
+                rememberDevice={rememberDevice}
+                onRememberDeviceChange={setRememberDevice}
                 onChange={setTotpCode}
                 onSubmit={handleMfaVerification}
                 onReset={resetIdentity}
@@ -538,6 +560,9 @@ function MfaCodeForm({
   code,
   working,
   submitLabel,
+  trustedDeviceAvailable,
+  rememberDevice,
+  onRememberDeviceChange,
   onChange,
   onSubmit,
   onReset,
@@ -546,6 +571,9 @@ function MfaCodeForm({
   code: string;
   working: boolean;
   submitLabel: string;
+  trustedDeviceAvailable: boolean;
+  rememberDevice: boolean;
+  onRememberDeviceChange: (value: boolean) => void;
   onChange: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onReset: () => void;
@@ -553,6 +581,20 @@ function MfaCodeForm({
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
       <p className="text-xs text-muted-foreground">Signed in as {email}</p>
+      {trustedDeviceAvailable ? (
+        <label className="flex min-h-11 items-start gap-3 rounded-md border border-border/70 bg-background/60 px-3 py-2 text-sm">
+          <input
+            type="checkbox"
+            checked={rememberDevice}
+            onChange={(event) => onRememberDeviceChange(event.target.checked)}
+            className="mt-1 h-4 w-4 accent-primary"
+          />
+          <span>
+            <span className="block font-medium">Trust this device for 30 days</span>
+            <span className="mt-0.5 block text-xs text-muted-foreground">Your admin password will still be required on future sign-ins.</span>
+          </span>
+        </label>
+      ) : null}
       <div>
         <label htmlFor="admin-totp" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           Six-digit code

@@ -1,8 +1,9 @@
-# Admin identity and MFA rollout
+# Admin identity and optional MFA rollout
 
 The `/admin` area supports individual Supabase Auth identities. Every named
-administrator must reach Authenticator Assurance Level `aal2` (password plus
-TOTP); a missing or false `ADMIN_REQUIRE_MFA` value does not weaken this rule.
+administrator must have a valid Supabase password session and the server-managed
+admin role. Authenticator Assurance Level `aal2` (password plus TOTP) is an
+optional stronger session state, not a prerequisite for dashboard access.
 `ADMIN_REQUIRE_MFA` is no longer a supported configuration switch and should be
 removed from hosting environments. Authorization uses
 `app_metadata`, which users cannot edit, and never trusts `user_metadata` for
@@ -13,7 +14,7 @@ roles.
 - `ADMIN_AUTH_MODE=migration` enables individual identity sign-in when the
   public Supabase configuration is present and temporarily keeps the legacy
   shared-password form available. This mode is only for the migration window.
-- `ADMIN_AUTH_MODE=identity` accepts only an authorized Supabase identity at
+- `ADMIN_AUTH_MODE=identity` accepts an authorized Supabase identity at AAL1 or
   AAL2. Shared-password cookies and credentials are ignored.
 - Missing or invalid `ADMIN_AUTH_MODE` fails closed. It never silently enables
   shared-password access.
@@ -22,6 +23,21 @@ Set `ADMIN_AUTH_ROLE=admin` unless the Supabase project uses a different
 server-managed role name. Admin users must have either
 `app_metadata.role = "admin"` or an `app_metadata.roles` array containing
 `"admin"`.
+
+## Trusted devices
+
+To make repeated sign-ins less disruptive for administrators who choose MFA, set the
+server-only `ADMIN_TRUSTED_DEVICE_SECRET` to at least 32 random characters.
+After a successful TOTP verification, an administrator may opt in to “Trust this
+device for 30 days.” The browser receives an HttpOnly, signed, identity-bound
+cookie. Future sign-ins still require that administrator's password; only the
+repeat TOTP prompt is skipped. The cookie is never accepted without a matching
+Supabase identity session, and it cannot renew itself. Administrators who do not
+enable MFA can enter with their password session alone.
+
+If the secret is absent, sign-in continues normally and the device option is
+unavailable. Rotate the secret to revoke all trusted devices. Do not expose the
+secret in a `NEXT_PUBLIC_` variable.
 
 ## Production rollout
 
@@ -42,28 +58,22 @@ server-managed role name. Admin users must have either
    `ADMIN_SESSION_SECRET` (at least 32 random characters) during this step.
 4. Add `https://www.aixco.global/admin/auth/complete` and
    `https://www.aixco.global/admin/auth/callback` to the Supabase Auth redirect
-   allowlist. The default Supabase invite returns session credentials in a URL
-   fragment. `/admin/auth/complete` consumes that fragment, synchronously
-   removes it from browser history before any asynchronous work, validates the
-   user, and redirects to the clean password-setup URL. Fragments are never
-   sent in HTTP requests or Referer headers.
-
-   Optionally, a custom **Invite user** email template can use the stricter
-   server-only token-hash callback:
-
-   ```html
-   <a href="{{ .SiteURL }}/admin/auth/callback?token_hash={{ .TokenHash }}&type=invite">Accept AIXCO admin invitation</a>
-   ```
+   allowlist. The AIXCO invitation email uses a server-only token-hash callback:
+   the first GET stages the hash and redirects to `/admin/auth/accept`; only the
+   recipient's explicit Continue action verifies it. This prevents email
+   security scanners from consuming the single-use token. The default Supabase
+   invite flow remains supported at `/admin/auth/complete` for older messages.
 
 5. Open `/admin/identity-migration` while authenticated with temporary migration
    access and invite every administrator using their own email address. The
-   server sends the Supabase invite and then assigns `app_metadata.role`; if
-   role assignment fails, it attempts a compensating delete of the new user.
+   server generates the Supabase token, assigns `app_metadata.role`, and sends
+   one branded AIXCO email through Resend; if role assignment or email delivery
+   fails, it attempts a compensating delete of the new user. Configure
+   `RESEND_API_KEY` and `ADMIN_INVITE_FROM` (or `LEAD_NOTIFICATION_FROM`).
    Disable public signup unless the website needs it for another feature.
-6. Each administrator accepts the invite, creates a unique password of at least
-   12 characters, scans the one-time QR code in an authenticator app, and
-   verifies the six-digit code. Password-only named sessions cannot enter the
-   dashboard.
+6. Each administrator accepts the invite and creates a unique password of at
+   least 12 characters. MFA enrollment is optional; administrators who enable it
+   can scan the one-time QR code and verify the six-digit code.
 7. Confirm every expected administrator can sign in and that the lead dashboard
    identifies them by email.
 8. Set `ADMIN_AUTH_MODE=identity`, redeploy, and verify the shared-password form
@@ -79,18 +89,21 @@ server-managed role name. Admin users must have either
   email pseudonym, action, outcome, and bounded non-PII context. Raw email
   addresses, secrets, and lead message bodies are excluded. Security-sensitive
   mutations require the pre-action audit record to persist before proceeding.
-- The complete admin dashboard and all sensitive tools are restricted to
-  verified Supabase AAL2 identities. The legacy shared password can only open
-  the identity-migration page and bootstrap the first named identity during
-  migration mode. As soon as any named admin exists, the shared password can no
-  longer send invitations; another invite requires a named AAL2 administrator.
+- The complete admin dashboard and sensitive tools are restricted to an
+  authorized Supabase identity. AAL2 is recorded when present but is not
+  required. The legacy shared password can only open the identity-migration page
+  and bootstrap the first named identity during migration mode. As soon as any
+  named admin exists, the shared password can no longer send invitations;
+  another invite requires a named administrator identity.
 - If the migration page reports that administrator identities are unavailable
   or incomplete, keep `ADMIN_AUTH_MODE=migration`. Invitations and the readiness
-  signal remain disabled until every paginated user and MFA-factor lookup can be
-  verified; a partial response is never treated as safe to end migration.
-- If an administrator replaces or loses their authenticator device, an owner of
-  the Supabase project must follow the Supabase MFA recovery procedure. Do not
-  switch the whole site back to migration mode for one user.
+  signal remain disabled until the paginated user lookup can be verified; MFA
+  factor status is informational because MFA is optional. A partial user
+  response is never treated as safe to end migration.
+- If an administrator replaces or loses their authenticator device, they can
+  continue using their password session because MFA is optional. An owner of the
+  Supabase project can still follow the Supabase MFA recovery procedure if that
+  administrator wants to re-enable MFA.
 - Review Supabase Auth settings for password strength, leaked-password checks,
   short access-token expiry, and appropriate email delivery before completing
   the rollout.

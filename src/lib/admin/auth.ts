@@ -8,6 +8,11 @@ import {
   createAdminSessionToken,
   verifyAdminSessionToken,
 } from "./session-token";
+import {
+  ADMIN_TRUSTED_DEVICE_COOKIE_NAME,
+  getTrustedDeviceSecret,
+  verifyTrustedDeviceToken,
+} from "./trusted-device";
 
 export const ADMIN_SESSION_COOKIE_NAME = "aixco_admin_session";
 export const ADMIN_SESSION_COOKIE_PATH = "/admin";
@@ -16,7 +21,11 @@ const MINIMUM_MIGRATION_PASSWORD_LENGTH = 16;
 const MINIMUM_SESSION_SECRET_LENGTH = 32;
 
 export type AdminAuthMode = "identity" | "migration";
-export type AdminAuthentication = "supabase-password" | "supabase-mfa" | "legacy-shared-password";
+export type AdminAuthentication =
+  | "supabase-password"
+  | "supabase-mfa"
+  | "supabase-trusted-device"
+  | "legacy-shared-password";
 
 export type AdminPrincipal = {
   id: string;
@@ -137,9 +146,54 @@ async function getIdentityDecision(config: AdminAuthConfig): Promise<AdminAuthDe
     if (!hasAdminRole(user.app_metadata, config.role)) return { ok: false, reason: "not-authorized" };
 
     const assurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    const isAal2 = !assurance.error
+      && assurance.data?.currentLevel === "aal2"
+      && assurance.data?.nextLevel === "aal2";
+
+    return {
+      ok: true,
+      principal: {
+        id: user.id,
+        email: user.email ?? null,
+        authentication: isAal2 ? "supabase-mfa" : "supabase-password",
+        aal: isAal2 ? "aal2" : "aal1",
+      },
+    };
+  } catch {
+    return { ok: false, reason: "not-authenticated" };
+  }
+}
+
+/**
+ * A trusted device is an app-level continuation of a previously verified
+ * Supabase MFA session. It never replaces the password: the current request
+ * must still carry the same admin's Supabase identity session at AAL1, and the
+ * signed, HttpOnly device token must be bound to that user ID and unexpired.
+ */
+async function getTrustedDeviceDecision(config: AdminAuthConfig): Promise<AdminAuthDecision> {
+  const secret = getTrustedDeviceSecret();
+  if (!config.identity.configured || !secret) return { ok: false, reason: "mfa-required" };
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get(ADMIN_TRUSTED_DEVICE_COOKIE_NAME)?.value;
+  if (!token) return { ok: false, reason: "mfa-required" };
+
+  try {
+    const supabase = await getSupabaseAuthServerClient();
+    const { data, error } = await supabase.auth.getUser();
+    const user = data.user;
+
+    if (error || !user || !hasAdminRole(user.app_metadata, config.role)) {
+      return { ok: false, reason: error || !user ? "not-authenticated" : "not-authorized" };
+    }
+    if (!verifyTrustedDeviceToken(token, user.id, secret)) {
+      return { ok: false, reason: "mfa-required" };
+    }
+
+    const assurance = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
     if (
       assurance.error
-      || assurance.data.currentLevel !== "aal2"
+      || assurance.data.currentLevel !== "aal1"
       || assurance.data.nextLevel !== "aal2"
     ) {
       return { ok: false, reason: "mfa-required" };
@@ -150,12 +204,14 @@ async function getIdentityDecision(config: AdminAuthConfig): Promise<AdminAuthDe
       principal: {
         id: user.id,
         email: user.email ?? null,
-        authentication: "supabase-mfa",
+        authentication: "supabase-trusted-device",
+        // This is an application-level trusted-device assurance, not a claim
+        // that Supabase's current session itself is AAL2.
         aal: "aal2",
       },
     };
   } catch {
-    return { ok: false, reason: "not-authenticated" };
+    return { ok: false, reason: "mfa-required" };
   }
 }
 
@@ -188,6 +244,11 @@ export async function getAdminAuthDecision(): Promise<AdminAuthDecision> {
   const identity = await getIdentityDecision(config);
   if (identity.ok) return identity;
 
+  if (identity.reason === "mfa-required") {
+    const trustedDevice = await getTrustedDeviceDecision(config);
+    if (trustedDevice.ok) return trustedDevice;
+  }
+
   if (config.mode === "migration") {
     const legacy = await getLegacyDecision(config);
     if (legacy.ok) return legacy;
@@ -196,17 +257,31 @@ export async function getAdminAuthDecision(): Promise<AdminAuthDecision> {
   return identity;
 }
 
+/**
+ * Returns only the actual Supabase AAL2 decision. Trusted-device sessions are
+ * deliberately excluded so the endpoint that issues a new device token can
+ * never renew one without a fresh authenticator verification.
+ */
+export async function getCurrentSupabaseMfaAdminAuthDecision(): Promise<AdminAuthDecision> {
+  const config = getAdminAuthConfig();
+  if (!config.configured) return { ok: false, reason: "config" };
+  return getIdentityDecision(config);
+}
+
+/**
+ * Backwards-compatible helper for admin entry points that historically used
+ * an AAL2-only name. MFA is optional for the dashboard; authorization still
+ * requires a valid Supabase session with the server-managed admin role.
+ */
 export async function getAal2AdminAuthDecision(): Promise<AdminAuthDecision> {
   const decision = await getAdminAuthDecision();
   if (!decision.ok) return decision;
-
-  if (
-    decision.principal.authentication !== "supabase-mfa"
-    || decision.principal.aal !== "aal2"
-  ) {
-    return { ok: false, reason: "mfa-required" };
+  if (decision.principal.authentication === "legacy-shared-password") {
+    // Migration access is intentionally limited to the migration page. The
+    // renamed compatibility helper now allows named Supabase admins at AAL1,
+    // but it must never widen the legacy shared-password session.
+    return { ok: false, reason: "not-authorized" };
   }
-
   return decision;
 }
 

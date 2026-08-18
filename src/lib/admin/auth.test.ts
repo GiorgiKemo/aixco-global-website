@@ -1,5 +1,6 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createAdminSessionToken } from "./session-token";
+import { createTrustedDeviceToken } from "./trusted-device";
 
 const mocks = vi.hoisted(() => ({
   getUser: vi.fn(),
@@ -28,6 +29,7 @@ const ENV_KEYS = [
   "ADMIN_REQUIRE_MFA",
   "ADMIN_DASHBOARD_PASSWORD",
   "ADMIN_SESSION_SECRET",
+  "ADMIN_TRUSTED_DEVICE_SECRET",
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
 ] as const;
@@ -105,7 +107,7 @@ describe("admin auth rollout configuration", () => {
 });
 
 describe("admin identity authorization", () => {
-  it("requires a signed-in admin role at AAL2", async () => {
+  it("authorizes a signed-in admin role and preserves AAL2 when available", async () => {
     setIdentityEnvironment();
     mocks.getUser.mockResolvedValue({
       data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
@@ -145,7 +147,7 @@ describe("admin identity authorization", () => {
     expect(mocks.getAssurance).not.toHaveBeenCalled();
   });
 
-  it("rejects an admin identity until TOTP upgrades the session to AAL2", async () => {
+  it("authorizes an admin identity at AAL1 when MFA is not enabled", async () => {
     setIdentityEnvironment();
     mocks.getUser.mockResolvedValue({
       data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { roles: ["admin"] } } },
@@ -156,10 +158,18 @@ describe("admin identity authorization", () => {
       error: null,
     });
 
-    await expect(getAdminAuthDecision()).resolves.toEqual({ ok: false, reason: "mfa-required" });
+    await expect(getAdminAuthDecision()).resolves.toEqual({
+      ok: true,
+      principal: {
+        id: "admin-id",
+        email: "admin@aixco.global",
+        authentication: "supabase-password",
+        aal: "aal1",
+      },
+    });
   });
 
-  it("rejects a stale AAL2 session after its MFA factor is no longer active", async () => {
+  it("keeps a named admin authorized when a previous AAL2 session falls back to AAL1", async () => {
     setIdentityEnvironment();
     mocks.getUser.mockResolvedValue({
       data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
@@ -170,13 +180,16 @@ describe("admin identity authorization", () => {
       error: null,
     });
 
-    await expect(getAdminAuthDecision()).resolves.toEqual({ ok: false, reason: "mfa-required" });
+    await expect(getAdminAuthDecision()).resolves.toMatchObject({
+      ok: true,
+      principal: { authentication: "supabase-password", aal: "aal1" },
+    });
   });
 
   it.each([
     ["is absent", undefined],
     ["is false", "false"],
-  ])("rejects an AAL1 named admin when ADMIN_REQUIRE_MFA %s", async (_label, flag) => {
+  ])("does not make MFA mandatory when ADMIN_REQUIRE_MFA %s", async (_label, flag) => {
     setIdentityEnvironment();
     if (flag === undefined) delete process.env.ADMIN_REQUIRE_MFA;
     else process.env.ADMIN_REQUIRE_MFA = flag;
@@ -189,8 +202,14 @@ describe("admin identity authorization", () => {
       error: null,
     });
 
-    await expect(getAdminAuthDecision()).resolves.toEqual({ ok: false, reason: "mfa-required" });
-    await expect(getAal2AdminAuthDecision()).resolves.toEqual({ ok: false, reason: "mfa-required" });
+    await expect(getAdminAuthDecision()).resolves.toMatchObject({
+      ok: true,
+      principal: { authentication: "supabase-password", aal: "aal1" },
+    });
+    await expect(getAal2AdminAuthDecision()).resolves.toMatchObject({
+      ok: true,
+      principal: { authentication: "supabase-password", aal: "aal1" },
+    });
     expect(mocks.getAssurance).toHaveBeenCalledTimes(2);
   });
 
@@ -209,7 +228,7 @@ describe("admin identity authorization", () => {
     });
   });
 
-  it("does not accept a migration password session for AAL2-only admin tools", async () => {
+  it("keeps the legacy migration session out of protected admin tools", async () => {
     const sessionSecret = "0123456789abcdef0123456789abcdef";
     process.env.ADMIN_AUTH_MODE = "migration";
     process.env.ADMIN_DASHBOARD_PASSWORD = "a-long-temporary-password";
@@ -218,13 +237,10 @@ describe("admin identity authorization", () => {
       value: createAdminSessionToken({ secret: sessionSecret, ttlSeconds: 60 }),
     });
 
-    await expect(getAal2AdminAuthDecision()).resolves.toEqual({
-      ok: false,
-      reason: "mfa-required",
-    });
+    await expect(getAal2AdminAuthDecision()).resolves.toEqual({ ok: false, reason: "not-authorized" });
   });
 
-  it("accepts a verified admin identity for AAL2-only admin tools", async () => {
+  it("accepts a verified admin identity through the compatibility helper", async () => {
     setIdentityEnvironment();
     mocks.getUser.mockResolvedValue({
       data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
@@ -242,6 +258,31 @@ describe("admin identity authorization", () => {
         authentication: "supabase-mfa",
         aal: "aal2",
       },
+    });
+  });
+
+  it("accepts a named admin at AAL1 without relying on a trusted-device cookie", async () => {
+    const trustedSecret = "trusted-device-auth-test-secret-01234567890123456789";
+    setIdentityEnvironment();
+    process.env.ADMIN_TRUSTED_DEVICE_SECRET = trustedSecret;
+    const token = createTrustedDeviceToken("admin-id", trustedSecret);
+    mocks.cookieGet.mockReturnValue({ value: token });
+    mocks.getUser.mockResolvedValue({
+      data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
+      error: null,
+    });
+    mocks.getAssurance.mockResolvedValue({
+      data: { currentLevel: "aal1", nextLevel: "aal2" },
+      error: null,
+    });
+
+    await expect(getAdminAuthDecision()).resolves.toMatchObject({
+      ok: true,
+      principal: { id: "admin-id", authentication: "supabase-password", aal: "aal1" },
+    });
+    await expect(getAal2AdminAuthDecision()).resolves.toMatchObject({
+      ok: true,
+      principal: { authentication: "supabase-password", aal: "aal1" },
     });
   });
 });

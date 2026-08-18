@@ -44,6 +44,7 @@ const identityConfig = {
   role: "admin",
   identityAvailable: true,
   legacyAvailable: false,
+  trustedDeviceAvailable: true,
 };
 
 const fetchMock = vi.fn();
@@ -108,25 +109,22 @@ describe("AdminLoginForm", () => {
     expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
   });
 
-  it("signs out locally when MFA preparation fails after accepting credentials", async () => {
+  it("does not block an admin when the optional MFA status check fails", async () => {
+    const onAuthenticated = vi.fn();
     authMocks.signInWithPassword.mockResolvedValue({ data: { user: adminUser }, error: null });
     authMocks.getAssurance.mockResolvedValue({ data: null, error: new Error("MFA unavailable") });
 
-    render(<AdminLoginForm config={identityConfig} />);
+    render(<AdminLoginForm config={identityConfig} onAuthenticated={onAuthenticated} />);
     fireEvent.change(screen.getByLabelText("Email"), { target: { value: "admin@aixco.global" } });
     fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct-password" } });
     fireEvent.submit(screen.getByRole("button", { name: "Continue securely" }).closest("form")!);
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/authenticator code could not be verified/i);
-    expect(authMocks.signOut).toHaveBeenCalledWith({ scope: "local" });
-    expect(fetchMock).toHaveBeenCalledWith("/admin/logout", {
-      method: "POST",
-      credentials: "same-origin",
-      cache: "no-store",
-    });
+    await waitFor(() => expect(onAuthenticated).toHaveBeenCalledTimes(1));
+    expect(authMocks.signOut).not.toHaveBeenCalled();
   });
 
-  it("moves an authorized user with an enrolled factor to the TOTP challenge", async () => {
+  it("allows an authorized user with an enrolled factor to continue without a challenge", async () => {
+    const onAuthenticated = vi.fn();
     authMocks.signInWithPassword.mockResolvedValue({
       data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { role: "admin" } } },
       error: null,
@@ -135,27 +133,40 @@ describe("AdminLoginForm", () => {
       data: { currentLevel: "aal1", nextLevel: "aal2" },
       error: null,
     });
-    authMocks.listFactors.mockResolvedValue({
-      data: {
-        all: [{ id: "factor-id", factor_type: "totp", status: "verified" }],
-        totp: [{ id: "factor-id", factor_type: "totp", status: "verified" }],
-        phone: [],
-      },
-      error: null,
-    });
+    render(<AdminLoginForm config={identityConfig} onAuthenticated={onAuthenticated} />);
 
-    render(<AdminLoginForm config={identityConfig} />);
     fireEvent.change(screen.getByLabelText("Email"), { target: { value: "admin@aixco.global" } });
     fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct-password" } });
     fireEvent.submit(screen.getByRole("button", { name: "Continue securely" }).closest("form")!);
 
-    const challengeHeading = await screen.findByRole("heading", { name: "Authenticator code" });
-    await waitFor(() => expect(challengeHeading).toHaveFocus());
-    expect(screen.getByLabelText("Six-digit code")).toHaveAttribute("autocomplete", "one-time-code");
-    expect(screen.getByText(/signed in as admin@aixco.global/i)).toBeInTheDocument();
+    await waitFor(() => expect(onAuthenticated).toHaveBeenCalledTimes(1));
+    expect(authMocks.listFactors).not.toHaveBeenCalled();
   });
 
-  it("requires first-time admins to enroll a TOTP factor", async () => {
+  it("does not require a trusted-device check for an optional MFA session", async () => {
+    const onAuthenticated = vi.fn();
+    authMocks.signInWithPassword.mockResolvedValue({
+      data: { user: adminUser },
+      error: null,
+    });
+    authMocks.getAssurance.mockResolvedValue({
+      data: { currentLevel: "aal1", nextLevel: "aal2" },
+      error: null,
+    });
+    fetchMock.mockResolvedValueOnce(auditResponse(true));
+
+    render(<AdminLoginForm config={identityConfig} onAuthenticated={onAuthenticated} />);
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "admin@aixco.global" } });
+    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct-password" } });
+    fireEvent.submit(screen.getByRole("button", { name: "Continue securely" }).closest("form")!);
+
+    await waitFor(() => expect(onAuthenticated).toHaveBeenCalledTimes(1));
+    expect(authMocks.listFactors).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledWith("/admin/login/audit", expect.anything());
+  });
+
+  it("allows first-time admins to enter without enrolling TOTP", async () => {
+    const onAuthenticated = vi.fn();
     authMocks.signInWithPassword.mockResolvedValue({
       data: { user: { id: "admin-id", email: "admin@aixco.global", app_metadata: { roles: ["admin"] } } },
       error: null,
@@ -164,50 +175,33 @@ describe("AdminLoginForm", () => {
       data: { currentLevel: "aal1", nextLevel: "aal1" },
       error: null,
     });
-    authMocks.listFactors.mockResolvedValue({ data: { all: [], totp: [], phone: [] }, error: null });
-    authMocks.enroll.mockResolvedValue({
-      data: {
-        id: "new-factor",
-        totp: {
-          qr_code: "data:image/svg+xml,%3Csvg%3E%3C/svg%3E",
-          secret: "AIXCO-TOTP-SECRET",
-        },
-      },
-      error: null,
-    });
 
-    render(<AdminLoginForm config={identityConfig} />);
+    render(<AdminLoginForm config={identityConfig} onAuthenticated={onAuthenticated} />);
     fireEvent.change(screen.getByLabelText("Email"), { target: { value: "admin@aixco.global" } });
     fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct-password" } });
     fireEvent.submit(screen.getByRole("button", { name: "Continue securely" }).closest("form")!);
 
-    expect(await screen.findByRole("heading", { name: "Protect your admin account" })).toBeInTheDocument();
-    expect(screen.getByAltText("QR code for AIXCO admin authenticator setup")).toBeInTheDocument();
-    fireEvent.click(screen.getByText("Cannot scan the QR code?"));
-    expect(screen.getByText("AIXCO-TOTP-SECRET")).toBeInTheDocument();
+    await waitFor(() => expect(onAuthenticated).toHaveBeenCalledTimes(1));
+    expect(authMocks.enroll).not.toHaveBeenCalled();
   });
 
-  it("requires an invited administrator to create a reusable password before MFA enrollment", async () => {
+  it("requires an invited administrator to create a reusable password before dashboard access", async () => {
+    const onAuthenticated = vi.fn();
     authMocks.searchParams = new URLSearchParams("setup=1");
     const user = { id: "invited-admin", email: "invited@aixco.global", app_metadata: { role: "admin" } };
     authMocks.getUser.mockResolvedValue({ data: { user }, error: null });
     authMocks.updateUser.mockResolvedValue({ data: { user }, error: null });
     authMocks.getAssurance.mockResolvedValue({ data: { currentLevel: "aal1", nextLevel: "aal1" }, error: null });
-    authMocks.listFactors.mockResolvedValue({ data: { all: [], totp: [], phone: [] }, error: null });
-    authMocks.enroll.mockResolvedValue({
-      data: { id: "factor-id", totp: { qr_code: "data:image/svg+xml,%3Csvg%3E%3C/svg%3E", secret: "SETUP" } },
-      error: null,
-    });
 
-    render(<AdminLoginForm config={identityConfig} />);
+    render(<AdminLoginForm config={identityConfig} onAuthenticated={onAuthenticated} />);
     expect(await screen.findByRole("heading", { name: "Create your admin password" })).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("New password"), { target: { value: "long-secure-password" } });
     fireEvent.change(screen.getByLabelText("Confirm password"), { target: { value: "long-secure-password" } });
     fireEvent.submit(screen.getByRole("button", { name: "Save password and continue" }).closest("form")!);
 
     await waitFor(() => expect(authMocks.updateUser).toHaveBeenCalledWith({ password: "long-secure-password" }));
-    const enrollmentHeading = await screen.findByRole("heading", { name: "Protect your admin account" });
-    await waitFor(() => expect(enrollmentHeading).toHaveFocus());
+    await waitFor(() => expect(onAuthenticated).toHaveBeenCalledTimes(1));
+    expect(authMocks.enroll).not.toHaveBeenCalled();
   });
 
   it("signs out locally when invited-user password setup fails", async () => {
@@ -251,7 +245,7 @@ describe("AdminLoginForm", () => {
       credentials: "same-origin",
       body: JSON.stringify({
         email: "admin@aixco.global",
-        phase: "session",
+        phase: "mfa",
         outcome: "success",
       }),
     }));
@@ -297,22 +291,13 @@ describe("AdminLoginForm", () => {
     expect(authMocks.signOut).toHaveBeenCalledWith({ scope: "local" });
   });
 
-  it("invalidates an MFA session when its required success audit is unavailable", async () => {
+  it("invalidates an optional-MFA session when its success audit is unavailable", async () => {
     const onAuthenticated = vi.fn();
     authMocks.signInWithPassword.mockResolvedValue({ data: { user: adminUser }, error: null });
     authMocks.getAssurance.mockResolvedValue({
       data: { currentLevel: "aal1", nextLevel: "aal2" },
       error: null,
     });
-    authMocks.listFactors.mockResolvedValue({
-      data: {
-        all: [{ id: "factor-id", factor_type: "totp", status: "verified" }],
-        totp: [{ id: "factor-id", factor_type: "totp", status: "verified" }],
-        phone: [],
-      },
-      error: null,
-    });
-    authMocks.challengeAndVerify.mockResolvedValue({ data: {}, error: null });
     fetchMock
       .mockResolvedValueOnce(auditResponse(false))
       .mockResolvedValueOnce(new Response(null, { status: 204 }));
@@ -322,14 +307,10 @@ describe("AdminLoginForm", () => {
     fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct-password" } });
     fireEvent.submit(screen.getByRole("button", { name: "Continue securely" }).closest("form")!);
 
-    const code = await screen.findByLabelText("Six-digit code");
-    fireEvent.change(code, { target: { value: "123456" } });
-    fireEvent.submit(screen.getByRole("button", { name: "Verify and sign in" }).closest("form")!);
-
     expect(await screen.findByRole("heading", { name: "Individual admin sign-in" })).toBeInTheDocument();
     expect(screen.getByRole("alert")).toHaveTextContent(/authenticated session was signed out/i);
     expect(onAuthenticated).not.toHaveBeenCalled();
-    expect(authMocks.challengeAndVerify).toHaveBeenCalledTimes(1);
+    expect(authMocks.challengeAndVerify).not.toHaveBeenCalled();
     expect(authMocks.signOut).toHaveBeenCalledWith({ scope: "local" });
     expect(screen.queryByLabelText("Six-digit code")).not.toBeInTheDocument();
   });
