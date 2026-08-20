@@ -5,6 +5,7 @@ import { InitialSiteAnimation } from "./InitialSiteAnimation";
 
 describe("InitialSiteAnimation", () => {
   beforeEach(() => {
+    window.sessionStorage.clear();
     vi.stubGlobal(
       "matchMedia",
       vi.fn().mockImplementation((query: string) => ({
@@ -21,6 +22,7 @@ describe("InitialSiteAnimation", () => {
   });
 
   afterEach(() => {
+    window.sessionStorage.clear();
     vi.unstubAllGlobals();
     delete document.documentElement.dataset.siteIntro;
   });
@@ -56,5 +58,14 @@ describe("InitialSiteAnimation", () => {
     expect(decodeURIComponent(container.querySelector("img")?.getAttribute("src") ?? "")).toContain(
       "/aixco-global-op2/media/aixco-intro-black-poster-hd.webp",
     );
+  });
+
+  it("does not replay after it has already run in the current session", async () => {
+    window.sessionStorage.setItem("aixco-site-intro-v1", "seen");
+
+    const { container } = render(<InitialSiteAnimation />);
+
+    await waitFor(() => expect(container.querySelector("[data-site-intro]")).not.toBeInTheDocument());
+    expect(document.documentElement.dataset.siteIntro).toBe("complete");
   });
 });

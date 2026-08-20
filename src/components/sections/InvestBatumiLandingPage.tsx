@@ -675,7 +675,7 @@ export function InvestBatumiLandingPage() {
             <div className={styles.heroMeta}><span>{content.hero.location}</span><span>{content.hero.service}</span></div>
           </div>
           <div className={styles.heroImageFrame}>
-            <Image src={images.hero.src} alt="Batumi skyline and Black Sea from above" fill preload quality={90} sizes="(max-width: 850px) 200vw, 110vw" className={styles.heroImage} />
+            <Image src={images.hero.src} alt="Batumi skyline and Black Sea from above" fill preload quality={90} sizes="(max-width: 700px) 100vw, 57vw" className={styles.heroImage} />
           </div>
         </section>
 
@@ -702,11 +702,11 @@ export function InvestBatumiLandingPage() {
             <button type="button" className={styles.textButton} onClick={() => scrollTo("#contact")}>{content.batumi.cta}<ArrowUpRight size={16} /></button>
           </div>
           <button type="button" className={`${styles.imageFrame} ${styles.imageFrameOne}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(1)}>
-            <Image src={images.verticalCity.src} alt={content.gallery.captions[1]} fill quality={90} sizes="(max-width: 560px) 180vw, (max-width: 960px) 100vw, 80vw" />
+            <Image src={images.verticalCity.src} alt={content.gallery.captions[1]} fill quality={90} sizes="(max-width: 700px) 58vw, (max-width: 960px) 50vw, 33vw" />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
           <button type="button" className={`${styles.imageFrame} ${styles.imageFrameTwo}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(2)}>
-            <Image src={images.verticalTower.src} alt={content.gallery.captions[2]} fill quality={90} sizes="(max-width: 560px) 180vw, (max-width: 960px) 100vw, 45vw" />
+            <Image src={images.verticalTower.src} alt={content.gallery.captions[2]} fill quality={90} sizes="(max-width: 700px) 42vw, (max-width: 960px) 50vw, 27vw" />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
         </section>
@@ -734,7 +734,7 @@ export function InvestBatumiLandingPage() {
           <div className={styles.galleryGrid}>
             {images.gallery.map((image, index) => (
               <button key={image.src} type="button" aria-label={content.gallery.captions[index]} onClick={() => setGalleryIndex(index)}>
-                <Image src={image.src} alt={content.gallery.captions[index]} fill quality={90} sizes="(max-width: 560px) 140vw, (max-width: 960px) 120vw, 75vw" />
+                <Image src={image.src} alt={content.gallery.captions[index]} fill quality={90} sizes="(max-width: 700px) 50vw, (max-width: 960px) 50vw, 24vw" />
                 <span>{content.gallery.captions[index]}</span>
               </button>
             ))}
@@ -756,11 +756,11 @@ export function InvestBatumiLandingPage() {
 
         <section id="contact" className={styles.contactSection}>
           <div className={styles.contactMedia}>
-            <Image src={images.contact.src} alt="Premium indoor pool and resident wellness area" fill quality={90} sizes="(max-width: 899px) 220vw, 120vw" />
+            <Image src={images.contact.src} alt="Premium indoor pool and resident wellness area" fill quality={90} sizes="(max-width: 960px) 100vw, 50vw" />
           </div>
           <div className={styles.contactPanel}>
             <p className={styles.eyebrowGold}>{content.contact.eyebrow}</p>
-            <h2>{content.contact.title}</h2>
+            <h2 id="invest-batumi-contact-title">{content.contact.title}</h2>
             <p className={styles.contactIntro}>{content.contact.body}</p>
             {submitted ? (
               <div className={styles.success} role="status">
@@ -769,7 +769,7 @@ export function InvestBatumiLandingPage() {
                 <button type="button" onClick={() => { setSubmitted(false); setRequestReference(null); formStartedAt.current = Date.now(); }}>{content.contact.another}</button>
               </div>
             ) : (
-              <form className={styles.form} onSubmit={handleSubmit}>
+              <form className={styles.form} aria-labelledby="invest-batumi-contact-title" onSubmit={handleSubmit}>
                 <input className={styles.honeypot} type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
                 <div className={styles.formRow}>
                   <label>{content.contact.name}<input required minLength={2} maxLength={100} name="name" autoComplete="name" placeholder={content.contact.namePlaceholder} /></label>

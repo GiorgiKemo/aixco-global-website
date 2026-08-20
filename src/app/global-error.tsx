@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { analyticsCollectionAllowed } from "@/lib/analytics/client";
+import { createClientErrorEventId, getClientErrorContext } from "@/lib/analytics/client-error-context";
 
 type RecoveryLang = "en" | "de" | "pl" | "sl" | "ru";
 
@@ -38,7 +39,14 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
       void fetch("/api/client-errors", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ kind: "root-render", digest: safeDigest, locale: storedLang, pagePath: window.location.pathname }),
+        body: JSON.stringify({
+          kind: "root-render",
+          digest: safeDigest,
+          eventId: createClientErrorEventId(),
+          locale: storedLang,
+          pagePath: window.location.pathname,
+          metadata: getClientErrorContext(),
+        }),
         credentials: "same-origin",
         keepalive: true,
       }).catch(() => undefined);

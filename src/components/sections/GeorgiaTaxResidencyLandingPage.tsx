@@ -20,7 +20,7 @@ import { LANGS, useI18n } from "@/i18n/I18nProvider";
 import type { Lang } from "@/i18n/languages";
 import { useSiteContent } from "@/data/site-content-context";
 import { useUI } from "@/components/ui-state";
-import { aixcoLiveDocuments, aixcoLiveImages, aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { aixcoLiveImages, aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { recordContactSubmission } from "@/lib/backend/lead-capture";
 import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
 import { openAnalyticsPreferences } from "@/lib/analytics/client";
@@ -788,7 +788,7 @@ export function GeorgiaTaxResidencyLandingPage() {
           <div className={styles.heroCopy}>
             <motion.div initial={reducedMotion ? false : "hidden"} animate="visible" variants={reveal}>
               <p className={styles.eyebrow}><span />{content.hero.eyebrow}</p>
-              <h1 id="tax-hero-title">{content.hero.title}<br /><span>{content.hero.accent}</span></h1>
+              <h1 id="tax-hero-title">{content.hero.title}<br />{" "}<span>{content.hero.accent}</span></h1>
               <p className={styles.heroBody}>{content.hero.body}</p>
               <div className={styles.heroActions}>
                 <button type="button" className={styles.goldButton} onClick={() => handleNav("contact")}>{content.hero.primary}<ArrowUpRight size={16} aria-hidden /></button>
@@ -799,7 +799,7 @@ export function GeorgiaTaxResidencyLandingPage() {
           </div>
           <div className={styles.heroMedia}>
             <motion.div className={styles.heroImageInner} style={reducedMotion ? undefined : { y: heroImageY }}>
-              <Image src={heroImage} alt="Batumi coastline and modern architecture in Georgia" fill preload quality={90} sizes="(min-width: 1600px) 115vw, (min-width: 980px) 160vw, 200vw" />
+              <Image src={heroImage} alt="Batumi coastline and modern architecture in Georgia" fill preload quality={90} sizes="(min-width: 821px) 59vw, 100vw" />
             </motion.div>
             <div className={styles.heroMediaCaption}><span>{content.hero.location}</span><span>41.6168° N · 41.6367° E</span></div>
           </div>
@@ -884,7 +884,7 @@ export function GeorgiaTaxResidencyLandingPage() {
         </section>
 
         <section id="why" className={styles.whySection} aria-labelledby="why-title">
-          <div className={styles.whyImage}><Image src={aixcoLiveImages.taxResidencyWhyGeorgia} alt="Batumi skyline and waterfront at sunset" fill quality={90} sizes="(min-width: 980px) 160vw, 100vw" /></div>
+          <div className={styles.whyImage}><Image src={aixcoLiveImages.taxResidencyWhyGeorgia} alt="Batumi skyline and waterfront at sunset" fill quality={90} sizes="(min-width: 821px) 45vw, 100vw" /></div>
           <div className={styles.whyCopy}>
             <motion.div initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal}>
               <p className={styles.eyebrow}><span />{content.why.eyebrow}</p>
@@ -919,7 +919,7 @@ export function GeorgiaTaxResidencyLandingPage() {
                 <button type="button" className={styles.textButton} onClick={() => { setSubmitted(false); setRequestReference(null); formStartedAt.current = Date.now(); }}>{content.contact.another}<ArrowUpRight size={15} aria-hidden /></button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className={styles.form}>
+              <form onSubmit={handleSubmit} className={styles.form} aria-labelledby="contact-title">
                 <input className={styles.honeypot} type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
                 <div className={styles.formRow}>
                   <label>{content.contact.name}<input required minLength={2} maxLength={100} name="name" autoComplete="name" placeholder={content.contact.namePlaceholder} /></label>
@@ -938,7 +938,7 @@ export function GeorgiaTaxResidencyLandingPage() {
       <footer className={styles.footer}>
         <Link href="/" aria-label={content.home}><Image src={aixcoLiveLogos.aixcoHorizontalDark} alt="AIXCO.Global" width={1600} height={333} sizes="8rem" /></Link>
         <div className={styles.footerInfo}><a href={`mailto:${company.email}`}>{company.email}</a><span>{company.offices.join(" · ")}</span></div>
-        <div className={styles.footerLinks}><Link href="/">{content.footer.home}</Link><button type="button" onClick={openPrivacy}>{content.footer.privacy}</button><button type="button" onClick={openTerms}>{content.footer.terms}</button><button type="button" onClick={openAnalyticsPreferences}>{content.footer.cookies}</button><a href={aixcoLiveDocuments.taxResidencyPhotoCredits} target="_blank" rel="noreferrer">{content.footer.photos}</a></div>
+        <div className={styles.footerLinks}><Link href="/">{content.footer.home}</Link><button type="button" onClick={openPrivacy}>{content.footer.privacy}</button><button type="button" onClick={openTerms}>{content.footer.terms}</button><button type="button" onClick={openAnalyticsPreferences}>{content.footer.cookies}</button><Link href="/georgia-tax-residency/photo-credits">{content.footer.photos}</Link></div>
         <p>© {new Date().getFullYear()} AIXCO.Global. {content.footer.rights}</p>
       </footer>
     </div>

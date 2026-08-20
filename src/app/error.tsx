@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { analyticsCollectionAllowed } from "@/lib/analytics/client";
+import { createClientErrorEventId, getClientErrorContext } from "@/lib/analytics/client-error-context";
 
 type RecoveryLang = "en" | "de" | "pl" | "sl" | "ru";
 
@@ -31,7 +32,14 @@ function reportClientError(kind: string, digest: string | undefined, locale: Rec
   void fetch("/api/client-errors", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ kind, digest: safeDigest, locale, pagePath: window.location.pathname }),
+    body: JSON.stringify({
+      kind,
+      digest: safeDigest,
+      eventId: createClientErrorEventId(),
+      locale,
+      pagePath: window.location.pathname,
+      metadata: getClientErrorContext(),
+    }),
     credentials: "same-origin",
     keepalive: true,
   }).catch(() => undefined);

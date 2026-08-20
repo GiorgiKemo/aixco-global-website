@@ -1221,7 +1221,7 @@ function FixedHeroBackdrop({ mediaReady, visible }: { mediaReady: boolean; visib
           fetchPriority="high"
           loading="eager"
           quality={78}
-          sizes="120vw"
+          sizes="100vw"
           className="object-cover brightness-[1.08] saturate-[1.08]"
         />
         {shouldRenderVideo && canAnimate && videoSrc ? (
@@ -1856,7 +1856,7 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
 
 function StoryMetricText({
   value,
-  ariaHidden = true,
+  ariaHidden = false,
 }: {
   value: string;
   ariaHidden?: boolean;
@@ -2074,7 +2074,7 @@ function AboutScene({
                 className="story-about-cinematic-poster object-cover"
                 loading="lazy"
                 fetchPriority="auto"
-                sizes="130vw"
+                sizes="100vw"
                 decoding="async"
               />
             </div>
@@ -2117,7 +2117,7 @@ function AboutScene({
 
                 return (
                   <div key={metric.label} className="border-s border-white/28 ps-4">
-                    <dt className="story-glyph-safe story-standard-number tabular-nums" aria-label={localizedValue}>
+                    <dt className="story-glyph-safe story-standard-number tabular-nums">
                       <StoryMetricText value={localizedValue} />
                     </dt>
                     <dd className="mt-2 text-[clamp(0.7rem,2.45vw,0.82rem)] font-semibold uppercase leading-relaxed tracking-[0.04em] text-white/70 [overflow-wrap:anywhere]">
@@ -2183,7 +2183,7 @@ function PhilosophyScene({
                 <span className="hidden sm:inline">{tx(stat.label)}</span>
                 <span className="sm:hidden">{tx(mobileLabel)}</span>
               </dt>
-              <dd className="story-glyph-safe story-standard-number tabular-nums" aria-label={localizedValue}>
+              <dd className="story-glyph-safe story-standard-number tabular-nums">
                 <StoryMetricText value={localizedValue} />
               </dd>
             </div>
@@ -2244,7 +2244,7 @@ function PhilosophyPlatformScene({
           return (
             <div key={stat.label} className="story-philosophy-stat">
               <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
-              <dd className="story-metric-value story-philosophy-stat__value story-standard-number" aria-label={localizedValue}>
+              <dd className="story-metric-value story-philosophy-stat__value story-standard-number">
                 <StoryMetricText value={localizedValue} />
               </dd>
             </div>
@@ -2377,7 +2377,7 @@ function AboutObjectivesScene({
               loading="lazy"
               decoding="async"
               quality={75}
-              sizes="(max-width: 1279px) 140vw, 1px"
+              sizes="(max-width: 1279px) 100vw, 1px"
               className="h-full w-full object-cover xl:hidden"
               style={{ objectPosition: "center 56%" }}
             />
@@ -2388,7 +2388,7 @@ function AboutObjectivesScene({
               loading="lazy"
               decoding="async"
               quality={75}
-              sizes="(min-width: 1280px) 120vw, 1px"
+              sizes="(min-width: 1280px) 100vw, 1px"
               className="hidden h-full w-full object-cover xl:block"
               style={{ objectPosition: "center 58%" }}
             />
@@ -2440,7 +2440,7 @@ function AboutAccessScene({
                 loading="lazy"
                 decoding="async"
                 quality={75}
-                sizes="(max-width: 1279px) 140vw, 1px"
+                sizes="(max-width: 1279px) 100vw, 1px"
                 className="h-full w-full object-cover xl:hidden"
                 style={{ objectPosition: "center 56%" }}
               />
@@ -2451,7 +2451,7 @@ function AboutAccessScene({
                 loading="lazy"
                 decoding="async"
                 quality={75}
-                sizes="(min-width: 1280px) 120vw, 1px"
+                sizes="(min-width: 1280px) 100vw, 1px"
                 className="hidden h-full w-full object-cover xl:block"
                 style={{ objectPosition: "center 58%" }}
               />
@@ -2469,7 +2469,7 @@ function AboutAccessScene({
               loading="lazy"
               decoding="async"
               quality={75}
-              sizes="120vw"
+              sizes="100vw"
               className="h-full w-full object-cover"
               style={{ objectPosition: "58% 56%" }}
             />

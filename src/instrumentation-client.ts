@@ -1,3 +1,5 @@
+import { getClientErrorContext } from "@/lib/analytics/client-error-context";
+
 const consentKey = "aixco-analytics-consent-v1";
 const consentVersion = "2026-08-13-google-analytics-policy-refresh";
 const sessionKey = "aixco-analytics-session-v1";
@@ -57,6 +59,7 @@ function report(
     eventId: fingerprint(sourceValue.slice(0, 2_000)),
     pagePath: window.location.pathname,
     metadata: {
+      ...getClientErrorContext(),
       source: "instrumentation_client",
       component: component?.slice(0, 120),
       sessionId: sessionId(),

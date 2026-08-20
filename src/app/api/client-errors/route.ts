@@ -15,20 +15,34 @@ const structuredClientErrorSchema = z.object({
   pagePath: z.string().trim().max(800).nullable().optional(),
   metadata: z.object({
     boundary: z.string().trim().max(120).optional(),
+    browserFamily: z.string().trim().max(40).optional(),
     buildId: z.string().trim().max(120).optional(),
     component: z.string().trim().max(120).optional(),
     digest: z.string().trim().max(255).optional(),
+    online: z.boolean().optional(),
     routeKind: z.string().trim().max(80).optional(),
     sessionId: z.string().uuid().optional(),
     source: z.string().trim().max(80).optional(),
+    viewportClass: z.enum(["mobile", "tablet", "desktop"]).optional(),
+    viewportHeight: z.number().int().min(1).max(20_000).optional(),
+    viewportWidth: z.number().int().min(1).max(20_000).optional(),
   }).strict().optional(),
 }).strict();
 
 const boundaryClientErrorSchema = z.object({
   kind: z.enum(["route-render", "root-render"]),
   digest: z.string().trim().min(1).max(255).nullable().optional(),
+  eventId: z.string().trim().min(1).max(255).nullable().optional(),
   locale: z.string().trim().min(1).max(35).nullable().optional(),
   pagePath: z.string().trim().max(800).nullable().optional(),
+  metadata: z.object({
+    browserFamily: z.string().trim().max(40).optional(),
+    buildId: z.string().trim().max(120).optional(),
+    online: z.boolean().optional(),
+    viewportClass: z.enum(["mobile", "tablet", "desktop"]).optional(),
+    viewportHeight: z.number().int().min(1).max(20_000).optional(),
+    viewportWidth: z.number().int().min(1).max(20_000).optional(),
+  }).strict().optional(),
 }).strict();
 
 const clientErrorSchema = z.union([structuredClientErrorSchema, boundaryClientErrorSchema]);
@@ -98,10 +112,12 @@ export async function POST(request: Request) {
     const telemetry = "kind" in parsed.data
       ? {
           eventName: parsed.data.kind === "root-render" ? "global_error" as const : "error_boundary" as const,
-          eventId: parsed.data.digest ?? null,
+          eventId: parsed.data.digest ?? parsed.data.eventId ?? null,
           pagePath: parsed.data.pagePath ?? null,
           metadata: {
+            ...parsed.data.metadata,
             digest: parsed.data.digest ?? undefined,
+            locale: parsed.data.locale ?? undefined,
             source: parsed.data.kind,
           },
         }

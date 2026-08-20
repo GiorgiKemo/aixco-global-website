@@ -348,13 +348,13 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain("src={videoAttached ? aixcoDubaiHeroVideo.src : undefined}");
   });
 
-  it("requests high-density images for tall cropped story panels", () => {
+  it("requests appropriately sized images for tall cropped story panels", () => {
     expect(desktopStoryHome).toContain('sizes: "(min-width: 1280px) 140vw, 100vw"');
     expect(desktopStoryHome).toContain('sizes: "(max-width: 767px) 170vw, 100vw"');
     expect(desktopStoryHome).toContain("src={aixcoLiveImages.batumiMosaicSunsetPanorama}");
     expect(desktopStoryHome).toContain("src={aixcoLiveImages.batumiSeafrontPoster}");
-    expect(desktopStoryHome).toContain('sizes="(max-width: 1279px) 140vw, 1px"');
-    expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 120vw, 1px"');
+    expect(desktopStoryHome).toContain('sizes="(max-width: 1279px) 100vw, 1px"');
+    expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 100vw, 1px"');
     expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 100vw, 100vw"');
     expect(desktopStoryHome).toContain("src={image.thumbnailSrc}");
     expect(desktopStoryHome).toContain('sizes="(min-width: 1280px) 144px, 34vw"');

@@ -50,12 +50,15 @@ export function RouteTransition() {
   const pathname = usePathname();
   const veilRef = useRef<HTMLDivElement | null>(null);
   const hideTimerRef = useRef<number | null>(null);
+  const safetyTimerRef = useRef<number | null>(null);
+  const routePathRef = useRef<string | null>(null);
 
   useEffect(() => {
     const isAppRoute =
       pathname.startsWith("/admin") || pathname.startsWith("/api") || pathname.startsWith("/portal");
     document.documentElement.dataset.routeTransition = isAppRoute ? "app" : "marketing";
     document.documentElement.dataset.routePath = pathname;
+    routePathRef.current = pathname;
   }, [pathname]);
 
   useEffect(() => {
@@ -65,6 +68,10 @@ export function RouteTransition() {
     if (hideTimerRef.current !== null) {
       window.clearTimeout(hideTimerRef.current);
       hideTimerRef.current = null;
+    }
+    if (safetyTimerRef.current !== null) {
+      window.clearTimeout(safetyTimerRef.current);
+      safetyTimerRef.current = null;
     }
 
     if (!veil.classList.contains("is-active")) return;
@@ -86,6 +93,22 @@ export function RouteTransition() {
   }, [pathname]);
 
   useEffect(() => {
+    const scheduleSafetyExit = (delay: number) => {
+      if (safetyTimerRef.current !== null) window.clearTimeout(safetyTimerRef.current);
+      safetyTimerRef.current = window.setTimeout(() => {
+        safetyTimerRef.current = null;
+        const veil = veilRef.current;
+        if (!veil?.classList.contains("is-active")) return;
+
+        veil.classList.add("is-leaving");
+        if (hideTimerRef.current !== null) window.clearTimeout(hideTimerRef.current);
+        hideTimerRef.current = window.setTimeout(() => {
+          resetVeil(veil);
+          hideTimerRef.current = null;
+        }, VEIL_HIDE_MS);
+      }, delay);
+    };
+
     const handlePointer = (event: MouseEvent) => {
       if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
         return;
@@ -94,13 +117,36 @@ export function RouteTransition() {
       const target = event.target;
       if (!(target instanceof Element)) return;
       const anchor = target.closest("a[href]");
-      if (!(anchor instanceof HTMLAnchorElement) || !isInternalPageHref(anchor)) return;
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      const url = isInternalPageHref(anchor);
+      if (!url) return;
 
       activateVeil(veilRef.current);
+      // Search-only navigation does not change usePathname(), so guarantee the
+      // veil exits even when the route component itself is preserved.
+      scheduleSafetyExit(url.pathname === window.location.pathname ? 0 : 2500);
     };
 
-    const handlePopState = () => activateVeil(veilRef.current);
-    const handlePageShow = () => resetVeil(veilRef.current);
+    const handlePopState = () => {
+      const nextPath = window.location.pathname;
+      if (routePathRef.current === nextPath) {
+        // Hash-only history changes must never cover the current page.
+        resetVeil(veilRef.current);
+        return;
+      }
+
+      routePathRef.current = nextPath;
+      activateVeil(veilRef.current);
+      scheduleSafetyExit(2500);
+    };
+    const handlePageShow = () => {
+      routePathRef.current = window.location.pathname;
+      if (safetyTimerRef.current !== null) {
+        window.clearTimeout(safetyTimerRef.current);
+        safetyTimerRef.current = null;
+      }
+      resetVeil(veilRef.current);
+    };
 
     document.addEventListener("click", handlePointer, true);
     window.addEventListener("popstate", handlePopState, true);
@@ -110,6 +156,10 @@ export function RouteTransition() {
       document.removeEventListener("click", handlePointer, true);
       window.removeEventListener("popstate", handlePopState, true);
       window.removeEventListener("pageshow", handlePageShow);
+      if (safetyTimerRef.current !== null) {
+        window.clearTimeout(safetyTimerRef.current);
+        safetyTimerRef.current = null;
+      }
     };
   }, []);
 

@@ -323,7 +323,6 @@ export function GeorgiaResidencyLandingPage() {
 
       <main>
         <section className="relative min-h-[100svh] overflow-hidden bg-[#0b0b0b]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <Image
             src={aixcoLiveImages.batumiMosaicNightSkyline}
             alt={tx("Batumi night skyline")}
@@ -364,7 +363,6 @@ export function GeorgiaResidencyLandingPage() {
         <section id="paths" className="scroll-mt-16">
           {permitPaths.map((path) => (
             <article key={path.id} id={path.id} className="relative min-h-[78svh] overflow-hidden border-t border-white/10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <Image src={path.image} alt="" fill sizes="100vw" className="object-cover" />
               <div aria-hidden className="absolute inset-0 bg-[#0b0b0b]/72" />
               <div className="relative z-10 mx-auto grid min-h-[78svh] max-w-[1480px] items-end gap-10 px-5 py-16 sm:px-10 lg:grid-cols-[0.7fr_1fr] lg:px-16 lg:py-20">
@@ -450,7 +448,6 @@ export function GeorgiaResidencyLandingPage() {
         </section>
 
         <section id="contact" className="relative scroll-mt-16 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <Image src={aixcoLiveImages.batumiMosaicEveningWaterfront} alt="" fill sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-[#0b0b0b]/78" />
           <div className="relative z-10 mx-auto grid max-w-[1480px] gap-12 px-5 py-20 sm:px-10 lg:grid-cols-[0.85fr_1.15fr] lg:px-16 lg:py-28">

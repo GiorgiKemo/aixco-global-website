@@ -15,15 +15,21 @@ const telemetryInputSchema = z.object({
 
 const allowedMetadataKeys = new Set([
   "boundary",
+  "browserFamily",
   "buildId",
   "component",
   "delta",
   "digest",
   "metricId",
   "navigationType",
+  "locale",
+  "online",
   "routeKind",
   "sessionId",
   "source",
+  "viewportClass",
+  "viewportHeight",
+  "viewportWidth",
 ]);
 
 type SiteTelemetryInput = z.input<typeof telemetryInputSchema>;

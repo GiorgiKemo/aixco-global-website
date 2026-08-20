@@ -260,12 +260,12 @@ export function BrandbookLandingPage() {
             aria-label={menuOpen ? tx("Close navigation") : tx("Open navigation")}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((value) => !value)}
-            className="inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
+            className="order-2 inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
           >
             {menuOpen ? <X size={21} strokeWidth={1.6} /> : <Menu size={21} strokeWidth={1.6} />}
           </button>
 
-          <div ref={languageSwitcherRef} className="relative shrink-0">
+          <div ref={languageSwitcherRef} className="relative order-1 shrink-0">
             <button
               data-language-trigger="true"
               type="button"
@@ -383,9 +383,9 @@ export function BrandbookLandingPage() {
                 </div>
               </div>
 
-              <div className="relative z-10 mt-auto grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t border-white/25 pt-4 text-[0.58rem] font-medium uppercase tracking-[0.15em] text-white/60 sm:text-[0.62rem] sm:tracking-[0.17em]">
+              <div className="relative z-10 mt-auto grid grid-cols-1 items-start gap-2 border-t border-white/25 pt-4 text-[0.58rem] font-medium uppercase tracking-[0.15em] text-white/60 sm:text-[0.62rem] sm:tracking-[0.17em] xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center xl:gap-4">
                 <span>{tx("59 Adlia Street")} · Batumi</span>
-                <span className="hidden items-center justify-self-end gap-2 text-right sm:flex"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#E6C767]" /> {tx("Completion targeted for July 2028")}</span>
+                <span className="hidden items-center gap-2 text-left sm:flex xl:justify-self-end xl:text-right"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#E6C767]" /> {tx("Completion targeted for July 2028")}</span>
               </div>
             </div>
 
@@ -396,7 +396,7 @@ export function BrandbookLandingPage() {
                 fill
                 preload
                 quality={90}
-                sizes="(min-width: 1024px) 65vw, 120vw"
+                sizes="(min-width: 1024px) 55vw, 100vw"
                 className="object-cover object-[58%_center] transition-transform duration-[1400ms] ease-out hover:scale-[1.03]"
               />
               <button
@@ -439,7 +439,7 @@ export function BrandbookLandingPage() {
               <p className="mt-9 max-w-[31rem] text-lg leading-[1.55] text-[#161616]/65">
                 {tx("Clear guidance, real project information, and supporting materials from AIXCO.")}
               </p>
-              <div className="mt-12 grid max-w-[37rem] grid-cols-2 border-y border-[#161616]/20 sm:grid-cols-4">
+              <div className="mt-12 grid max-w-[37rem] grid-cols-2 border-y border-[#161616]/20 xl:grid-cols-4">
                 <div className="py-5 pr-4">
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("17")}</strong>
                   <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/70">{tx("Floors")}</span>
@@ -448,11 +448,11 @@ export function BrandbookLandingPage() {
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("408")}</strong>
                   <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/70">{tx("Apartments")}</span>
                 </div>
-                <div className="border-l border-[#161616]/20 py-5 pl-4 sm:px-4">
+                <div className="border-t border-[#161616]/20 py-5 pr-4 xl:border-l xl:border-t-0 xl:px-4">
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("28")}</strong>
                   <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/70">{tx("Available")}</span>
                 </div>
-                <div className="border-l border-[#161616]/20 py-5 pl-4">
+                <div className="border-l border-t border-[#161616]/20 py-5 pl-4 xl:border-t-0">
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("Jul 2028")}</strong>
                   <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-[#161616]/70">{tx("Completion")}</span>
                 </div>
@@ -465,7 +465,7 @@ export function BrandbookLandingPage() {
             </div>
 
             <div className="relative min-h-[28rem] overflow-hidden bg-[#D9D0C0] lg:min-h-[44rem]">
-              <Image src={projectImages.sunset.src} alt={tx("Sunset over the residence facade")} fill quality={90} sizes="(min-width: 1024px) 75vw, 140vw" className="object-cover object-center" />
+              <Image src={projectImages.sunset.src} alt={tx("Sunset over the residence facade")} fill quality={90} sizes="(min-width: 1024px) 56vw, 100vw" className="object-cover object-center" />
               <button
                 type="button"
                 aria-label={tx("Expand image")}
@@ -530,7 +530,7 @@ export function BrandbookLandingPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <figure className="group relative aspect-[0.92] overflow-hidden bg-[#D9D0C0] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
-                      <Image src={projectImages.lounge.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 65vw, 140vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                      <Image src={projectImages.lounge.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 50vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance residential towers image")} onClick={() => setExpandedImage({ ...projectImages.lounge, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
@@ -540,7 +540,7 @@ export function BrandbookLandingPage() {
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
-                      <Image src={projectImages.arrival.src} alt={tx("Reverance arrival and landscaped exterior project render")} fill quality={90} sizes="(min-width: 1024px) 35vw, 70vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                      <Image src={projectImages.arrival.src} alt={tx("Reverance arrival and landscaped exterior project render")} fill quality={90} sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ ...projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
@@ -550,7 +550,7 @@ export function BrandbookLandingPage() {
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
                 <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
-                      <Image src={projectImages.gym.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 35vw, 70vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                      <Image src={projectImages.gym.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ ...projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}

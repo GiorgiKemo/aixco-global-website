@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { hasAdminRole } from "@/lib/admin/policy";
@@ -20,7 +21,7 @@ type AdminLoginFormProps = {
   onAuthenticated?: () => void;
 };
 
-type MfaStage = "credentials" | "set-password" | "challenge" | "enroll";
+type SignInStage = "credentials" | "set-password";
 
 type SuccessfulAuditPhase = "mfa" | "session";
 
@@ -36,8 +37,8 @@ function getErrorMessage(error: string | null) {
   if (error === "config") return "Admin authentication is not configured.";
   if (error === "rate-limited") return "Too many sign-in attempts. Please try again shortly.";
   if (error === "not-authorized") return "This identity is not assigned the AIXCO admin role.";
-  if (error === "mfa-required") return "Enter your authenticator code to complete sign-in.";
-  if (error === "not-authenticated") return "Your admin session expired. Please sign in again.";
+  if (error === "mfa-required") return "Sign in with your individual admin account to continue.";
+  if (error === "not-authenticated") return "Sign in to continue to the admin dashboard.";
   if (error === "invite-invalid") return "The invitation is invalid or has expired. Request a new invitation.";
   return "";
 }
@@ -45,9 +46,6 @@ function getErrorMessage(error: string | null) {
 function readableAuthError(message: string) {
   const lower = message.toLowerCase();
   if (lower.includes("invalid login credentials")) return "The email or password is incorrect.";
-  if (lower.includes("mfa") || lower.includes("factor") || lower.includes("challenge")) {
-    return "The authenticator code could not be verified. Check the six digits and try again.";
-  }
   return "Admin sign-in could not be completed. Please try again.";
 }
 
@@ -89,46 +87,6 @@ async function reportAdminLogin(
   return false;
 }
 
-async function checkTrustedDevice() {
-  try {
-    const response = await fetch("/admin/login/trusted-device", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "same-origin",
-      cache: "no-store",
-      body: JSON.stringify({ action: "check" }),
-    });
-    const result = await response.json().catch(() => null) as { trusted?: unknown } | null;
-    return response.ok && result?.trusted === true;
-  } catch {
-    // A missing/unreachable trust endpoint must never prevent a normal TOTP
-    // sign-in. The user can still enter their code below.
-    return false;
-  }
-}
-
-async function enableTrustedDevice() {
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    try {
-      const response = await fetch("/admin/login/trusted-device", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
-        cache: "no-store",
-        body: JSON.stringify({ action: "enable" }),
-      });
-      const result = await response.json().catch(() => null) as { trusted?: unknown } | null;
-      if (response.ok && result?.trusted === true) return true;
-      if (response.status !== 401 || attempt > 0) return false;
-      await new Promise((resolve) => window.setTimeout(resolve, 250));
-    } catch {
-      return false;
-    }
-  }
-
-  return false;
-}
-
 async function revokeIncompleteAdminSignIn() {
   // Start the server-side cookie revocation before clearing the browser client.
   // Promise.allSettled makes both independent safeguards run even if one fails.
@@ -149,13 +107,7 @@ export function AdminLoginForm({
   const params = useSearchParams();
   const queryError = getErrorMessage(params?.get("error") ?? null);
   const setupRequested = params?.get("setup") === "1";
-  const [stage, setStage] = useState<MfaStage>("credentials");
-  const [factorId, setFactorId] = useState("");
-  const [qrCode, setQrCode] = useState("");
-  const [totpSecret, setTotpSecret] = useState("");
-  const [totpCode, setTotpCode] = useState("");
-  const [rememberDevice, setRememberDevice] = useState(false);
-  const trustedDeviceAvailable = config.trustedDeviceAvailable ?? false;
+  const [stage, setStage] = useState<SignInStage>("credentials");
   const [identityEmail, setIdentityEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -179,10 +131,6 @@ export function AdminLoginForm({
 
       await revokeIncompleteAdminSignIn();
       setStage("credentials");
-      setFactorId("");
-      setQrCode("");
-      setTotpSecret("");
-      setTotpCode("");
       setIdentityEmail("");
       setErrorMessage(AUDIT_UNAVAILABLE_MESSAGE);
       return false;
@@ -190,7 +138,7 @@ export function AdminLoginForm({
     [onAuthenticated],
   );
 
-  const prepareMfa = useCallback(
+  const prepareAdminSession = useCallback(
     async (user: User) => {
       const supabase = getSupabaseAuthBrowserClient();
       if (!hasAdminRole(user.app_metadata, config.role)) {
@@ -235,7 +183,7 @@ export function AdminLoginForm({
             setStage("set-password");
           }
         } else {
-          await prepareMfa(currentUser.data.user);
+          await prepareAdminSession(currentUser.data.user);
         }
       } catch (error) {
         await revokeIncompleteAdminSignIn();
@@ -252,7 +200,7 @@ export function AdminLoginForm({
     return () => {
       cancelled = true;
     };
-  }, [config.identityAvailable, config.role, prepareMfa, setupRequested]);
+  }, [config.identityAvailable, config.role, prepareAdminSession, setupRequested]);
 
   async function handleIdentityLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -269,42 +217,16 @@ export function AdminLoginForm({
       const result = await supabase.auth.signInWithPassword({ email, password });
       if (result.error || !result.data.user) throw result.error ?? new Error("Missing user");
       credentialsAccepted = true;
-      await prepareMfa(result.data.user);
+      await prepareAdminSession(result.data.user);
     } catch (error) {
       if (credentialsAccepted) await revokeIncompleteAdminSignIn();
       await reportAdminLogin(
         email || null,
         credentialsAccepted ? "authorization" : "credentials",
         "failure",
-        credentialsAccepted ? "mfa_preparation_failed" : "invalid_credentials",
+        credentialsAccepted ? "session_preparation_failed" : "invalid_credentials",
       );
       setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
-    } finally {
-      setWorking(false);
-    }
-  }
-
-  async function handleMfaVerification(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!factorId || totpCode.trim().length !== 6) return;
-
-    setWorking(true);
-    setErrorMessage("");
-    try {
-      const supabase = getSupabaseAuthBrowserClient();
-      const result = await supabase.auth.mfa.challengeAndVerify({
-        factorId,
-        code: totpCode.trim(),
-      });
-      if (result.error) throw result.error;
-      if (rememberDevice && !(await enableTrustedDevice())) {
-        setErrorMessage("Sign-in succeeded, but this device could not be remembered. You will be asked for a code next time.");
-      }
-      await finalizeVerifiedSignIn(identityEmail, "mfa");
-    } catch (error) {
-      await reportAdminLogin(identityEmail, "mfa", "failure", "invalid_code");
-      setErrorMessage(readableAuthError(error instanceof Error ? error.message : ""));
-      setTotpCode("");
     } finally {
       setWorking(false);
     }
@@ -325,7 +247,7 @@ export function AdminLoginForm({
       if (updated.error || !updated.data.user) throw updated.error ?? new Error("Missing user");
       setNewPassword("");
       setConfirmPassword("");
-      await prepareMfa(updated.data.user);
+      await prepareAdminSession(updated.data.user);
     } catch (error) {
       await revokeIncompleteAdminSignIn();
       setStage("credentials");
@@ -344,11 +266,6 @@ export function AdminLoginForm({
       await getSupabaseAuthBrowserClient().auth.signOut({ scope: "local" });
     } finally {
       setStage("credentials");
-      setFactorId("");
-      setQrCode("");
-      setTotpSecret("");
-      setTotpCode("");
-      setRememberDevice(false);
       setIdentityEmail("");
       setNewPassword("");
       setConfirmPassword("");
@@ -416,54 +333,10 @@ export function AdminLoginForm({
               <button type="submit" disabled={working} className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60">
                 {working ? "Checking account…" : "Continue securely"}
               </button>
-              <a href="/admin/login?recover=1" className="min-h-11 inline-flex items-center justify-center text-sm font-medium text-primary underline-offset-4 hover:underline">
+              <Link href="/admin/login?recover=1" className="min-h-11 inline-flex items-center justify-center text-sm font-medium text-primary underline-offset-4 hover:underline">
                 Forgot password?
-              </a>
+              </Link>
             </form>
-          )}
-
-          {config.identityAvailable && stage === "enroll" && (
-            <div className="grid gap-5">
-              <div>
-                <p className="eyebrow">One-time setup</p>
-                <h2 ref={stageHeadingRef} tabIndex={-1} className="mt-2 font-display text-xl outline-none">Protect your admin account</h2>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Scan this QR code with 1Password, Google Authenticator, Microsoft Authenticator, or another TOTP app.
-                </p>
-              </div>
-              {qrCode && (
-                <div className="mx-auto rounded-md border border-border bg-white p-3">
-                  {/* Inline Supabase TOTP QR data cannot be sent through Next's image optimizer. */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={qrCode}
-                    alt="QR code for AIXCO admin authenticator setup"
-                    width={208}
-                    height={208}
-                    className="block h-[208px] w-[208px]"
-                  />
-                </div>
-              )}
-              {totpSecret && (
-                <details className="rounded-md border border-border/70 bg-background/60 px-3 py-2 text-sm">
-                  <summary className="flex min-h-11 cursor-pointer items-center font-medium">Cannot scan the QR code?</summary>
-                  <p className="mt-2 text-xs text-muted-foreground">Enter this setup key manually:</p>
-                  <code className="mt-1 block break-all font-mono text-xs">{totpSecret}</code>
-                </details>
-              )}
-              <MfaCodeForm
-                email={identityEmail}
-                code={totpCode}
-                working={working}
-                submitLabel="Enable MFA and sign in"
-                trustedDeviceAvailable={trustedDeviceAvailable}
-                rememberDevice={rememberDevice}
-                onRememberDeviceChange={setRememberDevice}
-                onChange={setTotpCode}
-                onSubmit={handleMfaVerification}
-                onReset={resetIdentity}
-              />
-            </div>
           )}
 
           {config.identityAvailable && stage === "set-password" && (
@@ -490,34 +363,10 @@ export function AdminLoginForm({
             </form>
           )}
 
-          {config.identityAvailable && stage === "challenge" && (
-            <div className="grid gap-5">
-              <div>
-                <p className="eyebrow">Second factor</p>
-                <h2 ref={stageHeadingRef} tabIndex={-1} className="mt-2 font-display text-xl outline-none">Authenticator code</h2>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Open your authenticator app and enter the current six-digit code.
-                </p>
-              </div>
-              <MfaCodeForm
-                email={identityEmail}
-                code={totpCode}
-                working={working}
-                submitLabel="Verify and sign in"
-                trustedDeviceAvailable={trustedDeviceAvailable}
-                rememberDevice={rememberDevice}
-                onRememberDeviceChange={setRememberDevice}
-                onChange={setTotpCode}
-                onSubmit={handleMfaVerification}
-                onReset={resetIdentity}
-              />
-            </div>
-          )}
-
           {config.mode === "migration" && config.legacyAvailable && (
             <div className={config.identityAvailable ? "border-t border-border/70 pt-6" : ""}>
               <div className="mb-4 rounded-md border border-amber-700/20 bg-amber-50 px-3 py-3 text-sm text-amber-950">
-                Temporary migration access. This shared-password path must be removed after individual admins enroll MFA.
+                Temporary migration access. Remove this shared-password path after every administrator has an individual account.
               </div>
               <form action="/admin/session" method="post" className="grid gap-5">
                 <input
@@ -552,75 +401,5 @@ export function AdminLoginForm({
         </div>
       )}
     </div>
-  );
-}
-
-function MfaCodeForm({
-  email,
-  code,
-  working,
-  submitLabel,
-  trustedDeviceAvailable,
-  rememberDevice,
-  onRememberDeviceChange,
-  onChange,
-  onSubmit,
-  onReset,
-}: {
-  email: string;
-  code: string;
-  working: boolean;
-  submitLabel: string;
-  trustedDeviceAvailable: boolean;
-  rememberDevice: boolean;
-  onRememberDeviceChange: (value: boolean) => void;
-  onChange: (value: string) => void;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  onReset: () => void;
-}) {
-  return (
-    <form onSubmit={onSubmit} className="grid gap-4">
-      <p className="text-xs text-muted-foreground">Signed in as {email}</p>
-      {trustedDeviceAvailable ? (
-        <label className="flex min-h-11 items-start gap-3 rounded-md border border-border/70 bg-background/60 px-3 py-2 text-sm">
-          <input
-            type="checkbox"
-            checked={rememberDevice}
-            onChange={(event) => onRememberDeviceChange(event.target.checked)}
-            className="mt-1 h-4 w-4 accent-primary"
-          />
-          <span>
-            <span className="block font-medium">Trust this device for 30 days</span>
-            <span className="mt-0.5 block text-xs text-muted-foreground">Your admin password will still be required on future sign-ins.</span>
-          </span>
-        </label>
-      ) : null}
-      <div>
-        <label htmlFor="admin-totp" className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-          Six-digit code
-        </label>
-        <input
-          id="admin-totp"
-          name="totp"
-          type="text"
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          pattern="[0-9]{6}"
-          minLength={6}
-          maxLength={6}
-          required
-          autoFocus
-          value={code}
-          onChange={(event) => onChange(event.target.value.replace(/\D/g, "").slice(0, 6))}
-          className="form-control text-center font-mono text-lg tracking-[0.35em]"
-        />
-      </div>
-      <button type="submit" disabled={working || code.length !== 6} className="btn-gold justify-center disabled:cursor-wait disabled:opacity-60">
-        {working ? "Verifying…" : submitLabel}
-      </button>
-      <button type="button" disabled={working} onClick={onReset} className="inline-flex min-h-11 items-center justify-center text-sm text-muted-foreground underline-offset-4 hover:underline">
-        Use another account
-      </button>
-    </form>
   );
 }

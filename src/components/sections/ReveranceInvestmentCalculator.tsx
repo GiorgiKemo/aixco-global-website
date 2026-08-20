@@ -19,14 +19,6 @@ import styles from "./ReveranceInvestmentCalculator.module.css";
 
 const localeFor = (lang: string) => lang === "sl" ? "sl-SI" : lang;
 
-function formatCurrency(value: number, lang: string) {
-  return new Intl.NumberFormat(localeFor(lang), {
-    style: "currency",
-    currency: "EUR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
 function currencyParts(value: number, lang: string) {
   return new Intl.NumberFormat(localeFor(lang), {
     style: "currency",
@@ -37,12 +29,12 @@ function currencyParts(value: number, lang: string) {
 
 function CurrencyValue({ value, lang, prefix = "", className = "" }: { value: number; lang: string; prefix?: string; className?: string }) {
   return (
-    <span className={`${styles.currencyValue} ${className}`} aria-label={`${prefix}${formatCurrency(value, lang)}`}>
-      {prefix ? <span className={styles.currencyPrefix} aria-hidden="true">{prefix}</span> : null}
+    <span className={`${styles.currencyValue} ${className}`}>
+      {prefix ? <span className={styles.currencyPrefix}>{prefix}</span> : null}
       {currencyParts(value, lang).map((part, index) => (
         part.type === "currency"
-          ? <span key={`${part.type}-${index}`} className={styles.currencyGlyph} aria-hidden="true">{part.value}</span>
-          : <span key={`${part.type}-${index}`} aria-hidden="true">{part.value}</span>
+          ? <span key={`${part.type}-${index}`} className={styles.currencyGlyph}>{part.value}</span>
+          : <span key={`${part.type}-${index}`}>{part.value}</span>
       ))}
     </span>
   );
@@ -187,7 +179,7 @@ export function ReveranceInvestmentCalculator() {
                 src={aixcoLiveImages.currentProjectCleanFacade}
                 alt={tx("Project Reverance residential towers in Batumi")}
                 fill
-                priority
+                preload
                 quality={90}
                 sizes="(min-width: 1024px) 58vw, 100vw"
                 className="object-cover object-center"

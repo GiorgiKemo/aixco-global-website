@@ -82,7 +82,7 @@ describe("admin audit events", () => {
         actor_email_hash: expect.stringMatching(/^[a-f0-9]{64}$/),
         action: "admin.login",
         outcome: "failure",
-        auth_method: "supabase-mfa",
+        auth_method: "supabase-password",
         target_type: "admin_session",
         ip_address: "198.51.100.44",
         request_id: "request-456",

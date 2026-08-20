@@ -12,6 +12,7 @@ const INTRO_FADE_MS = 360;
 const INTRO_POSTER = "/aixco-global-op2/media/aixco-intro-black-poster-hd.webp";
 const INTRO_DESKTOP_VIDEO = "/aixco-global-op2/media/aixco-intro-black-1080.mp4";
 const INTRO_PORTRAIT_VIDEO = "/aixco-global-op2/media/aixco-intro-black-portrait-1080.mp4";
+const INTRO_SESSION_KEY = "aixco-site-intro-v1";
 
 type IntroPhase = "visible" | "fading" | "hidden";
 
@@ -43,6 +44,28 @@ export function InitialSiteAnimation() {
   }, [closeIntro]);
 
   useEffect(() => {
+    let introAlreadyPlayed = document.documentElement.dataset.siteIntroSeen === "true";
+
+    try {
+      introAlreadyPlayed ||= window.sessionStorage.getItem(INTRO_SESSION_KEY) === "seen";
+    } catch {
+      // Storage can be unavailable in hardened/private browser contexts. The
+      // intro still works normally in that case.
+    }
+
+    if (introAlreadyPlayed) {
+      document.documentElement.dataset.siteIntro = "complete";
+      window.dispatchEvent(new Event("aixco:site-intro-complete"));
+      setPhase("hidden");
+      return undefined;
+    }
+
+    try {
+      window.sessionStorage.setItem(INTRO_SESSION_KEY, "seen");
+    } catch {
+      // See the storage note above.
+    }
+
     document.documentElement.dataset.siteIntro = "active";
 
     const visibleDuration = window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -59,13 +82,15 @@ export function InitialSiteAnimation() {
   }, [closeIntro]);
 
   useEffect(() => {
+    if (phase !== "visible") return undefined;
+
     // Keep the server-rendered shell free of a full-viewport video LCP
     // candidate. The poster background is visible immediately; mounting the
     // decoder on the first client frame preserves the animation without
     // delaying the page shell's first meaningful paint.
     const frameId = window.requestAnimationFrame(() => setVideoReady(true));
     return () => window.cancelAnimationFrame(frameId);
-  }, []);
+  }, [phase]);
 
   useEffect(() => {
     if (!videoReady) return undefined;

@@ -3,7 +3,7 @@
   --ivory: #f3ede1;
   --paper: #fbf8f1;
   --gold: #e6c767;
-  --gold-deep: #7a6224;
+  --gold-deep: #6a5417;
   min-width: 0;
   overflow: clip;
   background: var(--ivory);
@@ -1385,13 +1385,17 @@
   color: var(--ink);
 }
 
+.paperLedPage .hero h1 span {
+  color: var(--gold-deep);
+}
+
 .paperLedPage .heroBody {
   color: rgb(22 22 22 / 68%);
 }
 
 .paperLedPage .heroMeta {
   border-top-color: rgb(22 22 22 / 20%);
-  color: rgb(22 22 22 / 58%);
+  color: rgb(22 22 22 / 72%);
 }
 
 .paperLedPage .eyebrowLight,
@@ -1542,7 +1546,7 @@
 
 .paperLedPage .footer {
   background: var(--ivory);
-  color: rgb(22 22 22 / 58%);
+  color: rgb(22 22 22 / 70%);
 }
 
 .paperLedPage .footer > p {

@@ -7,7 +7,7 @@
   --line: rgb(22 22 22 / 0.16);
   --line-light: rgb(22 22 22 / 0.1);
   --gold: #e6c767;
-  --gold-deep: #8a6c20;
+  --gold-deep: #6a5417;
   min-height: 100vh;
   overflow-x: clip;
   background: var(--paper);
@@ -297,7 +297,10 @@
 
 .hero h1 {
   max-width: 12ch;
+  overflow-wrap: normal;
   font-size: clamp(3.8rem, 7.15vw, 8.25rem);
+  word-break: normal;
+  hyphens: auto;
 }
 
 .hero h1 span {
@@ -1698,7 +1701,7 @@
   }
 
   .heroIndex {
-    inset-block-start: 34.3rem;
+    display: none;
   }
 
   .clockSection,

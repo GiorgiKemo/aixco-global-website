@@ -11974,7 +11974,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 [data-story-section] .story-metric-label.text-primary\/75,
 [data-story-section] .story-eyebrow,
 [data-story-section] .story-contact-intro .eyebrow {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 /* The approach eyebrow sits over photography, so retain the brighter accent
@@ -11989,7 +11989,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 [data-story-section='contact'] [data-layout='story-contact-actions'] .btn-ghost-gold {
-  color: #7a6224;
+  color: #6a5417;
 }
 
 [data-story-section] .story-metric-label.text-foreground\/52,
@@ -12117,7 +12117,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
-  color: #7a6224;
+  color: #6a5417;
   font-size: 0.64rem;
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -12162,7 +12162,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 
 .brandbook-text-link:hover {
   border-color: var(--brandbook-gold);
-  color: #7a6224;
+  color: #6a5417;
 }
 
 /* Remaining landing pages: a shared premium paper-led direction. The existing
@@ -12198,6 +12198,33 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   }
 }
 
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .medical-editorial #top > div:first-child {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .medical-editorial #top > div:first-child > div:first-child,
+  .medical-editorial #top > div:first-child > div:nth-child(2) {
+    min-height: auto;
+  }
+
+  .medical-editorial #top > div:first-child > div:first-child {
+    padding-right: clamp(2.5rem, 7vw, 5rem);
+  }
+
+  .medical-editorial #top > div:first-child > div:first-child h1 {
+    max-width: 14ch;
+    overflow-wrap: normal;
+    font-size: clamp(4rem, 8vw, 5.7rem);
+    word-break: normal;
+    hyphens: auto;
+  }
+
+  .medical-editorial #top > div:first-child > div:nth-child(2) {
+    min-height: 34rem;
+  }
+}
+
 .medical-editorial #top > div:first-child > div:first-child [class*="text-white"],
 .medical-editorial #top > div:first-child > div:first-child .text-white {
   color: var(--medical-ink) !important;
@@ -12215,7 +12242,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 
 .medical-editorial #top > div:first-child > div:first-child > p,
 .medical-editorial #top > div:first-child > div:first-child [class*="text-[#E6C767]"] {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 .medical-editorial #top > div:first-child > div:nth-child(2) {
@@ -12257,9 +12284,11 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .medical-editorial #treatments [class*="text-[#E6C767]"],
+.medical-editorial #treatments .brandbook-eyebrow-light,
 .medical-editorial .medical-editorial-patient-path [class*="text-[#E6C767]"],
+.medical-editorial .medical-editorial-patient-path .brandbook-eyebrow-light,
 .medical-editorial #contact .brandbook-eyebrow-light {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 .medical-editorial #contact .brandbook-input {
@@ -12283,7 +12312,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 
 .medical-editorial > [role="contentinfo"] {
   background: var(--medical-paper) !important;
-  color: rgb(22 22 22 / 0.58) !important;
+  color: rgb(22 22 22 / 0.7) !important;
 }
 
 .residency-editorial {
@@ -12344,16 +12373,16 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .residency-editorial > main > section:first-child > div.relative [class*="text-[#E6C767]"] {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 .residency-editorial > main > section:first-child > div.relative > p:first-child {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 .residency-editorial > main > section:first-child > div.relative h1 span,
 .residency-editorial > main > section:first-child > div.relative strong {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 .residency-editorial > main > section:first-child > div.relative > p:nth-of-type(2) {
@@ -12401,7 +12430,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .residency-editorial #paths article [class*="text-[#E6C767]"] {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 .residency-editorial #hnwi {
@@ -12421,7 +12450,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .residency-editorial #services [class*="text-[#E6C767]"] {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 .residency-editorial #contact {
@@ -12451,7 +12480,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .residency-editorial #contact [class*="text-[#E6C767]"] {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 .residency-editorial #contact form {
@@ -12480,12 +12509,12 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 .residency-editorial > [role="contentinfo"] {
   border-color: rgb(22 22 22 / 0.14) !important;
   background: var(--residency-paper) !important;
-  color: rgb(22 22 22 / 0.58) !important;
+  color: rgb(22 22 22 / 0.7) !important;
 }
 
 .residency-editorial > [role="contentinfo"] [class*="text-white"],
 .residency-editorial > [role="contentinfo"] .text-white {
-  color: rgb(22 22 22 / 0.58) !important;
+  color: rgb(22 22 22 / 0.7) !important;
 }
 
 @media (max-width: 767px) {
@@ -12497,19 +12526,19 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
     inset: 0 0 auto !important;
     left: 0 !important;
     width: 100% !important;
-    height: 48% !important;
+    height: 44svh !important;
     object-position: 58% center;
   }
 
   .residency-editorial > main > section:first-child > div[aria-hidden] {
     inset: 0 0 auto !important;
-    height: 58% !important;
+    height: 62svh !important;
     background: linear-gradient(180deg, transparent 55%, var(--residency-paper) 100%) !important;
   }
 
   .residency-editorial > main > section:first-child > div.relative {
     min-height: 100svh;
-    padding-top: 48svh;
+    padding-top: 52svh;
   }
 
   .residency-editorial #paths article,
@@ -12656,7 +12685,15 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial #top > div:first-child > div:first-child > p {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child [class*="text-[#E6C767]"] {
+  color: #6a5417 !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child h1 span {
+  color: #6a5417 !important;
 }
 
 .reverance-editorial #top > div:first-child > div:first-child > p > span {
@@ -12709,8 +12746,9 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   border-color: rgb(22 22 22 / 0.18) !important;
 }
 
-.reverance-editorial #approach [class*="text-[#E6C767]"] {
-  color: #7a6224 !important;
+.reverance-editorial #approach [class*="text-[#E6C767]"],
+.reverance-editorial #approach .brandbook-eyebrow-light {
+  color: #6a5417 !important;
 }
 
 .reverance-editorial #residence {
@@ -12732,7 +12770,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial #contact .brandbook-eyebrow-light {
-  color: #7a6224 !important;
+  color: #6a5417 !important;
 }
 
 .reverance-editorial #contact .brandbook-input {
@@ -13250,7 +13288,9 @@ html[data-route-transition='marketing']::view-transition-new(root) {
 .brandbook-landing h2,
 .residency-dossier h1,
 .residency-dossier h2 {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: auto;
 }
 
 .brandbook-landing header,
@@ -13265,6 +13305,20 @@ html[data-route-transition='marketing']::view-transition-new(root) {
 }
 
 @media (max-width: 767px) {
+  html[lang="pl"] .brandbook-landing #opportunity h2 {
+    max-width: 100% !important;
+    font-size: clamp(2.125rem, 10.8vw, 3rem) !important;
+  }
+
+  html[lang="pl"] .medical-editorial-patient-path h2 {
+    max-width: 100% !important;
+    font-size: clamp(2.35rem, 12.5vw, 3.1rem) !important;
+  }
+
+  .residency-editorial > main > section:first-child h1 {
+    hyphens: none;
+  }
+
   .residency-frame {
     inset: 0.7rem;
   }
@@ -13272,6 +13326,13 @@ html[data-route-transition='marketing']::view-transition-new(root) {
   .brandbook-landing [id$='-language-list'],
   .residency-dossier [id$='-language-list'] {
     width: min(14rem, calc(100vw - 1.5rem));
+  }
+}
+
+@media (min-width: 768px) {
+  html[lang="pl"] .brandbook-landing #opportunity h2 {
+    max-width: 100% !important;
+    font-size: clamp(2.65rem, 4.25vw, 4.6rem) !important;
   }
 }
 

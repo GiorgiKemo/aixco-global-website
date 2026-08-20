@@ -1,6 +1,7 @@
 "use client";
 
 import { type FormEvent, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getSupabaseAuthBrowserClient } from "@/lib/supabase/auth-browser";
 
@@ -138,11 +139,11 @@ export function AdminPasswordRecoveryForm(props: AdminPasswordRecoveryFormProps)
         {failed ? (
           <>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">This link is invalid or expired. Request a new reset email to continue.</p>
-            <a href="/admin/login?recover=1" className="btn-gold mt-5 inline-flex min-h-11 items-center justify-center">Request a new reset email</a>
+            <Link href="/admin/login?recover=1" className="btn-gold mt-5 inline-flex min-h-11 items-center justify-center">Request a new reset email</Link>
           </>
         ) : ready ? (
           <form onSubmit={updatePassword} className="mt-6 grid gap-5">
-            <p className="text-sm leading-relaxed text-muted-foreground">After changing your password, you must still complete your authenticator challenge before entering the dashboard.</p>
+            <p className="text-sm leading-relaxed text-muted-foreground">After changing your password, sign in again with your individual admin account. MFA remains optional.</p>
             {errorMessage ? <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">{errorMessage}</p> : null}
             <p id="admin-recovery-password-requirements" className="text-xs text-muted-foreground">Use at least 12 characters.</p>
             <label className="grid gap-2 text-sm font-medium" htmlFor="admin-recovery-password">
@@ -167,7 +168,7 @@ export function AdminPasswordRecoveryForm(props: AdminPasswordRecoveryFormProps)
       {submitted ? (
         <>
           <p role="status" className="mt-4 rounded-md border border-emerald-700/20 bg-emerald-50 px-3 py-3 text-sm leading-relaxed text-emerald-900">If that address belongs to an administrator, a password reset email is on its way. Check your inbox and spam folder.</p>
-          <a href="/admin/login" className="mt-5 inline-flex min-h-11 items-center text-sm font-medium text-primary underline-offset-4 hover:underline">Return to sign in</a>
+          <Link href="/admin/login" className="mt-5 inline-flex min-h-11 items-center text-sm font-medium text-primary underline-offset-4 hover:underline">Return to sign in</Link>
         </>
       ) : (
         <form onSubmit={requestReset} className="mt-6 grid gap-5">
@@ -178,7 +179,7 @@ export function AdminPasswordRecoveryForm(props: AdminPasswordRecoveryFormProps)
             <input id="admin-recovery-email" type="email" autoComplete="username" required value={email} onChange={(event) => setEmail(event.target.value)} className="form-control" />
           </label>
           <button type="submit" disabled={working} className="btn-gold min-h-11 justify-center disabled:cursor-wait disabled:opacity-60">{working ? "Sending reset email…" : "Send reset email"}</button>
-          <a href="/admin/login" className="inline-flex min-h-11 items-center justify-center text-sm font-medium text-muted-foreground underline-offset-4 hover:underline">Back to sign in</a>
+          <Link href="/admin/login" className="inline-flex min-h-11 items-center justify-center text-sm font-medium text-muted-foreground underline-offset-4 hover:underline">Back to sign in</Link>
         </form>
       )}
     </section>

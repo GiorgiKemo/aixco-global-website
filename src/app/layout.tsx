@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "lenis/dist/lenis.css";
 import "@/index.css";
 import "@/story-mobile-menu.css";
@@ -97,6 +98,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
+      <Script id="aixco-intro-session" strategy="beforeInteractive">
+        {`try{if(sessionStorage.getItem("aixco-site-intro-v1")==="seen"){document.documentElement.dataset.siteIntroSeen="true"}}catch{}`}
+      </Script>
       <body suppressHydrationWarning>
         <RouteTransition />
         {children}

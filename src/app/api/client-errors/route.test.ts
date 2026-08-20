@@ -47,9 +47,37 @@ describe("client error telemetry route", () => {
       eventName,
       eventId: "safe-digest",
       pagePath: "/admin/analytics",
-      metadata: { digest: "safe-digest", source: kind },
+      metadata: { digest: "safe-digest", locale: "en", source: kind },
     });
     expect(mocks.guard).toHaveBeenCalledWith("telemetry", null, expect.any(Headers));
+  });
+
+  it("stores bounded release, browser, and viewport context for a boundary error", async () => {
+    const response = await POST(request({
+      kind: "route-render",
+      eventId: "client-correlation-id",
+      pagePath: "/invest-in-batumi",
+      metadata: {
+        browserFamily: "Chrome",
+        buildId: "commit-123",
+        online: true,
+        viewportClass: "mobile",
+        viewportHeight: 844,
+        viewportWidth: 390,
+      },
+    }));
+
+    expect(response.status).toBe(202);
+    expect(mocks.store).toHaveBeenCalledWith(expect.objectContaining({
+      eventId: "client-correlation-id",
+      metadata: expect.objectContaining({
+        browserFamily: "Chrome",
+        buildId: "commit-123",
+        viewportClass: "mobile",
+        viewportHeight: 844,
+        viewportWidth: 390,
+      }),
+    }));
   });
 
   it("rejects unknown fields so stack traces and messages cannot be persisted", async () => {

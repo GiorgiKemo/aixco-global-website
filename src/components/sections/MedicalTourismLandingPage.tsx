@@ -327,12 +327,12 @@ export function MedicalTourismLandingPage() {
             aria-label={menuOpen ? tx("Close navigation") : tx("Open navigation")}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((value) => !value)}
-            className="inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
+            className="order-2 inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
           >
             {menuOpen ? <X size={21} strokeWidth={1.6} /> : <Menu size={21} strokeWidth={1.6} />}
           </button>
 
-          <div ref={languageSwitcherRef} className="relative shrink-0">
+          <div ref={languageSwitcherRef} className="relative order-1 shrink-0">
             <button
               data-language-trigger="true"
               type="button"
@@ -455,7 +455,7 @@ export function MedicalTourismLandingPage() {
                 fill
                 preload
                 quality={90}
-                sizes="(min-width: 1024px) 120vw, 200vw"
+                sizes="(min-width: 1200px) 57vw, 100vw"
                 className="object-cover object-[58%_center] transition-transform duration-[1400ms] ease-out hover:scale-[1.03]"
               />
               <button
@@ -699,7 +699,7 @@ export function MedicalTourismLandingPage() {
                     image={sceneImages.pool}
                     alt={tx("Reverance indoor pool")}
                     expandLabel={tx("Expand the Reverance indoor pool image")}
-                    sizes="(min-width: 1024px) 85vw, 200vw"
+                    sizes="(min-width: 1024px) 50vw, 100vw"
                     className="absolute inset-0"
                   />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Indoor pool")}</figcaption>
@@ -709,7 +709,7 @@ export function MedicalTourismLandingPage() {
                     image={sceneImages.garden}
                     alt={tx("Reverance garden pool")}
                     expandLabel={tx("Expand the Reverance garden pool image")}
-                    sizes="(min-width: 1024px) 58vw, 140vw"
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     className="absolute inset-0"
                   />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Garden pool")}</figcaption>
@@ -719,7 +719,7 @@ export function MedicalTourismLandingPage() {
                     image={sceneImages.sauna}
                     alt={tx("Reverance sauna")}
                     expandLabel={tx("Expand the Reverance sauna image")}
-                    sizes="(min-width: 1024px) 58vw, 140vw"
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     className="absolute inset-0"
                   />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Sauna")}</figcaption>

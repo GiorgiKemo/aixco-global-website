@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getSupabaseAuthBrowserClient } from "@/lib/supabase/auth-browser";
 
@@ -58,7 +59,7 @@ export default function AdminAuthCompleteClient() {
             ? "Request a new invitation from an existing administrator."
             : "You will continue to finish your administrator account setup."}
         </p>
-        {failed ? <a href="/admin/login" className="btn-gold mt-5 inline-flex justify-center">Return to sign in</a> : null}
+        {failed ? <Link href="/admin/login" className="btn-gold mt-5 inline-flex justify-center">Return to sign in</Link> : null}
       </section>
     </main>
   );
