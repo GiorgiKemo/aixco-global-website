@@ -46,6 +46,27 @@ describe("home page performance structure", () => {
     expect(sitemapSource).not.toContain("/aixco-philosophy");
   });
 
+  it("places the current project before the philosophy chapter", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const chapterOrder = [
+      desktopStorySource.indexOf('{ key: "about", id: "about", label: "About" }'),
+      desktopStorySource.indexOf('{ key: "batumi", id: "batumi", label: "Current project", href: "/reverance-batumi" }'),
+      desktopStorySource.indexOf('{ key: "philosophy", id: "philosophy", label: "Philosophy" }'),
+    ];
+    const sceneOrder = [
+      desktopStorySource.indexOf('<MemoizedAboutScene'),
+      desktopStorySource.indexOf('<MemoizedBatumiScene'),
+      desktopStorySource.indexOf('<MemoizedPhilosophyScene'),
+    ];
+
+    expect(chapterOrder.every((index) => index >= 0)).toBe(true);
+    expect(sceneOrder.every((index) => index >= 0)).toBe(true);
+    expect(chapterOrder[0]).toBeLessThan(chapterOrder[1]);
+    expect(chapterOrder[1]).toBeLessThan(chapterOrder[2]);
+    expect(sceneOrder[0]).toBeLessThan(sceneOrder[1]);
+    expect(sceneOrder[1]).toBeLessThan(sceneOrder[2]);
+  });
+
   it("keeps the in-page philosophy story section compact and media-backed", () => {
     const philosophySource = readSource("src/components/sections/DesktopStoryHome.tsx");
 

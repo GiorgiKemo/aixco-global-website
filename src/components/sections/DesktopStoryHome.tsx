@@ -174,6 +174,7 @@ function useSiteIntroReady() {
 const storyChapters: StoryChapter[] = [
   { key: "hero", label: "AIXCO" },
   { key: "about", id: "about", label: "About" },
+  { key: "batumi", id: "batumi", label: "Current project", href: "/reverance-batumi" },
   { key: "philosophy", id: "philosophy", label: "Philosophy" },
   { key: "philosophyOrigins", id: "philosophy-origins", label: "Origins" },
   { key: "philosophyPlatform", id: "philosophy-platform", label: "Principles" },
@@ -181,7 +182,6 @@ const storyChapters: StoryChapter[] = [
   { key: "aboutAccess", id: "about-access", label: "Access" },
   { key: "legacy", id: "legacy", label: "Legacy" },
   { key: "dubai", id: "dubai", label: "Dubai" },
-  { key: "batumi", id: "batumi", label: "Current project", href: "/reverance-batumi" },
   { key: "materials", id: "materials", label: "Download Materials" },
   { key: "participate", id: "participate", label: "How to work" },
   { key: "how", id: "how", label: "Journeys" },
@@ -3786,11 +3786,12 @@ export function DesktopStoryHome() {
         shouldStartVideo={siteIntroReady && activeIndex === 1}
         tx={tx}
       />,
-      <MemoizedPhilosophyScene key="philosophy" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
+      <MemoizedBatumiScene key="batumi" isActive={activeIndex === 2} isRevealed={isRevealed(2)} tx={tx} />,
+      <MemoizedPhilosophyScene key="philosophy" isActive={activeIndex === 3} isRevealed={isRevealed(3)} tx={tx} />,
       <MemoizedPhilosophyDetailScene
         key="philosophy-origins"
-        isActive={activeIndex === 3}
-        isRevealed={isRevealed(3)}
+        isActive={activeIndex === 4}
+        isRevealed={isRevealed(4)}
         tx={tx}
         eyebrow="Swiss discipline in practice"
         title="A real estate foundation built on wise selection"
@@ -3804,12 +3805,11 @@ export function DesktopStoryHome() {
           sizes: "(max-width: 767px) 170vw, 100vw",
         }}
       />,
-      <MemoizedPhilosophyPlatformScene key="philosophy-platform" isActive={activeIndex === 4} isRevealed={isRevealed(4)} tx={tx} />,
-      <MemoizedAboutObjectivesScene key="about-objectives" isActive={activeIndex === 5} isRevealed={isRevealed(5)} tx={tx} />,
-      <MemoizedAboutAccessScene key="about-access" isActive={activeIndex === 6} isRevealed={isRevealed(6)} tx={tx} />,
-      <MemoizedLegacyScene key="legacy" isActive={activeIndex === 7} isRevealed={isRevealed(7)} tx={tx} />,
-      <MemoizedDubaiScene key="dubai" isActive={activeIndex === 8} isRevealed={isRevealed(8)} tx={tx} />,
-      <MemoizedBatumiScene key="batumi" isActive={activeIndex === 9} isRevealed={isRevealed(9)} tx={tx} />,
+      <MemoizedPhilosophyPlatformScene key="philosophy-platform" isActive={activeIndex === 5} isRevealed={isRevealed(5)} tx={tx} />,
+      <MemoizedAboutObjectivesScene key="about-objectives" isActive={activeIndex === 6} isRevealed={isRevealed(6)} tx={tx} />,
+      <MemoizedAboutAccessScene key="about-access" isActive={activeIndex === 7} isRevealed={isRevealed(7)} tx={tx} />,
+      <MemoizedLegacyScene key="legacy" isActive={activeIndex === 8} isRevealed={isRevealed(8)} tx={tx} />,
+      <MemoizedDubaiScene key="dubai" isActive={activeIndex === 9} isRevealed={isRevealed(9)} tx={tx} />,
       <MemoizedMaterialsScene key="materials" isActive={activeIndex === 10} isRevealed={isRevealed(10)} lang={lang} tx={tx} />,
       <MemoizedParticipateScene key="participate" isActive={activeIndex === 11} isRevealed={isRevealed(11)} tx={tx} onRegister={openRegister} />,
       <MemoizedHowScene key="how" isActive={activeIndex === 12} isRevealed={isRevealed(12)} tx={tx} onJourney={openJourney} onRegister={openRegister} />,
