@@ -11027,7 +11027,8 @@ html[lang='de']
 @media (max-width: 767px) {
   .story-dubai-timeline[data-layout='story-dubai-funds'],
   [data-story-section='dubai'] .story-dubai-timeline {
-    --story-dubai-rail-position: calc(2.35rem + 0.25rem);
+    /* Keep the step labels visibly clear of the rail on narrow screens. */
+    --story-dubai-rail-position: calc(2.75rem + 0.25rem);
     padding-block: 0.25rem !important;
   }
 
@@ -11088,7 +11089,7 @@ html[lang='de']
 @media (max-width: 420px) {
   .story-dubai-timeline[data-layout='story-dubai-funds'],
   [data-story-section='dubai'] .story-dubai-timeline {
-    --story-dubai-rail-position: calc(2.08rem + 0.25rem);
+    --story-dubai-rail-position: calc(2.75rem + 0.25rem);
   }
 
   .story-dubai-timeline .story-dubai-timeline__entry {

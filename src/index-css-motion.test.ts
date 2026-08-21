@@ -996,6 +996,28 @@ describe("index.css motion rules", () => {
     expect(mobileProgressBlock).toContain("padding-top: 0;");
   });
 
+  it("keeps mobile Dubai timeline labels clear of the vertical rail", () => {
+    const mobileTimelineStart = css.indexOf("@media (max-width: 767px) {");
+    const mobileTimelineBlock = css.slice(
+      mobileTimelineStart,
+      css.indexOf("\n}\n\n@media (max-width: 420px)", mobileTimelineStart),
+    );
+    const narrowTimelineStart = css.indexOf("@media (max-width: 420px) {");
+    const narrowTimelineBlock = css.slice(
+      narrowTimelineStart,
+      css.indexOf("\n}\n\n/* Keep each progress qualifier", narrowTimelineStart),
+    );
+
+    expect(mobileTimelineStart).toBeGreaterThanOrEqual(0);
+    expect(narrowTimelineStart).toBeGreaterThanOrEqual(0);
+    expect(mobileTimelineBlock).toContain(
+      "--story-dubai-rail-position: calc(2.75rem + 0.25rem);",
+    );
+    expect(narrowTimelineBlock).toContain(
+      "--story-dubai-rail-position: calc(2.75rem + 0.25rem);",
+    );
+  });
+
   it("keeps the current project reachable only from the hero CTA", () => {
     expect(desktopStoryHome).toContain('const currentProjectHref = "/reverance-batumi";');
     expect(desktopStoryHome.match(/href=\{currentProjectHref\}/g)).toHaveLength(1);
