@@ -98,10 +98,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
-      <Script id="aixco-intro-session" strategy="beforeInteractive">
-        {`try{if(sessionStorage.getItem("aixco-site-intro-v1")==="seen"){document.documentElement.dataset.siteIntroSeen="true"}}catch{}`}
-      </Script>
       <body suppressHydrationWarning>
+        <Script id="aixco-intro-session" strategy="beforeInteractive">
+          {`try{if(sessionStorage.getItem("aixco-site-intro-v1")==="seen"){document.documentElement.dataset.siteIntroSeen="true"}}catch{}`}
+        </Script>
         <RouteTransition />
         {children}
       </body>

@@ -286,6 +286,16 @@ describe("home page performance structure", () => {
     expect(globalStyles).toContain("[data-story-in-viewport='false'] .story-journeys-track");
   });
 
+  it("warms the current-project gallery before selection so switching does not wait on image decoding", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+
+    expect(desktopStorySource).toContain("warmGalleryImages");
+    expect(desktopStorySource).toContain("loading=\"eager\"");
+    expect(desktopStorySource).toContain("sizes=\"(min-width: 1280px) 58vw, 100vw\"");
+    expect(desktopStorySource).toContain("onPointerEnter={() => warmGalleryImages([image.key])}");
+    expect(desktopStorySource).toContain("onFocus={() => warmGalleryImages([image.key])}");
+  });
+
   it("memoizes story scenes so a chapter boundary does not rerender the full page", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
 

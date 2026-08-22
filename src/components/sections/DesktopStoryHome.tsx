@@ -1634,8 +1634,25 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
     [tx],
   );
   const [selectedImageKey, setSelectedImageKey] = useState<BatumiVisualMosaicImageKey>(batumiVisualMosaicImages[0].key);
+  const [preloadedImageKeys, setPreloadedImageKeys] = useState<Set<BatumiVisualMosaicImageKey>>(
+    () => new Set([batumiVisualMosaicImages[0].key]),
+  );
   const selectedImage = galleryImages.find((image) => image.key === selectedImageKey) ?? galleryImages[0];
   const carouselImages = [...galleryImages, ...galleryImages, ...galleryImages];
+  const warmGalleryImages = useCallback((imageKeys: BatumiVisualMosaicImageKey[]) => {
+    setPreloadedImageKeys((currentKeys) => {
+      const nextKeys = new Set(currentKeys);
+      imageKeys.forEach((imageKey) => nextKeys.add(imageKey));
+      return nextKeys.size === currentKeys.size ? currentKeys : nextKeys;
+    });
+  }, []);
+
+  useEffect(() => {
+    const warmupKeys = galleryImages.slice(0, 6).map((image) => image.key);
+    const warmupTimer = window.setTimeout(() => warmGalleryImages(warmupKeys), 450);
+    return () => window.clearTimeout(warmupTimer);
+  }, [galleryImages, warmGalleryImages]);
+
   const selectImage = useCallback((imageKey: BatumiVisualMosaicImageKey) => {
     if (imageKey === selectedImageKey) return;
 
@@ -1779,6 +1796,22 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
   return (
     <div className="story-batumi-gallery" aria-label={tx("Current project image gallery")}>
       <div className="story-batumi-gallery__wash" aria-hidden />
+      {preloadedImageKeys.size > 1 ? (
+        <div className="story-batumi-gallery__preload" aria-hidden>
+          {galleryImages.filter((image) => preloadedImageKeys.has(image.key) && image.key !== selectedImage.key).map((image) => (
+            <Image
+              key={image.key}
+              src={image.src}
+              alt=""
+              fill
+              sizes="(min-width: 1280px) 58vw, 100vw"
+              loading="eager"
+              quality={90}
+              decoding="async"
+            />
+          ))}
+        </div>
+      ) : null}
       <ExpandableImage
         src={selectedImage.src}
         title={selectedImage.alt}
@@ -1788,9 +1821,10 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
           src={selectedImage.src}
           alt={selectedImage.alt}
           fill
-          sizes="(min-width: 1280px) 100vw, 100vw"
+          sizes="(min-width: 1280px) 58vw, 100vw"
           loading="lazy"
           quality={90}
+          decoding="async"
           data-batumi-hero-image={selectedImage.key}
           className="story-batumi-gallery__hero-image"
           style={{ objectPosition: selectedImage.objectPosition }}
@@ -1830,6 +1864,9 @@ function BatumiVisualMosaic({ tx }: { tx: (copy: string) => string }) {
               "story-batumi-gallery__thumb",
               image.key === selectedImage.key && "story-batumi-gallery__thumb--active",
             )}
+            onPointerDown={() => warmGalleryImages([image.key])}
+            onPointerEnter={() => warmGalleryImages([image.key])}
+            onFocus={() => warmGalleryImages([image.key])}
             onClick={() => selectImage(image.key)}
           >
             <Image

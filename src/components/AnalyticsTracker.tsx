@@ -986,7 +986,7 @@ export function AnalyticsTracker() {
             open={detailsOpen}
             onToggle={(event) => setDetailsOpen(event.currentTarget.open)}
           >
-            <summary className="flex min-h-11 cursor-pointer list-none items-center text-sm leading-snug text-foreground/70 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-details-marker]:hidden">
+            <summary className="block cursor-pointer list-none text-sm leading-relaxed text-foreground/70 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-details-marker]:hidden">
               {copy.summary}{" "}
               <span className="inline-flex items-center gap-1 whitespace-nowrap align-baseline text-[0.66rem] font-semibold uppercase tracking-[0.13em] text-primary">
                 {detailsOpen ? copy.collapse : copy.expand}
