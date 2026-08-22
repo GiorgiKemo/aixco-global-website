@@ -164,8 +164,12 @@ try {
     );
     const details = dialog.locator("details");
     await details.locator("summary").click();
+    await waitFor(
+      () => details.evaluate((node) => node.hasAttribute("open")),
+      "consent details did not expand",
+    );
     assert(
-      await dialog.getByText("We use Google Analytics through Google Tag Manager", { exact: false }).isVisible(),
+      await dialog.getByText("Google Analytics through Google Tag Manager", { exact: false }).isVisible(),
       "expanded consent details are missing",
     );
     await details.locator("summary").click();

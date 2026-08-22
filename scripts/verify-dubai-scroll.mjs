@@ -28,7 +28,10 @@ try {
     const media = section.querySelector("[data-story-scene-media]");
     const cards = [...section.querySelectorAll(".story-dubai-portfolio-card")];
     const reveal = section.querySelector(".story-scene-reveal");
-    const nextSection = document.querySelector("[data-story-section='batumi']");
+    // Dubai follows the legacy portfolio and is followed by Materials. Keep
+    // this boundary check tied to the actual adjacent section so a deliberate
+    // chapter reorder cannot make the smoke test compare unrelated sections.
+    const nextSection = document.querySelector("[data-story-section='materials']");
     const mediaRect = media.getBoundingClientRect();
     const revealRect = reveal.getBoundingClientRect();
     return {
