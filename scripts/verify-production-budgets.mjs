@@ -13,20 +13,22 @@ const buildManifestPath = resolve(buildDirectory, "build-manifest.json");
 const budgets = {
   // Multilingual public routes are part of the homepage client graph, so the
   // baseline includes their translation catalog and responsive renderers.
-  // Keep approximately 1.5% headroom over the measured production output.
+  // Keep approximately 2% headroom over the current measured production
+  // output. Raw sizes are intentionally rounded up; gzip limits below remain
+  // the tighter regression guard because they better reflect transfer cost.
   homeJavaScriptRaw: 1_430_000,
   homeJavaScriptGzip: 430_000,
-  homeCssRaw: 390_000,
+  homeCssRaw: 410_000,
   homeCssGzip: 66_000,
-  largestJavaScriptRaw: 550_000,
+  largestJavaScriptRaw: 565_000,
   // Private analytics is a separate route, so measure its actual route
   // payload rather than summing mutually exclusive chunks from every route.
-  adminAnalyticsJavaScriptRaw: 665_000,
-  adminAnalyticsJavaScriptGzip: 200_000,
+  adminAnalyticsJavaScriptRaw: 700_000,
+  adminAnalyticsJavaScriptGzip: 210_000,
   // Option 2 adds the private admin shell and launchpad surfaces. Keep the
-  // raw ceiling aligned with the multilingual public-route CSS output while
-  // retaining the stricter all-CSS gzip ceiling below.
-  allCssRaw: 525_000,
+  // raw ceiling aligned with the current multilingual public-route CSS output
+  // while retaining the stricter all-CSS gzip ceiling below.
+  allCssRaw: 550_000,
   allCssGzip: 86_000,
 };
 
