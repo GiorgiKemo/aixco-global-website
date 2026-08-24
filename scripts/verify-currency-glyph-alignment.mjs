@@ -436,13 +436,19 @@ try {
   }
 
   for (const locale of ["en", "de", "pl", "sl", "ru"]) {
-    await page.evaluate((nextLocale) => {
-      window.localStorage.setItem("aixco-lang", nextLocale);
-    }, locale);
-    // The app intentionally keeps long-lived connections open, so waiting for
-    // networkidle makes this audit flaky in CI. DOM readiness plus the font
-    // readiness check below is the signal this visual test actually needs.
-    await page.reload({ waitUntil: "domcontentloaded", timeout: 60_000 });
+    // Exercise the real language control instead of reloading the entire page.
+    // The previous storage-plus-reload approach made this visual assertion
+    // depend on an unrelated document navigation and could time out on CI even
+    // after every responsive browser check had already passed.
+    await page
+      .locator('[data-language-trigger="true"]:visible')
+      .first()
+      .click();
+    await page.locator(`button[data-lang="${locale}"]:visible`).first().click();
+    await page.waitForFunction(
+      (nextLocale) => document.documentElement.lang === nextLocale,
+      locale,
+    );
     await page.evaluate(() => document.fonts.ready);
 
     const localeTreatments = await page.evaluate(() =>
