@@ -12,7 +12,41 @@ const INTRO_FADE_MS = 360;
 const INTRO_POSTER = "/aixco-global-op2/media/aixco-intro-black-poster-hd.webp";
 const INTRO_DESKTOP_VIDEO = "/aixco-global-op2/media/aixco-intro-black-1080.mp4";
 const INTRO_PORTRAIT_VIDEO = "/aixco-global-op2/media/aixco-intro-black-portrait-1080.mp4";
-const INTRO_SESSION_KEY = "aixco-site-intro-v1";
+const INTRO_STORAGE_KEY = "aixco-site-intro-v1";
+
+function hasSeenIntro() {
+  try {
+    if (
+      window.localStorage.getItem(INTRO_STORAGE_KEY) === "seen" ||
+      window.localStorage.getItem("aixco-lang") !== null
+    ) {
+      return true;
+    }
+  } catch {
+    // Persistent storage can be unavailable in hardened/private contexts.
+  }
+
+  try {
+    return window.sessionStorage.getItem(INTRO_STORAGE_KEY) === "seen";
+  } catch {
+    return false;
+  }
+}
+
+function rememberIntro() {
+  try {
+    window.localStorage.setItem(INTRO_STORAGE_KEY, "seen");
+    return;
+  } catch {
+    // Fall back to the current tab when persistent storage is unavailable.
+  }
+
+  try {
+    window.sessionStorage.setItem(INTRO_STORAGE_KEY, "seen");
+  } catch {
+    // The intro still works when all browser storage is unavailable.
+  }
+}
 
 type IntroPhase = "visible" | "fading" | "hidden";
 
@@ -44,27 +78,20 @@ export function InitialSiteAnimation() {
   }, [closeIntro]);
 
   useEffect(() => {
-    let introAlreadyPlayed = document.documentElement.dataset.siteIntroSeen === "true";
-
-    try {
-      introAlreadyPlayed ||= window.sessionStorage.getItem(INTRO_SESSION_KEY) === "seen";
-    } catch {
-      // Storage can be unavailable in hardened/private browser contexts. The
-      // intro still works normally in that case.
-    }
+    const introAlreadyPlayed =
+      document.documentElement.dataset.siteIntroSeen === "true" || hasSeenIntro();
 
     if (introAlreadyPlayed) {
+      // Migrate the former session-only marker to persistent storage without
+      // replaying the animation for visitors who already saw it.
+      rememberIntro();
       document.documentElement.dataset.siteIntro = "complete";
       window.dispatchEvent(new Event("aixco:site-intro-complete"));
       setPhase("hidden");
       return undefined;
     }
 
-    try {
-      window.sessionStorage.setItem(INTRO_SESSION_KEY, "seen");
-    } catch {
-      // See the storage note above.
-    }
+    rememberIntro();
 
     document.documentElement.dataset.siteIntro = "active";
 

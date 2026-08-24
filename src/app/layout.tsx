@@ -99,8 +99,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
-        <Script id="aixco-intro-session" strategy="beforeInteractive">
-          {`try{if(sessionStorage.getItem("aixco-site-intro-v1")==="seen"){document.documentElement.dataset.siteIntroSeen="true"}}catch{}`}
+        <Script id="aixco-intro-persistence" strategy="beforeInteractive">
+          {`var k="aixco-site-intro-v1",s=false;try{s=localStorage.getItem(k)==="seen"||localStorage.getItem("aixco-lang")!==null}catch{}try{s=s||sessionStorage.getItem(k)==="seen"}catch{}if(s){try{localStorage.setItem(k,"seen")}catch{}document.documentElement.dataset.siteIntroSeen="true"}`}
         </Script>
         <RouteTransition />
         {children}

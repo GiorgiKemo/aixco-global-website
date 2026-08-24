@@ -5,6 +5,7 @@ import { InitialSiteAnimation } from "./InitialSiteAnimation";
 
 describe("InitialSiteAnimation", () => {
   beforeEach(() => {
+    window.localStorage.clear();
     window.sessionStorage.clear();
     vi.stubGlobal(
       "matchMedia",
@@ -22,9 +23,11 @@ describe("InitialSiteAnimation", () => {
   });
 
   afterEach(() => {
+    window.localStorage.clear();
     window.sessionStorage.clear();
     vi.unstubAllGlobals();
     delete document.documentElement.dataset.siteIntro;
+    delete document.documentElement.dataset.siteIntroSeen;
   });
 
   it("uses dedicated four-second landscape and portrait motion sources", async () => {
@@ -58,14 +61,35 @@ describe("InitialSiteAnimation", () => {
     expect(decodeURIComponent(container.querySelector("img")?.getAttribute("src") ?? "")).toContain(
       "/aixco-global-op2/media/aixco-intro-black-poster-hd.webp",
     );
+    expect(window.localStorage.getItem("aixco-site-intro-v1")).toBe("seen");
   });
 
-  it("does not replay after it has already run in the current session", async () => {
+  it("does not replay after it has already run in this browser", async () => {
+    window.localStorage.setItem("aixco-site-intro-v1", "seen");
+
+    const { container } = render(<InitialSiteAnimation />);
+
+    await waitFor(() => expect(container.querySelector("[data-site-intro]")).not.toBeInTheDocument());
+    expect(document.documentElement.dataset.siteIntro).toBe("complete");
+  });
+
+  it("recognizes an existing language preference as a returning visitor", async () => {
+    window.localStorage.setItem("aixco-lang", "en");
+
+    const { container } = render(<InitialSiteAnimation />);
+
+    await waitFor(() => expect(container.querySelector("[data-site-intro]")).not.toBeInTheDocument());
+    expect(window.localStorage.getItem("aixco-site-intro-v1")).toBe("seen");
+    expect(document.documentElement.dataset.siteIntro).toBe("complete");
+  });
+
+  it("migrates the former session marker without replaying the intro", async () => {
     window.sessionStorage.setItem("aixco-site-intro-v1", "seen");
 
     const { container } = render(<InitialSiteAnimation />);
 
     await waitFor(() => expect(container.querySelector("[data-site-intro]")).not.toBeInTheDocument());
+    expect(window.localStorage.getItem("aixco-site-intro-v1")).toBe("seen");
     expect(document.documentElement.dataset.siteIntro).toBe("complete");
   });
 });
