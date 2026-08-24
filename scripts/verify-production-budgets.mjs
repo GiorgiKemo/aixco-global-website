@@ -25,11 +25,12 @@ const budgets = {
   // payload rather than summing mutually exclusive chunks from every route.
   adminAnalyticsJavaScriptRaw: 700_000,
   adminAnalyticsJavaScriptGzip: 210_000,
-  // Option 2 adds the private admin shell and launchpad surfaces. Keep the
-  // raw ceiling aligned with the current multilingual public-route CSS output
-  // while retaining the stricter all-CSS gzip ceiling below.
+  // Option 2 adds the private admin shell and launchpad surfaces. The shared
+  // brandbook tokens and responsive multilingual landing-page treatments are
+  // also part of this graph. Keep roughly 2% gzip headroom while retaining a
+  // substantially tighter transfer-size guard than the raw ceiling.
   allCssRaw: 550_000,
-  allCssGzip: 86_000,
+  allCssGzip: 88_000,
 };
 
 async function listFiles(directory) {
