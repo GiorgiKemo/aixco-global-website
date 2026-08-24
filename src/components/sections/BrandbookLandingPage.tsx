@@ -20,7 +20,7 @@ import { useSiteContent } from "@/data/site-content-context";
 import { CurrentProjectBrochureLink } from "@/components/property/PropertyChrome";
 import { getContactSubmitErrorMessage } from "@/lib/contact-submit-error";
 import { recordContactSubmission } from "@/lib/backend/lead-capture";
-import { aixcoCurrentProjectGalleryImages, aixcoLiveLogos } from "@/lib/aixco-live-assets";
+import { aixcoCurrentProjectGalleryImages, aixcoLiveImages, aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { openAnalyticsPreferences } from "@/lib/analytics/client";
 import { LandingSiblingLinks } from "@/components/landing/LandingSiblingLinks";
 import { scrollToHash } from "@/lib/smooth-scroll";
@@ -391,7 +391,7 @@ export function BrandbookLandingPage() {
 
             <div className="relative min-h-[26rem] overflow-hidden bg-[#002147] lg:min-h-full">
               <Image
-                src={projectImages.hero.src}
+                src={aixcoLiveImages.currentProjectCleanFacade}
                 alt={tx("The Reverance residence exterior in Batumi")}
                 fill
                 preload
