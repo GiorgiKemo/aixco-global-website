@@ -98,6 +98,24 @@ const supplementalTranslations: Partial<Record<string, Partial<Record<CatalogLan
     sl: "Tudi od AIXCO",
     ru: "Также от AIXCO",
   },
+  "Invest in Batumi": {
+    de: "In Batumi investieren",
+    pl: "Inwestowanie w Batumi",
+    sl: "Naložbe v Batumiju",
+    ru: "Инвестиции в Батуми",
+  },
+  "Georgia tax residency": {
+    de: "Steuerresidenz in Georgien",
+    pl: "Rezydencja podatkowa w Gruzji",
+    sl: "Davčno rezidentstvo v Gruziji",
+    ru: "Налоговое резидентство в Грузии",
+  },
+  "AIXCO Global Bond": {
+    de: "AIXCO Global-Anleihe",
+    pl: "Obligacja AIXCO Global",
+    sl: "Obveznica AIXCO Global",
+    ru: "Облигация AIXCO Global",
+  },
   "Skip to main content": {
     de: "Zum Hauptinhalt springen",
     ru: "Перейти к основному содержанию",

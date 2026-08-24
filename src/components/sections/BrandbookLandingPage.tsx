@@ -216,7 +216,7 @@ export function BrandbookLandingPage() {
   return (
     <div id="main-content" className="brandbook-landing reverance-editorial bg-[#F3EDE1] text-[#161616]">
       <header className="brandbook-header sticky top-0 z-50 border-b border-[#161616]/10 bg-[#F3EDE1]/95 backdrop-blur-md">
-        <div className="landing-header-bar mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between gap-3 px-5 sm:px-8 lg:px-12">
+        <div className="landing-header-bar mx-auto flex h-[var(--aixco-header-height)] w-full max-w-[1600px] items-center justify-between gap-3 px-5 sm:px-8 lg:px-12">
           <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex min-w-0 shrink-0 items-center">
             <Image
               src={aixcoLiveLogos.aixcoHorizontalDark}
@@ -224,7 +224,7 @@ export function BrandbookLandingPage() {
               width={1600}
               height={333}
               sizes="(min-width: 1024px) 12rem, 10rem"
-              className="h-auto w-[7.25rem] sm:w-36 lg:w-40"
+              className="landing-header-logo h-auto w-[7.25rem] sm:w-36 lg:w-40"
             />
           </Link>
 
@@ -248,7 +248,7 @@ export function BrandbookLandingPage() {
                 event.preventDefault();
                 handleNavClick("#contact");
               }}
-              className="brandbook-header-cta inline-flex min-h-10 items-center gap-2 bg-[#161616] px-4 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#002147]"
+              className="brandbook-header-cta landing-header-control inline-flex min-h-10 items-center gap-2 bg-[#161616] px-4 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#002147]"
             >
               {tx("Request a brief")} <ArrowUpRight size={14} strokeWidth={1.8} />
             </a>
@@ -260,7 +260,7 @@ export function BrandbookLandingPage() {
             aria-label={menuOpen ? tx("Close navigation") : tx("Open navigation")}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((value) => !value)}
-            className="order-2 inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
+            className="landing-header-control order-2 inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
           >
             {menuOpen ? <X size={21} strokeWidth={1.6} /> : <Menu size={21} strokeWidth={1.6} />}
           </button>
@@ -273,7 +273,7 @@ export function BrandbookLandingPage() {
               aria-controls="brandbook-language-list"
               aria-label={`${currentLangName} ${tx("Change language")}`}
               onClick={() => setLanguageOpen((current) => !current)}
-              className="inline-flex min-h-11 items-center gap-1.5 border border-[#161616]/15 bg-transparent px-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#E6C767] hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 sm:px-3"
+              className="landing-header-control inline-flex min-h-11 items-center gap-1.5 border border-[#161616]/15 bg-transparent px-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#E6C767] hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 sm:px-3"
             >
               <Globe size={14} strokeWidth={1.6} aria-hidden />
               <span className="sm:hidden">{lang.toUpperCase()}</span>

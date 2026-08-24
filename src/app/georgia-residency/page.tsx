@@ -21,10 +21,10 @@ export const metadata: Metadata = {
     siteName: "AIXCO.Global",
     images: [
       {
-        url: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-night-skyline.jpg",
-        width: 1920,
-        height: 1280,
-        alt: "Batumi night skyline",
+        url: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-dusk-aerial-central.webp",
+        width: 3840,
+        height: 2160,
+        alt: "Batumi skyline at dusk",
       },
     ],
     locale: "en_US",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: pageTitle,
     description: pageDescription,
-    images: ["/aixco-global-op2/images/batumi-mosaic-hd/batumi-night-skyline.jpg"],
+    images: ["/aixco-global-op2/images/batumi-mosaic-hd/batumi-dusk-aerial-central.webp"],
   },
 };
 
@@ -61,7 +61,7 @@ export default async function GeorgiaResidencyLandingRoute() {
         name: "AIXCO.Global Georgia Residency",
         description: pageDescription,
         url: `${siteUrl}${routePath}`,
-        image: `${siteUrl}/aixco-global-op2/images/batumi-mosaic-hd/batumi-night-skyline.jpg`,
+        image: `${siteUrl}/aixco-global-op2/images/batumi-mosaic-hd/batumi-dusk-aerial-central.webp`,
         areaServed: { "@type": "Country", name: "Georgia" },
         parentOrganization: { "@id": `${siteUrl}/#organization` },
       },

@@ -26,6 +26,23 @@
 @layer base {
   :root {
     /* Exact AIXCO brandbook palette. */
+    --aixco-onyx: #161616;
+    --aixco-white: #ffffff;
+    --aixco-gold-champagne: #e6c767;
+    --aixco-gold-deep: #9c7f3c;
+    /* Approved digital extension: readable small gold text on ivory surfaces. */
+    --aixco-gold-accessible: #6a5417;
+    --aixco-navy: #002147;
+    --aixco-ivory: #f3ede1;
+    --aixco-gray: #9a9a9a;
+    --aixco-paper: #f7f2e9;
+    --aixco-paper-light: #fbf9f4;
+    --aixco-paper-deep: #ece3d3;
+    --aixco-header-height: 4.65rem;
+    --aixco-header-logo-width: clamp(7.25rem, 11vw, 10rem);
+    --aixco-control-min-size: 2.75rem;
+    --aixco-label-min-size: 0.6875rem;
+
     --background: 40 42.9% 91.8%;
     --foreground: 0 0% 8.6%;
 
@@ -10832,6 +10849,19 @@ html[lang='de']
   border-block-start: 1px solid hsl(var(--foreground) / 0.14) !important;
 }
 
+.landing-header-bar {
+  min-height: var(--aixco-header-height);
+}
+
+.landing-header-logo {
+  width: var(--aixco-header-logo-width) !important;
+}
+
+.landing-header-control {
+  min-width: var(--aixco-control-min-size);
+  min-height: var(--aixco-control-min-size);
+}
+
 .story-dubai-timeline[data-layout='story-dubai-funds'],
 [data-story-section='dubai'] .story-dubai-timeline {
   /* Leave a small, consistent breathing gap between the index labels and the
@@ -11975,7 +12005,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 [data-story-section] .story-metric-label.text-primary\/75,
 [data-story-section] .story-eyebrow,
 [data-story-section] .story-contact-intro .eyebrow {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 /* The approach eyebrow sits over photography, so retain the brighter accent
@@ -11990,7 +12020,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 [data-story-section='contact'] [data-layout='story-contact-actions'] .btn-ghost-gold {
-  color: #6a5417;
+  color: var(--aixco-gold-accessible);
 }
 
 [data-story-section] .story-metric-label.text-foreground\/52,
@@ -12068,9 +12098,9 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 /* Brandbook landing direction: quiet editorial rhythm, square edges, and a
    strict black / ivory / navy / champagne palette. */
 .brandbook-landing {
-  --brandbook-ivory: #f3ede1;
-  --brandbook-ink: #161616;
-  --brandbook-gold: #e6c767;
+  --brandbook-ivory: var(--aixco-ivory);
+  --brandbook-ink: var(--aixco-onyx);
+  --brandbook-gold: var(--aixco-gold-champagne);
   --brandbook-navy: #002147;
   overflow-x: clip;
   font-family: var(--font-gilroy), Arial, sans-serif;
@@ -12118,7 +12148,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
-  color: #6a5417;
+  color: var(--aixco-gold-accessible);
   font-size: 0.64rem;
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -12163,18 +12193,34 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 
 .brandbook-text-link:hover {
   border-color: var(--brandbook-gold);
-  color: #6a5417;
+  color: var(--aixco-gold-accessible);
 }
 
 /* Remaining landing pages: a shared premium paper-led direction. The existing
    content, imagery, translations, forms, analytics, and chapter structure stay
    intact; only the visual surfaces and contrast are tuned to the brandbook. */
 .medical-editorial {
-  --medical-paper: #f7f2e9;
-  --medical-paper-deep: #e9dfcf;
+  --medical-paper: var(--aixco-paper);
+  --medical-paper-deep: var(--aixco-paper-deep);
   --medical-ink: #161616;
   background: var(--medical-paper) !important;
   color: var(--medical-ink) !important;
+}
+
+/* Gilroy's euro glyph is optically taller and heavier than its figures at
+   table-copy sizes. Normalize only the symbol while keeping the values in the
+   approved brand face. */
+.medical-editorial .medical-currency-symbol {
+  display: inline;
+  margin-inline-end: 0;
+  color: inherit;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont,
+    'Helvetica Neue', Arial, sans-serif;
+  font-size: 1em;
+  font-weight: 400;
+  font-synthesis: none;
+  line-height: inherit;
+  vertical-align: baseline;
 }
 
 .medical-editorial .brandbook-header {
@@ -12243,7 +12289,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 
 .medical-editorial #top > div:first-child > div:first-child > p,
 .medical-editorial #top > div:first-child > div:first-child [class*="text-[#E6C767]"] {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .medical-editorial #top > div:first-child > div:nth-child(2) {
@@ -12289,7 +12335,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 .medical-editorial .medical-editorial-patient-path [class*="text-[#E6C767]"],
 .medical-editorial .medical-editorial-patient-path .brandbook-eyebrow-light,
 .medical-editorial #contact .brandbook-eyebrow-light {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .medical-editorial #contact .brandbook-input {
@@ -12317,8 +12363,8 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .residency-editorial {
-  --residency-paper: #f7f2e9;
-  --residency-paper-deep: #e9dfcf;
+  --residency-paper: var(--aixco-paper);
+  --residency-paper-deep: var(--aixco-paper-deep);
   --residency-ink: #161616;
   overflow-x: clip;
   background: var(--residency-paper) !important;
@@ -12374,16 +12420,16 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .residency-editorial > main > section:first-child > div.relative [class*="text-[#E6C767]"] {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .residency-editorial > main > section:first-child > div.relative > p:first-child {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .residency-editorial > main > section:first-child > div.relative h1 span,
 .residency-editorial > main > section:first-child > div.relative strong {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .residency-editorial > main > section:first-child > div.relative > p:nth-of-type(2) {
@@ -12431,7 +12477,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .residency-editorial #paths article [class*="text-[#E6C767]"] {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .residency-editorial #hnwi {
@@ -12451,7 +12497,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .residency-editorial #services [class*="text-[#E6C767]"] {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .residency-editorial #contact {
@@ -12481,7 +12527,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .residency-editorial #contact [class*="text-[#E6C767]"] {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .residency-editorial #contact form {
@@ -12582,7 +12628,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 /* Keep consent controls readable at small sizes while preserving the gold
    brand accent. */
 .analytics-consent .text-primary {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .brandbook-input {
@@ -12625,8 +12671,8 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
    geometry remain unchanged; the oversized dark surfaces become supporting
    accents instead of the page's dominant background. */
 .reverance-editorial {
-  --reverance-paper: #f7f2e9;
-  --reverance-paper-deep: #e9dfcf;
+  --reverance-paper: var(--aixco-paper);
+  --reverance-paper-deep: var(--aixco-paper-deep);
   --reverance-ink: #161616;
   --reverance-muted: #57534b;
   background: var(--reverance-paper) !important;
@@ -12686,15 +12732,15 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial #top > div:first-child > div:first-child > p {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .reverance-editorial #top > div:first-child > div:first-child [class*="text-[#E6C767]"] {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .reverance-editorial #top > div:first-child > div:first-child h1 span {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .reverance-editorial #top > div:first-child > div:first-child > p > span {
@@ -12749,7 +12795,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 
 .reverance-editorial #approach [class*="text-[#E6C767]"],
 .reverance-editorial #approach .brandbook-eyebrow-light {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .reverance-editorial #residence {
@@ -12771,7 +12817,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial #contact .brandbook-eyebrow-light {
-  color: #6a5417 !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .reverance-editorial #contact .brandbook-input {

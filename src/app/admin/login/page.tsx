@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getAdminAuthConfig, getAdminAuthDecision } from "@/lib/admin/auth";
 import { getTrustedDeviceSecret } from "@/lib/admin/trusted-device";
 import { getSiteUrl } from "@/lib/site-url";
+import { aixcoLiveLogos } from "@/lib/aixco-live-assets";
 import { AdminLoginForm } from "./AdminLoginForm";
 import { AdminPasswordRecoveryForm } from "./AdminPasswordRecoveryForm";
 
@@ -10,6 +13,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Admin Login | AIXCO.Global",
+  alternates: { canonical: null },
   robots: {
     index: false,
     follow: false,
@@ -42,6 +46,16 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
   return (
     <main className="admin-safe-page admin-safe-page--login min-h-screen bg-background px-5 py-16 text-foreground">
       <section className="mx-auto w-full max-w-md">
+        <Link href="/" aria-label="AIXCO.Global home" className="mb-10 inline-flex">
+          <Image
+            src={aixcoLiveLogos.aixcoHorizontalDark}
+            alt="AIXCO.Global"
+            width={1600}
+            height={333}
+            sizes="10rem"
+            className="h-auto w-40"
+          />
+        </Link>
         <p className="eyebrow">AIXCO Admin</p>
         <h1 className="mt-4 font-display text-4xl leading-tight">Operations dashboard</h1>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">

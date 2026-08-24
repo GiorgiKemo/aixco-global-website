@@ -9,7 +9,7 @@ export const georgiaResidencyTranslations: Source = {
   Request: { de: "Anfrage", pl: "Wniosek", sl: "Zahteva", ru: "Запрос" },
   "Request access": { de: "Zugang anfragen", pl: "Poproś o dostęp", sl: "Zahtevajte dostop", ru: "Запросить доступ" },
   "Page chapters": { de: "Seitenabschnitte", pl: "Rozdziały strony", sl: "Poglavja strani", ru: "Разделы страницы" },
-  "Batumi night skyline": { de: "Batumi-Skyline bei Nacht", pl: "Panorama Batumi nocą", sl: "Nočno obzorje Batumija", ru: "Ночная панорама Батуми" },
+  "Batumi skyline at dusk": { de: "Batumi-Skyline in der Abenddämmerung", pl: "Panorama Batumi o zmierzchu", sl: "Obzorje Batumija v mraku", ru: "Панорама Батуми в сумерках" },
   "Residence permit in Georgia": {
     de: "Aufenthaltserlaubnis in Georgien",
     pl: "Zezwolenie na pobyt w Gruzji",

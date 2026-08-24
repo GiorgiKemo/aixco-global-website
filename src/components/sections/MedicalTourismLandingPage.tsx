@@ -88,6 +88,128 @@ const fertilityRows = [
   { treatment: "Germany", georgia: "Not allowed" },
 ] as const;
 
+type ThreeColumnCostRow = {
+  readonly treatment: string;
+  readonly georgia: string;
+  readonly germany: string;
+};
+
+type TwoColumnCostRow = {
+  readonly treatment: string;
+  readonly georgia: string;
+};
+
+function NormalizedEuroText({ value }: { value: string }) {
+  return (
+    <>
+      {value.split(/(€)/u).map((part, index) =>
+        part === "€" ? (
+          <span className="medical-currency-symbol" key={`euro-${index}`}>
+            €
+          </span>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+}
+
+function ThreeColumnCostComparison({ rows }: { rows: readonly ThreeColumnCostRow[] }) {
+  const { tx } = useI18n();
+
+  return (
+    <>
+      <div className="mt-8 divide-y divide-[#161616]/10 border-y border-[#161616]/20 sm:hidden">
+        {rows.map((row) => (
+          <article key={row.treatment} className="py-5">
+            <p className="text-base font-medium leading-snug">{tx(row.treatment)}</p>
+            <dl className="mt-3 grid grid-cols-2 gap-3">
+              <div className="min-w-0 border-l border-white/15 pl-3">
+                <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white/60">{tx("Georgia")}</dt>
+                <dd className="mt-1 whitespace-nowrap text-sm font-medium text-[#E6C767]">
+                  <NormalizedEuroText value={row.georgia} />
+                </dd>
+              </div>
+              <div className="min-w-0 border-l border-white/15 pl-3">
+                <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white/60">{tx("Germany")}</dt>
+                <dd className="mt-1 whitespace-nowrap text-sm text-white/70">
+                  <NormalizedEuroText value={row.germany} />
+                </dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-8 hidden min-w-0 max-w-full overflow-x-auto sm:block">
+        <table className="w-full table-fixed text-left text-sm">
+          <thead>
+            <tr className="border-b border-white/20 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white/60">
+              <th className="w-[42%] pb-3 pr-3 font-semibold">{tx("Treatment")}</th>
+              <th className="w-[29%] pb-3 pr-3 font-semibold">{tx("Georgia")}</th>
+              <th className="w-[29%] pb-3 font-semibold">{tx("Germany")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.treatment} className="border-b border-white/10">
+                <td className="py-3 pr-3">{tx(row.treatment)}</td>
+                <td className="whitespace-nowrap py-3 pr-3 text-[#E6C767]">
+                  <NormalizedEuroText value={row.georgia} />
+                </td>
+                <td className="whitespace-nowrap py-3 text-white/55">
+                  <NormalizedEuroText value={row.germany} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+function TwoColumnCostComparison({ rows }: { rows: readonly TwoColumnCostRow[] }) {
+  const { tx } = useI18n();
+
+  return (
+    <>
+      <div className="mt-8 divide-y divide-[#161616]/10 border-y border-[#161616]/20 sm:hidden">
+        {rows.map((row) => (
+          <article key={row.treatment} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-4">
+            <p className="min-w-0 text-sm font-medium leading-snug">{tx(row.treatment)}</p>
+            <p className={`whitespace-nowrap text-sm ${row.treatment === "Georgia" ? "font-medium text-[#E6C767]" : "text-white/70"}`}>
+              {row.georgia === "Not allowed" ? tx("Not allowed") : <NormalizedEuroText value={row.georgia} />}
+            </p>
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-8 hidden min-w-0 max-w-full overflow-x-auto sm:block">
+        <table className="w-full table-fixed text-left text-sm">
+          <thead>
+            <tr className="border-b border-white/20 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white/60">
+              <th className="w-1/2 pb-3 pr-3 font-semibold">{tx("Country")}</th>
+              <th className="w-1/2 pb-3 font-semibold">{tx("Typical cost")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.treatment} className="border-b border-white/10">
+                <td className="py-3 pr-3">{tx(row.treatment)}</td>
+                <td className={`whitespace-nowrap py-3 ${row.treatment === "Georgia" ? "text-[#E6C767]" : "text-white/70"}`}>
+                  {row.georgia === "Not allowed" ? tx("Not allowed") : <NormalizedEuroText value={row.georgia} />}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
 const clinics = [
   { name: "American Hospital Tbilisi", focus: "Premium care", body: "Premium international-level care for complex treatments." },
   { name: "Evex Hospitals", focus: "Full-service care", body: "Largest network with nationwide coverage." },
@@ -283,7 +405,7 @@ export function MedicalTourismLandingPage() {
   return (
     <div id="main-content" className="brandbook-landing medical-editorial bg-[#F3EDE1] text-[#161616]">
       <header className="brandbook-header sticky top-0 z-50 border-b border-[#161616]/10 bg-[#F3EDE1]/95 backdrop-blur-md">
-        <div className="landing-header-bar mx-auto flex h-[4.6rem] w-full max-w-[1600px] items-center justify-between gap-3 px-5 sm:px-8 lg:px-12">
+        <div className="landing-header-bar mx-auto flex h-[var(--aixco-header-height)] w-full max-w-[1600px] items-center justify-between gap-3 px-5 sm:px-8 lg:px-12">
           <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex min-w-0 shrink-0 items-center">
             <Image
               src={aixcoLiveLogos.aixcoHorizontalDark}
@@ -291,7 +413,7 @@ export function MedicalTourismLandingPage() {
               width={1600}
               height={333}
               sizes="(min-width: 1024px) 12rem, 10rem"
-              className="h-auto w-[7.25rem] sm:w-36 lg:w-40"
+              className="landing-header-logo h-auto w-[7.25rem] sm:w-36 lg:w-40"
             />
           </Link>
 
@@ -315,7 +437,7 @@ export function MedicalTourismLandingPage() {
                 event.preventDefault();
                 handleNavClick("#contact");
               }}
-              className="brandbook-header-cta inline-flex min-h-10 items-center gap-2 bg-[#161616] px-4 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#002147]"
+              className="brandbook-header-cta landing-header-control inline-flex min-h-10 items-center gap-2 bg-[#161616] px-4 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#002147]"
             >
               {tx("Request a brief")} <ArrowUpRight size={14} strokeWidth={1.8} />
             </a>
@@ -327,7 +449,7 @@ export function MedicalTourismLandingPage() {
             aria-label={menuOpen ? tx("Close navigation") : tx("Open navigation")}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((value) => !value)}
-            className="order-2 inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
+            className="landing-header-control order-2 inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
           >
             {menuOpen ? <X size={21} strokeWidth={1.6} /> : <Menu size={21} strokeWidth={1.6} />}
           </button>
@@ -340,7 +462,7 @@ export function MedicalTourismLandingPage() {
               aria-controls="medical-tourism-language-list"
               aria-label={`${currentLangName} ${tx("Change language")}`}
               onClick={() => setLanguageOpen((current) => !current)}
-              className="inline-flex min-h-11 items-center gap-1.5 border border-[#161616]/15 bg-transparent px-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#E6C767] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 sm:px-3"
+              className="landing-header-control inline-flex min-h-11 items-center gap-1.5 border border-[#161616]/15 bg-transparent px-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#161616] transition-colors hover:border-[#E6C767] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]/70 sm:px-3"
             >
               <Globe size={14} strokeWidth={1.6} aria-hidden />
               <span className="sm:hidden">{lang.toUpperCase()}</span>
@@ -546,78 +668,21 @@ export function MedicalTourismLandingPage() {
                 <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">01</p>
                 <h3 className="mt-4 text-3xl font-medium tracking-[-0.045em]">{tx("Dental care")}</h3>
                 <p className="mt-4 max-w-[28rem] text-[0.98rem] leading-[1.55] text-white/58">{tx("Dental implants, veneers, crowns, and full-mouth reconstruction with European materials.")}</p>
-                <div className="mt-8 overflow-x-auto">
-                <table className="w-full min-w-[28rem] text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-white/20 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/60">
-                      <th className="pb-3 font-semibold">{tx("Treatment")}</th>
-                      <th className="pb-3 font-semibold">{tx("Georgia")}</th>
-                      <th className="pb-3 font-semibold">{tx("Germany")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dentalRows.map((row) => (
-                      <tr key={row.treatment} className="border-b border-white/10">
-                        <td className="py-3 pr-3">{tx(row.treatment)}</td>
-                        <td className="py-3 pr-3 whitespace-nowrap text-[#E6C767]">{row.georgia}</td>
-                        <td className="py-3 whitespace-nowrap text-white/55">{row.germany}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                </div>
+                <ThreeColumnCostComparison rows={dentalRows} />
               </article>
 
               <article className="border-t border-white/20 pt-8">
                 <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">02</p>
                 <h3 className="mt-4 text-3xl font-medium tracking-[-0.045em]">{tx("Cosmetic surgery")}</h3>
                 <p className="mt-4 max-w-[28rem] text-[0.98rem] leading-[1.55] text-white/58">{tx("Rhinoplasty, facelifts, liposuction, and non-surgical treatments in modern private clinics.")}</p>
-                <div className="mt-8 overflow-x-auto">
-                <table className="w-full min-w-[28rem] text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-white/20 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/60">
-                      <th className="pb-3 font-semibold">{tx("Treatment")}</th>
-                      <th className="pb-3 font-semibold">{tx("Georgia")}</th>
-                      <th className="pb-3 font-semibold">{tx("Germany")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cosmeticRows.map((row) => (
-                      <tr key={row.treatment} className="border-b border-white/10">
-                        <td className="py-3 pr-3">{tx(row.treatment)}</td>
-                        <td className="py-3 pr-3 whitespace-nowrap text-[#E6C767]">{row.georgia}</td>
-                        <td className="py-3 whitespace-nowrap text-white/55">{row.germany}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                </div>
+                <ThreeColumnCostComparison rows={cosmeticRows} />
               </article>
 
               <article className="border-t border-white/20 pt-8">
                 <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">03</p>
                 <h3 className="mt-4 text-3xl font-medium tracking-[-0.045em]">{tx("Fertility")}</h3>
                 <p className="mt-4 max-w-[28rem] text-[0.98rem] leading-[1.55] text-white/58">{tx("IVF, egg donation, and legally regulated surrogacy with intended parents legally recognized.")}</p>
-                <div className="mt-8 overflow-x-auto">
-                <table className="w-full min-w-[22rem] text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-white/20 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white/60">
-                      <th className="pb-3 font-semibold">{tx("Country")}</th>
-                      <th className="pb-3 font-semibold">{tx("Typical cost")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {fertilityRows.map((row) => (
-                      <tr key={row.treatment} className="border-b border-white/10">
-                        <td className="py-3 pr-3">{tx(row.treatment)}</td>
-                        <td className={`py-3 whitespace-nowrap ${row.treatment === "Georgia" ? "text-[#E6C767]" : "text-white/70"}`}>
-                          {row.georgia === "Not allowed" ? tx("Not allowed") : row.georgia}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                </div>
+                <TwoColumnCostComparison rows={fertilityRows} />
               </article>
 
               <article className="border-t border-white/20 pt-8">
@@ -625,7 +690,13 @@ export function MedicalTourismLandingPage() {
                 <h3 className="mt-4 text-3xl font-medium tracking-[-0.045em]">{tx("Orthopedics")}</h3>
                 <p className="mt-4 max-w-[28rem] text-[0.98rem] leading-[1.55] text-white/58">{tx("Knee and hip replacements, arthroscopy, and spine-related procedures with rehabilitation packages.")}</p>
                 <div className="mt-8 grid gap-4 border-t border-white/15 pt-6 text-sm leading-6 text-white/70">
-                  <p>{tx("A basic checkup typically starts around €130. Hospital treatment can reach approximately €340, depending on the clinic and city.")}</p>
+                  <p>
+                    <NormalizedEuroText
+                      value={tx(
+                        "A basic checkup typically starts around €130. Hospital treatment can reach approximately €340, depending on the clinic and city.",
+                      )}
+                    />
+                  </p>
                   <p>{tx("From 2026, proof of health insurance is mandatory for entry into Georgia.")}</p>
                 </div>
               </article>

@@ -211,7 +211,7 @@ export function GeorgiaResidencyLandingPage() {
   return (
     <div id="main-content" className="residency-dossier residency-editorial">
       <header className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${scrolled || menuOpen ? "bg-[#161616]" : "bg-transparent"}`}>
-        <div className="landing-header-bar mx-auto flex h-16 max-w-[1480px] items-center justify-between gap-3 px-5 sm:px-8">
+        <div className="landing-header-bar mx-auto flex h-[var(--aixco-header-height)] max-w-[1480px] items-center justify-between gap-3 px-5 sm:px-8">
           <Link href="/" aria-label={tx("AIXCO.Global home")} className="flex min-w-0 shrink-0 items-center">
             <Image
               src={aixcoLiveLogos.aixcoHorizontalDark}
@@ -219,7 +219,7 @@ export function GeorgiaResidencyLandingPage() {
               width={1600}
               height={333}
               sizes="10rem"
-              className="h-auto w-[7.25rem] sm:w-36"
+              className="landing-header-logo h-auto w-[7.25rem] sm:w-36"
             />
           </Link>
           <nav aria-label={tx("Page chapters")} className="hidden min-w-0 items-center gap-6 lg:flex">
@@ -231,7 +231,7 @@ export function GeorgiaResidencyLandingPage() {
                   event.preventDefault();
                   scrollToId(chapter.id);
                 }}
-                className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white/70 transition-colors hover:text-white"
+                className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white/70 transition-colors hover:text-white"
               >
                 {tx(chapter.label)}
               </a>
@@ -245,7 +245,7 @@ export function GeorgiaResidencyLandingPage() {
                 setMenuOpen(false);
                 scrollToId("contact");
               }}
-              className="hidden min-h-10 items-center bg-[#E6C767] px-4 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[#161616] sm:inline-flex"
+              className="landing-header-control hidden min-h-10 items-center bg-[#E6C767] px-4 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#161616] sm:inline-flex"
             >
               {tx("Request access")}
             </a>
@@ -257,7 +257,7 @@ export function GeorgiaResidencyLandingPage() {
                 aria-controls="residency-language-list"
                 aria-label={`${currentLangName} ${tx("Change language")}`}
                 onClick={() => setLanguageOpen((open) => !open)}
-                className="inline-flex min-h-10 items-center gap-1 px-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-white/80"
+                className="landing-header-control inline-flex min-h-10 items-center gap-1 px-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-white/80"
               >
                 <Globe size={13} strokeWidth={1.6} aria-hidden />
                 <span className="sm:hidden">{lang.toUpperCase()}</span>
@@ -291,7 +291,7 @@ export function GeorgiaResidencyLandingPage() {
             </div>
             <button
               type="button"
-              className="inline-flex min-h-10 min-w-10 items-center justify-center text-white lg:hidden"
+              className="landing-header-control inline-flex min-h-10 min-w-10 items-center justify-center text-white lg:hidden"
               aria-label={menuOpen ? tx("Close navigation") : tx("Open navigation")}
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((open) => !open)}
@@ -324,8 +324,8 @@ export function GeorgiaResidencyLandingPage() {
       <main>
         <section className="relative min-h-[100svh] overflow-hidden bg-[#0b0b0b]">
           <Image
-            src={aixcoLiveImages.batumiMosaicNightSkyline}
-            alt={tx("Batumi night skyline")}
+            src={aixcoLiveImages.batumiMosaicDuskAerialCentral}
+            alt={tx("Batumi skyline at dusk")}
             fill
             preload
             sizes="100vw"

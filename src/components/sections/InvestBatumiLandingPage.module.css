@@ -1,14 +1,14 @@
 .page {
-  --ink: #151515;
-  --ivory: #f3ede1;
-  --paper: #fbf8f1;
-  --gold: #e6c767;
-  --gold-deep: #6a5417;
+  --ink: var(--aixco-onyx);
+  --ivory: var(--aixco-ivory);
+  --paper: var(--aixco-paper-light);
+  --gold: var(--aixco-gold-champagne);
+  --gold-deep: var(--aixco-gold-accessible);
   min-width: 0;
   overflow: clip;
   background: var(--ivory);
   color: var(--ink);
-  font-family: var(--font-epilogue), "Epilogue", sans-serif;
+  font-family: var(--font-brand-sans);
 }
 
 .page button,
@@ -30,7 +30,7 @@
 
 .headerInner {
   width: min(100%, 100rem);
-  min-height: 5rem;
+  min-height: var(--aixco-header-height);
   margin-inline: auto;
   padding: 0.85rem clamp(1.25rem, 4vw, 4.5rem);
   display: flex;
@@ -40,7 +40,7 @@
 
 .logoLink {
   display: inline-flex;
-  width: clamp(8.5rem, 11vw, 10.5rem);
+  width: var(--aixco-header-logo-width);
   flex: 0 0 auto;
 }
 
@@ -60,7 +60,7 @@
 .desktopNav a,
 .mobileNav a {
   color: rgb(21 21 21 / 68%);
-  font-size: 0.64rem;
+  font-size: var(--aixco-label-min-size);
   font-weight: 700;
   letter-spacing: 0.17em;
   text-transform: uppercase;
@@ -92,7 +92,7 @@
   padding: 0.85rem 1.2rem;
   background: var(--gold);
   color: var(--ink);
-  font-size: 0.63rem;
+  font-size: var(--aixco-label-min-size);
   font-weight: 750;
   letter-spacing: 0.16em;
   line-height: 1.25;
@@ -116,7 +116,7 @@
 .languageButton,
 .menuButton {
   min-width: 2rem;
-  min-height: 2.75rem;
+  min-height: var(--aixco-control-min-size);
   padding: 0.5rem 0.25rem;
   border: 0;
   display: inline-flex;
@@ -308,7 +308,7 @@
 .lensInner > p {
   margin: 0;
   color: rgb(255 255 255 / 52%);
-  font-size: 0.62rem;
+  font-size: var(--aixco-label-min-size);
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -325,7 +325,7 @@
   padding: 0.75rem 1rem;
   background: transparent;
   color: rgb(255 255 255 / 62%);
-  font-size: 0.66rem;
+  font-size: var(--aixco-label-min-size);
   font-weight: 700;
   letter-spacing: 0.08em;
 }
@@ -1108,7 +1108,7 @@
 
 @media (max-width: 700px) {
   .headerInner {
-    min-height: 4.45rem;
+    min-height: var(--aixco-header-height);
   }
 
   .logoLink {
@@ -1163,12 +1163,17 @@
   }
 
   .lensTabs {
-    overflow-x: auto;
-    padding-bottom: 0.35rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+    padding-bottom: 0;
   }
 
   .lensTabs button {
-    flex: 0 0 auto;
+    min-width: 0;
+    padding-inline: 0.4rem;
+    line-height: 1.25;
+    white-space: normal;
   }
 
   .lensSummary {
@@ -1358,7 +1363,7 @@
    the dominant surface instead of charcoal. */
 .paperLedPage {
   --ink: #161616;
-  --ivory: #f7f2e9;
+  --ivory: var(--aixco-paper);
   --paper: #fbf8f1;
   --mineral: #e9dfcf;
   background: var(--ivory);

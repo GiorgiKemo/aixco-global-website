@@ -8,6 +8,9 @@ const siblings = [
   { href: "/reverance-batumi", label: "Project Reverance" },
   { href: "/medical-tourism", label: "Medical care" },
   { href: "/georgia-residency", label: "Residence permit in Georgia" },
+  { href: "/invest-in-batumi", label: "Invest in Batumi" },
+  { href: "/georgia-tax-residency", label: "Georgia tax residency" },
+  { href: "/aixco-global-bond", label: "AIXCO Global Bond" },
 ] as const;
 
 export function LandingSiblingLinks({ tone }: { tone: "ivory" | "dark" }) {

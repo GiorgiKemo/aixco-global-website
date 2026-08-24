@@ -176,4 +176,7 @@ export const polishTranslationsFinal = {
   "Dismiss contact prompt": { pl: "Zamknij okno kontaktowe" },
   "Cookie preferences": { pl: "Ustawienia plików cookie" },
   "Also from AIXCO": { pl: "Także od AIXCO" },
+  "Invest in Batumi": { pl: "Inwestowanie w Batumi" },
+  "Georgia tax residency": { pl: "Rezydencja podatkowa w Gruzji" },
+  "AIXCO Global Bond": { pl: "Obligacja AIXCO Global" },
 } satisfies PolishTranslationSource;
