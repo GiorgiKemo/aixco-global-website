@@ -394,10 +394,15 @@ try {
         const heroTitle = page.locator("main > section:first-of-type h1");
         await heroTitle.waitFor({ state: "visible", timeout: 30_000 });
         await page.evaluate(() => document.fonts.ready);
+        // The production preview generates responsive Next Image variants on
+        // first request. CPU-constrained CI runners can take longer than 30s
+        // for an uncached width even though the same asset and layout are
+        // healthy. This is a correctness gate, so allow the cold transform to
+        // finish while retaining the natural-width assertion below.
         await page.waitForFunction(() => {
           const image = document.querySelector("main > section:first-of-type img");
           return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
-        }, undefined, { timeout: 30_000 });
+        }, undefined, { timeout: 90_000 });
 
         await heroTitle.evaluate((element) => element.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" }));
         const canonicalMetrics = await page.evaluate(() => {
