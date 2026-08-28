@@ -541,7 +541,7 @@ export function MedicalTourismLandingPage() {
               </div>
 
               <div className="relative z-10 mt-7 max-w-[36rem]">
-                <h1 className="max-w-[11ch] text-[clamp(2.45rem,11vw,6.6rem)] font-medium leading-[0.94] tracking-[-0.065em]">
+                <h1 className="max-w-[11ch] text-[clamp(2.15rem,10.5vw,6.6rem)] font-medium leading-[0.96] tracking-[-0.065em] [overflow-wrap:anywhere] [hyphens:auto]">
                   {tx("Medical care")} <span className="text-[#E6C767]">{tx("at European quality.")}</span>
                 </h1>
                 <p className="mt-8 max-w-[30rem] text-[1.05rem] leading-[1.55] text-white/68 sm:text-[1.12rem]">
@@ -586,8 +586,8 @@ export function MedicalTourismLandingPage() {
                 onClick={() => setExpandedHero({ ...sceneImages.hero, alt: tx("Batumi coastline at golden hour") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
-                <span className="absolute right-5 top-5 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8">
-                  <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand image")}
+                <span className="absolute right-2 top-2 inline-flex max-w-[calc(100%-0.75rem)] items-center gap-1.5 p-2 text-[0.52rem] font-semibold uppercase tracking-[0.12em] text-white [overflow-wrap:anywhere] [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8 sm:gap-2 sm:text-[0.58rem] sm:tracking-[0.16em]">
+                  <Maximize2 size={13} strokeWidth={1.7} /> <span className="hidden min-[380px]:inline">{tx("Expand image")}</span>
                 </span>
               </button>
               <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#161616]/60 via-[#161616]/10 to-transparent" />

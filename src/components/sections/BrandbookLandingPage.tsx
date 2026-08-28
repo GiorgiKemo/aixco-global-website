@@ -353,8 +353,8 @@ export function BrandbookLandingPage() {
               </div>
 
               <div className="relative z-10 mt-7 max-w-[35rem]">
-                <h1 className="max-w-none text-[clamp(3.2rem,13vw,3.9rem)] font-medium leading-[0.86] tracking-[-0.065em] sm:max-w-[8.5ch] sm:text-[clamp(3.9rem,7vw,7.4rem)]">
-                  {tx("Project")} <span className="text-[#E6C767]">Reverance</span>
+                <h1 className="max-w-none [overflow-wrap:anywhere] [hyphens:none] text-[clamp(2.25rem,10.5vw,3.9rem)] font-medium leading-[0.9] tracking-[-0.065em] sm:max-w-[8.5ch] sm:text-[clamp(3.9rem,7vw,7.4rem)]">
+                  {tx("Project")} <span className="text-[#E6C767] [hyphens:none]">Reverance</span>
                 </h1>
                 <p className="mt-8 max-w-[28rem] text-[1.05rem] leading-[1.55] text-white/68 sm:text-[1.12rem]">
                   {tx(currentProject.summary)}
@@ -405,8 +405,8 @@ export function BrandbookLandingPage() {
                 onClick={() => setExpandedImage({ ...projectImages.hero, alt: tx("The Reverance residence exterior in Batumi") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
-                <span className="absolute right-5 top-5 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8">
-                  <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand image")}
+                <span className="absolute right-2 top-2 inline-flex max-w-[calc(100%-0.75rem)] items-center gap-1.5 p-2 text-[0.52rem] font-semibold uppercase tracking-[0.12em] text-white [overflow-wrap:anywhere] [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8 sm:gap-2 sm:text-[0.58rem] sm:tracking-[0.16em]">
+                  <Maximize2 size={13} strokeWidth={1.7} /> <span className="hidden min-[380px]:inline">{tx("Expand image")}</span>
                 </span>
               </button>
               <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#161616]/55 via-[#161616]/10 to-transparent" />
@@ -472,8 +472,8 @@ export function BrandbookLandingPage() {
                 onClick={() => setExpandedImage({ ...projectImages.sunset, alt: tx("Sunset over the residence facade") })}
                 className="absolute inset-0 z-10 cursor-zoom-in"
               >
-                <span className="absolute right-5 top-5 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8">
-                  <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand image")}
+                <span className="absolute right-2 top-2 inline-flex max-w-[calc(100%-0.75rem)] items-center gap-1.5 p-2 text-[0.52rem] font-semibold uppercase tracking-[0.12em] text-white [overflow-wrap:anywhere] [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:right-8 sm:top-8 sm:gap-2 sm:text-[0.58rem] sm:tracking-[0.16em]">
+                  <Maximize2 size={13} strokeWidth={1.7} /> <span className="hidden min-[380px]:inline">{tx("Expand image")}</span>
                 </span>
               </button>
               <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/85 via-[#0b0b0b]/20 to-[#0b0b0b]/20" />

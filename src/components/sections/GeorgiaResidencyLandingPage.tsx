@@ -335,7 +335,7 @@ export function GeorgiaResidencyLandingPage() {
           <div className="residency-frame hidden sm:block" />
           <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-end px-5 pb-10 pt-28 sm:px-10 sm:pb-14 lg:px-16">
             <p className="text-[0.66rem] font-semibold uppercase tracking-[0.28em] text-[#E6C767]">{tx("Residence permit in Georgia")}</p>
-            <h1 className="mt-5 max-w-[14ch] text-[clamp(2.55rem,12vw,7.6rem)] font-medium leading-[0.86] tracking-[-0.055em] text-white">
+            <h1 className="mt-5 max-w-[14ch] text-[clamp(2.15rem,11vw,7.6rem)] font-medium leading-[0.9] tracking-[-0.055em] text-white [overflow-wrap:anywhere] [hyphens:auto]">
               {tx("Stay. Own.")} <span className="text-[#E6C767]">{tx("Reside.")}</span>
             </h1>
             <p className="mt-6 max-w-[34rem] text-base leading-[1.6] text-white/72 sm:text-lg">
@@ -418,10 +418,10 @@ export function GeorgiaResidencyLandingPage() {
         </section>
 
         <section id="services" className="scroll-mt-16 bg-[#002147] text-white">
-          <div className="mx-auto grid max-w-[1480px] gap-14 px-5 py-20 sm:px-10 lg:grid-cols-[0.9fr_1.1fr] lg:px-16 lg:py-28">
-            <div>
+          <div className="mx-auto grid max-w-[1480px] min-w-0 grid-cols-1 gap-14 px-4 py-20 sm:px-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:px-16 lg:py-28">
+            <div className="min-w-0">
               <p className="text-[0.66rem] font-semibold uppercase tracking-[0.26em] text-[#E6C767]">{tx("Our services")}</p>
-              <h2 className="mt-5 max-w-[10ch] text-[clamp(2.7rem,5vw,5.2rem)] font-medium leading-[0.9] tracking-[-0.05em]">{tx("A relocation ledger.")}</h2>
+              <h2 className="mt-5 max-w-[10ch] text-[clamp(2.15rem,11vw,5.2rem)] font-medium leading-[0.94] tracking-[-0.05em] [overflow-wrap:anywhere]">{tx("A relocation ledger.")}</h2>
               <p className="mt-6 max-w-[28rem] text-base leading-[1.55] text-white/62">
                 {tx("For clients without an established tax residency, or who have exited their prior jurisdiction, AIXCO provides a Tax Relocation Package.")}
               </p>
@@ -429,18 +429,18 @@ export function GeorgiaResidencyLandingPage() {
               <p className="mt-2 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white/60">{tx("Tax relocation package")}</p>
               <ul className="mt-6 grid gap-2 text-sm leading-6 text-white/70">
                 {relocationIncludes.map((item) => (
-                  <li key={item} className="flex gap-3">
+                  <li key={item} className="flex min-w-0 gap-3">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-[#E6C767]" />
-                    {tx(item)}
+                    <span className="min-w-0 [overflow-wrap:anywhere]">{tx(item)}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <ol className="border-t border-white/15">
+            <ol className="min-w-0 border-t border-white/15">
               {services.map((service, index) => (
-                <li key={service} className="grid grid-cols-[3rem_1fr] gap-4 border-b border-white/10 py-4 text-sm leading-6 text-white/78">
+                <li key={service} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-3 border-b border-white/10 py-4 text-sm leading-6 text-white/78 sm:grid-cols-[3rem_minmax(0,1fr)] sm:gap-4">
                   <span className="text-[#E6C767]">{String(index + 1).padStart(2, "0")}</span>
-                  <span>{tx(service)}</span>
+                  <span className="min-w-0 [overflow-wrap:anywhere]">{tx(service)}</span>
                 </li>
               ))}
             </ol>

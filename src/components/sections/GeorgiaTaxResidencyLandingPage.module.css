@@ -328,6 +328,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
+  min-height: var(--aixco-control-min-size);
   border: 0;
   background: none;
   color: var(--ink);
@@ -336,7 +337,7 @@
   font-size: 0.66rem;
   font-weight: 700;
   letter-spacing: 0.16em;
-  padding: 0.6rem 0;
+  padding: 0.7rem 0;
   text-transform: uppercase;
 }
 
@@ -1661,7 +1662,7 @@
   }
 
   .logoLink {
-    width: 7.8rem;
+    width: min(7.8rem, 42vw);
   }
 
   .languageButton {
@@ -1674,7 +1675,9 @@
   }
 
   .hero h1 {
-    font-size: clamp(3.35rem, 15vw, 5.2rem);
+    font-size: clamp(2.35rem, 12.5vw, 3.6rem);
+    overflow-wrap: anywhere;
+    hyphens: auto;
   }
 
   .heroBody {
@@ -1825,6 +1828,67 @@
   .footerLinks {
     justify-content: flex-start;
     text-align: start;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero h1,
+  .pathwayIntro h2,
+  .contactCopy h2,
+  .chapterCopy h2 {
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.1rem, 12vw, 2.85rem);
+  }
+
+  .pathwayIntro h2 {
+    font-size: clamp(2.15rem, 12vw, 3.1rem);
+  }
+}
+
+@media (max-width: 359px) {
+  .headerInner {
+    width: min(100% - 1rem, 40rem);
+    gap: 0.4rem;
+  }
+
+  .logoLink {
+    width: min(6.2rem, 38vw);
+  }
+
+  .headerActions {
+    gap: 0.3rem;
+  }
+}
+
+@media (max-width: 300px) {
+  .headerInner,
+  .chapterSection,
+  .contactSection,
+  .footer {
+    width: min(100% - 0.9rem, 40rem);
+    gap: 0.35rem;
+  }
+
+  .logoLink {
+    width: min(5.4rem, 36vw);
+  }
+
+  .headerActions {
+    gap: 0.25rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.85rem, 13vw, 2.4rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .page {
+    padding-bottom: max(3.75rem, env(safe-area-inset-bottom, 0px));
   }
 }
 

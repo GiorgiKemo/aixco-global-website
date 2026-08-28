@@ -55,6 +55,14 @@
   font-variant-numeric: tabular-nums;
 }
 
+@media (max-width: 1279px) {
+  .currencyValue {
+    max-width: 100%;
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+}
+
 .currencyPrefix {
   display: inline-block;
   margin-inline-end: 0.06em;

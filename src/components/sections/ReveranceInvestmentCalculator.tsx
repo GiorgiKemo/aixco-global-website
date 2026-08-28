@@ -72,10 +72,10 @@ function ControlRange({
   onChange: (value: number) => void;
 }) {
   return (
-    <label className="grid gap-3">
-      <span className="flex items-baseline justify-between gap-4 text-[0.67rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/70">
-        <span>{label}</span>
-        <strong className="text-sm tracking-normal text-[#161616]">{display}</strong>
+    <label className="grid min-w-0 gap-3">
+      <span className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[0.62rem] font-semibold uppercase tracking-[0.1em] text-[#161616]/70 sm:text-[0.67rem] sm:tracking-[0.16em]">
+        <span className="min-w-0 [overflow-wrap:anywhere]">{label}</span>
+        <strong className="shrink-0 text-sm tracking-normal text-[#161616]">{display}</strong>
       </span>
       <input
         className={styles.range}
@@ -98,8 +98,8 @@ function ControlRange({
 
 function OutputCard({ label, value, accent = false }: { label: string; value: ReactNode; accent?: boolean }) {
   return (
-    <article className={`flex min-h-[9.5rem] flex-col border border-[#161616]/12 p-5 sm:p-6 ${accent ? "bg-[#002147] text-white" : "bg-white text-[#161616]"}`}>
-      <p className={`min-h-[2.2rem] text-[0.62rem] font-semibold uppercase leading-[1.35] tracking-[0.18em] ${accent ? "text-[#E6C767]" : "text-[#161616]/70"}`}>{label}</p>
+    <article className={`flex min-h-[9.5rem] min-w-0 flex-col overflow-hidden border border-[#161616]/12 p-5 sm:p-6 ${accent ? "bg-[#002147] text-white" : "bg-white text-[#161616]"}`}>
+      <p className={`min-h-[2.2rem] text-[0.62rem] font-semibold uppercase leading-[1.35] tracking-[0.12em] [overflow-wrap:anywhere] sm:tracking-[0.18em] ${accent ? "text-[#E6C767]" : "text-[#161616]/70"}`}>{label}</p>
       <p className={`mt-auto pt-5 font-display text-[clamp(1.8rem,3.6vw,3.2rem)] font-semibold leading-none tracking-[-0.05em] ${accent ? "text-white" : "text-[#161616]"}`}>{value}</p>
     </article>
   );
@@ -107,9 +107,9 @@ function OutputCard({ label, value, accent = false }: { label: string; value: Re
 
 function DetailRow({ label, value, strong = false }: { label: string; value: ReactNode; strong?: boolean }) {
   return (
-    <div className="flex items-baseline justify-between gap-5 border-b border-[#161616]/12 py-4 last:border-b-0">
-      <span className="text-sm text-[#161616]/70">{label}</span>
-      <strong className={`text-right text-sm ${strong ? "font-semibold text-[#8B6A18]" : "font-medium text-[#161616]"}`}>{value}</strong>
+    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-[#161616]/12 py-4 last:border-b-0">
+      <span className="min-w-0 text-sm text-[#161616]/70 [overflow-wrap:anywhere]">{label}</span>
+      <strong className={`shrink-0 text-right text-sm ${strong ? "font-semibold text-[#8B6A18]" : "font-medium text-[#161616]"}`}>{value}</strong>
     </div>
   );
 }
@@ -160,10 +160,10 @@ export function ReveranceInvestmentCalculator() {
       <PropertyChrome />
       <main id="main-content" className="bg-[#F3EDE1] text-[#161616]">
         <section className={`relative overflow-hidden border-b border-[#161616]/12 ${styles.heroGrid}`}>
-          <div className="mx-auto grid w-full max-w-[1600px] gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[0.86fr_1.14fr] lg:items-center lg:gap-16 lg:px-14 lg:py-24">
+          <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-12 px-4 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:items-center lg:gap-16 lg:px-14 lg:py-24">
             <div className="relative z-10">
               <p className="brandbook-eyebrow">01 — {tx("Scenario calculator")}</p>
-              <h1 className="mt-8 max-w-[10ch] font-display text-[clamp(3.5rem,7.2vw,7.8rem)] font-medium leading-[0.87] tracking-[-0.075em]">
+              <h1 className="mt-8 max-w-[12ch] font-display text-[clamp(2.05rem,9vw,7.8rem)] font-medium leading-[0.96] tracking-[-0.075em] [overflow-wrap:break-word] [hyphens:manual]">
                 {tx("Reverance investment model")}
               </h1>
               <p className="mt-9 max-w-[30rem] text-lg leading-[1.55] text-[#161616]/65 sm:text-xl">
@@ -197,7 +197,7 @@ export function ReveranceInvestmentCalculator() {
         </section>
 
         <section id="calculator" className="scroll-mt-24 border-b border-[#161616]/12 bg-[#FAF8F3]">
-          <div className="mx-auto w-full max-w-[1600px] px-5 py-14 sm:px-8 sm:py-20 lg:px-14 lg:py-28">
+          <div className="mx-auto w-full max-w-[1600px] px-4 py-14 sm:px-8 sm:py-20 lg:px-14 lg:py-28">
             <div className="flex flex-col justify-between gap-7 border-b border-[#161616]/15 pb-8 lg:flex-row lg:items-end">
               <div>
                 <p className="brandbook-eyebrow">02 — {tx("What you control")}</p>
@@ -206,8 +206,8 @@ export function ReveranceInvestmentCalculator() {
               <p className="max-w-[30rem] text-base leading-[1.55] text-[#161616]/62">{tx("The model translates your inputs into purchase price, financing, net monthly rent and a projected net worth.")}</p>
             </div>
 
-            <div className="mt-10 grid gap-5 lg:grid-cols-[0.84fr_1.16fr] lg:gap-8">
-              <section className="border border-[#161616]/12 bg-[#F3EDE1] p-6 sm:p-8 lg:p-10" aria-labelledby="calculator-controls-heading">
+            <div className="mt-10 grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:gap-8">
+              <section className="min-w-0 border border-[#161616]/12 bg-[#F3EDE1] p-4 sm:p-8 lg:p-10" aria-labelledby="calculator-controls-heading">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#75540F]">03 / 05</p>
@@ -217,7 +217,7 @@ export function ReveranceInvestmentCalculator() {
                 </div>
 
                 <label className="mt-10 grid gap-3">
-                  <span className="text-[0.67rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/65">{tx("Choose your apartment")}</span>
+                  <span className="text-[0.67rem] font-semibold uppercase tracking-[0.12em] text-[#161616]/65 [overflow-wrap:anywhere] sm:tracking-[0.16em]">{tx("Choose your apartment")}</span>
                   <select
                     value={inputs.unitCode}
                     onChange={(event) => updateInput("unitCode", event.target.value)}
@@ -231,7 +231,7 @@ export function ReveranceInvestmentCalculator() {
                   </select>
                 </label>
 
-                <div className="mt-7 grid grid-cols-2 gap-3 border-y border-[#161616]/12 py-5 text-sm">
+                <div className="mt-7 grid grid-cols-1 gap-3 border-y border-[#161616]/12 py-5 text-sm min-[360px]:grid-cols-2">
                   <div><p className="text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">{tx("Area")}</p><p className="mt-2 font-semibold">{formatNumber(unit.area, lang)} m²</p></div>
                   <div><p className="text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">{tx("Orientation")}</p><p className="mt-2 font-semibold">{tx(unit.orientation)}</p></div>
                   <div><p className="text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">{tx("Building")}</p><p className="mt-2 font-semibold">{unit.building}</p></div>
@@ -247,27 +247,27 @@ export function ReveranceInvestmentCalculator() {
                 </div>
               </section>
 
-              <section className="grid content-start gap-px bg-[#161616]/12" aria-label={tx("Your scenario")}>
-                <div className="grid gap-px bg-[#161616]/12 sm:grid-cols-3">
+              <section className="grid min-w-0 grid-cols-1 content-start gap-px bg-[#161616]/12" aria-label={tx("Your scenario")}>
+                <div className="grid min-w-0 grid-cols-1 gap-px bg-[#161616]/12 xl:grid-cols-3">
                   <OutputCard label={tx("Invested equity")} value={<CurrencyValue value={calculation.investedEquity} lang={lang} />} />
                   <OutputCard label={tx("Monthly surplus")} value={<CurrencyValue value={Math.abs(calculation.monthlySurplus)} lang={lang} prefix={calculation.monthlySurplus >= 0 ? "+" : "−"} />} accent />
                   <OutputCard label={`${tx("Net worth after")} ${inputs.holdingYears} ${tx(inputs.holdingYears === 1 ? "year" : "years")}`} value={<CurrencyValue value={calculation.holdingProjection.netWorth} lang={lang} />} />
                 </div>
-                <div className="bg-white p-6 sm:p-8 lg:p-10">
-                  <div className="flex flex-col justify-between gap-4 border-b border-[#161616]/12 pb-5 sm:flex-row sm:items-end">
-                    <div><p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#8B6A18]">{tx("At completion")}</p><h3 className="mt-3 font-display text-3xl font-medium tracking-[-0.05em]"><CurrencyValue value={calculation.completionValue} lang={lang} /></h3></div>
-                    <p className="max-w-[16rem] text-right text-sm leading-5 text-[#161616]/70">{formatPercent(reveranceCalculatorAssumptions.completionUpliftPercent, lang)} {tx("Value uplift to completion").toLowerCase()}</p>
+                <div className="min-w-0 bg-white p-6 sm:p-8 lg:p-10">
+                  <div className="flex min-w-0 flex-col justify-between gap-4 border-b border-[#161616]/12 pb-5 sm:flex-row sm:items-end">
+                    <div className="min-w-0"><p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#8B6A18]">{tx("At completion")}</p><h3 className="mt-3 font-display text-3xl font-medium tracking-[-0.05em] [overflow-wrap:anywhere]"><CurrencyValue value={calculation.completionValue} lang={lang} /></h3></div>
+                    <p className="max-w-full min-w-0 text-left text-sm leading-5 text-[#161616]/70 [overflow-wrap:anywhere] sm:max-w-[16rem] sm:text-right">{formatPercent(reveranceCalculatorAssumptions.completionUpliftPercent, lang)} {tx("Value uplift to completion").toLowerCase()}</p>
                   </div>
-                  <div className="mt-2 grid gap-0 sm:grid-cols-2 sm:gap-x-10">
+                  <div className="mt-2 grid min-w-0 gap-0 sm:grid-cols-2 sm:gap-x-10">
                     <DetailRow label={tx("Purchase price")} value={<CurrencyValue value={calculation.listPrice} lang={lang} />} />
                     <DetailRow label={tx("Financing amount")} value={<CurrencyValue value={calculation.loanAmount} lang={lang} />} />
                     <DetailRow label={tx("Net monthly rent")} value={<CurrencyValue value={calculation.netMonthlyRent} lang={lang} />} strong />
                     <DetailRow label={tx("Monthly bank payment")} value={<CurrencyValue value={calculation.monthlyBankPayment} lang={lang} prefix="−" />} />
                   </div>
                 </div>
-                <div className="bg-[#002147] p-6 text-white sm:p-8 lg:p-10">
+                <div className="min-w-0 bg-[#002147] p-6 text-white sm:p-8 lg:p-10">
                   <div className="flex items-start justify-between gap-5"><div><p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#E6C767]">{tx("At your horizon")}</p><h3 className="mt-3 font-display text-3xl font-medium tracking-[-0.05em]"><CurrencyValue value={calculation.holdingProjection.netWorth} lang={lang} /></h3></div><ArrowUpRight className="h-6 w-6 text-[#E6C767]" strokeWidth={1.2} aria-hidden="true" /></div>
-                  <div className="mt-8 grid gap-0 sm:grid-cols-3 sm:gap-5">
+                  <div className="mt-8 grid min-w-0 gap-0 sm:grid-cols-3 sm:gap-5">
                     <div className="border-t border-white/20 pt-3"><p className="text-[0.58rem] uppercase tracking-[0.16em] text-white/55">{tx("Property value")}</p><p className="mt-2 text-sm font-semibold"><CurrencyValue value={calculation.holdingProjection.propertyValue} lang={lang} /></p></div>
                     <div className="border-t border-white/20 pt-3"><p className="text-[0.58rem] uppercase tracking-[0.16em] text-white/55">{tx("Remaining debt")}</p><p className="mt-2 text-sm font-semibold"><CurrencyValue value={calculation.holdingProjection.remainingDebt} lang={lang} /></p></div>
                     <div className="border-t border-white/20 pt-3"><p className="text-[0.58rem] uppercase tracking-[0.16em] text-white/55">{tx("Equity multiple")}</p><p className="mt-2 text-sm font-semibold">{formatNumber(calculation.holdingProjection.multiple, lang, 2)}×</p></div>
@@ -297,8 +297,8 @@ export function ReveranceInvestmentCalculator() {
         </section>
 
         <section className="border-b border-[#161616]/12 bg-[#F3EDE1]">
-          <div className="mx-auto w-full max-w-[1600px] px-5 py-14 sm:px-8 sm:py-20 lg:px-14 lg:py-28">
-            <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+          <div className="mx-auto w-full max-w-[1600px] px-4 py-14 sm:px-8 sm:py-20 lg:px-14 lg:py-28">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
               <div>
                 <p className="brandbook-eyebrow">05 — {tx("Projection")}</p>
                 <h2 className="mt-7 max-w-[9ch] font-display text-[clamp(3rem,5.5vw,6rem)] font-medium leading-[0.87] tracking-[-0.07em]">{tx("Net worth over time")}</h2>

@@ -6440,16 +6440,16 @@
 
   @media (max-width: 559px) {
     [data-story-section='hero'] {
-      height: 100svh;
+      height: auto;
       min-height: 100svh;
-      max-height: 100svh;
-      overflow: hidden;
+      max-height: none;
+      overflow: visible;
     }
 
     [data-story-section='hero'] .story-hero-copy {
-      justify-content: center;
+      justify-content: flex-start;
       padding: clamp(5.15rem, 10svh, 6rem) clamp(1.15rem, 5vw, 1.45rem)
-        max(1.15rem, env(safe-area-inset-bottom, 0px));
+        max(5.5rem, calc(4.25rem + env(safe-area-inset-bottom, 0px)));
     }
 
     [data-story-section='hero'] .story-hero-lockup {
@@ -6524,7 +6524,7 @@
 
     [data-story-section='hero'] .story-hero-actions {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       width: min(100%, 21.5rem);
       gap: 0.5rem;
       margin-top: clamp(0.9rem, 3.3svh, 1.35rem);
@@ -6926,8 +6926,8 @@
     }
 
     [data-story-section='hero'] .story-hero-statement__line {
-      font-size: clamp(2.6rem, 13.5vw, 3.4rem);
-      line-height: 0.94;
+      font-size: clamp(1.85rem, 10.5vw, 2.55rem);
+      line-height: 0.96;
     }
   }
 
@@ -9954,9 +9954,10 @@ html[dir='rtl'] {
 
   .property-hero__title {
     max-width: 100%;
-    font-size: clamp(2.7rem, 14vw, 3.5rem) !important;
+    font-size: clamp(2.15rem, 12vw, 3.5rem) !important;
     letter-spacing: -0.045em;
     overflow-wrap: anywhere;
+    hyphens: none;
   }
 
   .property-hero__subtitle {
@@ -10133,7 +10134,7 @@ html[dir='rtl'] {
     min-height: calc(100svh - 1.5rem) !important;
     min-height: calc(100dvh - 1.5rem) !important;
     max-height: none !important;
-    overflow: clip !important;
+    overflow: visible !important;
   }
 
   [data-story-section='hero'] > div:not(.story-section-boundary) {
@@ -10276,11 +10277,11 @@ html[dir='rtl'] {
     min-height: 100svh !important;
     min-height: 100dvh !important;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     overflow: visible;
     padding-top: max(4.75rem, calc(4rem + env(safe-area-inset-top, 0px)));
     padding-right: max(1rem, env(safe-area-inset-right, 0px));
-    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    padding-bottom: max(4.25rem, calc(3.4rem + env(safe-area-inset-bottom, 0px)));
     padding-left: max(1rem, env(safe-area-inset-left, 0px));
     text-align: center;
   }
@@ -10345,14 +10346,15 @@ html[dir='rtl'] {
 
   [data-story-section='hero'] .story-hero-actions {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    width: min(100%, 44rem);
-    gap: 0.5rem;
-    margin: 0.15rem auto 0;
+    grid-template-columns: 1fr;
+    width: min(100%, 22rem);
+    gap: 0.45rem;
+    margin: 0.35rem auto 0;
+    padding-bottom: 0.25rem;
   }
 
   [data-story-section='hero'] .story-hero-actions > :first-child {
-    grid-column: auto;
+    grid-column: 1 / -1;
   }
 
   [data-story-section='hero'] .story-hero-actions .btn-gold,
@@ -12187,6 +12189,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .brandbook-text-link {
+  min-height: var(--aixco-control-min-size);
   border-bottom: 1px solid rgb(22 22 22 / 0.22);
   padding-bottom: 0.65rem;
 }
@@ -13403,5 +13406,198 @@ html[data-route-transition='marketing']::view-transition-new(root) {
   .aixco-route-veil.is-active {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+/* Viewport safety net: foldables, 320px SE, short landscape, and long locales.
+   Intentional marquees/carousels keep overflow; everything else must wrap. */
+@media (max-width: 1279px) {
+  #main-content h1,
+  #main-content h2,
+  #main-content h3,
+  .brandbook-landing h1,
+  .brandbook-landing h2,
+  .residency-editorial h1,
+  .residency-editorial h2,
+  .medical-editorial h1,
+  .medical-editorial h2 {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .brandbook-landing a,
+  .residency-editorial a,
+  .medical-editorial a {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 767px) {
+  .brandbook-landing,
+  .reverance-editorial,
+  .medical-editorial,
+  .residency-editorial {
+    padding-bottom: max(3.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  [data-story-section='hero'] .story-hero-actions .btn-gold,
+  [data-story-section='hero'] .story-hero-actions .btn-ghost-gold {
+    white-space: normal;
+  }
+
+  [data-whatsapp-floating-container='true'] {
+    bottom: max(0.7rem, env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+@media (max-width: 559px) and (max-height: 700px) {
+  [data-story-section='hero'] .story-hero-kicker {
+    font-size: clamp(0.58rem, 2.6vw, 0.7rem);
+  }
+
+  [data-story-section='hero'] [data-brand-lockup='story-hero'],
+  [data-story-section='hero'] .story-hero-wordmark {
+    font-size: clamp(1.7rem, 9.4vw, 2.25rem) !important;
+  }
+
+  [data-story-section='hero'] .story-hero-statement__line,
+  [data-story-section='hero']
+    .story-hero-statement__line
+    + .story-hero-statement__line {
+    margin-left: 0;
+    font-size: clamp(1.55rem, 8.8vw, 2.15rem);
+    line-height: 0.98;
+  }
+
+  [data-story-section='hero'] .story-hero-statement__note {
+    font-size: clamp(0.56rem, 2.5vw, 0.68rem);
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 359px) {
+  [data-story-section='hero'] .story-hero-copy {
+    padding-inline: 0.85rem;
+  }
+
+  [data-story-section='hero'] .story-hero-lockup,
+  [data-story-section='hero'] .story-hero-statement,
+  [data-story-section='hero'] .story-hero-actions {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .landing-header-bar {
+    gap: 0.4rem;
+    padding-inline: 0.75rem;
+  }
+
+  .landing-header-logo {
+    width: clamp(5.6rem, 42vw, 7.25rem) !important;
+  }
+}
+
+@media (max-width: 300px) {
+  [data-story-section='hero'] .story-hero-statement__line {
+    font-size: clamp(1.35rem, 9vw, 1.75rem);
+  }
+
+  [data-story-section='hero'] .story-hero-actions .btn-gold,
+  [data-story-section='hero'] .story-hero-actions .btn-ghost-gold {
+    min-height: 2.55rem;
+    font-size: 0.68rem;
+    padding-inline: 0.35rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 420px) {
+  [data-story-section='hero'] .story-hero-copy {
+    padding-bottom: max(3.25rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .brandbook-landing #top > div,
+  .reverance-editorial #top > div,
+  .medical-editorial #top > div,
+  .residency-editorial #top > div {
+    min-height: auto;
+  }
+}
+
+/* Fold-cover and similar ultra-narrow widths: never let grid/flex min-content
+   stretch a landing page past the viewport. Intentional marquees stay clipped
+   by their own overflow rules. */
+@media (max-width: 359px) {
+  #main-content,
+  .brandbook-landing,
+  .residency-editorial,
+  .medical-editorial,
+  .reverance-editorial {
+    overflow-x: clip;
+  }
+
+  #main-content .grid,
+  #main-content .flex {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #main-content .grid > *,
+  #main-content .flex > *:not(svg) {
+    min-width: 0;
+  }
+
+  #main-content p,
+  #main-content li,
+  #main-content label,
+  #main-content span,
+  .brandbook-landing #top span,
+  .residency-editorial #top span,
+  .medical-editorial #top span {
+    overflow-wrap: break-word;
+  }
+
+  #main-content select,
+  #main-content input,
+  #main-content textarea,
+  #main-content button {
+    max-width: 100%;
+  }
+
+  .brandbook-eyebrow {
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 255px) {
+  .landing-header-bar {
+    padding-inline: 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .landing-header-logo {
+    width: clamp(4.6rem, 38vw, 6.2rem) !important;
+  }
+
+  #main-content h1,
+  .brandbook-landing h1,
+  .residency-editorial h1 {
+    font-size: clamp(1.7rem, 11vw, 2.4rem) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-story-section='hero'] .story-hero-copy {
+    justify-content: flex-start;
+    padding-bottom: max(5.5rem, calc(4.5rem + env(safe-area-inset-bottom, 0px))) !important;
+  }
+
+  [data-story-section='hero'] .story-hero-actions {
+    max-width: calc(100% - 3.35rem);
+    margin-inline: 0 auto 0 0;
+  }
+
+  .property-hero__content {
+    padding-bottom: max(4.75rem, calc(3.5rem + env(safe-area-inset-bottom, 0px))) !important;
   }
 }
