@@ -651,7 +651,7 @@ export function PrivateClientAdvisoryLandingPage() {
                 <Globe2 size={15} aria-hidden /><span>{lang.toUpperCase()}</span><ChevronDown size={13} className={languageOpen ? styles.chevronOpen : ""} aria-hidden />
               </button>
               {languageOpen && (
-                <div className={styles.languageMenu}>
+                <div className={`${styles.languageMenu} landing-language-panel`}>
                   {LANGS.map((option) => (
                     <button key={option.code} type="button" data-active={option.code === lang} onClick={() => { setLang(option.code); setLanguageOpen(false); }}>
                       <span>{option.label}</span><span>{option.native}</span>
@@ -666,7 +666,7 @@ export function PrivateClientAdvisoryLandingPage() {
           </div>
         </div>
         {menuOpen && (
-          <nav className={styles.mobileNav} aria-label="Mobile navigation">
+          <nav className={`${styles.mobileNav} landing-mobile-nav`} aria-label="Mobile navigation">
             {sectionIds.map((id) => (
               <button key={id} type="button" onClick={() => goTo(id)}>{content.nav[id === "who" ? "who" : id === "markets" ? "markets" : id === "model" ? "model" : id === "structure" ? "structure" : "contact"]}</button>
             ))}

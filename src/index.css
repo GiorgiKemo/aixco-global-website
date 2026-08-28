@@ -2194,7 +2194,7 @@
       font-size: clamp(2rem, 10vw, 2.7rem);
       line-height: 1.04;
       padding-inline-end: 0;
-      overflow-wrap: normal;
+      overflow-wrap: anywhere;
       word-break: normal;
       hyphens: none;
     }
@@ -7099,8 +7099,10 @@ html[data-home-experience='story'] {
 
 @media (max-width: 767px) {
   [data-whatsapp-floating-container='true'] > a {
-    width: 2.55rem !important;
-    height: 2.55rem !important;
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    min-width: 2.75rem !important;
+    min-height: 2.75rem !important;
     border-radius: 0.55rem !important;
   }
 
@@ -13571,7 +13573,13 @@ html[data-route-transition='marketing']::view-transition-new(root) {
   }
 
   .brandbook-eyebrow {
-    letter-spacing: 0.12em;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    min-width: 0;
+    letter-spacing: 0.08em;
+    overflow-wrap: anywhere;
+    white-space: normal;
   }
 }
 
@@ -13606,4 +13614,42 @@ html[data-route-transition='marketing']::view-transition-new(root) {
   .property-hero__content {
     padding-bottom: max(4.75rem, calc(3.5rem + env(safe-area-inset-bottom, 0px))) !important;
   }
+}
+
+/* Keep the cookie banner from covering WhatsApp / scroll-to-top, and keep
+   landing language menus and mobile drawers inside uncommon viewports. */
+html[data-analytics-consent-open='true'] [data-whatsapp-floating-container='true'],
+html[data-analytics-consent-open='true'] [data-scroll-to-top-button='true'],
+html:has(.landing-mobile-nav) [data-whatsapp-floating-container='true'],
+html:has(.landing-mobile-nav) [data-scroll-to-top-button='true'] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.landing-language-panel,
+[id$='-language-list'] {
+  max-width: calc(100vw - 1.5rem);
+  max-height: min(18rem, calc(100dvh - var(--aixco-header-height) - 1.25rem));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 359px) {
+  .landing-language-panel,
+  [id$='-language-list'] {
+    position: fixed !important;
+    top: calc(var(--aixco-header-height) + env(safe-area-inset-top, 0px)) !important;
+    inset-inline-end: 0.75rem !important;
+    inset-inline-start: auto !important;
+    right: 0.75rem !important;
+    left: auto !important;
+    width: min(14rem, calc(100vw - 1.5rem)) !important;
+    z-index: 90;
+  }
+}
+
+.landing-mobile-nav {
+  max-height: calc(100dvh - var(--aixco-header-height) - env(safe-area-inset-top, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }

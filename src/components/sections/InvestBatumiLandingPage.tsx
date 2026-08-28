@@ -643,7 +643,7 @@ export function InvestBatumiLandingPage() {
                 <Globe2 size={16} /><span>{activeLanguage}</span>
               </button>
               {languageOpen ? (
-                <div className={styles.languageMenu}>
+                <div className={`${styles.languageMenu} landing-language-panel`}>
                   {LANGS.map((option) => (
                     <button key={option.code} type="button" data-active={option.code === lang} onClick={() => { setLang(option.code); setLanguageOpen(false); }}>
                       <span>{option.label}</span><span>{option.native}</span>
@@ -658,7 +658,7 @@ export function InvestBatumiLandingPage() {
           </div>
         </div>
         {menuOpen ? (
-          <nav aria-label="Mobile navigation" className={styles.mobileNav}>
+          <nav aria-label="Mobile navigation" className={`${styles.mobileNav} landing-mobile-nav`}>
             {navItems.map((item) => <a key={item.href} href={item.href} onClick={(event) => { event.preventDefault(); handleNav(item.href); }}>{item.label}</a>)}
             <a href="#contact" onClick={(event) => { event.preventDefault(); handleNav("#contact"); }}>{content.nav.contact}</a>
           </nav>

@@ -757,7 +757,7 @@ export function GeorgiaTaxResidencyLandingPage() {
               </button>
               <AnimatePresence>
                 {languageOpen ? (
-                  <motion.div className={styles.languageMenu} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
+                  <motion.div className={`${styles.languageMenu} landing-language-panel`} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
                     {LANGS.map((option) => (
                       <button key={option.code} type="button" data-active={option.code === lang} onClick={() => { setLang(option.code); setLanguageOpen(false); }}>
                         <span>{option.label}</span><span>{option.native}</span>
@@ -774,7 +774,7 @@ export function GeorgiaTaxResidencyLandingPage() {
         </div>
         <AnimatePresence>
           {menuOpen ? (
-            <motion.nav className={styles.mobileNav} aria-label="Mobile navigation" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+            <motion.nav className={`${styles.mobileNav} landing-mobile-nav`} aria-label="Mobile navigation" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
               {["clock", "position", "path", "why", "contact"].map((id) => (
                 <button key={id} type="button" onClick={() => handleNav(id)}>{content.nav[id as keyof typeof content.nav]}</button>
               ))}

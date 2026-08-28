@@ -100,6 +100,7 @@ describe("AnalyticsTracker consent and session lifecycle", () => {
   });
 
   afterEach(() => {
+    document.documentElement.removeAttribute("data-analytics-consent-open");
     cleanup();
     vi.unstubAllGlobals();
   });
@@ -109,6 +110,7 @@ describe("AnalyticsTracker consent and session lifecycle", () => {
 
     expect(await screen.findByRole("dialog", { name: "Cookies & analytics" }))
       .toBeInTheDocument();
+    expect(document.documentElement).toHaveAttribute("data-analytics-consent-open", "true");
     expect(readAnalyticsConsent()).toBe("unset");
     expect(fetchMock).not.toHaveBeenCalled();
     expect(screen.getByText(/Google Analytics and optional AIXCO analytics stay off until you choose/)).toBeVisible();
@@ -119,6 +121,7 @@ describe("AnalyticsTracker consent and session lifecycle", () => {
     fireEvent.click(screen.getByRole("button", { name: "Accept analytics" }));
 
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(document.documentElement).not.toHaveAttribute("data-analytics-consent-open");
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
     expect(readAnalyticsConsent()).toBe("granted");
     expect(window.localStorage.getItem(ANALYTICS_VISITOR_STORAGE_KEY)).toMatch(

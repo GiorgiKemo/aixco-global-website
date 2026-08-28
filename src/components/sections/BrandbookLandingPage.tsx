@@ -281,7 +281,7 @@ export function BrandbookLandingPage() {
               <ChevronDown size={13} strokeWidth={1.6} className={languageOpen ? "rotate-180" : undefined} aria-hidden />
             </button>
             {languageOpen ? (
-              <div id="brandbook-language-list" className="absolute end-0 top-[calc(100%+0.5rem)] z-[80] w-56 border border-[#161616]/10 bg-[#F3EDE1] p-1.5 text-[#161616] shadow-xl">
+              <div id="brandbook-language-list" className="landing-language-panel absolute end-0 top-[calc(100%+0.5rem)] z-[80] w-56 border border-[#161616]/10 bg-[#F3EDE1] p-1.5 text-[#161616] shadow-xl">
                 <ul aria-label={tx("Change language")} className="grid gap-1">
                   {LANGS.map((option) => (
                     <li key={option.code}>
@@ -309,7 +309,7 @@ export function BrandbookLandingPage() {
         </div>
 
         {menuOpen && (
-          <nav aria-label={tx("Mobile navigation")} className="border-t border-[#161616]/10 bg-[#F3EDE1] px-5 py-5 lg:hidden">
+          <nav aria-label={tx("Mobile navigation")} className="landing-mobile-nav border-t border-[#161616]/10 bg-[#F3EDE1] px-5 py-5 lg:hidden">
             <div className="mx-auto flex max-w-[1600px] flex-col gap-1">
               {navigation.map((item) => (
                 <a

@@ -372,7 +372,7 @@ export function PropertyChrome() {
               <ChevronDown className={cn("h-3 w-3 opacity-70 transition-transform", langOpen && "rotate-180")} aria-hidden />
             </button>
             {langOpen ? (
-              <div id="property-language-list" className="absolute end-0 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant">
+              <div id="property-language-list" className="landing-language-panel absolute end-0 top-[calc(100%+0.5rem)] z-[80] w-64 rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant">
                 {languageOptions}
               </div>
             ) : null}
@@ -416,7 +416,7 @@ export function PropertyChrome() {
           </div>
 
           {langOpen ? (
-            <div id="property-mobile-language-list" className="property-mobile-language-list absolute end-4 top-[calc(100%+0.5rem)] z-[80] max-h-[calc(100dvh-5.5rem)] w-64 overflow-y-auto overscroll-contain rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant xl:hidden">
+            <div id="property-mobile-language-list" className="landing-language-panel property-mobile-language-list absolute end-4 top-[calc(100%+0.5rem)] z-[80] max-h-[calc(100dvh-5.5rem)] w-64 overflow-y-auto overscroll-contain rounded-sm border border-foreground/10 bg-[#F3EDE1] p-1.5 shadow-elegant xl:hidden">
               {languageOptions}
             </div>
           ) : null}

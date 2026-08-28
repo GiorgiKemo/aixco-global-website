@@ -169,7 +169,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
       <section className="property-hero relative mx-auto grid max-w-[96rem] overflow-hidden border-b border-[#9E9D9D]/35 lg:min-h-[40rem] lg:grid-cols-[minmax(0,1.16fr)_minmax(28rem,0.84fr)]">
         <div className="property-hero__content order-2 flex flex-col justify-center bg-[#F3EDE1] px-5 py-10 sm:px-8 sm:py-12 lg:order-1 lg:px-[clamp(3rem,4.2vw,4.5rem)] lg:py-10">
           <div className="max-w-[48rem]">
-            <p className="flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[#161616]">
+            <p className="flex min-w-0 flex-wrap items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#161616] sm:tracking-[0.3em]">
               <Diamond className="h-2.5 w-2.5 fill-[#E6C767] stroke-[#E6C767]" aria-hidden />
               <Tx>Batumi property profile</Tx>
             </p>
@@ -260,7 +260,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
       <section className="property-content-section bg-[#161616] px-5 py-14 text-white sm:px-8 lg:px-10 lg:py-20">
         <div className="mx-auto grid max-w-[82rem] gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
           <div>
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[#E6C767]"><Tx>Project highlights</Tx></p>
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[#E6C767] [overflow-wrap:anywhere]"><Tx>Project highlights</Tx></p>
             <h2 className="property-highlights__title mt-5 max-w-[12ch] text-[clamp(2.8rem,5vw,5rem)] font-semibold leading-[0.98] tracking-[-0.03em]">
               <Tx>Selected access, structured for ownership.</Tx>
             </h2>

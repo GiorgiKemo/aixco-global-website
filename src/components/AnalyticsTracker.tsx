@@ -919,6 +919,17 @@ export function AnalyticsTracker() {
     window.dispatchEvent(new Event(ANALYTICS_NAVIGATION_EVENT));
   }, [pathname, ready]);
 
+  const bannerVisible = ready && !excludedRoute && (consent === "unset" || preferencesOpen);
+
+  useEffect(() => {
+    if (!bannerVisible) {
+      document.documentElement.removeAttribute("data-analytics-consent-open");
+      return;
+    }
+    document.documentElement.setAttribute("data-analytics-consent-open", "true");
+    return () => document.documentElement.removeAttribute("data-analytics-consent-open");
+  }, [bannerVisible]);
+
   if (!ready || excludedRoute) return null;
   if (consent !== "unset" && !preferencesOpen) return null;
 
@@ -1011,7 +1022,7 @@ export function AnalyticsTracker() {
               setPreferencesOpen(false);
               setDetailsOpen(false);
             }}
-            className="btn-ghost-gold !min-h-11 whitespace-nowrap !px-4 !py-2 !text-[0.7rem]"
+            className="btn-ghost-gold !min-h-11 whitespace-normal !px-4 !py-2 !text-[0.7rem]"
           >
             {copy.necessary}
           </button>
@@ -1023,7 +1034,7 @@ export function AnalyticsTracker() {
                 setPreferencesOpen(false);
                 setDetailsOpen(false);
               }}
-              className="btn-gold !min-h-11 whitespace-nowrap !px-4 !py-2 !text-[0.7rem]"
+              className="btn-gold !min-h-11 whitespace-normal !px-4 !py-2 !text-[0.7rem]"
             >
               {copy.accept}
             </button>

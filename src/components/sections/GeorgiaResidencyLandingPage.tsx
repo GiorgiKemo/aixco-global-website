@@ -265,7 +265,7 @@ export function GeorgiaResidencyLandingPage() {
                 <ChevronDown size={12} className={languageOpen ? "rotate-180" : undefined} aria-hidden />
               </button>
               {languageOpen ? (
-                <div id="residency-language-list" className="absolute end-0 top-[calc(100%+0.4rem)] z-[80] w-52 border border-white/10 bg-[#161616] p-1.5">
+                <div id="residency-language-list" className="landing-language-panel absolute end-0 top-[calc(100%+0.4rem)] z-[80] w-52 border border-white/10 bg-[#161616] p-1.5">
                   <ul aria-label={tx("Change language")} className="grid gap-1">
                     {LANGS.map((option) => (
                       <li key={option.code}>
@@ -301,7 +301,7 @@ export function GeorgiaResidencyLandingPage() {
           </div>
         </div>
         {menuOpen ? (
-          <nav aria-label={tx("Mobile navigation")} className="border-t border-white/10 bg-[#161616] px-5 py-4 lg:hidden">
+          <nav aria-label={tx("Mobile navigation")} className="landing-mobile-nav border-t border-white/10 bg-[#161616] px-5 py-4 lg:hidden">
             {chapters.map((chapter) => (
               <a
                 key={chapter.id}
