@@ -1868,7 +1868,13 @@ function loadTranslationCatalogs() {
         attributes.title,
       ],
     };
-  });
+  })
+    .catch((error: unknown) => {
+      // A failed chunk load (stale deploy, flaky network) must not poison the
+      // cache for the rest of the session: reset so the next attempt retries.
+      translationCatalogPromise = null;
+      throw error;
+    });
 
   return translationCatalogPromise;
 }
@@ -1940,9 +1946,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     if (lang === "en" || translationCatalogs) return;
 
     let isMounted = true;
-    loadTranslationCatalogs().then((catalogs) => {
-      if (isMounted) setTranslationCatalogs(catalogs);
-    });
+    loadTranslationCatalogs()
+      .then((catalogs) => {
+        if (isMounted) setTranslationCatalogs(catalogs);
+      })
+      .catch(() => {
+        // The cache reset in loadTranslationCatalogs lets the next
+        // language switch retry after a transient chunk failure.
+      });
 
     return () => {
       isMounted = false;

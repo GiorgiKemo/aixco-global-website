@@ -332,7 +332,7 @@ export function PropertyChrome() {
                     }}
                     className={cn(
                       "inline-flex min-h-11 items-center gap-1.5 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.05em] transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45",
-                      group.active ? "text-primary" : "text-[#161616]/72",
+                      group.active ? "text-primary-text" : "text-[#161616]/72",
                     )}
                   >
                     {tx(group.label)}
@@ -448,7 +448,7 @@ export function PropertyChrome() {
               <Link href="/" prefetch={false} onClick={closeAll} className="rounded-lg px-3 py-3 text-sm font-semibold hover:bg-muted/70">{tx("AIXCO")}</Link>
               {navGroups.map((group) => (
                 <div key={group.key} className="border-t border-foreground/10 pt-2">
-                  <p className={cn("px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.16em]", group.active ? "text-primary" : "text-foreground/55")}>{tx(group.label)}</p>
+                  <p className={cn("px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.16em]", group.active ? "text-primary-text" : "text-foreground/55")}>{tx(group.label)}</p>
                   {group.items.map((item) => (
                     <Link key={item.href} href={item.href} prefetch={false} onClick={closeAll} className="flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium text-foreground/78 hover:bg-primary/10 hover:text-primary">
                       {tx(item.label)}

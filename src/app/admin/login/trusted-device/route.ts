@@ -24,7 +24,11 @@ const headers = {
 };
 
 function secureCookie() {
-  return process.env.VERCEL === "1" || process.env.ADMIN_COOKIE_SECURE === "true";
+  return (
+    process.env.VERCEL === "1"
+    || process.env.NODE_ENV === "production"
+    || process.env.ADMIN_COOKIE_SECURE === "true"
+  );
 }
 
 function originIsSame(request: Request) {

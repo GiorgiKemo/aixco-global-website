@@ -115,16 +115,15 @@ describe("lead capture route", () => {
   });
 
   it("accepts a same-origin beacon whose browser omits Sec-Fetch-Site", () => {
-    const request = new Request("http://next-internal:3000/api/web-vitals", {
+    const request = new Request("https://www.aixco.global/api/web-vitals", {
       headers: {
-        host: "127.0.0.1:8081",
-        referer: "http://127.0.0.1:8081/",
+        referer: "https://www.aixco.global/aixco-global-op2/current-project",
       },
     });
     expect(isTrustedLeadCaptureOrigin(request, { NODE_ENV: "production" })).toBe(true);
   });
 
-  it("accepts the public browser origin when a trusted proxy rewrites the internal request URL", () => {
+  it("does not derive production allowlist entries from x-forwarded-host", () => {
     const request = new Request("http://next-internal:3000/api/web-vitals", {
       headers: {
         origin: "https://www.aixco.global",
@@ -133,7 +132,8 @@ describe("lead capture route", () => {
         "x-forwarded-proto": "https",
       },
     });
-    expect(isTrustedLeadCaptureOrigin(request, { NODE_ENV: "production" })).toBe(true);
+    expect(isTrustedLeadCaptureOrigin(request, { NODE_ENV: "production" })).toBe(false);
+    expect(isTrustedLeadCaptureOrigin(request, { NODE_ENV: "production", VERCEL: "1" })).toBe(false);
 
     const forged = new Request("http://next-internal:3000/api/web-vitals", {
       headers: {
@@ -144,6 +144,59 @@ describe("lead capture route", () => {
       },
     });
     expect(isTrustedLeadCaptureOrigin(forged, { NODE_ENV: "production" })).toBe(false);
+  });
+
+  it("still accepts the public origin in production when it is configured", () => {
+    const request = new Request("http://next-internal:3000/api/web-vitals", {
+      headers: {
+        origin: "https://www.aixco.global",
+        host: "next-internal:3000",
+        "x-forwarded-host": "www.aixco.global",
+        "x-forwarded-proto": "https",
+      },
+    });
+    const env = { NODE_ENV: "production", SITE_URL: "https://www.aixco.global" };
+    expect(isTrustedLeadCaptureOrigin(request, env)).toBe(true);
+  });
+
+  it("requires the https scheme for host-derived production origins", () => {
+    const request = new Request("http://next-internal:3000/api/web-vitals", {
+      headers: {
+        origin: "http://www.aixco.global",
+        host: "www.aixco.global",
+        "x-forwarded-proto": "http",
+      },
+    });
+    expect(isTrustedLeadCaptureOrigin(request, { NODE_ENV: "production" })).toBe(false);
+
+    const secure = new Request("http://next-internal:3000/api/web-vitals", {
+      headers: {
+        origin: "https://www.aixco.global",
+        host: "www.aixco.global",
+        "x-forwarded-proto": "https",
+      },
+    });
+    expect(isTrustedLeadCaptureOrigin(secure, { NODE_ENV: "production" })).toBe(true);
+  });
+
+  it("keeps the http localhost allowance outside production", () => {
+    const request = new Request("http://localhost:3000/api/web-vitals", {
+      headers: {
+        origin: "http://localhost:3000",
+        host: "localhost:3000",
+      },
+    });
+    expect(isTrustedLeadCaptureOrigin(request, { NODE_ENV: "development" })).toBe(true);
+
+    const forwarded = new Request("http://next-internal:3000/api/web-vitals", {
+      headers: {
+        origin: "https://www.aixco.global",
+        host: "next-internal:3000",
+        "x-forwarded-host": "www.aixco.global",
+        "x-forwarded-proto": "https",
+      },
+    });
+    expect(isTrustedLeadCaptureOrigin(forwarded, { NODE_ENV: "development" })).toBe(true);
   });
 
   it("rejects missing or forged production provenance when Origin is absent", () => {

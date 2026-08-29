@@ -111,7 +111,7 @@ export function ContactNudge() {
           <PhoneCall className="h-4 w-4" aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary-text">
             {tx("Personal contact")}
           </p>
           <h2 className="mt-1 font-display text-xl font-semibold leading-tight">

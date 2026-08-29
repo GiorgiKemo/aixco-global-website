@@ -39,11 +39,26 @@ function normalizeForwardedIp(value: string | null) {
   return value?.split(",")[0]?.trim().slice(0, 80) || "";
 }
 
+/**
+ * Vercel and Cloudflare overwrite these platform headers at their trusted edge,
+ * so they identify the real client even when a client prepends spoofed entries
+ * to x-forwarded-for. In production we deliberately do not fall back to the
+ * client-spoofable headers; a missing edge identity shares one fail-safe bucket.
+ */
 export function getRateLimitClientId(headers: Headers) {
+  const vercelIdentity = normalizeForwardedIp(headers.get("x-vercel-forwarded-for"));
+  if (vercelIdentity) return vercelIdentity;
+
+  const cloudflareIdentity = normalizeForwardedIp(headers.get("cf-connecting-ip"));
+  if (cloudflareIdentity) return cloudflareIdentity;
+
+  if (process.env.VERCEL === "1" || process.env.NODE_ENV === "production") {
+    return "trusted-edge:unavailable";
+  }
+
   return (
     normalizeForwardedIp(headers.get("x-forwarded-for")) ||
-    headers.get("cf-connecting-ip")?.trim().slice(0, 80) ||
-    headers.get("x-real-ip")?.trim().slice(0, 80) ||
+    normalizeForwardedIp(headers.get("x-real-ip")) ||
     "anonymous"
   );
 }

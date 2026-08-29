@@ -2,10 +2,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resetRateLimitStore } from "@/lib/security/rate-limit";
 
 const mocks = vi.hoisted(() => ({
+  guard: vi.fn(),
   origin: vi.fn(),
   generatePdf: vi.fn(),
 }));
 
+vi.mock("@/lib/backend/lead-capture-abuse", () => ({
+  checkDistributedLeadCaptureLimit: mocks.guard,
+}));
 vi.mock("@/lib/backend/lead-capture-route", () => ({
   isTrustedLeadCaptureOrigin: mocks.origin,
 }));
@@ -36,6 +40,7 @@ describe("Reverance PDF API", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resetRateLimitStore();
+    mocks.guard.mockResolvedValue({ allowed: true });
     mocks.origin.mockReturnValue(true);
     mocks.generatePdf.mockResolvedValue(new Uint8Array([37, 80, 68, 70, 45]));
   });
@@ -62,5 +67,47 @@ describe("Reverance PDF API", () => {
     expect((await POST(textRequest)).status).toBe(415);
     expect((await POST(request({ lang: "xx", inputs: validInputs }))).status).toBe(400);
     expect(mocks.generatePdf).not.toHaveBeenCalled();
+  });
+
+  it("consumes the distributed telemetry guard before generating a PDF", async () => {
+    const response = await POST(request({ lang: "en", inputs: validInputs }));
+
+    expect(response.status).toBe(200);
+    expect(mocks.guard).toHaveBeenCalledWith("telemetry", null, expect.any(Headers));
+  });
+
+  it("rejects generation when the distributed guard rate limits the client", async () => {
+    mocks.guard.mockResolvedValueOnce({
+      allowed: false,
+      retryAfterSeconds: 120,
+      reason: "client_rate_limit",
+    });
+
+    const response = await POST(request({ lang: "en", inputs: validInputs }));
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("retry-after")).toBe("120");
+    await expect(response.json()).resolves.toEqual({ ok: false, reason: "rate_limited" });
+    expect(mocks.generatePdf).not.toHaveBeenCalled();
+  });
+
+  it.each(["configuration", "database"])("fails closed when the distributed guard is unavailable (%s)", async (reason) => {
+    mocks.guard.mockResolvedValueOnce({
+      allowed: false,
+      retryAfterSeconds: 60,
+      reason,
+    });
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    try {
+      const response = await POST(request({ lang: "en", inputs: validInputs }));
+
+      expect(response.status).toBe(503);
+      expect(response.headers.get("retry-after")).toBe("60");
+      await expect(response.json()).resolves.toEqual({ ok: false, reason: "protection_unavailable" });
+      expect(mocks.generatePdf).not.toHaveBeenCalled();
+    } finally {
+      consoleError.mockRestore();
+    }
   });
 });

@@ -120,6 +120,10 @@ export function RouteTransition() {
       if (!(anchor instanceof HTMLAnchorElement)) return;
       const url = isInternalPageHref(anchor);
       if (!url) return;
+      // Modal-intent links (e.g. /?modal=contact) are preventDefault()-ed by
+      // bubble-phase handlers that open a dialog instead of navigating, so the
+      // veil must never activate behind the modal.
+      if (url.searchParams.has("modal")) return;
 
       activateVeil(veilRef.current);
       // Search-only navigation does not change usePathname(), so guarantee the

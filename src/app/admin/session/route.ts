@@ -15,7 +15,11 @@ import { DEFAULT_ADMIN_SESSION_TTL_SECONDS, verifyAdminPassword } from "@/lib/ad
 import { checkRateLimit, getRateLimitClientId } from "@/lib/security/rate-limit";
 
 function getSecureCookieSetting() {
-  return process.env.VERCEL === "1" || process.env.ADMIN_COOKIE_SECURE === "true";
+  return (
+    process.env.VERCEL === "1"
+    || process.env.NODE_ENV === "production"
+    || process.env.ADMIN_COOKIE_SECURE === "true"
+  );
 }
 
 function redirectTo(request: Request, path: string) {

@@ -977,7 +977,7 @@ export function AnalyticsTracker() {
           </span>
 
           <div className="min-w-0 flex-1">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary-text">
               {copy.eyebrow}
             </p>
             <h2
@@ -999,7 +999,7 @@ export function AnalyticsTracker() {
           >
             <summary className="block cursor-pointer list-none text-sm leading-relaxed text-foreground/70 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-details-marker]:hidden">
               {copy.summary}{" "}
-              <span className="inline-flex items-center gap-1 whitespace-nowrap align-baseline text-[0.66rem] font-semibold uppercase tracking-[0.13em] text-primary">
+              <span className="inline-flex items-center gap-1 whitespace-nowrap align-baseline text-[0.66rem] font-semibold uppercase tracking-[0.13em] text-primary-text">
                 {detailsOpen ? copy.collapse : copy.expand}
                 <ChevronDown className={`h-3.5 w-3.5 transition-transform ${detailsOpen ? "rotate-180" : ""}`} aria-hidden />
               </span>

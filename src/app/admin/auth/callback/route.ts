@@ -17,7 +17,11 @@ const INVITE_TOKEN_COOKIE = "aixco_admin_invite_token";
 const INVITE_TOKEN_TTL_SECONDS = 10 * 60;
 
 function secureCookie() {
-  return process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
+  return (
+    process.env.VERCEL === "1"
+    || process.env.NODE_ENV === "production"
+    || process.env.ADMIN_COOKIE_SECURE === "true"
+  );
 }
 
 function getRedirectUrl(request: Request, path: string) {
@@ -61,9 +65,6 @@ export async function GET(request: Request) {
     const supabase = await getSupabaseAuthServerClient();
     if (code) {
       const result = await supabase.auth.exchangeCodeForSession(code);
-      if (result.error) throw result.error;
-    } else if (tokenHash) {
-      const result = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: "invite" });
       if (result.error) throw result.error;
     } else {
       throw new Error("Missing invitation credential.");

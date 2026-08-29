@@ -9,7 +9,11 @@ import { getSupabaseAuthPublicConfig } from "@/lib/supabase/auth-config";
 import { getSupabaseAuthServerClient } from "@/lib/supabase/auth-server";
 
 function getSecureCookieSetting() {
-  return process.env.VERCEL === "1" || process.env.ADMIN_COOKIE_SECURE === "true";
+  return (
+    process.env.VERCEL === "1"
+    || process.env.NODE_ENV === "production"
+    || process.env.ADMIN_COOKIE_SECURE === "true"
+  );
 }
 
 function clearLegacySession(request: Request) {

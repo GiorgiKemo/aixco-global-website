@@ -980,7 +980,7 @@ function AccessModal({ mode, tx, lang }: { mode: "login" | "register"; tx: (text
                   portalUrl: role.url,
                 });
               }}
-              className="mt-5 inline-flex min-h-11 items-center py-2 text-xs uppercase tracking-widest text-primary"
+              className="mt-5 inline-flex min-h-11 items-center py-2 text-xs uppercase tracking-widest text-primary-text"
             >
               {tx(role.cta)}
             </a>
@@ -1080,7 +1080,7 @@ function TeamDetail({
       <div>
         <p className="eyebrow mb-3">{tx("Leadership")}</p>
         <h3 className="heading-section mb-1">{data.name}</h3>
-        <p className="mb-4 text-sm text-primary">{tx(data.role)}</p>
+        <p className="mb-4 text-sm text-primary-text">{tx(data.role)}</p>
         <p className="text-sm leading-relaxed text-foreground/80">{tx(data.bio)}</p>
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {data.points.map((point) => (
@@ -1159,7 +1159,7 @@ function PartnerDetail({
               )}
               <div>
                 <h4 className="font-display text-lg">{leader.name}</h4>
-                <p className="mt-1 text-sm text-primary">{tx(leader.role)}</p>
+                <p className="mt-1 text-sm text-primary-text">{tx(leader.role)}</p>
               </div>
             </div>
           ))}

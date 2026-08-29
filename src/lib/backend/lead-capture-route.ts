@@ -91,6 +91,7 @@ export function isTrustedLeadCaptureOrigin(
   request: Request,
   env: Record<string, string | undefined>,
 ) {
+  const production = env.NODE_ENV === "production" || env.VERCEL === "1";
   const origin = request.headers.get("origin")?.trim();
   const allowedOrigins = new Set<string>();
   let requestProtocol = "";
@@ -108,9 +109,13 @@ export function isTrustedLeadCaptureOrigin(
     .toLowerCase();
   const protocols = new Set(
     [forwardedProtocol ? `${forwardedProtocol}:` : "", requestProtocol]
-      .filter((protocol) => protocol === "https:" || protocol === "http:"),
+      .filter((protocol) => protocol === "https:" || (!production && protocol === "http:")),
   );
-  for (const headerName of ["x-forwarded-host", "host"]) {
+  // x-forwarded-host is client-supplied on any deployment without a trusted
+  // proxy stripping it, so production allowlist entries only derive from the
+  // server-observed host header and require the https scheme.
+  const hostHeaders = production ? ["host"] : ["x-forwarded-host", "host"];
+  for (const headerName of hostHeaders) {
     const host = request.headers.get(headerName)?.split(",", 1)[0]?.trim() ?? "";
     if (!/^([a-z0-9.-]+|\[[0-9a-f:.]+\])(?::[0-9]{1,5})?$/i.test(host)) continue;
     for (const protocol of protocols) {

@@ -1059,7 +1059,7 @@ describe("index.css motion rules", () => {
     expect(css).toContain("--primary: 42.5 44.4% 42.4%");
     expect(css).toContain("--primary-glow: 45.8 71.7% 65.3%");
     expect(css).toContain("--secondary: 212.1 100% 13.9%");
-    expect(css).toContain("--muted-foreground: 0 0% 60.4%");
+    expect(css).toContain("--muted-foreground: 0 0% 40%");
     expect(css).toContain("--font-legacy-ui: var(--font-brand-sans)");
     expect(css).toContain("--font-legacy-display: var(--font-brand-display)");
     expect(css).toContain("hsl(var(--primary-glow)) 0%");

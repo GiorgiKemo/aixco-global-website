@@ -38,6 +38,27 @@ describe("Reverance investment model", () => {
     expect(fifteenYears.milestones.map((milestone) => milestone.year)).toEqual([3, 5, 7, 10, 15]);
   });
 
+  it("stops bank outflows in accumulated cash once the loan term ends", () => {
+    const result = calculateReveranceInvestment({ holdingYears: 15 });
+    const { netMonthlyRent, monthlyBankPayment, assumptions } = result;
+    const fifteenYear = result.holdingProjection;
+    const tenYear = result.milestones.find((milestone) => milestone.year === 10);
+
+    expect(fifteenYear.year).toBe(15);
+    expect(tenYear).toBeDefined();
+    expect(fifteenYear.remainingDebt).toBe(0);
+    expect(fifteenYear.accumulatedCash).toBeCloseTo(
+      (netMonthlyRent * 12 - monthlyBankPayment * 12) * assumptions.loanYears
+        + netMonthlyRent * 12 * (15 - assumptions.loanYears),
+      6,
+    );
+    // Years beyond the loan term add exactly one year of net rent, no bank payment.
+    expect(fifteenYear.accumulatedCash - tenYear!.accumulatedCash).toBeCloseTo(
+      netMonthlyRent * 12 * (15 - assumptions.loanYears),
+      6,
+    );
+  });
+
   it("produces no loan payment when financing is zero", () => {
     const result = calculateReveranceInvestment({ financingPercent: 0 });
 

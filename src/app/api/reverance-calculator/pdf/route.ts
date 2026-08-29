@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { checkDistributedLeadCaptureLimit } from "@/lib/backend/lead-capture-abuse";
 import { isTrustedLeadCaptureOrigin } from "@/lib/backend/lead-capture-route";
 import { getRateLimitClientId, checkRateLimit } from "@/lib/security/rate-limit";
 import { readBoundedJson } from "@/lib/security/request-body";
@@ -48,6 +49,27 @@ export async function POST(request: Request) {
   const parsed = body.ok ? requestSchema.safeParse(body.value) : null;
   if (!parsed?.success) {
     return NextResponse.json({ ok: false, reason: "invalid_payload" }, { status: 400, headers: responseHeaders });
+  }
+
+  // PDF generation is CPU-heavy and the in-memory limiter is per-instance on
+  // serverless, so the distributed telemetry guard (120 requests / 10 minutes)
+  // is the real cross-instance protection. Like lead capture, it fails closed:
+  // a missing guard configuration or database rejects the expensive work.
+  const guard = await checkDistributedLeadCaptureLimit(
+    "telemetry",
+    null,
+    request.headers,
+  );
+  if (!guard.allowed) {
+    const unavailable = guard.reason === "configuration" || guard.reason === "database";
+    if (unavailable) console.error("PDF generation abuse protection is unavailable; request rejected.");
+    return NextResponse.json(
+      { ok: false, reason: unavailable ? "protection_unavailable" : "rate_limited" },
+      {
+        status: unavailable ? 503 : 429,
+        headers: { ...responseHeaders, "Retry-After": String(guard.retryAfterSeconds) },
+      },
+    );
   }
 
   try {

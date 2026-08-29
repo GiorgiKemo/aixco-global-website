@@ -2,6 +2,7 @@ import Image from "next/image";
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
@@ -75,12 +76,19 @@ export function DubaiImageMarquee({
   );
   const trackX = useMotionValue(0);
   const targetOffset = useMotionValue(0);
-  const smoothOffset = useSpring(targetOffset, {
-    stiffness: shouldReduceMotion ? 150 : 96,
-    damping: shouldReduceMotion ? 32 : 24,
-    mass: shouldReduceMotion ? 0.55 : 0.72,
-    restDelta: 0.001,
-  });
+  // framer-motion 12 useSpring re-attaches its follow animation when the
+  // options identity changes, so keying the options on the resolved
+  // reduced-motion flag re-syncs the spring physics after hydration.
+  const springOptions = useMemo(
+    () => ({
+      stiffness: shouldReduceMotion ? 150 : 96,
+      damping: shouldReduceMotion ? 32 : 24,
+      mass: shouldReduceMotion ? 0.55 : 0.72,
+      restDelta: 0.001,
+    }),
+    [shouldReduceMotion],
+  );
+  const smoothOffset = useSpring(targetOffset, springOptions);
 
   const renderGalleryOffset = useCallback((offset: number) => {
     const renderedOffset = getRenderedGalleryOffset(loopWidthRef.current, offset);

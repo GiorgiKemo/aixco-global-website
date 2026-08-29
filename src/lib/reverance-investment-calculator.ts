@@ -182,8 +182,12 @@ export function calculateReveranceInvestment(rawInputs: Partial<CalculatorInputs
 
   const projectionAt = (year: number): InvestmentProjection => {
     const propertyValue = completionValue * Math.pow(1 + inputs.annualGrowthPercent / 100, year);
-    const annualCashFlow = netMonthlyRent * 12 - monthlyBankPayment * 12;
-    const accumulatedCash = annualCashFlow * year;
+    // Bank outflows only occur during the loan term; afterwards pure rent accumulates.
+    const loanTermYears = Math.min(year, Math.max(0, assumptions.loanYears));
+    const postLoanYears = Math.max(0, year - assumptions.loanYears);
+    const accumulatedCash =
+      (netMonthlyRent * 12 - monthlyBankPayment * 12) * loanTermYears
+      + netMonthlyRent * 12 * postLoanYears;
     const remainingDebt = remainingLoanBalance(
       loanAmount,
       monthlyBankPayment,

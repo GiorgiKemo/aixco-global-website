@@ -2280,7 +2280,7 @@ function PhilosophyPlatformScene({
 
           return (
             <div key={stat.label} className="story-philosophy-stat">
-              <dt className="story-metric-label text-foreground/52" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
+              <dt className="story-metric-label text-foreground/70" title={tx(stat.label)}>{tx(stat.shortLabel)}</dt>
               <dd className="story-metric-value story-philosophy-stat__value story-standard-number">
                 <StoryMetricText value={localizedValue} />
               </dd>
@@ -2357,7 +2357,7 @@ function PhilosophyDetailScene({
             <div data-layout="story-philosophy-detail" className="story-philosophy-detail-grid">
               {sections.map((section) => (
                 <article key={section.title} className="story-philosophy-detail-column min-w-0">
-                  <p className="story-metric-label text-primary/78">{tx(section.eyebrow)}</p>
+                  <p className="story-metric-label text-primary/75">{tx(section.eyebrow)}</p>
                   <h3 className="story-card-title mt-2">{tx(section.title)}</h3>
                   <div className="mt-3 grid gap-3">
                     {section.paragraphs.map((paragraph) => (
@@ -2898,7 +2898,7 @@ function MaterialsScene({
       </p>
       <div className="story-materials-marquee w-full min-w-0" data-layout="story-materials-marquee">
         <div className="mb-3 flex items-center justify-between gap-4">
-          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-primary">
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-primary-text">
             {tx("Available files")} <span aria-hidden>·</span> {materials.length}
           </p>
         </div>
@@ -3240,7 +3240,7 @@ function TeamScene({
               </div>
               <div className="min-w-0 self-center">
                 <h3 className={cn("story-card-title", isSelected && "text-primary")}>{tx(member.name)}</h3>
-                <p className="story-team-member__role story-body font-medium text-primary">{tx(member.role)}</p>
+                <p className="story-team-member__role story-body font-medium text-primary-text">{tx(member.role)}</p>
                 <p className="story-team-member__summary story-body">{tx(member.summary)}</p>
               </div>
             </button>
@@ -3344,7 +3344,7 @@ function StoryFaqDropdown({
         onClick={() => setOpenId(openId === itemId ? null : itemId)}
       >
         <span className="min-w-0">
-          <span className="story-metric-label text-primary/75">{tx(item.group)}</span>
+          <span className="story-metric-label text-primary-text">{tx(item.group)}</span>
           <span className="story-faq-question">{tx(item.q)}</span>
         </span>
         <ChevronDown className={cn("story-faq-icon", isOpen && "story-faq-icon--open")} aria-hidden />
@@ -3465,7 +3465,7 @@ function ContactScene({
               <div data-layout="story-contact-panel" className="flex min-w-0 flex-col gap-3">
                 <div data-layout="story-contact-details" className="grid w-full gap-3 sm:grid-cols-2">
                   <a href={`mailto:${company.email}`} className="story-contact-card story-contact-card--email group min-w-0">
-                    <span className="story-metric-label text-primary/75">{tx("Email")}</span>
+                    <span className="story-metric-label text-primary-text">{tx("Email")}</span>
                     <span className="story-contact-card__row">
                       <span className="story-contact-card__icon-tile" aria-hidden="true">
                         <Image src={aixcoLiveIcons.email} alt="" width={28} height={28} unoptimized className="story-contact-card__svg-icon" />
@@ -3481,7 +3481,7 @@ function ContactScene({
                     rel="noreferrer"
                     className="story-contact-card group min-w-0"
                   >
-                    <span className="story-metric-label text-primary/75">{tx("Address")}</span>
+                    <span className="story-metric-label text-primary-text">{tx("Address")}</span>
                     <span className="story-contact-card__row">
                       <span className="story-contact-card__icon-tile" aria-hidden="true">
                         <MapPin />
@@ -3492,7 +3492,7 @@ function ContactScene({
                 </div>
 
                 <div data-layout="story-contact-socials" className="story-contact-card story-contact-social-card min-w-0">
-                  <span className="story-metric-label text-primary/75">{tx("SOCIAL MEDIA")}</span>
+                  <span className="story-metric-label text-primary-text">{tx("SOCIAL MEDIA")}</span>
                   <SocialLinks
                     socials={company.socials}
                     theme="light"
@@ -3570,7 +3570,6 @@ export function DesktopStoryHome() {
 
   useLayoutEffect(() => {
     const hiddenHeaders = new Map<HTMLElement, string>();
-    const previousHomeExperience = document.documentElement.dataset.homeExperience;
     const hideGlobalHeaders = () => {
       document
         .querySelectorAll<HTMLElement>('header[dir="ltr"], header.fixed.inset-x-0.top-0')
@@ -3582,9 +3581,9 @@ export function DesktopStoryHome() {
         });
     };
 
-    if (previousHomeExperience !== "story") {
-      document.documentElement.dataset.homeExperience = "story";
-    }
+    // data-home-experience is owned by HomeExperience: it captures the
+    // pre-mount value and restores/deletes it on unmount, so this child must
+    // not set or restore it (mount order would leak a stale "story" value).
     document.body.classList.add("home-story-nav-hidden");
     document.body.classList.remove("home-desktop-story-boot");
     hideGlobalHeaders();
@@ -3594,11 +3593,6 @@ export function DesktopStoryHome() {
 
     return () => {
       observer.disconnect();
-      if (previousHomeExperience === undefined) {
-        delete document.documentElement.dataset.homeExperience;
-      } else {
-        document.documentElement.dataset.homeExperience = previousHomeExperience;
-      }
       document.body.classList.remove("home-story-nav-hidden");
       hiddenHeaders.forEach((display, header) => {
         header.style.display = display;

@@ -53,7 +53,7 @@ export function CurrentProjectVideoButton({
         type="button"
         onClick={() => setIsOpen(true)}
         aria-haspopup="dialog"
-        className="inline-flex min-h-12 items-center justify-center gap-2 whitespace-normal bg-[#B08A32] px-3 text-center text-xs font-semibold uppercase tracking-[0.12em] text-white shadow-[0_8px_18px_rgba(176,138,50,0.18)] transition-colors hover:bg-[#9A7425] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
+        className="inline-flex min-h-12 items-center justify-center gap-2 whitespace-normal bg-[#7c611f] px-3 text-center text-xs font-semibold uppercase tracking-[0.12em] text-white shadow-[0_8px_18px_rgba(124,97,31,0.18)] transition-colors hover:bg-[#6a5417] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
       >
         <Play className="h-3.5 w-3.5 fill-current" aria-hidden />
         <span>{tx("Play video")}</span>
