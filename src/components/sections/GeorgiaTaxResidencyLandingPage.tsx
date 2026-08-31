@@ -40,6 +40,7 @@ type TaxCopy = {
     secondary: string;
     note: string;
     location: string;
+    disclaimer: string;
   };
   clock: {
     eyebrow: string;
@@ -78,13 +79,20 @@ type TaxCopy = {
     body: string;
     name: string;
     email: string;
+    phone: string;
+    phonePlaceholder: string;
+    taxResidence: string;
+    taxResidencePlaceholder: string;
     interest: string;
+    profile: string;
     message: string;
     namePlaceholder: string;
     emailPlaceholder: string;
     messagePlaceholder: string;
     interestOptions: string[];
+    profileOptions: string[];
     consent: string;
+    formDisclaimer: string;
     submit: string;
     sending: string;
     successTitle: string;
@@ -128,13 +136,14 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     nav: { clock: "183-day rule", position: "Your position", path: "The route", why: "Why Georgia", contact: "Consultation" },
     hero: {
       eyebrow: "Georgia tax residency",
-      title: "Where your life",
-      accent: "takes shape.",
-      body: "A clearer route to Georgia tax residency for internationally mobile people, families and private clients.",
-      primary: "Schedule a consultation",
-      secondary: "Discover the route",
+      title: "A CLEARER ROUTE TO",
+      accent: "INTERNATIONAL TAX RESIDENCY.",
+      body: "Georgia offers two principal pathways to tax residency — the 183-day rule and the HNWI regime — for internationally mobile individuals, families and private clients.",
+      primary: "Check my eligibility",
+      secondary: "Book a private consultation",
       note: "AIXCO advisory · Georgia",
       location: "Batumi · Georgia",
+      disclaimer: "General information only. Tax residency depends on individual facts, source-of-income rules, other-country residency rules and applicable double-tax treaties.",
     },
     clock: {
       eyebrow: "183-day presence check",
@@ -183,18 +192,37 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     },
     contact: {
       eyebrow: "Ready to map your position?",
-      title: "Let’s make the route legible.",
-      body: "Tell us what is changing, where you are based and what you need to understand. We will return with the right next conversation.",
+      title: "Understand your Georgia tax-residency options.",
+      body: "Tell us where you are currently based, how much time you plan to spend in Georgia and whether you are considering the HNWI route. We will help identify the appropriate next conversation.",
       name: "Full name",
       email: "Email address",
+      phone: "WhatsApp / Phone",
+      phonePlaceholder: "+995 …",
+      taxResidence: "Current country of tax residence",
+      taxResidencePlaceholder: "e.g. Germany",
       interest: "I am interested in",
+      profile: "My approximate profile",
       message: "Your message",
       namePlaceholder: "Your name",
       emailPlaceholder: "you@example.com",
       messagePlaceholder: "Tell us what you are planning",
-      interestOptions: ["Georgia tax residency", "Residence permit", "Property in Batumi", "Private client advisory"],
+      interestOptions: [
+        "183-day tax residency",
+        "HNWI tax residency",
+        "Property + tax residency",
+        "Residence permit + tax residency",
+        "International relocation",
+        "Not sure yet",
+      ],
+      profileOptions: [
+        "Under GEL 3M assets",
+        "GEL 3M+ assets",
+        "GEL 200K+ annual income",
+        "Prefer not to disclose yet",
+      ],
       consent: "By sending this form, you agree that AIXCO may contact you about your request.",
-      submit: "Request a private consultation",
+      formDisclaimer: "Please do not submit sensitive tax documents, bank statements or detailed financial records through this website form.",
+      submit: "Request a private review",
       sending: "Sending request",
       successTitle: "Your request is with us.",
       successBody: "A member of the AIXCO team will be in touch shortly.",
@@ -216,13 +244,14 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     nav: { clock: "183-Tage-Regel", position: "Ihre Position", path: "Der Weg", why: "Warum Georgien", contact: "Beratung" },
     hero: {
       eyebrow: "Steuerresidenz Georgien",
-      title: "Wo Ihr Leben",
-      accent: "Gestalt annimmt.",
-      body: "Ein klarer Weg zur Steuerresidenz in Georgien für international mobile Menschen, Familien und Privatkunden.",
-      primary: "Beratung vereinbaren",
-      secondary: "Den Weg entdecken",
+      title: "EIN KLARERER WEG ZUR",
+      accent: "INTERNATIONALEN STEUERRESIDENZ.",
+      body: "Georgien bietet zwei Hauptwege zur Steuerresidenz — die 183-Tage-Regel und das HNWI-Regime — für international mobile Personen, Familien und Privatkunden.",
+      primary: "Meine Eignung prüfen",
+      secondary: "Private Beratung buchen",
       note: "AIXCO Beratung · Georgien",
       location: "Batumi · Georgien",
+      disclaimer: "Nur allgemeine Information. Die Steuerresidenz hängt von individuellen Fakten, Quellenregeln, Wohnsitzregeln in anderen Ländern und anwendbaren Doppelbesteuerungsabkommen ab.",
     },
     clock: {
       eyebrow: "Prüfung der 183-Tage-Regel",
@@ -271,18 +300,37 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     },
     contact: {
       eyebrow: "Bereit, Ihre Position zu klären?",
-      title: "Machen wir den Weg verständlich.",
-      body: "Erzählen Sie uns, was sich verändert, wo Sie derzeit leben und was Sie verstehen möchten.",
+      title: "Verstehen Sie Ihre Optionen zur Steuerresidenz in Georgien.",
+      body: "Nennen Sie uns Ihren aktuellen Wohnsitz, wie viel Zeit Sie in Georgien verbringen möchten und ob Sie die HNWI-Route prüfen. Wir helfen beim nächsten passenden Gespräch.",
       name: "Vollständiger Name",
       email: "E-Mail-Adresse",
+      phone: "WhatsApp / Telefon",
+      phonePlaceholder: "+995 …",
+      taxResidence: "Aktuelles Land der Steuerresidenz",
+      taxResidencePlaceholder: "z. B. Deutschland",
       interest: "Ich interessiere mich für",
+      profile: "Mein ungefähres Profil",
       message: "Ihre Nachricht",
       namePlaceholder: "Ihr Name",
       emailPlaceholder: "sie@beispiel.com",
       messagePlaceholder: "Was planen Sie?",
-      interestOptions: ["Steuerresidenz Georgien", "Aufenthaltstitel", "Immobilie in Batumi", "Private Beratung"],
+      interestOptions: [
+        "183-Tage-Steuerresidenz",
+        "HNWI-Steuerresidenz",
+        "Immobilie + Steuerresidenz",
+        "Aufenthaltstitel + Steuerresidenz",
+        "Internationale Verlagerung",
+        "Noch unsicher",
+      ],
+      profileOptions: [
+        "Vermögen unter 3 Mio. GEL",
+        "Vermögen ab 3 Mio. GEL",
+        "Jahreseinkommen ab 200.000 GEL",
+        "Noch keine Angabe",
+      ],
       consent: "Mit dem Absenden stimmen Sie zu, dass AIXCO Sie zu Ihrer Anfrage kontaktieren darf.",
-      submit: "Private Beratung anfragen",
+      formDisclaimer: "Bitte senden Sie keine sensiblen Steuerunterlagen, Kontoauszüge oder detaillierte Finanzdaten über dieses Website-Formular.",
+      submit: "Private Prüfung anfragen",
       sending: "Anfrage wird gesendet",
       successTitle: "Ihre Anfrage ist bei uns.",
       successBody: "Ein Mitglied des AIXCO-Teams meldet sich in Kürze.",
@@ -304,13 +352,14 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     nav: { clock: "Reguła 183 dni", position: "Twoja sytuacja", path: "Droga", why: "Dlaczego Gruzja", contact: "Konsultacja" },
     hero: {
       eyebrow: "Rezydencja podatkowa w Gruzji",
-      title: "Tam, gdzie Twoje życie",
-      accent: "nabiera kształtu.",
-      body: "Przejrzysta droga do rezydencji podatkowej w Gruzji dla osób, rodzin i klientów prywatnych mobilnych międzynarodowo.",
-      primary: "Umów konsultację",
-      secondary: "Poznaj drogę",
+      title: "PRZEJRZYSTSZA DROGA DO",
+      accent: "MIĘDZYNARODOWEJ REZYDENCJI PODATKOWEJ.",
+      body: "Gruzja oferuje dwie główne ścieżki rezydencji podatkowej — regułę 183 dni i reżim HNWI — dla osób mobilnych międzynarodowo, rodzin i klientów prywatnych.",
+      primary: "Sprawdź moją kwalifikowalność",
+      secondary: "Umów prywatną konsultację",
       note: "Doradztwo AIXCO · Gruzja",
       location: "Batumi · Gruzja",
+      disclaimer: "Wyłącznie informacje ogólne. Rezydencja podatkowa zależy od indywidualnych faktów, zasad źródła dochodu, zasad rezydencji w innych krajach i obowiązujących umów o unikaniu podwójnego opodatkowania.",
     },
     clock: {
       eyebrow: "Sprawdzenie reguły 183 dni",
@@ -359,18 +408,37 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     },
     contact: {
       eyebrow: "Gotowy, aby uporządkować swoją sytuację?",
-      title: "Nadajmy tej drodze jasny kształt.",
-      body: "Napisz, co się zmienia, gdzie obecnie mieszkasz i co chcesz zrozumieć.",
+      title: "Poznaj swoje opcje rezydencji podatkowej w Gruzji.",
+      body: "Napisz, gdzie obecnie mieszkasz podatkowo, ile czasu planujesz spędzać w Gruzji i czy rozważasz ścieżkę HNWI. Pomożemy wskazać właściwą kolejną rozmowę.",
       name: "Imię i nazwisko",
       email: "Adres e-mail",
+      phone: "WhatsApp / telefon",
+      phonePlaceholder: "+995 …",
+      taxResidence: "Obecny kraj rezydencji podatkowej",
+      taxResidencePlaceholder: "np. Niemcy",
       interest: "Interesuje mnie",
+      profile: "Mój przybliżony profil",
       message: "Twoja wiadomość",
       namePlaceholder: "Twoje imię",
       emailPlaceholder: "ty@przyklad.com",
       messagePlaceholder: "Co planujesz?",
-      interestOptions: ["Rezydencja podatkowa w Gruzji", "Zezwolenie na pobyt", "Nieruchomość w Batumi", "Doradztwo dla klienta prywatnego"],
+      interestOptions: [
+        "Rezydencja podatkowa 183 dni",
+        "Rezydencja podatkowa HNWI",
+        "Nieruchomość + rezydencja podatkowa",
+        "Zezwolenie na pobyt + rezydencja podatkowa",
+        "Relokacja międzynarodowa",
+        "Jeszcze nie wiem",
+      ],
+      profileOptions: [
+        "Aktywa poniżej 3 mln GEL",
+        "Aktywa 3 mln GEL+",
+        "Dochód roczny 200 tys. GEL+",
+        "Wolę nie ujawniać",
+      ],
       consent: "Wysyłając formularz, wyrażasz zgodę na kontakt AIXCO w sprawie zapytania.",
-      submit: "Poproś o prywatną konsultację",
+      formDisclaimer: "Nie przesyłaj przez ten formularz wrażliwych dokumentów podatkowych, wyciągów bankowych ani szczegółowych danych finansowych.",
+      submit: "Poproś o prywatną analizę",
       sending: "Wysyłanie zapytania",
       successTitle: "Twoje zapytanie do nas dotarło.",
       successBody: "Członek zespołu AIXCO wkrótce się z Tobą skontaktuje.",
@@ -392,13 +460,14 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     nav: { clock: "Pravilo 183 dni", position: "Vaš položaj", path: "Pot", why: "Zakaj Gruzija", contact: "Posvet" },
     hero: {
       eyebrow: "Davčno rezidentstvo v Gruziji",
-      title: "Kjer vaše življenje",
-      accent: "dobi obliko.",
-      body: "Jasnejša pot do davčnega rezidentstva v Gruziji za mednarodno mobilne posameznike, družine in zasebne stranke.",
-      primary: "Dogovorite se za posvet",
-      secondary: "Odkrijte pot",
+      title: "JASNEJŠA POT DO",
+      accent: "MEDNARODNEGA DAVČNEGA REZIDENTSTVA.",
+      body: "Gruzija ponuja dve glavni poti do davčnega rezidentstva — pravilo 183 dni in režim HNWI — za mednarodno mobilne posameznike, družine in zasebne stranke.",
+      primary: "Preveri mojo upravičenost",
+      secondary: "Rezerviraj zasebno posvetovanje",
       note: "Svetovanje AIXCO · Gruzija",
       location: "Batumi · Gruzija",
+      disclaimer: "Samo splošne informacije. Davčno rezidentstvo je odvisno od posameznih dejstev, pravil o viru dohodka, pravil o rezidentstvu v drugih državah in veljavnih pogodb o izogibanju dvojnega obdavčevanja.",
     },
     clock: {
       eyebrow: "Preverjanje pravila 183 dni",
@@ -447,18 +516,37 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     },
     contact: {
       eyebrow: "Ste pripravljeni razumeti svoj položaj?",
-      title: "Naj bo pot jasna.",
-      body: "Povejte nam, kaj se spreminja, kje živite in kaj želite razumeti.",
+      title: "Razumite svoje možnosti davčnega rezidentstva v Gruziji.",
+      body: "Povejte nam, kje imate trenutno davčno rezidentstvo, koliko časa nameravate preživeti v Gruziji in ali razmišljate o poti HNWI. Pomagali vam bomo pri naslednjem koraku.",
       name: "Polno ime",
       email: "E-poštni naslov",
+      phone: "WhatsApp / telefon",
+      phonePlaceholder: "+995 …",
+      taxResidence: "Trenutna država davčnega rezidentstva",
+      taxResidencePlaceholder: "npr. Nemčija",
       interest: "Zanima me",
+      profile: "Moj približni profil",
       message: "Vaše sporočilo",
       namePlaceholder: "Vaše ime",
       emailPlaceholder: "vi@primer.com",
       messagePlaceholder: "Kaj načrtujete?",
-      interestOptions: ["Davčno rezidentstvo v Gruziji", "Dovoljenje za prebivanje", "Nepremičnina v Batumiju", "Svetovanje zasebni stranki"],
+      interestOptions: [
+        "Davčno rezidentstvo 183 dni",
+        "Davčno rezidentstvo HNWI",
+        "Nepremičnina + davčno rezidentstvo",
+        "Dovoljenje za prebivanje + davčno rezidentstvo",
+        "Mednarodna selitev",
+        "Še nisem prepričan",
+      ],
+      profileOptions: [
+        "Premoženje pod 3 mil. GEL",
+        "Premoženje 3 mil. GEL+",
+        "Letni dohodek 200 tisoč GEL+",
+        "Ne želim razkriti",
+      ],
       consent: "Z oddajo obrazca soglašate, da vas AIXCO kontaktira glede vašega povpraševanja.",
-      submit: "Zahtevajte zasebni posvet",
+      formDisclaimer: "Prosimo, ne pošiljajte občutljivih davčnih dokumentov, bančnih izpiskov ali podrobnih finančnih podatkov prek tega spletnega obrazca.",
+      submit: "Zahtevajte zasebni pregled",
       sending: "Pošiljanje povpraševanja",
       successTitle: "Vaše povpraševanje smo prejeli.",
       successBody: "Član ekipe AIXCO vas bo kmalu kontaktiral.",
@@ -480,13 +568,14 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     nav: { clock: "Правило 183 дней", position: "Ваша ситуация", path: "Маршрут", why: "Почему Грузия", contact: "Консультация" },
     hero: {
       eyebrow: "Налоговое резидентство в Грузии",
-      title: "Там, где ваша жизнь",
-      accent: "обретает форму.",
-      body: "Понятный путь к налоговому резидентству в Грузии для мобильных людей, семей и частных клиентов.",
-      primary: "Запланировать консультацию",
-      secondary: "Изучить маршрут",
+      title: "БОЛЕЕ ПОНЯТНЫЙ ПУТЬ К",
+      accent: "МЕЖДУНАРОДНОМУ НАЛОГОВОМУ РЕЗИДЕНТСТВУ.",
+      body: "Грузия предлагает два основных пути к налоговому резидентству — правило 183 дней и режим HNWI — для мобильных людей, семей и частных клиентов.",
+      primary: "Проверить моё соответствие",
+      secondary: "Записаться на частную консультацию",
       note: "Консультация AIXCO · Грузия",
       location: "Батуми · Грузия",
+      disclaimer: "Только общая информация. Налоговое резидентство зависит от индивидуальных обстоятельств, правил об источнике дохода, правил резидентства в других странах и применимых соглашений об избежании двойного налогообложения.",
     },
     clock: {
       eyebrow: "Проверка правила 183 дней",
@@ -535,18 +624,37 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
     },
     contact: {
       eyebrow: "Готовы разобраться в своей ситуации?",
-      title: "Сделаем маршрут понятным.",
-      body: "Расскажите, что меняется, где вы находитесь и что хотите прояснить.",
+      title: "Поймите свои варианты налогового резидентства в Грузии.",
+      body: "Расскажите, где вы сейчас являетесь налоговым резидентом, сколько времени планируете проводить в Грузии и рассматриваете ли маршрут HNWI. Мы поможем определить следующий шаг.",
       name: "Имя и фамилия",
       email: "Электронная почта",
+      phone: "WhatsApp / телефон",
+      phonePlaceholder: "+995 …",
+      taxResidence: "Текущая страна налогового резидентства",
+      taxResidencePlaceholder: "например, Германия",
       interest: "Меня интересует",
+      profile: "Мой примерный профиль",
       message: "Ваше сообщение",
       namePlaceholder: "Ваше имя",
       emailPlaceholder: "you@example.com",
       messagePlaceholder: "Что вы планируете?",
-      interestOptions: ["Налоговое резидентство в Грузии", "Вид на жительство", "Недвижимость в Батуми", "Консультация частного клиента"],
+      interestOptions: [
+        "Налоговое резидентство по правилу 183 дней",
+        "Налоговое резидентство HNWI",
+        "Недвижимость + налоговое резидентство",
+        "ВНЖ + налоговое резидентство",
+        "Международная релокация",
+        "Пока не уверен",
+      ],
+      profileOptions: [
+        "Активы до 3 млн GEL",
+        "Активы от 3 млн GEL",
+        "Годовой доход от 200 000 GEL",
+        "Предпочитаю не раскрывать",
+      ],
       consent: "Отправляя форму, вы соглашаетесь, что AIXCO может связаться с вами по вашему запросу.",
-      submit: "Запросить личную консультацию",
+      formDisclaimer: "Пожалуйста, не отправляйте через эту форму конфиденциальные налоговые документы, банковские выписки или подробные финансовые данные.",
+      submit: "Запросить частный обзор",
       sending: "Запрос отправляется",
       successTitle: "Мы получили ваш запрос.",
       successBody: "Представитель AIXCO свяжется с вами в ближайшее время.",
@@ -713,7 +821,18 @@ export function GeorgiaTaxResidencyLandingPage() {
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
     const interest = String(form.get("interest") ?? "").trim();
-    const message = String(form.get("message") ?? "").trim();
+    const phone = String(form.get("phone") ?? "").trim();
+    const taxResidence = String(form.get("taxResidence") ?? "").trim();
+    const profile = String(form.get("profile") ?? "").trim();
+    const messageBody = String(form.get("message") ?? "").trim();
+    const message = [
+      messageBody,
+      phone ? `WhatsApp / Phone: ${phone}` : "",
+      taxResidence ? `Current country of tax residence: ${taxResidence}` : "",
+      profile ? `Approximate profile: ${profile}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n") || `Interest: ${interest}`;
     const website = String(form.get("website") ?? "").trim();
     setSubmitError(null);
     setSubmitting(true);
@@ -790,6 +909,7 @@ export function GeorgiaTaxResidencyLandingPage() {
               <p className={styles.eyebrow}><span />{content.hero.eyebrow}</p>
               <h1 id="tax-hero-title">{content.hero.title}<br />{" "}<span>{content.hero.accent}</span></h1>
               <p className={styles.heroBody}>{content.hero.body}</p>
+              <p className={styles.heroDisclaimer}>{content.hero.disclaimer}</p>
               <div className={styles.heroActions}>
                 <button type="button" className={styles.goldButton} onClick={() => handleNav("contact")}>{content.hero.primary}<ArrowUpRight size={16} aria-hidden /></button>
                 <button type="button" className={styles.textButton} onClick={() => handleNav("clock")}>{content.hero.secondary}<ArrowDown size={16} aria-hidden /></button>
@@ -925,10 +1045,15 @@ export function GeorgiaTaxResidencyLandingPage() {
                   <label>{content.contact.name}<input required minLength={2} maxLength={100} name="name" autoComplete="name" placeholder={content.contact.namePlaceholder} /></label>
                   <label>{content.contact.email}<input required maxLength={255} name="email" type="email" autoComplete="email" placeholder={content.contact.emailPlaceholder} /></label>
                 </div>
+                <div className={styles.formRow}>
+                  <label>{content.contact.phone}<input maxLength={40} name="phone" type="tel" autoComplete="tel" placeholder={content.contact.phonePlaceholder} /></label>
+                  <label>{content.contact.taxResidence}<input maxLength={80} name="taxResidence" autoComplete="country-name" placeholder={content.contact.taxResidencePlaceholder} /></label>
+                </div>
                 <label>{content.contact.interest}<select name="interest" defaultValue={content.contact.interestOptions[0]}>{content.contact.interestOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>{content.contact.message}<textarea required minLength={10} maxLength={1500} rows={5} name="message" placeholder={content.contact.messagePlaceholder} /></label>
+                <label>{content.contact.profile}<select name="profile" defaultValue={content.contact.profileOptions[0]}>{content.contact.profileOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
+                <label>{content.contact.message}<textarea maxLength={1500} rows={5} name="message" placeholder={content.contact.messagePlaceholder} /></label>
                 {submitError ? <p className={styles.formError} role="alert">{submitError}</p> : null}
-                <div className={styles.formFooter}><p>{content.contact.consent}</p><button type="submit" className={styles.goldButton} disabled={submitting}>{submitting ? content.contact.sending : content.contact.submit}<ArrowUpRight size={16} aria-hidden /></button></div>
+                <div className={styles.formFooter}><div><p>{content.contact.consent}</p><p className={styles.formDisclaimer}>{content.contact.formDisclaimer}</p></div><button type="submit" className={styles.goldButton} disabled={submitting}>{submitting ? content.contact.sending : content.contact.submit}<ArrowUpRight size={16} aria-hidden /></button></div>
               </form>
             )}
           </div>

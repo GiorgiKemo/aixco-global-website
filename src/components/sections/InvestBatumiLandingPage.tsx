@@ -14,7 +14,6 @@ import {
   KeyRound,
   Menu,
   Scale,
-  Search,
   ShieldCheck,
   X,
 } from "lucide-react";
@@ -54,11 +53,23 @@ type LandingCopy = {
     longTerm: { title: string; body: string };
   };
   batumi: { eyebrow: string; title: string; body: string; cta: string };
+  market: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    stats: Array<{ value: string; label: string }>;
+    source: string;
+  };
+  pricing: {
+    eyebrow: string;
+    title: string;
+    tiers: Array<{ title: string; price: string }>;
+  };
   process: {
     eyebrow: string;
     title: string;
     body: string;
-    steps: Array<{ title: string; body: string }>;
+    steps: Array<{ value?: string; title: string; body: string }>;
     cta: string;
   };
   gallery: { eyebrow: string; title: string; expand: string; close: string; previous: string; next: string; captions: string[] };
@@ -76,8 +87,16 @@ type LandingCopy = {
     namePlaceholder: string;
     email: string;
     emailPlaceholder: string;
+    phone: string;
+    phonePlaceholder: string;
     interest: string;
     interests: string[];
+    budget: string;
+    budgetSelect: string;
+    budgetOptions: string[];
+    unitType: string;
+    unitTypeSelect: string;
+    unitTypeOptions: string[];
     message: string;
     messagePlaceholder: string;
     consent: string;
@@ -102,11 +121,11 @@ const copy: Record<Lang, LandingCopy> = {
     closeMenu: "Close menu",
     language: "Language",
     hero: {
-      eyebrow: "International buyers · Batumi, Georgia",
-      title: "See Batumi",
-      accent: "differently.",
-      body: "Selected property opportunities. Transparent euro pricing. Local expertise from first comparison to ownership.",
-      cta: "Build my property shortlist",
+      eyebrow: "Batumi, Georgia · Coastal property",
+      title: "OWN PROPERTY IN ONE OF EUROPE'S",
+      accent: "FASTEST-GROWING COASTAL MARKETS",
+      body: "Selected apartments from €45,000. 10% initial payment, up to 60% bank financing, up to 12% net rental yield*, 1% rental income tax*, and 100% foreign ownership.",
+      cta: "View available apartments",
       location: "Black Sea coast · Georgia",
       service: "AIXCO buyer advisory",
     },
@@ -117,22 +136,44 @@ const copy: Record<Lang, LandingCopy> = {
       longTerm: { title: "Long-term value", body: "Build a considered property strategy around location quality, delivery and future usability." },
     },
     batumi: {
-      eyebrow: "The place",
-      title: "The Black Sea. Modern energy. Real potential.",
-      body: "Batumi combines a distinctive waterfront, ambitious new architecture and direct access to Georgia's natural landscape. AIXCO helps international buyers understand the city street by street and project by project.",
-      cta: "Start with the right questions",
+      eyebrow: "Why Batumi",
+      title: "One of Europe's most dynamic residential property markets.",
+      body: "Batumi has become one of Europe's most dynamic residential property markets, supported by economic growth, expanding tourism, modern infrastructure and increasing international demand.",
+      cta: "Explore the opportunity",
+    },
+    market: {
+      eyebrow: "Why Batumi",
+      title: "Batumi by the numbers.",
+      body: "Key indicators from independent market research underline the city's growing residential appeal.",
+      stats: [
+        { value: "17,478", label: "Property transactions (2025)*" },
+        { value: "$1.3B", label: "Residential market size*" },
+        { value: "+9.4%", label: "Primary-market price growth*" },
+        { value: "7.4%", label: "Average rental yield*" },
+        { value: "52%", label: "International buyers in surveyed projects*" },
+      ],
+      source: "Sources: Galt & Taggart Research; Colliers Georgia.",
+    },
+    pricing: {
+      eyebrow: "Investment",
+      title: "How much does it cost?",
+      tiers: [
+        { title: "Studio", price: "From €45,000" },
+        { title: "1 Bedroom", price: "From €65,000" },
+        { title: "2 Bedroom", price: "From €95,000" },
+        { title: "Luxury", price: "From €150,000" },
+      ],
     },
     process: {
-      eyebrow: "The AIXCO way",
-      title: "From interest to ownership.",
-      body: "One accountable team helps you compare the details that matter and keeps the process clear at every stage.",
+      eyebrow: "Payment structure",
+      title: "Own your apartment. Pay in stages.",
+      body: "A structured route to ownership without paying the full property price upfront.",
       steps: [
-        { title: "Discover", body: "We clarify your objective, budget and preferred property profile." },
-        { title: "Compare", body: "You receive a focused shortlist with transparent context and trade-offs." },
-        { title: "Secure", body: "We coordinate documentation, due diligence and the purchase process." },
-        { title: "Manage", body: "After purchase, we remain available for handover and ownership support." },
+        { value: "10%", title: "Initial payment", body: "Secure the selected property.*" },
+        { value: "30%", title: "During construction", body: "Structured payments during the construction period.*" },
+        { value: "60%", title: "At completion", body: "Up to 60% bank financing may be available subject to eligibility and lender approval.*" },
       ],
-      cta: "Talk to an AIXCO advisor",
+      cta: "Calculate my payment plan",
     },
     gallery: {
       eyebrow: "Batumi, up close",
@@ -144,29 +185,38 @@ const copy: Record<Lang, LandingCopy> = {
       captions: ["Batumi at golden hour", "The Black Sea waterfront", "Contemporary Batumi architecture", "Selected residential design", "Private resident amenities"],
     },
     guidance: {
-      eyebrow: "Guidance without guesswork",
-      title: "Clarity before commitment.",
-      body: "AIXCO combines local property knowledge with an international buyer's perspective. We explain the practical details, disclose what is known and help you compare like with like.",
+      eyebrow: "Why AIXCO",
+      title: "Why buy through AIXCO?",
+      body: "Since its first acquisition in 2009, AIXCO has followed a disciplined strategy built on long-term real estate ownership, careful capital allocation and international expansion.",
       features: [
-        { title: "A focused shortlist", body: "Relevant options selected around your goal—not an overwhelming catalogue." },
-        { title: "Transparent comparison", body: "Clear context on pricing, location, delivery stage and the ownership process." },
-        { title: "One point of contact", body: "A consistent advisor from first conversation through the next practical step." },
+        { title: "Select", body: "We shortlist only projects we would buy ourselves." },
+        { title: "Negotiate", body: "Access developer pricing and selected inventory." },
+        { title: "Purchase", body: "Complete documentation with local support." },
+        { title: "Own", body: "Rental, reporting and administration." },
       ],
     },
     contact: {
-      eyebrow: "Your Batumi brief",
-      title: "Tell us what you are looking for.",
-      body: "Share your priorities and an AIXCO advisor will respond with the most relevant next step.",
+      eyebrow: "Get started",
+      title: "FIND THE RIGHT PROPERTY IN BATUMI",
+      body: "Tell us what you're looking for. We'll show you the available apartments that best match your budget and objective.",
       name: "Full name",
       namePlaceholder: "Your name",
       email: "Email address",
       emailPlaceholder: "you@email.com",
+      phone: "WhatsApp / phone",
+      phonePlaceholder: "+995 …",
       interest: "Primary goal",
-      interests: ["Lifestyle property", "Income-focused property", "Long-term property", "Not sure yet"],
-      message: "What matters most?",
-      messagePlaceholder: "Tell us your preferred budget, timeline or property type.",
+      interests: ["Investment / rental income", "Lifestyle / personal use", "Long-term hold", "Not sure yet"],
+      budget: "Budget",
+      budgetSelect: "Select budget",
+      budgetOptions: ["€45K–€60K", "€60K–€100K", "€100K+", "Not decided"],
+      unitType: "I'm looking for",
+      unitTypeSelect: "Select unit type",
+      unitTypeOptions: ["Studio", "1 Bedroom", "2 Bedroom", "Not sure"],
+      message: "Anything else we should know?",
+      messagePlaceholder: "Preferred timeline, floor level or other priorities.",
       consent: "By sending this form, you agree that AIXCO may contact you about your request.",
-      send: "Request my shortlist",
+      send: "Send me available apartments",
       sending: "Sending…",
       successTitle: "Your request is with us.",
       successBody: "An AIXCO advisor will review your brief and contact you shortly.",
@@ -185,11 +235,11 @@ const copy: Record<Lang, LandingCopy> = {
     closeMenu: "Menü schließen",
     language: "Sprache",
     hero: {
-      eyebrow: "Internationale Käufer · Batumi, Georgien",
-      title: "Batumi neu",
-      accent: "entdecken.",
-      body: "Ausgewählte Immobilienchancen. Transparente Euro-Preise. Lokale Expertise vom ersten Vergleich bis zum Eigentum.",
-      cta: "Meine Auswahl erstellen",
+      eyebrow: "Batumi, Georgien · Küstenimmobilien",
+      title: "EIGENTUM IN EINEM DER",
+      accent: "AM SCHNELLSTEN WACHSENDEN KÜSTENMÄRKTE EUROPAS",
+      body: "Ausgewählte Wohnungen ab 45.000 €. 10 % Anzahlung, bis zu 60 % Bankfinanzierung, bis zu 12 % Nettomietrendite*, 1 % Steuer auf Mieteinkünfte* und 100 % ausländisches Eigentum.",
+      cta: "Verfügbare Wohnungen ansehen",
       location: "Schwarzmeerküste · Georgien",
       service: "AIXCO Käuferberatung",
     },
@@ -200,22 +250,44 @@ const copy: Record<Lang, LandingCopy> = {
       longTerm: { title: "Langfristiger Wert", body: "Entwickeln Sie eine durchdachte Immobilienstrategie rund um Lage, Fertigstellung und künftige Nutzung." },
     },
     batumi: {
-      eyebrow: "Der Ort",
-      title: "Das Schwarze Meer. Moderne Energie. Echtes Potenzial.",
-      body: "Batumi verbindet eine markante Uferpromenade, ambitionierte neue Architektur und direkten Zugang zu Georgiens Natur. AIXCO hilft internationalen Käufern, die Stadt Straße für Straße und Projekt für Projekt zu verstehen.",
-      cta: "Mit den richtigen Fragen beginnen",
+      eyebrow: "Warum Batumi",
+      title: "Einer der dynamischsten Wohnungsmärkte Europas.",
+      body: "Batumi hat sich zu einem der dynamischsten Wohnungsmärkte Europas entwickelt – getragen von Wirtschaftswachstum, wachsendem Tourismus, moderner Infrastruktur und steigender internationaler Nachfrage.",
+      cta: "Die Chance entdecken",
+    },
+    market: {
+      eyebrow: "Warum Batumi",
+      title: "Batumi in Zahlen.",
+      body: "Schlüsselindikatoren unabhängiger Marktforschung unterstreichen die wachsende Attraktivität der Stadt.",
+      stats: [
+        { value: "17.478", label: "Immobilientransaktionen (2025)*" },
+        { value: "1,3 Mrd. $", label: "Größe des Wohnungsmarkts*" },
+        { value: "+9,4 %", label: "Preiswachstum auf dem Primärmarkt*" },
+        { value: "7,4 %", label: "Durchschnittliche Mietrendite*" },
+        { value: "52 %", label: "Internationale Käufer in untersuchten Projekten*" },
+      ],
+      source: "Quellen: Galt & Taggart Research; Colliers Georgia.",
+    },
+    pricing: {
+      eyebrow: "Investition",
+      title: "Was kostet es?",
+      tiers: [
+        { title: "Studio", price: "Ab 45.000 €" },
+        { title: "1 Schlafzimmer", price: "Ab 65.000 €" },
+        { title: "2 Schlafzimmer", price: "Ab 95.000 €" },
+        { title: "Luxus", price: "Ab 150.000 €" },
+      ],
     },
     process: {
-      eyebrow: "Der AIXCO Weg",
-      title: "Vom Interesse zum Eigentum.",
-      body: "Ein verantwortliches Team hilft Ihnen, die entscheidenden Details zu vergleichen und hält jeden Schritt verständlich.",
+      eyebrow: "Zahlungsstruktur",
+      title: "Eigentum an Ihrer Wohnung. Zahlung in Etappen.",
+      body: "Ein strukturierter Weg zum Eigentum, ohne den vollen Kaufpreis sofort zu zahlen.",
       steps: [
-        { title: "Entdecken", body: "Wir klären Ziel, Budget und Ihr bevorzugtes Immobilienprofil." },
-        { title: "Vergleichen", body: "Sie erhalten eine fokussierte Auswahl mit transparentem Kontext und Abwägungen." },
-        { title: "Sichern", body: "Wir koordinieren Unterlagen, Prüfung und Kaufprozess." },
-        { title: "Verwalten", body: "Nach dem Kauf begleiten wir Übergabe und Eigentumsfragen weiter." },
+        { value: "10 %", title: "Anzahlung", body: "Sichern Sie die ausgewählte Immobilie.*" },
+        { value: "30 %", title: "Während der Bauphase", body: "Strukturierte Zahlungen während der Bauphase.*" },
+        { value: "60 %", title: "Bei Fertigstellung", body: "Bis zu 60 % Bankfinanzierung können vorbehaltlich Eignung und Genehmigung des Kreditgebers verfügbar sein.*" },
       ],
-      cta: "Mit AIXCO sprechen",
+      cta: "Meinen Zahlungsplan berechnen",
     },
     gallery: {
       eyebrow: "Batumi aus der Nähe",
@@ -227,29 +299,38 @@ const copy: Record<Lang, LandingCopy> = {
       captions: ["Batumi zur goldenen Stunde", "Die Schwarzmeerküste", "Zeitgenössische Architektur in Batumi", "Ausgewähltes Wohndesign", "Private Annehmlichkeiten"],
     },
     guidance: {
-      eyebrow: "Beratung ohne Rätselraten",
-      title: "Klarheit vor der Entscheidung.",
-      body: "AIXCO verbindet lokale Immobilienkenntnis mit der Perspektive internationaler Käufer. Wir erklären praktische Details, legen Bekanntes offen und schaffen echte Vergleichbarkeit.",
+      eyebrow: "Warum AIXCO",
+      title: "Warum über AIXCO kaufen?",
+      body: "Seit der ersten Akquisition im Jahr 2009 verfolgt AIXCO eine disziplinierte Strategie auf Basis langfristigen Immobilieneigentums, sorgfältiger Kapitalallokation und internationaler Expansion.",
       features: [
-        { title: "Eine fokussierte Auswahl", body: "Passende Optionen rund um Ihr Ziel statt eines unübersichtlichen Katalogs." },
-        { title: "Transparenter Vergleich", body: "Klarer Kontext zu Preis, Lage, Bauphase und Eigentumsprozess." },
-        { title: "Ein Ansprechpartner", body: "Ein verlässlicher Berater vom ersten Gespräch bis zum nächsten praktischen Schritt." },
+        { title: "Auswählen", body: "Wir listen nur Projekte auf, die wir selbst kaufen würden." },
+        { title: "Verhandeln", body: "Zugang zu Entwicklerpreisen und ausgewähltem Bestand." },
+        { title: "Kaufen", body: "Vollständige Dokumentation mit lokaler Unterstützung." },
+        { title: "Besitzen", body: "Vermietung, Reporting und Verwaltung." },
       ],
     },
     contact: {
-      eyebrow: "Ihr Batumi-Briefing",
-      title: "Sagen Sie uns, wonach Sie suchen.",
-      body: "Teilen Sie Ihre Prioritäten. Ein AIXCO-Berater antwortet mit dem sinnvollsten nächsten Schritt.",
+      eyebrow: "Jetzt starten",
+      title: "DIE RICHTIGE IMMOBILIE IN BATUMI FINDEN",
+      body: "Sagen Sie uns, wonach Sie suchen. Wir zeigen Ihnen die verfügbaren Wohnungen, die am besten zu Budget und Ziel passen.",
       name: "Vollständiger Name",
       namePlaceholder: "Ihr Name",
       email: "E-Mail-Adresse",
       emailPlaceholder: "sie@email.de",
+      phone: "WhatsApp / Telefon",
+      phonePlaceholder: "+995 …",
       interest: "Hauptziel",
-      interests: ["Immobilie zur Eigennutzung", "Ertragsorientierte Immobilie", "Langfristige Immobilie", "Noch nicht sicher"],
-      message: "Was ist Ihnen wichtig?",
-      messagePlaceholder: "Nennen Sie uns Budget, Zeitrahmen oder gewünschten Immobilientyp.",
+      interests: ["Investition / Mieteinnahmen", "Eigennutzung / Lifestyle", "Langfristiger Bestand", "Noch nicht sicher"],
+      budget: "Budget",
+      budgetSelect: "Budget wählen",
+      budgetOptions: ["45.000–60.000 €", "60.000–100.000 €", "100.000 €+", "Noch unentschieden"],
+      unitType: "Ich suche",
+      unitTypeSelect: "Wohnungstyp wählen",
+      unitTypeOptions: ["Studio", "1 Schlafzimmer", "2 Schlafzimmer", "Noch unsicher"],
+      message: "Gibt es noch etwas, das wir wissen sollten?",
+      messagePlaceholder: "Bevorzugter Zeitrahmen, Etage oder andere Prioritäten.",
       consent: "Mit dem Absenden stimmen Sie zu, dass AIXCO Sie zu Ihrer Anfrage kontaktieren darf.",
-      send: "Meine Auswahl anfordern",
+      send: "Verfügbare Wohnungen senden",
       sending: "Wird gesendet…",
       successTitle: "Ihre Anfrage ist eingegangen.",
       successBody: "Ein AIXCO-Berater prüft Ihr Briefing und meldet sich in Kürze.",
@@ -268,11 +349,11 @@ const copy: Record<Lang, LandingCopy> = {
     closeMenu: "Zamknij menu",
     language: "Język",
     hero: {
-      eyebrow: "Kupujący międzynarodowi · Batumi, Gruzja",
-      title: "Spójrz na Batumi",
-      accent: "inaczej.",
-      body: "Wybrane możliwości. Przejrzyste ceny w euro. Lokalna wiedza od pierwszego porównania aż po własność.",
-      cta: "Stwórz moją krótką listę",
+      eyebrow: "Batumi, Gruzja · Nieruchomości nad morzem",
+      title: "WŁASNOŚĆ NA JEDNYM Z",
+      accent: "NAJSZYBCIEJ ROSNĄCYCH NADMORSKICH RYNKÓW EUROPY",
+      body: "Wybrane apartamenty od 45 000 €. 10% wpłaty początkowej, do 60% finansowania bankowego, do 12% netto z najmu*, 1% podatku od dochodu z najmu* i 100% własności dla cudzoziemców.",
+      cta: "Zobacz dostępne apartamenty",
       location: "Wybrzeże Morza Czarnego · Gruzja",
       service: "Doradztwo AIXCO dla kupujących",
     },
@@ -283,22 +364,44 @@ const copy: Record<Lang, LandingCopy> = {
       longTerm: { title: "Wartość długoterminowa", body: "Buduj przemyślaną strategię opartą na jakości lokalizacji, realizacji i przyszłym sposobie użytkowania." },
     },
     batumi: {
-      eyebrow: "To miejsce",
-      title: "Morze Czarne. Nowoczesna energia. Realny potencjał.",
-      body: "Batumi łączy charakterystyczne wybrzeże, ambitną nową architekturę i bezpośredni dostęp do gruzińskiej przyrody. AIXCO pomaga międzynarodowym kupującym poznać miasto ulica po ulicy i projekt po projekcie.",
-      cta: "Zacznij od właściwych pytań",
+      eyebrow: "Dlaczego Batumi",
+      title: "Jeden z najbardziej dynamicznych rynków mieszkaniowych w Europie.",
+      body: "Batumi stało się jednym z najbardziej dynamicznych rynków mieszkaniowych w Europie, wspieranym przez wzrost gospodarczy, rozwijającą się turystykę, nową infrastrukturę i rosnący popyt międzynarodowy.",
+      cta: "Poznaj możliwości",
+    },
+    market: {
+      eyebrow: "Dlaczego Batumi",
+      title: "Batumi w liczbach.",
+      body: "Kluczowe wskaźniki z niezależnych badań rynku potwierdzają rosnącą atrakcyjność miasta.",
+      stats: [
+        { value: "17 478", label: "Transakcji nieruchomości (2025)*" },
+        { value: "1,3 mld $", label: "Wielkość rynku mieszkaniowego*" },
+        { value: "+9,4%", label: "Wzrost cen na rynku pierwotnym*" },
+        { value: "7,4%", label: "Średnia rentowność najmu*" },
+        { value: "52%", label: "Zagraniczni nabywcy w badanych projektach*" },
+      ],
+      source: "Źródła: Galt & Taggart Research; Colliers Georgia.",
+    },
+    pricing: {
+      eyebrow: "Inwestycja",
+      title: "Ile to kosztuje?",
+      tiers: [
+        { title: "Studio", price: "Od 45 000 €" },
+        { title: "1 sypialnia", price: "Od 65 000 €" },
+        { title: "2 sypialnie", price: "Od 95 000 €" },
+        { title: "Luksus", price: "Od 150 000 €" },
+      ],
     },
     process: {
-      eyebrow: "Sposób AIXCO",
-      title: "Od zainteresowania do własności.",
-      body: "Jeden odpowiedzialny zespół pomaga porównać istotne szczegóły i utrzymuje przejrzystość na każdym etapie.",
+      eyebrow: "Struktura płatności",
+      title: "Własność mieszkania. Płatności etapowe.",
+      body: "Ustrukturyzowana droga do własności bez konieczności płacenia pełnej ceny z góry.",
       steps: [
-        { title: "Poznaj", body: "Ustalamy Twój cel, budżet i preferowany profil nieruchomości." },
-        { title: "Porównaj", body: "Otrzymujesz skupioną listę z jasnym kontekstem i kompromisami." },
-        { title: "Zabezpiecz", body: "Koordynujemy dokumenty, weryfikację i proces zakupu." },
-        { title: "Zarządzaj", body: "Po zakupie wspieramy odbiór i dalsze kwestie właścicielskie." },
+        { value: "10%", title: "Wpłata początkowa", body: "Zabezpiecz wybraną nieruchomość.*" },
+        { value: "30%", title: "W trakcie budowy", body: "Ustrukturyzowane płatności w okresie budowy.*" },
+        { value: "60%", title: "Po ukończeniu", body: "Do 60% finansowania bankowego może być dostępne z zastrzeżeniem kwalifikowalności i zgody banku.*" },
       ],
-      cta: "Porozmawiaj z doradcą AIXCO",
+      cta: "Oblicz mój plan płatności",
     },
     gallery: {
       eyebrow: "Batumi z bliska",
@@ -310,29 +413,38 @@ const copy: Record<Lang, LandingCopy> = {
       captions: ["Batumi o złotej godzinie", "Wybrzeże Morza Czarnego", "Współczesna architektura Batumi", "Wybrane wnętrza mieszkalne", "Prywatne udogodnienia dla mieszkańców"],
     },
     guidance: {
-      eyebrow: "Doradztwo bez zgadywania",
-      title: "Jasność przed decyzją.",
-      body: "AIXCO łączy lokalną wiedzę o rynku z perspektywą międzynarodowego kupującego. Wyjaśniamy praktyczne szczegóły, ujawniamy znane informacje i pomagamy porównywać podobne oferty.",
+      eyebrow: "Dlaczego AIXCO",
+      title: "Dlaczego kupować przez AIXCO?",
+      body: "Od pierwszej akwizycji w 2009 roku AIXCO realizuje zdyscyplinowaną strategię opartą na długoterminowej własności, ostrożnej alokacji kapitału i ekspansji międzynarodowej.",
       features: [
-        { title: "Skupiona lista", body: "Opcje dobrane do Twojego celu zamiast przytłaczającego katalogu." },
-        { title: "Przejrzyste porównanie", body: "Jasny kontekst cen, lokalizacji, etapu realizacji i procesu zakupu." },
-        { title: "Jeden kontakt", body: "Stały doradca od pierwszej rozmowy do kolejnego praktycznego kroku." },
+        { title: "Wybierz", body: "Prezentujemy tylko projekty, które sami byśmy kupili." },
+        { title: "Negocjuj", body: "Dostęp do cen deweloperskich i wybranego asortymentu." },
+        { title: "Kup", body: "Pełna dokumentacja z lokalnym wsparciem." },
+        { title: "Posiadaj", body: "Najem, raportowanie i administracja." },
       ],
     },
     contact: {
-      eyebrow: "Twoje założenia dla Batumi",
-      title: "Powiedz nam, czego szukasz.",
-      body: "Podziel się priorytetami, a doradca AIXCO odpowie z najbardziej odpowiednim kolejnym krokiem.",
+      eyebrow: "Zacznij teraz",
+      title: "ZNALEŹĆ WŁAŚCIWĄ NIERUCHOMOŚĆ W BATUMI",
+      body: "Powiedz nam, czego szukasz. Pokażemy dostępne apartamenty, które najlepiej pasują do budżetu i celu.",
       name: "Imię i nazwisko",
       namePlaceholder: "Twoje imię i nazwisko",
       email: "Adres e-mail",
       emailPlaceholder: "ty@email.pl",
+      phone: "WhatsApp / telefon",
+      phonePlaceholder: "+995 …",
       interest: "Główny cel",
-      interests: ["Nieruchomość do życia", "Nieruchomość dochodowa", "Nieruchomość długoterminowa", "Jeszcze nie wiem"],
-      message: "Co jest najważniejsze?",
-      messagePlaceholder: "Podaj preferowany budżet, termin lub typ nieruchomości.",
+      interests: ["Inwestycja / dochód z najmu", "Styl życia / użytek własny", "Długoterminowa posiadłość", "Jeszcze nie wiem"],
+      budget: "Budżet",
+      budgetSelect: "Wybierz budżet",
+      budgetOptions: ["45–60 tys. €", "60–100 tys. €", "100 tys. €+", "Jeszcze nie zdecydowane"],
+      unitType: "Szukam",
+      unitTypeSelect: "Wybierz typ",
+      unitTypeOptions: ["Studio", "1 sypialnia", "2 sypialnie", "Nie jestem pewien"],
+      message: "Czy jest coś jeszcze, o czym powinniśmy wiedzieć?",
+      messagePlaceholder: "Preferowany termin, piętro lub inne priorytety.",
       consent: "Wysyłając formularz, zgadzasz się na kontakt AIXCO w sprawie Twojego zapytania.",
-      send: "Poproś o moją listę",
+      send: "Wyślij dostępne apartamenty",
       sending: "Wysyłanie…",
       successTitle: "Otrzymaliśmy Twoje zapytanie.",
       successBody: "Doradca AIXCO przeanalizuje informacje i wkrótce się skontaktuje.",
@@ -351,11 +463,11 @@ const copy: Record<Lang, LandingCopy> = {
     closeMenu: "Zapri meni",
     language: "Jezik",
     hero: {
-      eyebrow: "Mednarodni kupci · Batumi, Gruzija",
-      title: "Poglejte Batumi",
-      accent: "drugače.",
-      body: "Izbrane nepremičninske priložnosti. Pregledne cene v evrih. Lokalno znanje od prve primerjave do lastništva.",
-      cta: "Pripravite moj ožji izbor",
+      eyebrow: "Batumi, Gruzija · Obalne nepremičnine",
+      title: "LASTNIŠTVO NA ENEGA OD",
+      accent: "NAJHITREJE RASTOČIH OBALNIH TRGOV V EVROPI",
+      body: "Izbrani apartmaji od 45.000 €. 10% začetno plačilo, do 60% bančnega financiranja, do 12% neto donosa najema*, 1% davka na dohodek iz najema* in 100% tuje lastništvo.",
+      cta: "Oglejte si razpoložljive apartmaje",
       location: "Črnomorska obala · Gruzija",
       service: "Svetovanje AIXCO za kupce",
     },
@@ -366,22 +478,44 @@ const copy: Record<Lang, LandingCopy> = {
       longTerm: { title: "Dolgoročna vrednost", body: "Oblikujte premišljeno strategijo glede na kakovost lokacije, izvedbo in prihodnjo uporabnost." },
     },
     batumi: {
-      eyebrow: "Kraj",
-      title: "Črno morje. Sodobna energija. Resničen potencial.",
-      body: "Batumi združuje prepoznavno obalo, ambiciozno novo arhitekturo in neposreden dostop do gruzijske narave. AIXCO mednarodnim kupcem pomaga razumeti mesto ulico za ulico in projekt za projektom.",
-      cta: "Začnite s pravimi vprašanji",
+      eyebrow: "Zakaj Batumi",
+      title: "Eden najhitreje rastočih stanovanjskih trgov v Evropi.",
+      body: "Batumi je postal eden najdinamičnejših stanovanjskih trgov v Evropi, podprt z gospodarsko rastjo, naraščajočim turizmom, sodobno infrastrukturo in naraščajočim mednarodnim povpraševanjem.",
+      cta: "Raziščite priložnost",
+    },
+    market: {
+      eyebrow: "Zakaj Batumi",
+      title: "Batumi v številkah.",
+      body: "Ključni kazalniki neodvisnih tržnih raziskav potrjujejo naraščajočo privlačnost mesta.",
+      stats: [
+        { value: "17.478", label: "Nepremičninskih transakcij (2025)*" },
+        { value: "1,3 mlrd $", label: "Velikost stanovanjskega trga*" },
+        { value: "+9,4 %", label: "Rast cen na primarnem trgu*" },
+        { value: "7,4 %", label: "Povprečni donos najema*" },
+        { value: "52 %", label: "Tuji kupci v pregledanih projektih*" },
+      ],
+      source: "Viri: Galt & Taggart Research; Colliers Georgia.",
+    },
+    pricing: {
+      eyebrow: "Naložba",
+      title: "Koliko stane?",
+      tiers: [
+        { title: "Studio", price: "Od 45.000 €" },
+        { title: "1 spalnica", price: "Od 65.000 €" },
+        { title: "2 spalnici", price: "Od 95.000 €" },
+        { title: "Luksuz", price: "Od 150.000 €" },
+      ],
     },
     process: {
-      eyebrow: "Način AIXCO",
-      title: "Od zanimanja do lastništva.",
-      body: "Ena odgovorna ekipa vam pomaga primerjati pomembne podrobnosti in ohranja jasnost na vsakem koraku.",
+      eyebrow: "Struktura plačil",
+      title: "Lastništvo stanovanja. Plačilo po stopnjah.",
+      body: "Strukturirana pot do lastništva brez plačila celotne cene nepremičnine vnaprej.",
       steps: [
-        { title: "Odkrijte", body: "Opredelimo vaš cilj, proračun in želeni profil nepremičnine." },
-        { title: "Primerjajte", body: "Prejmete osredotočen izbor s preglednim kontekstom in kompromisi." },
-        { title: "Zavarujte", body: "Uskladimo dokumentacijo, skrbni pregled in postopek nakupa." },
-        { title: "Upravljajte", body: "Po nakupu ostanemo na voljo za prevzem in podporo lastniku." },
+        { value: "10 %", title: "Začetno plačilo", body: "Zagotovite izbrano nepremičnino.*" },
+        { value: "30 %", title: "Med gradnjo", body: "Strukturirana plačila v obdobju gradnje.*" },
+        { value: "60 %", title: "Ob zaključku", body: "Do 60 % bančnega financiranja je lahko na voljo glede na upravičenost in odobritev posojilodajalca.*" },
       ],
-      cta: "Pogovorite se s svetovalcem AIXCO",
+      cta: "Izračunaj moj načrt plačil",
     },
     gallery: {
       eyebrow: "Batumi od blizu",
@@ -393,29 +527,38 @@ const copy: Record<Lang, LandingCopy> = {
       captions: ["Batumi v zlati svetlobi", "Obala Črnega morja", "Sodobna arhitektura Batumija", "Izbrana stanovanjska zasnova", "Zasebne vsebine za stanovalce"],
     },
     guidance: {
-      eyebrow: "Svetovanje brez ugibanja",
-      title: "Jasnost pred odločitvijo.",
-      body: "AIXCO združuje lokalno poznavanje nepremičnin s pogledom mednarodnega kupca. Razložimo praktične podrobnosti, jasno navedemo znana dejstva in omogočimo pošteno primerjavo.",
+      eyebrow: "Zakaj AIXCO",
+      title: "Zakaj kupovati prek AIXCO?",
+      body: "Od prve pridobitve leta 2009 AIXCO izvaja disciplinirano strategijo, zgrajeno na dolgoročnem lastništvu nepremičnin, premišljeni alokaciji kapitala in mednarodni širitvi.",
       features: [
-        { title: "Osredotočen izbor", body: "Ustrezne možnosti glede na vaš cilj, ne nepregleden katalog." },
-        { title: "Pregledna primerjava", body: "Jasen kontekst cen, lokacije, faze izvedbe in postopka lastništva." },
-        { title: "Ena kontaktna oseba", body: "Stalen svetovalec od prvega pogovora do naslednjega praktičnega koraka." },
+        { title: "Izberite", body: "Na kratki seznam uvrščamo le projekte, ki bi jih kupili sami." },
+        { title: "Pogajajte se", body: "Dostop do razvijalčevih cen in izbranega inventarja." },
+        { title: "Kupite", body: "Celotna dokumentacija z lokalno podporo." },
+        { title: "Lastite", body: "Najem, poročanje in upravljanje." },
       ],
     },
     contact: {
-      eyebrow: "Vaše izhodišče za Batumi",
-      title: "Povejte nam, kaj iščete.",
-      body: "Zaupajte nam svoje prednostne naloge in svetovalec AIXCO vam bo predlagal najprimernejši naslednji korak.",
+      eyebrow: "Začnite zdaj",
+      title: "NAJDITE PRAVO NEPREMIČNINO V BATUMIJU",
+      body: "Povejte nam, kaj iščete. Pokazali vam bomo razpoložljive apartmaje, ki najbolje ustrezajo proračunu in cilju.",
       name: "Ime in priimek",
       namePlaceholder: "Vaše ime",
       email: "E-poštni naslov",
       emailPlaceholder: "vi@email.si",
+      phone: "WhatsApp / telefon",
+      phonePlaceholder: "+995 …",
       interest: "Glavni cilj",
-      interests: ["Nepremičnina za bivanje", "Nepremičnina za donos", "Dolgoročna nepremičnina", "Še nisem prepričan/a"],
-      message: "Kaj vam je najpomembnejše?",
-      messagePlaceholder: "Navedite želeni proračun, časovnico ali vrsto nepremičnine.",
+      interests: ["Naložba / donos najema", "Življenjski slog / lastna raba", "Dolgoročno lastništvo", "Še nisem prepričan/a"],
+      budget: "Proračun",
+      budgetSelect: "Izberite proračun",
+      budgetOptions: ["45.000–60.000 €", "60.000–100.000 €", "100.000 €+", "Še nisem se odločil"],
+      unitType: "Iščem",
+      unitTypeSelect: "Izberite tip",
+      unitTypeOptions: ["Studio", "1 spalnica", "2 spalnici", "Še nisem prepričan"],
+      message: "Ali je še kaj, kar bi morali vedeti?",
+      messagePlaceholder: "Želeni časovni okvir, nadstropje ali druge prioritete.",
       consent: "Z oddajo obrazca soglašate, da vas AIXCO kontaktira glede vašega povpraševanja.",
-      send: "Zahtevajte moj izbor",
+      send: "Pošlji razpoložljive apartmaje",
       sending: "Pošiljanje…",
       successTitle: "Vaše povpraševanje smo prejeli.",
       successBody: "Svetovalec AIXCO bo pregledal podatke in vas kmalu kontaktiral.",
@@ -434,11 +577,11 @@ const copy: Record<Lang, LandingCopy> = {
     closeMenu: "Закрыть меню",
     language: "Язык",
     hero: {
-      eyebrow: "Для международных покупателей · Батуми, Грузия",
-      title: "Взгляните на Батуми",
-      accent: "по-новому.",
-      body: "Отобранные возможности. Прозрачные цены в евро. Местная экспертиза — от первого сравнения до оформления собственности.",
-      cta: "Составить мою подборку",
+      eyebrow: "Батуми, Грузия · Прибрежная недвижимость",
+      title: "СОБСТВЕННОСТЬ НА ОДНОМ ИЗ",
+      accent: "САМЫХ БЫСТРОРАСТУЩИХ ПРИБРЕЖНЫХ РЫНКОВ ЕВРОПЫ",
+      body: "Отобранные апартаменты от 45 000 €. 10% первый взнос, до 60% банковского финансирования, до 12% чистой арендной доходности*, 1% налога на доход от аренды* и 100% иностранная собственность.",
+      cta: "Смотреть доступные апартаменты",
       location: "Побережье Чёрного моря · Грузия",
       service: "Консультации AIXCO для покупателей",
     },
@@ -449,22 +592,44 @@ const copy: Record<Lang, LandingCopy> = {
       longTerm: { title: "Долгосрочная ценность", body: "Выстраивайте взвешенную стратегию с учётом качества локации, реализации и будущего использования." },
     },
     batumi: {
-      eyebrow: "Место",
-      title: "Чёрное море. Современная энергия. Реальный потенциал.",
-      body: "Батуми объединяет узнаваемую набережную, амбициозную новую архитектуру и близость к природе Грузии. AIXCO помогает международным покупателям понять город — улица за улицей, проект за проектом.",
-      cta: "Начать с правильных вопросов",
+      eyebrow: "Почему Батуми",
+      title: "Один из самых динамичных рынков жилья в Европе.",
+      body: "Батуми стал одним из самых динамичных рынков жилой недвижимости в Европе благодаря экономическому росту, развивающемуся туризму, новой инфраструктуре и растущему международному спросу.",
+      cta: "Изучить возможности",
+    },
+    market: {
+      eyebrow: "Почему Батуми",
+      title: "Батуми в цифрах.",
+      body: "Ключевые показатели независимых исследований рынка подтверждают растущую привлекательность города.",
+      stats: [
+        { value: "17 478", label: "Сделок с недвижимостью (2025)*" },
+        { value: "1,3 млрд $", label: "Объём жилого рынка*" },
+        { value: "+9,4%", label: "Рост цен на первичном рынке*" },
+        { value: "7,4%", label: "Средняя арендная доходность*" },
+        { value: "52%", label: "Иностранные покупатели в обследованных проектах*" },
+      ],
+      source: "Источники: Galt & Taggart Research; Colliers Georgia.",
+    },
+    pricing: {
+      eyebrow: "Инвестиция",
+      title: "Сколько это стоит?",
+      tiers: [
+        { title: "Студия", price: "От 45 000 €" },
+        { title: "1 спальня", price: "От 65 000 €" },
+        { title: "2 спальни", price: "От 95 000 €" },
+        { title: "Люкс", price: "От 150 000 €" },
+      ],
     },
     process: {
-      eyebrow: "Подход AIXCO",
-      title: "От интереса к собственности.",
-      body: "Одна ответственная команда помогает сравнивать важные детали и сохраняет прозрачность на каждом этапе.",
+      eyebrow: "Структура оплаты",
+      title: "Собственность квартиры. Оплата этапами.",
+      body: "Структурированный путь к собственности без полной предоплаты стоимости объекта.",
       steps: [
-        { title: "Определить", body: "Мы уточняем вашу цель, бюджет и предпочтительный тип недвижимости." },
-        { title: "Сравнить", body: "Вы получаете сфокусированную подборку с понятным контекстом и компромиссами." },
-        { title: "Оформить", body: "Мы координируем документы, проверку и процесс покупки." },
-        { title: "Управлять", body: "После покупки мы остаёмся на связи по вопросам приёмки и владения." },
+        { value: "10%", title: "Первый взнос", body: "Закрепите выбранный объект.*" },
+        { value: "30%", title: "Во время строительства", body: "Структурированные платежи в период строительства.*" },
+        { value: "60%", title: "При завершении", body: "До 60% банковского финансирования может быть доступно при соответствии требованиям и одобрении кредитора.*" },
       ],
-      cta: "Поговорить с консультантом AIXCO",
+      cta: "Рассчитать мой план оплаты",
     },
     gallery: {
       eyebrow: "Батуми в деталях",
@@ -476,29 +641,38 @@ const copy: Record<Lang, LandingCopy> = {
       captions: ["Батуми в золотой час", "Побережье Чёрного моря", "Современная архитектура Батуми", "Отобранный жилой дизайн", "Приватная инфраструктура для жителей"],
     },
     guidance: {
-      eyebrow: "Консультация без догадок",
-      title: "Ясность до принятия решения.",
-      body: "AIXCO сочетает знание местного рынка с пониманием задач международного покупателя. Мы объясняем практические детали, открыто сообщаем известные факты и помогаем корректно сравнивать варианты.",
+      eyebrow: "Почему AIXCO",
+      title: "Почему покупать через AIXCO?",
+      body: "С первой сделки в 2009 году AIXCO следует дисциплинированной стратегии, основанной на долгосрочном владении недвижимостью, взвешенном распределении капитала и международной экспансии.",
       features: [
-        { title: "Сфокусированная подборка", body: "Подходящие варианты под вашу цель вместо перегруженного каталога." },
-        { title: "Прозрачное сравнение", body: "Понятный контекст цены, локации, стадии реализации и процесса оформления." },
-        { title: "Один контакт", body: "Постоянный консультант от первого разговора до следующего практического шага." },
+        { title: "Отбор", body: "Мы отбираем только те проекты, которые купили бы сами." },
+        { title: "Переговоры", body: "Доступ к ценам застройщика и отобранному инвентарю." },
+        { title: "Покупка", body: "Полное оформление документов с местной поддержкой." },
+        { title: "Владение", body: "Аренда, отчётность и администрирование." },
       ],
     },
     contact: {
-      eyebrow: "Ваш запрос по Батуми",
-      title: "Расскажите, что вы ищете.",
-      body: "Поделитесь приоритетами, и консультант AIXCO предложит наиболее подходящий следующий шаг.",
+      eyebrow: "Начать",
+      title: "НАЙТИ ПОДХОДЯЩУЮ НЕДВИЖИМОСТЬ В БАТУМИ",
+      body: "Расскажите, что вы ищете. Мы покажем доступные апартаменты, которые лучше всего соответствуют бюджету и задаче.",
       name: "Имя и фамилия",
       namePlaceholder: "Ваше имя",
       email: "Электронная почта",
       emailPlaceholder: "you@email.com",
+      phone: "WhatsApp / телефон",
+      phonePlaceholder: "+995 …",
       interest: "Основная цель",
-      interests: ["Недвижимость для жизни", "Доходная недвижимость", "Долгосрочная недвижимость", "Пока не определился/-ась"],
-      message: "Что для вас важнее всего?",
-      messagePlaceholder: "Укажите желаемый бюджет, сроки или тип недвижимости.",
+      interests: ["Инвестиция / арендный доход", "Образ жизни / личное использование", "Долгосрочное владение", "Пока не определился/-ась"],
+      budget: "Бюджет",
+      budgetSelect: "Выберите бюджет",
+      budgetOptions: ["45–60 тыс. €", "60–100 тыс. €", "100 тыс. €+", "Ещё не решил"],
+      unitType: "Я ищу",
+      unitTypeSelect: "Выберите тип",
+      unitTypeOptions: ["Студия", "1 спальня", "2 спальни", "Пока не уверен"],
+      message: "Есть ли ещё что-то, что нам следует знать?",
+      messagePlaceholder: "Предпочтительные сроки, этаж или другие приоритеты.",
       consent: "Отправляя форму, вы соглашаетесь, что AIXCO может связаться с вами по вашему запросу.",
-      send: "Получить мою подборку",
+      send: "Прислать доступные апартаменты",
       sending: "Отправка…",
       successTitle: "Ваш запрос получен.",
       successBody: "Консультант AIXCO изучит запрос и свяжется с вами в ближайшее время.",
@@ -524,7 +698,7 @@ const images = {
   contact: { src: "/aixco-global-op2/images/project-gallery-2026/17-indoor-pool.webp", width: 4096, height: 2731 },
 } as const;
 
-const processIcons = [Search, Scale, ShieldCheck, KeyRound] as const;
+const processIcons = [ShieldCheck, Scale, KeyRound] as const;
 
 function scrollTo(href: string) {
   scrollToHash(href);
@@ -597,7 +771,20 @@ export function InvestBatumiLandingPage() {
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
     const interest = String(form.get("interest") ?? "").trim();
-    const message = String(form.get("message") ?? "").trim();
+    const phone = String(form.get("phone") ?? "").trim();
+    const budget = String(form.get("budget") ?? "").trim();
+    const unitType = String(form.get("unitType") ?? "").trim();
+    const composedMessage = [
+      String(form.get("message") ?? "").trim(),
+      phone ? `WhatsApp / Phone: ${phone}` : "",
+      budget ? `Budget: ${budget}` : "",
+      unitType ? `Looking for: ${unitType}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+    const message = composedMessage.length >= 10
+      ? composedMessage
+      : [`Primary goal: ${interest}`, composedMessage].filter(Boolean).join("\n\n");
     const website = String(form.get("website") ?? "").trim();
 
     setSubmitError(null);
@@ -693,6 +880,39 @@ export function InvestBatumiLandingPage() {
           </div>
         </section>
 
+        <section id="market" className={styles.marketSection}>
+          <div className={styles.marketIntro}>
+            <p className={styles.eyebrowGold}>{content.market.eyebrow}</p>
+            <h2>{content.market.title}</h2>
+            <p>{content.market.body}</p>
+          </div>
+          <div className={styles.marketStats}>
+            {content.market.stats.map((stat) => (
+              <article key={stat.label}>
+                <strong>{stat.value}</strong>
+                <span>{stat.label}</span>
+              </article>
+            ))}
+          </div>
+          <p className={styles.marketSource}>{content.market.source}</p>
+        </section>
+
+        <section id="pricing" className={styles.pricingSection}>
+          <div className={styles.pricingIntro}>
+            <p className={styles.eyebrowDark}>{content.pricing.eyebrow}</p>
+            <h2>{content.pricing.title}</h2>
+          </div>
+          <div className={styles.pricingGrid}>
+            {content.pricing.tiers.map((tier, index) => (
+              <article key={tier.title}>
+                <span>0{index + 1}</span>
+                <h3>{tier.title}</h3>
+                <p>{tier.price}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section id="batumi" className={styles.batumiSection}>
           <div className={styles.batumiCopy}>
             <p className={styles.eyebrowGold}>{content.batumi.eyebrow}</p>
@@ -720,10 +940,22 @@ export function InvestBatumiLandingPage() {
           <div className={styles.processGrid}>
             {content.process.steps.map((step, index) => {
               const Icon = processIcons[index];
-              return <article key={step.title}><div className={styles.stepTop}><span>0{index + 1}</span><Icon size={23} strokeWidth={1.35} /></div><h3>{step.title}</h3><p>{step.body}</p></article>;
+              return (
+                <article key={step.title}>
+                  <div className={styles.stepTop}>
+                    <span>{step.value ?? `0${index + 1}`}</span>
+                    <Icon size={23} strokeWidth={1.35} />
+                  </div>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                </article>
+              );
             })}
           </div>
-          <button type="button" className={styles.goldButton} onClick={() => scrollTo("#contact")}>{content.process.cta}<ArrowUpRight size={17} /></button>
+          <Link href="/reverance-batumi/calculator" className={styles.goldButton}>
+            {content.process.cta}
+            <ArrowUpRight size={17} />
+          </Link>
         </section>
 
         <section id="gallery" className={styles.gallerySection}>
@@ -775,8 +1007,13 @@ export function InvestBatumiLandingPage() {
                   <label>{content.contact.name}<input required minLength={2} maxLength={100} name="name" autoComplete="name" placeholder={content.contact.namePlaceholder} /></label>
                   <label>{content.contact.email}<input required maxLength={255} name="email" type="email" autoComplete="email" placeholder={content.contact.emailPlaceholder} /></label>
                 </div>
+                <label>{content.contact.phone}<input maxLength={40} name="phone" type="tel" autoComplete="tel" placeholder={content.contact.phonePlaceholder} /></label>
                 <label>{content.contact.interest}<select name="interest" defaultValue={content.contact.interests[0]}>{content.contact.interests.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
-                <label>{content.contact.message}<textarea required minLength={10} maxLength={1500} rows={4} name="message" placeholder={content.contact.messagePlaceholder} /></label>
+                <div className={styles.formRow}>
+                  <label>{content.contact.budget}<select name="budget" defaultValue=""><option value="">{content.contact.budgetSelect}</option>{content.contact.budgetOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+                  <label>{content.contact.unitType}<select name="unitType" defaultValue=""><option value="">{content.contact.unitTypeSelect}</option>{content.contact.unitTypeOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+                </div>
+                <label>{content.contact.message}<textarea minLength={0} maxLength={1500} rows={4} name="message" placeholder={content.contact.messagePlaceholder} /></label>
                 {submitError ? <p className={styles.formError} role="alert">{submitError}</p> : null}
                 <div className={styles.formFooter}><p>{content.contact.consent}</p><button type="submit" disabled={submitting}>{submitting ? content.contact.sending : content.contact.send}<ArrowUpRight size={16} /></button></div>
               </form>

@@ -62,6 +62,13 @@
 .heroMedia img { object-position: 55% center; }
 .mediaCaption { position: absolute; inset: auto 1.5rem 1.5rem; display: flex; justify-content: space-between; color: white; font-size: var(--aixco-label-min-size); font-weight: 700; letter-spacing: .18em; text-shadow: 0 1px 1rem rgb(0 0 0 / .35); }
 
+.statsSection { border-block-end: 1px solid var(--line); background: var(--ink); color: var(--paper); }
+.statsGrid { display: grid; grid-template-columns: repeat(6, 1fr); width: min(100% - 3rem, 90rem); margin: 0 auto; }
+.statCard { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .65rem; min-height: 8.5rem; padding: 1.4rem 1rem; border-inline-end: 1px solid rgb(247 242 233 / .18); text-align: center; }
+.statCard:last-child { border-inline-end: 0; }
+.statCard strong { color: var(--gold); font-size: clamp(1.45rem, 2.4vw, 2.35rem); font-weight: 500; letter-spacing: -.04em; line-height: 1; overflow-wrap: anywhere; }
+.statCard span { max-width: 11rem; color: rgb(247 242 233 / .72); font-size: .62rem; font-weight: 600; letter-spacing: .14em; line-height: 1.45; text-transform: uppercase; overflow-wrap: anywhere; hyphens: auto; }
+
 .section { width: min(100% - 3rem, 90rem); margin: 0 auto; padding: clamp(5rem, 10vw, 9rem) clamp(0rem, 3vw, 3.5rem); scroll-margin-top: 4.65rem; }
 .whoSection { display: grid; grid-template-columns: minmax(14rem, .78fr) minmax(0, 1.22fr); gap: clamp(3rem, 9vw, 10rem); border-block-end: 1px solid var(--line); }
 .sectionIntro h2, .marketCopy h2, .structureIntro h2, .closingSection h2, .contactPanel h2 { max-width: 12ch; margin: 0; font-size: clamp(2.5rem, 4.1vw, 5rem); font-weight: 500; letter-spacing: -.065em; line-height: .98; }
@@ -168,6 +175,9 @@
   .heroMedia { min-height: 29rem; }
   .heroIndex { inset-block-start: 9rem; }
   .hero h1 { max-width: 13ch; font-size: clamp(3.4rem, 10vw, 5.4rem); }
+  .statsGrid { grid-template-columns: repeat(3, 1fr); width: auto; }
+  .statCard:nth-child(3n) { border-inline-end: 0; }
+  .statCard:nth-child(-n + 3) { border-block-end: 1px solid rgb(247 242 233 / .18); }
   .whoSection, .marketSection, .contactSection { grid-template-columns: 1fr; }
   .whoSection { gap: 1rem; }
   .proseStack { padding-top: 1rem; }
@@ -206,8 +216,15 @@
   .hero { padding-block-start: var(--aixco-header-height); }
   .heroCopy { min-height: 35rem; padding: 5.5rem 1.25rem 2.6rem; }
   .heroIndex { display: none; }
-  .hero h1 { max-width: 100%; font-size: clamp(2.65rem, 11vw, 3.8rem); }
+  .hero h1 { max-width: 100%; font-size: clamp(2.65rem, 11vw, 3.8rem); overflow-wrap: anywhere; word-break: normal; hyphens: auto; }
   .heroBody { font-size: .98rem; }
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .statCard { min-height: 7.5rem; padding: 1.15rem .75rem; }
+  .statCard:nth-child(3n) { border-inline-end: 1px solid rgb(247 242 233 / .18); }
+  .statCard:nth-child(2n) { border-inline-end: 0; }
+  .statCard:nth-child(-n + 4) { border-block-end: 1px solid rgb(247 242 233 / .18); }
+  .statCard:last-child { border-block-end: 0; }
+  .statCard strong { font-size: clamp(1.25rem, 6.5vw, 1.75rem); }
   .heroActions, .closingActions { align-items: flex-start; flex-direction: column; gap: 1rem; margin-top: 2rem; }
   .goldButton { width: 100%; }
   .location { padding-top: 2.5rem; }
@@ -236,6 +253,14 @@
   .footerLinks { gap: .75rem 1rem; }
 }
 
+@media (max-width: 320px) {
+  .heroCopy { padding: 5.25rem 0.85rem 2.4rem; min-width: 0; }
+  .hero h1 { max-width: 100%; font-size: clamp(1.85rem, 9.8vw, 2.35rem); overflow-wrap: anywhere; hyphens: auto; line-height: 0.95; }
+  .heroBody, .heroActions, .location { max-width: 100%; min-width: 0; }
+  .goldButton { width: 100%; max-width: 100%; padding-inline: 0.85rem; font-size: 0.6rem; }
+  .mediaCaption { inset-inline: 0.75rem; flex-wrap: wrap; gap: 0.35rem 0.75rem; }
+}
+
 @media (max-width: 380px) {
   .heroCopy { padding-inline: 1rem; }
   .hero h1 { font-size: clamp(2.15rem, 10.5vw, 2.85rem); }
@@ -249,10 +274,12 @@
   .headerActions { gap: 0.3rem; }
 }
 
-@media (max-width: 300px) {
-  .headerInner { width: calc(100% - 1rem); gap: .4rem; }
-  .heroCopy { padding-inline: .75rem; }
-  .hero h1 { font-size: clamp(1.85rem, 12vw, 2.35rem); }
+@media (max-width: 280px) {
+  .heroCopy { padding: 5rem 0.75rem 2.2rem; }
+  .hero h1 { font-size: clamp(1.65rem, 9.2vw, 2.1rem); letter-spacing: -0.05em; }
+  .heroBody { font-size: 0.92rem; }
+  .goldButton { font-size: 0.58rem; letter-spacing: 0.12em; }
+  .bondStatsGrid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 767px) {

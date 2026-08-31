@@ -93,7 +93,7 @@ export const batumiProperties = [
     url: "current-project",
     image: "batumi-current-project",
     video: "currentProject",
-    summary: "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for July 2028.",
+    summary: "Selected residences in one of Batumi's most dynamic coastal districts. AIXCO offers 28 selected apartments on the 13th and 14th floors of Project Reverance, with completion targeted for July 2028.",
     metrics: [
       { label: "Floors", value: "17", subtext: "per building" },
       { label: "Apartments", value: "408", subtext: "total units" },

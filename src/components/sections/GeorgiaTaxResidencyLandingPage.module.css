@@ -315,6 +315,14 @@
   line-height: 1.55;
 }
 
+.heroDisclaimer {
+  max-width: 34rem;
+  margin: 1.15rem 0 0;
+  color: rgb(98 94 85 / 0.82);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
 .heroActions {
   display: flex;
   flex-wrap: wrap;
@@ -1386,6 +1394,13 @@
   color: var(--muted);
   font-size: 0.7rem;
   line-height: 1.45;
+}
+
+.formDisclaimer {
+  margin-top: 0.65rem !important;
+  max-width: 22rem !important;
+  color: rgb(98 94 85 / 0.78) !important;
+  font-size: 0.66rem !important;
 }
 
 .formFooter .goldButton {

@@ -19,7 +19,7 @@ describe("current Batumi project data", () => {
     expect(project?.summary).toContain("28 selected apartments");
     expect(project?.summary).toContain("13th and 14th floors");
     expect(project?.summary).toContain("July 2028");
-    expect(project?.summary).toMatch(/^Reverance is a premium residential complex/);
+    expect(project?.summary).toMatch(/^Selected residences in one of Batumi's most dynamic coastal districts/);
     expect(JSON.stringify(project)).not.toMatch(/by Otium/i);
     expect(project?.highlights).toContainEqual({
       label: "Location",

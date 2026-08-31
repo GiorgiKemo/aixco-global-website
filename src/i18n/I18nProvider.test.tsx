@@ -103,7 +103,7 @@ function SlovenianClientRevisionProbe() {
 }
 
 const currentProjectSummary =
-  "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for July 2028.";
+  "Selected residences in one of Batumi's most dynamic coastal districts. AIXCO offers 28 selected apartments on the 13th and 14th floors of Project Reverance, with completion targeted for July 2028.";
 
 function CurrentProjectCompletionProbe() {
   const { tx } = useI18n();
@@ -288,22 +288,22 @@ describe("I18nProvider", () => {
     ],
     [
       "de",
-      "Reverance ist ein Premium-Wohnkomplex am New Boulevard in Batumi. AIXCO bietet derzeit 28 ausgewählte Wohnungen im 13. und 14. Stock an; die Fertigstellung ist für Juli 2028 geplant.",
+      "Ausgewählte Residenzen in einem der dynamischsten Küstenviertel Batumis. AIXCO bietet 28 ausgewählte Wohnungen im 13. und 14. Stock von Project Reverance; Fertigstellung geplant für Juli 2028.",
       "Juli 2028",
     ],
     [
       "pl",
-      "Reverance to kompleks mieszkaniowy klasy premium przy Nowym Bulwarze w Batumi. AIXCO oferuje obecnie 28 wybranych apartamentów na 13. i 14. piętrze; zakończenie budowy planowane jest na lipiec 2028 r.",
+      "Wybrane rezydencje w jednym z najbardziej dynamicznych nadmorskich dystryktów Batumi. AIXCO oferuje 28 wybranych apartamentów na 13. i 14. piętrze projektu Reverance; ukończenie planowane na lipiec 2028.",
       "lipiec 2028",
     ],
     [
       "sl",
-      "Reverance je vrhunski stanovanjski kompleks na Novem bulvarju v Batumiju. AIXCO trenutno ponuja 28 izbranih stanovanj v 13. in 14. nadstropju, z dokončanjem, predvidenim za julij 2028.",
+      "Izbrane rezidence v enem najbolj dinamičnih obalnih okrožij Batumija. AIXCO ponuja 28 izbranih apartmajev v 13. in 14. nadstropju projekta Reverance; zaključek je predviden za julij 2028.",
       "julij 2028",
     ],
     [
       "ru",
-      "Reverance — жилой комплекс премиум-класса на Новом бульваре Батуми. Сейчас AIXCO предлагает 28 выбранных квартир на 13-м и 14-м этажах; завершение строительства запланировано на июль 2028 года.",
+      "Отобранные резиденции в одном из самых динамичных прибрежных районов Батуми. AIXCO предлагает 28 отобранных апартаментов на 13-м и 14-м этажах проекта Reverance; завершение запланировано на июль 2028 года.",
       "Июль 2028",
     ],
   ] as const)("uses the brochure-backed July 2028 date in %s", async (locale, summary, completion) => {
@@ -356,7 +356,7 @@ describe("I18nProvider", () => {
       expect(screen.getByText("$350M, večnamenski program")).toBeInTheDocument();
       expect(screen.getByText("KUPITE. SODELUJTE. USTVARITE VREDNOST.")).toBeInTheDocument();
       expect(screen.getByText("$400M")).toBeInTheDocument();
-      expect(screen.getByText("$4.2B+")).toBeInTheDocument();
+      expect(screen.getByText("4,2 mlrd $+")).toBeInTheDocument();
       expect(screen.getByText("€45k")).toBeInTheDocument();
       expect(screen.getByText("Prenos gradiv")).toBeInTheDocument();
       expect(screen.getByText("Osnovna pogosta vprašanja")).toBeInTheDocument();

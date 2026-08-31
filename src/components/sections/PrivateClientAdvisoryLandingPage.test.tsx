@@ -46,7 +46,7 @@ describe("PrivateClientAdvisoryLandingPage", () => {
   it("renders the editorial page and exercises navigation, language, and footer controls", async () => {
     render(<PrivateClientAdvisoryLandingPage />);
 
-    expect(screen.getByRole("heading", { name: /Emerging Market Real Estate/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Direct Access to AIXCO/i })).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Batumi coastline and high-rise skyline at golden hour" })).toBeInTheDocument();
     expect(document.title).toContain("Emerging Market Real Estate Investment");
 

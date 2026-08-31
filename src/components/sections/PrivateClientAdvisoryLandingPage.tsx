@@ -44,6 +44,7 @@ type Copy = {
     location: string;
     imageAlt: string;
   };
+  bondStats: { value: string; label: string }[];
   who: { eyebrow: string; title: string; paragraphs: string[] };
   markets: { eyebrow: string; title: string; body: string; current: string; currentBody: string; imageAlt: string };
   model: { eyebrow: string; title: string; body: string; steps: { title: string; body: string }[] };
@@ -84,21 +85,30 @@ const copyByLanguage: Record<Lang, Copy> = {
     metaDescription: "AIXCO Global identifies, acquires, develops and manages residential real estate across high-growth emerging markets.",
     nav: { who: "Who we are", markets: "Emerging markets", model: "How we operate", structure: "Structure", contact: "Request a brief" },
     hero: {
-      eyebrow: "Emerging market real estate specialist",
-      title: "Emerging Market Real Estate.",
-      accent: "Engineered for Long-Term Value.",
-      body: "AIXCO Global identifies, acquires, develops and manages residential real estate across the world's fastest-growing property markets — turning early-stage opportunity into disciplined, long-term returns.",
-      primary: "Discover the AIXCO Global Bond",
-      secondary: "View current projects",
+      eyebrow: "AIXCO Global Bond",
+      title: "DIRECT ACCESS TO AIXCO",
+      accent: "THE COMPANY BEHIND SUCCESSFUL REAL ESTATE.",
+      body: "Participate in AIXCO's long-term real estate strategy through a professionally managed corporate bond.",
+      primary: "Download investor brochure",
+      secondary: "Book private consultation",
       location: "Batumi, Georgia",
       imageAlt: "Batumi coastline and high-rise skyline at golden hour",
     },
+    bondStats: [
+      { value: "6%", label: "Fixed Annual Coupon" },
+      { value: "€1,000", label: "Minimum Investment" },
+      { value: "5 YEARS", label: "Investment Term" },
+      { value: "€400M+", label: "GDV" },
+      { value: "2,000+", label: "Transactions" },
+      { value: "Since 2009", label: "Real Estate Experience" },
+    ],
     who: {
       eyebrow: "01 — Who we are",
       title: "An international real estate investor, built for emerging markets.",
       paragraphs: [
-        "AIXCO Global is an international real estate group focused exclusively on emerging and fast-growing property markets. Rooted in Swiss real estate heritage and long-term investment discipline, AIXCO identifies undervalued opportunities in markets on the edge of structural growth — acquiring, developing, and managing residential assets across the full property lifecycle.",
-        "We don't follow capital into markets that have already matured. We move early — securing land and development opportunities at the lowest point of the price curve, building high-quality residential product, and capturing appreciation as each market comes of age. This is not passive property ownership. It is active, vertically integrated real estate investment, designed to compound value across market cycles.",
+        "AIXCO combines Swiss discipline with an international outlook to identify real estate opportunities before they become mainstream.",
+        "Our strategy begins with carefully selected emerging markets where long-term fundamentals support future growth. By acquiring assets early, actively managing development, and balancing property sales with recurring rental income, we create multiple sources of value within a single portfolio.",
+        "Rather than relying on one transaction, AIXCO continuously reinvests capital to expand and strengthen its portfolio, building long-term value across market cycles.",
       ],
     },
     markets: {
@@ -181,21 +191,30 @@ const copyByLanguage: Record<Lang, Copy> = {
     metaDescription: "AIXCO Global identifiziert, erwirbt, entwickelt und verwaltet Wohnimmobilien in wachstumsstarken Schwellenmärkten.",
     nav: { who: "Über uns", markets: "Wachstumsmärkte", model: "Unser Modell", structure: "Struktur", contact: "Brief anfragen" },
     hero: {
-      eyebrow: "Spezialist für Immobilien in Wachstumsmärkten",
-      title: "Immobilien in Wachstumsmärkten.",
-      accent: "Für langfristigen Wert entwickelt.",
-      body: "AIXCO Global identifiziert, erwirbt, entwickelt und verwaltet Wohnimmobilien in den wachstumsstärksten Märkten — und macht frühe Chancen zu disziplinierten, langfristigen Erträgen.",
-      primary: "Die AIXCO Global Anleihe entdecken",
-      secondary: "Aktuelle Projekte ansehen",
+      eyebrow: "AIXCO Global Anleihe",
+      title: "DIREKTER ZUGANG ZU AIXCO",
+      accent: "HINTER ERFOLGREICHER IMMOBILIEN.",
+      body: "Beteiligen Sie sich an AIXCOs langfristiger Immobilienstrategie über eine professionell verwaltete Unternehmensanleihe.",
+      primary: "Investorenbroschüre herunterladen",
+      secondary: "Private Beratung buchen",
       location: "Batumi, Georgien",
       imageAlt: "Küste und Skyline von Batumi in der goldenen Stunde",
     },
+    bondStats: [
+      { value: "6 %", label: "Fester Jahreskupon" },
+      { value: "1.000 €", label: "Mindestinvestition" },
+      { value: "5 JAHRE", label: "Anlagezeitraum" },
+      { value: "400 Mio. €+", label: "GDV" },
+      { value: "2.000+", label: "Transaktionen" },
+      { value: "Seit 2009", label: "Immobilienerfahrung" },
+    ],
     who: {
       eyebrow: "01 — Über uns",
       title: "Ein internationaler Immobilieninvestor für Wachstumsmärkte.",
       paragraphs: [
-        "AIXCO Global ist eine internationale Immobiliengruppe mit klarem Fokus auf aufstrebende und schnell wachsende Immobilienmärkte. Verwurzelt in Schweizer Immobilienerfahrung und langfristiger Investitionsdisziplin, identifiziert AIXCO unterbewertete Chancen an der Schwelle zu strukturellem Wachstum — und erwirbt, entwickelt und verwaltet Wohnimmobilien über den gesamten Lebenszyklus.",
-        "Wir folgen keinem Kapital in Märkte, die bereits ausgereift sind. Wir handeln früh — sichern Grundstücke und Entwicklungschancen am unteren Ende der Preiskurve, bauen hochwertige Wohnprodukte und realisieren Wertsteigerungen, wenn ein Markt reift. Das ist kein passiver Immobilienbesitz, sondern aktive, vertikal integrierte Immobilieninvestition.",
+        "AIXCO verbindet Schweizer Disziplin mit internationaler Ausrichtung, um Immobilienchancen zu identifizieren, bevor sie zum Mainstream werden.",
+        "Unsere Strategie beginnt mit sorgfältig ausgewählten Wachstumsmärkten, deren langfristige Fundamentaldaten zukünftiges Wachstum stützen. Durch frühen Erwerb, aktive Entwicklung und die Balance zwischen Verkäufen und wiederkehrenden Mieteinnahmen schaffen wir mehrere Wertquellen in einem Portfolio.",
+        "Statt auf eine einzelne Transaktion zu setzen, reinvestiert AIXCO Kapital kontinuierlich, um das Portfolio auszubauen und langfristigen Wert über Marktzyklen hinweg aufzubauen.",
       ],
     },
     markets: {
@@ -278,21 +297,30 @@ const copyByLanguage: Record<Lang, Copy> = {
     metaDescription: "AIXCO Global identyfikuje, nabywa, rozwija i zarządza nieruchomościami mieszkaniowymi na szybko rosnących rynkach.",
     nav: { who: "O nas", markets: "Rynki wschodzące", model: "Nasz model", structure: "Struktura", contact: "Poproś o brief" },
     hero: {
-      eyebrow: "Specjalista od nieruchomości na rynkach wschodzących",
-      title: "Nieruchomości na rynkach wschodzących.",
-      accent: "Zaprojektowane dla długoterminowej wartości.",
-      body: "AIXCO Global identyfikuje, nabywa, rozwija i zarządza nieruchomościami mieszkaniowymi na najszybciej rosnących rynkach — zamieniając wczesne szanse w zdyscyplinowane, długoterminowe zwroty.",
-      primary: "Poznaj obligację AIXCO Global",
-      secondary: "Zobacz aktualne projekty",
+      eyebrow: "Obligacja AIXCO Global",
+      title: "DOSTĘP DO AIXCO",
+      accent: "FIRMA ZA UDANYMI NIERUCHOMOŚCIAMI.",
+      body: "Weź udział w długoterminowej strategii nieruchomościowej AIXCO poprzez profesjonalnie zarządzaną obligację korporacyjną.",
+      primary: "Pobierz broszurę inwestora",
+      secondary: "Umów prywatną konsultację",
       location: "Batumi, Gruzja",
       imageAlt: "Wybrzeże i panorama Batumi o złotej godzinie",
     },
+    bondStats: [
+      { value: "6%", label: "Stały roczny kupon" },
+      { value: "1 000 €", label: "Minimalna inwestycja" },
+      { value: "5 LAT", label: "Okres inwestycji" },
+      { value: "400 mln €+", label: "GDV" },
+      { value: "2 000+", label: "Transakcje" },
+      { value: "Od 2009", label: "Doświadczenie w nieruchomościach" },
+    ],
     who: {
       eyebrow: "01 — O nas",
       title: "Międzynarodowy inwestor nieruchomości zbudowany dla rynków wschodzących.",
       paragraphs: [
-        "AIXCO Global to międzynarodowa grupa nieruchomości skupiona wyłącznie na rynkach wschodzących i szybko rosnących. Łącząc szwajcarskie dziedzictwo nieruchomości z długoterminową dyscypliną inwestycyjną, AIXCO wyszukuje niedowartościowane szanse na rynkach stojących u progu strukturalnego wzrostu — nabywając, rozwijając i zarządzając aktywami mieszkaniowymi przez cały cykl życia.",
-        "Nie podążamy za kapitałem na rynki, które już dojrzały. Działamy wcześnie — zabezpieczamy grunty i możliwości deweloperskie przy najniższym punkcie krzywej cenowej, tworzymy wysokiej jakości produkt mieszkaniowy i realizujemy wzrost wartości wraz z dojrzewaniem rynku. To aktywne, wertykalnie zintegrowane inwestowanie w nieruchomości.",
+        "AIXCO łączy szwajcarską dyscyplinę z międzynarodową perspektywą, aby identyfikować szanse w nieruchomościach, zanim staną się powszechne.",
+        "Nasza strategia zaczyna się od starannie wybranych rynków wschodzących, gdzie długoterminowe fundamenty wspierają przyszły wzrost. Dzięki wczesnemu nabyciu, aktywnemu rozwojowi oraz równowadze między sprzedażą a dochodami z najmu tworzymy wiele źródeł wartości w jednym portfelu.",
+        "Zamiast polegać na jednej transakcji, AIXCO stale reinwestuje kapitał, rozwijając i wzmacniając portfel oraz budując długoterminową wartość w kolejnych cyklach rynkowych.",
       ],
     },
     markets: {
@@ -375,21 +403,30 @@ const copyByLanguage: Record<Lang, Copy> = {
     metaDescription: "AIXCO Global prepoznava, pridobiva, razvija in upravlja stanovanjske nepremičnine na hitro rastočih trgih.",
     nav: { who: "O nas", markets: "Rastoči trgi", model: "Naš model", structure: "Struktura", contact: "Zahtevajte povzetek" },
     hero: {
-      eyebrow: "Specialist za nepremičnine na rastočih trgih",
-      title: "Nepremičnine na rastočih trgih.",
-      accent: "Ustvarjene za dolgoročno vrednost.",
-      body: "AIXCO Global prepoznava, pridobiva, razvija in upravlja stanovanjske nepremičnine na najhitreje rastočih trgih — zgodnje priložnosti spreminja v disciplinirane, dolgoročne donose.",
-      primary: "Spoznajte obveznico AIXCO Global",
-      secondary: "Oglejte si aktualne projekte",
+      eyebrow: "Obveznica AIXCO Global",
+      title: "NEPOSREDEN DOSTOP DO AIXCO",
+      accent: "PODJETJA ZA USPEŠNIMI NEPREMIČNINAMI.",
+      body: "Sodelujte v dolgoročni nepremičninski strategiji AIXCO prek profesionalno upravljane korporativne obveznice.",
+      primary: "Prenesite brošuro za vlagatelje",
+      secondary: "Rezervirajte zasebno posvetovanje",
       location: "Batumi, Gruzija",
       imageAlt: "Obala in panorama Batumija ob zlati uri",
     },
+    bondStats: [
+      { value: "6 %", label: "Fiksni letni kupon" },
+      { value: "1.000 €", label: "Minimalna naložba" },
+      { value: "5 LET", label: "Naložbeni rok" },
+      { value: "400 mil. €+", label: "GDV" },
+      { value: "2.000+", label: "Transakcije" },
+      { value: "Od 2009", label: "Izkušnje z nepremičninami" },
+    ],
     who: {
       eyebrow: "01 — O nas",
       title: "Mednarodni vlagatelj v nepremičnine, zgrajen za rastoče trge.",
       paragraphs: [
-        "AIXCO Global je mednarodna nepremičninska skupina, osredotočena izključno na rastoče in hitro razvijajoče se trge. Z združevanjem švicarske nepremičninske dediščine in dolgoročne naložbene discipline AIXCO prepoznava podcenjene priložnosti na trgih pred strukturno rastjo — ter pridobiva, razvija in upravlja stanovanjska sredstva skozi celoten življenjski cikel.",
-        "Ne sledimo kapitalu na trge, ki so že dozoreli. Delujemo zgodaj — zagotavljamo zemljišča in razvojne priložnosti na najnižji točki cenovne krivulje, gradimo kakovostne stanovanjske projekte in zajemamo rast vrednosti, ko trg dozoreva. To je aktivno, vertikalno integrirano vlaganje v nepremičnine.",
+        "AIXCO združuje švicarsko disciplino z mednarodno usmerjenostjo, da prepozna priložnosti v nepremičninah, preden postanejo mainstream.",
+        "Naša strategija se začne pri skrbno izbranih rastočih trgih, kjer dolgoročne osnove podpirajo prihodnjo rast. Z zgodnjim pridobivanjem, aktivnim razvojem in ravnovesjem med prodajo in najemninami ustvarjamo več virov vrednosti v enem portfelju.",
+        "Namesto ene transakcije AIXCO nenehno reinvestira kapital, širi in krepi portfelj ter gradi dolgoročno vrednost skozi tržne cikle.",
       ],
     },
     markets: {
@@ -472,21 +509,30 @@ const copyByLanguage: Record<Lang, Copy> = {
     metaDescription: "AIXCO Global выявляет, приобретает, развивает и управляет жилой недвижимостью на быстрорастущих рынках.",
     nav: { who: "О нас", markets: "Растущие рынки", model: "Наша модель", structure: "Структура", contact: "Запросить бриф" },
     hero: {
-      eyebrow: "Специалист по недвижимости на развивающихся рынках",
-      title: "Недвижимость на развивающихся рынках.",
-      accent: "Создана для долгосрочной ценности.",
-      body: "AIXCO Global выявляет, приобретает, развивает и управляет жилой недвижимостью на самых быстрорастущих рынках — превращая ранние возможности в дисциплинированную долгосрочную доходность.",
-      primary: "Узнать об облигации AIXCO Global",
-      secondary: "Посмотреть текущие проекты",
+      eyebrow: "Облигация AIXCO Global",
+      title: "ПРЯМОЙ ДОСТУП",
+      accent: "К КОМПАНИИ AIXCO.",
+      body: "Участвуйте в долгосрочной стратегии AIXCO в недвижимости через профессионально управляемую корпоративную облигацию.",
+      primary: "Скачать брошюру для инвесторов",
+      secondary: "Записаться на частную консультацию",
       location: "Батуми, Грузия",
       imageAlt: "Побережье и панорама Батуми в золотой час",
     },
+    bondStats: [
+      { value: "6%", label: "Фиксированный годовой купон" },
+      { value: "1 000 €", label: "Минимальная инвестиция" },
+      { value: "5 ЛЕТ", label: "Срок инвестирования" },
+      { value: "400 млн €+", label: "GDV" },
+      { value: "2 000+", label: "Сделки" },
+      { value: "С 2009 года", label: "Опыт в недвижимости" },
+    ],
     who: {
       eyebrow: "01 — О компании",
       title: "Международный инвестор в недвижимость для развивающихся рынков.",
       paragraphs: [
-        "AIXCO Global — международная группа в сфере недвижимости, сосредоточенная исключительно на развивающихся и быстрорастущих рынках. Опираясь на швейцарское наследие в недвижимости и долгосрочную инвестиционную дисциплину, AIXCO выявляет недооцененные возможности на рынках, находящихся на пороге структурного роста — приобретая, развивая и управляя жилыми активами на протяжении всего жизненного цикла.",
-        "Мы не следуем за капиталом на уже зрелые рынки. Мы действуем рано — обеспечиваем землю и возможности развития на нижней точке ценовой кривой, создаем качественный жилой продукт и фиксируем рост по мере взросления рынка. Это активное, вертикально интегрированное инвестирование в недвижимость.",
+        "AIXCO сочетает швейцарскую дисциплину с международным подходом, чтобы находить возможности в недвижимости до того, как они станут мейнстримом.",
+        "Наша стратегия начинается с тщательно отобранных развивающихся рынков, где долгосрочные фундаментальные факторы поддерживают будущий рост. Раннее приобретение, активное развитие и баланс между продажами и арендным доходом создают несколько источников стоимости в одном портфеле.",
+        "Вместо одной сделки AIXCO постоянно реинвестирует капитал, расширяя и укрепляя портфель и создавая долгосрочную стоимость на протяжении рыночных циклов.",
       ],
     },
     markets: {
@@ -691,6 +737,17 @@ export function PrivateClientAdvisoryLandingPage() {
           <div className={styles.heroMedia}>
             <Image src={heroImage} alt={content.hero.imageAlt} fill preload quality={90} sizes="(max-width: 850px) 100vw, 50vw" />
             <div className={styles.mediaCaption}><span>BATUMI, GEORGIA</span><span>BLACK SEA COAST</span></div>
+          </div>
+        </section>
+
+        <section className={styles.statsSection} aria-label="AIXCO Global Bond highlights">
+          <div className={styles.statsGrid}>
+            {content.bondStats.map((stat) => (
+              <article key={stat.label} className={styles.statCard}>
+                <strong>{stat.value}</strong>
+                <span>{stat.label}</span>
+              </article>
+            ))}
           </div>
         </section>
 

@@ -100,12 +100,20 @@ const relocationIncludes = [
 ] as const;
 
 const interestOptions = [
-  "Tax residency (HNWI)",
-  "Residence by property",
-  "Residence by investment",
-  "Business registration",
-  "Tax relocation package",
-  "Project Reverance",
+  "Property-based residency",
+  "Investment residency",
+  "Business-based residency",
+  "Tax residency / HNWI",
+  "Property + residency",
+  "Not sure yet",
+] as const;
+
+const budgetOptions = [
+  "Under $150K",
+  "$150K–$300K",
+  "$300K–$500K",
+  "$500K+",
+  "Prefer not to say",
 ] as const;
 
 const taxGuideDownloads: Record<Lang, { href: string; fileName: string }> = {
@@ -191,7 +199,16 @@ export function GeorgiaResidencyLandingPage() {
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
     const interest = String(form.get("interest") ?? "").trim();
-    const message = String(form.get("message") ?? "").trim();
+    const phone = String(form.get("phone") ?? "").trim();
+    const budget = String(form.get("budget") ?? "").trim();
+    const messageBody = String(form.get("message") ?? "").trim();
+    const message = [
+      messageBody,
+      phone ? `WhatsApp / Phone: ${phone}` : "",
+      budget ? `Approximate budget: ${budget}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n") || `Interest: ${interest}`;
     const website = String(form.get("website") ?? "").trim();
     setSubmitError(null);
     setIsSubmitting(true);
@@ -334,13 +351,34 @@ export function GeorgiaResidencyLandingPage() {
           <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/25" />
           <div className="residency-frame hidden sm:block" />
           <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-end px-5 pb-10 pt-28 sm:px-10 sm:pb-14 lg:px-16">
-            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.28em] text-[#E6C767]">{tx("Residence permit in Georgia")}</p>
+            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.28em] text-[#E6C767]">{tx("GEORGIA RESIDENCY")}</p>
             <h1 className="mt-5 max-w-[14ch] text-[clamp(2.15rem,11vw,7.6rem)] font-medium leading-[0.9] tracking-[-0.055em] text-white [overflow-wrap:anywhere] [hyphens:auto]">
-              {tx("Stay. Own.")} <span className="text-[#E6C767]">{tx("Reside.")}</span>
+              {tx("OWN. ESTABLISH.")} <span className="text-[#E6C767]">{tx("RESIDE.")}</span>
             </h1>
             <p className="mt-6 max-w-[34rem] text-base leading-[1.6] text-white/72 sm:text-lg">
-              {tx("There are several ways to obtain residency in Georgia. AIXCO works from its official residence and tax residency guides: business, property, or investment.")}
+              {tx("Multiple pathways to establish residency in Georgia through property ownership, qualifying investment or business activity. AIXCO coordinates the process from documentation and property selection to application support and local setup.")}
             </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <a
+                href="#paths"
+                onClick={(event) => {
+                  event.preventDefault();
+                  scrollToId("paths");
+                }}
+                className="inline-flex min-h-12 items-center gap-3 bg-[#E6C767] px-6 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#161616]"
+              >
+                {tx("FIND YOUR RESIDENCY PATH")}
+              </a>
+              <DownloadGateLink
+                href={residenceGuide.href}
+                fileName={residenceGuide.fileName}
+                lockedHref="#contact"
+                className="inline-flex min-h-12 items-center gap-3 border border-white/30 px-6 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]"
+              >
+                {tx("DOWNLOAD RESIDENCY GUIDE")}
+              </DownloadGateLink>
+            </div>
+            <p className="mt-6 max-w-[34rem] text-xs leading-5 text-white/50">{tx("Residency eligibility is subject to Georgian immigration law, individual circumstances and approval by the competent Georgian authorities.")}</p>
             <div className="mt-10 grid max-w-[44rem] grid-cols-1 border-t border-white/20 min-[520px]:grid-cols-3">
               {permitPaths.map((path) => (
                 <a
@@ -504,22 +542,35 @@ export function GeorgiaResidencyLandingPage() {
                     </label>
                   </div>
                   <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">
-                    {tx("I’m interested in")}
-                    <select name="interest" defaultValue="Tax residency (HNWI)" className="residency-input">
+                    {tx("WhatsApp / Phone")}
+                    <input maxLength={40} autoComplete="tel" name="phone" type="tel" placeholder="+995 …" className="residency-input" />
+                  </label>
+                  <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">
+                    {tx("I'm interested in")}
+                    <select name="interest" defaultValue="Property-based residency" className="residency-input">
                       {interestOptions.map((option) => (
                         <option key={option} value={option}>{tx(option)}</option>
                       ))}
                     </select>
                   </label>
                   <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">
+                    {tx("Approximate budget")}
+                    <select name="budget" defaultValue="" className="residency-input">
+                      <option value="">{tx("Select budget")}</option>
+                      {budgetOptions.map((option) => (
+                        <option key={option} value={option}>{tx(option)}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="grid gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">
                     {tx("Message")}
-                    <textarea required minLength={10} maxLength={1500} name="message" rows={4} placeholder={tx("Tell us the path, timing, and whether you already own or want to buy property.")} className="residency-input resize-none" />
+                    <textarea minLength={10} maxLength={1500} name="message" rows={4} placeholder={tx("Tell us the path, timing, and whether you already own or want to buy property.")} className="residency-input resize-none" />
                   </label>
                   {submitError ? <p role="alert" className="text-sm font-medium text-[#9A3030]">{submitError}</p> : null}
                   <div className="flex flex-col gap-4 border-t border-[#161616]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
                     <p className="max-w-[16rem] text-xs leading-5 text-[#161616]/70">{tx("By sending this form, you agree that AIXCO may contact you about your request.")}</p>
                     <button type="submit" disabled={isSubmitting} className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] px-5 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-white disabled:opacity-60">
-                      {isSubmitting ? tx("Sending...") : tx("Send request")} <ArrowUpRight size={15} />
+                      {isSubmitting ? tx("Sending...") : tx("REQUEST MY RESIDENCY BRIEF")} <ArrowUpRight size={15} />
                     </button>
                   </div>
                 </form>

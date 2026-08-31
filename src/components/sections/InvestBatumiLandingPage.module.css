@@ -98,6 +98,7 @@
   line-height: 1.25;
   text-align: center;
   text-transform: uppercase;
+  text-decoration: none;
   transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
 }
 
@@ -262,6 +263,9 @@
   font-weight: 500;
   letter-spacing: -0.065em;
   line-height: 0.9;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  word-break: normal;
 }
 
 .hero h1 span {
@@ -359,6 +363,133 @@
   color: rgb(255 255 255 / 68%);
   font-size: 0.78rem;
   line-height: 1.55;
+}
+
+.marketSection {
+  padding: clamp(5.5rem, 8vw, 8.5rem) clamp(1.25rem, 6vw, 7rem);
+  background: var(--ink);
+  color: white;
+}
+
+.marketIntro {
+  max-width: 58rem;
+}
+
+.marketIntro h2,
+.pricingIntro h2 {
+  margin: 0;
+  font-size: clamp(2.4rem, 4.5vw, 5rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.marketIntro h2 {
+  max-width: 14ch;
+  margin: 1.3rem 0 1.4rem;
+}
+
+.marketIntro > p:last-child {
+  max-width: 36rem;
+  margin: 0;
+  color: rgb(255 255 255 / 62%);
+  line-height: 1.75;
+}
+
+.marketStats {
+  margin: clamp(2.5rem, 5vw, 3.5rem) 0 1.5rem;
+  border: 1px solid rgb(255 255 255 / 18%);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.marketStats article {
+  min-height: 9.5rem;
+  padding: 1.4rem clamp(0.85rem, 1.8vw, 1.5rem) 1.6rem;
+  border-right: 1px solid rgb(255 255 255 / 18%);
+  text-align: center;
+}
+
+.marketStats article:last-child {
+  border-right: 0;
+}
+
+.marketStats strong {
+  display: block;
+  color: var(--gold);
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.marketStats span {
+  display: block;
+  margin-top: 0.85rem;
+  color: rgb(255 255 255 / 62%);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.45;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.marketSource {
+  margin: 0;
+  color: rgb(255 255 255 / 45%);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.pricingSection {
+  padding: clamp(5.5rem, 8vw, 8.5rem) clamp(1.25rem, 6vw, 7rem);
+  background: var(--ivory);
+}
+
+.pricingIntro h2 {
+  max-width: 12ch;
+  margin-top: 1.3rem;
+}
+
+.pricingGrid {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  border-top: 1px solid rgb(21 21 21 / 20%);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pricingGrid article {
+  min-height: 14rem;
+  padding: 1.5rem clamp(1rem, 2vw, 1.8rem) 2rem;
+  border-right: 1px solid rgb(21 21 21 / 20%);
+}
+
+.pricingGrid article:first-child {
+  border-left: 1px solid rgb(21 21 21 / 20%);
+}
+
+.pricingGrid article > span {
+  color: var(--gold-deep);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.pricingGrid h3 {
+  margin: 4.5rem 0 0.75rem;
+  font-size: clamp(1.35rem, 1.8vw, 1.9rem);
+  font-weight: 450;
+  letter-spacing: -0.035em;
+}
+
+.pricingGrid p {
+  margin: 0;
+  color: rgb(21 21 21 / 68%);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 .batumiSection {
@@ -516,7 +647,7 @@
   margin: clamp(3.5rem, 7vw, 6rem) 0 2.6rem;
   border-top: 1px solid rgb(255 255 255 / 20%);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .processGrid article {
@@ -716,6 +847,10 @@
 .contactPanel h2 {
   max-width: 10ch;
   margin: 1.3rem 0 1.4rem;
+}
+
+#invest-batumi-contact-title {
+  max-width: 14ch;
 }
 
 .contactIntro {
@@ -1094,6 +1229,41 @@
     border-left: 1px solid rgb(255 255 255 / 20%);
   }
 
+  .marketStats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .marketStats article:nth-child(3) {
+    border-right: 0;
+  }
+
+  .marketStats article:nth-child(4),
+  .marketStats article:nth-child(5) {
+    border-top: 1px solid rgb(255 255 255 / 18%);
+  }
+
+  .marketStats article:nth-child(4) {
+    border-left: 0;
+  }
+
+  .marketStats article:nth-child(5) {
+    grid-column: span 2;
+    border-right: 0;
+  }
+
+  .pricingGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pricingGrid article:nth-child(3) {
+    border-left: 1px solid rgb(21 21 21 / 20%);
+    border-top: 1px solid rgb(21 21 21 / 20%);
+  }
+
+  .pricingGrid article:nth-child(4) {
+    border-top: 1px solid rgb(21 21 21 / 20%);
+  }
+
   .guidanceSection,
   .contactSection {
     grid-template-columns: 1fr;
@@ -1157,7 +1327,7 @@
   }
 
   .hero h1 {
-    max-width: 9.5ch;
+    max-width: 100%;
     font-size: clamp(3.3rem, 15vw, 5.6rem);
   }
 
@@ -1236,6 +1406,39 @@
 
   .processGrid h3 {
     margin-top: 3.6rem;
+  }
+
+  .marketStats {
+    grid-template-columns: 1fr;
+  }
+
+  .marketStats article,
+  .marketStats article:nth-child(3),
+  .marketStats article:nth-child(4),
+  .marketStats article:nth-child(5) {
+    border-right: 0;
+    border-left: 0;
+    border-top: 1px solid rgb(255 255 255 / 18%);
+    grid-column: auto;
+  }
+
+  .marketStats article:first-child {
+    border-top: 0;
+  }
+
+  .pricingGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricingGrid article,
+  .pricingGrid article:nth-child(3) {
+    border-right: 1px solid rgb(21 21 21 / 20%);
+    border-left: 1px solid rgb(21 21 21 / 20%);
+    border-bottom: 1px solid rgb(21 21 21 / 20%);
+  }
+
+  .pricingGrid h3 {
+    margin-top: 3rem;
   }
 
   .galleryHeading {
@@ -1341,6 +1544,8 @@
 
   .heroContent,
   .batumiSection,
+  .marketSection,
+  .pricingSection,
   .processSection,
   .galleryHeading,
   .guidanceSection,
@@ -1474,10 +1679,33 @@
 }
 
 .paperLedPage .lensSection,
+.paperLedPage .marketSection,
 .paperLedPage .processSection,
 .paperLedPage .contactSection {
   background: var(--mineral);
   color: var(--ink);
+}
+
+.paperLedPage .marketIntro > p:last-child,
+.paperLedPage .marketStats span,
+.paperLedPage .marketSource,
+.paperLedPage .pricingGrid p {
+  color: rgb(22 22 22 / 68%);
+}
+
+.paperLedPage .marketStats,
+.paperLedPage .marketStats article,
+.paperLedPage .pricingGrid,
+.paperLedPage .pricingGrid article {
+  border-color: rgb(22 22 22 / 20%);
+}
+
+.paperLedPage .marketStats strong {
+  color: var(--gold-deep);
+}
+
+.paperLedPage .pricingSection {
+  background: var(--paper);
 }
 
 .paperLedPage .lensInner > p,
@@ -1524,6 +1752,8 @@
 
 .paperLedPage .batumiWord,
 .paperLedPage .batumiCopy h2,
+.paperLedPage .marketIntro h2,
+.paperLedPage .pricingIntro h2,
 .paperLedPage .processIntro h2,
 .paperLedPage .galleryHeading h2,
 .paperLedPage .guidanceIntro h2,

@@ -33,6 +33,14 @@ export const propertyPageTranslations = {
     ar: "Reverance مجمع سكني فاخر في البوليفارد الجديد في باتومي. تقدم AIXCO حاليا 28 شقة مختارة في الطابقين الثالث عشر والرابع عشر، ومن المقرر اكتمال المشروع في يوليو 2028.",
     pl: "Reverance to kompleks mieszkaniowy klasy premium przy Nowym Bulwarze w Batumi. AIXCO oferuje obecnie 28 wybranych apartamentów na 13. i 14. piętrze; zakończenie budowy planowane jest na lipiec 2028 r.",
   },
+  "Selected residences in one of Batumi's most dynamic coastal districts. AIXCO offers 28 selected apartments on the 13th and 14th floors of Project Reverance, with completion targeted for July 2028.": {
+    de: "Ausgewählte Residenzen in einem der dynamischsten Küstenviertel Batumis. AIXCO bietet 28 ausgewählte Wohnungen im 13. und 14. Stock von Project Reverance; Fertigstellung geplant für Juli 2028.",
+    ru: "Отобранные резиденции в одном из самых динамичных прибрежных районов Батуми. AIXCO предлагает 28 отобранных апартаментов на 13-м и 14-м этажах проекта Reverance; завершение запланировано на июль 2028 года.",
+    ka: "შერჩეული რეზიდენციები ბათუმის ერთ-ერთ ყველაზე დინამიკურ სანაპირო უბანში. AIXCO გთავაზობთ 28 შერჩეულ ბინას პროექტ Reverance-ის მე-13 და მე-14 სართულებზე; დასრულება დაგეგმილია 2028 წლის ივლისისთვის.",
+    tr: "Batum'un en dinamik sahil semtlerinden birinde seçilmiş konutlar. AIXCO, Project Reverance'ın 13. ve 14. katlarında 28 seçilmiş daire sunar; tamamlanma Temmuz 2028 olarak planlanır.",
+    ar: "مساكن مختارة في أحد أكثر أحياء باتومي الساحلية حيوية. تقدم AIXCO 28 شقة مختارة في الطابقين 13 و14 من مشروع Reverance، مع استهداف الإنجاز في يوليو 2028.",
+    pl: "Wybrane rezydencje w jednym z najbardziej dynamicznych nadmorskich dystryktów Batumi. AIXCO oferuje 28 wybranych apartamentów na 13. i 14. piętrze projektu Reverance; ukończenie planowane na lipiec 2028.",
+  },
   "Available apartments": {
     de: "Verfügbare Wohnungen",
     ru: "Доступные квартиры",

@@ -760,6 +760,7 @@ export const slovenianTranslations = {
   "Revenues": { sl: "Prihodki" },
   "Reverance": { sl: "Reverance" },
   "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for July 2028.": { sl: "Reverance je vrhunski stanovanjski kompleks na Novem bulvarju Batumi. AIXCO trenutno ponuja 28 izbrana stanovanja v 13th in 14th nadstropjih, dokončanje pa je predvideno za julij 2028." },
+  "Selected residences in one of Batumi's most dynamic coastal districts. AIXCO offers 28 selected apartments on the 13th and 14th floors of Project Reverance, with completion targeted for July 2028.": { sl: "Izbrane rezidence v enem najbolj dinamičnih obalnih okrožij Batumija. AIXCO ponuja 28 izbranih apartmajev v 13. in 14. nadstropju projekta Reverance; zaključek je predviden za julij 2028." },
   "Review Batumi apartments, legacy real estate references, client materials, and the correct onboarding route from one place.": { sl: "Preglejte stanovanja Batumi, reference starih nepremičnin, materiale strank in pravilno pot vstopa z enega mesta." },
   "Review commercial viability, positioning, and buyer suitability.": { sl: "Preglejte komercialno upravičenost, pozicioniranje in primernost za kupca." },
   "Review commercial viability, positioning, pricing, and buyer suitability.": { sl: "Preglejte komercialno upravičenost, položaj, cene in primernost za kupca." },

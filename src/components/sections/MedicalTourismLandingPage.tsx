@@ -653,6 +653,32 @@ export function MedicalTourismLandingPage() {
           </div>
         </section>
 
+        <section id="recovery" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#002147] text-white">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
+            <p className="brandbook-eyebrow brandbook-eyebrow-light">02 — {tx("Recovery")}</p>
+            <h2 className="mt-8 max-w-[14ch] text-[clamp(2.4rem,5vw,5.8rem)] font-medium leading-[0.9] tracking-[-0.065em]">
+              {tx("TREATMENT IS ONE PART OF THE JOURNEY. RECOVERY MATTERS AS MUCH.")}
+            </h2>
+            <p className="mt-8 max-w-[36rem] text-lg leading-[1.55] text-white/62">
+              {tx("Batumi offers a compact Black Sea setting for clients who want to combine treatment with a quieter recovery period away from a large capital city.")}
+            </p>
+            <div className="mt-12 grid gap-px bg-white/15 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                "BLACK SEA COAST",
+                "PRIVATE ACCOMMODATION",
+                "RESTAURANTS & DAILY SERVICES",
+                "WELLNESS",
+                "NATURE",
+                "INTERNATIONAL AIR ACCESS",
+              ].map((item) => (
+                <article key={item} className="bg-[#002147] p-6 sm:p-8">
+                  <h3 className="text-lg font-medium tracking-[-0.03em] text-[#E6C767]">{tx(item)}</h3>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section id="treatments" className="scroll-mt-20 bg-[#002147] text-white">
           <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
             <div className="flex flex-col justify-between gap-8 border-b border-white/20 pb-10 lg:flex-row lg:items-end">
@@ -751,11 +777,53 @@ export function MedicalTourismLandingPage() {
           </div>
         </section>
 
+        <section id="property-path" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#161616] text-white">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
+            <p className="brandbook-eyebrow brandbook-eyebrow-light">05 — {tx("Longer stay")}</p>
+            <h2 className="mt-8 max-w-[12ch] text-[clamp(2.4rem,5vw,5.8rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("STAY FOR A WEEK. OR THINK LONGER.")}</h2>
+            <p className="mt-6 text-xl font-medium tracking-[-0.03em] text-[#E6C767]">{tx("FROM TEMPORARY STAY TO A PLACE OF YOUR OWN.")}</p>
+            <p className="mt-8 max-w-[36rem] text-lg leading-[1.55] text-white/62">{tx("Some clients discover Georgia for a specific reason and decide they want a longer-term connection to the country. For those considering property ownership, AIXCO can introduce selected residential opportunities in Batumi.")}</p>
+            <article className="mt-12 border border-white/15 bg-white/5 p-6 sm:p-10">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">{tx("PROJECT REVERANCE")}</p>
+              <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em]">{tx("New Boulevard · Batumi")}</h3>
+              <ul className="mt-6 grid gap-3 text-sm leading-6 text-white/68 sm:grid-cols-2">
+                <li>{tx("28 AIXCO-selected apartments")}</li>
+                <li>{tx("13th & 14th floors")}</li>
+                <li>{tx("Target completion July 2028")}</li>
+              </ul>
+              <Link href="/reverance-batumi" className="brandbook-button-gold mt-8 inline-flex min-h-12 items-center gap-3 bg-[#E6C767] px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#161616]">
+                {tx("EXPLORE PROJECT REVERANCE")} <MoveRight size={17} strokeWidth={1.6} />
+              </Link>
+            </article>
+          </div>
+        </section>
+
+        <section id="why-aixco" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#F3EDE1]">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-36">
+            <p className="brandbook-eyebrow">06 — {tx("WHY AIXCO")}</p>
+            <h2 className="mt-8 max-w-[14ch] text-[clamp(2.4rem,5vw,5.8rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("ONE INTERNATIONAL POINT OF CONTACT IN GEORGIA.")}</h2>
+            <p className="mt-8 max-w-[40rem] text-lg leading-[1.55] text-[#161616]/62">{tx("AIXCO is an international real estate and private-client group with operations spanning Europe, Dubai and Georgia. Our role is to help international clients navigate selected aspects of establishing a connection with Georgia, from property and residency information to practical introductions and local coordination.")}</p>
+            <div className="mt-12 grid gap-px bg-[#161616]/10 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { value: "2009", label: "In business since" },
+                { value: "2,000+", label: "Real estate transactions" },
+                { value: "$4.2B+", label: "Property value transacted" },
+                { value: "90+", label: "Professionals" },
+              ].map((stat) => (
+                <article key={stat.label} className="bg-[#F3EDE1] p-6 text-center sm:p-7">
+                  <strong className="block text-2xl font-medium tracking-[-0.04em] text-[#7A6224] sm:text-3xl">{stat.value}</strong>
+                  <span className="mt-3 block text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-[#161616]/70">{tx(stat.label)}</span>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section id="batumi" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#F3EDE1]">
           <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-36">
             <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
               <div>
-                <p className="brandbook-eyebrow">05 — {tx("Recover in Batumi")}</p>
+                <p className="brandbook-eyebrow">07 — {tx("Recover in Batumi")}</p>
                 <h2 className="mt-8 max-w-[9ch] text-[clamp(3.2rem,5.7vw,6.6rem)] font-medium leading-[0.88] tracking-[-0.065em]">{tx("A calm coast after treatment.")}</h2>
                 <p className="mt-9 max-w-[26rem] text-lg leading-[1.55] text-[#161616]/62">{tx("Patients benefit from affordable accommodation, visa-free entry for many nationalities, and a comfortable Black Sea setting for recovery.")}</p>
                 <p className="mt-6 max-w-[26rem] text-lg leading-[1.55] text-[#161616]/62">{tx("Combine treatment with property ownership in Batumi. AIXCO currently offers 28 selected apartments at Project Reverance, 8 minutes from Batumi Medical Center.")}</p>
@@ -803,7 +871,7 @@ export function MedicalTourismLandingPage() {
         <section id="contact" className="scroll-mt-20 bg-[#161616] text-white">
           <div className="mx-auto grid w-full max-w-[1600px] gap-16 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24 lg:px-14 lg:py-32">
             <div>
-              <p className="brandbook-eyebrow brandbook-eyebrow-light">06 — {tx("Start with AIXCO")}</p>
+              <p className="brandbook-eyebrow brandbook-eyebrow-light">08 — {tx("Start with AIXCO")}</p>
               <h2 className="mt-8 max-w-[8ch] text-[clamp(3.2rem,5.7vw,6.7rem)] font-medium leading-[0.88] tracking-[-0.065em]">{tx("Contact AIXCO")}</h2>
               <p className="mt-9 max-w-[25rem] text-lg leading-[1.55] text-white/60">{tx("Tell us the treatment you are considering. The AIXCO team will follow up with a private brief.")}</p>
               <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-5 text-[0.62rem] font-semibold uppercase tracking-[0.17em] text-white/60">
