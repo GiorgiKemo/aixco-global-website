@@ -431,26 +431,6 @@
   text-shadow: 0 1px 12px rgb(0 0 0 / 0.48);
 }
 
-.heroIndex {
-  position: absolute;
-  inset-block-end: 1.5rem;
-  inset-inline-start: clamp(1.5rem, 4vw, 4rem);
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  color: var(--gold-deep);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-}
-
-.heroIndex span:nth-child(2) {
-  display: block;
-  width: 2.5rem;
-  height: 1px;
-  background: var(--gold-deep);
-}
-
 .clockSection {
   padding: clamp(6rem, 11vw, 12rem) clamp(1.5rem, 6vw, 8rem);
   background: var(--paper-light);
@@ -1614,13 +1594,6 @@
     min-height: min(76vw, 35rem);
   }
 
-  .heroIndex {
-    inset-block-end: auto;
-    inset-block-start: 40.2rem;
-    inset-inline-end: 1rem;
-    inset-inline-start: auto;
-  }
-
   .sectionGrid,
   .pathwayGrid,
   .chapterSection,
@@ -1752,10 +1725,6 @@
 
   .heroImageInner img {
     object-position: 54% 65%;
-  }
-
-  .heroIndex {
-    display: none;
   }
 
   .clockSection,

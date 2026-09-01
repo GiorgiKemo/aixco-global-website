@@ -923,7 +923,6 @@ export function GeorgiaTaxResidencyLandingPage() {
             </motion.div>
             <div className={styles.heroMediaCaption}><span>{content.hero.location}</span><span>41.6168° N · 41.6367° E</span></div>
           </div>
-          <div className={styles.heroIndex} aria-hidden="true"><span>01</span><span /><span>04</span></div>
         </section>
 
         <section id="clock" className={`${styles.clockSection} ${styles.pathwaySection}`} aria-labelledby="pathway-title">
