@@ -803,11 +803,215 @@ export function BrandbookLandingPage() {
           </div>
         </section>
 
+        <section id="why-batumi" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#002147] text-white">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
+            <p className="brandbook-eyebrow brandbook-eyebrow-light">02 — {tx("WHY BATUMI")}</p>
+            <h2 className="mt-8 max-w-[16ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.92] tracking-[-0.065em]">
+              {tx("Batumi combines Black Sea tourism, international demand, new infrastructure and comparatively accessible residential pricing.")}
+            </h2>
+            <div className="mt-12 grid gap-px bg-white/15 sm:grid-cols-2 lg:grid-cols-5">
+              {batumiMarketStats.map((stat) => (
+                <article key={stat.label} className="bg-[#002147] p-6 text-center sm:p-7">
+                  <strong className="block text-2xl font-medium tracking-[-0.04em] text-[#E6C767] sm:text-3xl">{tx(stat.value)}</strong>
+                  <span className="mt-3 block text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-white/70">{tx(stat.label)}</span>
+                </article>
+              ))}
+            </div>
+            <p className="mt-8 text-[0.72rem] leading-5 text-white/50">{tx("Sources: Galt & Taggart Research; Colliers Georgia.")}</p>
+          </div>
+        </section>
+
+        <section id="residence" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#F3EDE1]">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-36">
+            <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
+              <div>
+                <p className="brandbook-eyebrow">03 — {tx("WHY REVERANCE")}</p>
+                <h2 className="mt-8 max-w-[14ch] text-[clamp(2.4rem,5.2vw,5.6rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("BUILT FOR LIVING. POSITIONED FOR OWNERSHIP.")}</h2>
+                <p className="mt-9 max-w-[24rem] text-lg leading-[1.55] text-[#161616]/62">{tx("Reverance is a premium residential development on Batumi's New Boulevard, combining contemporary residences, resident amenities and access to one of the city's most active development districts.")}</p>
+                <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+                  <Link href={currentProjectHref} className="brandbook-text-link inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em]">{tx("View the complete residence")} <MoveRight size={17} strokeWidth={1.6} /></Link>
+                  <Link href="/reverance-batumi/calculator" className="inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#6A5417] transition-colors hover:text-[#161616]">{tx("Model your investment")} <ArrowUpRight size={17} strokeWidth={1.6} /></Link>
+                </div>
+              </div>
+
+              <figure className="group relative min-h-[24rem] overflow-hidden bg-[#9A9A9A] lg:min-h-[39rem]">
+                <Image src={projectImages.lounge.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                <button type="button" aria-label={tx("Expand the Reverance residential towers image")} onClick={() => setExpandedImage({ ...projectImages.lounge, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
+                  <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                    <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
+                  </span>
+                </button>
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project Reverance")}</figcaption>
+              </figure>
+            </div>
+
+            <div className="mt-16 border-t border-[#161616]/15 pt-8 lg:mt-24">
+              <p className="brandbook-eyebrow">{tx("Project benefits")}</p>
+              <div className="mt-6">
+                <div className="grid gap-px bg-[#161616]/15 sm:grid-cols-2 lg:hidden">
+                  {projectBenefits.map(renderBenefitCard)}
+                </div>
+                <div className="hidden lg:block">
+                  <div className="grid gap-1.5 bg-transparent lg:grid-cols-3">
+                    {projectBenefits.slice(0, 3).map(renderBenefitCard)}
+                  </div>
+                  <div className="mt-1.5 flex justify-center">
+                    <div className="grid w-2/3 grid-cols-2 gap-1.5 bg-transparent">
+                      {projectBenefits.slice(3).map(renderBenefitCard)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="payment" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#F3EDE1]">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-36">
+            <p className="brandbook-eyebrow">04 — {tx("PAYMENT STRUCTURE")}</p>
+            <h2 className="mt-8 max-w-[14ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("OWN YOUR APARTMENT. PAY IN STAGES.")}</h2>
+            <div className="mt-12 grid gap-6 lg:grid-cols-3">
+              {paymentStages.map((stage, index) => (
+                <article key={stage.title} className="border border-[#161616]/15 bg-white/40 p-6 sm:p-8">
+                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#6A5417]">{String(index + 1).padStart(2, "0")}</p>
+                  <strong className="mt-4 block text-4xl font-medium tracking-[-0.05em]">{tx(stage.value)}</strong>
+                  <h3 className="mt-3 text-lg font-medium tracking-[-0.03em]">{tx(stage.title)}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx(stage.body)}</p>
+                </article>
+              ))}
+            </div>
+            <p className="mt-8 max-w-[34rem] text-base leading-[1.55] text-[#161616]/62">{tx("A structured route to ownership without paying the full property price upfront.")}</p>
+            <Link href="/reverance-batumi/calculator" className="brandbook-button-gold mt-8 inline-flex min-h-12 items-center gap-3 bg-[#E6C767] px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#161616]">
+              {tx("CALCULATE MY PAYMENT PLAN")} <ArrowUpRight size={16} strokeWidth={1.8} />
+            </Link>
+          </div>
+        </section>
+
+        <section id="ownership" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#F3EDE1]">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-36">
+            <p className="brandbook-eyebrow">06 — {tx("OWNERSHIP IN GEORGIA")}</p>
+            <h2 className="mt-8 max-w-[22ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("A PROPERTY MARKET BUILT FOR INTERNATIONAL OWNERS.")}</h2>
+            <div className="mt-10">
+              <div className="grid gap-px bg-[#161616]/15 sm:grid-cols-2 lg:hidden">
+                {ownershipBenefits.map(renderBenefitCard)}
+              </div>
+              <div className="hidden lg:block">
+                <div className="grid gap-1.5 bg-transparent lg:grid-cols-3">
+                  {ownershipBenefits.slice(0, 3).map(renderBenefitCard)}
+                </div>
+                <div className="mt-1.5 flex justify-center">
+                  <div className="grid w-2/3 grid-cols-2 gap-1.5 bg-transparent">
+                    {ownershipBenefits.slice(3).map(renderBenefitCard)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="why-aixco" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#161616] text-white">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
+            <p className="brandbook-eyebrow brandbook-eyebrow-light">08 — {tx("WHY AIXCO")}</p>
+            <h2 className="mt-8 max-w-[12ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("WE DON'T JUST BUY PROPERTY. WE SELECT IT.")}</h2>
+            <p className="mt-6 max-w-[34rem] text-lg leading-[1.55] text-white/62">{tx("AIXCO combines international real estate experience with disciplined asset selection and local execution.")}</p>
+            <div className="mt-12 grid gap-px bg-white/15 sm:grid-cols-2 lg:grid-cols-5">
+              {aixcoCredibilityStats.map((stat) => (
+                <article key={stat.label} className="bg-[#161616] p-6 text-center sm:p-7">
+                  <strong className="block text-2xl font-medium tracking-[-0.04em] text-[#E6C767] sm:text-3xl">{tx(stat.value)}</strong>
+                  <span className="mt-3 block text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-white/70">{tx(stat.label)}</span>
+                </article>
+              ))}
+            </div>
+            <p className="mt-10 max-w-[40rem] text-base leading-[1.55] text-white/58">{tx("Our role is not to show you every property on the market. It is to identify selected assets based on location, pricing, development quality, ownership structure and long-term market fundamentals.")}</p>
+            <p className="mt-4 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#E6C767]">{tx("SWISS HERITAGE → DUBAI EXPERIENCE → BATUMI OPPORTUNITY")}</p>
+          </div>
+        </section>
+
+        <section id="research" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#F3EDE1]">
+          <div className="mx-auto grid w-full max-w-[1600px] gap-12 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-2 lg:gap-20 lg:px-14 lg:py-36">
+            <div>
+              <p className="brandbook-eyebrow">09 — {tx("INDEPENDENT MARKET RESEARCH")}</p>
+              <h2 className="mt-8 max-w-[10ch] text-[clamp(2.2rem,4.8vw,4.8rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("DECISIONS SUPPORTED BY DATA.")}</h2>
+              <p className="mt-8 text-base leading-[1.55] text-[#161616]/62">{tx("AIXCO uses independent third-party market research alongside its own due diligence when evaluating markets and projects.")}</p>
+            </div>
+            <div className="grid gap-6">
+              <article className="border border-[#161616]/15 bg-white/50 p-6 sm:p-8">
+                <h3 className="text-xl font-medium tracking-[-0.03em]">{tx("COLLIERS")}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx("Global real estate advisory and research firm providing professional property-market intelligence across international markets.")}</p>
+              </article>
+              <article className="border border-[#161616]/15 bg-white/50 p-6 sm:p-8">
+                <h3 className="text-xl font-medium tracking-[-0.03em]">{tx("GALT & TAGGART")}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx("Leading Georgian investment bank and research house providing in-depth analysis of Georgia's economy, capital markets and real estate sector.")}</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="gallery" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#161616] text-white">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
+            <div className="flex flex-col justify-between gap-8 border-b border-white/20 pb-10 lg:flex-row lg:items-end">
+              <div>
+                <p className="brandbook-eyebrow brandbook-eyebrow-light">10 — {tx("Project gallery")}</p>
+                <h2 className="mt-8 max-w-[12ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("Reverance project gallery")}</h2>
+              </div>
+              <p className="max-w-[28rem] text-base leading-[1.55] text-white/62">{tx("Reverance is a premium residential development on Batumi's New Boulevard, combining contemporary residences, resident amenities and access to one of the city's most active development districts.")}</p>
+            </div>
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <figure className="group relative aspect-[1.15] overflow-hidden bg-[#9A9A9A] sm:aspect-[1.25]">
+                <Image src={projectImages.arrival.src} alt={tx("Reverance arrival and landscaped exterior project render")} fill quality={90} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ ...projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
+                  <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                    <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
+                  </span>
+                </button>
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
+              </figure>
+              <figure className="group relative aspect-[1.15] overflow-hidden bg-[#9A9A9A] sm:aspect-[1.25]">
+                <Image src={projectImages.gym.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ ...projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
+                  <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                    <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
+                  </span>
+                </button>
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
+              </figure>
+              <figure className="group relative aspect-[1.15] overflow-hidden bg-[#9A9A9A] sm:aspect-[1.25]">
+                <Image src={projectImages.aerial.src} alt={tx("The Reverance residence exterior in Batumi")} fill quality={90} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
+                <button type="button" aria-label={tx("Expand the Reverance residence exterior image")} onClick={() => setExpandedImage({ ...projectImages.aerial, alt: tx("The Reverance residence exterior in Batumi") })} className="absolute inset-0 z-10 cursor-zoom-in">
+                  <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                    <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
+                  </span>
+                </button>
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#002147] text-white">
+          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
+            <p className="brandbook-eyebrow brandbook-eyebrow-light">11 — {tx("FAQ")}</p>
+            <h2 className="mt-8 max-w-[12ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("WHAT BUYERS USUALLY ASK.")}</h2>
+            <div className="mt-12 grid gap-px bg-white/15">
+              {faqItems.map((item) => (
+                <article key={item.question} className="bg-[#002147] p-6 sm:p-8">
+                  <h3 className="text-lg font-medium tracking-[-0.03em] text-[#E6C767]">{tx(item.question)}</h3>
+                  <p className="mt-3 max-w-[40rem] text-sm leading-6 text-white/68">{tx(item.answer)}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section id="approach" className="scroll-mt-20 bg-[#002147] text-white">
           <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
             <div className="flex flex-col justify-between gap-8 border-b border-white/20 pb-10 lg:flex-row lg:items-end">
               <div>
-                <p className="brandbook-eyebrow brandbook-eyebrow-light">02 — {tx("How to work with AIXCO")}</p>
+                <p className="brandbook-eyebrow brandbook-eyebrow-light">{tx("The AIXCO way")}</p>
                 <h2 className="mt-8 max-w-[10ch] text-[clamp(3.2rem,5.6vw,6.5rem)] font-medium leading-[0.88] tracking-[-0.065em]">{tx("ACQUIRE. PARTNER. CREATE VALUE.")}</h2>
               </div>
               <p className="max-w-[23rem] text-base leading-[1.55] text-white/60 lg:pb-2">{tx("From property ownership and strategic partnership to professional asset management, AIXCO is with you at every stage of the journey.")}</p>
@@ -830,187 +1034,10 @@ export function BrandbookLandingPage() {
           </div>
         </section>
 
-        <section id="residence" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#F3EDE1]">
-          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-36">
-            <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
-              <div>
-                <p className="brandbook-eyebrow">03 — {tx("WHY REVERANCE")}</p>
-                <h2 className="mt-8 max-w-[14ch] text-[clamp(2.4rem,5.2vw,5.6rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("BUILT FOR LIVING. POSITIONED FOR OWNERSHIP.")}</h2>
-                <p className="mt-9 max-w-[24rem] text-lg leading-[1.55] text-[#161616]/62">{tx("Reverance is a premium residential development on Batumi's New Boulevard, combining contemporary residences, resident amenities and access to one of the city's most active development districts.")}</p>
-                <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
-                  <Link href={currentProjectHref} className="brandbook-text-link inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em]">{tx("View the complete residence")} <MoveRight size={17} strokeWidth={1.6} /></Link>
-                  <Link href="/reverance-batumi/calculator" className="inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#6A5417] transition-colors hover:text-[#161616]">{tx("Model your investment")} <ArrowUpRight size={17} strokeWidth={1.6} /></Link>
-                </div>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <figure className="group relative aspect-[0.92] overflow-hidden bg-[#9A9A9A] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
-                      <Image src={projectImages.lounge.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 50vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <button type="button" aria-label={tx("Expand the Reverance residential towers image")} onClick={() => setExpandedImage({ ...projectImages.lounge, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
-                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                      <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
-                    </span>
-                  </button>
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
-                </figure>
-                <figure className="group relative aspect-[1.25] overflow-hidden bg-[#9A9A9A]">
-                      <Image src={projectImages.arrival.src} alt={tx("Reverance arrival and landscaped exterior project render")} fill quality={90} sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ ...projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
-                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                      <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
-                    </span>
-                  </button>
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
-                </figure>
-                <figure className="group relative aspect-[1.25] overflow-hidden bg-[#9A9A9A]">
-                      <Image src={projectImages.gym.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                  <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ ...projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
-                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                      <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
-                    </span>
-                  </button>
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
-                </figure>
-              </div>
-            </div>
-
-            <div className="mt-16 border-t border-[#161616]/15 pt-8 lg:mt-24">
-              <p className="brandbook-eyebrow">{tx("Project benefits")}</p>
-              <div className="mt-6">
-                <div className="grid gap-px bg-[#161616]/15 sm:grid-cols-2 lg:hidden">
-                  {projectBenefits.map(renderBenefitCard)}
-                </div>
-                <div className="hidden lg:block">
-                  <div className="grid gap-1.5 bg-transparent lg:grid-cols-3">
-                    {projectBenefits.slice(0, 3).map(renderBenefitCard)}
-                  </div>
-                  <div className="mt-1.5 flex justify-center">
-                    <div className="grid w-2/3 grid-cols-2 gap-1.5 bg-transparent">
-                      {projectBenefits.slice(3).map(renderBenefitCard)}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <p className="brandbook-eyebrow mt-14">{tx("OWNERSHIP IN GEORGIA")}</p>
-              <h3 className="mt-4 max-w-[22ch] text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("A PROPERTY MARKET BUILT FOR INTERNATIONAL OWNERS.")}</h3>
-              <div className="mt-6">
-                <div className="grid gap-px bg-[#161616]/15 sm:grid-cols-2 lg:hidden">
-                  {ownershipBenefits.map(renderBenefitCard)}
-                </div>
-                <div className="hidden lg:block">
-                  <div className="grid gap-1.5 bg-transparent lg:grid-cols-3">
-                    {ownershipBenefits.slice(0, 3).map(renderBenefitCard)}
-                  </div>
-                  <div className="mt-1.5 flex justify-center">
-                    <div className="grid w-2/3 grid-cols-2 gap-1.5 bg-transparent">
-                      {ownershipBenefits.slice(3).map(renderBenefitCard)}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="why-batumi" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#002147] text-white">
-          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
-            <p className="brandbook-eyebrow brandbook-eyebrow-light">04 — {tx("WHY BATUMI")}</p>
-            <h2 className="mt-8 max-w-[16ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.92] tracking-[-0.065em]">
-              {tx("Batumi combines Black Sea tourism, international demand, new infrastructure and comparatively accessible residential pricing.")}
-            </h2>
-            <div className="mt-12 grid gap-px bg-white/15 sm:grid-cols-2 lg:grid-cols-5">
-              {batumiMarketStats.map((stat) => (
-                <article key={stat.label} className="bg-[#002147] p-6 text-center sm:p-7">
-                  <strong className="block text-2xl font-medium tracking-[-0.04em] text-[#E6C767] sm:text-3xl">{tx(stat.value)}</strong>
-                  <span className="mt-3 block text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-white/70">{tx(stat.label)}</span>
-                </article>
-              ))}
-            </div>
-            <p className="mt-8 text-[0.72rem] leading-5 text-white/50">{tx("Sources: Galt & Taggart Research; Colliers Georgia.")}</p>
-          </div>
-        </section>
-
-        <section id="payment" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#F3EDE1]">
-          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-36">
-            <p className="brandbook-eyebrow">05 — {tx("PAYMENT STRUCTURE")}</p>
-            <h2 className="mt-8 max-w-[14ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("OWN YOUR APARTMENT. PAY IN STAGES.")}</h2>
-            <div className="mt-12 grid gap-6 lg:grid-cols-3">
-              {paymentStages.map((stage, index) => (
-                <article key={stage.title} className="border border-[#161616]/15 bg-white/40 p-6 sm:p-8">
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#6A5417]">{String(index + 1).padStart(2, "0")}</p>
-                  <strong className="mt-4 block text-4xl font-medium tracking-[-0.05em]">{tx(stage.value)}</strong>
-                  <h3 className="mt-3 text-lg font-medium tracking-[-0.03em]">{tx(stage.title)}</h3>
-                  <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx(stage.body)}</p>
-                </article>
-              ))}
-            </div>
-            <p className="mt-8 max-w-[34rem] text-base leading-[1.55] text-[#161616]/62">{tx("A structured route to ownership without paying the full property price upfront.")}</p>
-            <Link href="/reverance-batumi/calculator" className="brandbook-button-gold mt-8 inline-flex min-h-12 items-center gap-3 bg-[#E6C767] px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#161616]">
-              {tx("CALCULATE MY PAYMENT PLAN")} <ArrowUpRight size={16} strokeWidth={1.8} />
-            </Link>
-          </div>
-        </section>
-
-        <section id="why-aixco" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#161616] text-white">
-          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
-            <p className="brandbook-eyebrow brandbook-eyebrow-light">06 — {tx("WHY AIXCO")}</p>
-            <h2 className="mt-8 max-w-[12ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("WE DON'T JUST BUY PROPERTY. WE SELECT IT.")}</h2>
-            <p className="mt-6 max-w-[34rem] text-lg leading-[1.55] text-white/62">{tx("AIXCO combines international real estate experience with disciplined asset selection and local execution.")}</p>
-            <div className="mt-12 grid gap-px bg-white/15 sm:grid-cols-2 lg:grid-cols-5">
-              {aixcoCredibilityStats.map((stat) => (
-                <article key={stat.label} className="bg-[#161616] p-6 text-center sm:p-7">
-                  <strong className="block text-2xl font-medium tracking-[-0.04em] text-[#E6C767] sm:text-3xl">{tx(stat.value)}</strong>
-                  <span className="mt-3 block text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-white/70">{tx(stat.label)}</span>
-                </article>
-              ))}
-            </div>
-            <p className="mt-10 max-w-[40rem] text-base leading-[1.55] text-white/58">{tx("Our role is not to show you every property on the market. It is to identify selected assets based on location, pricing, development quality, ownership structure and long-term market fundamentals.")}</p>
-            <p className="mt-4 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#E6C767]">{tx("SWISS HERITAGE → DUBAI EXPERIENCE → BATUMI OPPORTUNITY")}</p>
-          </div>
-        </section>
-
-        <section id="research" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#F3EDE1]">
-          <div className="mx-auto grid w-full max-w-[1600px] gap-12 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-2 lg:gap-20 lg:px-14 lg:py-36">
-            <div>
-              <p className="brandbook-eyebrow">07 — {tx("INDEPENDENT MARKET RESEARCH")}</p>
-              <h2 className="mt-8 max-w-[10ch] text-[clamp(2.2rem,4.8vw,4.8rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("DECISIONS SUPPORTED BY DATA.")}</h2>
-              <p className="mt-8 text-base leading-[1.55] text-[#161616]/62">{tx("AIXCO uses independent third-party market research alongside its own due diligence when evaluating markets and projects.")}</p>
-            </div>
-            <div className="grid gap-6">
-              <article className="border border-[#161616]/15 bg-white/50 p-6 sm:p-8">
-                <h3 className="text-xl font-medium tracking-[-0.03em]">{tx("COLLIERS")}</h3>
-                <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx("Global real estate advisory and research firm providing professional property-market intelligence across international markets.")}</p>
-              </article>
-              <article className="border border-[#161616]/15 bg-white/50 p-6 sm:p-8">
-                <h3 className="text-xl font-medium tracking-[-0.03em]">{tx("GALT & TAGGART")}</h3>
-                <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx("Leading Georgian investment bank and research house providing in-depth analysis of Georgia's economy, capital markets and real estate sector.")}</p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section id="faq" className="scroll-mt-20 border-b border-[#161616]/10 bg-[#002147] text-white">
-          <div className="mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28 lg:px-14 lg:py-32">
-            <p className="brandbook-eyebrow brandbook-eyebrow-light">08 — {tx("FAQ")}</p>
-            <h2 className="mt-8 max-w-[12ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("WHAT BUYERS USUALLY ASK.")}</h2>
-            <div className="mt-12 grid gap-px bg-white/15">
-              {faqItems.map((item) => (
-                <article key={item.question} className="bg-[#002147] p-6 sm:p-8">
-                  <h3 className="text-lg font-medium tracking-[-0.03em] text-[#E6C767]">{tx(item.question)}</h3>
-                  <p className="mt-3 max-w-[40rem] text-sm leading-6 text-white/68">{tx(item.answer)}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <section id="contact" className="scroll-mt-20 bg-[#161616] text-white">
           <div className="mx-auto grid w-full max-w-[1600px] gap-16 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24 lg:px-14 lg:py-32">
             <div>
-              <p className="brandbook-eyebrow brandbook-eyebrow-light">09 — {tx("Start with AIXCO")}</p>
+              <p className="brandbook-eyebrow brandbook-eyebrow-light">{tx("Start with AIXCO")}</p>
               <h2 className="mt-8 max-w-[12ch] text-[clamp(2.4rem,5.2vw,5.4rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("YOUR REVERANCE PROPERTY STARTS HERE.")}</h2>
               <p className="mt-9 max-w-[25rem] text-lg leading-[1.55] text-white/60">{tx("Tell us what you're looking for. We'll show you the available apartments that best match your budget and objective.")}</p>
               <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-5 text-[0.62rem] font-semibold uppercase tracking-[0.17em] text-white/60">
