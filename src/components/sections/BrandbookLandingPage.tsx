@@ -4,11 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
+  ArrowLeft,
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
   Check,
   ChevronDown,
+  Eye,
   Globe,
   Maximize2,
   Menu,
@@ -40,6 +42,56 @@ const projectImages = {
   lounge: { src: aixcoCurrentProjectGalleryImages[12].src, width: 3935, height: 2733 },
   gym: { src: aixcoCurrentProjectGalleryImages[15].src, width: 3840, height: 2160 },
 } as const;
+
+const amenityGalleryImage = (index: number, width: number, height: number, alt: string, caption: string) => {
+  const image = aixcoCurrentProjectGalleryImages[index];
+  return { src: image.src, thumbnailSrc: image.thumbnailSrc, width, height, alt, caption };
+};
+
+const amenityGallery = [
+  {
+    id: "pool",
+    label: "Pool",
+    description: "Indoor and courtyard water spaces.",
+    images: [
+      amenityGalleryImage(16, 4096, 2731, "Reverance indoor pool project render", "Indoor pool"),
+      amenityGalleryImage(17, 4096, 2731, "Reverance indoor pool project render", "Pool lounge"),
+      amenityGalleryImage(18, 3840, 2160, "Reverance courtyard pool project render", "Courtyard pool"),
+    ],
+  },
+  {
+    id: "wellness",
+    label: "Wellness",
+    description: "Gym, sauna and restorative resident spaces.",
+    images: [
+      amenityGalleryImage(15, 3840, 2160, "Reverance gym and wellness project render", "Resident gym"),
+      amenityGalleryImage(19, 3840, 2160, "Reverance sauna project render", "Resident sauna"),
+      amenityGalleryImage(14, 4096, 4096, "Reverance private lounge project render", "Private lounge"),
+    ],
+  },
+  {
+    id: "landscaped",
+    label: "Landscaped areas",
+    description: "Arrival sequences, terraces and planted outdoor spaces.",
+    images: [
+      amenityGalleryImage(5, 4000, 4000, "Reverance landscaped entrance project render", "Landscaped arrival"),
+      amenityGalleryImage(8, 4000, 4000, "Reverance pool terrace project render", "Pool terrace"),
+      amenityGalleryImage(10, 4000, 4000, "Reverance planted arrival project render", "Night arrival"),
+    ],
+  },
+  {
+    id: "resident-facilities",
+    label: "Resident facilities",
+    description: "Reception, lounges and resident-facing facilities.",
+    images: [
+      amenityGalleryImage(11, 4096, 2733, "Reverance reception project render", "Reception"),
+      amenityGalleryImage(12, 3935, 2733, "Reverance resident lounge project render", "Lobby lounge"),
+      amenityGalleryImage(14, 1920, 1080, "Reverance business lounge project render", "Business lounge"),
+    ],
+  },
+] as const;
+
+type AmenityCategoryId = (typeof amenityGallery)[number]["id"];
 
 type ExpandedImage = {
   src: string;
@@ -96,6 +148,143 @@ export function ExpandedProjectImageModal({ image, dialogLabel, closeLabel, onCl
           sizes="92vw"
           className="h-auto max-h-[82dvh] w-auto max-w-[92vw] object-contain"
         />
+      </div>
+    </div>
+  );
+}
+
+type AmenitiesGalleryModalProps = {
+  tx: (text: string) => string;
+  onClose: () => void;
+};
+
+function AmenitiesGalleryModal({ tx, onClose }: AmenitiesGalleryModalProps) {
+  const [activeCategoryId, setActiveCategoryId] = useState<AmenityCategoryId>("pool");
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const activeCategory = amenityGallery.find((category) => category.id === activeCategoryId) ?? amenityGallery[0];
+  const activeImage = activeCategory.images[activeImageIndex] ?? activeCategory.images[0];
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+      if (event.key === "ArrowLeft") setActiveImageIndex((current) => (current - 1 + activeCategory.images.length) % activeCategory.images.length);
+      if (event.key === "ArrowRight") setActiveImageIndex((current) => (current + 1) % activeCategory.images.length);
+    };
+
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeCategory.images.length, onClose]);
+
+  const changeImage = (step: number) => {
+    setActiveImageIndex((current) => (current + step + activeCategory.images.length) % activeCategory.images.length);
+  };
+
+  return (
+    <div
+      id="amenities-gallery-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="amenities-gallery-title"
+      className="fixed inset-0 z-[110] overflow-y-auto bg-[#071016]/85 p-3 backdrop-blur-sm sm:p-6 lg:p-10"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="mx-auto flex min-h-full w-full max-w-[112rem] items-center justify-center py-2 sm:py-6"
+        onClick={(event) => {
+          if (event.target === event.currentTarget) onClose();
+        }}
+      >
+        <div className="grid w-full overflow-hidden border border-white/15 bg-[#F3EDE1] shadow-2xl lg:grid-cols-[minmax(0,1fr)_20rem]" onClick={(event) => event.stopPropagation()}>
+          <section className="min-w-0 bg-[#161616] p-4 text-white sm:p-6 lg:p-8">
+            <div className="flex items-start justify-between gap-5">
+              <div>
+                <p className="flex items-center gap-3 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]"><span className="h-px w-8 bg-[#E6C767]" /> {tx("Amenities gallery")}</p>
+                <h2 id="amenities-gallery-title" className="mt-4 max-w-[14ch] text-[clamp(2rem,4vw,4.4rem)] font-medium leading-[0.9] tracking-[-0.06em]">{tx("RESIDENT AMENITIES")}</h2>
+              </div>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                aria-label={tx("Close amenities gallery")}
+                onClick={onClose}
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-white/30 text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767]"
+              >
+                <X size={20} strokeWidth={1.6} />
+              </button>
+            </div>
+
+            <div className="relative mt-6 flex min-h-[18rem] items-center justify-center overflow-hidden border border-white/10 bg-[#26363D] p-3 sm:min-h-[min(58vh,38rem)] sm:p-8">
+              <Image src={activeImage.src} alt={tx(activeImage.alt)} width={activeImage.width} height={activeImage.height} sizes="(max-width: 1024px) calc(100vw - 2rem), 70vw" className="max-h-[58vh] w-auto max-w-full object-contain" />
+              <button type="button" aria-label={tx("Previous amenity image")} onClick={() => changeImage(-1)} className="absolute left-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/30 bg-[#161616]/55 text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767] sm:left-5">
+                <ArrowLeft size={18} strokeWidth={1.6} />
+              </button>
+              <button type="button" aria-label={tx("Next amenity image")} onClick={() => changeImage(1)} className="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/30 bg-[#161616]/55 text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767] sm:right-5">
+                <ArrowRight size={18} strokeWidth={1.6} />
+              </button>
+              <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-end justify-between gap-4 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:inset-x-8 sm:bottom-6">
+                <span>{tx(activeImage.caption)}</span>
+                <span className="text-[#E6C767]">{String(activeImageIndex + 1).padStart(2, "0")} / {String(activeCategory.images.length).padStart(2, "0")}</span>
+              </div>
+            </div>
+
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              {activeCategory.images.map((image, index) => (
+                <button
+                  key={image.src}
+                  type="button"
+                  aria-label={`${tx("View amenity image")}: ${tx(image.caption)}`}
+                  aria-pressed={activeImageIndex === index}
+                  onClick={() => setActiveImageIndex(index)}
+                  className={`group relative overflow-hidden border text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767] ${activeImageIndex === index ? "border-[#E6C767]" : "border-white/10 hover:border-white/60"}`}
+                >
+                  <span className="relative block aspect-[1.45] bg-[#26363D]">
+                    <Image src={image.thumbnailSrc} alt="" fill sizes="(max-width: 640px) 30vw, 18vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <span className={`absolute inset-0 transition-colors ${activeImageIndex === index ? "bg-[#E6C767]/20" : "bg-[#161616]/20 group-hover:bg-transparent"}`} />
+                  </span>
+                  <span className="block truncate bg-[#161616] px-2 py-2 text-[0.54rem] font-semibold uppercase tracking-[0.12em] text-white/75">{tx(image.caption)}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          <aside className="bg-[#F3EDE1] p-5 text-[#161616] sm:p-7 lg:p-8">
+            <p className="brandbook-eyebrow">{tx("Choose an amenity")}</p>
+            <h3 className="mt-5 max-w-[12ch] text-3xl font-medium leading-[0.95] tracking-[-0.05em] sm:text-4xl">{tx("See the resident experience.")}</h3>
+            <p className="mt-5 text-base leading-[1.55] text-[#161616]/62">{tx("Explore the confirmed resident amenities through project visuals.")}</p>
+
+            <div className="mt-8 grid gap-2">
+              {amenityGallery.map((category, index) => {
+                const isActive = activeCategoryId === category.id;
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    aria-pressed={isActive}
+                    onClick={() => {
+                      setActiveCategoryId(category.id);
+                      setActiveImageIndex(0);
+                    }}
+                    className={`group grid grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-3 border p-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767] ${isActive ? "border-[#6A5417] bg-[#E6C767]" : "border-[#161616]/15 bg-white/35 hover:border-[#6A5417]/60 hover:bg-white/70"}`}
+                  >
+                    <span className={`pt-0.5 text-[0.6rem] font-semibold tracking-[0.16em] ${isActive ? "text-[#161616]/65" : "text-[#6A5417]"}`}>{String(index + 1).padStart(2, "0")}</span>
+                    <span className="min-w-0"><strong className="block text-sm font-semibold uppercase tracking-[0.08em]">{tx(category.label)}</strong><small className={`mt-1 block text-xs leading-[1.4] ${isActive ? "text-[#161616]/70" : "text-[#161616]/58"}`}>{tx(category.description)}</small></span>
+                    <ArrowRight size={17} strokeWidth={1.6} className={`mt-0.5 transition-transform group-hover:translate-x-1 ${isActive ? "text-[#161616]" : "text-[#6A5417]"}`} />
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-8 border-t border-[#161616]/15 pt-4 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-[#161616]/55">{tx("Confirmed amenity set")}</div>
+          </aside>
+        </div>
       </div>
     </div>
   );
@@ -188,16 +377,40 @@ export function BrandbookLandingPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [requestReference, setRequestReference] = useState<string | null>(null);
   const [expandedImage, setExpandedImage] = useState<ExpandedImage | null>(null);
+  const [amenitiesOpen, setAmenitiesOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const languageSwitcherRef = useRef<HTMLDivElement | null>(null);
   const formStartedAtRef = useRef(Date.now());
   const currentLangName = LANGS.find((option) => option.code === lang)?.native ?? lang.toUpperCase();
-  const renderBenefitCard = (benefit: { title: string; body: string }) => (
-    <article key={benefit.title} className="bg-[#F3EDE1] p-6 sm:p-7">
-      <h3 className="text-lg font-medium tracking-[-0.035em] sm:text-xl">{tx(benefit.title)}</h3>
-      <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx(benefit.body)}</p>
-    </article>
-  );
+  const renderBenefitCard = (benefit: { title: string; body: string }) => {
+    const isAmenitiesCard = benefit.title === "RESIDENT AMENITIES";
+    const cardContent = (
+      <>
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="text-lg font-medium tracking-[-0.035em] sm:text-xl">{tx(benefit.title)}</h3>
+          {isAmenitiesCard ? <ArrowUpRight size={18} strokeWidth={1.6} className="shrink-0 text-[#6A5417] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /> : null}
+        </div>
+        <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx(benefit.body)}</p>
+      </>
+    );
+
+    if (isAmenitiesCard) {
+      return (
+        <button
+          key={benefit.title}
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="amenities-gallery-dialog"
+          onClick={() => setAmenitiesOpen(true)}
+          className="group w-full bg-[#F3EDE1] p-6 text-start transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A5417] focus-visible:ring-inset sm:p-7"
+        >
+          {cardContent}
+        </button>
+      );
+    }
+
+    return <article key={benefit.title} className="bg-[#F3EDE1] p-6 sm:p-7">{cardContent}</article>;
+  };
 
   useEffect(() => {
     if (!expandedImage) return;
@@ -471,9 +684,9 @@ export function BrandbookLandingPage() {
                       event.preventDefault();
                       handleNavClick("#opportunity");
                     }}
-                    className="brandbook-button-gold inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2.5 whitespace-nowrap bg-[#E6C767] px-4 text-[0.68rem] font-semibold uppercase leading-[1.15] tracking-[0.1em] text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.11em]"
+                    className="brandbook-button-gold inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2 whitespace-nowrap bg-[#E6C767] px-3 text-[0.6rem] font-semibold uppercase leading-[1.15] tracking-[0.08em] text-[#161616] sm:justify-start sm:px-3 sm:text-[0.62rem] sm:tracking-[0.09em]"
                   >
-                    <span aria-hidden="true" className="shrink-0 text-[1rem] leading-none">👁️</span> {tx("AVAILABLE APARTMENTS")} <ArrowUpRight className="shrink-0" size={16} strokeWidth={1.8} />
+                    <Eye aria-hidden="true" className="shrink-0" size={16} strokeWidth={1.7} /> {tx("AVAILABLE APARTMENTS")}
                   </a>
                   <CurrentProjectBrochureLink className="reverance-hero-cta-secondary inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2.5 whitespace-normal [overflow-wrap:anywhere] border border-white/70 bg-white/[0.06] px-4 text-[0.72rem] font-semibold uppercase leading-[1.15] tracking-[0.12em] text-white transition-[background-color,border-color,color,transform] duration-200 hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]" />
                 </div>
@@ -671,11 +884,11 @@ export function BrandbookLandingPage() {
                   {projectBenefits.map(renderBenefitCard)}
                 </div>
                 <div className="hidden lg:block">
-                  <div className="grid gap-px bg-[#161616]/15 lg:grid-cols-3">
+                  <div className="grid gap-1.5 bg-transparent lg:grid-cols-3">
                     {projectBenefits.slice(0, 3).map(renderBenefitCard)}
                   </div>
-                  <div className="mt-3 flex justify-center">
-                    <div className="grid w-2/3 grid-cols-2 gap-px bg-[#161616]/15">
+                  <div className="mt-1.5 flex justify-center">
+                    <div className="grid w-2/3 grid-cols-2 gap-1.5 bg-transparent">
                       {projectBenefits.slice(3).map(renderBenefitCard)}
                     </div>
                   </div>
@@ -688,11 +901,11 @@ export function BrandbookLandingPage() {
                   {ownershipBenefits.map(renderBenefitCard)}
                 </div>
                 <div className="hidden lg:block">
-                  <div className="grid gap-px bg-[#161616]/15 lg:grid-cols-3">
+                  <div className="grid gap-1.5 bg-transparent lg:grid-cols-3">
                     {ownershipBenefits.slice(0, 3).map(renderBenefitCard)}
                   </div>
-                  <div className="mt-3 flex justify-center">
-                    <div className="grid w-2/3 grid-cols-2 gap-px bg-[#161616]/15">
+                  <div className="mt-1.5 flex justify-center">
+                    <div className="grid w-2/3 grid-cols-2 gap-1.5 bg-transparent">
                       {ownershipBenefits.slice(3).map(renderBenefitCard)}
                     </div>
                   </div>
@@ -885,6 +1098,8 @@ export function BrandbookLandingPage() {
           </div>
         </div>
       </div>
+
+      {amenitiesOpen ? <AmenitiesGalleryModal tx={tx} onClose={() => setAmenitiesOpen(false)} /> : null}
 
       {expandedImage ? (
         <ExpandedProjectImageModal
