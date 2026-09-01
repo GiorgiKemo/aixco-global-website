@@ -139,6 +139,7 @@ export const brandbookLandingTranslations: BrandbookLandingTranslationSource = {
   "APARTMENT INTERIOR": { de: "WOHNUNGSINTERIEUR", pl: "WNĘTRZE APARTAMENTU", sl: "NOTRANJOST STANOVANJA", ru: "ИНТЕРЬЕР АПАРТАМЕНТА" },
   "SEA / CITY VIEWS": { de: "MEER- / STADTBLICKE", pl: "WIDOKI NA MORZE / MIASTO", sl: "POGLEDI NA MORJE / MESTO", ru: "ВИДЫ НА МОРЕ / ГОРОД" },
   "NEW BOULEVARD LOCATION": { de: "LAGE AM NEW BOULEVARD", pl: "LOKALIZACJA NEW BOULEVARD", sl: "LOKACIJA NEW BOULEVARD", ru: "ЛОКАЦИЯ НОВОГО БУЛЬВАРА" },
+  "ROOFTOP TERRACE": { de: "DACH-TERRASSE", pl: "TARAS NA DACHU", sl: "STREŠNA TERASA", ru: "ТЕРРАСА НА КРЫШЕ" },
   "Reverance exterior project render": { de: "Visualisierung der Außenansicht von Reverance", pl: "Wizualizacja elewacji Reverance", sl: "Vizualizacija zunanjosti Reverance", ru: "Визуализация экстерьера Reverance" },
   "Reverance lobby project render": { de: "Visualisierung der Lobby von Reverance", pl: "Wizualizacja lobby Reverance", sl: "Vizualizacija lobija Reverance", ru: "Визуализация лобби Reverance" },
   "Reverance resident wellness project render": { de: "Visualisierung des Wellnessbereichs von Reverance", pl: "Wizualizacja strefy wellness Reverance", sl: "Vizualizacija wellnessa Reverance", ru: "Визуализация велнес-зоны Reverance" },
@@ -146,6 +147,7 @@ export const brandbookLandingTranslations: BrandbookLandingTranslationSource = {
   "Reverance apartment interior project render": { de: "Visualisierung des Wohnungsinterieurs von Reverance", pl: "Wizualizacja wnętrza apartamentu Reverance", sl: "Vizualizacija notranjosti stanovanja Reverance", ru: "Визуализация интерьера апартамента Reverance" },
   "Batumi sea and city view": { de: "Blick auf Meer und Stadt in Batumi", pl: "Widok na morze i miasto w Batumi", sl: "Pogled na morje in mesto v Batumiju", ru: "Вид на море и город в Батуми" },
   "Batumi New Boulevard location from above": { de: "Lage des New Boulevard in Batumi aus der Vogelperspektive", pl: "Lokalizacja New Boulevard w Batumi z lotu ptaka", sl: "Lokacija New Boulevard v Batumiju iz zraka", ru: "Локация Нового бульвара в Батуми с высоты" },
+  "Reverance rooftop terrace project render": { de: "Visualisierung der Dachterrasse von Reverance", pl: "Wizualizacja tarasu na dachu Reverance", sl: "Vizualizacija strešne terase Reverance", ru: "Визуализация террасы на крыше Reverance" },
   "Selected access, structured for ownership.": {
     de: "Ausgewählter Zugang, strukturiert für Eigentum.",
     pl: "Wyselekcjonowany dostęp, uporządkowany z myślą o własności.",

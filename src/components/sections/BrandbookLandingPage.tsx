@@ -52,6 +52,7 @@ const projectGalleryItems = [
   { label: "APARTMENT INTERIOR", alt: "Reverance apartment interior project render", image: { src: aixcoCurrentProjectGalleryImages[13].src, width: 4096, height: 4096 }, featured: false },
   { label: "SEA / CITY VIEWS", alt: "Batumi sea and city view", image: { src: aixcoLiveImages.batumiMosaicSunsetPanorama, width: 3840, height: 2160 }, featured: false },
   { label: "NEW BOULEVARD LOCATION", alt: "Batumi New Boulevard location from above", image: { src: aixcoLiveImages.batumiMosaicDuskAerialCoastline, width: 3840, height: 2160 }, featured: false },
+  { label: "ROOFTOP TERRACE", alt: "Reverance rooftop terrace project render", image: { src: aixcoCurrentProjectGalleryImages[7].src, width: 4096, height: 4096 }, featured: false },
 ] as const;
 
 const amenityGalleryImage = (index: number, width: number, height: number, alt: string, caption: string) => {
