@@ -578,7 +578,7 @@ export function BrandbookLandingPage() {
                   <Maximize2 size={13} strokeWidth={1.7} /> <span className="hidden min-[380px]:inline">{tx("Expand image")}</span>
                 </span>
               </button>
-              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/20" />
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
               <div className="pointer-events-none absolute left-5 top-5 z-20 flex items-center gap-3 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:left-8 sm:top-8">
                 <span className="h-px w-8 bg-[#E6C767]" /> {tx("Reverance project gallery")}
               </div>
