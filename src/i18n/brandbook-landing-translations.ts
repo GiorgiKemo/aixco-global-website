@@ -380,7 +380,6 @@ export const brandbookLandingTranslations: BrandbookLandingTranslationSource = {
     sl: "V skladu z veljavnimi gruzijskimi davčnimi pravili, obdobjem lastništva, klasifikacijo nepremičnine in individualnimi okoliščinami.",
     ru: "Применяется в соответствии с грузинскими налоговыми правилами, сроком владения, классификацией объекта и индивидуальными обстоятельствами.",
   },
-  "100% FOREIGN OWNERSHIP": { de: "100 % AUSLÄNDISCHES EIGENTUM", pl: "100% WŁASNOŚĆ DLA CUDZOZIEMCÓW", sl: "100% TUJE LASTNIŠTVO", ru: "100% ИНОСТРАННАЯ СОБСТВЕННОСТЬ" },
   "International buyers can own qualifying residential property directly, subject to Georgian law.": {
     de: "Internationale Käufer können qualifizierte Wohnimmobilien direkt besitzen, vorbehaltlich georgischen Rechts.",
     pl: "Międzynarodowi nabywcy mogą bezpośrednio posiadać kwalifikowaną nieruchomość mieszkaniową, z zastrzeżeniem prawa gruzińskiego.",
