@@ -61,7 +61,7 @@ export function ExpandedProjectImageModal({ image, dialogLabel, closeLabel, onCl
       role="dialog"
       aria-modal="true"
       aria-label={dialogLabel}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0b0b0b]/95 p-4 sm:p-8"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 sm:p-8"
       onClick={(event) => {
         const mediaBounds = event.currentTarget.querySelector("[data-expanded-project-media]")?.getBoundingClientRect();
         if (
@@ -451,11 +451,11 @@ export function BrandbookLandingPage() {
                       event.preventDefault();
                       handleNavClick("#opportunity");
                     }}
-                    className="brandbook-button-gold inline-flex min-h-12 w-full items-center justify-center gap-2.5 bg-[#E6C767] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#161616] sm:justify-start sm:px-5 sm:text-[0.74rem] sm:tracking-[0.15em]"
+                    className="brandbook-button-gold inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2.5 whitespace-nowrap bg-[#E6C767] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]"
                   >
                     {tx("VIEW AVAILABLE APARTMENTS")} <ArrowUpRight size={16} strokeWidth={1.8} />
                   </a>
-                  <CurrentProjectBrochureLink className="inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-white/70 bg-white/[0.06] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:justify-start sm:px-5 sm:text-[0.74rem] sm:tracking-[0.15em]" />
+                  <CurrentProjectBrochureLink className="reverance-hero-cta-secondary inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2.5 whitespace-nowrap border border-white/70 bg-white/[0.06] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white transition-[background-color,border-color,color,transform] duration-200 hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]" />
                 </div>
                 <p className="reverance-hero-disclaimer mt-4 max-w-[34rem] text-[0.8rem] leading-[1.45] text-white/70 sm:text-[0.84rem]">
                   {tx("Pricing, payment terms and financing are subject to apartment availability, eligibility and final contractual terms.")}
@@ -546,7 +546,7 @@ export function BrandbookLandingPage() {
               </div>
             </div>
 
-            <div className="relative min-h-[28rem] overflow-hidden bg-[#D9D0C0] lg:min-h-[44rem]">
+            <div className="relative min-h-[28rem] overflow-hidden bg-[#9A9A9A] lg:min-h-[44rem]">
               <Image src={projectImages.sunset.src} alt={tx("Sunset over the residence facade")} fill quality={90} sizes="(min-width: 1024px) 56vw, 100vw" className="object-cover object-center" />
               <button
                 type="button"
@@ -558,7 +558,7 @@ export function BrandbookLandingPage() {
                   <Maximize2 size={13} strokeWidth={1.7} /> <span className="hidden min-[380px]:inline">{tx("Expand image")}</span>
                 </span>
               </button>
-              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/85 via-[#0b0b0b]/20 to-[#0b0b0b]/20" />
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/20" />
               <div className="pointer-events-none absolute left-5 top-5 z-20 flex items-center gap-3 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:left-8 sm:top-8">
                 <span className="h-px w-8 bg-[#E6C767]" /> {tx("Reverance project gallery")}
               </div>
@@ -606,39 +606,39 @@ export function BrandbookLandingPage() {
                 <p className="mt-9 max-w-[24rem] text-lg leading-[1.55] text-[#161616]/62">{tx("Reverance is a premium residential development on Batumi's New Boulevard, combining contemporary residences, resident amenities and access to one of the city's most active development districts.")}</p>
                 <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
                   <Link href={currentProjectHref} className="brandbook-text-link inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em]">{tx("View the complete residence")} <MoveRight size={17} strokeWidth={1.6} /></Link>
-                  <Link href="/reverance-batumi/calculator" className="inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#8B6A18] transition-colors hover:text-[#161616]">{tx("Model your investment")} <ArrowUpRight size={17} strokeWidth={1.6} /></Link>
+                  <Link href="/reverance-batumi/calculator" className="inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#6A5417] transition-colors hover:text-[#161616]">{tx("Model your investment")} <ArrowUpRight size={17} strokeWidth={1.6} /></Link>
                 </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <figure className="group relative aspect-[0.92] overflow-hidden bg-[#D9D0C0] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
+                <figure className="group relative aspect-[0.92] overflow-hidden bg-[#9A9A9A] sm:row-span-2 sm:aspect-auto sm:min-h-[39rem]">
                       <Image src={projectImages.lounge.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 50vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance residential towers image")} onClick={() => setExpandedImage({ ...projectImages.lounge, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
                   </button>
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
-                <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
+                <figure className="group relative aspect-[1.25] overflow-hidden bg-[#9A9A9A]">
                       <Image src={projectImages.arrival.src} alt={tx("Reverance arrival and landscaped exterior project render")} fill quality={90} sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ ...projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
                   </button>
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
-                <figure className="group relative aspect-[1.25] overflow-hidden bg-[#D9D0C0]">
+                <figure className="group relative aspect-[1.25] overflow-hidden bg-[#9A9A9A]">
                       <Image src={projectImages.gym.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
                   <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ ...projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
                     <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
                     </span>
                   </button>
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b0b]/80 via-transparent to-transparent" />
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                   <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
                 </figure>
               </div>
@@ -693,7 +693,7 @@ export function BrandbookLandingPage() {
             <div className="mt-12 grid gap-6 lg:grid-cols-3">
               {paymentStages.map((stage, index) => (
                 <article key={stage.title} className="border border-[#161616]/15 bg-white/40 p-6 sm:p-8">
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#8B6A18]">{String(index + 1).padStart(2, "0")}</p>
+                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#6A5417]">{String(index + 1).padStart(2, "0")}</p>
                   <strong className="mt-4 block text-4xl font-medium tracking-[-0.05em]">{tx(stage.value)}</strong>
                   <h3 className="mt-3 text-lg font-medium tracking-[-0.03em]">{tx(stage.title)}</h3>
                   <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx(stage.body)}</p>
@@ -777,7 +777,7 @@ export function BrandbookLandingPage() {
                   <div className="flex h-12 w-12 items-center justify-center bg-[#E6C767] text-[#161616]"><Check size={23} strokeWidth={2} /></div>
                   <h3 className="mt-8 text-3xl font-medium tracking-[-0.045em]">{tx("Thank you. We will contact you shortly.")}</h3>
                   <p className="mt-4 max-w-[25rem] text-base leading-[1.55] text-white/60">{tx("Your request is with the AIXCO team.")}</p>
-                  {requestReference ? <p className="mt-4 text-sm font-semibold text-[#E6C767]">{tx("Request reference")}: <span className="font-mono">{requestReference}</span></p> : null}
+                  {requestReference ? <p className="mt-4 text-sm font-semibold text-[#E6C767]">{tx("Request reference")}: <span>{requestReference}</span></p> : null}
                   <button type="button" onClick={() => { setSubmitted(false); setRequestReference(null); }} className="mt-8 inline-flex w-fit items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.17em] text-[#E6C767]">{tx("Send another request")} <ArrowRight size={16} strokeWidth={1.6} /></button>
                 </div>
               ) : (
