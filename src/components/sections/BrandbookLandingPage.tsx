@@ -43,6 +43,17 @@ const projectImages = {
   gym: { src: aixcoCurrentProjectGalleryImages[15].src, width: 3840, height: 2160 },
 } as const;
 
+const projectGalleryItems = [
+  { label: "EXTERIOR", alt: "Reverance exterior project render", image: projectImages.hero, featured: true },
+  { label: "LOBBY", alt: "Reverance lobby project render", image: { src: aixcoCurrentProjectGalleryImages[12].src, width: 3935, height: 2733 }, featured: false },
+  { label: "POOL", alt: "Reverance indoor pool project render", image: { src: aixcoCurrentProjectGalleryImages[17].src, width: 4096, height: 2731 }, featured: false },
+  { label: "WELLNESS", alt: "Reverance resident wellness project render", image: projectImages.gym, featured: false },
+  { label: "LANDSCAPED AREAS", alt: "Reverance landscaped courtyard project render", image: { src: aixcoCurrentProjectGalleryImages[18].src, width: 3840, height: 2160 }, featured: false },
+  { label: "APARTMENT INTERIOR", alt: "Reverance apartment interior project render", image: { src: aixcoCurrentProjectGalleryImages[13].src, width: 4096, height: 4096 }, featured: false },
+  { label: "SEA / CITY VIEWS", alt: "Batumi sea and city view", image: { src: aixcoLiveImages.batumiMosaicSunsetPanorama, width: 3840, height: 2160 }, featured: false },
+  { label: "NEW BOULEVARD LOCATION", alt: "Batumi New Boulevard location from above", image: { src: aixcoLiveImages.batumiMosaicDuskAerialCoastline, width: 3840, height: 2160 }, featured: false },
+] as const;
+
 const amenityGalleryImage = (index: number, width: number, height: number, alt: string, caption: string) => {
   const image = aixcoCurrentProjectGalleryImages[index];
   return { src: image.src, thumbnailSrc: image.thumbnailSrc, width, height, alt, caption };
@@ -953,41 +964,23 @@ export function BrandbookLandingPage() {
             <div className="flex flex-col justify-between gap-8 border-b border-white/20 pb-10 lg:flex-row lg:items-end">
               <div>
                 <p className="brandbook-eyebrow brandbook-eyebrow-light">10 — {tx("Project gallery")}</p>
-                <h2 className="mt-8 max-w-[12ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("Reverance project gallery")}</h2>
+                <h2 className="mt-8 max-w-[12ch] text-[clamp(2.2rem,4.8vw,5rem)] font-medium leading-[0.9] tracking-[-0.065em]">{tx("SEE REVERANCE.")}</h2>
               </div>
               <p className="max-w-[28rem] text-base leading-[1.55] text-white/62">{tx("Reverance is a premium residential development on Batumi's New Boulevard, combining contemporary residences, resident amenities and access to one of the city's most active development districts.")}</p>
             </div>
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <figure className="group relative aspect-[1.15] overflow-hidden bg-[#9A9A9A] sm:aspect-[1.25]">
-                <Image src={projectImages.arrival.src} alt={tx("Reverance arrival and landscaped exterior project render")} fill quality={90} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                <button type="button" aria-label={tx("Expand the Reverance arrival image")} onClick={() => setExpandedImage({ ...projectImages.arrival, alt: tx("Reverance arrival and landscaped exterior project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
-                  <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                    <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
-                  </span>
-                </button>
-                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
-              </figure>
-              <figure className="group relative aspect-[1.15] overflow-hidden bg-[#9A9A9A] sm:aspect-[1.25]">
-                <Image src={projectImages.gym.src} alt={tx("Reverance residential towers project render")} fill quality={90} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                <button type="button" aria-label={tx("Expand the Reverance amenities image")} onClick={() => setExpandedImage({ ...projectImages.gym, alt: tx("Reverance residential towers project render") })} className="absolute inset-0 z-10 cursor-zoom-in">
-                  <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                    <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
-                  </span>
-                </button>
-                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
-              </figure>
-              <figure className="group relative aspect-[1.15] overflow-hidden bg-[#9A9A9A] sm:aspect-[1.25]">
-                <Image src={projectImages.aerial.src} alt={tx("The Reverance residence exterior in Batumi")} fill quality={90} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-                <button type="button" aria-label={tx("Expand the Reverance residence exterior image")} onClick={() => setExpandedImage({ ...projectImages.aerial, alt: tx("The Reverance residence exterior in Batumi") })} className="absolute inset-0 z-10 cursor-zoom-in">
-                  <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                    <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
-                  </span>
-                </button>
-                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx("Project gallery")}</figcaption>
-              </figure>
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 sm:auto-rows-[15rem] lg:grid-cols-4 lg:auto-rows-[15rem]">
+              {projectGalleryItems.map((item) => (
+                <figure key={item.label} className={`group relative min-h-[14rem] overflow-hidden bg-[#9A9A9A] ${item.featured ? "sm:col-span-2 sm:row-span-2 sm:min-h-[30rem]" : ""}`}>
+                  <Image src={item.image.src} alt={tx(item.alt)} fill quality={90} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+                  <button type="button" aria-label={`${tx("Expand")} ${tx(item.label)}`} onClick={() => setExpandedImage({ ...item.image, alt: tx(item.alt) })} className="absolute inset-0 z-10 cursor-zoom-in">
+                    <span className="absolute right-4 top-4 inline-flex items-center gap-2 p-2 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)] sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                      <Maximize2 size={13} strokeWidth={1.7} /> {tx("Expand")}
+                    </span>
+                  </button>
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <figcaption className="pointer-events-none absolute bottom-4 left-4 z-20 max-w-[calc(100%-2rem)] text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_2px_8px_rgb(0_0_0/0.95)]">{tx(item.label)}</figcaption>
+                </figure>
+              ))}
             </div>
           </div>
         </section>
