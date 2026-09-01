@@ -221,7 +221,7 @@
 .eyebrowDark {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  align-items: start;
+  align-items: center;
   column-gap: 0.75rem;
   margin: 0;
   font-size: 0.64rem;
