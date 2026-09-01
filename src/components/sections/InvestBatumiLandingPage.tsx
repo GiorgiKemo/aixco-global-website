@@ -685,7 +685,7 @@ const copy: Record<Lang, LandingCopy> = {
 };
 
 const images = {
-  hero: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-golden-hour-coastline-crisp.webp", width: 1672, height: 941 },
+  hero: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-golden-hour-coastline.webp", width: 3840, height: 2160 },
   verticalCity: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-dusk-aerial-central.webp", width: 3840, height: 2160 },
   verticalTower: { src: "/aixco-global-op2/images/project-gallery-2026/05-front-facade.webp", width: 4000, height: 4000 },
   gallery: [
