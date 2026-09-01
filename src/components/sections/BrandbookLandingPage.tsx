@@ -471,9 +471,9 @@ export function BrandbookLandingPage() {
                       event.preventDefault();
                       handleNavClick("#opportunity");
                     }}
-                    className="brandbook-button-gold inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2.5 whitespace-normal [overflow-wrap:anywhere] bg-[#E6C767] px-4 text-[0.72rem] font-semibold uppercase leading-[1.15] tracking-[0.12em] text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]"
+                    className="brandbook-button-gold inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2.5 whitespace-nowrap bg-[#E6C767] px-4 text-[0.68rem] font-semibold uppercase leading-[1.15] tracking-[0.1em] text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.11em]"
                   >
-                    {tx("VIEW AVAILABLE APARTMENTS")} <ArrowUpRight className="shrink-0" size={16} strokeWidth={1.8} />
+                    <span aria-hidden="true" className="shrink-0 text-[1rem] leading-none">👁️</span> {tx("AVAILABLE APARTMENTS")} <ArrowUpRight className="shrink-0" size={16} strokeWidth={1.8} />
                   </a>
                   <CurrentProjectBrochureLink className="reverance-hero-cta-secondary inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2.5 whitespace-normal [overflow-wrap:anywhere] border border-white/70 bg-white/[0.06] px-4 text-[0.72rem] font-semibold uppercase leading-[1.15] tracking-[0.12em] text-white transition-[background-color,border-color,color,transform] duration-200 hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]" />
                 </div>
@@ -674,7 +674,7 @@ export function BrandbookLandingPage() {
                   <div className="grid gap-px bg-[#161616]/15 lg:grid-cols-3">
                     {projectBenefits.slice(0, 3).map(renderBenefitCard)}
                   </div>
-                  <div className="mt-px flex justify-center border-t border-[#161616]/15 pt-px">
+                  <div className="mt-3 flex justify-center">
                     <div className="grid w-2/3 grid-cols-2 gap-px bg-[#161616]/15">
                       {projectBenefits.slice(3).map(renderBenefitCard)}
                     </div>
@@ -691,7 +691,7 @@ export function BrandbookLandingPage() {
                   <div className="grid gap-px bg-[#161616]/15 lg:grid-cols-3">
                     {ownershipBenefits.slice(0, 3).map(renderBenefitCard)}
                   </div>
-                  <div className="mt-px flex justify-center border-t border-[#161616]/15 pt-px">
+                  <div className="mt-3 flex justify-center">
                     <div className="grid w-2/3 grid-cols-2 gap-px bg-[#161616]/15">
                       {ownershipBenefits.slice(3).map(renderBenefitCard)}
                     </div>

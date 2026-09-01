@@ -370,13 +370,21 @@
 }
 
 .marketSection {
-  padding: clamp(4rem, 6vw, 6.5rem) clamp(1.25rem, 6vw, 7rem);
+  padding: clamp(3rem, 4vw, 4.5rem) clamp(1.25rem, 6vw, 7rem);
   background: var(--ink);
   color: white;
 }
 
 .marketIntro {
-  max-width: 58rem;
+  max-width: 78rem;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  column-gap: clamp(2rem, 7vw, 7rem);
+  align-items: start;
+}
+
+.marketIntro .eyebrowGold {
+  grid-column: 1 / -1;
 }
 
 .marketIntro h2,
@@ -389,19 +397,23 @@
 }
 
 .marketIntro h2 {
+  grid-column: 1;
   max-width: 14ch;
   margin: 1rem 0 1.2rem;
 }
 
 .marketIntro > p:last-child {
+  grid-column: 2;
   max-width: 36rem;
   margin: 0;
   color: rgb(255 255 255 / 62%);
+  font-size: clamp(1rem, 1.2vw, 1.16rem);
   line-height: 1.75;
+  padding-top: 1rem;
 }
 
 .marketStats {
-  margin: clamp(2.2rem, 4vw, 3rem) 0 1.5rem;
+  margin: clamp(1.75rem, 3vw, 2.5rem) 0 1.5rem;
   border: 1px solid rgb(255 255 255 / 18%);
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1414,6 +1426,15 @@
 
   .marketStats {
     grid-template-columns: 1fr;
+  }
+
+  .marketIntro {
+    max-width: none;
+    display: block;
+  }
+
+  .marketIntro > p:last-child {
+    padding-top: 0;
   }
 
   .marketStats article,

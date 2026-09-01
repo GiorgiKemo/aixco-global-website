@@ -278,6 +278,12 @@ export const brandbookLandingTranslations: BrandbookLandingTranslationSource = {
     sl: "OGLEJTE SI RAZPOLOŽLJIVE APARTMAJE",
     ru: "СМОТРЕТЬ ДОСТУПНЫЕ АПАРТАМЕНТЫ",
   },
+  "AVAILABLE APARTMENTS": {
+    de: "VERFÜGBARE WOHNUNGEN",
+    pl: "DOSTĘPNE APARTAMENTY",
+    sl: "RAZPOLOŽLJIVI APARTMAJI",
+    ru: "ДОСТУПНЫЕ АПАРТАМЕНТЫ",
+  },
   "Pricing, payment terms and financing are subject to apartment availability, eligibility and final contractual terms.": {
     de: "Preise, Zahlungsbedingungen und Finanzierung hängen von Verfügbarkeit, Eignung und den endgültigen Vertragsbedingungen ab.",
     pl: "Ceny, warunki płatności i finansowanie zależą od dostępności, kwalifikowalności i ostatecznych warunków umowy.",

@@ -685,7 +685,7 @@ const copy: Record<Lang, LandingCopy> = {
 };
 
 const images = {
-  hero: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-golden-hour-coastline.webp", width: 3840, height: 2160 },
+  hero: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-golden-hour-coastline-crisp.webp", width: 1672, height: 941 },
   verticalCity: { src: "/aixco-global-op2/images/batumi-mosaic-hd/batumi-dusk-aerial-central.webp", width: 3840, height: 2160 },
   verticalTower: { src: "/aixco-global-op2/images/project-gallery-2026/05-front-facade.webp", width: 4000, height: 4000 },
   gallery: [
@@ -862,7 +862,7 @@ export function InvestBatumiLandingPage() {
             <div className={styles.heroMeta}><span>{content.hero.location}</span><span>{content.hero.service}</span></div>
           </div>
           <div className={styles.heroImageFrame}>
-            <Image src={images.hero.src} alt="Batumi skyline and Black Sea from above" fill preload quality={90} sizes="(max-width: 700px) 100vw, 57vw" className={styles.heroImage} />
+            <Image src={images.hero.src} alt="Batumi skyline and Black Sea from above" fill preload unoptimized quality={90} sizes="(max-width: 700px) 100vw, 57vw" className={styles.heroImage} />
           </div>
         </section>
 
