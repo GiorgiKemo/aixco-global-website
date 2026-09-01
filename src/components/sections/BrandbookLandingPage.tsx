@@ -702,7 +702,7 @@ export function BrandbookLandingPage() {
                       event.preventDefault();
                       handleNavClick("#opportunity");
                     }}
-                    className="brandbook-button-gold inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2 whitespace-nowrap bg-[#E6C767] px-3 text-[0.6rem] font-semibold uppercase leading-[1.15] tracking-[0.08em] text-[#161616] sm:justify-start sm:px-3 sm:text-[0.62rem] sm:tracking-[0.09em]"
+                    className="brandbook-button-gold inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2 whitespace-nowrap bg-[#E6C767] px-3 text-[0.72rem] font-semibold uppercase leading-[1.15] tracking-[0.12em] text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]"
                   >
                     <Eye aria-hidden="true" className="shrink-0" size={16} strokeWidth={1.7} /> {tx("AVAILABLE APARTMENTS")}
                   </a>
