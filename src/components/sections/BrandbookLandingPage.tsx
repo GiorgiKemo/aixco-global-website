@@ -173,6 +173,7 @@ type AmenitiesGalleryModalProps = {
 function AmenitiesGalleryModal({ tx, onClose }: AmenitiesGalleryModalProps) {
   const [activeCategoryId, setActiveCategoryId] = useState<AmenityCategoryId>("pool");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [loadedImageSrc, setLoadedImageSrc] = useState<string | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const activeCategory = amenityGallery.find((category) => category.id === activeCategoryId) ?? amenityGallery[0];
   const activeImage = activeCategory.images[activeImageIndex] ?? activeCategory.images[0];
@@ -193,6 +194,10 @@ function AmenitiesGalleryModal({ tx, onClose }: AmenitiesGalleryModalProps) {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [activeCategory.images.length, onClose]);
+
+  useEffect(() => {
+    setLoadedImageSrc(null);
+  }, [activeImage.src]);
 
   const changeImage = (step: number) => {
     setActiveImageIndex((current) => (current + step + activeCategory.images.length) % activeCategory.images.length);
@@ -234,7 +239,8 @@ function AmenitiesGalleryModal({ tx, onClose }: AmenitiesGalleryModalProps) {
             </div>
 
             <div className="relative mt-6 flex min-h-[18rem] items-center justify-center overflow-hidden border border-white/10 bg-[#26363D] p-3 sm:min-h-[min(58vh,38rem)] sm:p-8">
-              <Image src={activeImage.src} alt={tx(activeImage.alt)} width={activeImage.width} height={activeImage.height} sizes="(max-width: 1024px) calc(100vw - 2rem), 70vw" className="max-h-[58vh] w-auto max-w-full object-contain" />
+              <Image src={activeImage.thumbnailSrc} alt="" width={activeImage.width} height={activeImage.height} loading="eager" sizes="(max-width: 1024px) calc(100vw - 2rem), 70vw" className="max-h-[58vh] w-auto max-w-full object-contain" />
+              <Image key={activeImage.src} src={activeImage.src} alt={tx(activeImage.alt)} width={activeImage.width} height={activeImage.height} loading="eager" sizes="(max-width: 1024px) calc(100vw - 2rem), 70vw" onLoad={() => setLoadedImageSrc(activeImage.src)} className={`absolute inset-0 m-auto h-auto max-h-[58vh] w-auto max-w-full object-contain transition-opacity duration-150 ${loadedImageSrc === activeImage.src ? "opacity-100" : "opacity-0"}`} />
               <button type="button" aria-label={tx("Previous amenity image")} onClick={() => changeImage(-1)} className="absolute left-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/30 bg-[#161616]/55 text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767] sm:left-5">
                 <ArrowLeft size={18} strokeWidth={1.6} />
               </button>
