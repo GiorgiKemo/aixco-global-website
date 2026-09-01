@@ -308,6 +308,12 @@ export const brandbookLandingTranslations: BrandbookLandingTranslationSource = {
   "Selected floors": { de: "Ausgewählte Etagen", pl: "Wybrane piętra", sl: "Izbrana nadstropja", ru: "Отобранные этажи" },
   "Target completion": { de: "Geplante Fertigstellung", pl: "Planowane ukończenie", sl: "Predviden zaključek", ru: "Плановое завершение" },
   "25,000 m²": { de: "25.000 m²", pl: "25 000 m²", sl: "25.000 m²", ru: "25 000 м²" },
+  "25,000 m² of comfort and community infrastructure across a 45,000 m² planned site.": {
+    de: "25.000 m² Komfort- und Gemeinschaftsinfrastruktur auf einem geplanten 45.000 m² großen Areal.",
+    pl: "25 000 m² infrastruktury komfortu i społeczności na planowanym terenie o powierzchni 45 000 m².",
+    sl: "25.000 m² površin za udobje in skupnostno infrastrukturo na načrtovanem območju velikosti 45.000 m².",
+    ru: "25 000 м² инфраструктуры комфорта и сообщества на планируемом участке 45 000 м².",
+  },
   "Comfort & community infrastructure": {
     de: "Komfort- und Gemeinschaftsinfrastruktur",
     pl: "Infrastruktura komfortu i społeczności",

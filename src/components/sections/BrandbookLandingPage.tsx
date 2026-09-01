@@ -230,6 +230,17 @@ export function BrandbookLandingPage() {
     };
   }, [languageOpen]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isSubmitting) return;
@@ -330,7 +341,10 @@ export function BrandbookLandingPage() {
             type="button"
             aria-label={menuOpen ? tx("Close navigation") : tx("Open navigation")}
             aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((value) => !value)}
+            onClick={() => {
+              setMenuOpen((value) => !value);
+              setLanguageOpen(false);
+            }}
             className="landing-header-control order-2 inline-flex min-h-11 min-w-11 items-center justify-center border border-[#161616]/20 lg:hidden"
           >
             {menuOpen ? <X size={21} strokeWidth={1.6} /> : <Menu size={21} strokeWidth={1.6} />}
@@ -451,11 +465,11 @@ export function BrandbookLandingPage() {
                       event.preventDefault();
                       handleNavClick("#opportunity");
                     }}
-                    className="brandbook-button-gold inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2.5 whitespace-nowrap bg-[#E6C767] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]"
+                    className="brandbook-button-gold inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2.5 whitespace-normal [overflow-wrap:anywhere] bg-[#E6C767] px-4 text-[0.72rem] font-semibold uppercase leading-[1.15] tracking-[0.12em] text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]"
                   >
-                    {tx("VIEW AVAILABLE APARTMENTS")} <ArrowUpRight size={16} strokeWidth={1.8} />
+                    {tx("VIEW AVAILABLE APARTMENTS")} <ArrowUpRight className="shrink-0" size={16} strokeWidth={1.8} />
                   </a>
-                  <CurrentProjectBrochureLink className="reverance-hero-cta-secondary inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2.5 whitespace-nowrap border border-white/70 bg-white/[0.06] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white transition-[background-color,border-color,color,transform] duration-200 hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]" />
+                  <CurrentProjectBrochureLink className="reverance-hero-cta-secondary inline-flex min-h-12 w-full min-w-0 items-center justify-center gap-2.5 whitespace-normal [overflow-wrap:anywhere] border border-white/70 bg-white/[0.06] px-4 text-[0.72rem] font-semibold uppercase leading-[1.15] tracking-[0.12em] text-white transition-[background-color,border-color,color,transform] duration-200 hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:justify-start sm:px-4 sm:text-[0.7rem] sm:tracking-[0.13em]" />
                 </div>
                 <p className="reverance-hero-disclaimer mt-4 max-w-[34rem] text-[0.8rem] leading-[1.45] text-white/70 sm:text-[0.84rem]">
                   {tx("Pricing, payment terms and financing are subject to apartment availability, eligibility and final contractual terms.")}

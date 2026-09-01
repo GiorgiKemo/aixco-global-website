@@ -101,7 +101,7 @@ export const batumiProperties = [
     ],
     highlights: [
       { label: "Current availability", value: "28 selected apartments on the 13th and 14th floors." },
-      { label: "Scale", value: "25,000 sqm of comfort and community infrastructure across a 45,000 sqm planned site." },
+      { label: "Scale", value: "25,000 m² of comfort and community infrastructure across a 45,000 m² planned site." },
       { label: "Location", value: "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away." },
       { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck." },
     ],

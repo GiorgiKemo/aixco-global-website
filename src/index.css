@@ -12673,27 +12673,48 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   color: white;
 }
 
-/* Reverance benchmark: a quieter, paper-led expression of the brandbook.
-   The primary logo, Gilroy hierarchy, champagne accent, and square editorial
-   geometry remain unchanged; the oversized dark surfaces become supporting
-   accents instead of the page's dominant background. */
+/* Reverance benchmark: keep the page's editorial palette isolated from the
+   shared landing-page defaults. */
 .reverance-editorial {
   --reverance-paper: var(--brand-ivory);
   --reverance-paper-deep: var(--brand-white);
-  --reverance-ink: #161616;
-  --reverance-muted: rgb(22 22 22 / 0.65);
+  --reverance-ink: var(--brand-onyx);
+  --reverance-muted: rgb(22 22 22 / 0.68);
+  --reverance-dark-muted: rgb(255 255 255 / 0.68);
   background: var(--reverance-paper) !important;
 }
 
+.reverance-editorial h1,
+.reverance-editorial h2,
+.reverance-editorial h3,
+.reverance-editorial h4,
+.reverance-editorial h5,
+.reverance-editorial h6 {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+  text-wrap: balance;
+}
+
+.reverance-editorial .brandbook-eyebrow {
+  font-size: 0.64rem !important;
+  line-height: 1.2 !important;
+}
+
+.reverance-editorial [class*='text-[#161616]/62'],
+.reverance-editorial [class*='text-[#161616]/65'] {
+  color: rgb(22 22 22 / 0.68) !important;
+}
+
 .reverance-editorial .brandbook-header {
-  background: rgb(243 237 225 / 94%) !important;
+  background: rgb(243 237 225 / 100%) !important;
   box-shadow: 0 1rem 2.5rem -2.2rem rgb(22 22 22 / 0.35);
 }
 
 .reverance-editorial #top > div:first-child > div:first-child {
-  background: var(--reverance-paper) !important;
-  border-right: 1px solid rgb(22 22 22 / 0.12);
-  color: var(--reverance-ink) !important;
+  background: var(--brandbook-ink) !important;
+  border-right: 1px solid rgb(255 255 255 / 0.14);
+  color: var(--brand-white) !important;
 }
 
 @media (min-width: 1024px) {
@@ -12715,27 +12736,8 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   }
 }
 
-.reverance-editorial #top > div:first-child > div:first-child [class*="text-white"],
-.reverance-editorial #top > div:first-child > div:first-child .text-white {
-  color: var(--reverance-ink) !important;
-}
-
-.reverance-editorial #top > div:first-child > div:first-child [class*="border-white"] {
-  border-color: rgb(22 22 22 / 0.24) !important;
-}
-
 .reverance-editorial #top > div:first-child > div:first-child .brandbook-button-gold {
   box-shadow: 0 1rem 2rem -1.3rem rgb(22 22 22 / 0.22);
-}
-
-.reverance-editorial #top > div:first-child > div:first-child a:not(.brandbook-button-gold):not(.reverance-hero-cta-secondary) {
-  background: transparent !important;
-  color: var(--reverance-ink) !important;
-  text-shadow: none !important;
-}
-
-.reverance-editorial #top > div:first-child > div:first-child .brandbook-button-gold {
-  color: var(--reverance-ink) !important;
 }
 
 .reverance-editorial .reverance-hero-proof {
@@ -12746,25 +12748,7 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial .reverance-hero-disclaimer {
-  color: var(--reverance-muted) !important;
-}
-
-.reverance-editorial #top > div:first-child > div:first-child .reverance-hero-actions a.reverance-hero-cta-secondary {
-  border-color: rgb(22 22 22 / 0.22) !important;
-  background: rgb(255 255 255 / 0.72) !important;
-  color: var(--reverance-ink) !important;
-  transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    color 180ms ease,
-    transform 180ms ease;
-}
-
-.reverance-editorial #top > div:first-child > div:first-child .reverance-hero-actions a.reverance-hero-cta-secondary:hover {
-  background: var(--brandbook-gold) !important;
-  border-color: var(--brandbook-gold) !important;
-  color: var(--reverance-ink) !important;
-  transform: translateY(-1px);
+  color: var(--reverance-dark-muted) !important;
 }
 
 @media (min-width: 640px) {
@@ -12774,16 +12758,12 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   }
 }
 
-.reverance-editorial #top > div:first-child > div:first-child > p {
-  color: var(--aixco-gold-accessible) !important;
-}
-
 .reverance-editorial #top > div:first-child > div:first-child [class*="text-[#E6C767]"] {
-  color: var(--aixco-gold-accessible) !important;
+  color: var(--brandbook-gold) !important;
 }
 
 .reverance-editorial #top > div:first-child > div:first-child h1 span {
-  color: var(--aixco-gold-accessible) !important;
+  color: var(--brandbook-gold) !important;
 }
 
 .reverance-editorial #top > div:first-child > div:first-child > p > span {
@@ -12822,23 +12802,18 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial #approach {
-  background: var(--reverance-paper-deep) !important;
-  color: var(--reverance-ink) !important;
-}
-
-.reverance-editorial #approach [class*="text-white"],
-.reverance-editorial #approach .text-white {
-  color: var(--reverance-ink) !important;
+  background: var(--brand-navy) !important;
+  color: var(--brand-white) !important;
 }
 
 .reverance-editorial #approach [class*="border-white"],
 .reverance-editorial #approach article {
-  border-color: rgb(22 22 22 / 0.18) !important;
+  border-color: rgb(255 255 255 / 0.18) !important;
 }
 
 .reverance-editorial #approach [class*="text-[#E6C767]"],
 .reverance-editorial #approach .brandbook-eyebrow-light {
-  color: var(--aixco-gold-accessible) !important;
+  color: var(--brandbook-gold) !important;
 }
 
 .reverance-editorial #residence {
@@ -12846,40 +12821,16 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial #contact {
-  background: var(--reverance-paper-deep) !important;
-  color: var(--reverance-ink) !important;
-}
-
-.reverance-editorial #contact [class*="text-white"],
-.reverance-editorial #contact .text-white {
-  color: var(--reverance-ink) !important;
+  background: var(--brandbook-ink) !important;
+  color: var(--brand-white) !important;
 }
 
 .reverance-editorial #contact [class*="border-white"] {
-  border-color: rgb(22 22 22 / 0.18) !important;
+  border-color: rgb(255 255 255 / 0.18) !important;
 }
 
 .reverance-editorial #contact .brandbook-eyebrow-light {
-  color: var(--aixco-gold-accessible) !important;
-}
-
-.reverance-editorial #contact .brandbook-input {
-  border-color: rgb(22 22 22 / 0.25);
-  background: rgb(255 255 255 / 0.42);
-  color: var(--reverance-ink);
-}
-
-.reverance-editorial #contact .brandbook-input::placeholder {
-  color: rgb(22 22 22 / 0.48);
-}
-
-.reverance-editorial #contact .brandbook-input option {
-  background: var(--reverance-paper);
-  color: var(--reverance-ink);
-}
-
-.reverance-editorial #contact .brandbook-input:focus {
-  background: rgb(255 255 255 / 0.72);
+  color: var(--brandbook-gold) !important;
 }
 
 .reverance-editorial #contact .brandbook-button-gold {
@@ -12888,6 +12839,15 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 
 .reverance-editorial > [role="contentinfo"] {
   background: var(--reverance-paper) !important;
+}
+
+body:has(.reverance-editorial) [data-scroll-to-top-button='true'] {
+  left: auto !important;
+  right: max(1.25rem, var(--safe-inline-end)) !important;
+  border: 1px solid rgb(22 22 22 / 0.18);
+  background: rgb(243 237 225 / 96%) !important;
+  color: var(--brandbook-ink) !important;
+  box-shadow: 0 0.75rem 1.5rem -1.1rem rgb(22 22 22 / 0.45);
 }
 
 @media (max-width: 767px) {
@@ -13690,4 +13650,25 @@ html:has(.landing-mobile-nav) [data-scroll-to-top-button='true'] {
   max-height: calc(100dvh - var(--aixco-header-height) - env(safe-area-inset-top, 0px));
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+/* These page-scoped rules intentionally come last: shared landing resilience
+   rules otherwise re-enable emergency word breaking on this editorial page. */
+.reverance-editorial h1,
+.reverance-editorial h2,
+.reverance-editorial h3,
+.reverance-editorial h4,
+.reverance-editorial h5,
+.reverance-editorial h6 {
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+  text-wrap: balance !important;
+}
+
+.reverance-editorial .brandbook-eyebrow {
+  font-size: 0.64rem !important;
+  line-height: 1.2 !important;
+  overflow-wrap: normal !important;
+  letter-spacing: 0.2em;
 }
