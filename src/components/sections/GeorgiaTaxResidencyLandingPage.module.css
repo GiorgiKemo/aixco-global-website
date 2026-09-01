@@ -324,11 +324,22 @@
 }
 
 .heroActions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.25rem;
+  display: grid;
+  gap: 1rem;
   margin-block-start: 2.2rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 540px) {
+  .heroActions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}
+
+.heroActions :is(.goldButton, .outlineButton, .textButton, .inlineLink, a) {
+  width: 100%;
+  justify-content: center;
 }
 
 .textButton,

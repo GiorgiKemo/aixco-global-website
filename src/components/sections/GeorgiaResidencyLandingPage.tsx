@@ -358,14 +358,14 @@ export function GeorgiaResidencyLandingPage() {
             <p className="mt-6 max-w-[34rem] text-base leading-[1.6] text-white/72 sm:text-lg">
               {tx("Multiple pathways to establish residency in Georgia through property ownership, qualifying investment or business activity. AIXCO coordinates the process from documentation and property selection to application support and local setup.")}
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 sm:max-w-[38rem]">
               <a
                 href="#paths"
                 onClick={(event) => {
                   event.preventDefault();
                   scrollToId("paths");
                 }}
-                className="inline-flex min-h-12 items-center gap-3 bg-[#E6C767] px-6 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#161616]"
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2.5 bg-[#E6C767] px-5 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#161616] sm:justify-start sm:text-[0.74rem]"
               >
                 {tx("FIND YOUR RESIDENCY PATH")}
               </a>
@@ -373,7 +373,7 @@ export function GeorgiaResidencyLandingPage() {
                 href={residenceGuide.href}
                 fileName={residenceGuide.fileName}
                 lockedHref="#contact"
-                className="inline-flex min-h-12 items-center gap-3 border border-white/30 px-6 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]"
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-white/30 px-5 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-white hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:justify-start sm:text-[0.74rem]"
               >
                 {tx("DOWNLOAD RESIDENCY GUIDE")}
               </DownloadGateLink>

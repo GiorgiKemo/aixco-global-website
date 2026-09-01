@@ -547,18 +547,18 @@ export function MedicalTourismLandingPage() {
                 <p className="mt-8 max-w-[30rem] text-[1.05rem] leading-[1.55] text-white/68 sm:text-[1.12rem]">
                   {tx("Georgia offers high-value private treatment at significantly lower cost, especially for dental care, cosmetic procedures, fertility, and planned surgery.")}
                 </p>
-                <div className="mt-9 flex w-full max-w-[34rem] flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <div className="mt-9 grid w-full max-w-[34rem] gap-3 sm:grid-cols-2">
                   <a
                     href="#contact"
                     onClick={(event) => {
                       event.preventDefault();
                       handleNavClick("#contact");
                     }}
-                    className="brandbook-button-gold inline-flex min-h-12 items-center justify-center gap-3 bg-[#E6C767] px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#161616]"
+                    className="brandbook-button-gold inline-flex min-h-12 w-full items-center justify-center gap-2.5 bg-[#E6C767] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#161616] sm:justify-start sm:px-5 sm:text-[0.74rem]"
                   >
                     {tx("Request a medical brief")} <ArrowUpRight size={16} strokeWidth={1.8} />
                   </a>
-                  <MedicalTourismGuideLink className="inline-flex min-h-12 items-center justify-center gap-3 border border-white/70 bg-white/[0.06] px-5 text-center text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]" />
+                  <MedicalTourismGuideLink className="inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-white/70 bg-white/[0.06] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:justify-start sm:px-5 sm:text-[0.74rem]" />
                 </div>
               </div>
 

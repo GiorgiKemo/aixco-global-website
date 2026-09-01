@@ -12738,6 +12738,34 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   color: var(--reverance-ink) !important;
 }
 
+.reverance-editorial .reverance-hero-proof {
+  border-color: rgb(22 22 22 / 0.16) !important;
+  background: rgb(255 255 255 / 0.96) !important;
+  color: var(--reverance-ink) !important;
+  box-shadow: 0 1px 0 rgb(22 22 22 / 0.04);
+}
+
+.reverance-editorial .reverance-hero-disclaimer {
+  color: var(--reverance-muted) !important;
+}
+
+.reverance-editorial .reverance-hero-actions a:not(.brandbook-button-gold) {
+  border-color: rgb(22 22 22 / 0.22) !important;
+  background: rgb(255 255 255 / 0.72) !important;
+}
+
+.reverance-editorial .reverance-hero-actions a:not(.brandbook-button-gold):hover {
+  background: var(--brandbook-gold) !important;
+  border-color: var(--brandbook-gold) !important;
+}
+
+@media (min-width: 640px) {
+  .reverance-editorial .reverance-hero-actions {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: stretch;
+  }
+}
+
 .reverance-editorial #top > div:first-child > div:first-child > p {
   color: var(--aixco-gold-accessible) !important;
 }

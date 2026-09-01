@@ -106,36 +106,36 @@ const projectBenefits = [
   { title: "SELECTED HIGHER FLOORS", body: "AIXCO's current inventory is concentrated on the 13th and 14th floors." },
   { title: "PREMIUM RESIDENTIAL CONCEPT", body: "Contemporary architecture combined with residential and community infrastructure." },
   { title: "JULY 2028", body: "Targeted project completion." },
-  { title: "RESIDENT AMENITIES", body: "POOL · WELLNESS · LANDSCAPED AREAS · RESIDENT FACILITIES*" },
+  { title: "RESIDENT AMENITIES", body: "POOL · WELLNESS · LANDSCAPED AREAS · RESIDENT FACILITIES" },
 ] as const;
 
 const ownershipBenefits = [
   { title: "NO RESIDENCY REQUIREMENT", body: "Property ownership does not generally require the buyer to relocate to Georgia." },
-  { title: "1% RENTAL INCOME TAX*", body: "Potentially available under the applicable Georgian tax regime, subject to eligibility and individual circumstances." },
-  { title: "0% CAPITAL GAINS TAX AFTER 2 YEARS*", body: "Subject to applicable Georgian tax rules, holding period, property classification and individual circumstances." },
+  { title: "1% RENTAL INCOME TAX", body: "Potentially available under the applicable Georgian tax regime, subject to eligibility and individual circumstances." },
+  { title: "0% CAPITAL GAINS TAX AFTER 2 YEARS", body: "Subject to applicable Georgian tax rules, holding period, property classification and individual circumstances." },
   { title: "100% FOREIGN OWNERSHIP", body: "International buyers can own qualifying residential property directly, subject to Georgian law." },
-  { title: "MINIMUM 60% FINANCING*", body: "Local bank financing may be available subject to lender criteria and individual approval." },
+  { title: "MINIMUM 60% FINANCING", body: "Local bank financing may be available subject to lender criteria and individual approval." },
 ] as const;
 
 const heroProofPoints = [
-  "FROM €45,000*",
-  "10% INITIAL PAYMENT*",
-  "60%+ FINANCING*",
-  "100% FOREIGN OWNERSHIP*",
+  "FROM €45,000",
+  "10% INITIAL PAYMENT",
+  "60%+ FINANCING",
+  "100% FOREIGN OWNERSHIP",
 ] as const;
 
 const batumiMarketStats = [
-  { value: "17,478", label: "Apartments sold*" },
-  { value: "$1.3B", label: "Residential market size*" },
-  { value: "+9.4%", label: "Primary-market price growth*" },
-  { value: "7.4%", label: "Average rental yield*" },
-  { value: "52%", label: "Foreign buyers in surveyed projects*" },
+  { value: "17,478", label: "Apartments sold" },
+  { value: "$1.3B", label: "Residential market size" },
+  { value: "+9.4%", label: "Primary-market price growth" },
+  { value: "7.4%", label: "Average rental yield" },
+  { value: "52%", label: "Foreign buyers in surveyed projects" },
 ] as const;
 
 const paymentStages = [
-  { value: "10%", title: "INITIAL PAYMENT", body: "Secure the selected property.*" },
-  { value: "30%", title: "DURING CONSTRUCTION", body: "Structured payments during the construction period.*" },
-  { value: "60%", title: "AT COMPLETION", body: "Minimal 60% of bank financing may be available subject to eligibility and lender approval.*" },
+  { value: "10%", title: "INITIAL PAYMENT", body: "Secure the selected property." },
+  { value: "30%", title: "DURING CONSTRUCTION", body: "Structured payments during the construction period." },
+  { value: "60%", title: "AT COMPLETION", body: "Minimal 60% of bank financing may be available subject to eligibility and lender approval." },
 ] as const;
 
 const aixcoCredibilityStats = [
@@ -155,7 +155,7 @@ const faqItems = [
   {
     question: "How much do I need to start?",
     answer:
-      "Selected Reverance apartments are currently marketed from approximately €45,000*, with structured payment options.*",
+      "Selected Reverance apartments are currently marketed from approximately €45,000, with structured payment options.",
   },
   {
     question: "When is Reverance expected to be completed?",
@@ -434,27 +434,30 @@ export function BrandbookLandingPage() {
                 <p className="mt-4 max-w-[34rem] text-[0.98rem] leading-[1.55] text-white/62">
                   {tx("AIXCO offers 28 selected apartments on the 13th and 14th floors of Project Reverance, with completion targeted for July 2028.")}
                 </p>
-                <div className="mt-7 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="reverance-hero-proof-grid mt-7 grid grid-cols-2 gap-2.5 sm:gap-3">
                   {heroProofPoints.map((point) => (
-                    <span key={point} className="border border-white/20 bg-white/[0.06] px-2 py-2.5 text-center text-[0.52rem] font-semibold uppercase tracking-[0.12em] text-white/80 sm:text-[0.55rem] sm:tracking-[0.14em]">
+                    <span
+                      key={point}
+                      className="reverance-hero-proof flex min-h-[3.25rem] items-center justify-center border border-white/25 bg-white/[0.08] px-2.5 py-2.5 text-center text-[0.64rem] font-semibold uppercase leading-[1.25] tracking-[0.1em] text-white sm:min-h-[3.5rem] sm:px-3 sm:text-[0.68rem] sm:tracking-[0.12em]"
+                    >
                       {tx(point)}
                     </span>
                   ))}
                 </div>
-                <div className="mt-8 flex flex-wrap items-center gap-3">
+                <div className="reverance-hero-actions mt-8 grid gap-3 sm:grid-cols-2">
                   <a
                     href="#opportunity"
                     onClick={(event) => {
                       event.preventDefault();
                       handleNavClick("#opportunity");
                     }}
-                    className="brandbook-button-gold inline-flex min-h-12 items-center gap-3 bg-[#E6C767] px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#161616]"
+                    className="brandbook-button-gold inline-flex min-h-12 w-full items-center justify-center gap-2.5 bg-[#E6C767] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#161616] sm:justify-start sm:px-5 sm:text-[0.74rem] sm:tracking-[0.15em]"
                   >
                     {tx("VIEW AVAILABLE APARTMENTS")} <ArrowUpRight size={16} strokeWidth={1.8} />
                   </a>
-                  <CurrentProjectBrochureLink className="inline-flex min-h-12 items-center gap-3 border border-white/70 bg-white/[0.06] px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]" />
+                  <CurrentProjectBrochureLink className="inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-white/70 bg-white/[0.06] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616] sm:justify-start sm:px-5 sm:text-[0.74rem] sm:tracking-[0.15em]" />
                 </div>
-                <p className="mt-4 max-w-[34rem] text-[0.72rem] leading-5 text-white/48">
+                <p className="reverance-hero-disclaimer mt-4 max-w-[34rem] text-[0.8rem] leading-[1.45] text-white/70 sm:text-[0.84rem]">
                   {tx("Pricing, payment terms and financing are subject to apartment availability, eligibility and final contractual terms.")}
                 </p>
               </div>
@@ -533,7 +536,7 @@ export function BrandbookLandingPage() {
                 </div>
                 <div className="border-l border-t border-[#161616]/20 py-5 pl-4 xl:border-t-0">
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("25,000 m²")}</strong>
-                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[#161616]/70">{tx("Comfort & community infrastructure*")}</span>
+                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[#161616]/70">{tx("Comfort & community infrastructure")}</span>
                 </div>
               </div>
               <div className="mt-8 grid gap-3 text-sm leading-6 text-[#161616]/62">
