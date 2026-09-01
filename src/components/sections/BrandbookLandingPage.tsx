@@ -420,14 +420,14 @@ export function BrandbookLandingPage() {
           aria-haspopup="dialog"
           aria-controls="amenities-gallery-dialog"
           onClick={() => setAmenitiesOpen(true)}
-          className="group w-full bg-[#F3EDE1] p-6 text-start transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A5417] focus-visible:ring-inset sm:p-7"
+          className="group w-full border border-[#161616]/15 bg-[#F3EDE1] p-6 text-start transition-[background-color,border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-[#6A5417]/70 hover:bg-white hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A5417] focus-visible:ring-inset sm:p-7"
         >
           {cardContent}
         </button>
       );
     }
 
-    return <article key={benefit.title} className="bg-[#F3EDE1] p-6 sm:p-7">{cardContent}</article>;
+    return <article key={benefit.title} className="border border-[#161616]/15 bg-[#F3EDE1] p-6 transition-[background-color,border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-[#6A5417]/60 hover:bg-white hover:shadow-md sm:p-7">{cardContent}</article>;
   };
 
   useEffect(() => {
