@@ -374,6 +374,19 @@
   color: var(--gold-deep);
 }
 
+.heroActions .textButton {
+  border: 1px solid rgb(22 22 22 / 24%);
+  padding-inline: 1rem;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.heroActions .textButton:hover {
+  border-color: var(--gold-deep);
+  background: var(--gold);
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+
 .heroFootnote {
   display: flex;
   flex-wrap: wrap;
