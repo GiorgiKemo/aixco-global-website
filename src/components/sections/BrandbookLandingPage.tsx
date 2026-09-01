@@ -192,6 +192,12 @@ export function BrandbookLandingPage() {
   const languageSwitcherRef = useRef<HTMLDivElement | null>(null);
   const formStartedAtRef = useRef(Date.now());
   const currentLangName = LANGS.find((option) => option.code === lang)?.native ?? lang.toUpperCase();
+  const renderBenefitCard = (benefit: { title: string; body: string }) => (
+    <article key={benefit.title} className="bg-[#F3EDE1] p-6 sm:p-7">
+      <h3 className="text-lg font-medium tracking-[-0.035em] sm:text-xl">{tx(benefit.title)}</h3>
+      <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx(benefit.body)}</p>
+    </article>
+  );
 
   useEffect(() => {
     if (!expandedImage) return;
@@ -660,23 +666,37 @@ export function BrandbookLandingPage() {
 
             <div className="mt-16 border-t border-[#161616]/15 pt-8 lg:mt-24">
               <p className="brandbook-eyebrow">{tx("Project benefits")}</p>
-              <div className="mt-6 grid gap-px bg-[#161616]/15 sm:grid-cols-2 lg:grid-cols-3">
-                {projectBenefits.map((benefit) => (
-                  <article key={benefit.title} className="bg-[#F3EDE1] p-6 sm:p-7">
-                    <h3 className="text-lg font-medium tracking-[-0.035em] sm:text-xl">{tx(benefit.title)}</h3>
-                    <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx(benefit.body)}</p>
-                  </article>
-                ))}
+              <div className="mt-6">
+                <div className="grid gap-px bg-[#161616]/15 sm:grid-cols-2 lg:hidden">
+                  {projectBenefits.map(renderBenefitCard)}
+                </div>
+                <div className="hidden lg:block">
+                  <div className="grid gap-px bg-[#161616]/15 lg:grid-cols-3">
+                    {projectBenefits.slice(0, 3).map(renderBenefitCard)}
+                  </div>
+                  <div className="mt-px flex justify-center border-t border-[#161616]/15 pt-px">
+                    <div className="grid w-2/3 grid-cols-2 gap-px bg-[#161616]/15">
+                      {projectBenefits.slice(3).map(renderBenefitCard)}
+                    </div>
+                  </div>
+                </div>
               </div>
               <p className="brandbook-eyebrow mt-14">{tx("OWNERSHIP IN GEORGIA")}</p>
               <h3 className="mt-4 max-w-[22ch] text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("A PROPERTY MARKET BUILT FOR INTERNATIONAL OWNERS.")}</h3>
-              <div className="mt-6 grid gap-px bg-[#161616]/15 sm:grid-cols-2 lg:grid-cols-3">
-                {ownershipBenefits.map((benefit) => (
-                  <article key={benefit.title} className="bg-[#F3EDE1] p-6 sm:p-7">
-                    <h3 className="text-lg font-medium tracking-[-0.035em] sm:text-xl">{tx(benefit.title)}</h3>
-                    <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx(benefit.body)}</p>
-                  </article>
-                ))}
+              <div className="mt-6">
+                <div className="grid gap-px bg-[#161616]/15 sm:grid-cols-2 lg:hidden">
+                  {ownershipBenefits.map(renderBenefitCard)}
+                </div>
+                <div className="hidden lg:block">
+                  <div className="grid gap-px bg-[#161616]/15 lg:grid-cols-3">
+                    {ownershipBenefits.slice(0, 3).map(renderBenefitCard)}
+                  </div>
+                  <div className="mt-px flex justify-center border-t border-[#161616]/15 pt-px">
+                    <div className="grid w-2/3 grid-cols-2 gap-px bg-[#161616]/15">
+                      {ownershipBenefits.slice(3).map(renderBenefitCard)}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

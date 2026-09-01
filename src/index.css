@@ -12678,9 +12678,8 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 .reverance-editorial {
   --reverance-paper: var(--brand-ivory);
   --reverance-paper-deep: var(--brand-white);
-  --reverance-ink: var(--brand-onyx);
-  --reverance-muted: rgb(22 22 22 / 0.68);
-  --reverance-dark-muted: rgb(255 255 255 / 0.68);
+  --reverance-ink: #161616;
+  --reverance-muted: rgb(22 22 22 / 0.65);
   background: var(--reverance-paper) !important;
 }
 
@@ -12707,14 +12706,14 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial .brandbook-header {
-  background: rgb(243 237 225 / 100%) !important;
+  background: rgb(243 237 225 / 94%) !important;
   box-shadow: 0 1rem 2.5rem -2.2rem rgb(22 22 22 / 0.35);
 }
 
 .reverance-editorial #top > div:first-child > div:first-child {
-  background: var(--brandbook-ink) !important;
-  border-right: 1px solid rgb(255 255 255 / 0.14);
-  color: var(--brand-white) !important;
+  background: var(--reverance-paper) !important;
+  border-right: 1px solid rgb(22 22 22 / 0.12);
+  color: var(--reverance-ink) !important;
 }
 
 @media (min-width: 1024px) {
@@ -12747,8 +12746,45 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   box-shadow: 0 1px 0 rgb(22 22 22 / 0.04);
 }
 
+.reverance-editorial #top > div:first-child > div:first-child [class*="text-white"],
+.reverance-editorial #top > div:first-child > div:first-child .text-white {
+  color: var(--reverance-ink) !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child [class*="border-white"] {
+  border-color: rgb(22 22 22 / 0.24) !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child a:not(.brandbook-button-gold):not(.reverance-hero-cta-secondary) {
+  background: transparent !important;
+  color: var(--reverance-ink) !important;
+  text-shadow: none !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child .brandbook-button-gold {
+  color: var(--reverance-ink) !important;
+}
+
 .reverance-editorial .reverance-hero-disclaimer {
-  color: var(--reverance-dark-muted) !important;
+  color: var(--reverance-muted) !important;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child .reverance-hero-actions a.reverance-hero-cta-secondary {
+  border-color: rgb(22 22 22 / 0.22) !important;
+  background: rgb(255 255 255 / 0.72) !important;
+  color: var(--reverance-ink) !important;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.reverance-editorial #top > div:first-child > div:first-child .reverance-hero-actions a.reverance-hero-cta-secondary:hover {
+  background: var(--brandbook-gold) !important;
+  border-color: var(--brandbook-gold) !important;
+  color: var(--reverance-ink) !important;
+  transform: translateY(-1px);
 }
 
 @media (min-width: 640px) {
@@ -12758,12 +12794,16 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   }
 }
 
+.reverance-editorial #top > div:first-child > div:first-child > p {
+  color: var(--aixco-gold-accessible) !important;
+}
+
 .reverance-editorial #top > div:first-child > div:first-child [class*="text-[#E6C767]"] {
-  color: var(--brandbook-gold) !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .reverance-editorial #top > div:first-child > div:first-child h1 span {
-  color: var(--brandbook-gold) !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .reverance-editorial #top > div:first-child > div:first-child > p > span {
@@ -12802,18 +12842,23 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial #approach {
-  background: var(--brand-navy) !important;
-  color: var(--brand-white) !important;
+  background: var(--reverance-paper-deep) !important;
+  color: var(--reverance-ink) !important;
+}
+
+.reverance-editorial #approach [class*="text-white"],
+.reverance-editorial #approach .text-white {
+  color: var(--reverance-ink) !important;
 }
 
 .reverance-editorial #approach [class*="border-white"],
 .reverance-editorial #approach article {
-  border-color: rgb(255 255 255 / 0.18) !important;
+  border-color: rgb(22 22 22 / 0.18) !important;
 }
 
 .reverance-editorial #approach [class*="text-[#E6C767]"],
 .reverance-editorial #approach .brandbook-eyebrow-light {
-  color: var(--brandbook-gold) !important;
+  color: var(--aixco-gold-accessible) !important;
 }
 
 .reverance-editorial #residence {
@@ -12821,16 +12866,31 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
 }
 
 .reverance-editorial #contact {
-  background: var(--brandbook-ink) !important;
-  color: var(--brand-white) !important;
+  background: var(--reverance-paper-deep) !important;
+  color: var(--reverance-ink) !important;
+}
+
+.reverance-editorial #contact [class*="text-white"],
+.reverance-editorial #contact .text-white {
+  color: var(--reverance-ink) !important;
 }
 
 .reverance-editorial #contact [class*="border-white"] {
-  border-color: rgb(255 255 255 / 0.18) !important;
+  border-color: rgb(22 22 22 / 0.18) !important;
 }
 
 .reverance-editorial #contact .brandbook-eyebrow-light {
-  color: var(--brandbook-gold) !important;
+  color: var(--aixco-gold-accessible) !important;
+}
+
+.reverance-editorial #contact .brandbook-input {
+  border-color: rgb(22 22 22 / 0.25);
+  background: rgb(255 255 255 / 0.42);
+  color: var(--reverance-ink);
+}
+
+.reverance-editorial #contact .brandbook-input::placeholder {
+  color: rgb(22 22 22 / 0.48);
 }
 
 .reverance-editorial #contact .brandbook-button-gold {
