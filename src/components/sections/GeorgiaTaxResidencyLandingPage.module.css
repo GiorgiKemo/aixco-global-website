@@ -1496,6 +1496,7 @@
 .footer > a {
   display: block;
   width: 8rem;
+  margin-inline-start: 2rem;
 }
 
 .footerInfo {
@@ -1660,6 +1661,10 @@
 
   .footer {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .footer > a {
+    margin-inline-start: 4rem;
   }
 
   .footerInfo,
