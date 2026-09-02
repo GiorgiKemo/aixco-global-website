@@ -7,6 +7,8 @@ import { downloadGateTranslations } from "./download-gate-translations";
 import { normalizeGermanCompactMetricTranslation } from "./german-metric-notation";
 import { germanTranslationFixes } from "./german-translation-fixes";
 import { languageOptions, type CatalogLang, type Lang } from "./languages";
+import { landingPageReauditTranslations } from "./landing-page-reaudit-translations";
+import { landingPageReauditQualityTranslations } from "./landing-page-reaudit-quality-translations";
 import { localePassthroughFixes } from "./locale-passthrough-fixes";
 import { localeTranslationFixes } from "./locale-translation-fixes";
 import { polishTranslations } from "./polish-translations";
@@ -34,7 +36,7 @@ const MEDICAL_TOURISM_METADATA_DESCRIPTION =
   "Plan medical treatment in Georgia with AIXCO.Global: 50-80% lower costs than Western Europe, named private clinics, and recovery on the Black Sea coast in Batumi.";
 const GEORGIA_RESIDENCY_METADATA_TITLE = "Residence Permit and Tax Residency in Georgia | AIXCO.Global";
 const GEORGIA_RESIDENCY_METADATA_DESCRIPTION =
-  "Three official AIXCO paths to reside in Georgia: business registration from about €17,000 turnover, property from €138,000, or investment from €276,000, plus the HNWI tax residency process.";
+  "Explore Georgian residence pathways through qualifying business activity, property above $150,000 certified market value, or qualifying investment from $300,000, with coordinated AIXCO support.";
 const GEORGIA_TAX_RESIDENCY_METADATA_TITLE = "Georgia Tax Residency for HNWI | AIXCO.Global";
 const GEORGIA_TAX_RESIDENCY_METADATA_DESCRIPTION =
   "AIXCO.Global helps internationally mobile individuals map a clear, compliant route to Georgia tax residency with private guidance across residence, documentation and cross-border context.";
@@ -1798,6 +1800,7 @@ const siteProgressTranslations: TranslationSource = {
 };
 
 const baseCatalogSources: TranslationSource[] = [
+  landingPageReauditQualityTranslations,
   georgiaResidencyTranslations,
   medicalTourismTranslations,
   brandbookLandingTranslations,
@@ -1808,7 +1811,6 @@ const baseCatalogSources: TranslationSource[] = [
   slovenianTranslationFixes,
   germanTranslationFixes,
   localeTranslationFixes,
-  localePassthroughFixes,
   polishTranslations,
   polishTranslationsExtra,
   polishTranslationsFinal,
@@ -1818,6 +1820,8 @@ const baseCatalogSources: TranslationSource[] = [
   propertyPageTranslations,
   reveranceCalculatorTranslations,
   germanQualityTranslations,
+  landingPageReauditTranslations,
+  localePassthroughFixes,
   supplementalTranslations,
   clientBriefPassthroughTranslations,
   teamContentTranslations,
@@ -1837,6 +1841,7 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
+        landingPageReauditQualityTranslations,
         georgiaResidencyTranslations,
         medicalTourismTranslations,
         brandbookLandingTranslations,
@@ -1848,7 +1853,6 @@ function loadTranslationCatalogs() {
         slovenian.slovenianTranslations,
         germanTranslationFixes,
         localeTranslationFixes,
-        localePassthroughFixes,
         polishTranslations,
         polishTranslationsExtra,
         polishTranslationsFinal,
@@ -1858,6 +1862,8 @@ function loadTranslationCatalogs() {
         propertyPageTranslations,
         reveranceCalculatorTranslations,
         germanQualityTranslations,
+        landingPageReauditTranslations,
+        localePassthroughFixes,
         supplementalTranslations,
         translations.textTranslations,
         assets.assetTranslations,

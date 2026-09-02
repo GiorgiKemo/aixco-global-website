@@ -103,7 +103,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       { value: "Since 2009", label: "Real Estate Experience" },
     ],
     who: {
-      eyebrow: "01 — Who we are",
+      eyebrow: "02 — Why invest in AIXCO?",
       title: "An international real estate investor, built for emerging markets.",
       paragraphs: [
         "AIXCO combines Swiss discipline with an international outlook to identify real estate opportunities before they become mainstream.",
@@ -112,15 +112,15 @@ const copyByLanguage: Record<Lang, Copy> = {
       ],
     },
     markets: {
-      eyebrow: "02 — Why emerging markets",
-      title: "We move before the market feels obvious.",
-      body: "Mature real estate markets offer safety — but limited upside. Emerging markets offer what mature markets no longer can: early entry pricing, strong growth trajectories, and outsized appreciation potential.",
-      current: "Current focus",
-      currentBody: "Batumi, Georgia — one of Europe's fastest-growing coastal real estate markets — alongside a selective pipeline of opportunities across Georgia, the UAE, and other emerging economies with comparable structural tailwinds.",
+      eyebrow: "05 — The markets we believe in",
+      title: "Every market tells a chapter of the AIXCO story.",
+      body: "Switzerland is our foundation. Dubai strengthened our international presence and experience. Georgia is the current opportunity, positioned for long-term growth and value creation.",
+      current: "Future markets",
+      currentBody: "The next chapter expands into carefully selected emerging markets as new opportunities arise and long-term fundamentals support sustainable growth.",
       imageAlt: "Batumi modern coastline with towers beside the Black Sea",
     },
     model: {
-      eyebrow: "03 — How we operate",
+      eyebrow: "How we operate",
       title: "A vertically integrated real estate model.",
       body: "From the first market signal to the moment value is realized, the model keeps research, acquisition, development and portfolio growth connected.",
       steps: [
@@ -133,14 +133,14 @@ const copyByLanguage: Record<Lang, Copy> = {
       ],
     },
     structure: {
-      eyebrow: "04 — Institutional structure",
-      title: "Institutional structure. Regulated access.",
-      body: "AIXCO Global Assets GmbH, the entity behind the AIXCO Global Bond, is headquartered in Vienna, Austria, and licensed for the purchase, sale, letting, financing and leasing of real estate.",
+      eyebrow: "09 — AIXCO Global Bond",
+      title: "A direct way to participate in AIXCO's long-term growth.",
+      body: "The AIXCO Global Bond provides access to AIXCO's professionally managed real estate strategy through a fixed annual coupon and the potential for additional profit participation. Rather than purchasing and managing an individual property, investors participate in the company behind the portfolio.",
       badges: ["Vienna, Austria HQ", "Regulated bond issuer", "Listed on Vienna MTF", "Fixed 6% coupon"],
       note: "In December 2025, AIXCO Global Assets GmbH listed its 6% Subordinated Bond 2025–2030 (ISIN: AT0000A3QME7) on the Vienna MTF — giving investors regulated, transparent access to a diversified emerging-market real estate strategy, structured as a fixed-income instrument.",
     },
     transparency: {
-      eyebrow: "04B — Governance & transparency",
+      eyebrow: "Governance & transparency",
       title: "Built on transparency.",
       body: "AIXCO Global operates with the transparency investors expect from a regulated, listed issuer. Every investment decision, project update, and financial result is communicated clearly and on a consistent schedule — so investors always know exactly where their capital stands.",
       quarterly: "We report to our investors on a quarterly basis, covering portfolio performance, project progress, and financial results — giving you continuous visibility into how your investment is performing, not just an annual snapshot.",
@@ -152,7 +152,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       ],
     },
     closing: {
-      eyebrow: "05 — Begin the conversation",
+      eyebrow: "Begin the conversation",
       title: "Invest where growth is just beginning.",
       body: "AIXCO Global gives investors direct access to a professionally managed, emerging-market real estate strategy — without the burden of owning or managing property directly.",
       primary: "Explore the AIXCO Global Bond",
@@ -160,9 +160,9 @@ const copyByLanguage: Record<Lang, Copy> = {
       tertiary: "Talk to an investment specialist",
     },
     contact: {
-      eyebrow: "Private investor briefing",
-      title: "Make the opportunity legible.",
-      body: "Tell us what you are considering and our team will prepare a focused introduction to the AIXCO Global Bond and current real estate opportunities.",
+      eyebrow: "Investor information package",
+      title: "Participate in AIXCO's long-term growth.",
+      body: "Request your investor information package and schedule a private consultation with our team.",
       name: "Full name",
       email: "Email address",
       interest: "Area of interest",
@@ -172,7 +172,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       messagePlaceholder: "Tell us what you are exploring",
       interestOptions: ["AIXCO Global Bond", "Current projects", "Emerging-market strategy", "Investment specialist"],
       consent: "By sending this form, you agree that AIXCO may contact you about your request.",
-      submit: "Request an investment brief",
+      submit: "Request your investor package",
       sending: "Sending request",
       successTitle: "Your request is with us.",
       successBody: "A member of the AIXCO investment team will be in touch shortly.",
@@ -193,7 +193,7 @@ const copyByLanguage: Record<Lang, Copy> = {
     hero: {
       eyebrow: "AIXCO Global Anleihe",
       title: "DIREKTER ZUGANG ZU AIXCO",
-      accent: "HINTER ERFOLGREICHER IMMOBILIEN.",
+      accent: "DAS UNTERNEHMEN HINTER ERFOLGREICHEN IMMOBILIENPROJEKTEN.",
       body: "Beteiligen Sie sich an AIXCOs langfristiger Immobilienstrategie über eine professionell verwaltete Unternehmensanleihe.",
       primary: "Investorenbroschüre herunterladen",
       secondary: "Private Beratung buchen",
@@ -209,7 +209,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       { value: "Seit 2009", label: "Immobilienerfahrung" },
     ],
     who: {
-      eyebrow: "01 — Über uns",
+      eyebrow: "02 — Warum in AIXCO investieren?",
       title: "Ein internationaler Immobilieninvestor für Wachstumsmärkte.",
       paragraphs: [
         "AIXCO verbindet Schweizer Disziplin mit internationaler Ausrichtung, um Immobilienchancen zu identifizieren, bevor sie zum Mainstream werden.",
@@ -226,7 +226,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       imageAlt: "Moderne Skyline von Batumi am Schwarzen Meer",
     },
     model: {
-      eyebrow: "03 — Unser Vorgehen",
+      eyebrow: "Unser Vorgehen",
       title: "Ein vertikal integriertes Immobilienmodell.",
       body: "Vom ersten Marktsignal bis zur Realisierung des Werts verbindet unser Modell Forschung, Erwerb, Entwicklung und Portfoliowachstum.",
       steps: [
@@ -246,7 +246,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       note: "Im Dezember 2025 notierte die AIXCO Global Assets GmbH ihre 6% Subordinated Bond 2025–2030 (ISIN: AT0000A3QME7) an der Vienna MTF — als regulierten und transparenten Zugang zu einer diversifizierten Immobilienstrategie in Wachstumsmärkten.",
     },
     transparency: {
-      eyebrow: "04B — Governance & Transparenz",
+      eyebrow: "Governance & Transparenz",
       title: "Auf Transparenz gebaut.",
       body: "AIXCO Global arbeitet mit der Transparenz, die Anleger von einem regulierten, gelisteten Emittenten erwarten. Jede Investitionsentscheidung, jedes Projektupdate und jedes Finanzergebnis wird klar und nach einem festen Zeitplan kommuniziert.",
       quarterly: "Wir berichten vierteljährlich über Portfolioperformance, Projektfortschritt und Finanzergebnisse — damit Anleger kontinuierlich sehen, wie sich ihre Investition entwickelt.",
@@ -258,7 +258,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       ],
     },
     closing: {
-      eyebrow: "05 — Gespräch beginnen",
+      eyebrow: "Gespräch beginnen",
       title: "Investieren, wo Wachstum gerade beginnt.",
       body: "AIXCO Global bietet direkten Zugang zu einer professionell verwalteten Immobilienstrategie in Wachstumsmärkten — ohne Immobilien selbst besitzen oder verwalten zu müssen.",
       primary: "Die AIXCO Global Anleihe entdecken",
@@ -298,8 +298,8 @@ const copyByLanguage: Record<Lang, Copy> = {
     nav: { who: "O nas", markets: "Rynki wschodzące", model: "Nasz model", structure: "Struktura", contact: "Poproś o brief" },
     hero: {
       eyebrow: "Obligacja AIXCO Global",
-      title: "DOSTĘP DO AIXCO",
-      accent: "FIRMA ZA UDANYMI NIERUCHOMOŚCIAMI.",
+      title: "BEZPOŚREDNI DOSTĘP DO AIXCO",
+      accent: "SPÓŁKI STOJĄCEJ ZA UDANYMI INWESTYCJAMI W NIERUCHOMOŚCI.",
       body: "Weź udział w długoterminowej strategii nieruchomościowej AIXCO poprzez profesjonalnie zarządzaną obligację korporacyjną.",
       primary: "Pobierz broszurę inwestora",
       secondary: "Umów prywatną konsultację",
@@ -315,7 +315,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       { value: "Od 2009", label: "Doświadczenie w nieruchomościach" },
     ],
     who: {
-      eyebrow: "01 — O nas",
+      eyebrow: "02 — Dlaczego warto inwestować w AIXCO?",
       title: "Międzynarodowy inwestor nieruchomości zbudowany dla rynków wschodzących.",
       paragraphs: [
         "AIXCO łączy szwajcarską dyscyplinę z międzynarodową perspektywą, aby identyfikować szanse w nieruchomościach, zanim staną się powszechne.",
@@ -332,7 +332,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       imageAlt: "Nowoczesna panorama Batumi nad Morzem Czarnym",
     },
     model: {
-      eyebrow: "03 — Jak działamy",
+      eyebrow: "Jak działamy",
       title: "Wertykalnie zintegrowany model nieruchomości.",
       body: "Od pierwszego sygnału rynkowego do realizacji wartości łączymy badania, nabycie, rozwój i wzrost portfela.",
       steps: [
@@ -352,7 +352,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       note: "W grudniu 2025 roku AIXCO Global Assets GmbH wprowadziła na Vienna MTF obligację 6% Subordinated Bond 2025–2030 (ISIN: AT0000A3QME7), oferując regulowany i przejrzysty dostęp do zdywersyfikowanej strategii nieruchomości na rynkach wschodzących.",
     },
     transparency: {
-      eyebrow: "04B — Zarządzanie i przejrzystość",
+      eyebrow: "Zarządzanie i przejrzystość",
       title: "Zbudowane na przejrzystości.",
       body: "AIXCO Global działa z przejrzystością oczekiwaną od regulowanego, notowanego emitenta. Każda decyzja inwestycyjna, aktualizacja projektu i wynik finansowy są komunikowane jasno i zgodnie z harmonogramem.",
       quarterly: "Kwartalnie raportujemy wyniki portfela, postęp projektów i rezultaty finansowe — zapewniając stały wgląd w wyniki inwestycji, a nie tylko roczne podsumowanie.",
@@ -364,7 +364,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       ],
     },
     closing: {
-      eyebrow: "05 — Rozpocznij rozmowę",
+      eyebrow: "Rozpocznij rozmowę",
       title: "Inwestuj tam, gdzie wzrost dopiero się zaczyna.",
       body: "AIXCO Global zapewnia bezpośredni dostęp do profesjonalnie zarządzanej strategii nieruchomości na rynkach wschodzących — bez konieczności samodzielnego posiadania i zarządzania nieruchomością.",
       primary: "Poznaj obligację AIXCO Global",
@@ -405,7 +405,7 @@ const copyByLanguage: Record<Lang, Copy> = {
     hero: {
       eyebrow: "Obveznica AIXCO Global",
       title: "NEPOSREDEN DOSTOP DO AIXCO",
-      accent: "PODJETJA ZA USPEŠNIMI NEPREMIČNINAMI.",
+      accent: "PODJETJA, KI STOJI ZA USPEŠNIMI NEPREMIČNINSKIMI PROJEKTI.",
       body: "Sodelujte v dolgoročni nepremičninski strategiji AIXCO prek profesionalno upravljane korporativne obveznice.",
       primary: "Prenesite brošuro za vlagatelje",
       secondary: "Rezervirajte zasebno posvetovanje",
@@ -421,7 +421,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       { value: "Od 2009", label: "Izkušnje z nepremičninami" },
     ],
     who: {
-      eyebrow: "01 — O nas",
+      eyebrow: "02 — Zakaj vlagati v AIXCO?",
       title: "Mednarodni vlagatelj v nepremičnine, zgrajen za rastoče trge.",
       paragraphs: [
         "AIXCO združuje švicarsko disciplino z mednarodno usmerjenostjo, da prepozna priložnosti v nepremičninah, preden postanejo mainstream.",
@@ -438,7 +438,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       imageAlt: "Sodobna panorama Batumija ob Črnem morju",
     },
     model: {
-      eyebrow: "03 — Kako delujemo",
+      eyebrow: "Kako delujemo",
       title: "Vertikalno integriran nepremičninski model.",
       body: "Od prvega tržnega signala do uresničitve vrednosti povezujemo raziskave, pridobivanje, razvoj in rast portfelja.",
       steps: [
@@ -458,7 +458,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       note: "Decembra 2025 je AIXCO Global Assets GmbH na Vienna MTF uvrstila 6% Subordinated Bond 2025–2030 (ISIN: AT0000A3QME7), ki vlagateljem omogoča reguliran in pregleden dostop do razpršene nepremičninske strategije na rastočih trgih.",
     },
     transparency: {
-      eyebrow: "04B — Upravljanje in preglednost",
+      eyebrow: "Upravljanje in preglednost",
       title: "Zgrajeno na preglednosti.",
       body: "AIXCO Global deluje s preglednostjo, ki jo vlagatelji pričakujejo od reguliranega, kotiranega izdajatelja. Vsaka naložbena odločitev, posodobitev projekta in finančni rezultat so sporočeni jasno in po stalnem urniku.",
       quarterly: "Vlagatelje četrtletno obveščamo o uspešnosti portfelja, napredku projektov in finančnih rezultatih — za stalni vpogled v uspešnost naložbe.",
@@ -470,7 +470,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       ],
     },
     closing: {
-      eyebrow: "05 — Začnite pogovor",
+      eyebrow: "Začnite pogovor",
       title: "Vlagajte tam, kjer se rast šele začenja.",
       body: "AIXCO Global vlagateljem omogoča neposreden dostop do strokovno upravljane nepremičninske strategije na rastočih trgih — brez bremena neposrednega lastništva ali upravljanja nepremičnin.",
       primary: "Spoznajte obveznico AIXCO Global",
@@ -510,8 +510,8 @@ const copyByLanguage: Record<Lang, Copy> = {
     nav: { who: "О нас", markets: "Растущие рынки", model: "Наша модель", structure: "Структура", contact: "Запросить бриф" },
     hero: {
       eyebrow: "Облигация AIXCO Global",
-      title: "ПРЯМОЙ ДОСТУП",
-      accent: "К КОМПАНИИ AIXCO.",
+      title: "ПРЯМОЙ ДОСТУП К AIXCO",
+      accent: "КОМПАНИИ, СТОЯЩЕЙ ЗА УСПЕШНЫМИ ПРОЕКТАМИ В НЕДВИЖИМОСТИ.",
       body: "Участвуйте в долгосрочной стратегии AIXCO в недвижимости через профессионально управляемую корпоративную облигацию.",
       primary: "Скачать брошюру для инвесторов",
       secondary: "Записаться на частную консультацию",
@@ -527,7 +527,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       { value: "С 2009 года", label: "Опыт в недвижимости" },
     ],
     who: {
-      eyebrow: "01 — О компании",
+      eyebrow: "02 — Почему стоит инвестировать в AIXCO?",
       title: "Международный инвестор в недвижимость для развивающихся рынков.",
       paragraphs: [
         "AIXCO сочетает швейцарскую дисциплину с международным подходом, чтобы находить возможности в недвижимости до того, как они станут мейнстримом.",
@@ -544,7 +544,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       imageAlt: "Современная панорама Батуми у Черного моря",
     },
     model: {
-      eyebrow: "03 — Как мы работаем",
+      eyebrow: "Как мы работаем",
       title: "Вертикально интегрированная модель недвижимости.",
       body: "От первого рыночного сигнала до реализации стоимости мы объединяем исследование, приобретение, развитие и рост портфеля.",
       steps: [
@@ -564,7 +564,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       note: "В декабре 2025 года AIXCO Global Assets GmbH разместила на Vienna MTF 6% Subordinated Bond 2025–2030 (ISIN: AT0000A3QME7), предоставляя регулируемый и прозрачный доступ к диверсифицированной стратегии недвижимости на развивающихся рынках.",
     },
     transparency: {
-      eyebrow: "04B — Управление и прозрачность",
+      eyebrow: "Управление и прозрачность",
       title: "Основано на прозрачности.",
       body: "AIXCO Global работает с уровнем прозрачности, которого инвесторы ожидают от регулируемого эмитента с листингом. Каждое инвестиционное решение, обновление по проектам и финансовый результат сообщаются ясно и по установленному графику.",
       quarterly: "Мы ежеквартально отчитываемся о результатах портфеля, ходе проектов и финансовых показателях, обеспечивая постоянную видимость эффективности инвестиций.",
@@ -576,7 +576,7 @@ const copyByLanguage: Record<Lang, Copy> = {
       ],
     },
     closing: {
-      eyebrow: "05 — Начать разговор",
+      eyebrow: "Начать разговор",
       title: "Инвестируйте там, где рост только начинается.",
       body: "AIXCO Global предоставляет прямой доступ к профессионально управляемой стратегии недвижимости на развивающихся рынках — без необходимости самостоятельно владеть или управлять недвижимостью.",
       primary: "Узнать об облигации AIXCO Global",
@@ -613,9 +613,37 @@ const copyByLanguage: Record<Lang, Copy> = {
 };
 
 const sectionIds = ["who", "markets", "model", "structure", "contact"] as const;
+const capitalFlow = [
+  { title: "Investor capital", body: "Participate through the AIXCO Global Bond." },
+  { title: "Acquisition", body: "Secure selected real estate opportunities at an early stage." },
+  { title: "Development", body: "Create value through project delivery and active management." },
+  { title: "Recurring income", body: "Build rental and operational cash flow from retained assets." },
+  { title: "Selective sales", body: "Realise value through disciplined disposals." },
+  { title: "Reinvestment", body: "Recycle capital into the next carefully selected opportunity." },
+] as const;
+
+const georgiaStats = [
+  ["7.5%", "GDP growth"],
+  ["17,478", "Property transactions"],
+  ["1%", "Rental income tax*"],
+  ["0%", "Capital gains tax after 2 years*"],
+  ["100%", "Foreign ownership"],
+  ["7.4%", "Average rental yield"],
+] as const;
+
+const valueSources = [
+  ["Property sales", "Realising value through selective disposals."],
+  ["Recurring rental income", "Building predictable cash flow from retained assets."],
+  ["Property appreciation", "Benefiting from long-term growth in asset values."],
+  ["Professional asset management", "Protecting and enhancing portfolio performance."],
+  ["Future developments", "Creating new opportunities through disciplined expansion."],
+  ["International growth", "Scaling the business across carefully selected markets."],
+] as const;
+
+const investorReasons = ["Swiss discipline", "Transparent structure", "Recurring income", "Real assets", "Professional management", "Long-term value"] as const;
 
 export function PrivateClientAdvisoryLandingPage() {
-  const { lang, setLang } = useI18n();
+  const { lang, setLang, tx } = useI18n();
   const { openPrivacy, openTerms } = useUI();
   const content = copyByLanguage[lang];
   const [menuOpen, setMenuOpen] = useState(false);
@@ -624,8 +652,11 @@ export function PrivateClientAdvisoryLandingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [requestReference, setRequestReference] = useState<string | null>(null);
+  const [roiAmount, setRoiAmount] = useState(25000);
   const languageRef = useRef<HTMLDivElement>(null);
   const formStartedAt = useRef(Date.now());
+  const annualCoupon = roiAmount * 0.06;
+  const fiveYearCoupon = annualCoupon * 5;
 
   useEffect(() => {
     document.title = content.metaTitle;
@@ -656,7 +687,16 @@ export function PrivateClientAdvisoryLandingPage() {
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
     const interest = String(form.get("interest") ?? "").trim();
-    const message = String(form.get("message") ?? "").trim();
+    const phone = String(form.get("phone") ?? "").trim();
+    const country = String(form.get("country") ?? "").trim();
+    const investmentRange = String(form.get("investmentRange") ?? "").trim();
+    const messageBody = String(form.get("message") ?? "").trim();
+    const message = [
+      messageBody,
+      phone ? "Phone / WhatsApp: " + phone : "",
+      country ? "Country of residence: " + country : "",
+      investmentRange ? "Investment range: " + investmentRange : "",
+    ].filter(Boolean).join("\n");
     const website = String(form.get("website") ?? "").trim();
     setSubmitError(null);
     setSubmitting(true);
@@ -722,7 +762,7 @@ export function PrivateClientAdvisoryLandingPage() {
 
       <main>
         <section className={styles.hero} aria-labelledby="private-client-title">
-          <div className={styles.heroIndex} aria-hidden="true"><span>01</span><i /><span>05</span></div>
+          <div className={styles.heroIndex} aria-hidden="true"><span>01</span><i /><span>13</span></div>
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>{content.hero.eyebrow}</p>
             <h1 id="private-client-title">{content.hero.title}<br />{" "}<span>{content.hero.accent}</span></h1>
@@ -757,8 +797,28 @@ export function PrivateClientAdvisoryLandingPage() {
         </section>
 
         <section id="markets" className={styles.marketSection}>
+          <div className={styles.briefBand}>
+            <div className={styles.briefIntro}>
+              <p className={styles.eyebrow}>{tx("03 — How your capital works")}</p>
+              <h2>{tx("A transparent strategy built around real assets.")}</h2>
+              <p>{tx("When you participate through the AIXCO Global Bond, your capital supports AIXCO's long-term real estate strategy. Rather than financing a single property, it contributes to a diversified portfolio where value is created through acquisition, development, recurring income and disciplined reinvestment.")}</p>
+            </div>
+            <div className={styles.capitalFlow}>
+              {capitalFlow.map((step, index) => <article key={step.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{tx(step.title)}</h3><p>{tx(step.body)}</p></article>)}
+            </div>
+          </div>
+          <div className={styles.earlyEntry}>
+            <div className={styles.briefIntro}>
+              <p className={styles.eyebrow}>{tx("04 — Why AIXCO enters early")}</p>
+              <h2>{tx("Creating value before the market reaches its full potential.")}</h2>
+              <p>{tx("AIXCO focuses on acquiring carefully selected assets at the earliest stages of development, where pricing typically reflects future potential rather than completed value. As projects progress through construction, completion and long-term ownership, value may increase through development, market demand and recurring rental income.")}</p>
+            </div>
+            <div className={styles.developmentCycle}>
+              {["Early acquisition", "Construction", "Completion", "Long-term ownership"].map((stage, index) => <article key={stage}><span>{String(index + 1).padStart(2, "0")}</span><h3>{tx(stage)}</h3><i aria-hidden /></article>)}
+            </div>
+          </div>
           <div className={styles.marketMedia}><Image src={contextImage} alt={content.markets.imageAlt} fill quality={90} sizes="(max-width: 800px) 100vw, 60vw" /></div>
-          <div className={styles.marketCopy}><p className={styles.eyebrow}>{content.markets.eyebrow}</p><h2>{content.markets.title}</h2><p>{content.markets.body}</p><div className={styles.focusNote}><span>{content.markets.current}</span><strong>{content.markets.currentBody}</strong></div></div>
+          <div className={styles.marketCopy}><p className={styles.eyebrow}>{tx(copyByLanguage.en.markets.eyebrow)}</p><h2>{tx(copyByLanguage.en.markets.title)}</h2><p>{tx(copyByLanguage.en.markets.body)}</p><div className={styles.focusNote}><span>{tx(copyByLanguage.en.markets.current)}</span><strong>{tx(copyByLanguage.en.markets.currentBody)}</strong></div></div>
         </section>
 
         <section id="model" className={`${styles.section} ${styles.modelSection}`}>
@@ -766,17 +826,105 @@ export function PrivateClientAdvisoryLandingPage() {
           <div className={styles.stepsGrid}>{content.model.steps.map((step, index) => { const Icon = iconForStep[index]; return <article className={styles.step} key={step.title}><div className={styles.stepTop}><span>0{index + 1}</span><Icon size={20} strokeWidth={1.5} aria-hidden /></div><h3>{step.title}</h3><p>{step.body}</p></article>; })}</div>
         </section>
 
+        <section id="pattern" className={styles.patternSection}>
+          <div className={styles.briefIntro}>
+            <p className={styles.eyebrow}>{tx("06 — The pattern")}</p>
+            <h2>{tx("Yesterday's emerging markets are today's established markets.")}</h2>
+            <p>{tx("The world's most successful real estate markets did not become established overnight. Before attracting international capital and achieving today's valuations, they experienced years of economic development, infrastructure investment and growing investor confidence.")}</p>
+            <p>{tx("AIXCO seeks to identify markets at this stage of their evolution — before they become widely recognised by international investors.")}</p>
+          </div>
+          <div className={styles.patternGrid}>
+            {["Warsaw", "Bucharest", "Astana", "Tbilisi"].map((market, index) => <article key={market}><span>{String(index + 1).padStart(2, "0")}</span><h3>{market}</h3><p>{tx("Emerging market → established international market")}</p></article>)}
+          </div>
+        </section>
+
+        <section id="georgia" className={styles.georgiaSection}>
+          <div className={styles.briefIntro}>
+            <p className={styles.eyebrow}>{tx("07 — Why Georgia")}</p>
+            <h2>{tx("A coastal market with measurable momentum.")}</h2>
+          </div>
+          <div className={styles.georgiaGrid}>
+            {georgiaStats.map(([value, label]) => <article key={label}><strong>{value}</strong><span>{tx(label)}</span></article>)}
+          </div>
+          <p className={styles.researchNote}>{tx("Independent market research: Colliers Georgia and Galt & Taggart.")}</p>
+        </section>
+
+        <section id="value" className={styles.valueSection}>
+          <div className={styles.briefIntro}>
+            <p className={styles.eyebrow}>{tx("08 — Where value is created")}</p>
+            <h2>{tx("AIXCO does not depend on a single source of income.")}</h2>
+          </div>
+          <div className={styles.valueGrid}>
+            {valueSources.map(([title, body], index) => <article key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{tx(title)}</h3><p>{tx(body)}</p></article>)}
+          </div>
+          <p className={styles.researchNote}>{tx("Together, these activities strengthen AIXCO's portfolio and support sustainable long-term growth.")}</p>
+        </section>
+
         <section id="structure" className={styles.structureSection}>
-          <div className={styles.structureIntro}><p className={styles.eyebrow}>{content.structure.eyebrow}</p><h2>{content.structure.title}</h2><p>{content.structure.body}</p></div>
+          <div className={styles.structureIntro}><p className={styles.eyebrow}>{tx(copyByLanguage.en.structure.eyebrow)}</p><h2>{tx(copyByLanguage.en.structure.title)}</h2><p>{tx(copyByLanguage.en.structure.body)}</p></div>
           <div className={styles.bondCard}><div className={styles.bondMark}><ShieldCheck size={22} strokeWidth={1.5} aria-hidden /><span>AIXCO<br />GLOBAL<br />ASSETS</span></div><div className={styles.bondInfo}><span className={styles.bondLabel}>AIXCO GLOBAL BOND</span><strong>6%</strong><span>Subordinated Bond 2025–2030</span><small>ISIN: AT0000A3QME7 · Vienna MTF</small></div></div>
           <div className={styles.badges}>{content.structure.badges.map((badge) => <span key={badge}>{badge}</span>)}</div>
           <p className={styles.structureNote}>{content.structure.note}</p>
+          <ul className={styles.bondBenefits}>
+            {["Access AIXCO's diversified real estate strategy", "Participate from as little as €1,000", "6% fixed annual coupon", "Potential additional profit participation*", "Listed on the Vienna MTF and Frankfurt Stock Exchange", "Backed by a professionally managed real estate business"].map((item) => <li key={item}><ShieldCheck size={15} />{tx(item)}</li>)}
+          </ul>
         </section>
 
         <section className={`${styles.section} ${styles.transparencySection}`}>
           <div className={styles.sectionIntro}><p className={styles.eyebrow}>{content.transparency.eyebrow}</p><h2>{content.transparency.title}</h2></div>
           <div className={styles.transparencyCopy}><p>{content.transparency.body}</p><p className={styles.quarterly}>{content.transparency.quarterly}</p></div>
           <div className={styles.transparencyGrid}>{content.transparency.items.map((item) => <article key={item.title}><span className={styles.itemRule} /><h3>{item.title}</h3><p>{item.body}</p></article>)}</div>
+        </section>
+
+        <section id="roi" className={styles.roiSection}>
+          <div className={styles.briefIntro}>
+            <p className={styles.eyebrow}>{tx("10 — ROI calculator")}</p>
+            <h2>{tx("Illustrate the fixed coupon.")}</h2>
+            <p>{tx("Adjust the participation amount to see the gross fixed-coupon illustration before taxes, fees and any additional profit participation.")}</p>
+          </div>
+          <div className={styles.roiCalculator}>
+            <label>{tx("Investment amount")}<span>€</span><input type="number" min="1000" step="1000" value={roiAmount} onChange={(event) => setRoiAmount(Number(event.target.value) || 0)} /></label>
+            <article><span>{tx("Annual coupon at 6%")}</span><strong>{annualCoupon.toLocaleString(lang, { style: "currency", currency: "EUR", maximumFractionDigits: 0 })}</strong></article>
+            <article><span>{tx("Five-year gross coupon illustration")}</span><strong>{fiveYearCoupon.toLocaleString(lang, { style: "currency", currency: "EUR", maximumFractionDigits: 0 })}</strong></article>
+          </div>
+          <p className={styles.researchNote}>{tx("Illustrative only. Review the current terms, risk disclosures and professional advice before investing.")}</p>
+        </section>
+
+        <section id="bond-comparison" className={styles.comparisonSection}>
+          <div className={styles.briefIntro}>
+            <p className={styles.eyebrow}>{tx("11 — Why AIXCO Global Bond?")}</p>
+            <h2>{tx("Company-level access without managing an individual property.")}</h2>
+          </div>
+          <div className={styles.bondComparison}>
+            <article><h3>{tx("Direct property")}</h3><p>{tx("Individual asset selection, purchase administration, handover, rental decisions and ongoing property management.")}</p></article>
+            <article><h3>{tx("AIXCO Global Bond")}</h3><p>{tx("Access to AIXCO's diversified real estate strategy through a fixed annual coupon, listed structure and professionally managed operating platform.")}</p></article>
+          </div>
+        </section>
+
+        <section id="reasons" className={styles.reasonSection}>
+          <div className={styles.briefIntro}>
+            <p className={styles.eyebrow}>{tx("12 — Why investors choose AIXCO")}</p>
+            <h2>{tx("Six principles behind the proposition.")}</h2>
+          </div>
+          <div className={styles.investorReasonGrid}>
+            {investorReasons.map((reason, index) => <article key={reason}><span>{String(index + 1).padStart(2, "0")}</span><h3>{tx(reason)}</h3></article>)}
+          </div>
+        </section>
+
+        <section id="team" className={styles.teamSection}>
+          <div className={styles.briefIntro}>
+            <p className={styles.eyebrow}>{tx("13 — Leadership and international reach")}</p>
+            <h2>{tx("Experience across real estate, banking and international markets.")}</h2>
+          </div>
+          <div className={styles.teamGrid}>
+            {[
+              ["Benjamin Fischer", "Founder · Real estate strategy and international growth"],
+              ["Walter Schuster", "Real estate leadership and institutional experience"],
+              ["Owais Shaikh", "Banking, finance and digital transformation"],
+              ["International partners", "Local execution and specialist market expertise"],
+            ].map(([name, role]) => <article key={name}><h3>{name}</h3><p>{tx(role)}</p></article>)}
+          </div>
+          <div className={styles.teamStats}><strong>{tx("Swiss heritage")}</strong><strong>90+ {tx("professionals")}</strong></div>
         </section>
 
         <section className={styles.closingSection}>
@@ -786,7 +934,39 @@ export function PrivateClientAdvisoryLandingPage() {
 
         <section id="contact" className={styles.contactSection}>
           <div className={styles.contactMedia}><Image src={heroImage} alt="Batumi coastline at dusk" fill quality={90} sizes="(max-width: 850px) 100vw, 46vw" /></div>
-          <div className={styles.contactPanel}><p className={styles.eyebrow}>{content.contact.eyebrow}</p><h2 id="private-client-contact-title">{content.contact.title}</h2><p className={styles.contactBody}>{content.contact.body}</p>{submitted ? <div className={styles.successPanel}><div className={styles.successIcon}><ShieldCheck size={20} aria-hidden /></div><h3>{content.contact.successTitle}</h3><p>{content.contact.successBody}</p>{requestReference && <small>{content.contact.reference}: {requestReference}</small>}<button type="button" className={styles.textLink} onClick={() => { setSubmitted(false); setRequestReference(null); formStartedAt.current = Date.now(); }}>{content.contact.another}<ArrowRight size={16} aria-hidden /></button></div> : <form className={styles.contactForm} aria-labelledby="private-client-contact-title" onSubmit={handleSubmit}><div className={styles.formGrid}><label><span>{content.contact.name}</span><input name="name" required minLength={2} maxLength={100} placeholder={content.contact.namePlaceholder} /></label><label><span>{content.contact.email}</span><input name="email" type="email" required placeholder={content.contact.emailPlaceholder} /></label></div><label><span>{content.contact.interest}</span><select name="interest" defaultValue=""><option value="" disabled>{content.contact.interest}</option>{content.contact.interestOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select><ChevronDown className={styles.selectIcon} size={16} aria-hidden /></label><label><span>{content.contact.message}</span><textarea name="message" required minLength={10} maxLength={1500} placeholder={content.contact.messagePlaceholder} rows={4} /></label><input className={styles.honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" /><label className={styles.consent}><input type="checkbox" required /><span>{content.contact.consent}</span></label>{submitError && <p className={styles.formError} role="alert">{submitError}</p>}<button type="submit" className={styles.goldButton} disabled={submitting}>{submitting ? content.contact.sending : content.contact.submit}<ArrowRight size={17} aria-hidden /></button></form>}</div>
+          <div className={styles.contactPanel}>
+            <p className={styles.eyebrow}>{tx(copyByLanguage.en.contact.eyebrow)}</p>
+            <h2 id="private-client-contact-title">{tx(copyByLanguage.en.contact.title)}</h2>
+            <p className={styles.contactBody}>{tx(copyByLanguage.en.contact.body)}</p>
+            <ul className={styles.packageList}>
+              {["AIXCO Investor Brochure", "AIXCO Global Bond Term Sheet", "Personalised ROI Illustration", "Private Consultation with Our Team", "Answers to Your Questions"].map((item) => <li key={item}><ShieldCheck size={14} />{tx(item)}</li>)}
+            </ul>
+            {submitted ? (
+              <div className={styles.successPanel}>
+                <div className={styles.successIcon}><ShieldCheck size={20} aria-hidden /></div>
+                <h3>{content.contact.successTitle}</h3>
+                <p>{content.contact.successBody}</p>
+                {requestReference && <small>{content.contact.reference}: {requestReference}</small>}
+                <button type="button" className={styles.textLink} onClick={() => { setSubmitted(false); setRequestReference(null); formStartedAt.current = Date.now(); }}>{content.contact.another}<ArrowRight size={16} aria-hidden /></button>
+              </div>
+            ) : (
+              <form className={styles.contactForm} aria-labelledby="private-client-contact-title" onSubmit={handleSubmit}>
+                <div className={styles.formGrid}>
+                  <label><span>{content.contact.name}</span><input name="name" required minLength={2} maxLength={100} placeholder={content.contact.namePlaceholder} /></label>
+                  <label><span>{content.contact.email}</span><input name="email" type="email" required placeholder={content.contact.emailPlaceholder} /></label>
+                  <label><span>{tx("Phone / WhatsApp")}</span><input name="phone" type="tel" autoComplete="tel" placeholder="+995 …" /></label>
+                  <label><span>{tx("Country of residence")}</span><input name="country" autoComplete="country-name" /></label>
+                </div>
+                <label><span>{tx("Investment range")}</span><select name="investmentRange" defaultValue=""><option value="" disabled>{tx("Select investment range")}</option>{["€1,000 – €25,000", "€25,000 – €100,000", "€100,000 – €250,000", "€250,000+"].map((option) => <option key={option} value={option}>{option}</option>)}</select><ChevronDown className={styles.selectIcon} size={16} aria-hidden /></label>
+                <label><span>{content.contact.interest}</span><select name="interest" defaultValue=""><option value="" disabled>{content.contact.interest}</option>{content.contact.interestOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select><ChevronDown className={styles.selectIcon} size={16} aria-hidden /></label>
+                <label><span>{content.contact.message}</span><textarea name="message" minLength={0} maxLength={1500} placeholder={content.contact.messagePlaceholder} rows={4} /></label>
+                <input className={styles.honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+                <label className={styles.consent}><input type="checkbox" required /><span>{content.contact.consent}</span></label>
+                {submitError && <p className={styles.formError} role="alert">{submitError}</p>}
+                <button type="submit" className={styles.goldButton} disabled={submitting}>{submitting ? content.contact.sending : tx(copyByLanguage.en.contact.submit)}<ArrowRight size={17} aria-hidden /></button>
+              </form>
+            )}
+          </div>
         </section>
       </main>
 

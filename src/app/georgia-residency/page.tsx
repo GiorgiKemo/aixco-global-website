@@ -6,9 +6,9 @@ import { getSiteUrl } from "@/lib/site-url";
 import { JsonLd } from "@/components/JsonLd";
 
 const routePath = "/georgia-residency";
-const pageTitle = "Residence Permit and Tax Residency in Georgia | AIXCO.Global";
+const pageTitle = "Georgia Residency Pathways | AIXCO.Global";
 const pageDescription =
-  "Three official AIXCO paths to reside in Georgia: business registration from about €17,000 turnover, property from €138,000, or investment from €276,000, plus the HNWI tax residency process.";
+  "Explore Georgian residence pathways through qualifying business activity, property above $150,000 certified market value, or qualifying investment from $300,000, with coordinated AIXCO support.";
 
 export const metadata: Metadata = {
   title: pageTitle,

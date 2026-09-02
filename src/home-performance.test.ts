@@ -248,6 +248,18 @@ describe("home page performance structure", () => {
     expect(revealComponentSource).not.toContain("story-text-reveal__mobile-plain");
   });
 
+  it("reveals the hero lockup without fading its text", () => {
+    const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
+    const heroStart = desktopStorySource.indexOf("function HeroScene");
+    const heroEnd = desktopStorySource.indexOf("const DUBAI_METRIC_NUMBER_PATTERN", heroStart);
+    const heroSource = desktopStorySource.slice(heroStart, heroEnd);
+
+    expect(heroStart).toBeGreaterThanOrEqual(0);
+    expect(heroSource).toContain('clipPath: "inset(0 0 100% 0)"');
+    expect(heroSource).not.toContain("willChange:");
+    expect(heroSource).not.toContain("opacity:");
+  });
+
   it("replays each story title when its section becomes active again", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");

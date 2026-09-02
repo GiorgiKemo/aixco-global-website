@@ -6,8 +6,8 @@ import { getSiteUrl } from "@/lib/site-url";
 import { JsonLd } from "@/components/JsonLd";
 
 const routePath = "/aixco-global-bond";
-const pageTitle = "Emerging Market Real Estate Investment | AIXCO.Global";
-const pageDescription = "AIXCO Global identifies, acquires, develops and manages residential real estate across high-growth emerging markets.";
+const pageTitle = "AIXCO Global Bond | AIXCO.Global";
+const pageDescription = "Participate in AIXCO's long-term real estate strategy through the AIXCO Global Bond, with a 6% fixed annual coupon and a €1,000 minimum investment.";
 const socialImage = "/aixco-global-op2/images/batumi-mosaic-hd/batumi-golden-hour-coastline.webp";
 
 export const metadata: Metadata = {

@@ -255,9 +255,9 @@ type StorySectionMetric = {
 
 const storyTeamSwitchIntervalMs = 6800;
 const storyTeamResumeDelayMs = 9000;
-const storyTitleRevealDurationMs = 1700;
-const storyTitleRevealFallbackBufferMs = 240;
-const storyTitleScrollAnimationRange = "entry 0% cover 42%";
+const storyTitleRevealDurationMs = 920;
+const storyTitleRevealFallbackBufferMs = 180;
+const storyTitleScrollAnimationRange = "entry 0% cover 30%";
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
 const philosophyPlatformStats = [
@@ -1392,6 +1392,7 @@ function HeroScene({
   onLogin: () => void;
   tx: (copy: string) => string;
 }) {
+  const shouldReduceMotion = useHydratedReducedMotion();
   const statementLabel = heroStoryStatementLines.map((line) => tx(line)).join(" ");
 
   return (
@@ -1401,11 +1402,17 @@ function HeroScene({
         <div className="story-hero-copy">
           <motion.div
             className="story-hero-lockup hero-reference-font"
-            initial={{ opacity: 0, y: 28 }}
+            initial={
+              shouldReduceMotion
+                ? false
+                : { clipPath: "inset(0 0 100% 0)", y: 36 }
+            }
             animate={
-              isActive
-                ? { opacity: 1, y: 0 }
-                : { opacity: 0.94, y: 6 }
+              shouldReduceMotion
+                ? { clipPath: "inset(0 0 0 0)", y: 0 }
+                : isActive
+                  ? { clipPath: "inset(0 0 0 0)", y: 0 }
+                  : { clipPath: "inset(0 0 0 0)", y: 6 }
             }
             transition={revealTransition}
           >

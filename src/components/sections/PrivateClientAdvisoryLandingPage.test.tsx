@@ -16,7 +16,7 @@ vi.mock("@/i18n/I18nProvider", () => ({
     { code: "en", label: "English", native: "EN" },
     { code: "de", label: "Deutsch", native: "DE" },
   ],
-  useI18n: () => ({ lang: testState.lang, setLang: testState.setLang }),
+  useI18n: () => ({ lang: testState.lang, setLang: testState.setLang, tx: (text: string) => text }),
 }));
 
 vi.mock("@/components/ui-state", () => ({
@@ -81,7 +81,7 @@ describe("PrivateClientAdvisoryLandingPage", () => {
     fireEvent.change(screen.getByLabelText("Area of interest"), { target: { value: "AIXCO Global Bond" } });
     fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "I would like an investment brief, please." } });
     fireEvent.click(screen.getByLabelText(/By sending this form/i));
-    fireEvent.click(screen.getByRole("button", { name: "Request an investment brief" }));
+    fireEvent.click(screen.getByRole("button", { name: "Request your investor package" }));
 
     await waitFor(() => expect(screen.getByText("Your request is with us.")).toBeInTheDocument());
     expect(testState.recordContactSubmission).toHaveBeenCalledWith(
@@ -90,7 +90,7 @@ describe("PrivateClientAdvisoryLandingPage", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Send another request" }));
-    expect(screen.getByRole("button", { name: "Request an investment brief" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Request your investor package" })).toBeInTheDocument();
   });
 
   it("shows a localized submission error when the contact request fails", async () => {
@@ -102,7 +102,7 @@ describe("PrivateClientAdvisoryLandingPage", () => {
     fireEvent.change(screen.getByLabelText("Area of interest"), { target: { value: "Current projects" } });
     fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "Please send current project details." } });
     fireEvent.click(screen.getByLabelText(/By sending this form/i));
-    fireEvent.click(screen.getByRole("button", { name: "Request an investment brief" }));
+    fireEvent.click(screen.getByRole("button", { name: "Request your investor package" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent("We could not send this request.");
   });

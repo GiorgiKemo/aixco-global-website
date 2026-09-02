@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   ArrowDown,
   ArrowUpRight,
-  CalendarDays,
   Check,
   ChevronDown,
   Globe2,
@@ -138,7 +137,7 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
       eyebrow: "Georgia tax residency",
       title: "A CLEARER ROUTE TO",
       accent: "INTERNATIONAL TAX RESIDENCY.",
-      body: "Georgia offers two principal pathways to tax residency — the 183-day rule and the HNWI regime — for internationally mobile individuals, families and private clients.",
+      body: "Georgia offers two principal pathways for individuals seeking Georgian tax-resident status: physical presence or the dedicated High-Net-Worth Individual procedure. AIXCO helps internationally mobile individuals and families understand the route, coordinate the required local elements and connect with the appropriate tax and legal professionals.",
       primary: "Check my eligibility",
       secondary: "Book a private consultation",
       note: "AIXCO advisory · Georgia",
@@ -674,16 +673,16 @@ const copyByLanguage: Record<Lang, TaxCopy> = {
 
 const pathwayCopyByLanguage: Record<Lang, PathwayCopy> = {
   en: {
-    eyebrow: "The AIXCO pathway",
-    title: "From question to position.",
-    body: "AIXCO brings residence, property and practical guidance into one considered route.",
-    primary: "Start with a conversation",
+    eyebrow: "01 — Two routes",
+    title: "Which route fits your position?",
+    body: "Georgia offers a physical-presence route and a dedicated HNWI procedure. Compare the core requirements before deciding which route deserves professional review.",
+    primary: "Schedule a private consultation",
     education: "Read the 183-day rule",
     disclaimer: "General guidance only — not tax or legal advice. Individual outcomes depend on specific facts.",
     stages: [
-      { number: "01", title: "Understand your priorities", body: "Tell us what matters most — mobility, privacy, business, family or lifestyle — so we can focus on what is right for you.", details: ["Clarify your objectives and constraints", "Map the factors that will shape your decisions"], action: "Start with a conversation", target: "contact" },
-      { number: "02", title: "Explore the right structure", body: "Separate the questions that often get mixed together: tax residence, a residence permit, property and the practical route between them.", details: ["Understand the 183-day baseline", "Review the relevant residence and HNWI routes"], action: "Explore the framework", target: "why" },
-      { number: "03", title: "Speak with the right advisor", body: "Bring your facts into a focused conversation and leave with a clearer next step, the right documents and the right people involved.", details: ["Prepare a concise private-client brief", "Move forward with a considered plan"], action: "Book a consultation", target: "contact" },
+      { number: "02", title: "The 183-day route", body: "For individuals relocating to Georgia, the standard route is based on physical presence: 183 or more days in any continuous 12-month period ending in the relevant tax year.", details: ["Best suited to individuals and families relocating to Georgia", "Keep clear travel and presence evidence"], action: "Review the framework", target: "why" },
+      { number: "03", title: "HNWI tax residency", body: "Qualifying applicants may use the dedicated HNWI procedure without meeting the 183-day requirement when the financial and Georgian-connection conditions are satisfied.", details: ["GEL 3M assets or GEL 200K annual income test", "Georgian assets and connection conditions apply"], action: "Check HNWI eligibility", target: "why" },
+      { number: "→", title: "Need help choosing?", body: "Our team will help you understand the available options and connect you with the appropriate specialists based on your personal circumstances.", details: ["Separate tax residence from immigration residence", "Coordinate a case-specific professional review"], action: "Schedule a private consultation", target: "contact" },
     ],
   },
   de: {
@@ -741,15 +740,25 @@ const pathwayCopyByLanguage: Record<Lang, PathwayCopy> = {
 };
 
 const heroImage = aixcoLiveImages.taxResidencyHeroGenerated;
-const chapterImages = [
-  aixcoLiveImages.taxResidencyRouteArchitecture,
-  aixcoLiveImages.batumiMosaicGoldenHourCoastline,
-  aixcoLiveImages.taxResidencyRouteNight,
+const privateClientProcess = [
+  { title: "Private consultation", body: "Understand your objectives, existing country of residence, family position and mobility plans." },
+  { title: "Preliminary route", body: "Identify whether the 183-day route, HNWI route or another structure is potentially relevant." },
+  { title: "Professional review", body: "Coordinate the required Georgian tax and legal review." },
+  { title: "Local structure", body: "Where necessary, coordinate property, residence permit, address, banking or company-related elements." },
+  { title: "Application", body: "Prepare and coordinate the applicable documentation and submission process." },
+  { title: "Ongoing position", body: "Support renewal, local administration and coordination with advisers where required." },
+] as const;
+
+const taxSystemFeatures = [
+  { title: "Territorial principle", body: "Georgia generally distinguishes between Georgian-source and foreign-source income when determining personal taxation." },
+  { title: "20% standard personal income tax*", body: "The standard Georgian personal income-tax framework applies to qualifying Georgian-source income." },
+  { title: "Special regimes*", body: "Certain qualifying entrepreneurs and activities may be eligible for separate regimes." },
+  { title: "International treaties", body: "Georgia maintains a network of double-taxation agreements that can matter where two jurisdictions potentially treat the same individual as resident." },
 ] as const;
 
 const reveal: Variants = {
-  hidden: { opacity: 0, y: 36 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.82, ease: [0.16, 1, 0.3, 1] } },
+  hidden: { clipPath: "inset(0 0 100% 0)", y: 36 },
+  visible: { clipPath: "inset(0 0 0 0)", y: 0, transition: { duration: 0.72, ease: [0.16, 1, 0.3, 1] } },
 };
 
 function scrollToSection(id: string) {
@@ -757,11 +766,27 @@ function scrollToSection(id: string) {
 }
 
 export function GeorgiaTaxResidencyLandingPage() {
-  const { lang, setLang } = useI18n();
+  const { lang, setLang, tx } = useI18n();
   const { company } = useSiteContent();
   const { openPrivacy, openTerms } = useUI();
   const content = copyByLanguage[lang] ?? copyByLanguage.en;
-  const pathway = pathwayCopyByLanguage[lang] ?? pathwayCopyByLanguage.en;
+  const sourcePathway = pathwayCopyByLanguage.en;
+  const pathway: PathwayCopy = {
+    ...sourcePathway,
+    eyebrow: tx(sourcePathway.eyebrow),
+    title: tx(sourcePathway.title),
+    body: tx(sourcePathway.body),
+    primary: tx(sourcePathway.primary),
+    education: tx(sourcePathway.education),
+    disclaimer: tx(sourcePathway.disclaimer),
+    stages: sourcePathway.stages.map((stage) => ({
+      ...stage,
+      title: tx(stage.title),
+      body: tx(stage.body),
+      details: stage.details.map((detail) => tx(detail)),
+      action: tx(stage.action),
+    })),
+  };
   const [menuOpen, setMenuOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [openPathStage, setOpenPathStage] = useState(0);
@@ -849,8 +874,6 @@ export function GeorgiaTaxResidencyLandingPage() {
     setSubmitError(content.contact.error || getContactSubmitErrorMessage(result.reason));
   };
 
-  const iconForChapter = [CalendarDays, House, ShieldCheck] as const;
-
   return (
     <div id="main-content" className={styles.page}>
       <motion.div className={styles.progressBar} style={{ width: progressWidth }} aria-hidden="true" />
@@ -876,7 +899,7 @@ export function GeorgiaTaxResidencyLandingPage() {
               </button>
               <AnimatePresence>
                 {languageOpen ? (
-                  <motion.div className={`${styles.languageMenu} landing-language-panel`} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
+                  <motion.div className={`${styles.languageMenu} landing-language-panel`} initial={{ clipPath: "inset(0 0 100% 0)", y: -8 }} animate={{ clipPath: "inset(0 0 0 0)", y: 0 }} exit={{ clipPath: "inset(0 0 100% 0)", y: -8 }} transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}>
                     {LANGS.map((option) => (
                       <button key={option.code} type="button" data-active={option.code === lang} onClick={() => { setLang(option.code); setLanguageOpen(false); }}>
                         <span>{option.label}</span><span>{option.native}</span>
@@ -893,7 +916,7 @@ export function GeorgiaTaxResidencyLandingPage() {
         </div>
         <AnimatePresence>
           {menuOpen ? (
-            <motion.nav className={`${styles.mobileNav} landing-mobile-nav`} aria-label="Mobile navigation" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+            <motion.nav className={`${styles.mobileNav} landing-mobile-nav`} aria-label="Mobile navigation" initial={{ height: 0, clipPath: "inset(0 0 100% 0)" }} animate={{ height: "auto", clipPath: "inset(0 0 0 0)" }} exit={{ height: 0, clipPath: "inset(0 0 100% 0)" }} transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}>
               {["clock", "position", "path", "why", "contact"].map((id) => (
                 <button key={id} type="button" onClick={() => handleNav(id)}>{content.nav[id as keyof typeof content.nav]}</button>
               ))}
@@ -960,7 +983,7 @@ export function GeorgiaTaxResidencyLandingPage() {
                     </button>
                     <AnimatePresence initial={false}>
                       {isOpen ? (
-                        <motion.div id={panelId} className={styles.pathwayStagePanel} initial={reducedMotion ? false : { opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={reducedMotion ? undefined : { opacity: 0, height: 0 }} transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}>
+                        <motion.div id={panelId} className={styles.pathwayStagePanel} initial={reducedMotion ? false : { clipPath: "inset(0 0 100% 0)", height: 0 }} animate={{ clipPath: "inset(0 0 0 0)", height: "auto" }} exit={reducedMotion ? undefined : { clipPath: "inset(0 0 100% 0)", height: 0 }} transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}>
                           <p>{stage.body}</p>
                           <ul>
                             {stage.details.map((detail) => <li key={detail}><Check size={15} strokeWidth={1.8} aria-hidden />{detail}</li>)}
@@ -978,27 +1001,16 @@ export function GeorgiaTaxResidencyLandingPage() {
           </div>
         </section>
 
-        <section id="path" className={styles.chapterSection} aria-labelledby="path-title">
-          <div className={styles.chapterSticky}>
-            <motion.div initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal}>
-              <p className={styles.eyebrow}><span />{content.chapters.eyebrow}</p>
-              <h2 id="path-title">{content.chapters.title}</h2>
-              <p>{content.chapters.body}</p>
-              <div className={styles.chapterRule} />
-              <span className={styles.chapterSignature}>AIXCO / PRIVATE CLIENTS</span>
-            </motion.div>
+        <section id="difference" className={styles.sourceSection}>
+          <div className={styles.sourceIntro}>
+            <p className={styles.eyebrow}><span />{tx("04 — Tax residency or residence permit?")}</p>
+            <h2>{tx("Tax residency or residence permit?")}</h2>
+            <p>{tx("Although they are often discussed together, tax residency and a residence permit serve entirely different purposes. One determines your tax status, while the other determines your immigration status.")}</p>
           </div>
-          <div className={styles.chapterList}>
-            {content.chapters.items.map((item, index) => {
-              const Icon = iconForChapter[index];
-              return (
-                <motion.article key={item.number} className={styles.chapterItem} initial={reducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.25 }} variants={reveal}>
-                  <div className={styles.chapterNumber}><span>{item.number}</span><span className={styles.chapterNumberLine} /></div>
-                  <div className={styles.chapterText}><Icon size={21} strokeWidth={1.35} aria-hidden /><h3>{item.title}</h3><p>{item.body}</p></div>
-                  <div className={styles.chapterImage}><Image src={chapterImages[index]} alt="" fill quality={90} sizes="(min-width: 980px) 35vw, 88vw" /></div>
-                </motion.article>
-              );
-            })}
+          <div className={styles.legalConceptGrid}>
+            <article><span>{tx("Tax status")}</span><h3>{tx("Tax residency")}</h3><p>{tx("Determines whether Georgia treats you as tax resident for a particular tax year.")}</p><strong>{tx("183-day / HNWI route")}</strong></article>
+            <article><span>{tx("Immigration status")}</span><h3>{tx("Residence permit")}</h3><p>{tx("Determines whether you have permission to reside in Georgia under an applicable immigration route.")}</p><strong>{tx("Property / investment / work / other")}</strong></article>
+            <article><span>{tx("Evidence")}</span><h3>{tx("Tax-residency certificate")}</h3><p>{tx("A document confirming Georgian tax-resident status for the relevant period, where issued under the applicable procedure.")}</p><strong>{tx("One does not automatically create the others.")}</strong></article>
           </div>
         </section>
 
@@ -1012,11 +1024,89 @@ export function GeorgiaTaxResidencyLandingPage() {
             </motion.div>
             <div className={styles.featureGrid}>
               {content.why.features.map((feature, index) => (
-                <motion.article key={feature.title} initial={reducedMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.55, delay: index * 0.06 }}>
+                <motion.article key={feature.title} initial={reducedMotion ? false : { clipPath: "inset(0 0 100% 0)", y: 18 }} whileInView={{ clipPath: "inset(0 0 0 0)", y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.55, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}>
                   <span>0{index + 1}</span><h3>{feature.title}</h3><p>{feature.body}</p>
                 </motion.article>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section id="tax-system" className={styles.sourceSectionDark}>
+          <div className={styles.sourceIntro}>
+            <p className={styles.eyebrow}><span />{tx("05 — A tax system built around source")}</p>
+            <h2>{tx("A tax system built around source.")}</h2>
+            <p>{tx("Georgia's tax system can offer significant advantages, but the right outcome depends on your individual circumstances and the rules of your home country.")}</p>
+          </div>
+          <div className={styles.taxFeatureGrid}>
+            {taxSystemFeatures.map((feature, index) => <article key={feature.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{tx(feature.title)}</h3><p>{tx(feature.body)}</p></article>)}
+          </div>
+          <p className={styles.sourceDisclaimer}>{tx("Tax residency in Georgia does not automatically end your tax residency or tax obligations in another country.")}</p>
+        </section>
+
+        <section id="international" className={styles.sourceSection}>
+          <div className={styles.sourceIntro}>
+            <p className={styles.eyebrow}><span />{tx("06 — The international question")}</p>
+            <h2>{tx("Getting Georgian residency is only half the analysis.")}</h2>
+          </div>
+          <div className={styles.internationalFlow}>
+            <article><span>01</span><h3>{tx("Country of departure")}</h3><p>{tx("Do you still have a permanent home, spouse or dependants, business ownership or management, employment, economic interests or significant physical presence?")}</p></article>
+            <i aria-hidden>→</i>
+            <article><span>02</span><h3>{tx("Georgia")}</h3><p>{tx("Have you met the 183-day rule, the HNWI framework, the applicable source-of-income rules and the required evidence?")}</p></article>
+            <i aria-hidden>→</i>
+            <article><span>03</span><h3>{tx("Tax treaty")}</h3><p>{tx("If both countries consider you resident, the applicable Double Taxation Agreement may determine treaty residence and allocate taxing rights.")}</p></article>
+          </div>
+          <p className={styles.sourceDisclaimer}>{tx("AIXCO coordinates the Georgian side. Your home-country exit position should be reviewed with qualified advisers in that jurisdiction.")}</p>
+        </section>
+
+        <section id="hnwi-clients" className={styles.sourceSectionGold}>
+          <div className={styles.sourceIntro}>
+            <p className={styles.eyebrow}><span />{tx("07 — For HNWI clients")}</p>
+            <h2>{tx("A dedicated route for qualifying high-net-worth individuals.")}</h2>
+            <p>{tx("Eligible applicants may qualify without meeting the 183-day physical-presence requirement, provided all applicable financial and Georgian-connection conditions are satisfied.")}</p>
+          </div>
+          <div className={styles.hnwiQualification}>
+            <article><span>01</span><h3>{tx("Financial qualification")}</h3><strong>{tx("GEL 3 million+ worldwide assets")}</strong><em>{tx("or")}</em><strong>{tx("GEL 200,000+ annual income in each of the previous three years")}</strong></article>
+            <article><span>02</span><h3>{tx("Georgian assets")}</h3><strong>{tx("USD 500,000+ qualifying assets located in Georgia*")}</strong></article>
+            <article><span>03</span><h3>{tx("Georgian connection")}</h3><strong>{tx("Residence permit or citizenship")}</strong><em>{tx("or")}</em><strong>{tx("GEL 25,000+ qualifying Georgian-source income*")}</strong></article>
+          </div>
+        </section>
+
+        <section id="eligibility" className={styles.sourceSection}>
+          <div className={styles.sourceIntro}>
+            <p className={styles.eyebrow}><span />{tx("08 — HNWI eligibility check")}</p>
+            <h2>{tx("Could the HNWI route apply to you?")}</h2>
+            <p>{tx("Answer a few simple questions to understand whether the HNWI tax-residency framework may be relevant. This is an initial self-assessment only.")}</p>
+          </div>
+          <div className={styles.eligibilityGrid}>
+            <fieldset><legend><span>01</span>{tx("Financial qualification")}</legend><label><input type="checkbox" />{tx("I own worldwide assets exceeding GEL 3 million")}</label><label><input type="checkbox" />{tx("My annual income exceeded GEL 200,000 in each of the previous three years")}</label></fieldset>
+            <fieldset><legend><span>02</span>{tx("Georgian assets")}</legend><label><input type="checkbox" />{tx("Yes — I own USD 500,000+ in qualifying Georgian assets")}</label><label><input type="checkbox" />{tx("I am planning to acquire qualifying assets")}</label><label><input type="checkbox" />{tx("Not yet")}</label></fieldset>
+            <fieldset><legend><span>03</span>{tx("Georgian connection")}</legend><label><input type="checkbox" />{tx("Georgian residence permit or citizenship")}</label><label><input type="checkbox" />{tx("GEL 25,000+ qualifying Georgian-source income*")}</label><label><input type="checkbox" />{tx("Not sure")}</label></fieldset>
+          </div>
+          <button type="button" className={styles.sourceCta} onClick={() => handleNav("contact")}>{tx("Discuss your eligibility")}<ArrowUpRight size={16} /></button>
+          <p className={styles.sourceDisclaimer}>{tx("Every situation is unique. Final eligibility depends on individual circumstances and should be confirmed by qualified Georgian legal and tax professionals.")}</p>
+        </section>
+
+        <section id="path" className={styles.sourceSectionDark}>
+          <div className={styles.sourceIntro}>
+            <p className={styles.eyebrow}><span />{tx("09 — AIXCO private client process")}</p>
+            <h2>{tx("From question to coordinated position.")}</h2>
+          </div>
+          <ol className={styles.privateProcess}>
+            {privateClientProcess.map((step, index) => <li key={step.title}><span>{String(index + 1).padStart(2, "0")}</span><div><h3>{tx(step.title)}</h3><p>{tx(step.body)}</p></div></li>)}
+          </ol>
+        </section>
+
+        <section id="why-aixco" className={styles.sourceSection}>
+          <div className={styles.sourceIntro}>
+            <p className={styles.eyebrow}><span />{tx("10 — Why AIXCO")}</p>
+            <h2>{tx("More than a tax-residency application.")}</h2>
+            <p>{tx("AIXCO supports international private clients across the practical elements of establishing a position in Georgia.")}</p>
+          </div>
+          <div className={styles.aixcoSupportGrid}>
+            <article><House size={22} /><h3>{tx("Property")}</h3><p>{tx("Access selected Georgian real estate and local market expertise.")}</p></article>
+            <article><ShieldCheck size={22} /><h3>{tx("Residency")}</h3><p>{tx("Coordinate property-based and other relevant residency pathways.")}</p></article>
+            <article><Globe2 size={22} /><h3>{tx("Private client support")}</h3><p>{tx("Connect banking, local administration, professional advisers and ongoing coordination.")}</p></article>
           </div>
         </section>
 
@@ -1031,7 +1121,7 @@ export function GeorgiaTaxResidencyLandingPage() {
           </div>
           <div className={styles.contactPanel}>
             {submitted ? (
-              <motion.div className={styles.success} initial={reducedMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} role="status">
+              <motion.div className={styles.success} initial={reducedMotion ? false : { clipPath: "inset(0 0 100% 0)", y: 18 }} animate={{ clipPath: "inset(0 0 0 0)", y: 0 }} transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }} role="status">
                 <span className={styles.successIcon}><Check size={25} aria-hidden /></span>
                 <h3>{content.contact.successTitle}</h3><p>{content.contact.successBody}</p>
                 {requestReference ? <p className={styles.reference}>{content.contact.reference}: {requestReference}</p> : null}

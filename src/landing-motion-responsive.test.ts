@@ -7,11 +7,13 @@ function readSource(relativePath: string) {
 }
 
 const css = readSource("src/index.css");
+const introCss = readSource("src/components/InitialSiteAnimation.module.css");
 const nextConfig = readSource("next.config.mjs");
 const layout = readSource("src/app/layout.tsx");
 const template = readSource("src/app/template.tsx");
 const routeTransition = readSource("src/components/RouteTransition.tsx");
 const residency = readSource("src/components/sections/GeorgiaResidencyLandingPage.tsx");
+const taxResidency = readSource("src/components/sections/GeorgiaTaxResidencyLandingPage.tsx");
 const medical = readSource("src/components/sections/MedicalTourismLandingPage.tsx");
 const reverance = readSource("src/components/sections/BrandbookLandingPage.tsx");
 const invest = readSource("src/components/sections/InvestBatumiLandingPage.tsx");
@@ -27,11 +29,27 @@ describe("landing page motion and responsiveness", () => {
     expect(css).toContain("html[data-route-transition='marketing']::view-transition-old(root)");
     expect(css).toContain("html[data-route-transition='marketing']::view-transition-new(root)");
     expect(css).toContain(".aixco-route-veil.is-active");
-    expect(css).toContain("html:active-view-transition .aixco-page-shell");
+    expect(css).toContain("clip-path: inset(0 0 100% 0);");
   });
 
   it("does not transform the page wrapper that owns fixed landing headers", () => {
     expect(css).not.toContain("transform: translate3d(0, 12px, 0) scale(1.008);");
+    expect(css).toContain(".aixco-page-shell {\n  min-height: 100%;\n}");
+    expect(css).not.toContain("@keyframes aixco-page-in");
+  });
+
+  it("reveals text and route surfaces without opacity fades", () => {
+    const routeStart = css.indexOf("@keyframes aixco-route-out");
+    const routeEnd = css.indexOf("html[data-route-transition='marketing']::view-transition-old(root)", routeStart);
+    const routeKeyframes = css.slice(routeStart, routeEnd);
+
+    expect(routeStart).toBeGreaterThanOrEqual(0);
+    expect(routeKeyframes).not.toContain("opacity:");
+    expect(taxResidency).toContain('clipPath: "inset(0 0 100% 0)"');
+    expect(taxResidency).not.toContain("opacity: 0");
+    expect(introCss).toContain("transition: transform 620ms");
+    expect(introCss).toContain("transform: translate3d(0, -100%, 0);");
+    expect(introCss).not.toContain("transition: opacity");
   });
 
   it("scrolls landing-page sections through Lenis instead of native scrollIntoView", () => {

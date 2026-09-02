@@ -1601,10 +1601,25 @@
     max-width: 100%;
   }
 
-  .story-scene-reveal[data-story-scene-reveal-active='true'],
+  .story-scene-reveal[data-story-scene-reveal-active='true'] {
+    opacity: 1 !important;
+    visibility: visible;
+    animation: story-copy-settle 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
   .story-media-reveal[data-story-media-reveal-active='true'] {
     opacity: 1 !important;
     visibility: visible;
+  }
+
+  @keyframes story-copy-settle {
+    from {
+      transform: translate3d(0, 1rem, 0);
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+    }
   }
 
   body.story-mobile-menu-open [data-whatsapp-floating-container='true'] {
@@ -2172,11 +2187,9 @@
 
   @keyframes contact-nudge-in {
     from {
-      opacity: 0;
       transform: translateY(0.75rem) scale(0.98);
     }
     to {
-      opacity: 1;
       transform: translateY(0) scale(1);
     }
   }
@@ -4183,7 +4196,7 @@
   }
 
   .reveal {
-    opacity: 0;
+    clip-path: inset(0 0 100% 0);
     transform: translateY(24px);
     animation: reveal 1s var(--ease-out-expo) forwards;
   }
@@ -4203,7 +4216,7 @@
 
   @keyframes reveal {
     to {
-      opacity: 1;
+      clip-path: inset(0 0 0 0);
       transform: translateY(0);
     }
   }
@@ -11390,9 +11403,9 @@ html:not([lang='pl'])
   }
 }
 
-/* One title reveal on every viewport and OS. The animation is intentionally
-   limited to opacity and a small translate3d so it stays on the compositor and
-   does not create per-letter layout, paint, or glyph-metric work. */
+/* One whole-title reveal on every viewport and OS. Copy is uncovered with a
+   directional crop and a short transform instead of fading or animating every
+   glyph, keeping the motion crisp and the amount of work bounded. */
 .story-title-reveal {
   position: relative;
   display: inline-block;
@@ -11408,9 +11421,9 @@ html:not([lang='pl'])
   width: 100%;
   max-width: 100%;
   visibility: visible;
-  opacity: 1;
+  clip-path: inset(0 0 0 0);
   transform: translate3d(0, 0, 0);
-  transform-origin: 50% 50%;
+  transform-origin: 50% 100%;
   overflow: visible;
   overflow-wrap: normal;
   word-break: normal;
@@ -11420,20 +11433,20 @@ html:not([lang='pl'])
 
 .story-title-reveal--pending .story-title-reveal__text {
   visibility: hidden;
-  opacity: 0;
-  transform: translate3d(0, 0.36em, 0);
+  clip-path: inset(100% 0 0 0);
+  transform: translate3d(0, 0.56em, 0) skewY(1.2deg);
 }
 
 .story-title-reveal--active .story-title-reveal__text {
   visibility: visible;
-  animation: story-title-reveal var(--story-title-reveal-duration, 1700ms)
-    cubic-bezier(0.4, 0, 0.2, 1) both;
-  will-change: opacity, transform;
+  animation: story-title-reveal var(--story-title-reveal-duration, 920ms)
+    cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, clip-path;
 }
 
 .story-title-reveal--played .story-title-reveal__text {
   visibility: visible;
-  opacity: 1;
+  clip-path: inset(0 0 0 0);
   transform: translate3d(0, 0, 0);
   animation: none;
   will-change: auto;
@@ -11441,22 +11454,25 @@ html:not([lang='pl'])
 
 @keyframes story-title-reveal {
   from {
-    opacity: 0;
-    transform: translate3d(0, 0.36em, 0);
+    clip-path: inset(100% 0 0 0);
+    transform: translate3d(0, 0.56em, 0) skewY(1.2deg);
+  }
+
+  62% {
+    clip-path: inset(7% 0 0 0);
+    transform: translate3d(0, 0.08em, 0) skewY(0.2deg);
   }
 
   to {
-    opacity: 1;
+    clip-path: inset(0 0 0 0);
     transform: translate3d(0, 0, 0);
   }
 }
 
-/* In browsers with view timelines, the title's opacity and lift are driven by
-   actual scroll distance. This prevents a long duration from being visually
-   compressed by an aggressive ease-out curve and makes every title reveal at
-   the pace of the user's scroll. */
+/* Chromium ties the same wipe to actual scroll distance; the shorter range
+   completes promptly instead of making the copy feel delayed. */
 @supports (animation-timeline: view()) and
-  (animation-range: entry 0% cover 42%) {
+  (animation-range: entry 0% cover 30%) {
   :is(
       [data-story-section][data-story-revealed='true'],
       [data-story-section][data-story-active='true'],
@@ -11465,36 +11481,34 @@ html:not([lang='pl'])
     .story-title-reveal[data-text-reveal-state='scroll-linked']
     .story-title-reveal__text {
     visibility: visible;
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
     animation-name: story-title-scroll-reveal;
     animation-duration: auto;
     animation-timing-function: linear;
     animation-fill-mode: both;
     animation-timeline: view(block);
-    animation-range: entry 0% cover 42%;
+    animation-range: entry 0% cover 30%;
     will-change: auto;
   }
 }
 
 @keyframes story-title-scroll-reveal {
   0% {
-    opacity: 0;
-    transform: translate3d(0, 0.42em, 0);
+    clip-path: inset(100% 0 0 0);
+    transform: translate3d(0, 0.56em, 0) skewY(1.2deg);
   }
 
-  18% {
-    opacity: 0.08;
-    transform: translate3d(0, 0.36em, 0);
+  45% {
+    clip-path: inset(48% 0 0 0);
+    transform: translate3d(0, 0.28em, 0) skewY(0.65deg);
   }
 
-  58% {
-    opacity: 0.58;
-    transform: translate3d(0, 0.16em, 0);
+  78% {
+    clip-path: inset(8% 0 0 0);
+    transform: translate3d(0, 0.07em, 0) skewY(0.15deg);
   }
 
   100% {
-    opacity: 1;
+    clip-path: inset(0 0 0 0);
     transform: translate3d(0, 0, 0);
   }
 }
@@ -11510,10 +11524,15 @@ html:is([lang='ka'], [lang='ar']) .story-title-reveal__text {
   .story-title-reveal--active .story-title-reveal__text,
   .story-title-reveal--played .story-title-reveal__text {
     visibility: visible !important;
-    opacity: 1 !important;
+    clip-path: none !important;
     transform: none !important;
     animation: none !important;
     will-change: auto !important;
+  }
+
+  .story-scene-reveal[data-story-scene-reveal-active='true'] {
+    animation: none !important;
+    transform: none !important;
   }
 }
 
@@ -13282,75 +13301,58 @@ html[lang='de'] [data-story-section='contact'] {
   }
 }
 
-/* Route transitions: View Transitions when available, ivory veil fallback,
-   and a first-paint enter for browsers without the API. */
+/* Route transitions: captured pages move behind a solid directional wipe.
+   Text never cross-fades, and the real page wrapper remains untransformed so
+   fixed landing-page headers keep their viewport positioning. */
 .aixco-page-shell {
   min-height: 100%;
-  animation: aixco-page-in 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-html:active-view-transition .aixco-page-shell {
-  animation: none;
-}
-
-@keyframes aixco-page-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
 }
 
 @keyframes aixco-route-out {
   to {
-    opacity: 0;
-    transform: translate3d(0, -8px, 0) scale(0.992);
+    transform: translate3d(0, -12px, 0) scale(0.995);
   }
 }
 
 @keyframes aixco-route-in {
   from {
-    opacity: 0;
+    clip-path: inset(0 0 100% 0);
     transform: translate3d(0, 14px, 0) scale(1.008);
   }
 
   to {
-    opacity: 1;
+    clip-path: inset(0 0 0 0);
     transform: none;
   }
 }
 
 @keyframes aixco-veil-in {
   from {
-    opacity: 0;
+    transform: translate3d(0, -100%, 0);
   }
 
   to {
-    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes aixco-veil-out {
   from {
-    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    opacity: 0;
+    transform: translate3d(0, 100%, 0);
   }
 }
 
 @keyframes aixco-veil-rule {
   from {
     transform: scaleX(0.18);
-    opacity: 0;
   }
 
   to {
     transform: scaleX(1);
-    opacity: 1;
   }
 }
 
@@ -13370,17 +13372,19 @@ html[data-route-transition='marketing']::view-transition-new(root) {
   display: grid;
   place-items: center;
   background: #f3ede1;
-  opacity: 0;
+  transform: translate3d(0, -100%, 0);
   visibility: hidden;
 }
 
 .aixco-route-veil.is-active {
   visibility: visible;
-  animation: aixco-veil-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: aixco-veil-in 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform;
 }
 
 .aixco-route-veil.is-leaving {
   animation: aixco-veil-out 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform;
 }
 
 .aixco-route-veil__rule {
@@ -13453,7 +13457,6 @@ html[data-route-transition='marketing']::view-transition-new(root) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aixco-page-shell,
   html[data-route-transition='marketing']::view-transition-old(root),
   html[data-route-transition='marketing']::view-transition-new(root),
   .aixco-route-veil,
@@ -13464,8 +13467,8 @@ html[data-route-transition='marketing']::view-transition-new(root) {
   }
 
   .aixco-route-veil.is-active {
-    opacity: 0;
     visibility: hidden;
+    transform: none;
   }
 }
 

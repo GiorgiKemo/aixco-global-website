@@ -1908,3 +1908,440 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+.briefSection,
+.experienceSection,
+.comparisonSection,
+.journeySection {
+  padding: clamp(4.75rem, 9vw, 8.5rem) clamp(1.25rem, 5.5vw, 5.75rem);
+}
+
+.briefSection,
+.comparisonSection {
+  background: #171717;
+  color: #fff;
+}
+
+.experienceSection,
+.journeySection {
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+.briefSectionIntro {
+  width: min(100%, 92rem);
+  margin-inline: auto;
+}
+
+.briefSectionIntro h2 {
+  max-width: 15ch;
+  margin-top: 1.25rem;
+  font-size: clamp(2.55rem, 5.6vw, 6rem);
+  line-height: 0.94;
+  letter-spacing: -0.055em;
+  overflow-wrap: anywhere;
+}
+
+.briefSectionIntro > p:last-child:not(:first-child) {
+  max-width: 44rem;
+  margin-top: 1.5rem;
+  font-size: clamp(1rem, 1.3vw, 1.18rem);
+  line-height: 1.65;
+  color: rgb(255 255 255 / 62%);
+}
+
+.experienceSection .briefSectionIntro > p:last-child,
+.journeySection .briefSectionIntro > p:last-child {
+  color: rgb(22 22 22 / 62%);
+}
+
+.reasonGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: clamp(2.5rem, 5vw, 4.75rem) auto clamp(4rem, 7vw, 7rem);
+}
+
+.reasonGrid article {
+  min-height: 10rem;
+  border: 1px solid rgb(22 22 22 / 15%);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgb(255 255 255 / 36%);
+  transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.reasonGrid article:hover {
+  border-color: var(--gold-deep);
+  background: rgb(255 255 255 / 72%);
+  transform: translateY(-2px);
+}
+
+.reasonGrid span {
+  color: var(--gold-deep);
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.reasonGrid h3 {
+  max-width: 18ch;
+  font-size: 1.08rem;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+
+.returnCalculator {
+  width: min(100%, 92rem);
+  margin: clamp(2.5rem, 5vw, 4.75rem) auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+  border: 1px solid rgb(255 255 255 / 18%);
+}
+
+.calculatorInputs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.calculatorInputs label {
+  min-width: 0;
+  padding: 1.35rem;
+  border-right: 1px solid rgb(255 255 255 / 14%);
+  color: rgb(255 255 255 / 66%);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.calculatorInputs label:last-child {
+  border-right: 0;
+}
+
+.calculatorInputs label span {
+  display: inline-block;
+  margin-top: 1.4rem;
+  color: var(--gold);
+  font-size: 1.4rem;
+}
+
+.calculatorInputs input {
+  width: calc(100% - 1.5rem);
+  min-width: 0;
+  border: 0;
+  border-bottom: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 0;
+  padding: 0.75rem 0;
+  background: transparent;
+  color: #fff;
+  font-size: clamp(1.5rem, 2vw, 2.4rem);
+  letter-spacing: -0.04em;
+}
+
+.calculatorResults {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.calculatorResults article {
+  min-width: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  border-left: 1px solid rgb(22 22 22 / 16%);
+}
+
+.calculatorResults span {
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.calculatorResults strong {
+  font-size: clamp(1.65rem, 2.5vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
+}
+
+.calculatorNote {
+  width: min(100%, 92rem);
+  margin: 1rem auto 0;
+  color: rgb(255 255 255 / 48%);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.experienceCopy,
+.experiencePath,
+.comparisonTable,
+.journeySection > ol {
+  width: min(100%, 92rem);
+  margin-inline: auto;
+}
+
+.experienceCopy {
+  margin-top: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 5rem);
+  color: rgb(22 22 22 / 65%);
+  font-size: clamp(1rem, 1.3vw, 1.18rem);
+  line-height: 1.7;
+}
+
+.experiencePath {
+  margin-top: 3.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.experiencePath article {
+  min-height: 13rem;
+  border: 1px solid rgb(22 22 22 / 15%);
+  padding: 1.4rem;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.experiencePath article:hover {
+  border-color: var(--gold-deep);
+  background: rgb(255 255 255 / 55%);
+}
+
+.experiencePath span {
+  color: var(--gold-deep);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.experiencePath h3 {
+  margin-top: 2.5rem;
+  font-size: 1.35rem;
+  letter-spacing: -0.035em;
+}
+
+.experiencePath p {
+  margin-top: 0.75rem;
+  color: rgb(22 22 22 / 58%);
+  line-height: 1.5;
+}
+
+.comparisonTable {
+  margin-top: 3rem;
+  border-top: 1px solid rgb(255 255 255 / 22%);
+}
+
+.comparisonTable > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.7fr) minmax(12rem, 1fr) minmax(15rem, 1.4fr);
+  border-bottom: 1px solid rgb(255 255 255 / 14%);
+}
+
+.comparisonTable strong,
+.comparisonTable span {
+  min-width: 0;
+  padding: 1.1rem;
+  border-right: 1px solid rgb(255 255 255 / 14%);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.comparisonTable strong:last-child,
+.comparisonTable span:last-child {
+  border-right: 0;
+}
+
+.comparisonTable strong {
+  color: var(--gold);
+  font-size: 0.69rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.comparisonTable span {
+  color: rgb(255 255 255 / 68%);
+}
+
+.journeySection > ol {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.journeySection li {
+  min-width: 0;
+  min-height: 13rem;
+  border: 1px solid rgb(22 22 22 / 15%);
+  border-right: 0;
+  padding: 1.2rem;
+}
+
+.journeySection li:last-child {
+  border-right: 1px solid rgb(22 22 22 / 15%);
+}
+
+.journeySection li > span {
+  color: var(--gold-deep);
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.journeySection li div {
+  margin-top: 2.5rem;
+}
+
+.journeySection h3 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.journeySection p {
+  margin-top: 0.65rem;
+  color: rgb(22 22 22 / 58%);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.contactIncludes {
+  margin: 1.25rem 0 1.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem 1rem;
+  color: rgb(22 22 22 / 64%);
+  font-size: 0.78rem;
+}
+
+.contactIncludes li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.contactIncludes svg {
+  flex: 0 0 auto;
+  color: var(--gold-deep);
+}
+
+.heroDocumentActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.heroSecondaryButton {
+  min-height: var(--aixco-control-min-size);
+  padding: 0.85rem 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 1px solid rgb(255 255 255 / 52%);
+  background: transparent;
+  color: #fff;
+  font-size: var(--aixco-label-min-size);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.heroSecondaryButton:hover {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--ink);
+}
+
+@media (max-width: 960px) {
+  .reasonGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .returnCalculator {
+    grid-template-columns: 1fr;
+  }
+
+  .calculatorResults article:first-child {
+    border-left: 0;
+  }
+
+  .experiencePath {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .comparisonTable {
+    overflow-x: auto;
+  }
+
+  .comparisonTable > div {
+    min-width: 46rem;
+  }
+
+  .journeySection > ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .journeySection li,
+  .journeySection li:last-child {
+    border-right: 1px solid rgb(22 22 22 / 15%);
+  }
+}
+
+@media (max-width: 700px) {
+  .briefSection,
+  .experienceSection,
+  .comparisonSection,
+  .journeySection {
+    padding-inline: 1.25rem;
+  }
+
+  .reasonGrid,
+  .calculatorInputs,
+  .calculatorResults,
+  .experienceCopy,
+  .experiencePath,
+  .journeySection > ol,
+  .contactIncludes {
+    grid-template-columns: 1fr;
+  }
+
+  .heroDocumentActions {
+    flex-direction: column;
+  }
+
+  .reasonGrid article {
+    min-height: 8.5rem;
+  }
+
+  .calculatorInputs label {
+    border-right: 0;
+    border-bottom: 1px solid rgb(255 255 255 / 14%);
+  }
+
+  .calculatorResults article,
+  .calculatorResults article:first-child {
+    border-left: 0;
+    border-top: 1px solid rgb(22 22 22 / 16%);
+  }
+
+  .experiencePath article,
+  .journeySection li {
+    min-height: 10rem;
+  }
+}

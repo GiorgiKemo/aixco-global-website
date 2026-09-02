@@ -16,88 +16,71 @@ import { scrollToHash } from "@/lib/smooth-scroll";
 import type { Lang } from "@/i18n/languages";
 
 const chapters = [
-  { id: "paths", roman: "I", label: "Paths" },
-  { id: "hnwi", roman: "II", label: "HNWI" },
-  { id: "services", roman: "III", label: "Services" },
-  { id: "contact", roman: "IV", label: "Request" },
+  { id: "paths", roman: "01", label: "Residency paths" },
+  { id: "why-georgia", roman: "05", label: "Why Georgia" },
+  { id: "support", roman: "08", label: "AIXCO support" },
+  { id: "property", roman: "09", label: "Qualifying property" },
+  { id: "contact", roman: "10", label: "Request" },
 ] as const;
 
 const permitPaths = [
   {
     id: "business",
-    roman: "I",
-    title: "Business registration",
-    price: "€17,000",
-    detail: "Open a business with a minimum annual turnover of approximately €17,000.",
-    note: "This process can be completed within a short timeframe of about two to three days.",
+    roman: "01",
+    title: "Business activity",
+    price: "BUSINESS",
+    detail: "A residence route may be available through qualifying entrepreneurial or employment activity in Georgia, subject to the applicable legal requirements.",
+    note: "Best suited to founders, business owners and professionals establishing an active local base.",
     image: aixcoLiveImages.batumiMosaicBlueTower,
   },
   {
     id: "property",
-    roman: "II",
-    title: "Real estate ownership",
-    price: "€138,000",
-    detail: "Purchase property with a minimum value of €138,000. No work permit is required, saving at least 10 working days.",
-    note: "When purchasing through AIXCO, no additional costs apply. Document preparation is completed within one working day.",
+    roman: "02",
+    title: "Property ownership",
+    price: "$150K+",
+    detail: "Qualifying non-agricultural property exceeding $150,000 certified market value can support a short-term residence application.",
+    note: "The certified market value — not solely the advertised or purchase price — is used for eligibility.",
     image: aixcoLiveImages.currentProjectCleanFacade,
   },
   {
     id: "investment",
-    roman: "III",
-    title: "Investment / permanent residency",
-    price: "€276,000",
-    detail: "Make an investment of at least €276,000 in real estate. Granted for 5 years initially, with eligibility for permanent residency upon renewal.",
-    note: "An official valuation report usually requires around three working days. When purchasing through AIXCO, no additional costs apply.",
+    roman: "03",
+    title: "Qualifying investment",
+    price: "$300K+",
+    detail: "A qualifying investment of at least $300,000 may support an investment residence route, subject to the statutory conditions and approval.",
+    note: "Specified dependent family members may also qualify under the investment route where the legal conditions are met.",
     image: aixcoLiveImages.batumiMosaicDuskAerialCentral,
   },
 ] as const;
 
-const hnwiSteps = [
-  {
-    roman: "01",
-    title: "Proof of funds - €1.01 million",
-    time: "Timeline depends on how quickly this can be arranged. Support is available through our online notary partner.",
-  },
-  {
-    roman: "02",
-    title: "Proof of funds - €460,000",
-    time: "1 week from the date we open the account.",
-  },
-  {
-    roman: "03",
-    title: "Individual entrepreneur registration + bank account setup",
-    time: "Completed within 5 days after receiving all required documents.",
-  },
-  {
-    roman: "04",
-    title: "Residence permit",
-    time: "30 days from the date the small business status is active.",
-  },
-  {
-    roman: "05",
-    title: "Asset audit and document preparation",
-    time: "Completed within 4 working days.",
-  },
+const whyGeorgiaCards = [
+  { title: "Property ownership", body: "Foreigners can generally own qualifying residential and commercial real estate, with agricultural land subject to separate restrictions." },
+  { title: "Residency through property", body: "Qualifying non-agricultural property exceeding $150,000 certified market value can support a short-term residence application." },
+  { title: "Family access", body: "Qualifying property-based residence can extend to a spouse and children." },
+  { title: "Fast processing", body: "Official processing options are available from 10 to 30 calendar days for the short-term property residence permit." },
 ] as const;
 
-const services = [
-  "Register the business, tax registration and number",
-  "Legal address for the business",
-  "Physical address for the residence card",
-  "Open all bank accounts (personal, business, crypto)",
-  "Audit any crypto asset inside or outside Georgia",
-  "Audit the €460,000 in a bank account",
-  "Prepare and submit the required tax declarations during the process",
-  "Translation/notarization needed for the process inside Georgia",
-  "Issue the tax residency certificate, notarization, translation and apostille if needed",
+const supportSteps = [
+  { title: "Eligibility review", body: "Identify the most appropriate residency route." },
+  { title: "Property / business structure", body: "Select qualifying property or establish the required local structure." },
+  { title: "Documentation", body: "Coordinate valuations, translations, notarisation and required supporting documents." },
+  { title: "Application", body: "Prepare and coordinate the residence-permit application." },
+  { title: "Local setup", body: "Residence card · registered address · banking coordination*" },
+  { title: "Tax & relocation", body: "Where applicable, coordinate tax-residency and relocation requirements with appropriate professional advisers." },
 ] as const;
 
-const relocationIncludes = [
-  "Residence permit and residence card",
-  "Registered and legal address",
-  "Proof of address documentation",
-  "Preparation and submission of initial tax declarations (first three months)",
+const aixcoMetrics = [
+  { value: "Since 2009", body: "Building long-term expertise in residential real estate and international expansion." },
+  { value: "2,000+", body: "Transactions across residential property acquisitions, sales and development." },
+  { value: "$4.2B+", body: "Property value transacted across multiple markets." },
+  { value: "90+", body: "Professionals across real estate, finance, legal coordination, development and private client services." },
 ] as const;
+
+// Legacy sections remain hidden to keep this focused content correction surgical;
+// empty collections ensure they render no duplicate copy.
+const hnwiSteps: Array<{ roman: string; title: string; time: string }> = [];
+const relocationIncludes: string[] = [];
+const services: string[] = [];
 
 const interestOptions = [
   "Property-based residency",
@@ -398,7 +381,7 @@ export function GeorgiaResidencyLandingPage() {
           </div>
         </section>
 
-        <section id="paths" className="scroll-mt-16">
+        <section id="legacy-paths" className="hidden" aria-hidden="true">
           {permitPaths.map((path) => (
             <article key={path.id} id={path.id} className="relative min-h-[78svh] overflow-hidden border-t border-white/10">
               <Image src={path.image} alt="" fill sizes="100vw" className="object-cover" />
@@ -418,7 +401,7 @@ export function GeorgiaResidencyLandingPage() {
           ))}
         </section>
 
-        <section id="hnwi" className="scroll-mt-16 bg-[#F3EDE1] text-[#161616]">
+        <section id="legacy-hnwi" className="hidden" aria-hidden="true">
           <div className="mx-auto max-w-[1480px] px-5 py-20 sm:px-10 lg:px-16 lg:py-28">
             <p className="text-[0.66rem] font-semibold uppercase tracking-[0.26em] text-[#7A6224]">{tx("Tax residency Georgia")}</p>
             <h2 className="mt-5 max-w-[16ch] text-[clamp(2.8rem,5.4vw,5.8rem)] font-medium leading-[0.9] tracking-[-0.05em]">{tx("HNWI status, run in parallel.")}</h2>
@@ -455,7 +438,7 @@ export function GeorgiaResidencyLandingPage() {
           </div>
         </section>
 
-        <section id="services" className="scroll-mt-16 bg-[#002147] text-white">
+        <section id="legacy-services" className="hidden" aria-hidden="true">
           <div className="mx-auto grid max-w-[1480px] min-w-0 grid-cols-1 gap-14 px-4 py-20 sm:px-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:px-16 lg:py-28">
             <div className="min-w-0">
               <p className="text-[0.66rem] font-semibold uppercase tracking-[0.26em] text-[#E6C767]">{tx("Our services")}</p>
@@ -485,15 +468,170 @@ export function GeorgiaResidencyLandingPage() {
           </div>
         </section>
 
+        <section id="paths" className="scroll-mt-16 bg-[#F3EDE1] text-[#161616]">
+          <div className="mx-auto max-w-[1480px] px-5 py-20 sm:px-10 lg:px-16 lg:py-28">
+            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-[#7A6224]">{tx("01 — Three pathways to Georgian residency")}</p>
+            <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+              <h2 className="max-w-[14ch] text-[clamp(2.7rem,5.4vw,5.8rem)] font-medium leading-[0.92] tracking-[-0.05em]">{tx("Choose the path that best fits your objectives.")}</h2>
+              <div className="max-w-[42rem] text-base leading-7 text-[#161616]/68 sm:text-lg">
+                <p>{tx("Whether your goal is to establish a business, purchase property or make a qualifying investment, Georgia offers several residence pathways designed to accommodate different personal and business circumstances.")}</p>
+                <p className="mt-4">{tx("Explore the option that best matches your plans.")}</p>
+              </div>
+            </div>
+            <div className="mt-12 grid gap-3 lg:grid-cols-3">
+              {permitPaths.map((path) => (
+                <article key={path.id} id={path.id} className="group flex min-h-[22rem] scroll-mt-24 flex-col border border-[#161616]/18 bg-[#F8F3E9] p-6 transition-colors hover:border-[#9A7425] hover:bg-white sm:p-8">
+                  <div className="flex items-start justify-between gap-5">
+                    <span className="text-[0.65rem] font-semibold tracking-[0.22em] text-[#7A6224]">{path.roman}</span>
+                    <strong className="text-2xl font-medium tracking-[-0.04em] text-[#9A7425]">{path.price}</strong>
+                  </div>
+                  <h3 className="mt-10 text-2xl font-medium tracking-[-0.04em]">{tx(path.title)}</h3>
+                  <p className="mt-4 text-base leading-7 text-[#161616]/68">{tx(path.detail)}</p>
+                  <p className="mt-auto border-t border-[#161616]/12 pt-5 text-sm leading-6 text-[#161616]/56">{tx(path.note)}</p>
+                </article>
+              ))}
+            </div>
+            <p className="mt-8 max-w-[46rem] text-sm leading-6 text-[#161616]/58">{tx("For investment residence, the statutory definition of eligible family members is somewhat broader in specified dependency circumstances.")}</p>
+            <a href="#property" className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 bg-[#161616] px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-[#9A7425]">
+              {tx("See the $300K property route")} <ArrowUpRight size={15} />
+            </a>
+          </div>
+        </section>
+
+        <section id="why-georgia" className="scroll-mt-16 bg-[#0b0b0b] text-white">
+          <div className="mx-auto max-w-[1480px] px-5 py-20 sm:px-10 lg:px-16 lg:py-28">
+            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-[#E6C767]">{tx("05 — Why Georgia?")}</p>
+            <h2 className="mt-5 max-w-[16ch] text-[clamp(2.7rem,5.4vw,5.8rem)] font-medium leading-[0.92] tracking-[-0.05em]">{tx("A practical base between Europe and Asia.")}</h2>
+            <div className="mt-12 grid gap-px bg-white/15 sm:grid-cols-2">
+              {whyGeorgiaCards.map((item) => (
+                <article key={item.title} className="bg-[#0b0b0b] p-6 transition-colors hover:bg-white/[0.04] sm:p-8">
+                  <h3 className="text-lg font-medium uppercase tracking-[-0.02em] text-[#E6C767]">{tx(item.title)}</h3>
+                  <p className="mt-4 max-w-[34rem] text-base leading-7 text-white/65">{tx(item.body)}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="difference" className="scroll-mt-16 bg-[#F3EDE1] text-[#161616]">
+          <div className="mx-auto max-w-[1480px] px-5 py-20 sm:px-10 lg:px-16 lg:py-28">
+            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-[#7A6224]">{tx("06 — Residence is not tax residence")}</p>
+            <h2 className="mt-5 max-w-[15ch] text-[clamp(2.7rem,5vw,5.4rem)] font-medium leading-[0.94] tracking-[-0.05em]">{tx("Two different questions. One strategy.")}</h2>
+            <div className="mt-12 grid gap-4 lg:grid-cols-2">
+              <article className="border border-[#161616]/18 bg-[#F8F3E9] p-6 sm:p-8">
+                <span className="text-[0.64rem] font-semibold uppercase tracking-[0.2em] text-[#7A6224]">{tx("Immigration status")}</span>
+                <h3 className="mt-5 text-3xl font-medium tracking-[-0.045em]">{tx("Residence permit")}</h3>
+                <p className="mt-4 text-base leading-7 text-[#161616]/66">{tx("Allows a qualifying foreign national to reside in Georgia under the applicable permit.")}</p>
+                <p className="mt-8 border-t border-[#161616]/12 pt-5 text-xs font-semibold uppercase tracking-[0.16em]">{tx("Property · Business · Investment")}</p>
+              </article>
+              <article className="border border-[#161616]/18 bg-[#161616] p-6 text-white sm:p-8">
+                <span className="text-[0.64rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">{tx("Tax status")}</span>
+                <h3 className="mt-5 text-3xl font-medium tracking-[-0.045em]">{tx("Tax residency")}</h3>
+                <p className="mt-4 text-base leading-7 text-white/66">{tx("Determines whether an individual is treated as a Georgian tax resident under applicable Georgian tax law.")}</p>
+                <p className="mt-8 border-t border-white/12 pt-5 text-xs font-semibold uppercase tracking-[0.16em]">{tx("Standard / HNWI routes*")}</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="hnwi" className="scroll-mt-16 bg-[#002147] text-white">
+          <div className="mx-auto grid max-w-[1480px] gap-10 px-5 py-20 sm:px-10 lg:grid-cols-[0.8fr_1.2fr] lg:px-16 lg:py-28">
+            <div>
+              <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-[#E6C767]">{tx("07 — HNWI")}</p>
+              <h2 className="mt-5 max-w-[12ch] text-[clamp(2.7rem,5vw,5.4rem)] font-medium leading-[0.94] tracking-[-0.05em]">{tx("For high-net-worth individuals.")}</h2>
+            </div>
+            <div className="lg:pt-10">
+              <h3 className="text-2xl font-medium tracking-[-0.035em] text-[#E6C767]">{tx("Residency can be one part of a wider relocation structure.")}</h3>
+              <p className="mt-5 max-w-[42rem] text-lg leading-8 text-white/68">{tx("HNWI tax-residency eligibility depends on a combination of financial qualification, Georgian connections and applicable tax rules.")}</p>
+              <DownloadGateLink href={taxGuide.href} fileName={taxGuide.fileName} lockedHref="#contact" className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 border border-white/40 px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:border-[#E6C767] hover:bg-[#E6C767] hover:text-[#161616]">
+                <Download size={15} /> {tx("Download the HNWI guide")}
+              </DownloadGateLink>
+            </div>
+          </div>
+        </section>
+
+        <section id="support" className="scroll-mt-16 bg-[#F3EDE1] text-[#161616]">
+          <div className="mx-auto max-w-[1480px] px-5 py-20 sm:px-10 lg:px-16 lg:py-28">
+            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-[#7A6224]">{tx("08 — How AIXCO supports")}</p>
+            <h2 className="mt-5 max-w-[14ch] text-[clamp(2.7rem,5vw,5.4rem)] font-medium leading-[0.94] tracking-[-0.05em]">{tx("From application to local setup.")}</h2>
+            <p className="mt-6 max-w-[52rem] text-lg leading-8 text-[#161616]/66">{tx("Establishing yourself in a new country involves more than submitting an application. AIXCO coordinates the practical steps of the process, working alongside experienced legal, tax and banking professionals to help make your transition to Georgia as straightforward as possible.")}</p>
+            <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {supportSteps.map((step, index) => (
+                <article key={step.title} className="min-h-52 border border-[#161616]/16 bg-[#F8F3E9] p-6 transition-colors hover:border-[#9A7425] hover:bg-white">
+                  <span className="text-[0.65rem] font-semibold tracking-[0.2em] text-[#7A6224]">{String(index + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-7 text-xl font-medium uppercase tracking-[-0.025em]">{tx(step.title)}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#161616]/62">{tx(step.body)}</p>
+                </article>
+              ))}
+            </div>
+            <div className="mt-8 border border-[#9A7425]/40 bg-[#E9DFC9] p-6 sm:p-8">
+              <h3 className="text-xl font-medium uppercase tracking-[-0.025em] text-[#7A6224]">{tx("Tax relocation package")}</h3>
+              <p className="mt-3 max-w-[60rem] text-sm leading-6 text-[#161616]/66">{tx("Residence permit and card, registered and legal address, proof-of-address documentation, initial tax declarations, banking setup, audit assistance, translations, notarisation and tax-residency documentation can be coordinated where applicable.")}</p>
+              <p className="mt-4 text-xs leading-5 text-[#161616]/52">{tx("Exact scope, third-party costs and eligibility are confirmed before engagement.")}</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="property" className="scroll-mt-16 bg-[#0b0b0b] text-white">
+          <div className="mx-auto max-w-[1480px] px-5 py-20 sm:px-10 lg:px-16 lg:py-28">
+            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-[#E6C767]">{tx("09 — Find a qualifying property")}</p>
+            <h2 className="mt-5 max-w-[15ch] text-[clamp(2.7rem,5vw,5.4rem)] font-medium leading-[0.94] tracking-[-0.05em]">{tx("Residency starts with the right property.")}</h2>
+            <div className="mt-12 grid gap-4 lg:grid-cols-2">
+              <article className="border border-white/16 p-7 sm:p-9">
+                <strong className="text-4xl font-medium tracking-[-0.05em] text-[#E6C767]">$150K–$300K</strong>
+                <h3 className="mt-4 text-lg font-medium uppercase tracking-[-0.02em]">{tx("Short-term residency range")}</h3>
+                <p className="mt-4 text-base leading-7 text-white/62">{tx("Review AIXCO-selected property options positioned above the certified-value threshold for the short-term residence route.")}</p>
+              </article>
+              <article className="border border-[#E6C767]/45 bg-white/[0.03] p-7 sm:p-9">
+                <strong className="text-4xl font-medium tracking-[-0.05em] text-[#E6C767]">$300K+</strong>
+                <h3 className="mt-4 text-lg font-medium uppercase tracking-[-0.02em]">{tx("Investment residency range")}</h3>
+                <p className="mt-4 text-base leading-7 text-white/62">{tx("Explore qualifying options for clients considering Georgia's investment residence pathway.")}</p>
+              </article>
+            </div>
+            <Link href="/invest-in-batumi#contact" className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 bg-[#E6C767] px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#161616] transition-colors hover:bg-white">
+              {tx("Show me qualifying properties")} <ArrowUpRight size={15} />
+            </Link>
+            <p className="mt-6 max-w-[52rem] text-xs leading-5 text-white/48">{tx("Residency eligibility is based on the property's certified market value, not solely its advertised or purchase price.")}</p>
+          </div>
+        </section>
+
+        <section id="why-aixco" className="scroll-mt-16 bg-[#F3EDE1] text-[#161616]">
+          <div className="mx-auto max-w-[1480px] px-5 py-20 sm:px-10 lg:px-16 lg:py-28">
+            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-[#7A6224]">{tx("10 — Why AIXCO")}</p>
+            <h2 className="mt-5 max-w-[14ch] text-[clamp(2.7rem,5vw,5.4rem)] font-medium leading-[0.94] tracking-[-0.05em]">{tx("Property. Residency. One point of contact.")}</h2>
+            <div className="mt-8 grid gap-6 text-base leading-7 text-[#161616]/67 lg:grid-cols-2">
+              <p>{tx("Purchasing property and establishing a presence in another country often requires the coordination of multiple professionals, processes and administrative steps.")}</p>
+              <p>{tx("AIXCO brings these elements together through a single point of contact—combining carefully selected real estate opportunities with coordinated local support to help international clients establish their presence in Georgia with confidence.")}</p>
+            </div>
+            <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {aixcoMetrics.map((metric) => (
+                <article key={metric.value} className="border border-[#161616]/15 bg-[#F8F3E9] p-6">
+                  <strong className="text-3xl font-medium tracking-[-0.045em] text-[#9A7425]">{metric.value}</strong>
+                  <p className="mt-4 text-sm leading-6 text-[#161616]/60">{tx(metric.body)}</p>
+                </article>
+              ))}
+            </div>
+            <div className="mt-12 grid gap-8 border-t border-[#161616]/15 pt-10 lg:grid-cols-[1fr_0.8fr]">
+              <div>
+                <h3 className="text-2xl font-medium tracking-[-0.035em]">{tx("The AIXCO difference")}</h3>
+                <p className="mt-4 max-w-[50rem] text-base leading-7 text-[#161616]/66">{tx("Unlike a traditional real estate agency, AIXCO combines property selection with coordinated private client support, helping international buyers move from identifying a qualifying property to establishing their presence in Georgia.")}</p>
+              </div>
+              <ul className="grid grid-cols-1 gap-2 text-sm uppercase tracking-[0.08em] text-[#161616]/72 sm:grid-cols-2">
+                {["Carefully selected property", "Residency coordination", "Banking introductions*", "Professional tax & legal network", "Documentation support", "Ongoing local assistance"].map((item) => <li key={item} className="border-b border-[#161616]/12 py-3">{tx(item)}</li>)}
+              </ul>
+            </div>
+          </div>
+        </section>
+
         <section id="contact" className="relative scroll-mt-16 overflow-hidden">
           <Image src={aixcoLiveImages.batumiMosaicEveningWaterfront} alt="" fill sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-[#0b0b0b]/78" />
           <div className="relative z-10 mx-auto grid max-w-[1480px] gap-12 px-5 py-20 sm:px-10 lg:grid-cols-[0.85fr_1.15fr] lg:px-16 lg:py-28">
             <div className="text-white">
-              <p className="text-[0.66rem] font-semibold uppercase tracking-[0.26em] text-[#E6C767]">{tx("Private request")}</p>
-              <h2 className="mt-5 max-w-[10ch] text-[clamp(2.8rem,5.2vw,5.4rem)] font-medium leading-[0.9] tracking-[-0.05em]">{tx("Write to AIXCO.")}</h2>
+              <p className="text-[0.66rem] font-semibold uppercase tracking-[0.26em] text-[#E6C767]">{tx("Book a private consultation")}</p>
+              <h2 className="mt-5 max-w-[12ch] text-[clamp(2.8rem,5.2vw,5.4rem)] font-medium leading-[0.9] tracking-[-0.05em]">{tx("Start your journey with AIXCO.")}</h2>
               <p className="mt-6 max-w-[28rem] text-base leading-[1.55] text-white/68">
-                {tx("Tell us which path you are considering. The AIXCO team will follow up with the matching residence or tax residency brief.")}
+                {tx("Speak with our team to discover qualifying properties and understand the most appropriate pathway for establishing your presence in Georgia.")}
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <DownloadGateLink

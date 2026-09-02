@@ -291,3 +291,556 @@
     padding-bottom: max(3.75rem, env(safe-area-inset-bottom, 0px));
   }
 }
+
+.briefBand,
+.earlyEntry,
+.patternSection,
+.georgiaSection,
+.valueSection,
+.roiSection,
+.comparisonSection,
+.reasonSection,
+.teamSection {
+  padding: clamp(4.75rem, 9vw, 8.5rem) clamp(1.25rem, 5.5vw, 5.75rem);
+  scroll-margin-top: 4.65rem;
+}
+
+.briefBand,
+.earlyEntry {
+  grid-column: 1 / -1;
+}
+
+.briefBand,
+.georgiaSection,
+.comparisonSection,
+.teamSection {
+  background: var(--paper-light);
+  color: var(--ink);
+}
+
+.earlyEntry,
+.valueSection,
+.roiSection,
+.reasonSection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.patternSection {
+  background: var(--paper-deep);
+}
+
+.briefIntro,
+.capitalFlow,
+.developmentCycle,
+.patternGrid,
+.georgiaGrid,
+.valueGrid,
+.researchNote,
+.roiCalculator,
+.bondComparison,
+.investorReasonGrid,
+.teamGrid,
+.teamStats {
+  width: min(100%, 90rem);
+  margin-inline: auto;
+}
+
+.briefIntro h2 {
+  max-width: 15ch;
+  margin: 1.25rem 0 0;
+  font-size: clamp(2.55rem, 5.4vw, 5.8rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  overflow-wrap: anywhere;
+}
+
+.briefIntro > p:not(.eyebrow) {
+  max-width: 52rem;
+  margin: 1.5rem 0 0;
+  color: rgb(23 23 23 / 63%);
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  line-height: 1.7;
+}
+
+.earlyEntry .briefIntro > p:not(.eyebrow),
+.valueSection .briefIntro > p:not(.eyebrow),
+.roiSection .briefIntro > p:not(.eyebrow),
+.reasonSection .briefIntro > p:not(.eyebrow) {
+  color: rgb(255 255 255 / 62%);
+}
+
+.earlyEntry .eyebrow,
+.valueSection .eyebrow,
+.roiSection .eyebrow,
+.reasonSection .eyebrow {
+  color: var(--gold);
+}
+
+.capitalFlow,
+.valueGrid,
+.investorReasonGrid {
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.capitalFlow article,
+.valueGrid article,
+.investorReasonGrid article {
+  min-width: 0;
+  min-height: 13rem;
+  padding: 1.4rem;
+  border: 1px solid rgb(23 23 23 / 15%);
+  transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.capitalFlow article:hover {
+  border-color: var(--gold-deep);
+  background: #fff;
+  transform: translateY(-2px);
+}
+
+.capitalFlow span,
+.valueGrid span,
+.investorReasonGrid span {
+  color: var(--gold-deep);
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.capitalFlow h3,
+.valueGrid h3,
+.investorReasonGrid h3 {
+  margin-top: 2.3rem;
+  font-size: 1.25rem;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
+.capitalFlow p,
+.valueGrid p {
+  margin-top: 0.8rem;
+  color: rgb(23 23 23 / 58%);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.developmentCycle {
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+}
+
+.developmentCycle article {
+  min-width: 0;
+  min-height: 12rem;
+  padding: 1.4rem;
+  border: 1px solid rgb(255 255 255 / 17%);
+  border-right: 0;
+}
+
+.developmentCycle article:last-child {
+  border-right: 1px solid rgb(255 255 255 / 17%);
+}
+
+.developmentCycle span {
+  color: var(--gold);
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.developmentCycle h3 {
+  margin-top: 2.5rem;
+  font-size: 1.2rem;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+.developmentCycle i {
+  display: block;
+  width: calc(100% + 1.4rem);
+  height: 2px;
+  margin-top: 2.25rem;
+  background: linear-gradient(90deg, var(--gold), rgb(230 199 103 / 10%));
+}
+
+.patternGrid,
+.georgiaGrid {
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.patternGrid article {
+  min-width: 0;
+  min-height: 13rem;
+  padding: 1.4rem;
+  border: 1px solid var(--line);
+}
+
+.patternGrid span {
+  color: var(--gold-deep);
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.patternGrid h3 {
+  margin-top: 2.5rem;
+  font-size: 1.35rem;
+  letter-spacing: -0.035em;
+}
+
+.patternGrid p {
+  margin-top: 0.8rem;
+  color: var(--muted);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.georgiaGrid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.georgiaGrid article {
+  min-width: 0;
+  min-height: 11rem;
+  padding: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--line);
+}
+
+.georgiaGrid strong {
+  color: var(--gold-deep);
+  font-size: clamp(1.8rem, 3vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.georgiaGrid span {
+  color: var(--muted);
+  font-size: 0.69rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.valueGrid article,
+.investorReasonGrid article {
+  border-color: rgb(255 255 255 / 16%);
+}
+
+.valueGrid article:hover,
+.investorReasonGrid article:hover {
+  border-color: var(--gold);
+  background: rgb(255 255 255 / 4%);
+  transform: translateY(-2px);
+}
+
+.valueGrid span,
+.investorReasonGrid span {
+  color: var(--gold);
+}
+
+.valueGrid p {
+  color: rgb(255 255 255 / 57%);
+}
+
+.researchNote {
+  margin-top: 1.5rem;
+  color: rgb(23 23 23 / 48%);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.valueSection .researchNote,
+.roiSection .researchNote {
+  color: rgb(255 255 255 / 45%);
+}
+
+.bondBenefits,
+.packageList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem 1rem;
+  list-style: none;
+  padding: 0;
+}
+
+.bondBenefits {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.bondBenefits li,
+.packageList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.bondBenefits li {
+  color: rgb(255 255 255 / 68%);
+}
+
+.bondBenefits svg,
+.packageList svg {
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+  color: var(--gold);
+}
+
+.roiCalculator {
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: minmax(18rem, 1fr) repeat(2, minmax(0, 1fr));
+  border: 1px solid rgb(255 255 255 / 17%);
+}
+
+.roiCalculator label,
+.roiCalculator article {
+  min-width: 0;
+  min-height: 12rem;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid rgb(255 255 255 / 14%);
+}
+
+.roiCalculator article:last-child {
+  border-right: 0;
+}
+
+.roiCalculator label {
+  color: rgb(255 255 255 / 62%);
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.roiCalculator label span {
+  margin-top: 1.2rem;
+  color: var(--gold);
+  font-size: 1.4rem;
+}
+
+.roiCalculator input {
+  width: calc(100% - 1.6rem);
+  border: 0;
+  border-bottom: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 0;
+  padding: 0.65rem 0;
+  background: transparent;
+  color: #fff;
+  font-size: clamp(1.6rem, 2.6vw, 2.8rem);
+}
+
+.roiCalculator article {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.roiCalculator article span {
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.roiCalculator article strong {
+  font-size: clamp(1.7rem, 3vw, 3.2rem);
+  letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
+}
+
+.bondComparison {
+  width: min(100%, 90rem);
+  margin: clamp(2.5rem, 5vw, 4.5rem) auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.bondComparison article {
+  min-height: 16rem;
+  padding: 1.6rem;
+  border: 1px solid var(--line);
+}
+
+.bondComparison article:last-child {
+  border-color: var(--gold-deep);
+  background: var(--paper-deep);
+}
+
+.bondComparison h3 {
+  font-size: 1.55rem;
+  letter-spacing: -0.04em;
+}
+
+.bondComparison p {
+  margin-top: 1.2rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.investorReasonGrid article {
+  min-height: 10rem;
+}
+
+.teamGrid {
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.teamGrid article {
+  min-width: 0;
+  min-height: 12rem;
+  padding: 1.4rem;
+  border: 1px solid var(--line);
+}
+
+.teamGrid h3 {
+  font-size: 1.35rem;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
+.teamGrid p {
+  margin-top: 1rem;
+  color: var(--muted);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.teamStats {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.teamStats strong {
+  padding: 1.25rem;
+  border: 1px solid var(--gold-deep);
+  color: var(--gold-deep);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.packageList {
+  margin: 1.25rem 0 1.75rem;
+}
+
+.packageList li {
+  color: var(--muted);
+}
+
+.packageList svg {
+  color: var(--gold-deep);
+}
+
+@media (max-width: 960px) {
+  .capitalFlow,
+  .valueGrid,
+  .investorReasonGrid,
+  .patternGrid,
+  .teamGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .georgiaGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .roiCalculator {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .roiCalculator label {
+    grid-column: 1 / -1;
+    border-right: 0;
+    border-bottom: 1px solid rgb(255 255 255 / 14%);
+  }
+}
+
+@media (max-width: 640px) {
+  .briefBand,
+  .earlyEntry,
+  .patternSection,
+  .georgiaSection,
+  .valueSection,
+  .roiSection,
+  .comparisonSection,
+  .reasonSection,
+  .teamSection {
+    padding-inline: 1rem;
+  }
+
+  .capitalFlow,
+  .developmentCycle,
+  .patternGrid,
+  .georgiaGrid,
+  .valueGrid,
+  .roiCalculator,
+  .bondComparison,
+  .investorReasonGrid,
+  .teamGrid,
+  .teamStats,
+  .bondBenefits,
+  .packageList {
+    grid-template-columns: 1fr;
+  }
+
+  .capitalFlow article,
+  .developmentCycle article,
+  .patternGrid article,
+  .georgiaGrid article,
+  .valueGrid article,
+  .investorReasonGrid article,
+  .teamGrid article,
+  .bondComparison article {
+    min-height: auto;
+  }
+
+  .developmentCycle article,
+  .developmentCycle article:last-child {
+    border-right: 1px solid rgb(255 255 255 / 17%);
+    border-bottom: 0;
+  }
+
+  .developmentCycle article:last-child {
+    border-bottom: 1px solid rgb(255 255 255 / 17%);
+  }
+
+  .developmentCycle i {
+    width: 2px;
+    height: 2.2rem;
+    margin: 1.5rem auto -1.4rem;
+    background: linear-gradient(180deg, var(--gold), rgb(230 199 103 / 10%));
+  }
+
+  .roiCalculator label,
+  .roiCalculator article {
+    grid-column: auto;
+    border-right: 0;
+    border-bottom: 1px solid rgb(255 255 255 / 14%);
+  }
+}

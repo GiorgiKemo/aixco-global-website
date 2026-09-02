@@ -350,7 +350,7 @@ const copy: Record<Lang, LandingCopy> = {
     language: "Język",
     hero: {
       eyebrow: "Batumi, Gruzja · Nieruchomości nad morzem",
-      title: "WŁASNOŚĆ NA JEDNYM Z",
+      title: "KUP NIERUCHOMOŚĆ NA JEDNYM Z",
       accent: "NAJSZYBCIEJ ROSNĄCYCH NADMORSKICH RYNKÓW EUROPY",
       body: "Wybrane apartamenty od 45 000 €. 10% wpłaty początkowej, do 60% finansowania bankowego, do 12% netto z najmu, 1% podatku od dochodu z najmu i 100% własności dla cudzoziemców.",
       cta: "Zobacz dostępne apartamenty",
@@ -394,7 +394,7 @@ const copy: Record<Lang, LandingCopy> = {
     },
     process: {
       eyebrow: "Struktura płatności",
-      title: "Własność mieszkania. Płatności etapowe.",
+      title: "Kup mieszkanie. Płać etapami.",
       body: "Ustrukturyzowana droga do własności bez konieczności płacenia pełnej ceny z góry.",
       steps: [
         { value: "10%", title: "Wpłata początkowa", body: "Zabezpiecz wybraną nieruchomość." },
@@ -425,7 +425,7 @@ const copy: Record<Lang, LandingCopy> = {
     },
     contact: {
       eyebrow: "Zacznij teraz",
-      title: "ZNALEŹĆ WŁAŚCIWĄ NIERUCHOMOŚĆ W BATUMI",
+      title: "ZNAJDŹ WŁAŚCIWĄ NIERUCHOMOŚĆ W BATUMI",
       body: "Powiedz nam, czego szukasz. Pokażemy dostępne apartamenty, które najlepiej pasują do budżetu i celu.",
       name: "Imię i nazwisko",
       namePlaceholder: "Twoje imię i nazwisko",
@@ -464,7 +464,7 @@ const copy: Record<Lang, LandingCopy> = {
     language: "Jezik",
     hero: {
       eyebrow: "Batumi, Gruzija · Obalne nepremičnine",
-      title: "LASTNIŠTVO NA ENEGA OD",
+      title: "POSTANITE LASTNIK NA ENEM OD",
       accent: "NAJHITREJE RASTOČIH OBALNIH TRGOV V EVROPI",
       body: "Izbrani apartmaji od 45.000 €. 10% začetno plačilo, do 60% bančnega financiranja, do 12% neto donosa najema, 1% davka na dohodek iz najema in 100% tuje lastništvo.",
       cta: "Oglejte si razpoložljive apartmaje",
@@ -508,7 +508,7 @@ const copy: Record<Lang, LandingCopy> = {
     },
     process: {
       eyebrow: "Struktura plačil",
-      title: "Lastništvo stanovanja. Plačilo po stopnjah.",
+      title: "Postanite lastnik stanovanja. Plačujte po fazah.",
       body: "Strukturirana pot do lastništva brez plačila celotne cene nepremičnine vnaprej.",
       steps: [
         { value: "10 %", title: "Začetno plačilo", body: "Zagotovite izbrano nepremičnino." },
@@ -578,7 +578,7 @@ const copy: Record<Lang, LandingCopy> = {
     language: "Язык",
     hero: {
       eyebrow: "Батуми, Грузия · Прибрежная недвижимость",
-      title: "СОБСТВЕННОСТЬ НА ОДНОМ ИЗ",
+      title: "КУПИТЕ НЕДВИЖИМОСТЬ НА ОДНОМ ИЗ",
       accent: "САМЫХ БЫСТРОРАСТУЩИХ ПРИБРЕЖНЫХ РЫНКОВ ЕВРОПЫ",
       body: "Отобранные апартаменты от 45 000 €. 10% первый взнос, до 60% банковского финансирования, до 12% чистой арендной доходности, 1% налога на доход от аренды и 100% иностранная собственность.",
       cta: "Смотреть доступные апартаменты",
@@ -622,7 +622,7 @@ const copy: Record<Lang, LandingCopy> = {
     },
     process: {
       eyebrow: "Структура оплаты",
-      title: "Собственность квартиры. Оплата этапами.",
+      title: "Владейте квартирой. Платите поэтапно.",
       body: "Структурированный путь к собственности без полной предоплаты стоимости объекта.",
       steps: [
         { value: "10%", title: "Первый взнос", body: "Закрепите выбранный объект." },
@@ -653,7 +653,7 @@ const copy: Record<Lang, LandingCopy> = {
     },
     contact: {
       eyebrow: "Начать",
-      title: "НАЙТИ ПОДХОДЯЩУЮ НЕДВИЖИМОСТЬ В БАТУМИ",
+      title: "НАЙДИТЕ ПОДХОДЯЩУЮ НЕДВИЖИМОСТЬ В БАТУМИ",
       body: "Расскажите, что вы ищете. Мы покажем доступные апартаменты, которые лучше всего соответствуют бюджету и задаче.",
       name: "Имя и фамилия",
       namePlaceholder: "Ваше имя",
@@ -699,13 +699,31 @@ const images = {
 } as const;
 
 const processIcons = [ShieldCheck, Scale, KeyRound] as const;
+const investorReasons = [
+  "Entry prices still below most European coastal cities",
+  "Strong tourism growth",
+  "Fast-growing economy",
+  "Very low property taxes",
+  "Simple ownership process",
+  "Black Sea lifestyle",
+] as const;
+
+const buyerJourney = [
+  { title: "Select", body: "Find the right apartment" },
+  { title: "Reserve", body: "Secure your property" },
+  { title: "Finance", body: "Payment plan & financing" },
+  { title: "Construction", body: "Project updates" },
+  { title: "Handover", body: "Receive your keys" },
+  { title: "Rental", body: "Income management (optional)" },
+  { title: "Ownership support", body: "Administration & ongoing assistance" },
+] as const;
 
 function scrollTo(href: string) {
   scrollToHash(href);
 }
 
 export function InvestBatumiLandingPage() {
-  const { lang, setLang } = useI18n();
+  const { lang, setLang, tx } = useI18n();
   const { company } = useSiteContent();
   const { openPrivacy, openTerms } = useUI();
   const content = copy[lang];
@@ -717,9 +735,14 @@ export function InvestBatumiLandingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [requestReference, setRequestReference] = useState<string | null>(null);
+  const [investmentPrice, setInvestmentPrice] = useState(65000);
+  const [monthlyRent, setMonthlyRent] = useState(600);
+  const [loanPayment, setLoanPayment] = useState(0);
   const languageRef = useRef<HTMLDivElement | null>(null);
   const formStartedAt = useRef(Date.now());
   const activeLanguage = LANGS.find((option) => option.code === lang)?.native ?? lang.toUpperCase();
+  const estimatedMonthlyCashflow = monthlyRent - loanPayment;
+  const estimatedAnnualReturn = investmentPrice > 0 ? (estimatedMonthlyCashflow * 12 / investmentPrice) * 100 : 0;
 
   useEffect(() => {
     document.title = content.metaTitle;
@@ -858,7 +881,10 @@ export function InvestBatumiLandingPage() {
             <p className={styles.eyebrowLight}>{content.hero.eyebrow}</p>
             <h1>{content.hero.title}{" "}<span>{content.hero.accent}</span></h1>
             <p className={styles.heroBody}>{content.hero.body}</p>
-            <button type="button" className={styles.goldButton} onClick={() => scrollTo("#contact")}>{content.hero.cta}<ArrowUpRight size={17} /></button>
+            <div className={styles.heroDocumentActions}>
+              <button type="button" className={styles.goldButton} onClick={() => scrollTo("#contact")}>{content.hero.cta}<ArrowUpRight size={17} /></button>
+              <button type="button" className={styles.heroSecondaryButton} onClick={() => scrollTo("#contact")}>{tx("Download investment guide")}<ArrowUpRight size={16} /></button>
+            </div>
             <div className={styles.heroMeta}><span>{content.hero.location}</span><span>{content.hero.service}</span></div>
           </div>
           <div className={styles.heroImageFrame}>
@@ -882,7 +908,7 @@ export function InvestBatumiLandingPage() {
 
         <section id="market" className={styles.marketSection}>
           <div className={styles.marketIntro}>
-            <p className={styles.eyebrowGold}>{content.market.eyebrow}</p>
+            <p className={styles.eyebrowGold}>{tx("02 — Why Batumi?")}</p>
             <h2>{content.market.title}</h2>
             <p>{content.market.body}</p>
           </div>
@@ -898,8 +924,20 @@ export function InvestBatumiLandingPage() {
         </section>
 
         <section id="pricing" className={styles.pricingSection}>
+          <div className={styles.briefSectionIntro}>
+            <p className={styles.eyebrowDark}>{tx("03 — Why are investors buying today?")}</p>
+            <h2>{tx("Why are investors buying today?")}</h2>
+          </div>
+          <div className={styles.reasonGrid}>
+            {investorReasons.map((reason, index) => (
+              <article key={reason}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h3>{tx(reason)}</h3>
+              </article>
+            ))}
+          </div>
           <div className={styles.pricingIntro}>
-            <p className={styles.eyebrowDark}>{content.pricing.eyebrow}</p>
+            <p className={styles.eyebrowDark}>{tx("04 — How much does it cost?")}</p>
             <h2>{content.pricing.title}</h2>
           </div>
           <div className={styles.pricingGrid}>
@@ -933,7 +971,7 @@ export function InvestBatumiLandingPage() {
 
         <section id="approach" className={styles.processSection}>
           <div className={styles.processIntro}>
-            <p className={styles.eyebrowGold}>{content.process.eyebrow}</p>
+            <p className={styles.eyebrowGold}>{tx("05 — How do I buy?")}</p>
             <h2>{content.process.title}</h2>
             <p>{content.process.body}</p>
           </div>
@@ -958,6 +996,45 @@ export function InvestBatumiLandingPage() {
           </Link>
         </section>
 
+        <section id="returns" className={styles.briefSection}>
+          <div className={styles.briefSectionIntro}>
+            <p className={styles.eyebrowGold}>{tx("06 — How much could it generate?")}</p>
+            <h2>{tx("How much could it generate?")}</h2>
+            <p>{tx("Use a simple illustration to see how price, rent and loan payments affect estimated cashflow and annual return.")}</p>
+          </div>
+          <div className={styles.returnCalculator}>
+            <div className={styles.calculatorInputs}>
+              <label>{tx("Property price")}<span>€</span><input type="number" min="10000" step="1000" value={investmentPrice} onChange={(event) => setInvestmentPrice(Number(event.target.value) || 0)} /></label>
+              <label>{tx("Monthly rent")}<span>€</span><input type="number" min="0" step="50" value={monthlyRent} onChange={(event) => setMonthlyRent(Number(event.target.value) || 0)} /></label>
+              <label>{tx("Monthly loan payment")}<span>€</span><input type="number" min="0" step="50" value={loanPayment} onChange={(event) => setLoanPayment(Number(event.target.value) || 0)} /></label>
+            </div>
+            <div className={styles.calculatorResults} aria-live="polite">
+              <article><span>{tx("Estimated monthly cashflow")}</span><strong>{estimatedMonthlyCashflow.toLocaleString(lang, { style: "currency", currency: "EUR", maximumFractionDigits: 0 })}</strong></article>
+              <article><span>{tx("Estimated annual return")}</span><strong>{estimatedAnnualReturn.toFixed(1)}%</strong></article>
+            </div>
+          </div>
+          <p className={styles.calculatorNote}>{tx("Illustrative calculation only. It excludes vacancy, operating costs, taxes, fees and changes in financing terms.")}</p>
+        </section>
+
+        <section id="experience" className={styles.experienceSection}>
+          <div className={styles.briefSectionIntro}>
+            <p className={styles.eyebrowDark}>{tx("07 — Built on experience. Focused on the future.")}</p>
+            <h2>{tx("Built on experience. Focused on the future.")}</h2>
+          </div>
+          <div className={styles.experienceCopy}>
+            <p>{tx("Since its first acquisition in 2009, AIXCO has followed a disciplined strategy built on long-term real estate ownership, careful capital allocation and international expansion.")}</p>
+            <p>{tx("Today, AIXCO combines Swiss real estate heritage, international experience and a growing development platform to identify opportunities, create value and build a diversified portfolio designed for long-term growth.")}</p>
+          </div>
+          <div className={styles.experiencePath}>
+            {[
+              ["Switzerland", "Swiss real estate heritage"],
+              ["Dubai", "International expansion"],
+              ["Georgia", "Strategic growth market"],
+              ["Future", "Selected emerging markets"],
+            ].map(([place, body], index) => <article key={place}><span>{String(index + 1).padStart(2, "0")}</span><h3>{tx(place)}</h3><p>{tx(body)}</p></article>)}
+          </div>
+        </section>
+
         <section id="gallery" className={styles.gallerySection}>
           <div className={styles.galleryHeading}>
             <div><p className={styles.eyebrowDark}>{content.gallery.eyebrow}</p><h2>{content.gallery.title}</h2></div>
@@ -975,7 +1052,7 @@ export function InvestBatumiLandingPage() {
 
         <section className={styles.guidanceSection}>
           <div className={styles.guidanceIntro}>
-            <p className={styles.eyebrowDark}>{content.guidance.eyebrow}</p>
+            <p className={styles.eyebrowDark}>{tx("08 — Why buy through AIXCO?")}</p>
             <h2>{content.guidance.title}</h2>
             <p>{content.guidance.body}</p>
           </div>
@@ -986,14 +1063,50 @@ export function InvestBatumiLandingPage() {
           </div>
         </section>
 
+        <section id="comparison" className={styles.comparisonSection}>
+          <div className={styles.briefSectionIntro}>
+            <p className={styles.eyebrowGold}>{tx("09 — Compare Batumi to other markets")}</p>
+            <h2>{tx("Compare Batumi to other markets.")}</h2>
+            <p>{tx("Compare entry pricing in context, then review the exact project, location, condition and ownership terms before making a decision.")}</p>
+          </div>
+          <div className={styles.comparisonTable} role="table" aria-label={tx("Coastal market comparison")}>
+            <div role="row"><strong role="columnheader">{tx("Market")}</strong><strong role="columnheader">{tx("Position")}</strong><strong role="columnheader">{tx("Buyer consideration")}</strong></div>
+            {[
+              ["Batumi", "Emerging Black Sea market", "Accessible entry pricing and developing infrastructure"],
+              ["Dubai", "Established international market", "Higher entry pricing and mature investor demand"],
+              ["Mediterranean coast", "Mature European markets", "Limited supply in prime coastal locations"],
+              ["Tbilisi", "Capital-city market", "Different demand profile from a resort-led coastal city"],
+            ].map((row) => <div role="row" key={row[0]}>{row.map((cell) => <span role="cell" key={cell}>{tx(cell)}</span>)}</div>)}
+          </div>
+          <p className={styles.calculatorNote}>{tx("This qualitative comparison does not replace current price-per-square-metre data or project-level due diligence.")}</p>
+        </section>
+
+        <section id="journey" className={styles.journeySection}>
+          <div className={styles.briefSectionIntro}>
+            <p className={styles.eyebrowDark}>{tx("10 — Buyer journey")}</p>
+            <h2>{tx("Buyer journey")}</h2>
+          </div>
+          <ol>
+            {buyerJourney.map((step, index) => (
+              <li key={step.title}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div><h3>{tx(step.title)}</h3><p>{tx(step.body)}</p></div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
         <section id="contact" className={styles.contactSection}>
           <div className={styles.contactMedia}>
             <Image src={images.contact.src} alt="Premium indoor pool and resident wellness area" fill quality={90} sizes="(max-width: 960px) 100vw, 50vw" />
           </div>
           <div className={styles.contactPanel}>
-            <p className={styles.eyebrowGold}>{content.contact.eyebrow}</p>
+            <p className={styles.eyebrowGold}>{tx("11 — Find the right property in Batumi")}</p>
             <h2 id="invest-batumi-contact-title">{content.contact.title}</h2>
             <p className={styles.contactIntro}>{content.contact.body}</p>
+            <ul className={styles.contactIncludes}>
+              {["Current availability", "Prices", "Floor plans", "Financing example", "Rental projections", "Investment guide"].map((item) => <li key={item}><Check size={14} />{tx(item)}</li>)}
+            </ul>
             {submitted ? (
               <div className={styles.success} role="status">
                 <span><Check size={25} /></span><h3>{content.contact.successTitle}</h3><p>{content.contact.successBody}</p>
