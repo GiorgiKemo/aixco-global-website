@@ -9,6 +9,7 @@ import { recordContactSubmission, recordPortalEvent } from "@/lib/backend/lead-c
 import {
   getSafePortalLoginUrl,
   getSafePortalRegistrationUrl,
+  getSafePortalUrl,
   type PortalLoginRole,
   type PortalRegistrationRole,
 } from "@/lib/security/urls";
@@ -924,14 +925,17 @@ function AccessModal({ mode, tx, lang }: { mode: "login" | "register"; tx: (text
   const subtitle = isRegister
     ? "Register opens the relevant onboarding form for each role so the right information can be submitted before portal access is activated."
     : "Login takes each user type to its respective portal so customers, brokers, and developers can continue in the right environment immediately.";
-  const roles = (isRegister ? getRegisterRoles(company.portals) : getLoginRoles(company.portals))
-    .map((role) => ({
-      ...role,
-      url: isRegister
-        ? getSafePortalRegistrationUrl(role.url, role.portalRole as PortalRegistrationRole, lang, "")
-        : getSafePortalLoginUrl(role.url, role.portalRole as PortalLoginRole, lang, ""),
-    }))
-    .filter((role) => role.url);
+  const roles = (isRegister ? getRegisterRoles(company.portals) : getLoginRoles(company.portals)).flatMap((role) => {
+    const portalUrl = getSafePortalUrl(role.url, "");
+    if (!portalUrl) return [];
+
+    const url = isRegister
+      ? getSafePortalRegistrationUrl(portalUrl, role.portalRole as PortalRegistrationRole, lang, "")
+      : getSafePortalLoginUrl(portalUrl, role.portalRole as PortalLoginRole, lang, "");
+    if (!url) return [];
+
+    return [{ ...role, portalUrl, url }];
+  });
 
   return (
     <div>
@@ -949,7 +953,7 @@ function AccessModal({ mode, tx, lang }: { mode: "login" | "register"; tx: (text
                 mode,
                 roleTitle: role.title,
                 action: role.action,
-                portalUrl: role.url,
+                portalUrl: role.portalUrl,
               });
             }}
             className="btn-ghost-gold !py-2 !px-4 text-[12px]"
@@ -977,7 +981,7 @@ function AccessModal({ mode, tx, lang }: { mode: "login" | "register"; tx: (text
                   mode,
                   roleTitle: role.title,
                   action: role.cta,
-                  portalUrl: role.url,
+                  portalUrl: role.portalUrl,
                 });
               }}
               className="mt-5 inline-flex min-h-11 items-center py-2 text-xs uppercase tracking-widest text-primary-text"

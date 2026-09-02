@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { SiteContentContext } from "@/data/site-content-context";
 import { siteContentDefaults } from "@/lib/backend/site-content";
-import { recordContactSubmission } from "@/lib/backend/lead-capture";
+import { recordContactSubmission, recordPortalEvent } from "@/lib/backend/lead-capture";
 import {
   CONTACT_NUDGE_CONVERSION_SUPPRESSION_MS,
   getContactNudgePreferences,
@@ -181,6 +181,27 @@ describe("Modals", () => {
       "href",
       "https://workw.com/realestate/aixco/developer-login?lang=en",
     );
+  });
+
+  it("records login clicks against the approved portal root after opening the Workwise route", async () => {
+    render(
+      <I18nProvider>
+        <UIProvider>
+          <LoginTrigger />
+          <Modals />
+        </UIProvider>
+      </I18nProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /open login/i }));
+    fireEvent.click(await screen.findByRole("link", { name: "Customer Login" }));
+
+    expect(vi.mocked(recordPortalEvent)).toHaveBeenCalledWith({
+      mode: "login",
+      roleTitle: "Customer",
+      action: "Customer Login",
+      portalUrl: "https://customer.aixco.global/",
+    });
   });
 
   it("gives legal dialogs an accessible name", () => {
