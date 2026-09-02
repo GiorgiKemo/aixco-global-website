@@ -124,45 +124,44 @@ describe("index.css motion rules", () => {
     expect(desktopStoryHome).toContain('setAnimationState("played");');
     expect(desktopStoryHome).toContain('<span className="sr-only">{label}</span>');
     expect(desktopStoryHome).not.toContain("aria-label={label}");
-    expect(css).toContain(".story-title-reveal--pending .story-title-reveal__text,");
-    expect(css).toContain(".story-title-reveal--active .story-title-reveal__text,");
+    expect(css).toContain(".story-title-reveal--pending .story-title-reveal__glyph,");
+    expect(css).toContain(".story-title-reveal--active .story-title-reveal__glyph,");
     expect(css).toContain("animation: none !important;");
   });
 
-  it("uses one bounded whole-title wipe without opacity fades on every viewport", () => {
-    const titleKeyframesStart = css.indexOf("@keyframes story-title-reveal");
+  it("reveals letters left to right without opacity fades on every viewport", () => {
+    const titleKeyframesStart = css.indexOf("@keyframes story-title-letter-reveal");
     const titleKeyframesEnd = css.indexOf("html:is([lang='ka'], [lang='ar']) .story-title-reveal", titleKeyframesStart);
     const titleKeyframes = css.slice(titleKeyframesStart, titleKeyframesEnd);
-    const titleRevealRules = css.slice(css.indexOf("/* One whole-title reveal"), titleKeyframesEnd);
-    const storyCopyKeyframesStart = css.indexOf("@keyframes story-copy-settle");
-    const storyCopyKeyframesEnd = css.indexOf("body.story-mobile-menu-open", storyCopyKeyframesStart);
-    const storyCopyKeyframes = css.slice(storyCopyKeyframesStart, storyCopyKeyframesEnd);
+    const titleRevealRules = css.slice(css.indexOf("/* Section titles reveal"), titleKeyframesEnd);
 
     expect(desktopStoryHome).toContain("mobileLabel?: string");
     expect(desktopStoryHome).toContain('mobileLabel={tx("ACQUIRE.PARTNER.CREATE VALUE.").replace(/\\./g, ".\\u200B")}');
-    expect(desktopStoryHome).toContain('data-text-reveal-engine="scroll-linked-with-observer-fallback"');
+    expect(desktopStoryHome).toContain("createStoryTitleTokens");
+    expect(desktopStoryHome).toContain('data-text-reveal-engine="shared-observer-letter-sequence"');
     expect(desktopStoryHome).toContain('className="story-title-reveal__text"');
+    expect(desktopStoryHome).toContain('className="story-title-reveal__letter"');
+    expect(desktopStoryHome).toContain('className="story-title-reveal__glyph"');
     expect(desktopStoryHome).not.toContain("story-letter-reveal__char");
     expect(desktopStoryHome).not.toContain("story-letter-reveal--compact");
-    expect(css).toContain("@keyframes story-title-reveal");
-    expect(css).toContain("animation: story-title-reveal var(--story-title-reveal-duration, 920ms)");
+    expect(css).toContain("@keyframes story-title-letter-reveal");
+    expect(css).toContain("animation: story-title-letter-reveal var(--story-title-letter-duration, 520ms)");
     expect(css).toContain("cubic-bezier(0.16, 1, 0.3, 1) both;");
-    expect(css).toContain(".story-title-reveal--pending .story-title-reveal__text {");
-    expect(css).toContain("clip-path: inset(100% 0 0 0);");
-    expect(css).toContain("transform: translate3d(0, 0.56em, 0) skewY(1.2deg);");
-    expect(css).toContain("animation-timeline: view(block);");
-    expect(css).toContain("animation-range: entry 0% cover 30%;");
-    expect(css).toContain(".story-title-reveal[data-text-reveal-state='scroll-linked']");
-    expect(css).toContain("@keyframes story-title-scroll-reveal");
-    expect(css).toContain("@keyframes story-copy-settle");
+    expect(css).toContain(".story-title-reveal--pending .story-title-reveal__glyph {");
+    expect(css).toContain("clip-path: inset(-0.12em -0.05em);");
+    expect(css).toContain("transform: translate3d(-125%, 0.06em, 0) skewX(-7deg);");
+    expect(css).toContain("var(--story-title-letter-index) * var(--story-title-letter-step, 18ms)");
+    expect(css).not.toContain("@keyframes story-title-scroll-reveal");
+    expect(css).not.toContain("animation-timeline: view(block);");
+    expect(css).not.toContain("@keyframes story-copy-settle");
+    expect(css).not.toContain("animation: story-copy-settle");
     expect(desktopStoryHome).toContain("story-objectives-stage relative flex min-h-[100svh] items-center overflow-clip");
     expect(desktopStoryHome).toContain("story-about-access-stage relative min-h-[100svh] overflow-clip");
     expect(css).toContain("overflow: clip;");
-    expect(css).toContain("will-change: transform, clip-path;");
     expect(titleKeyframesStart).toBeGreaterThanOrEqual(0);
     expect(titleRevealRules).not.toContain("opacity:");
+    expect(titleRevealRules).not.toContain("will-change:");
     expect(titleKeyframes).not.toContain("filter:");
-    expect(storyCopyKeyframes).not.toContain("opacity:");
   });
 
   it("keeps phone story sections compact enough for smooth reveal entry", () => {
@@ -1146,8 +1145,8 @@ describe("index.css motion rules", () => {
       "html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])\n  [data-story-section]\n  :is(",
     );
     expect(css).toContain(".story-title-reveal__text,");
-    expect(css).toContain(".story-letter-reveal__word,");
-    expect(css).toContain(".story-letter-reveal__char");
+    expect(css).toContain(".story-title-reveal__word,");
+    expect(css).toContain(".story-title-reveal__glyph");
     expect(css).toContain("font-family: inherit;");
     expect(css).toContain("font-size: inherit;");
     expect(css).toContain("font-weight: inherit;");

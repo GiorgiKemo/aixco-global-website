@@ -65,7 +65,7 @@ import { PartnerMarquee } from "@/components/partners/PartnerMarquee";
 import { useTeamMemberRotation } from "@/hooks/use-team-member-rotation";
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion";
 import { AnimatePresence, motion } from "@/lib/framer-motion";
-import { premiumEase, revealTransition } from "@/lib/motion";
+import { premiumEase } from "@/lib/motion";
 import {
   formatMetricValue,
   isHeadlineMetric,
@@ -255,9 +255,11 @@ type StorySectionMetric = {
 
 const storyTeamSwitchIntervalMs = 6800;
 const storyTeamResumeDelayMs = 9000;
-const storyTitleRevealDurationMs = 920;
+const storyTitleLetterDurationMs = 520;
+const storyTitleLetterSequenceTargetMs = 1180;
+const storyTitleLetterMinStepMs = 8;
+const storyTitleLetterMaxStepMs = 28;
 const storyTitleRevealFallbackBufferMs = 180;
-const storyTitleScrollAnimationRange = "entry 0% cover 30%";
 const philosophyOwnershipSections = philosophySections.slice(0, 2);
 const philosophyPlatformSections = philosophySections.slice(2);
 const philosophyPlatformStats = [
@@ -344,59 +346,99 @@ function observeStoryTitle(element: HTMLElement, listener: StoryTitleRevealListe
   return () => stopObservingStoryTitle(element);
 }
 
-function supportsStoryTitleScrollTimeline() {
-  if (typeof window === "undefined" || typeof window.CSS?.supports !== "function") {
-    return false;
-  }
+type StoryTitleToken =
+  | { type: "break"; key: string }
+  | { type: "space"; key: string; value: string }
+  | {
+      type: "word";
+      key: string;
+      isLong: boolean;
+      letters: Array<{ key: string; value: string; index: number }>;
+    };
 
-  // Safari currently advertises view-timeline support but resolves the range
-  // incorrectly for several of our nested scenes. Use the proven observer
-  // fallback there; Chromium gets the native scroll-linked path.
-  const isChromiumEngine = /(?:Chrome|Chromium|Edg|OPR)\//u.test(window.navigator.userAgent);
+function createStoryTitleTokens(label: string) {
+  let letterIndex = 0;
+  const tokens: StoryTitleToken[] = label
+    .normalize("NFC")
+    .split(/(\u200B|\s+)/u)
+    .filter(Boolean)
+    .map((segment, tokenIndex) => {
+      if (segment === "\u200B") {
+        return { type: "break", key: `break-${tokenIndex}` };
+      }
 
-  return (
-    isChromiumEngine &&
-    window.CSS.supports("animation-timeline: view()") &&
-    window.CSS.supports(`animation-range: ${storyTitleScrollAnimationRange}`)
-  );
+      if (/^\s+$/u.test(segment)) {
+        return { type: "space", key: `space-${tokenIndex}`, value: segment };
+      }
+
+      const values = Array.from(segment);
+      const letters = values.map((value, valueIndex) => ({
+        key: `letter-${tokenIndex}-${valueIndex}-${value}`,
+        value,
+        index: letterIndex++,
+      }));
+
+      return {
+        type: "word",
+        key: `word-${tokenIndex}-${segment}`,
+        isLong: letters.length > 14,
+        letters,
+      };
+    });
+
+  return { tokens, letterCount: letterIndex };
 }
 
 function StoryTextReveal({
   active,
   label,
   mobileLabel,
+  announceLabel = true,
 }: {
   active: boolean;
   label: string;
   mobileLabel?: string;
+  announceLabel?: boolean;
 }) {
   const shouldReduceMotion = useHydratedReducedMotion();
   const visualLabel = mobileLabel ?? label;
+  const { tokens, letterCount } = useMemo(
+    () => createStoryTitleTokens(visualLabel),
+    [visualLabel],
+  );
+  const letterStepMs = clamp(
+    Math.floor(
+      (storyTitleLetterSequenceTargetMs - storyTitleLetterDurationMs) /
+        Math.max(1, letterCount - 1),
+    ),
+    storyTitleLetterMinStepMs,
+    storyTitleLetterMaxStepMs,
+  );
+  const sequenceDurationMs =
+    storyTitleLetterDurationMs + Math.max(0, letterCount - 1) * letterStepMs;
   const revealRef = useRef<HTMLSpanElement | null>(null);
   const animatedTextRef = useRef<HTMLSpanElement | null>(null);
   const initializedRef = useRef(false);
+  const hasRevealedRef = useRef(false);
   const isInRevealZoneRef = useRef(false);
   // Start visible so an interrupted hydration or unsupported browser can never
   // leave important copy hidden. The layout effect arms the scroll reveal
   // before paint after hydration.
-  const [animationState, setAnimationState] = useState<
-    "idle" | "animating" | "played" | "scroll-linked"
-  >("played");
+  const [animationState, setAnimationState] = useState<"idle" | "animating" | "played">("played");
 
   const finishReveal = useCallback(() => {
+    hasRevealedRef.current = true;
+    const element = revealRef.current;
+    if (element) stopObservingStoryTitle(element);
     setAnimationState("played");
   }, []);
 
   useLayoutEffect(() => {
     if (shouldReduceMotion) {
+      initializedRef.current = true;
+      hasRevealedRef.current = true;
       setAnimationState("played");
       isInRevealZoneRef.current = false;
-      return;
-    }
-
-    if (supportsStoryTitleScrollTimeline()) {
-      initializedRef.current = true;
-      setAnimationState("scroll-linked");
       return;
     }
 
@@ -407,6 +449,8 @@ function StoryTextReveal({
   }, [shouldReduceMotion]);
 
   const handleRevealZoneChange = useCallback((isInRevealZone: boolean) => {
+    if (hasRevealedRef.current) return;
+
     if (isInRevealZone && !isInRevealZoneRef.current) {
       setAnimationState("animating");
     }
@@ -416,11 +460,6 @@ function StoryTextReveal({
 
   useEffect(() => {
     if (shouldReduceMotion) return undefined;
-
-    // Chrome and other modern engines tie the reveal directly to scroll
-    // progress in CSS. The observer below remains the reliable fallback for
-    // engines without view timelines.
-    if (supportsStoryTitleScrollTimeline()) return undefined;
 
     const element = revealRef.current;
     if (!element) return undefined;
@@ -438,7 +477,6 @@ function StoryTextReveal({
   useEffect(() => {
     if (
       shouldReduceMotion ||
-      supportsStoryTitleScrollTimeline() ||
       !active ||
       animationState !== "idle"
     ) return;
@@ -459,17 +497,22 @@ function StoryTextReveal({
 
     const timeoutId = window.setTimeout(
       finishReveal,
-      storyTitleRevealDurationMs + storyTitleRevealFallbackBufferMs,
+      sequenceDurationMs + storyTitleRevealFallbackBufferMs,
     );
     return () => window.clearTimeout(timeoutId);
-  }, [animationState, finishReveal]);
+  }, [animationState, finishReveal, sequenceDurationMs]);
 
   useEffect(() => {
     const animatedText = animatedTextRef.current;
     if (!animatedText) return undefined;
 
     const handleAnimationCancel = (event: AnimationEvent) => {
-      if (event.animationName === "story-title-reveal") finishReveal();
+      const target = event.target;
+      if (
+        event.animationName === "story-title-letter-reveal" &&
+        target instanceof HTMLElement &&
+        target.dataset.storyLastLetter === "true"
+      ) finishReveal();
     };
 
     animatedText.addEventListener("animationcancel", handleAnimationCancel);
@@ -490,23 +533,64 @@ function StoryTextReveal({
         hasPlayed && "story-title-reveal--played",
       )}
       data-text-reveal-active={isAnimating ? "true" : "false"}
-      data-text-reveal-engine="scroll-linked-with-observer-fallback"
+      data-text-reveal-engine="shared-observer-letter-sequence"
       data-text-reveal-label={label}
       data-text-reveal-state={animationState}
+      aria-hidden={announceLabel ? undefined : true}
       style={{
-        "--story-title-reveal-duration": `${storyTitleRevealDurationMs}ms`,
+        "--story-title-letter-duration": `${storyTitleLetterDurationMs}ms`,
+        "--story-title-letter-step": `${letterStepMs}ms`,
+        "--story-title-letter-count": letterCount,
       } as CSSProperties}
     >
-      <span className="sr-only">{label}</span>
+      {announceLabel ? <span className="sr-only">{label}</span> : null}
       <span
         ref={animatedTextRef}
         className="story-title-reveal__text"
         aria-hidden="true"
         onAnimationEnd={(event) => {
-          if (event.target === event.currentTarget && event.animationName === "story-title-reveal") finishReveal();
+          const target = event.target;
+          if (
+            event.animationName === "story-title-letter-reveal" &&
+            target instanceof HTMLElement &&
+            target.dataset.storyLastLetter === "true"
+          ) finishReveal();
         }}
       >
-        {visualLabel}
+        {tokens.map((token) => {
+          if (token.type === "break") return <wbr key={token.key} />;
+          if (token.type === "space") {
+            return <span key={token.key} className="story-title-reveal__space">{token.value}</span>;
+          }
+
+          return (
+            <span
+              key={token.key}
+              className={cn(
+                "story-title-reveal__word",
+                token.isLong && "story-title-reveal__word--long",
+              )}
+            >
+              {token.letters.map((letter) => (
+                <span
+                  key={letter.key}
+                  className="story-title-reveal__letter"
+                >
+                  <span
+                    className="story-title-reveal__glyph"
+                    data-story-last-letter={letter.index === letterCount - 1 ? "true" : undefined}
+                    style={{
+                      "--story-title-letter-index": letter.index,
+                      "--story-title-letter-reverse-index": letterCount - letter.index - 1,
+                    } as CSSProperties}
+                  >
+                    {letter.value}
+                  </span>
+                </span>
+              ))}
+            </span>
+          );
+        })}
       </span>
     </span>
   );
@@ -1392,7 +1476,6 @@ function HeroScene({
   onLogin: () => void;
   tx: (copy: string) => string;
 }) {
-  const shouldReduceMotion = useHydratedReducedMotion();
   const statementLabel = heroStoryStatementLines.map((line) => tx(line)).join(" ");
 
   return (
@@ -1400,22 +1483,7 @@ function HeroScene({
       <div className="relative z-10 grid h-full min-h-0" style={{ gridTemplateColumns: "var(--story-shell-columns, minmax(0, 1fr))" }}>
         <div aria-hidden className="hidden" />
         <div className="story-hero-copy">
-          <motion.div
-            className="story-hero-lockup hero-reference-font"
-            initial={
-              shouldReduceMotion
-                ? false
-                : { clipPath: "inset(0 0 100% 0)", y: 36 }
-            }
-            animate={
-              shouldReduceMotion
-                ? { clipPath: "inset(0 0 0 0)", y: 0 }
-                : isActive
-                  ? { clipPath: "inset(0 0 0 0)", y: 0 }
-                  : { clipPath: "inset(0 0 0 0)", y: 6 }
-            }
-            transition={revealTransition}
-          >
+          <div className="story-hero-lockup hero-reference-font">
             <header className="story-hero-brand">
               <p className="story-hero-kicker">{tx("Global Real Estate")}</p>
               <h1 data-brand-lockup="story-hero" className="story-hero-wordmark hero-title-shadow">
@@ -1446,7 +1514,11 @@ function HeroScene({
             >
               {heroStoryStatementLines.map((line) => (
                 <span key={line} className="story-hero-statement__line">
-                  {tx(line)}
+                  <StoryTextReveal
+                    active={isActive}
+                    label={tx(line)}
+                    announceLabel={false}
+                  />
                 </span>
               ))}
               {heroOpportunityFootnote ? (
@@ -1470,7 +1542,7 @@ function HeroScene({
                 {tx("CONTACT ME")}
               </button>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

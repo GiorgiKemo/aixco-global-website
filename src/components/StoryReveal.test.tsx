@@ -7,7 +7,7 @@ const storyRevealSource = readFileSync("src/components/StoryReveal.tsx", "utf8")
 const css = readFileSync("src/index.css", "utf8").replace(/\r\n/g, "\n");
 
 describe("StoryReveal", () => {
-  it("renders scene children with one CSS-driven transform entrance", () => {
+  it("renders scene children without competing container motion", () => {
     const { container, getByText, rerender } = render(
       <StorySceneReveal isActive className="flex flex-col gap-4">
         <p>Eyebrow</p>
@@ -33,12 +33,8 @@ describe("StoryReveal", () => {
     expect(sceneRevealSource).toContain("<div key={index}>{child}</div>");
     expect(sceneRevealSource).not.toContain("staggerChildren");
     expect(sceneRevealSource).not.toContain("variants={storySceneItem}");
-    const keyframesStart = css.indexOf("@keyframes story-copy-settle");
-    const keyframesEnd = css.indexOf("body.story-mobile-menu-open", keyframesStart);
-    const keyframes = css.slice(keyframesStart, keyframesEnd);
-    expect(keyframesStart).toBeGreaterThanOrEqual(0);
-    expect(keyframes).toContain("transform: translate3d(0, 1rem, 0);");
-    expect(keyframes).not.toContain("opacity:");
+    expect(css).not.toContain("@keyframes story-copy-settle");
+    expect(css).not.toContain("animation: story-copy-settle");
   });
 
   it("renders cinematic story media reveal wrapper", () => {

@@ -1604,22 +1604,11 @@
   .story-scene-reveal[data-story-scene-reveal-active='true'] {
     opacity: 1 !important;
     visibility: visible;
-    animation: story-copy-settle 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   .story-media-reveal[data-story-media-reveal-active='true'] {
     opacity: 1 !important;
     visibility: visible;
-  }
-
-  @keyframes story-copy-settle {
-    from {
-      transform: translate3d(0, 1rem, 0);
-    }
-
-    to {
-      transform: translate3d(0, 0, 0);
-    }
   }
 
   body.story-mobile-menu-open [data-whatsapp-floating-container='true'] {
@@ -9403,6 +9392,9 @@ html:is([lang='de'], [lang='pl'], [lang='sl'], [lang='ru'])
   :is(
     .story-title-reveal,
     .story-title-reveal__text,
+    .story-title-reveal__word,
+    .story-title-reveal__letter,
+    .story-title-reveal__glyph,
     .story-letter-reveal,
     .story-letter-reveal__text,
     .story-letter-reveal__word,
@@ -11403,9 +11395,8 @@ html:not([lang='pl'])
   }
 }
 
-/* One whole-title reveal on every viewport and OS. Copy is uncovered with a
-   directional crop and a short transform instead of fading or animating every
-   glyph, keeping the motion crisp and the amount of work bounded. */
+/* Section titles reveal as a short, bounded left-to-right letter sequence.
+   Opacity and filters stay untouched so the type remains crisp while moving. */
 .story-title-reveal {
   position: relative;
   display: inline-block;
@@ -11421,94 +11412,78 @@ html:not([lang='pl'])
   width: 100%;
   max-width: 100%;
   visibility: visible;
-  clip-path: inset(0 0 0 0);
-  transform: translate3d(0, 0, 0);
-  transform-origin: 50% 100%;
   overflow: visible;
   overflow-wrap: normal;
   word-break: normal;
   hyphens: manual;
+}
+
+.story-title-reveal__word {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  line-height: inherit;
+  vertical-align: baseline;
+}
+
+.story-title-reveal__word--long {
+  display: inline;
+  white-space: normal;
+}
+
+.story-title-reveal__space {
+  white-space: pre-wrap;
+}
+
+.story-title-reveal__letter {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  -webkit-clip-path: inset(-0.12em -0.05em);
+  clip-path: inset(-0.12em -0.05em);
+  line-height: inherit;
+  vertical-align: baseline;
+}
+
+.story-title-reveal__glyph {
+  display: inline-block;
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+  transform-origin: 0 50%;
+  line-height: inherit;
   backface-visibility: hidden;
 }
 
-.story-title-reveal--pending .story-title-reveal__text {
+.story-title-reveal--pending .story-title-reveal__glyph {
   visibility: hidden;
-  clip-path: inset(100% 0 0 0);
-  transform: translate3d(0, 0.56em, 0) skewY(1.2deg);
+  transform: translate3d(-125%, 0.06em, 0) skewX(-7deg);
 }
 
-.story-title-reveal--active .story-title-reveal__text {
+.story-title-reveal--active .story-title-reveal__glyph {
   visibility: visible;
-  animation: story-title-reveal var(--story-title-reveal-duration, 920ms)
+  animation: story-title-letter-reveal var(--story-title-letter-duration, 520ms)
     cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: transform, clip-path;
+  animation-delay: calc(
+    var(--story-title-letter-index) * var(--story-title-letter-step, 18ms)
+  );
 }
 
-.story-title-reveal--played .story-title-reveal__text {
+.story-title-reveal--played .story-title-reveal__glyph {
   visibility: visible;
-  clip-path: inset(0 0 0 0);
   transform: translate3d(0, 0, 0);
   animation: none;
-  will-change: auto;
 }
 
-@keyframes story-title-reveal {
-  from {
-    clip-path: inset(100% 0 0 0);
-    transform: translate3d(0, 0.56em, 0) skewY(1.2deg);
-  }
-
-  62% {
-    clip-path: inset(7% 0 0 0);
-    transform: translate3d(0, 0.08em, 0) skewY(0.2deg);
-  }
-
-  to {
-    clip-path: inset(0 0 0 0);
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-/* Chromium ties the same wipe to actual scroll distance; the shorter range
-   completes promptly instead of making the copy feel delayed. */
-@supports (animation-timeline: view()) and
-  (animation-range: entry 0% cover 30%) {
-  :is(
-      [data-story-section][data-story-revealed='true'],
-      [data-story-section][data-story-active='true'],
-      [data-story-section]:target
-    )
-    .story-title-reveal[data-text-reveal-state='scroll-linked']
-    .story-title-reveal__text {
-    visibility: visible;
-    animation-name: story-title-scroll-reveal;
-    animation-duration: auto;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-timeline: view(block);
-    animation-range: entry 0% cover 30%;
-    will-change: auto;
-  }
-}
-
-@keyframes story-title-scroll-reveal {
+@keyframes story-title-letter-reveal {
   0% {
-    clip-path: inset(100% 0 0 0);
-    transform: translate3d(0, 0.56em, 0) skewY(1.2deg);
+    transform: translate3d(-125%, 0.06em, 0) skewX(-7deg);
   }
 
-  45% {
-    clip-path: inset(48% 0 0 0);
-    transform: translate3d(0, 0.28em, 0) skewY(0.65deg);
-  }
-
-  78% {
-    clip-path: inset(8% 0 0 0);
-    transform: translate3d(0, 0.07em, 0) skewY(0.15deg);
+  58% {
+    transform: translate3d(0.02em, 0, 0) skewX(0deg);
   }
 
   100% {
-    clip-path: inset(0 0 0 0);
     transform: translate3d(0, 0, 0);
   }
 }
@@ -11520,19 +11495,14 @@ html:is([lang='ka'], [lang='ar']) .story-title-reveal__text {
 
 @media (prefers-reduced-motion: reduce) {
   .story-title-reveal__text,
-  .story-title-reveal--pending .story-title-reveal__text,
-  .story-title-reveal--active .story-title-reveal__text,
-  .story-title-reveal--played .story-title-reveal__text {
+  .story-title-reveal__letter,
+  .story-title-reveal__glyph,
+  .story-title-reveal--pending .story-title-reveal__glyph,
+  .story-title-reveal--active .story-title-reveal__glyph,
+  .story-title-reveal--played .story-title-reveal__glyph {
     visibility: visible !important;
-    clip-path: none !important;
     transform: none !important;
     animation: none !important;
-    will-change: auto !important;
-  }
-
-  .story-scene-reveal[data-story-scene-reveal-active='true'] {
-    animation: none !important;
-    transform: none !important;
   }
 }
 

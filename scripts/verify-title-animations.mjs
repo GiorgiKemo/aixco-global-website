@@ -3,18 +3,25 @@ import { chromium, webkit } from "playwright";
 
 const baseUrl = process.env.SMOKE_URL ?? "http://127.0.0.1:8081";
 const outputDir = "output/playwright/title-animation";
-const titleRevealDurationMs = 1700;
+const revealSelector =
+  "[data-story-section='dubai'] [data-text-reveal-engine='shared-observer-letter-sequence']";
+const allRevealSelector =
+  "[data-text-reveal-engine='shared-observer-letter-sequence']";
+const requestedBrowser = process.env.SMOKE_BROWSER;
+const requestedViewport = process.env.SMOKE_VIEWPORT;
 const failures = [];
 const summaries = [];
 
 const viewportCases = [
-  { name: "desktop", width: 1440, height: 900 },
-  { name: "laptop", width: 1366, height: 768 },
-  { name: "small-laptop", width: 1024, height: 768 },
-  { name: "tablet", width: 768, height: 1024 },
-  { name: "phone", width: 390, height: 844 },
-  { name: "small-phone", width: 360, height: 800 },
-  { name: "phone-landscape", width: 844, height: 390 },
+  { name: "desktop", width: 1440, height: 900, mobile: false },
+  { name: "laptop", width: 1366, height: 768, mobile: false },
+  { name: "small-laptop", width: 1024, height: 768, mobile: false },
+  { name: "ipad-landscape", width: 1180, height: 820, mobile: true },
+  { name: "ipad-portrait", width: 820, height: 1180, mobile: true },
+  { name: "tablet", width: 768, height: 1024, mobile: true },
+  { name: "phone", width: 390, height: 844, mobile: true },
+  { name: "small-phone", width: 360, height: 800, mobile: true },
+  { name: "phone-landscape", width: 844, height: 390, mobile: true },
 ];
 
 const browserCases = [
@@ -22,7 +29,9 @@ const browserCases = [
   {
     name: "webkit",
     launcher: webkit,
-    viewports: viewportCases.filter(({ name }) => name === "desktop" || name === "phone"),
+    viewports: viewportCases.filter(({ name }) =>
+      ["desktop", "ipad-landscape", "ipad-portrait", "phone", "phone-landscape"].includes(name),
+    ),
   },
 ];
 
@@ -30,16 +39,134 @@ function check(condition, message) {
   if (!condition) failures.push(message);
 }
 
-async function inspectTitleCase(browser, browserName, viewport, locale = "en") {
-  const context = await browser.newContext({
+function contextOptions(viewport, reducedMotion = "no-preference") {
+  return {
     viewport: { width: viewport.width, height: viewport.height },
-    reducedMotion: "no-preference",
+    reducedMotion,
+    isMobile: viewport.mobile,
+    hasTouch: viewport.mobile,
+    deviceScaleFactor: viewport.mobile ? 2 : 1,
+  };
+}
+
+async function waitForStoryReady(page) {
+  await page.waitForSelector(revealSelector, { state: "attached" });
+  await page.waitForFunction(() => document.fonts.status === "loaded");
+  await page
+    .waitForFunction(
+      () => document.documentElement.dataset.siteIntro === "complete",
+      undefined,
+      { timeout: 12000 },
+    )
+    .catch(() => undefined);
+  await page.evaluate(async () => {
+    const readyImages = [...document.images].filter((image) => image.currentSrc && image.complete);
+    await Promise.all(readyImages.map((image) => image.decode().catch(() => undefined)));
   });
-  await context.addInitScript((nextLocale) => localStorage.setItem("aixco-lang", nextLocale), locale);
+  await page.waitForTimeout(450);
+}
+
+async function placeRevealAt(page, reveal, desiredTop) {
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    await reveal.evaluate((node, viewportTop) => {
+      const currentTop = node.getBoundingClientRect().top;
+      window.scrollTo(0, Math.max(0, window.scrollY + currentTop - viewportTop));
+    }, desiredTop);
+    await page.waitForTimeout(100);
+
+    const actualTop = await reveal.evaluate((node) => node.getBoundingClientRect().top);
+    if (Math.abs(actualTop - desiredTop) <= 4) return;
+  }
+
+  const actualTop = await reveal.evaluate((node) => node.getBoundingClientRect().top);
+  throw new Error(
+    `could not position the title at ${desiredTop.toFixed(1)}px; settled at ${actualTop.toFixed(1)}px`,
+  );
+}
+
+async function scrollRevealIntoZone(page, reveal, desiredTop) {
+  return reveal.evaluate(async (node, targetTop) => {
+    const scene = node.closest(".story-scene-reveal");
+    if (!(scene instanceof HTMLElement)) {
+      throw new Error("title is missing its story scene wrapper");
+    }
+
+    const samples = [];
+    let activeFrameCount = 0;
+    for (let frame = 0; frame < 180; frame += 1) {
+      const currentTop = node.getBoundingClientRect().top;
+      if (currentTop > targetTop + 1) {
+        window.scrollBy(0, Math.min(10, currentTop - targetTop));
+      }
+      await new Promise((resolve) => window.requestAnimationFrame(resolve));
+
+      const rect = node.getBoundingClientRect();
+      const sceneStyle = getComputedStyle(scene);
+      const sceneMatrix =
+        sceneStyle.transform === "none"
+          ? new DOMMatrixReadOnly()
+          : new DOMMatrixReadOnly(sceneStyle.transform);
+      samples.push({
+        documentTop: rect.top + window.scrollY,
+        sceneTranslateY: sceneMatrix.m42,
+        state: node.getAttribute("data-text-reveal-state"),
+      });
+
+      if (node.getAttribute("data-text-reveal-state") === "animating") {
+        activeFrameCount += 1;
+        if (activeFrameCount >= 6) break;
+      }
+    }
+
+    const animatedSamples = samples.filter(({ state }) => state === "animating");
+    const documentTops = animatedSamples.map(({ documentTop }) => documentTop);
+    return {
+      animatedDocumentTopShift: documentTops.length
+        ? Math.max(...documentTops) - Math.min(...documentTops)
+        : 0,
+      animatedFrameCount: animatedSamples.length,
+      finalTop: node.getBoundingClientRect().top,
+      frameCount: samples.length,
+      maxSceneTranslateYDuringTitle: animatedSamples.length
+        ? Math.max(...animatedSamples.map(({ sceneTranslateY }) => Math.abs(sceneTranslateY)))
+        : 0,
+    };
+  }, desiredTop);
+}
+
+async function inspectTitleCase(browser, browserName, viewport, locale = "en") {
+  const context = await browser.newContext(contextOptions(viewport));
+  await context.route("**/*", async (route) => {
+    const request = route.request();
+    if (
+      request.resourceType() === "media" ||
+      /\.(?:mp4|webm)(?:\?|$)/iu.test(request.url())
+    ) {
+      await route.fulfill({ status: 204, contentType: "video/mp4", body: "" });
+      return;
+    }
+    await route.continue();
+  });
+  await context.addInitScript((nextLocale) => {
+    try {
+      localStorage.setItem("aixco-lang", nextLocale);
+      localStorage.setItem(
+        "aixco-analytics-consent-v1",
+        JSON.stringify({
+          status: "denied",
+          version: "2026-08-13-google-analytics-policy-refresh",
+          updatedAt: new Date().toISOString(),
+        }),
+      );
+    } catch {
+      // The script also executes once in the initial opaque document.
+    }
+  }, locale);
   await context.addInitScript(() => {
     window.__aixcoTitleEvents = [];
     window.__aixcoTitleFrames = [];
     window.__aixcoTitleFrameSampling = false;
+    window.__aixcoTitleArmed = false;
 
     const sampleFrames = () => {
       if (window.__aixcoTitleFrameSampling) return;
@@ -54,520 +181,391 @@ async function inspectTitleCase(browser, browserName, viewport, locale = "en") {
       requestAnimationFrame(sample);
     };
 
-    document.addEventListener("animationstart", (event) => {
-      if (!["story-title-reveal", "story-title-scroll-reveal"].includes(event.animationName)) return;
-      window.__aixcoTitleEvents.push({
-        phase: "start",
-        name: event.animationName,
-        section: event.target.closest("[data-story-section]")?.getAttribute("data-story-section") ?? "unknown",
-      });
-      sampleFrames();
-    }, true);
+    document.addEventListener(
+      "animationstart",
+      (event) => {
+        if (!window.__aixcoTitleArmed || event.animationName !== "story-title-letter-reveal") return;
+        window.__aixcoTitleEvents.push({
+          phase: "start",
+          section:
+            event.target.closest("[data-story-section]")?.getAttribute("data-story-section") ??
+            "unknown",
+        });
+        sampleFrames();
+      },
+      true,
+    );
 
-    document.addEventListener("animationend", (event) => {
-      if (!["story-title-reveal", "story-title-scroll-reveal"].includes(event.animationName)) return;
-      window.__aixcoTitleEvents.push({
-        phase: "end",
-        name: event.animationName,
-        elapsedTime: event.elapsedTime,
-        section: event.target.closest("[data-story-section]")?.getAttribute("data-story-section") ?? "unknown",
-      });
-    }, true);
+    document.addEventListener(
+      "animationend",
+      (event) => {
+        if (!window.__aixcoTitleArmed || event.animationName !== "story-title-letter-reveal") return;
+        window.__aixcoTitleEvents.push({
+          elapsedTime: event.elapsedTime,
+          phase: "end",
+          section:
+            event.target.closest("[data-story-section]")?.getAttribute("data-story-section") ??
+            "unknown",
+        });
+      },
+      true,
+    );
   });
+
   const page = await context.newPage();
   const pageErrors = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("console", (message) => {
     if (message.type() === "error") pageErrors.push(message.text());
   });
-
   const label = `${browserName}/${viewport.name}/${locale}`;
+  const captureScreenshots =
+    locale === "en" &&
+    ["desktop", "ipad-landscape", "ipad-portrait", "phone", "phone-landscape"].includes(
+      viewport.name,
+    );
+  let phase = "navigation";
 
   try {
-    await page.goto(`${baseUrl}/#dubai`, { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']");
+    await page.goto(`${baseUrl}/`, { waitUntil: "domcontentloaded" });
+    phase = "story readiness";
+    await waitForStoryReady(page);
 
-    const structural = await page.evaluate(() => {
-      const reveals = [...document.querySelectorAll("[data-text-reveal-engine='scroll-linked-with-observer-fallback']")];
+    phase = "structure";
+    const structural = await page.evaluate((selector) => {
+      const reveals = [...document.querySelectorAll(selector)];
+      const expectedLetterCount = (labelText) =>
+        Array.from(labelText.normalize("NFC")).filter(
+          (value) => value !== "\u200B" && !/^\s$/u.test(value),
+        ).length;
+
       return {
         revealCount: reveals.length,
         invalidVisualLayerCount: reveals.filter(
-          (reveal) => reveal.querySelectorAll(":scope > .story-title-reveal__text").length !== 1,
+          (reveal) =>
+            reveal.querySelectorAll(":scope > .story-title-reveal__text").length !== 1,
         ).length,
+        invalidLetterCount: reveals.filter((reveal) => {
+          const labelText = reveal.getAttribute("data-text-reveal-label") ?? "";
+          return (
+            reveal.querySelectorAll(".story-title-reveal__letter").length !==
+            expectedLetterCount(labelText)
+          );
+        }).length,
         legacyCharacterCount: document.querySelectorAll(".story-letter-reveal__char").length,
-        compactFallbackCount: document.querySelectorAll(".story-letter-reveal--compact").length,
         duplicatePlainLayerCount: document.querySelectorAll(
           ".story-text-reveal__mobile-plain, .story-text-reveal__tiny-plain",
         ).length,
       };
-    });
+    }, allRevealSelector);
 
-    check(structural.revealCount >= 14, `${label}: expected all shared titles, found ${structural.revealCount}`);
+    check(structural.revealCount >= 15, `${label}: expected all shared titles, found ${structural.revealCount}`);
     check(structural.invalidVisualLayerCount === 0, `${label}: a title has duplicate visual layers`);
-    check(structural.legacyCharacterCount === 0, `${label}: legacy per-character nodes are still rendered`);
-    check(structural.compactFallbackCount === 0, `${label}: compact fallback is still rendered`);
-    check(structural.duplicatePlainLayerCount === 0, `${label}: duplicate mobile/tiny title layers remain`);
+    check(structural.invalidLetterCount === 0, `${label}: a title has missing or duplicate letters`);
+    check(structural.legacyCharacterCount === 0, `${label}: legacy letter nodes are still rendered`);
+    check(structural.duplicatePlainLayerCount === 0, `${label}: duplicate plain title layers remain`);
 
-    const reveal = page.locator("[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']");
-    await page.waitForFunction(() => document.fonts.status === "loaded");
-    // The branded intro intentionally holds scrolling for four seconds. Wait
-    // for it to finish before sampling the native view timeline; otherwise
-    // Chromium reports the title as outside the viewport while the intro is
-    // still active and the animation appears stuck at its initial value.
+    const reveal = page.locator(revealSelector);
     await page
       .waitForFunction(
-        () => document.documentElement.dataset.siteIntro === "complete",
-        { timeout: 10000 },
+        (selector) =>
+          document.querySelector(selector)?.getAttribute("data-text-reveal-state") === "played",
+        revealSelector,
+        { timeout: 6000 },
       )
       .catch(() => undefined);
-    // Let the final hash-stabilization pass finish before measuring positions.
-    await page.waitForTimeout(1000);
 
-    const scrollRevealToTop = async (documentTop, desiredTop) => {
-      for (let attempt = 0; attempt < 6; attempt += 1) {
-        await page.evaluate(
-          ({ targetDocumentTop, targetViewportTop }) =>
-            window.scrollTo(0, Math.max(0, targetDocumentTop - targetViewportTop)),
-          { targetDocumentTop: documentTop, targetViewportTop: desiredTop },
-        );
-        await page.waitForTimeout(120);
-
-        const actualTop = await reveal.evaluate((node) => node.getBoundingClientRect().top);
-        if (Math.abs(actualTop - desiredTop) <= 3) return;
-      }
-
-      const actualTop = await reveal.evaluate((node) => node.getBoundingClientRect().top);
-      throw new Error(
-        `could not position title at ${desiredTop.toFixed(1)}px; settled at ${actualTop.toFixed(1)}px`,
-      );
-    };
-
-    const nativeScrollLinked = await reveal.evaluate((node) => {
-      const text = node.querySelector(".story-title-reveal__text");
-      const style = getComputedStyle(text);
-      return style.animationName === "story-title-scroll-reveal" && style.animationTimeline !== "auto";
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = "auto";
+    });
+    phase = "leaving the reveal zone";
+    await placeRevealAt(page, reveal, viewport.height + 40);
+    await page.waitForTimeout(350);
+    await page.evaluate(() => {
+      window.__aixcoTitleEvents = [];
+      window.__aixcoTitleFrames = [];
+      window.__aixcoTitleFrameSampling = false;
+      window.__aixcoTitleArmed = true;
     });
 
-    let motionSummary = "";
+    phase = "entering the reveal zone";
+    const slowScrollTrace = await scrollRevealIntoZone(
+      page,
+      reveal,
+      viewport.height * 0.52,
+    );
+    check(
+      slowScrollTrace.animatedFrameCount > 0,
+      `${label}: slow scroll did not sample the active letter reveal`,
+    );
+    check(
+      slowScrollTrace.animatedDocumentTopShift <= 0.5,
+      `${label}: title shifted ${slowScrollTrace.animatedDocumentTopShift.toFixed(2)}px in document space while scrolling`,
+    );
+    check(
+      slowScrollTrace.maxSceneTranslateYDuringTitle <= 0.5,
+      `${label}: scene moved ${slowScrollTrace.maxSceneTranslateYDuringTitle.toFixed(2)}px while its title was revealing`,
+    );
+    await page.waitForFunction(
+      (selector) =>
+        document.querySelector(selector)?.getAttribute("data-text-reveal-state") === "animating",
+      revealSelector,
+      { polling: 10, timeout: 5000 },
+    );
+    await page.waitForTimeout(40);
 
-    if (nativeScrollLinked) {
-      const geometry = await reveal.evaluate((node) => ({
-        documentTop: window.scrollY + node.getBoundingClientRect().top,
-        viewportHeight: window.innerHeight,
-      }));
-      const desiredTitleTops = [
-        geometry.viewportHeight + 24,
-        geometry.viewportHeight * 0.8,
-        geometry.viewportHeight * 0.6,
-        geometry.viewportHeight * 0.4,
-        geometry.viewportHeight * 0.2,
-      ];
-      const samples = [];
-
-      for (const desiredTop of desiredTitleTops) {
-        await scrollRevealToTop(geometry.documentTop, desiredTop);
-        await page.waitForTimeout(80);
-        samples.push(await reveal.evaluate((node) => {
-          const text = node.querySelector(".story-title-reveal__text");
-          const style = getComputedStyle(text);
-          const rect = text.getBoundingClientRect();
-          return {
-            animationName: style.animationName,
-            animationTimeline: style.animationTimeline,
-            opacity: Number.parseFloat(style.opacity),
-            state: node.getAttribute("data-text-reveal-state"),
-            visibility: style.visibility,
-            rect: { left: rect.left, right: rect.right, height: rect.height },
-            viewportWidth: window.innerWidth,
-            horizontalOverflow: document.documentElement.scrollWidth - window.innerWidth,
-          };
-        }));
-      }
-
-      const opacities = samples.map((sample) => sample.opacity);
-      check(samples.every((sample) => sample.animationName === "story-title-scroll-reveal"), `${label}: native timeline animation name changed`);
-      check(samples.every((sample) => sample.animationTimeline !== "auto"), `${label}: native view timeline is inactive`);
-      check(samples.every((sample) => sample.state === "scroll-linked"), `${label}: native state is not scroll-linked`);
-      check(samples.every((sample) => sample.visibility === "visible"), `${label}: native title becomes visibility-hidden`);
-      check(opacities[0] <= 0.04, `${label}: title starts at opacity ${opacities[0].toFixed(3)}`);
-      check(opacities.at(-1) >= 0.92, `${label}: title ends at opacity ${opacities.at(-1).toFixed(3)}`);
-      check(
-        opacities.every((opacity, index) => index === 0 || opacity >= opacities[index - 1] - 0.01),
-        `${label}: opacity is not monotonic (${opacities.map((value) => value.toFixed(3)).join(", ")})`,
-      );
-
-      const settled = samples.at(-1);
-      check(settled.rect.height > 0, `${label}: title has no rendered height`);
-      check(settled.rect.left >= -1 && settled.rect.right <= settled.viewportWidth + 1, `${label}: title escapes the viewport`);
-      check(settled.horizontalOverflow <= 1, `${label}: horizontal overflow is ${settled.horizontalOverflow}px`);
-
-      // Scrolling back above the entry range must rewind the reveal instead of
-      // leaving a stale "played" title behind.
-      await scrollRevealToTop(geometry.documentTop, geometry.viewportHeight + 24);
-      await page.waitForTimeout(80);
-      const rewoundOpacity = await reveal.evaluate((node) =>
-        Number.parseFloat(getComputedStyle(node.querySelector(".story-title-reveal__text")).opacity),
-      );
-      check(rewoundOpacity <= 0.04, `${label}: reverse scroll only rewound to ${rewoundOpacity.toFixed(3)}`);
-      motionSummary = `scroll-linked opacity ${opacities.map((value) => value.toFixed(2)).join(" -> ")}`;
-    } else {
-      await page.evaluate(() => {
-        document.documentElement.style.scrollBehavior = "auto";
-      });
-      const fallbackGeometry = await reveal.evaluate((node) => ({
-        documentTop: window.scrollY + node.getBoundingClientRect().top,
-        viewportHeight: window.innerHeight,
-      }));
-      await scrollRevealToTop(
-        fallbackGeometry.documentTop,
-        fallbackGeometry.viewportHeight + 24,
-      );
-      await page.waitForTimeout(400);
-
-      const fallbackState = await reveal.getAttribute("data-text-reveal-state");
-      if (fallbackState === "animating") {
-        await page.waitForFunction(
-          () => document.querySelector("[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']")?.getAttribute("data-text-reveal-state") === "played",
-          undefined,
-          { timeout: 5000 },
+    phase = "active sequence sampling";
+    const active = await reveal.evaluate((node) => {
+      const text = node.querySelector(".story-title-reveal__text");
+      const letters = [...node.querySelectorAll(".story-title-reveal__letter")];
+      const readLetter = (letter) => {
+        const glyph = letter.querySelector(".story-title-reveal__glyph");
+        const style = getComputedStyle(glyph);
+        const animation = glyph.getAnimations().find(
+          (candidate) => candidate.animationName === "story-title-letter-reveal",
         );
-      }
-
-      await page.evaluate(() => {
-        window.__aixcoTitleEvents = [];
-        window.__aixcoTitleFrames = [];
-        window.__aixcoTitleFrameSampling = false;
-      });
-      await scrollRevealToTop(
-        fallbackGeometry.documentTop,
-        fallbackGeometry.viewportHeight * 0.55,
-      );
-      await page.waitForFunction(
-        () => document.querySelector("[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']")?.getAttribute("data-text-reveal-state") === "animating",
-        undefined,
-        { timeout: 5000 },
-      );
-      await page.waitForFunction(
-        () => document.querySelector("[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']")?.getAttribute("data-text-reveal-state") === "played",
-        undefined,
-        { timeout: 5000 },
-      );
-
-      const settled = await reveal.evaluate((node) => {
-        const text = node.querySelector(".story-title-reveal__text");
-        const style = getComputedStyle(text);
-        const rect = text.getBoundingClientRect();
         return {
-          animationName: style.animationName,
-          animationCount: text.getAnimations().length,
+          animationDelay: Number.parseFloat(style.animationDelay) || 0,
+          animationDuration: Number.parseFloat(style.animationDuration) || 0,
+          filter: style.filter,
           opacity: Number.parseFloat(style.opacity),
-          transform: style.transform,
+          progress: animation?.effect?.getComputedTiming().progress ?? 0,
           visibility: style.visibility,
-          rect: { left: rect.left, right: rect.right, height: rect.height },
-          viewportWidth: window.innerWidth,
-          horizontalOverflow: document.documentElement.scrollWidth - window.innerWidth,
         };
-      });
+      };
+      const sampledLetters = letters.slice(0, Math.min(10, letters.length)).map(readLetter);
+      const textRect = text.getBoundingClientRect();
+      const firstLetterRect = letters[0].getBoundingClientRect();
+      return {
+        first: readLetter(letters[0]),
+        last: readLetter(letters.at(-1)),
+        layout: {
+          firstLetterHeight: firstLetterRect.height,
+          firstLetterTopOffset: firstLetterRect.top - textRect.top,
+          textHeight: textRect.height,
+          textWidth: textRect.width,
+        },
+        letterCount: letters.length,
+        sampledLetters,
+      };
+    });
 
-      check(settled.animationName === "none", `${label}: settled fallback still reports ${settled.animationName}`);
-      check(settled.animationCount === 0, `${label}: settled fallback still has Web Animations work`);
-      check(settled.opacity === 1 && settled.visibility === "visible", `${label}: settled fallback is not fully visible`);
-      check(settled.transform === "none" || settled.transform === "matrix(1, 0, 0, 1, 0, 0)", `${label}: settled transform is ${settled.transform}`);
-      check(settled.rect.height > 0, `${label}: title has no rendered height`);
-      check(settled.rect.left >= -1 && settled.rect.right <= settled.viewportWidth + 1, `${label}: title escapes the viewport`);
-      check(settled.horizontalOverflow <= 1, `${label}: horizontal overflow is ${settled.horizontalOverflow}px`);
-
-      const initialEventSummary = await page.evaluate(() => {
-        const dubaiEvents = (window.__aixcoTitleEvents ?? []).filter((event) => event.section === "dubai");
-        return {
-          startCount: dubaiEvents.filter((event) => event.phase === "start").length,
-          endCount: dubaiEvents.filter((event) => event.phase === "end").length,
-          elapsedTime: dubaiEvents.find((event) => event.phase === "end")?.elapsedTime ?? 0,
-        };
-      });
-      check(initialEventSummary.startCount === 1, `${label}: expected one fallback start, found ${initialEventSummary.startCount}`);
-      check(initialEventSummary.endCount === 1, `${label}: expected one fallback end, found ${initialEventSummary.endCount}`);
+    check(active.letterCount > 10, `${label}: representative title has only ${active.letterCount} letters`);
+    check(
+      active.sampledLetters.every((letter) => letter.opacity === 1),
+      `${label}: opacity changed during the reveal`,
+    );
+    check(
+      active.sampledLetters.every((letter) => letter.filter === "none"),
+      `${label}: a blur/filter is active during the reveal`,
+    );
+    check(
+      active.sampledLetters.every((letter) => letter.visibility === "visible"),
+      `${label}: an active letter is visibility-hidden`,
+    );
+    check(
+      active.sampledLetters.every(
+        (letter, index, letters) =>
+          index === 0 || letter.animationDelay >= letters[index - 1].animationDelay,
+      ),
+      `${label}: letter delays do not increase left to right`,
+    );
+    check(
+      active.last.animationDelay > active.first.animationDelay,
+      `${label}: first and last letters do not have an ordered delay`,
+    );
+    if (browserName === "chromium") {
       check(
-        initialEventSummary.elapsedTime >= 1.62 && initialEventSummary.elapsedTime <= 1.78,
-        `${label}: fallback duration was ${initialEventSummary.elapsedTime.toFixed(3)}s`,
+        active.first.progress > active.last.progress + 0.04,
+        `${label}: letters are not visibly progressing left to right (${active.first.progress.toFixed(2)} vs ${active.last.progress.toFixed(2)})`,
       );
-      motionSummary = `observer fallback ${initialEventSummary.elapsedTime.toFixed(2)}s`;
     }
+    check(
+      active.sampledLetters.every(
+        (letter) => letter.animationDuration >= 0.5 && letter.animationDuration <= 0.54,
+      ),
+      `${label}: letter duration escaped the 500-540ms budget`,
+    );
+    phase = "settled sequence";
+    await page.waitForFunction(
+      (selector) =>
+        document.querySelector(selector)?.getAttribute("data-text-reveal-state") === "played",
+      revealSelector,
+      { timeout: 5000 },
+    );
+    await page.waitForTimeout(650);
+
+    const settled = await reveal.evaluate((node) => {
+      const text = node.querySelector(".story-title-reveal__text");
+      const letters = [...node.querySelectorAll(".story-title-reveal__letter")];
+      const rect = text.getBoundingClientRect();
+      const offscreenLetterCount = letters.filter((letter) => {
+        const letterRect = letter.getBoundingClientRect();
+        return letterRect.left < -1 || letterRect.right > window.innerWidth + 1;
+      }).length;
+      const invalidLetterCount = letters.filter((letter) => {
+        const glyph = letter.querySelector(".story-title-reveal__glyph");
+        const style = getComputedStyle(glyph);
+        return (
+          style.animationName !== "none" ||
+          style.opacity !== "1" ||
+          style.visibility !== "visible" ||
+          !["none", "matrix(1, 0, 0, 1, 0, 0)"].includes(style.transform)
+        );
+      }).length;
+      return {
+        activeAnimationCount: letters.reduce(
+          (count, letter) =>
+            count + letter.querySelector(".story-title-reveal__glyph").getAnimations().length,
+          0,
+        ),
+        horizontalOverflow: document.documentElement.scrollWidth - window.innerWidth,
+        invalidLetterCount,
+        layout: {
+          firstLetterHeight: letters[0].getBoundingClientRect().height,
+          firstLetterTopOffset:
+            letters[0].getBoundingClientRect().top - text.getBoundingClientRect().top,
+          textHeight: text.getBoundingClientRect().height,
+          textWidth: text.getBoundingClientRect().width,
+        },
+        offscreenLetterCount,
+        rect: { height: rect.height, left: rect.left, right: rect.right },
+        viewportWidth: window.innerWidth,
+      };
+    });
+
+    check(settled.activeAnimationCount === 0, `${label}: settled title still has animation work`);
+    check(settled.invalidLetterCount === 0, `${label}: settled letters are not in their final state`);
+    check(
+      Math.abs(settled.layout.textHeight - active.layout.textHeight) <= 0.5 &&
+        Math.abs(settled.layout.textWidth - active.layout.textWidth) <= 0.5 &&
+        Math.abs(settled.layout.firstLetterHeight - active.layout.firstLetterHeight) <= 0.5 &&
+        Math.abs(settled.layout.firstLetterTopOffset - active.layout.firstLetterTopOffset) <= 0.5,
+      `${label}: title geometry twitched from ${JSON.stringify(active.layout)} to ${JSON.stringify(settled.layout)}`,
+    );
+    check(settled.offscreenLetterCount === 0, `${label}: ${settled.offscreenLetterCount} letters escape the viewport`);
+    check(settled.rect.height > 0, `${label}: title has no rendered height`);
+    check(
+      settled.rect.left >= -1 && settled.rect.right <= settled.viewportWidth + 1,
+      `${label}: title container escapes the viewport`,
+    );
+    check(settled.horizontalOverflow <= 1, `${label}: horizontal overflow is ${settled.horizontalOverflow}px`);
+
+    const eventSummary = await page.evaluate(() => {
+      const events = (window.__aixcoTitleEvents ?? []).filter(
+        (event) => event.section === "dubai",
+      );
+      const elapsedTimes = events
+        .filter((event) => event.phase === "end")
+        .map((event) => event.elapsedTime);
+      return {
+        endCount: elapsedTimes.length,
+        maxElapsedTime: elapsedTimes.length ? Math.max(...elapsedTimes) : 0,
+        minElapsedTime: elapsedTimes.length ? Math.min(...elapsedTimes) : 0,
+        startCount: events.filter((event) => event.phase === "start").length,
+      };
+    });
+    if (browserName === "chromium") {
+      check(
+        eventSummary.startCount === active.letterCount,
+        `${label}: expected ${active.letterCount} starts, found ${eventSummary.startCount}`,
+      );
+      check(
+        eventSummary.endCount === active.letterCount,
+        `${label}: expected ${active.letterCount} ends, found ${eventSummary.endCount}`,
+      );
+      check(
+        eventSummary.minElapsedTime >= 0.5 && eventSummary.maxElapsedTime <= 0.54,
+        `${label}: browser reported ${eventSummary.minElapsedTime.toFixed(3)}-${eventSummary.maxElapsedTime.toFixed(3)}s letter durations`,
+      );
+    }
+
+    phase = "one-shot replay guard";
+    await page.evaluate(() => {
+      window.__aixcoTitleEvents = [];
+    });
+    await placeRevealAt(page, reveal, viewport.height + 40);
+    await page.waitForTimeout(180);
+    await placeRevealAt(page, reveal, viewport.height * 0.52);
+    await page.waitForTimeout(450);
+    const replay = await page.evaluate((selector) => {
+      const node = document.querySelector(selector);
+      const events = (window.__aixcoTitleEvents ?? []).filter(
+        (event) => event.section === "dubai" && event.phase === "start",
+      );
+      return {
+        startCount: events.length,
+        state: node?.getAttribute("data-text-reveal-state"),
+      };
+    }, revealSelector);
+    check(replay.state === "played", `${label}: settled title did not remain played after re-entry`);
+    check(replay.startCount === 0, `${label}: settled title replayed ${replay.startCount} letter animations`);
 
     const frameStats = await page.evaluate(() => {
       const frames = window.__aixcoTitleFrames ?? [];
       const sorted = [...frames].sort((a, b) => a - b);
       return {
         count: frames.length,
-        average: frames.length ? frames.reduce((sum, value) => sum + value, 0) / frames.length : 0,
-        p95: sorted.length ? sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.95))] : 0,
-        max: sorted.length ? sorted[sorted.length - 1] : 0,
+        max: sorted.at(-1) ?? 0,
+        p95: sorted.length
+          ? sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.95))]
+          : 0,
       };
     });
-
-    if (browserName === "chromium" && !nativeScrollLinked) {
-      check(frameStats.count >= 20, `${label}: insufficient animation-frame samples (${frameStats.count})`);
+    if (browserName === "chromium") {
+      check(frameStats.count >= 35, `${label}: only ${frameStats.count} animation-frame samples`);
       check(frameStats.p95 < 70, `${label}: p95 frame gap is ${frameStats.p95.toFixed(1)}ms`);
       check(frameStats.max < 180, `${label}: maximum frame gap is ${frameStats.max.toFixed(1)}ms`);
     }
     check(pageErrors.length === 0, `${label}: console/page errors: ${pageErrors.join(" | ")}`);
 
-    if (locale === "en" && (viewport.name === "desktop" || viewport.name === "phone")) {
+    if (captureScreenshots) {
       await page.screenshot({ path: `${outputDir}/${browserName}-${viewport.name}.png` });
     }
 
-    summaries.push(`${label}: ${motionSummary}`);
-  } catch (error) {
-    failures.push(`${label}: ${error instanceof Error ? error.message : String(error)}`);
-  } finally {
-    await context.close();
-  }
-}
-
-async function inspectNaturalScrollTraversal(browser, viewport) {
-  const context = await browser.newContext({
-    viewport: { width: viewport.width, height: viewport.height },
-    reducedMotion: "no-preference",
-  });
-  const page = await context.newPage();
-  const pageErrors = [];
-  page.on("pageerror", (error) => pageErrors.push(error.message));
-  page.on("console", (message) => {
-    if (message.type() === "error") pageErrors.push(message.text());
-  });
-
-  const label = `chromium/${viewport.name}/natural-scroll`;
-  const settleMs = 96;
-  const scrollStep = Math.max(120, Math.round(viewport.height * 0.38));
-  const encounteredTitles = new Set();
-  const traversalFailures = [];
-
-  const inspectVisibleTitles = async (direction) => {
-    const snapshot = await page.evaluate(() => ({
-      scrollY: window.scrollY,
-      viewportHeight: window.innerHeight,
-      titles: [...document.querySelectorAll("[data-text-reveal-engine='scroll-linked-with-observer-fallback']")].map((node) => {
-        const text = node.querySelector(".story-title-reveal__text");
-        const style = getComputedStyle(text);
-        const rect = text.getBoundingClientRect();
-        return {
-          active: node.closest("[data-story-section]")?.getAttribute("data-story-active") ?? "false",
-          animationName: style.animationName,
-          bottom: rect.bottom,
-          label: node.getAttribute("data-text-reveal-label") ?? "unknown",
-          opacity: Number.parseFloat(style.opacity),
-          section: node.closest("[data-story-section]")?.getAttribute("data-story-section") ?? "unknown",
-          state: node.getAttribute("data-text-reveal-state"),
-          top: rect.top,
-          visibility: style.visibility,
-        };
-      }),
-    }));
-
-    for (const title of snapshot.titles) {
-      if (title.active !== "true") continue;
-
-      encounteredTitles.add(title.label);
-      if (title.state === "idle" || title.visibility !== "visible") {
-        traversalFailures.push(
-          `${label}: ${direction} at scrollY ${Math.round(snapshot.scrollY)} left ` +
-          `${title.section} (${title.label}) ${title.state}/${title.visibility}, ` +
-          `opacity ${title.opacity.toFixed(3)}, animation ${title.animationName}, ` +
-          `rect ${title.top.toFixed(1)}..${title.bottom.toFixed(1)}`,
-        );
-      }
-    }
-
-    return snapshot.scrollY;
-  };
-
-  try {
-    await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
-    await page.waitForSelector("[data-text-reveal-engine='scroll-linked-with-observer-fallback']");
-    await page.waitForFunction(() => document.fonts.status === "loaded");
-    await page.waitForFunction(() => document.documentElement.dataset.homeExperience === "story");
-    await page.waitForTimeout(350);
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await page.mouse.move(Math.round(viewport.width / 2), Math.round(viewport.height / 2));
-    await page.waitForTimeout(settleMs);
-
-    const titleCount = await page.locator("[data-text-reveal-engine='scroll-linked-with-observer-fallback']").count();
-    const maxScrollY = await page.evaluate(() =>
-      Math.max(0, document.documentElement.scrollHeight - window.innerHeight),
-    );
-    const maxSteps = Math.ceil(maxScrollY / scrollStep) + 8;
-
-    await inspectVisibleTitles("down");
-    for (let step = 0; step < maxSteps; step += 1) {
-      const before = await page.evaluate(() => window.scrollY);
-      if (before >= maxScrollY - 1) break;
-
-      await page.mouse.wheel(0, scrollStep);
-      await page.waitForTimeout(settleMs);
-      const after = await inspectVisibleTitles("down");
-      if (after <= before) {
-        traversalFailures.push(`${label}: downward wheel stalled at scrollY ${Math.round(after)}`);
-        break;
-      }
-    }
-
-    for (let step = 0; step < maxSteps; step += 1) {
-      const before = await page.evaluate(() => window.scrollY);
-      if (before <= 1) break;
-
-      await page.mouse.wheel(0, -scrollStep);
-      await page.waitForTimeout(settleMs);
-      const after = await inspectVisibleTitles("up");
-      if (after >= before) {
-        traversalFailures.push(`${label}: upward wheel stalled at scrollY ${Math.round(after)}`);
-        break;
-      }
-    }
-
-    await page.waitForTimeout(titleRevealDurationMs + 80);
-    await inspectVisibleTitles("settled-at-top");
-
-    check(
-      encounteredTitles.size === titleCount,
-      `${label}: encountered ${encounteredTitles.size} of ${titleCount} titles`,
-    );
-    traversalFailures.forEach((message) => failures.push(message));
-    check(pageErrors.length === 0, `${label}: console/page errors: ${pageErrors.join(" | ")}`);
-
     summaries.push(
-      `${label}: ${encounteredTitles.size}/${titleCount} titles remained visible through down/up traversal`,
+      browserName === "chromium"
+        ? `${label}: ${active.letterCount} letters, p95 ${frameStats.p95.toFixed(1)}ms, no overflow`
+        : `${label}: ${active.letterCount} ordered letters, no overflow`,
     );
   } catch (error) {
-    failures.push(`${label}: ${error instanceof Error ? error.message : String(error)}`);
+    failures.push(`${label} (${phase}): ${error instanceof Error ? error.message : String(error)}`);
   } finally {
     await context.close();
   }
 }
 
-async function inspectReducedMotion(browser, browserName) {
-  const context = await browser.newContext({
-    viewport: { width: 390, height: 844 },
-    reducedMotion: "reduce",
-  });
+async function inspectReducedMotion(browser, browserName, viewport) {
+  const context = await browser.newContext(contextOptions(viewport, "reduce"));
   const page = await context.newPage();
+  const label = `${browserName}/${viewport.name}/reduced-motion`;
 
   try {
     await page.goto(`${baseUrl}/#dubai`, { waitUntil: "domcontentloaded" });
-    const reveal = page.locator("[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']");
-    await reveal.waitFor();
-    await page.waitForTimeout(100);
-    const result = await reveal.evaluate((node) => {
-      const text = node.querySelector(".story-title-reveal__text");
-      const style = getComputedStyle(text);
+    await page.waitForSelector(revealSelector, { state: "attached" });
+    await page.waitForTimeout(120);
+    const result = await page.locator(revealSelector).evaluate((node) => {
+      const letters = [...node.querySelectorAll(".story-title-reveal__letter")];
       return {
-        animationName: style.animationName,
-        animationCount: text.getAnimations().length,
-        opacity: style.opacity,
-        transform: style.transform,
-        visibility: style.visibility,
+        activeAnimationCount: letters.reduce(
+          (count, letter) =>
+            count + letter.querySelector(".story-title-reveal__glyph").getAnimations().length,
+          0,
+        ),
+        invalidLetterCount: letters.filter((letter) => {
+          const style = getComputedStyle(letter.querySelector(".story-title-reveal__glyph"));
+          return (
+            style.animationName !== "none" ||
+            style.opacity !== "1" ||
+            style.visibility !== "visible" ||
+            style.transform !== "none"
+          );
+        }).length,
       };
     });
-    check(result.animationName === "none", `${browserName}/reduced-motion: animation is ${result.animationName}`);
-    check(result.animationCount === 0, `${browserName}/reduced-motion: active animation work remains`);
-    check(result.opacity === "1" && result.visibility === "visible", `${browserName}/reduced-motion: title is not visible`);
-    check(result.transform === "none", `${browserName}/reduced-motion: transform is ${result.transform}`);
-  } catch (error) {
-    failures.push(`${browserName}/reduced-motion: ${error instanceof Error ? error.message : String(error)}`);
-  } finally {
-    await context.close();
-  }
-}
-
-async function inspectLiveLocaleUpdate(browser) {
-  const context = await browser.newContext({
-    viewport: { width: 390, height: 844 },
-    reducedMotion: "no-preference",
-  });
-  const page = await context.newPage();
-  const label = "chromium/phone/live-locale-update";
-
-  try {
-    await page.goto(`${baseUrl}/#dubai`, { waitUntil: "domcontentloaded" });
-    const reveal = page.locator("[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']");
-    await reveal.waitFor();
-    await page.waitForTimeout(100);
-    const nativeScrollLinked = await page.evaluate(() =>
-      /(?:Chrome|Chromium|Edg|OPR)\//u.test(navigator.userAgent) &&
-      CSS.supports("animation-timeline: view()") &&
-      CSS.supports("animation-range: entry 0% cover 42%"),
-    );
-    if (nativeScrollLinked) {
-      await page.waitForFunction(
-        () => document.querySelector(
-          "[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']",
-        )?.getAttribute("data-text-reveal-state") === "scroll-linked",
-        undefined,
-        { timeout: 5000 },
-      );
-    } else {
-      await page.waitForFunction(
-        () => document.querySelector(
-          "[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']",
-        )?.getAttribute("data-text-reveal-state") === "played",
-        undefined,
-        { timeout: 5000 },
-      );
-    }
-    const englishLabel = await reveal.getAttribute("data-text-reveal-label");
-
-    await page.locator('[data-language-trigger="true"]:visible').click();
-    await page.locator('[data-lang="de"]:visible').click();
-    await page.waitForFunction(() => document.documentElement.lang === "de");
-    await page.waitForFunction(
-      (previousLabel) => {
-        const node = document.querySelector(
-          "[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']",
-        );
-        return node?.getAttribute("data-text-reveal-label") !== previousLabel;
-      },
-      englishLabel,
-      { timeout: 5000 },
-    );
-    await reveal.evaluate((node) => {
-      const documentTop = window.scrollY + node.getBoundingClientRect().top;
-      window.scrollTo(0, Math.max(0, documentTop - window.innerHeight * 0.2));
-    });
-    await page.waitForFunction(
-      () => {
-        const node = document.querySelector(
-          "[data-story-section='dubai'] [data-text-reveal-engine='scroll-linked-with-observer-fallback']",
-        );
-        const text = node?.querySelector(".story-title-reveal__text");
-        return text && Number.parseFloat(getComputedStyle(text).opacity) >= 0.98;
-      },
-      undefined,
-      { timeout: 2500 },
-    );
-
-    const result = await reveal.evaluate((node) => {
-      const text = node.querySelector(".story-title-reveal__text");
-      const style = getComputedStyle(text);
-      return {
-        animationName: style.animationName,
-        opacity: Number.parseFloat(style.opacity),
-        state: node.getAttribute("data-text-reveal-state"),
-        visibility: style.visibility,
-      };
-    });
-
-    check(
-      result.state === (nativeScrollLinked ? "scroll-linked" : "played"),
-      `${label}: translated title reset to ${result.state}`,
-    );
-    check(
-      result.visibility === "visible" && result.opacity >= 0.98,
-      `${label}: translated title became hidden at opacity ${result.opacity.toFixed(3)}`,
-    );
-    check(
-      result.animationName === (nativeScrollLinked ? "story-title-scroll-reveal" : "none"),
-      `${label}: translated title animation is ${result.animationName}`,
-    );
-    summaries.push(`${label}: translated title retained ${result.state} state`);
+    check(result.activeAnimationCount === 0, `${label}: active animation work remains`);
+    check(result.invalidLetterCount === 0, `${label}: some letters are not immediately visible`);
+    summaries.push(`${label}: immediate static text`);
   } catch (error) {
     failures.push(`${label}: ${error instanceof Error ? error.message : String(error)}`);
   } finally {
@@ -577,26 +575,31 @@ async function inspectLiveLocaleUpdate(browser) {
 
 await mkdir(outputDir, { recursive: true });
 
-for (const browserCase of browserCases) {
+for (const browserCase of browserCases.filter(
+  ({ name }) => !requestedBrowser || name === requestedBrowser,
+)) {
   const browser = await browserCase.launcher.launch({ headless: true });
   try {
-    for (const viewport of browserCase.viewports) {
+    for (const viewport of browserCase.viewports.filter(
+      ({ name }) => !requestedViewport || name === requestedViewport,
+    )) {
       await inspectTitleCase(browser, browserCase.name, viewport);
     }
 
-    if (browserCase.name === "chromium") {
+    if (browserCase.name === "chromium" && !requestedViewport) {
+      const phone = viewportCases.find(({ name }) => name === "phone");
       for (const locale of ["de", "pl", "sl", "ru"]) {
-        await inspectTitleCase(browser, browserCase.name, viewportCases[4], locale);
+        await inspectTitleCase(browser, browserCase.name, phone, locale);
       }
-
-      for (const viewport of viewportCases.filter(({ name }) => name === "desktop" || name === "phone")) {
-        await inspectNaturalScrollTraversal(browser, viewport);
-      }
-
-      await inspectLiveLocaleUpdate(browser);
     }
 
-    await inspectReducedMotion(browser, browserCase.name);
+    const reducedMotionViewports = requestedViewport ? [] : [
+      viewportCases.find(({ name }) => name === "phone"),
+      viewportCases.find(({ name }) => name === "ipad-portrait"),
+    ];
+    for (const viewport of reducedMotionViewports) {
+      await inspectReducedMotion(browser, browserCase.name, viewport);
+    }
   } finally {
     await browser.close();
   }
@@ -606,6 +609,6 @@ if (failures.length) {
   console.error(failures.join("\n"));
   process.exitCode = 1;
 } else {
-  console.log(`Unified title animation passed ${summaries.length} browser/viewport/locale cases.`);
+  console.log(`Letter reveal passed ${summaries.length} browser/viewport/locale cases.`);
   console.log(summaries.join("\n"));
 }

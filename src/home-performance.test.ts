@@ -216,7 +216,7 @@ describe("home page performance structure", () => {
     expect(desktopStorySource).not.toContain("const chapterHashDelays =");
   });
 
-  it("uses native scroll timelines with one shared observer fallback", () => {
+  it("uses one shared observer for consistent title timing in every browser", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
     const revealComponentEnd = desktopStorySource.indexOf("function StoryCrossfadeMediaPanel");
@@ -224,38 +224,48 @@ describe("home page performance structure", () => {
 
     expect(revealComponentStart).toBeGreaterThanOrEqual(0);
     expect(revealComponentSource).toContain("active: boolean;");
-    expect(revealComponentSource).toContain('data-text-reveal-engine="scroll-linked-with-observer-fallback"');
-    expect(revealComponentSource).toContain("supportsStoryTitleScrollTimeline()");
+    expect(revealComponentSource).toContain('data-text-reveal-engine="shared-observer-letter-sequence"');
+    expect(revealComponentSource).not.toContain("supportsStoryTitleScrollTimeline()");
     expect(desktopStorySource.match(/new window\.IntersectionObserver/g)).toHaveLength(1);
     expect(desktopStorySource).toContain("storyTitleRevealListeners");
     expect(desktopStorySource).toContain('rootMargin: "0px 0px -20% 0px"');
     expect(desktopStorySource).toContain("threshold: [0, 0.2]");
     expect(revealComponentSource).toContain("observeStoryTitle(element, handleRevealZoneChange)");
+    expect(revealComponentSource).toContain("const hasRevealedRef = useRef(false)");
+    expect(revealComponentSource).toContain("if (hasRevealedRef.current) return;");
+    expect(revealComponentSource).toContain("stopObservingStoryTitle(element)");
     expect(desktopStorySource).not.toContain("function useStoryTextInView");
     expect(revealComponentSource).not.toContain('window.addEventListener("scroll"');
   });
 
-  it("uses one whole-title animation instead of per-glyph or compact fallbacks", () => {
+  it("uses a bounded per-letter sequence without legacy compact fallbacks", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const revealComponentStart = desktopStorySource.indexOf("function StoryTextReveal");
     const revealComponentEnd = desktopStorySource.indexOf("function StoryCrossfadeMediaPanel");
     const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
 
     expect(revealComponentSource).toContain('className="story-title-reveal__text"');
+    expect(revealComponentSource).toContain('className="story-title-reveal__letter"');
+    expect(revealComponentSource).toContain('className="story-title-reveal__glyph"');
+    expect(revealComponentSource).toContain("createStoryTitleTokens(visualLabel)");
+    expect(revealComponentSource).toContain("storyTitleLetterSequenceTargetMs");
     expect(revealComponentSource).not.toContain("story-letter-reveal__char");
     expect(revealComponentSource).not.toContain("story-letter-reveal--compact");
     expect(revealComponentSource).not.toContain("story-text-reveal__tiny-plain");
     expect(revealComponentSource).not.toContain("story-text-reveal__mobile-plain");
   });
 
-  it("reveals the hero lockup without fading its text", () => {
+  it("reveals the hero statement letter by letter without fading the lockup", () => {
     const desktopStorySource = readSource("src/components/sections/DesktopStoryHome.tsx");
     const heroStart = desktopStorySource.indexOf("function HeroScene");
     const heroEnd = desktopStorySource.indexOf("const DUBAI_METRIC_NUMBER_PATTERN", heroStart);
     const heroSource = desktopStorySource.slice(heroStart, heroEnd);
 
     expect(heroStart).toBeGreaterThanOrEqual(0);
-    expect(heroSource).toContain('clipPath: "inset(0 0 100% 0)"');
+    expect(heroSource).toContain("<StoryTextReveal");
+    expect(heroSource).toContain("active={isActive}");
+    expect(heroSource).toContain("announceLabel={false}");
+    expect(heroSource).not.toContain('clipPath: "inset(0 0 100% 0)"');
     expect(heroSource).not.toContain("willChange:");
     expect(heroSource).not.toContain("opacity:");
   });
@@ -267,11 +277,13 @@ describe("home page performance structure", () => {
     const revealComponentSource = desktopStorySource.slice(revealComponentStart, revealComponentEnd);
 
     expect(revealComponentSource).toContain("active: boolean;");
-    expect(revealComponentSource).toContain('"idle" | "animating" | "played" | "scroll-linked"');
-    expect(revealComponentSource).toContain('setAnimationState("scroll-linked")');
+    expect(revealComponentSource).toContain('"idle" | "animating" | "played"');
+    expect(revealComponentSource).not.toContain('setAnimationState("scroll-linked")');
     expect(revealComponentSource).toContain('isPending && "story-title-reveal--pending"');
-    expect(revealComponentSource).toContain("storyTitleRevealDurationMs + storyTitleRevealFallbackBufferMs");
+    expect(revealComponentSource).toContain("sequenceDurationMs + storyTitleRevealFallbackBufferMs");
     expect(revealComponentSource).toContain('addEventListener("animationcancel", handleAnimationCancel)');
+    expect(revealComponentSource).toContain('event.animationName === "story-title-letter-reveal"');
+    expect(revealComponentSource).toContain('target.dataset.storyLastLetter === "true"');
     expect(revealComponentSource).toContain("const isInRevealZoneRef = useRef(false);");
     expect(revealComponentSource).toContain("isInRevealZone && !isInRevealZoneRef.current");
     expect(revealComponentSource).toContain("isInRevealZoneRef.current = isInRevealZone;");
