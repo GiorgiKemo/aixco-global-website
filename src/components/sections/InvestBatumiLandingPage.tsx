@@ -960,11 +960,11 @@ export function InvestBatumiLandingPage() {
             <button type="button" className={styles.textButton} onClick={() => scrollTo("#contact")}>{content.batumi.cta}<ArrowUpRight size={16} /></button>
           </div>
           <button type="button" className={`${styles.imageFrame} ${styles.imageFrameOne}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(1)}>
-            <Image src={images.verticalCity.src} alt={content.gallery.captions[1]} fill quality={90} sizes="(max-width: 700px) 58vw, (max-width: 960px) 50vw, 33vw" />
+            <Image src={images.verticalCity.src} alt={content.gallery.captions[1]} fill quality={90} sizes="(max-width: 700px) 58vw, (max-width: 960px) 50vw, 33vw" style={{ aspectRatio: `${images.verticalCity.width} / ${images.verticalCity.height}` }} />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
           <button type="button" className={`${styles.imageFrame} ${styles.imageFrameTwo}`} aria-label={content.gallery.expand} onClick={() => setGalleryIndex(2)}>
-            <Image src={images.verticalTower.src} alt={content.gallery.captions[2]} fill quality={90} sizes="(max-width: 700px) 42vw, (max-width: 960px) 50vw, 27vw" />
+            <Image src={images.verticalTower.src} alt={content.gallery.captions[2]} fill quality={90} sizes="(max-width: 700px) 42vw, (max-width: 960px) 50vw, 27vw" style={{ aspectRatio: `${images.verticalTower.width} / ${images.verticalTower.height}` }} />
             <span><Expand size={16} />{content.gallery.expand}</span>
           </button>
         </section>
@@ -1043,7 +1043,7 @@ export function InvestBatumiLandingPage() {
           <div className={styles.galleryGrid}>
             {images.gallery.map((image, index) => (
               <button key={image.src} type="button" aria-label={content.gallery.captions[index]} onClick={() => setGalleryIndex(index)}>
-                <Image src={image.src} alt={content.gallery.captions[index]} fill quality={90} sizes="(max-width: 700px) 50vw, (max-width: 960px) 50vw, 24vw" />
+                <Image src={image.src} alt={content.gallery.captions[index]} fill quality={90} sizes="(max-width: 700px) 50vw, (max-width: 960px) 50vw, 24vw" style={{ aspectRatio: `${image.width} / ${image.height}` }} />
                 <span>{content.gallery.captions[index]}</span>
               </button>
             ))}
@@ -1098,7 +1098,7 @@ export function InvestBatumiLandingPage() {
 
         <section id="contact" className={styles.contactSection}>
           <div className={styles.contactMedia}>
-            <Image src={images.contact.src} alt="Premium indoor pool and resident wellness area" fill quality={90} sizes="(max-width: 960px) 100vw, 50vw" />
+            <Image src={images.contact.src} alt="Premium indoor pool and resident wellness area" fill quality={90} sizes="(max-width: 960px) 100vw, 50vw" style={{ aspectRatio: `${images.contact.width} / ${images.contact.height}` }} />
           </div>
           <div className={styles.contactPanel}>
             <p className={styles.eyebrowGold}>{tx("11 — Find the right property in Batumi")}</p>
