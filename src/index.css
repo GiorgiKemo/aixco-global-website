@@ -10495,7 +10495,7 @@ html[dir='rtl'] {
   }
 }
 
-/* Selected portrait-phone hero: centered brand lockup with an editorial left-aligned message. */
+/* Portrait-phone hero: full-width brand with centered copy and actions. */
 @media (max-width: 767px) and (orientation: portrait) {
   [data-story-section='hero'] .story-hero-copy {
     align-items: stretch;
@@ -10515,19 +10515,31 @@ html[dir='rtl'] {
   }
 
   [data-story-section='hero'] .story-hero-brand {
-    align-items: center;
+    align-items: flex-start;
   }
 
   [data-story-section='hero'] .story-hero-kicker,
   [data-story-section='hero'] [data-brand-lockup='story-hero'],
   [data-story-section='hero'] .story-hero-wordmark {
-    margin-inline: auto;
-    text-align: center;
+    width: 100%;
+    margin-inline: 0;
+    text-align: start;
+  }
+
+  [data-story-section='hero'] .story-hero-official-logo {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    object-position: left;
+  }
+
+  [data-story-section='hero'] .story-hero-kicker {
+    padding-inline-start: 23.5%;
   }
 
   [data-story-section='hero'] .story-hero-statement {
     width: 100%;
-    align-items: flex-start;
+    align-items: center;
     margin-inline: 0;
   }
 
@@ -10536,17 +10548,16 @@ html[dir='rtl'] {
     width: 100%;
     max-width: none;
     margin-inline: 0;
-    text-align: start;
+    text-align: center;
   }
 
   [data-story-section='hero'] .story-hero-statement__note {
-    max-width: 21rem;
-    margin-inline: 0;
-    text-align: start;
+    display: none;
   }
 
   [data-story-section='hero'] .story-hero-actions {
     width: 100%;
+    justify-content: center;
     margin-inline: 0;
   }
 }
@@ -13638,8 +13649,8 @@ html[data-route-transition='marketing']::view-transition-new(root) {
   }
 
   [data-story-section='hero'] .story-hero-actions {
-    max-width: calc(100% - 3.35rem);
-    margin-inline: 0 auto 0 0;
+    max-width: 100%;
+    margin-inline: auto;
   }
 
   .property-hero__content {
