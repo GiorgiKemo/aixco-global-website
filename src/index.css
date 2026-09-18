@@ -10511,10 +10511,12 @@ html[dir='rtl'] {
 
   [data-story-section='hero'] .story-hero-lockup {
     width: 100%;
+    flex: 1;
     margin-inline: 0;
   }
 
   [data-story-section='hero'] .story-hero-brand {
+    position: relative;
     align-items: flex-start;
   }
 
@@ -10533,14 +10535,21 @@ html[dir='rtl'] {
     object-position: left;
   }
 
-  [data-story-section='hero'] .story-hero-kicker {
-    padding-inline-start: 23.5%;
+  #main-content [data-story-section='hero'] .story-hero-kicker {
+    position: absolute;
+    top: max(0px, calc(30% - 1.6em));
+    left: 23.5%;
+    width: 76.5%;
+    padding: 0;
+    font-size: clamp(0.65rem, 3vw, 1rem);
+    line-height: 1.2;
   }
 
   [data-story-section='hero'] .story-hero-statement {
     width: 100%;
     align-items: center;
     margin-inline: 0;
+    margin-bottom: clamp(1.5rem, 4svh, 2.5rem);
   }
 
   [data-story-section='hero'] .story-hero-statement__line,
@@ -10557,7 +10566,9 @@ html[dir='rtl'] {
 
   [data-story-section='hero'] .story-hero-actions {
     width: 100%;
+    flex-shrink: 0;
     justify-content: center;
+    margin-top: auto;
     margin-inline: 0;
   }
 }
@@ -13645,7 +13656,7 @@ html[data-route-transition='marketing']::view-transition-new(root) {
 @media (max-width: 767px) and (orientation: portrait) {
   [data-story-section='hero'] .story-hero-copy {
     justify-content: flex-start;
-    padding-bottom: max(5.5rem, calc(4.5rem + env(safe-area-inset-bottom, 0px))) !important;
+    padding-bottom: max(4rem, calc(3.5rem + env(safe-area-inset-bottom, 0px))) !important;
   }
 
   [data-story-section='hero'] .story-hero-actions {
