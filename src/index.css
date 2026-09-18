@@ -10549,6 +10549,7 @@ html[dir='rtl'] {
     width: 100%;
     align-items: center;
     margin-inline: 0;
+    margin-top: clamp(2.5rem, 7svh, 4rem);
     margin-bottom: clamp(1.5rem, 4svh, 2.5rem);
   }
 
