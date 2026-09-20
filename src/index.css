@@ -10537,12 +10537,14 @@ html[dir='rtl'] {
 
   #main-content [data-story-section='hero'] .story-hero-kicker {
     position: absolute;
-    top: max(0px, calc(30% - 1.6em));
+    /* Match the wordmark ink, which ends before the logo asset's right edge. */
+    top: 72%;
     left: 23.5%;
-    width: 76.5%;
+    width: 70.9%;
     padding: 0;
     font-size: clamp(0.65rem, 3vw, 1rem);
     line-height: 1.2;
+    text-align: right;
   }
 
   [data-story-section='hero'] .story-hero-statement {
