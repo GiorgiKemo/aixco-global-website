@@ -1053,6 +1053,7 @@ function StoryChrome({
             className="pointer-events-auto absolute bottom-0 end-0 top-0 z-10 max-h-[100dvh] w-[min(21rem,88vw)] overflow-y-auto overscroll-contain border-s border-foreground/10 bg-white px-5 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pt-24 text-foreground shadow-[18px_0_60px_-30px_rgba(0,0,0,0.38)] [scrollbar-gutter:stable]"
           >
             <nav aria-label={tx("Story navigation")} className="grid gap-1">
+              <Link href="/reverance-batumi/calculator" prefetch={false} onClick={() => { setMenuOpen(false); setLangOpen(false); }} className="story-chapter-link rounded-sm border border-primary/35 px-3 text-foreground hover:text-primary">{tx("Calculator")}</Link>
               {storyChapters.map((chapter, index) => {
                 const isActive = activeIndex === index;
                 const href = chapter.href ?? (chapter.id ? `#${chapter.id}` : "/");
@@ -1120,6 +1121,7 @@ function StoryChrome({
 
         <nav ref={desktopNavRef} aria-label={tx("Story navigation")} className="story-desktop-nav min-w-0 flex-1">
           <div className="story-desktop-nav__scroller">
+            <Link href="/reverance-batumi/calculator" prefetch={false} className="story-desktop-nav-link rounded-sm border border-current/25" onClick={() => { setLangOpen(false); setDesktopGroupOpen(null); }}>{tx("Calculator")}</Link>
             {(() => {
               const chapter = storyChapters[0];
               const isActive = activeChapterKey === chapter.key;

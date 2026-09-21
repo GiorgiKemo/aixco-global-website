@@ -3,6 +3,7 @@ import type { CatalogLang, Lang } from "./languages";
 type TranslationSource = Partial<Record<string, Partial<Record<CatalogLang, string>>>>;
 
 export const reveranceCalculatorTranslations: TranslationSource = {
+  Calculator: { de: "Rechner", pl: "Kalkulator", sl: "Kalkulator", ru: "Калькулятор" },
   "1 Bedroom": { de: "1 Schlafzimmer", pl: "1 sypialnia", sl: "1 spalnica", ru: "1 спальня" },
   "Client address (optional)": { de: "Kundenadresse (optional)", pl: "Adres klienta (opcjonalnie)", sl: "Naslov stranke (neobvezno)", ru: "Адрес клиента (необязательно)" },
   "Street, city, postal code, country": { de: "Straße, Ort, Postleitzahl, Land", pl: "Ulica, miasto, kod pocztowy, kraj", sl: "Ulica, mesto, poštna številka, država", ru: "Улица, город, почтовый индекс, страна" },

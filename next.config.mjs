@@ -62,6 +62,9 @@ const developmentNoCacheHeaders = isDevelopment
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  outputFileTracingIncludes: {
+    "/api/reverance-calculator/pdf": ["./public/aixco-global-op2/images/reverance-offer/**/*", "./public/aixco-global-op2/fonts/reverance-pdf/*.ttf"],
+  },
   poweredByHeader: false,
   devIndicators: false,
   allowedDevOrigins: ["127.0.0.1", "localhost"],

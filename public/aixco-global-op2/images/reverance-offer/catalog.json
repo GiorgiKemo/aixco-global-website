@@ -1,0 +1,394 @@
+{
+  "A1305": {
+    "source": "https://api.otium.ge/api/flats/687",
+    "planSource": "https://api.otium.ge/storage/1781/1305.png",
+    "roomsSource": "https://api.otium.ge/storage/1782/32.2-ßâÖßâò.ßâ¢.webp",
+    "floor": 13,
+    "points": [
+      {
+        "x": 31.402,
+        "y": 76.294
+      },
+      {
+        "x": 31.402,
+        "y": 47.707
+      },
+      {
+        "x": 23.475,
+        "y": 47.707
+      },
+      {
+        "x": 23.323,
+        "y": 76.485
+      }
+    ],
+    "areas": [
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23
+      },
+      {
+        "type": "bathroom",
+        "size": 4.4
+      },
+      {
+        "type": "balcony",
+        "size": 5
+      }
+    ]
+  },
+  "A1306": {
+    "source": "https://api.otium.ge/api/flats/688",
+    "planSource": "https://api.otium.ge/storage/1787/1306.png",
+    "roomsSource": "https://api.otium.ge/storage/1788/32.2-ßâÖßâò.ßâ¢.webp",
+    "floor": 13,
+    "points": [
+      {
+        "x": 39.634,
+        "y": 76.295
+      },
+      {
+        "x": 39.634,
+        "y": 47.517
+      },
+      {
+        "x": 31.86,
+        "y": 47.708
+      },
+      {
+        "x": 31.86,
+        "y": 76.104
+      }
+    ],
+    "areas": [
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23
+      },
+      {
+        "type": "bathroom",
+        "size": 4.4
+      },
+      {
+        "type": "balcony",
+        "size": 4.9
+      }
+    ]
+  },
+  "A1307": {
+    "source": "https://api.otium.ge/api/flats/689",
+    "planSource": "https://api.otium.ge/storage/1789/1307.png",
+    "roomsSource": "https://api.otium.ge/storage/1790/32.2-ßâÖßâò.ßâ¢.webp",
+    "floor": 13,
+    "points": [
+      {
+        "x": 47.865,
+        "y": 76.295
+      },
+      {
+        "x": 48.17,
+        "y": 47.517
+      },
+      {
+        "x": 40.396,
+        "y": 47.517
+      },
+      {
+        "x": 40.091,
+        "y": 76.295
+      }
+    ],
+    "areas": [
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23
+      },
+      {
+        "type": "bathroom",
+        "size": 4.4
+      },
+      {
+        "type": "balcony",
+        "size": 5
+      }
+    ]
+  },
+  "A1308": {
+    "source": "https://api.otium.ge/api/flats/690",
+    "planSource": "https://api.otium.ge/storage/1791/1308.png",
+    "roomsSource": "https://api.otium.ge/storage/1792/32.2-ßâÖßâò.ßâ¢.webp",
+    "floor": 13,
+    "points": [
+      {
+        "x": 56.25,
+        "y": 76.295
+      },
+      {
+        "x": 56.402,
+        "y": 47.517
+      },
+      {
+        "x": 48.628,
+        "y": 47.517
+      },
+      {
+        "x": 48.78,
+        "y": 76.295
+      }
+    ],
+    "areas": [
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23.1
+      },
+      {
+        "type": "bathroom",
+        "size": 4.4
+      },
+      {
+        "type": "balcony",
+        "size": 4.9
+      }
+    ]
+  },
+  "A1309": {
+    "source": "https://api.otium.ge/api/flats/691",
+    "planSource": "https://api.otium.ge/storage/1793/1309.png",
+    "roomsSource": "https://api.otium.ge/storage/1794/32.2-ßâÖßâò.ßâ¢.webp",
+    "floor": 13,
+    "points": [
+      {
+        "x": 64.481,
+        "y": 76.104
+      },
+      {
+        "x": 64.786,
+        "y": 47.517
+      },
+      {
+        "x": 57.012,
+        "y": 47.517
+      },
+      {
+        "x": 56.707,
+        "y": 76.104
+      }
+    ],
+    "areas": [
+      {
+        "type": "bathroom",
+        "size": 4.4
+      },
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23
+      },
+      {
+        "type": "balcony",
+        "size": 5
+      }
+    ]
+  },
+  "A1310": {
+    "source": "https://api.otium.ge/api/flats/692",
+    "planSource": "https://api.otium.ge/storage/1795/1310.png",
+    "roomsSource": "https://api.otium.ge/storage/1796/32.2-ßâÖßâò.ßâ¢.webp",
+    "floor": 13,
+    "points": [
+      {
+        "x": 73.018,
+        "y": 76.295
+      },
+      {
+        "x": 72.866,
+        "y": 47.517
+      },
+      {
+        "x": 64.939,
+        "y": 47.517
+      },
+      {
+        "x": 65.091,
+        "y": 76.104
+      }
+    ],
+    "areas": [
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23
+      },
+      {
+        "type": "bathroom",
+        "size": 4.4
+      },
+      {
+        "type": "balcony",
+        "size": 5
+      }
+    ]
+  },
+  "A1401": {
+    "source": "https://api.otium.ge/api/flats/695",
+    "planSource": "https://api.otium.ge/storage/1237/1401.png",
+    "roomsSource": "https://api.otium.ge/storage/1801/46.4-ßâÖßâò.ßâ¢.webp",
+    "floor": 14,
+    "points": [
+      {
+        "x": 52.744,
+        "y": 42.371
+      },
+      {
+        "x": 52.744,
+        "y": 24.266
+      },
+      {
+        "x": 62.653,
+        "y": 24.075
+      },
+      {
+        "x": 62.653,
+        "y": 15.309
+      },
+      {
+        "x": 44.665,
+        "y": 15.118
+      },
+      {
+        "x": 44.817,
+        "y": 42.371
+      }
+    ],
+    "areas": [
+      {
+        "type": "bedroom",
+        "size": 12.8
+      },
+      {
+        "type": "bathroom",
+        "size": 4.7
+      },
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23.9
+      },
+      {
+        "type": "balcony",
+        "size": 4.9
+      }
+    ]
+  },
+  "A1405": {
+    "source": "https://api.otium.ge/api/flats/699",
+    "planSource": "https://api.otium.ge/storage/1241/1405.png",
+    "roomsSource": "https://api.otium.ge/storage/1806/32.2-ßâÖßâò.ßâ¢.webp",
+    "floor": 14,
+    "points": [
+      {
+        "x": 31.402,
+        "y": 76.294
+      },
+      {
+        "x": 31.402,
+        "y": 47.707
+      },
+      {
+        "x": 23.475,
+        "y": 47.707
+      },
+      {
+        "x": 23.323,
+        "y": 76.485
+      }
+    ],
+    "areas": [
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23
+      },
+      {
+        "type": "bathroom",
+        "size": 4.4
+      },
+      {
+        "type": "balcony",
+        "size": 5
+      }
+    ]
+  },
+  "A1407": {
+    "source": "https://api.otium.ge/api/flats/701",
+    "planSource": "https://api.otium.ge/storage/1808/1407.png",
+    "roomsSource": "https://api.otium.ge/storage/1809/32.2-ßâÖßâò.ßâ¢.webp",
+    "floor": 14,
+    "points": [
+      {
+        "x": 47.865,
+        "y": 76.295
+      },
+      {
+        "x": 48.17,
+        "y": 47.517
+      },
+      {
+        "x": 40.396,
+        "y": 47.517
+      },
+      {
+        "x": 40.091,
+        "y": 76.295
+      }
+    ],
+    "areas": [
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23
+      },
+      {
+        "type": "bathroom",
+        "size": 4.4
+      },
+      {
+        "type": "balcony",
+        "size": 5
+      }
+    ]
+  },
+  "A1408": {
+    "source": "https://api.otium.ge/api/flats/702",
+    "planSource": "https://api.otium.ge/storage/1244/1408.png",
+    "roomsSource": "https://api.otium.ge/storage/1810/32.2-ßâÖßâò.ßâ¢.webp",
+    "floor": 14,
+    "points": [
+      {
+        "x": 56.25,
+        "y": 76.295
+      },
+      {
+        "x": 56.402,
+        "y": 47.517
+      },
+      {
+        "x": 48.628,
+        "y": 47.517
+      },
+      {
+        "x": 48.78,
+        "y": 76.295
+      }
+    ],
+    "areas": [
+      {
+        "type": "living_room_and_kitchen",
+        "size": 23.1
+      },
+      {
+        "type": "bathroom",
+        "size": 4.4
+      },
+      {
+        "type": "balcony",
+        "size": 4.9
+      }
+    ]
+  }
+}

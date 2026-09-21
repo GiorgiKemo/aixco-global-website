@@ -313,6 +313,9 @@ export function PropertyChrome() {
           </Link>
 
           <nav aria-label={tx("Story navigation")} className="hidden min-w-0 flex-1 items-center gap-1 ps-3 xl:flex">
+            <Link href="/reverance-batumi/calculator" prefetch={false} onClick={closeAll} className="inline-flex min-h-11 items-center rounded-sm border border-primary/35 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.05em] hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary/45">
+              {tx("Calculator")}
+            </Link>
             <Link href="/" prefetch={false} onClick={closeAll} className="inline-flex min-h-11 items-center px-3 text-[0.7rem] font-semibold uppercase tracking-[0.05em] text-[#161616]/72 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45">
               {tx("AIXCO")}
             </Link>
@@ -445,6 +448,7 @@ export function PropertyChrome() {
               <X className="h-5 w-5" aria-hidden />
             </button>
             <nav aria-label={tx("Story navigation")} className="grid gap-2">
+              <Link href="/reverance-batumi/calculator" prefetch={false} onClick={closeAll} className="rounded-lg border border-primary/35 px-3 py-3 text-sm font-semibold hover:bg-primary/10">{tx("Calculator")}</Link>
               <Link href="/" prefetch={false} onClick={closeAll} className="rounded-lg px-3 py-3 text-sm font-semibold hover:bg-muted/70">{tx("AIXCO")}</Link>
               {navGroups.map((group) => (
                 <div key={group.key} className="border-t border-foreground/10 pt-2">

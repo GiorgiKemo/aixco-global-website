@@ -28,6 +28,15 @@ function renderChrome() {
 }
 
 describe("PropertyChrome", () => {
+  it("offers the calculator in desktop and mobile navigation", () => {
+    renderChrome();
+    expect(screen.getByRole("link", { name: "Calculator" })).toHaveAttribute("href", "/reverance-batumi/calculator");
+    fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
+    const drawer = screen.getByRole("dialog", { name: "Story navigation" });
+    expect(within(drawer).getByRole("link", { name: "Calculator" })).toHaveAttribute("href", "/reverance-batumi/calculator");
+    fireEvent.click(within(drawer).getByRole("link", { name: "Calculator" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
   beforeEach(() => {
     localStorage.clear();
     document.body.className = "";
