@@ -5,16 +5,28 @@ import {
   defaultReveranceCalculatorInputs,
   normalizeReveranceInputs,
   remainingLoanBalance,
+  reveranceUnits,
+  findReveranceUnit,
 } from "./reverance-investment-calculator";
 
 describe("Reverance investment model", () => {
+  it("offers exactly Klem's approved sea-view units and areas", () => {
+    expect(reveranceUnits.map(({ code, area }) => [code, area])).toEqual([
+      ["A1305", 32.4], ["A1306", 32.3], ["A1307", 32.4], ["A1308", 32.3],
+      ["A1309", 32.4], ["A1310", 32.3], ["A1401", 46.4], ["A1405", 32.4],
+      ["A1407", 32.4], ["A1408", 32.3],
+    ]);
+    expect(reveranceUnits.every((unit) => unit.building === "A" && [13, 14].includes(unit.floor) && unit.orientation === "Sea view")).toBe(true);
+    expect(findReveranceUnit("A1401").type).toBe("1 Bedroom");
+    expect(findReveranceUnit("retired").code).toBe(defaultReveranceCalculatorInputs.unitCode);
+  });
   it("matches the reference scenario mechanics for the default unit", () => {
     const result = calculateReveranceInvestment(defaultReveranceCalculatorInputs);
-    const listPrice = 33.7 * 1_600;
+    const listPrice = 32.4 * 1_600;
     const loan = listPrice * 0.6;
     const payment = annuityPayment(loan, 9, 10);
 
-    expect(result.unit.code).toBe("A0203");
+    expect(result.unit.code).toBe("A1305");
     expect(result.listPrice).toBeCloseTo(listPrice, 6);
     expect(result.downPayment).toBeCloseTo(listPrice * 0.1, 6);
     expect(result.constructionInstallments).toBeCloseTo(listPrice * 0.3, 6);

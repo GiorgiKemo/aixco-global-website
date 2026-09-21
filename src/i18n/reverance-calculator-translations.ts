@@ -3,6 +3,15 @@ import type { CatalogLang, Lang } from "./languages";
 type TranslationSource = Partial<Record<string, Partial<Record<CatalogLang, string>>>>;
 
 export const reveranceCalculatorTranslations: TranslationSource = {
+  "1 Bedroom": { de: "1 Schlafzimmer", pl: "1 sypialnia", sl: "1 spalnica", ru: "1 спальня" },
+  "Client address (optional)": { de: "Kundenadresse (optional)", pl: "Adres klienta (opcjonalnie)", sl: "Naslov stranke (neobvezno)", ru: "Адрес клиента (необязательно)" },
+  "Street, city, postal code, country": { de: "Straße, Ort, Postleitzahl, Land", pl: "Ulica, miasto, kod pocztowy, kraj", sl: "Ulica, mesto, poštna številka, država", ru: "Улица, город, почтовый индекс, страна" },
+  "All bars show projected net worth for your selected financing scenario, not profit or additional fees.": {
+    de: "Alle Balken zeigen das prognostizierte Nettovermögen für Ihr gewähltes Finanzierungsszenario, nicht den Gewinn oder zusätzliche Gebühren.",
+    pl: "Wszystkie słupki pokazują prognozowany majątek netto dla wybranego scenariusza finansowania, a nie zysk ani dodatkowe opłaty.",
+    sl: "Vsi stolpci prikazujejo predvideno neto premoženje za izbrani scenarij financiranja, ne dobička ali dodatnih stroškov.",
+    ru: "Все столбцы показывают прогноз чистых активов при выбранном финансировании, а не прибыль или дополнительные сборы.",
+  },
   "Reverance investment model": {
     de: "Reverance-Investitionsmodell",
     pl: "Model inwestycyjny Reverance",

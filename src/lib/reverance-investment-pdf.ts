@@ -129,7 +129,21 @@ function wrapText(text: string, maxWidth: number, size: number, fonts: FontPack,
   const words = text.trim().split(/\s+/).filter(Boolean);
   const lines: string[] = [];
   let current = "";
-  for (const word of words) {
+  // Client-entered names and addresses may contain long unbroken strings.
+  const chunks = words.flatMap((word) => {
+    const parts: string[] = [];
+    let part = "";
+    for (const character of word) {
+      if (part && mixedWidth(part + character, size, fonts, bold) > maxWidth) {
+        parts.push(part);
+        part = "";
+      }
+      part += character;
+    }
+    if (part) parts.push(part);
+    return parts;
+  });
+  for (const word of chunks) {
     const candidate = current ? `${current} ${word}` : word;
     if (!current || mixedWidth(candidate, size, fonts, bold) <= maxWidth) {
       current = candidate;
@@ -294,9 +308,10 @@ export type GenerateReverancePdfOptions = {
   calculation: InvestmentCalculation;
   lang: Lang;
   clientName?: string;
+  clientAddress?: string;
 };
 
-export async function generateReveranceInvestmentPdf({ calculation, lang, clientName }: GenerateReverancePdfOptions) {
+export async function generateReveranceInvestmentPdf({ calculation, lang, clientName, clientAddress }: GenerateReverancePdfOptions) {
   const doc = await PDFDocument.create();
   doc.setTitle(textValue("Project Reverance investment calculator | AIXCO.Global", lang));
   doc.setAuthor("AIXCO.Global");
@@ -337,9 +352,12 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
     drawWrapped(page, textValue("Reverance investment model", lang), { x: MARGIN, top: 329, size: 34, color: colors.navy, bold: true, maxWidth: 390, lineHeight: 38 }, fonts);
     drawWrapped(page, textValue("A clear view of the numbers before you decide.", lang), { x: MARGIN, top: 421, size: 13, color: colors.muted, maxWidth: 330, lineHeight: 19 }, fonts);
     if (clientName?.trim()) {
-      drawTopText(page, clientName.trim().slice(0, 80), { x: MARGIN, top: 501, size: 10, color: colors.ink, bold: true }, fonts);
+      drawWrapped(page, clientName.trim(), { x: MARGIN, top: 485, size: 10, lineHeight: 13, color: colors.ink, bold: true }, fonts);
     }
-    drawTopText(page, labelForUnit(calculation, lang), { x: MARGIN, top: 532, size: 10, color: colors.deepGold, bold: true }, fonts);
+    if (clientAddress?.trim()) {
+      drawWrapped(page, clientAddress.trim(), { x: MARGIN, top: 523, size: 9, lineHeight: 12, color: colors.muted }, fonts);
+    }
+    drawTopText(page, labelForUnit(calculation, lang), { x: MARGIN, top: 601, size: 10, color: colors.deepGold, bold: true }, fonts);
     drawMetricCard(page, textValue("Invested equity", lang), formatCurrency(calculation.investedEquity, lang), MARGIN, 624, 158, fonts, true);
     drawMetricCard(page, textValue("Monthly surplus", lang), `${calculation.monthlySurplus >= 0 ? "+" : "−"}${formatCurrency(Math.abs(calculation.monthlySurplus), lang)}`, MARGIN + 170, 624, 158, fonts);
     drawMetricCard(page, `${textValue("Net worth after", lang)} ${calculation.inputs.holdingYears} ${textValue(calculation.inputs.holdingYears === 1 ? "year" : "years", lang)}`, formatCurrency(calculation.holdingProjection.netWorth, lang), MARGIN + 340, 624, 159, fonts);
@@ -425,10 +443,11 @@ export async function generateReveranceInvestmentPdf({ calculation, lang, client
     calculation.milestones.forEach((milestone, index) => {
       const height = Math.max(3, chartHeight * (milestone.netWorth / maxValue));
       const x = MARGIN + index * (barWidth + barGap);
-      drawRectTop(page, x, chartTop + chartHeight - height, barWidth, height, index === calculation.milestones.length - 1 ? colors.navy : colors.gold);
+      drawRectTop(page, x, chartTop + chartHeight - height, barWidth, height, colors.navy);
       drawTopText(page, formatCurrency(milestone.netWorth, lang), { x, top: chartTop + chartHeight - height - 19, size: 7.5, color: colors.ink, bold: true }, fonts);
       drawTopText(page, `${milestone.year} ${textValue("year", lang)}`, { x, top: chartTop + chartHeight + 15, size: 7, color: colors.muted, bold: true }, fonts);
     });
+    drawWrapped(page, textValue("All bars show projected net worth for your selected financing scenario, not profit or additional fees.", lang), { x: MARGIN, top: 619, size: 8, lineHeight: 11, color: colors.muted }, fonts);
     drawEyebrow(page, textValue("At your horizon", lang), MARGIN, 650, fonts);
     drawTableRow(page, textValue("Property value", lang), formatCurrency(calculation.holdingProjection.propertyValue, lang), 689, fonts);
     drawTableRow(page, textValue("Remaining debt", lang), formatCurrency(calculation.holdingProjection.remainingDebt, lang), 734, fonts);

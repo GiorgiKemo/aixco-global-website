@@ -9,11 +9,22 @@ describe("Reverance localized PDF brief", () => {
       calculation: calculateReveranceInvestment(),
       lang,
       clientName: "AIXCO client",
+      clientAddress: "Musterstraße 12 · Łódź · Ljubljana · Москва",
     });
     const document = await PDFDocument.load(bytes);
 
     expect(new TextDecoder().decode(bytes.slice(0, 5))).toBe("%PDF-");
     expect(document.getPageCount()).toBe(5);
     expect(document.getTitle()).toContain(lang === "en" ? "Project Reverance" : "AIXCO");
+  });
+
+  it("renders maximum-length client details without dropping the document", async () => {
+    const bytes = await generateReveranceInvestmentPdf({
+      calculation: calculateReveranceInvestment({ unitCode: "A1401", holdingYears: 15 }),
+      lang: "ru",
+      clientName: "Ж".repeat(100),
+      clientAddress: "Ж".repeat(300),
+    });
+    expect((await PDFDocument.load(bytes)).getPageCount()).toBe(5);
   });
 });

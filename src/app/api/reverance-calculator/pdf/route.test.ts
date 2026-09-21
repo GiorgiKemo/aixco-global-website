@@ -20,7 +20,7 @@ vi.mock("@/lib/reverance-investment-pdf", () => ({
 import { POST } from "./route";
 
 const validInputs = {
-  unitCode: "A0203",
+  unitCode: "A1305",
   pricePerSquareMetre: 1_600,
   financingPercent: 60,
   grossYieldPercent: 12,
@@ -46,13 +46,27 @@ describe("Reverance PDF API", () => {
   });
 
   it("returns a localized PDF attachment for a valid scenario", async () => {
-    const response = await POST(request({ lang: "ru", clientName: "Client", inputs: validInputs }));
+    const response = await POST(request({ lang: "ru", clientName: "Client", clientAddress: "  Musterstraße 12\n8001 Zürich, Schweiz  ", inputs: validInputs }));
 
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toBe("application/pdf");
     expect(response.headers.get("content-disposition")).toContain("aixco-reverance-investment-brief-ru.pdf");
     expect(Array.from(new Uint8Array(await response.arrayBuffer()))).toEqual([37, 80, 68, 70, 45]);
-    expect(mocks.generatePdf).toHaveBeenCalledWith(expect.objectContaining({ lang: "ru", clientName: "Client" }));
+    expect(mocks.generatePdf).toHaveBeenCalledWith(expect.objectContaining({ lang: "ru", clientName: "Client", clientAddress: "Musterstraße 12\n8001 Zürich, Schweiz" }));
+  });
+
+  it("rejects oversized addresses and retired apartments without substituting a different unit", async () => {
+    expect((await POST(request({ inputs: validInputs, clientAddress: "x".repeat(301) }))).status).toBe(400);
+    expect((await POST(request({ inputs: { ...validInputs, unitCode: "A0203" } }))).status).toBe(400);
+    expect(mocks.generatePdf).not.toHaveBeenCalled();
+  });
+
+  it("accepts a 300-character address and the one-bedroom apartment", async () => {
+    expect((await POST(request({ inputs: { ...validInputs, unitCode: "A1401" }, clientAddress: "Ж".repeat(300) }))).status).toBe(200);
+    expect(mocks.generatePdf).toHaveBeenCalledWith(expect.objectContaining({
+      clientAddress: "Ж".repeat(300),
+      calculation: expect.objectContaining({ unit: expect.objectContaining({ code: "A1401", area: 46.4 }) }),
+    }));
   });
 
   it("rejects forged origins, non-JSON requests, and malformed payloads", async () => {

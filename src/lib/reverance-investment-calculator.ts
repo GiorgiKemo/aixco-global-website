@@ -3,10 +3,10 @@ export type ReveranceUnit = {
   building: "A" | "B";
   floor: number;
   area: number;
-  livingArea: number;
-  terraceArea: number;
+  livingArea?: number;
+  terraceArea?: number;
   orientation: "City side" | "Courtyard" | "Sea view" | "Adjara mountains";
-  type: "Studio";
+  type: "Studio" | "1 Bedroom";
 };
 
 export type CalculatorInputs = {
@@ -74,22 +74,22 @@ export const reveranceCalculatorRanges = {
 } as const;
 
 export const reveranceUnits: readonly ReveranceUnit[] = [
-  { code: "A0201", building: "A", floor: 2, area: 32.2, livingArea: 27.3, terraceArea: 5.4, orientation: "City side", type: "Studio" },
-  { code: "A0401", building: "A", floor: 4, area: 32.2, livingArea: 27.3, terraceArea: 5.4, orientation: "Sea view", type: "Studio" },
-  { code: "A0202", building: "A", floor: 2, area: 33.1, livingArea: 27.4, terraceArea: 5.7, orientation: "Courtyard", type: "Studio" },
-  { code: "A0302", building: "A", floor: 3, area: 33.1, livingArea: 27.4, terraceArea: 5.7, orientation: "Sea view", type: "Studio" },
-  { code: "A0203", building: "A", floor: 2, area: 33.7, livingArea: 27.3, terraceArea: 6.4, orientation: "Sea view", type: "Studio" },
-  { code: "A0303", building: "A", floor: 3, area: 33.7, livingArea: 27.3, terraceArea: 6.4, orientation: "Adjara mountains", type: "Studio" },
-  { code: "A0803", building: "A", floor: 8, area: 33.7, livingArea: 27.3, terraceArea: 6.4, orientation: "City side", type: "Studio" },
-  { code: "A0304", building: "A", floor: 3, area: 34.1, livingArea: 27.5, terraceArea: 6.6, orientation: "City side", type: "Studio" },
-  { code: "A0904", building: "A", floor: 9, area: 34.1, livingArea: 27.5, terraceArea: 6.6, orientation: "Sea view", type: "Studio" },
-  { code: "B0203", building: "B", floor: 2, area: 33.7, livingArea: 27.3, terraceArea: 6.4, orientation: "Sea view", type: "Studio" },
-  { code: "B1403", building: "B", floor: 14, area: 33.7, livingArea: 27.3, terraceArea: 6.4, orientation: "Sea view", type: "Studio" },
-  { code: "B1502", building: "B", floor: 15, area: 33.1, livingArea: 27.4, terraceArea: 5.7, orientation: "Sea view", type: "Studio" },
+  // Klem's approved sea-view shortlist, 21 September 2026.
+  // Only total areas were supplied; do not infer interior/terrace measurements.
+  { code: "A1305", building: "A", floor: 13, area: 32.4, orientation: "Sea view", type: "Studio" },
+  { code: "A1306", building: "A", floor: 13, area: 32.3, orientation: "Sea view", type: "Studio" },
+  { code: "A1307", building: "A", floor: 13, area: 32.4, orientation: "Sea view", type: "Studio" },
+  { code: "A1308", building: "A", floor: 13, area: 32.3, orientation: "Sea view", type: "Studio" },
+  { code: "A1309", building: "A", floor: 13, area: 32.4, orientation: "Sea view", type: "Studio" },
+  { code: "A1310", building: "A", floor: 13, area: 32.3, orientation: "Sea view", type: "Studio" },
+  { code: "A1401", building: "A", floor: 14, area: 46.4, orientation: "Sea view", type: "1 Bedroom" },
+  { code: "A1405", building: "A", floor: 14, area: 32.4, orientation: "Sea view", type: "Studio" },
+  { code: "A1407", building: "A", floor: 14, area: 32.4, orientation: "Sea view", type: "Studio" },
+  { code: "A1408", building: "A", floor: 14, area: 32.3, orientation: "Sea view", type: "Studio" },
 ] as const;
 
 export const defaultReveranceCalculatorInputs: CalculatorInputs = {
-  unitCode: "A0203",
+  unitCode: "A1305",
   pricePerSquareMetre: 1600,
   financingPercent: 60,
   grossYieldPercent: 12,
@@ -107,7 +107,7 @@ function finite(value: unknown, fallback: number) {
 }
 
 export function findReveranceUnit(code: string) {
-  return reveranceUnits.find((unit) => unit.code === code) ?? reveranceUnits[4];
+  return reveranceUnits.find((unit) => unit.code === code) ?? reveranceUnits[0];
 }
 
 export function normalizeReveranceInputs(value: Partial<CalculatorInputs> = {}): CalculatorInputs {

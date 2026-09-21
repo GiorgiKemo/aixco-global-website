@@ -118,6 +118,7 @@ export function ReveranceInvestmentCalculator() {
   const { lang, tx } = useI18n();
   const [inputs, setInputs] = useState<CalculatorInputs>(defaultReveranceCalculatorInputs);
   const [clientName, setClientName] = useState("");
+  const [clientAddress, setClientAddress] = useState("");
   const [pdfState, setPdfState] = useState<"idle" | "loading" | "success" | "error">("idle");
   const calculation = useMemo(() => calculateReveranceInvestment(inputs), [inputs]);
   const unit = calculation.unit;
@@ -136,6 +137,7 @@ export function ReveranceInvestmentCalculator() {
         body: JSON.stringify({
           lang,
           clientName: clientName.trim() || undefined,
+          clientAddress: clientAddress.trim() || undefined,
           inputs,
         }),
       });
@@ -283,7 +285,11 @@ export function ReveranceInvestmentCalculator() {
                   </div>
                   <div className="border border-white/18 bg-white/[0.035] p-5 sm:p-6">
                     <div className="flex items-center justify-between gap-4 border-b border-white/15 pb-4"><div><p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#E6C767]">{tx("Selected language")}</p><p className="mt-2 text-xl font-medium tracking-[-0.04em]">{lang.toUpperCase()}</p></div><ShieldCheck className="h-6 w-6 text-[#E6C767]" strokeWidth={1.2} aria-hidden="true" /></div>
-                    <label className="mt-5 grid gap-2"><span className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/58">{tx("Your name (optional)")}</span><input value={clientName} onChange={(event) => setClientName(event.target.value)} placeholder={tx("Used for the cover only")} maxLength={100} className="min-h-12 w-full border border-white/20 bg-white/[0.06] px-4 text-base text-white outline-none placeholder:text-white/35 focus:border-[#E6C767] focus:ring-2 focus:ring-[#E6C767]/30" /></label>
+                    <label className="mt-5 grid gap-2"><span className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/58">{tx("Your name (optional)")}</span><input value={clientName} onChange={(event) => { setClientName(event.target.value); setPdfState("idle"); }} placeholder={tx("Used for the cover only")} maxLength={100} className="min-h-12 w-full border border-white/20 bg-white/[0.06] px-4 text-base text-white outline-none placeholder:text-white/35 focus:border-[#E6C767] focus:ring-2 focus:ring-[#E6C767]/30" /></label>
+                    <label className="mt-4 grid gap-2">
+                      <span className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/58">{tx("Client address (optional)")}</span>
+                      <textarea value={clientAddress} onChange={(event) => { setClientAddress(event.target.value); setPdfState("idle"); }} placeholder={tx("Street, city, postal code, country")} maxLength={300} rows={3} className="min-h-24 w-full resize-y border border-white/20 bg-white/[0.06] px-4 py-3 text-base text-white outline-none placeholder:text-white/35 focus:border-[#E6C767] focus:ring-2 focus:ring-[#E6C767]/30" />
+                    </label>
                     <button type="button" onClick={downloadPdf} disabled={pdfState === "loading"} className="relative mt-5 inline-flex min-h-16 w-full items-center justify-center bg-[#E6C767] px-6 py-4 text-[0.65rem] font-semibold uppercase leading-[1.2] tracking-[0.08em] text-[#161616] transition-colors hover:bg-white disabled:cursor-wait disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E6C767] focus-visible:ring-offset-2 focus-visible:ring-offset-[#002147]">
                       <Download size={16} className="absolute left-5 top-1/2 -translate-y-1/2" strokeWidth={1.8} aria-hidden="true" /> <span className="min-w-0 flex-1 px-5 text-center">{pdfState === "loading" ? tx("Generating PDF…") : tx("Download localized PDF brief")}</span>
                     </button>

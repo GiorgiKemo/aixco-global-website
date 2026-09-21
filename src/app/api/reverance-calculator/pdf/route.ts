@@ -4,7 +4,7 @@ import { checkDistributedLeadCaptureLimit } from "@/lib/backend/lead-capture-abu
 import { isTrustedLeadCaptureOrigin } from "@/lib/backend/lead-capture-route";
 import { getRateLimitClientId, checkRateLimit } from "@/lib/security/rate-limit";
 import { readBoundedJson } from "@/lib/security/request-body";
-import { calculateReveranceInvestment } from "@/lib/reverance-investment-calculator";
+import { calculateReveranceInvestment, reveranceUnits } from "@/lib/reverance-investment-calculator";
 import { generateReveranceInvestmentPdf } from "@/lib/reverance-investment-pdf";
 
 export const runtime = "nodejs";
@@ -13,8 +13,9 @@ export const dynamic = "force-dynamic";
 const requestSchema = z.object({
   lang: z.enum(["en", "de", "pl", "sl", "ru"]).default("en"),
   clientName: z.string().trim().max(100).optional(),
+  clientAddress: z.string().trim().max(300).optional(),
   inputs: z.object({
-    unitCode: z.string().trim().min(1).max(10),
+    unitCode: z.string().trim().min(1).max(10).refine((code) => reveranceUnits.some((unit) => unit.code === code)),
     pricePerSquareMetre: z.number().finite(),
     financingPercent: z.number().finite(),
     grossYieldPercent: z.number().finite(),
@@ -78,6 +79,7 @@ export async function POST(request: Request) {
       calculation,
       lang: parsed.data.lang,
       clientName: parsed.data.clientName,
+      clientAddress: parsed.data.clientAddress,
     });
     const filename = `aixco-reverance-investment-brief-${parsed.data.lang}.pdf`;
     return new NextResponse(Buffer.from(pdf), {
