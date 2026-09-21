@@ -93,8 +93,7 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
     text(p,footer,W-M-width(footer,7),808,7,false,C.muted);
     return p;
   }
-  const base=path.join(process.cwd(),"public/aixco-global-op2/images");
-  const assetDir=path.join(base,"reverance-offer");
+  const assetDir=path.join(process.cwd(),"public/aixco-global-op2/images/reverance-offer");
   const imageBytes = await Promise.all([a.unit.code+"-plan.png",a.unit.code+"-rooms.jpg","floor-"+art.floor+".jpg","hero.jpg"].map(file=>fs.readFile(path.join(assetDir,file))));
   const [plan,rooms,floor,hero] = await Promise.all(imageBytes.map((bytes,i)=>i===0?doc.embedPng(new Uint8Array(bytes)):doc.embedJpg(new Uint8Array(bytes))));
 
