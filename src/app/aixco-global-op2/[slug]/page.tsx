@@ -151,7 +151,7 @@ function PropertyPageContent({ property, batumiBenefits }: { property: BatumiPro
     : "(min-width: 1024px) 44vw, 100vw";
   const heroMetrics = [
     ...property.metrics,
-    { label: "Available apartments", value: "28", subtext: "13th and 14th floors" },
+    { label: "Available apartments", value: "24", subtext: "13th and 14th floors" },
   ];
   const investmentBenefits = [
     { icon: Globe2, title: "100% Ownership", body: "Full freehold, no local partner, no conditions. Yours entirely." },
@@ -336,7 +336,7 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
       "@type": "AggregateOffer",
       priceCurrency: "EUR",
       lowPrice: "45000",
-      offerCount: "28",
+      offerCount: "24",
       availability: "https://schema.org/InStock",
       url: canonicalUrl,
     },

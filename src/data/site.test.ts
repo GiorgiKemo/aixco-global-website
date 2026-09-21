@@ -16,7 +16,9 @@ describe("current Batumi project data", () => {
         { label: "Completion", value: "Jul 2028", subtext: "target" },
       ],
     });
-    expect(project?.summary).toContain("28 selected apartments");
+    expect(project?.summary).toContain("28-apartment inventory");
+    expect(project?.summary).toContain("24 are currently available");
+    expect(project?.summary).toContain("4 are reserved");
     expect(project?.summary).toContain("13th and 14th floors");
     expect(project?.summary).toContain("July 2028");
     expect(project?.summary).toMatch(/^Selected residences in one of Batumi's most dynamic coastal districts/);
@@ -24,6 +26,10 @@ describe("current Batumi project data", () => {
     expect(project?.highlights).toContainEqual({
       label: "Location",
       value: "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away.",
+    });
+    expect(project?.highlights).toContainEqual({
+      label: "Current availability",
+      value: "24 available apartments and 4 reserved units across the 13th and 14th floors.",
     });
   });
 

@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/JsonLd";
 const routePath = "/reverance-batumi";
 const pageTitle = "Project Reverance Batumi | AIXCO.Global";
 const pageDescription =
-  "Explore selected Project Reverance apartments in Batumi's New Boulevard area with AIXCO.Global: 28 available apartments, transparent guidance, and completion targeted for July 2028.";
+  "Explore Project Reverance in Batumi's New Boulevard with AIXCO.Global: 24 available apartments and 4 reserved units from a selected 28-apartment inventory, transparent guidance, and completion targeted for July 2028.";
 
 export const metadata: Metadata = {
   title: pageTitle,

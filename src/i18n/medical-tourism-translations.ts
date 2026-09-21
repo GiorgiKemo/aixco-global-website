@@ -311,11 +311,11 @@ export const medicalTourismTranslations: MedicalTourismTranslationSource = {
     sl: "Pacienti imajo koristi od dostopne nastanitve, vstopa brez vizuma za številna državljanstva in prijetnega črnomorskega okolja za okrevanje.",
     ru: "Пациенты получают доступное жильё, безвизовый въезд для многих гражданств и спокойную черноморскую среду для восстановления.",
   },
-  "Combine treatment with property ownership in Batumi. AIXCO currently offers 28 selected apartments at Project Reverance, 8 minutes from Batumi Medical Center.": {
-    de: "Verbinden Sie die Behandlung mit Eigentum in Batumi. AIXCO bietet derzeit 28 ausgewählte Wohnungen im Projekt Reverance an, 8 Minuten vom Batumi Medical Center.",
-    pl: "Połącz leczenie z własnością nieruchomości w Batumi. AIXCO oferuje obecnie 28 wybranych apartamentów w projekcie Reverance, 8 minut od Batumi Medical Center.",
-    sl: "Zdravljenje povežite z lastništvom nepremičnine v Batumiju. AIXCO trenutno ponuja 28 izbranih apartmajev v projektu Reverance, 8 minut od Batumi Medical Center.",
-    ru: "Совместите лечение с владением недвижимостью в Батуми. AIXCO сейчас предлагает 28 отобранных апартаментов в проекте Reverance, в 8 минутах от Batumi Medical Center.",
+  "Combine treatment with property ownership in Batumi. AIXCO currently offers a selected 28-apartment inventory at Project Reverance: 24 are available and 4 are reserved, 8 minutes from Batumi Medical Center.": {
+    de: "Verbinden Sie die Behandlung mit Eigentum in Batumi. AIXCO bietet derzeit ein ausgewähltes Inventar von 28 Wohnungen im Projekt Reverance an: 24 sind verfügbar und 4 reserviert, 8 Minuten vom Batumi Medical Center entfernt.",
+    pl: "Połącz leczenie z własnością nieruchomości w Batumi. AIXCO oferuje obecnie wybraną pulę 28 apartamentów w projekcie Reverance: 24 są dostępne, a 4 zarezerwowane, 8 minut od Batumi Medical Center.",
+    sl: "Zdravljenje povežite z lastništvom nepremičnine v Batumiju. AIXCO trenutno ponuja izbrano ponudbo 28 apartmajev v projektu Reverance: 24 so na voljo, 4 pa rezervirani, 8 minut od Batumi Medical Center.",
+    ru: "Совместите лечение с владением недвижимостью в Батуми. AIXCO сейчас предлагает отобранную коллекцию из 28 апартаментов в проекте Reverance: 24 доступны, а 4 зарезервированы, в 8 минутах от Batumi Medical Center.",
   },
   "View Project Reverance": {
     de: "Projekt Reverance ansehen",
@@ -434,7 +434,7 @@ export const medicalTourismTranslations: MedicalTourismTranslationSource = {
   },
   "PROJECT REVERANCE": { de: "PROJEKT REVERANCE", pl: "PROJEKT REVERANCE", sl: "PROJEKT REVERANCE", ru: "ПРОЕКТ REVERANCE" },
   "New Boulevard · Batumi": { de: "New Boulevard · Batumi", pl: "New Boulevard · Batumi", sl: "New Boulevard · Batumi", ru: "New Boulevard · Батуми" },
-  "28 AIXCO-selected apartments": { de: "28 von AIXCO ausgewählte Wohnungen", pl: "28 apartamentów wybranych przez AIXCO", sl: "28 apartmajev, izbranih s strani AIXCO", ru: "28 апартаментов, отобранных AIXCO" },
+  "24 available · 4 reserved · 28 selected": { de: "24 verfügbar · 4 reserviert · 28 ausgewählt", pl: "24 dostępne · 4 zarezerwowane · 28 wybranych", sl: "24 razpoložljivi · 4 rezervirani · 28 izbranih", ru: "24 доступны · 4 зарезервированы · 28 отобраны" },
   "13th & 14th floors": { de: "13. & 14. Stock", pl: "13. i 14. piętro", sl: "13. in 14. nadstropje", ru: "13-й и 14-й этажи" },
   "Target completion July 2028": { de: "Geplante Fertigstellung Juli 2028", pl: "Planowane ukończenie: lipiec 2028", sl: "Predviden zaključek julij 2028", ru: "Плановое завершение — июль 2028" },
   "EXPLORE PROJECT REVERANCE": { de: "PROJEKT REVERANCE ENTDECKEN", pl: "POZNAJ PROJEKT REVERANCE", sl: "RAZIŠČITE PROJEKT REVERANCE", ru: "ИЗУЧИТЬ ПРОЕКТ REVERANCE" },

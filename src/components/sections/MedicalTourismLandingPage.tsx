@@ -787,7 +787,7 @@ export function MedicalTourismLandingPage() {
               <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">{tx("PROJECT REVERANCE")}</p>
               <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em]">{tx("New Boulevard · Batumi")}</h3>
               <ul className="mt-6 grid gap-3 text-sm leading-6 text-white/68 sm:grid-cols-2">
-                <li>{tx("28 AIXCO-selected apartments")}</li>
+                <li>{tx("24 available · 4 reserved · 28 selected")}</li>
                 <li>{tx("13th & 14th floors")}</li>
                 <li>{tx("Target completion July 2028")}</li>
               </ul>
@@ -826,7 +826,7 @@ export function MedicalTourismLandingPage() {
                 <p className="brandbook-eyebrow">07 — {tx("Recover in Batumi")}</p>
                 <h2 className="mt-8 max-w-[9ch] text-[clamp(3.2rem,5.7vw,6.6rem)] font-medium leading-[0.88] tracking-[-0.065em]">{tx("A calm coast after treatment.")}</h2>
                 <p className="mt-9 max-w-[26rem] text-lg leading-[1.55] text-[#161616]/62">{tx("Patients benefit from affordable accommodation, visa-free entry for many nationalities, and a comfortable Black Sea setting for recovery.")}</p>
-                <p className="mt-6 max-w-[26rem] text-lg leading-[1.55] text-[#161616]/62">{tx("Combine treatment with property ownership in Batumi. AIXCO currently offers 28 selected apartments at Project Reverance, 8 minutes from Batumi Medical Center.")}</p>
+                <p className="mt-6 max-w-[26rem] text-lg leading-[1.55] text-[#161616]/62">{tx("Combine treatment with property ownership in Batumi. AIXCO currently offers a selected 28-apartment inventory at Project Reverance: 24 are available and 4 are reserved, 8 minutes from Batumi Medical Center.")}</p>
                 <Link href="/reverance-batumi" className="brandbook-text-link mt-10 inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em]">
                   {tx("View Project Reverance")} <MoveRight size={17} strokeWidth={1.6} />
                 </Link>

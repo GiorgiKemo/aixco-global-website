@@ -93,14 +93,14 @@ export const batumiProperties = [
     url: "current-project",
     image: "batumi-current-project",
     video: "currentProject",
-    summary: "Selected residences in one of Batumi's most dynamic coastal districts. AIXCO offers 28 selected apartments on the 13th and 14th floors of Project Reverance, with completion targeted for July 2028.",
+    summary: "Selected residences in one of Batumi's most dynamic coastal districts. AIXCO offers a focused 28-apartment inventory on the 13th and 14th floors of Project Reverance: 24 are currently available and 4 are reserved, with completion targeted for July 2028.",
     metrics: [
       { label: "Floors", value: "17", subtext: "per building" },
       { label: "Apartments", value: "408", subtext: "total units" },
       { label: "Completion", value: "Jul 2028", subtext: "target", highlight: true },
     ],
     highlights: [
-      { label: "Current availability", value: "28 selected apartments on the 13th and 14th floors." },
+      { label: "Current availability", value: "24 available apartments and 4 reserved units across the 13th and 14th floors." },
       { label: "Scale", value: "25,000 m² of comfort and community infrastructure across a 45,000 m² planned site." },
       { label: "Location", value: "59 Adlia Street, with New Boulevard 5 minutes away, shopping and airport access 7 minutes away, and Batumi Medical Center 8 minutes away." },
       { label: "Rental case", value: "$600/month average long-term rent, $80/night average short-stay rent, and 90% potential occupancy shown in the project deck." },

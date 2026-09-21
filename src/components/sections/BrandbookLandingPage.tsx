@@ -683,7 +683,7 @@ export function BrandbookLandingPage() {
                   {tx("Selected residences in one of Batumi's most dynamic coastal districts.")}
                 </p>
                 <p className="mt-4 max-w-[34rem] text-[0.98rem] leading-[1.55] text-white/62">
-                  {tx("AIXCO offers 28 selected apartments on the 13th and 14th floors of Project Reverance, with completion targeted for July 2028.")}
+                  {tx("AIXCO offers a focused 28-apartment inventory on the 13th and 14th floors of Project Reverance: 24 are currently available and 4 are reserved, with completion targeted for July 2028.")}
                 </p>
                 <div className="reverance-hero-proof-grid mt-7 grid grid-cols-2 gap-2.5 sm:gap-3">
                   {heroProofPoints.map((point) => (
@@ -770,12 +770,12 @@ export function BrandbookLandingPage() {
                 {tx("Reverance is a premium residential development on Batumi's New Boulevard, combining contemporary residences, resident amenities and access to one of the city's most active development districts.")}
               </p>
               <p className="mt-5 max-w-[31rem] text-base leading-[1.55] text-[#161616]/62">
-                {tx("AIXCO has selected 28 apartments on the 13th and 14th floors, giving clients access to a focused inventory rather than an overwhelming catalogue.")}
+                {tx("AIXCO has selected 28 apartments on the 13th and 14th floors: 24 are currently available and 4 are reserved, giving clients access to a focused inventory rather than an overwhelming catalogue.")}
               </p>
               <div className="mt-12 grid max-w-[37rem] grid-cols-2 border-y border-[#161616]/20 xl:grid-cols-4">
                 <div className="py-5 pr-4">
-                  <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("28")}</strong>
-                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[#161616]/70">{tx("AIXCO-selected apartments")}</span>
+                  <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("24")}</strong>
+                  <span className="mt-2 block text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[#161616]/70">{tx("Available apartments")}</span>
                 </div>
                 <div className="border-l border-[#161616]/20 px-4 py-5">
                   <strong className="block text-2xl font-medium tracking-[-0.04em] sm:text-3xl">{tx("13–14")}</strong>

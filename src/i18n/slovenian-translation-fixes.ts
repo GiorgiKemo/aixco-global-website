@@ -269,17 +269,17 @@ export const slovenianTranslationFixes = {
   "Our current project": { sl: "Naš trenutni projekt" },
   "Batumi property profile": { sl: "Profil nepremičninskega projekta v Batumiju" },
   "Reverance": { sl: "Reverance" },
-  "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for July 2028.": {
-    sl: "Reverance je vrhunski stanovanjski kompleks na Novem bulvarju v Batumiju. AIXCO trenutno ponuja 28 izbranih stanovanj v 13. in 14. nadstropju, dokončanje pa je predvideno za julij 2028.",
+  "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers a selected 28-apartment inventory on the 13th and 14th floors: 24 are available and 4 are reserved, with completion targeted for July 2028.": {
+    sl: "Reverance je vrhunski stanovanjski kompleks na Novem bulvarju v Batumiju. AIXCO trenutno ponuja izbrano ponudbo 28 apartmajev v 13. in 14. nadstropju: 24 so na voljo, 4 pa rezervirani; dokončanje je predvideno za julij 2028.",
   },
-  "Selected residences in one of Batumi's most dynamic coastal districts. AIXCO offers 28 selected apartments on the 13th and 14th floors of Project Reverance, with completion targeted for July 2028.": {
-    sl: "Izbrane rezidence v enem najbolj dinamičnih obalnih okrožij Batumija. AIXCO ponuja 28 izbranih apartmajev v 13. in 14. nadstropju projekta Reverance; zaključek je predviden za julij 2028.",
+  "Selected residences in one of Batumi's most dynamic coastal districts. AIXCO offers a focused 28-apartment inventory on the 13th and 14th floors of Project Reverance: 24 are currently available and 4 are reserved, with completion targeted for July 2028.": {
+    sl: "Izbrane rezidence v enem najbolj dinamičnih obalnih okrožij Batumija. AIXCO ponuja izbrano ponudbo 28 apartmajev v 13. in 14. nadstropju projekta Reverance: 24 so trenutno na voljo, 4 pa rezervirani; zaključek je predviden za julij 2028.",
   },
   "Available apartments": { sl: "Razpoložljiva stanovanja" },
   "13th and 14th floors": { sl: "13. in 14. nadstropje" },
   "Current availability": { sl: "Trenutna razpoložljivost" },
-  "28 selected apartments on the 13th and 14th floors.": {
-    sl: "28 izbranih stanovanj v 13. in 14. nadstropju.",
+  "24 available apartments and 4 reserved units across the 13th and 14th floors.": {
+    sl: "24 razpoložljivi apartmaji in 4 rezervirane enote v 13. in 14. nadstropju.",
   },
   "private residences": { sl: "zasebne rezidence" },
   "Floors": { sl: "Nadstropja" },

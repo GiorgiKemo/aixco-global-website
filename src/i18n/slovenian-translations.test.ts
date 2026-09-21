@@ -54,7 +54,7 @@ describe("Slovenian translation catalog", () => {
     expect(slovenianTranslationFixes.Email.sl).toBe("E-pošta");
     expect(
       slovenianTranslationFixes[
-        "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers 28 selected apartments on the 13th and 14th floors, with completion targeted for July 2028."
+        "Reverance is a premium residential complex on Batumi's New Boulevard. AIXCO currently offers a selected 28-apartment inventory on the 13th and 14th floors: 24 are available and 4 are reserved, with completion targeted for July 2028."
       ].sl,
     ).toContain("13. in 14. nadstropju");
   });
