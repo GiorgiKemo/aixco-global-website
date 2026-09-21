@@ -84,10 +84,14 @@ describe("Reverance investment model", () => {
       ["B1401", 46.4], ["B1405", 32.4], ["B1406", 32.3], ["B1407", 32.4], ["B1408", 32.3],
       ["B1409", 32.4], ["B1410", 32.3],
     ]);
-    expect(reveranceUnits).toHaveLength(22);
-    expect(reveranceUnits.every((unit) => [13, 14].includes(unit.floor) && unit.orientation === "Sea view")).toBe(true);
+    expect(reveranceUnits).toHaveLength(163);
+    expect(new Set(reveranceUnits.map(unit => unit.code)).size).toBe(163);
+    expect(reveranceUnits.filter(unit => !isGoldenPremiumUnit(unit.code))).toHaveLength(141);
+    expect(findReveranceUnit("A411")).toMatchObject({ building: "A", area: 64.5, type: "2 Bedrooms" });
+    expect(findReveranceUnit("B204")).toMatchObject({ building: "B", area: 68.3, floor: 2 });
+    expect(reveranceUnits.some(unit => ["B1305", "B1306", "A1501", "A204"].includes(unit.code))).toBe(false);
     expect(findReveranceUnit("A1401").type).toBe("1 Bedroom");
-    expect(reveranceUnits.every((unit) => isGoldenPremiumUnit(unit.code))).toBe(true);
+    expect(reveranceUnits.filter((unit) => isGoldenPremiumUnit(unit.code))).toHaveLength(22);
     expect(findReveranceUnit("retired").code).toBe(defaultReveranceCalculatorInputs.unitCode);
   });
   it("matches the reference scenario mechanics for the default unit", () => {

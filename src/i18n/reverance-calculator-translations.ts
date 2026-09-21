@@ -41,6 +41,16 @@ export const reveranceCalculatorTranslations: TranslationSource = {
   "Model your investment": { de: "Ihre Investition modellieren", pl: "Modeluj swoją inwestycję", sl: "Modelirajte svojo naložbo", ru: "Смоделировать инвестицию" },
   "Open the model": { de: "Modell öffnen", pl: "Otwórz model", sl: "Odprite model", ru: "Открыть модель" },
   "Choose your apartment": { de: "Wohnung auswählen", pl: "Wybierz apartament", sl: "Izberite stanovanje", ru: "Выберите апартамент" },
+  "Regular apartments": { de: "Standardwohnungen", pl: "Apartamenty standardowe", sl: "Standardna stanovanja", ru: "Стандартные апартаменты" },
+  "Room layout awaiting confirmation": { de: "Raumaufteilung noch zu bestätigen", pl: "Układ pomieszczeń do potwierdzenia", sl: "Razpored prostorov čaka na potrditev", ru: "Планировка ожидает подтверждения" },
+  "The room-plan area differs from the stock workbook. No substitute apartment is shown. Request the confirmed room layout before reservation.": {
+    de: "Die Fläche im Raumplan weicht von der Bestandsliste ab. Es wird keine Ersatzwohnung gezeigt. Fordern Sie vor der Reservierung den bestätigten Raumplan an.",
+    pl: "Powierzchnia rzutu różni się od listy lokali. Nie pokazujemy innego apartamentu. Przed rezerwacją poproś o potwierdzony układ pomieszczeń.",
+    sl: "Površina na načrtu se razlikuje od seznama stanovanj. Drugo stanovanje ni prikazano. Pred rezervacijo zahtevajte potrjen razpored prostorov.",
+    ru: "Площадь на плане отличается от списка квартир. Другой апартамент не подставляется. Перед бронированием запросите подтверждённую планировку.",
+  },
+  "Not specified": { de: "Nicht angegeben", pl: "Nie podano", sl: "Ni navedeno", ru: "Не указано" },
+  "2 Bedrooms": { de: "2 Schlafzimmer", pl: "2 sypialnie", sl: "2 spalnici", ru: "2 спальни" },
   "Approved shortlist": { de: "Freigegebene Auswahl", pl: "Zatwierdzona lista", sl: "Odobreni izbor", ru: "Утверждённая подборка" },
   "Other available Golden Premium apartments": {
     de: "Weitere verfügbare Golden-Premium-Apartments",

@@ -6,7 +6,9 @@ import path from 'node:path';
 const trace = '.next/server/app/api/reverance-calculator/pdf/route.js.nft.json';
 const files = JSON.parse(fs.readFileSync(trace, 'utf8')).files.map(file => path.resolve(path.dirname(trace), file));
 const size = files.reduce((total, file) => total + fs.statSync(file).size, 0);
-assert(size < 50_000_000, `PDF function trace is too large: ${size} bytes`);
+// The merged stock has 163 offers rather than the original ten; keep an explicit
+// limit well below Vercel's function limit while including their exact artwork.
+assert(size < 100_000_000, `PDF function trace is too large: ${size} bytes`);
 for (const directory of ['public/aixco-global-op2/images/reverance-offer', 'public/aixco-global-op2/fonts/reverance-pdf']) {
   for (const name of fs.readdirSync(directory).filter(name => /\.(png|jpg|ttf)$/.test(name))) {
     assert(files.includes(path.resolve(directory, name)), `Missing PDF asset: ${name}`);

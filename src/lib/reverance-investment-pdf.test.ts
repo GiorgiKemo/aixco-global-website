@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { PDFDocument } from "pdf-lib";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { additionalAvailableReveranceUnits, approvedReveranceUnits } from "./reverance-investment-calculator";
+import { reveranceUnits } from "./reverance-investment-calculator";
+import catalog from "../../public/aixco-global-op2/images/reverance-offer/catalog.json";
 import { OFFER_COPY } from "@/i18n/reverance-offer-copy";
 
 async function saveQa(name: string, bytes: Uint8Array) {
@@ -49,15 +50,17 @@ describe("Reverance localized PDF brief", () => {
     expect((await PDFDocument.load(bytes)).getPageCount()).toBe(6);
     await saveQa("long-ru", bytes);
   });
-  it.each(approvedReveranceUnits)("uses the matching artwork for $code", async unit => {
+  it.each(reveranceUnits)("exports the workbook unit $code with its own block/floor artwork", async unit => {
     const bytes = await generateReveranceInvestmentPdf({ calculation: calculateReveranceInvestment({unitCode:unit.code}), lang:"en" });
     expect((await PDFDocument.load(bytes)).getPageCount()).toBe(6);
     await saveQa(unit.code, bytes);
   });
-  it.each(additionalAvailableReveranceUnits)("generates a six-page fallback brief for the available $code unit", async unit => {
-    const bytes = await generateReveranceInvestmentPdf({ calculation: calculateReveranceInvestment({unitCode:unit.code}), lang:"en" });
-    expect((await PDFDocument.load(bytes)).getPageCount()).toBe(6);
-    await saveQa(unit.code, bytes);
+  it("has matching artwork entries for every available unit, with no borrowed room fallback", () => {
+    expect(Object.keys(catalog).sort()).toEqual(reveranceUnits.map(unit => unit.code).sort());
+    expect(catalog.B1211.roomsFile).toBeNull();
+    expect(catalog.B1404.roomsFile).toBeNull();
+    expect(catalog.B1408.roomsFile).toBeNull();
+    expect(catalog.B204.floorFile).not.toBe(catalog.A411.floorFile);
   });
   it.each([0,70])("renders the %s percent financing boundary", async financingPercent => {
     const bytes = await generateReveranceInvestmentPdf({ calculation: calculateReveranceInvestment({financingPercent,holdingYears:15,grossYieldPercent:5,annualGrowthPercent:0}), lang:"de" });

@@ -1,0 +1,1130 @@
+[
+  {
+    "code": "A411",
+    "building": "A",
+    "floor": 4,
+    "area": 64.5,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A412",
+    "building": "A",
+    "floor": 4,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A502",
+    "building": "A",
+    "floor": 5,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A511",
+    "building": "A",
+    "floor": 5,
+    "area": 68.2,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A602",
+    "building": "A",
+    "floor": 6,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A603",
+    "building": "A",
+    "floor": 6,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A604",
+    "building": "A",
+    "floor": 6,
+    "area": 61.6,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A611",
+    "building": "A",
+    "floor": 6,
+    "area": 68.2,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A612",
+    "building": "A",
+    "floor": 6,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A701",
+    "building": "A",
+    "floor": 7,
+    "area": 46.4,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A702",
+    "building": "A",
+    "floor": 7,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A703",
+    "building": "A",
+    "floor": 7,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A704",
+    "building": "A",
+    "floor": 7,
+    "area": 61.6,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A706",
+    "building": "A",
+    "floor": 7,
+    "area": 32.7,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A707",
+    "building": "A",
+    "floor": 7,
+    "area": 33.2,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A708",
+    "building": "A",
+    "floor": 7,
+    "area": 33.6,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A709",
+    "building": "A",
+    "floor": 7,
+    "area": 34.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A710",
+    "building": "A",
+    "floor": 7,
+    "area": 34.5,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A711",
+    "building": "A",
+    "floor": 7,
+    "area": 68.2,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A712",
+    "building": "A",
+    "floor": 7,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A801",
+    "building": "A",
+    "floor": 8,
+    "area": 46.4,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A802",
+    "building": "A",
+    "floor": 8,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A805",
+    "building": "A",
+    "floor": 8,
+    "area": 32.3,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A806",
+    "building": "A",
+    "floor": 8,
+    "area": 32.7,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A807",
+    "building": "A",
+    "floor": 8,
+    "area": 33.2,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A808",
+    "building": "A",
+    "floor": 8,
+    "area": 33.6,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A809",
+    "building": "A",
+    "floor": 8,
+    "area": 34.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A810",
+    "building": "A",
+    "floor": 8,
+    "area": 34.5,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A811",
+    "building": "A",
+    "floor": 8,
+    "area": 68.2,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A812",
+    "building": "A",
+    "floor": 8,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A901",
+    "building": "A",
+    "floor": 9,
+    "area": 46.4,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A902",
+    "building": "A",
+    "floor": 9,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A903",
+    "building": "A",
+    "floor": 9,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A904",
+    "building": "A",
+    "floor": 9,
+    "area": 68.3,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A912",
+    "building": "A",
+    "floor": 9,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1001",
+    "building": "A",
+    "floor": 10,
+    "area": 46.4,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A1002",
+    "building": "A",
+    "floor": 10,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A1003",
+    "building": "A",
+    "floor": 10,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1004",
+    "building": "A",
+    "floor": 10,
+    "area": 68.3,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1006",
+    "building": "A",
+    "floor": 10,
+    "area": 34.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "A1011",
+    "building": "A",
+    "floor": 10,
+    "area": 61.5,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1012",
+    "building": "A",
+    "floor": 10,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1102",
+    "building": "A",
+    "floor": 11,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A1103",
+    "building": "A",
+    "floor": 11,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1104",
+    "building": "A",
+    "floor": 11,
+    "area": 68.3,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1111",
+    "building": "A",
+    "floor": 11,
+    "area": 61.5,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1112",
+    "building": "A",
+    "floor": 11,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1202",
+    "building": "A",
+    "floor": 12,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "A1203",
+    "building": "A",
+    "floor": 12,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1204",
+    "building": "A",
+    "floor": 12,
+    "area": 68.3,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1212",
+    "building": "A",
+    "floor": 12,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "A1311",
+    "building": "A",
+    "floor": 13,
+    "area": 64.8,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B204",
+    "building": "B",
+    "floor": 2,
+    "area": 68.3,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B311",
+    "building": "B",
+    "floor": 3,
+    "area": 64.5,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B403",
+    "building": "B",
+    "floor": 4,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B411",
+    "building": "B",
+    "floor": 4,
+    "area": 64.5,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B412",
+    "building": "B",
+    "floor": 4,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B503",
+    "building": "B",
+    "floor": 5,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B504",
+    "building": "B",
+    "floor": 5,
+    "area": 61.6,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B510",
+    "building": "B",
+    "floor": 5,
+    "area": 34.5,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B511",
+    "building": "B",
+    "floor": 5,
+    "area": 68.2,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B512",
+    "building": "B",
+    "floor": 5,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B602",
+    "building": "B",
+    "floor": 6,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B603",
+    "building": "B",
+    "floor": 6,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B604",
+    "building": "B",
+    "floor": 6,
+    "area": 61.6,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B610",
+    "building": "B",
+    "floor": 6,
+    "area": 34.5,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B611",
+    "building": "B",
+    "floor": 6,
+    "area": 68.2,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B612",
+    "building": "B",
+    "floor": 6,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B701",
+    "building": "B",
+    "floor": 7,
+    "area": 46.4,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B702",
+    "building": "B",
+    "floor": 7,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B703",
+    "building": "B",
+    "floor": 7,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B704",
+    "building": "B",
+    "floor": 7,
+    "area": 61.6,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B705",
+    "building": "B",
+    "floor": 7,
+    "area": 32.3,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B706",
+    "building": "B",
+    "floor": 7,
+    "area": 32.7,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B707",
+    "building": "B",
+    "floor": 7,
+    "area": 33.2,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B708",
+    "building": "B",
+    "floor": 7,
+    "area": 33.6,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B709",
+    "building": "B",
+    "floor": 7,
+    "area": 34.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B710",
+    "building": "B",
+    "floor": 7,
+    "area": 34.5,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B711",
+    "building": "B",
+    "floor": 7,
+    "area": 68.2,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B712",
+    "building": "B",
+    "floor": 7,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B801",
+    "building": "B",
+    "floor": 8,
+    "area": 46.4,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B802",
+    "building": "B",
+    "floor": 8,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B803",
+    "building": "B",
+    "floor": 8,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B804",
+    "building": "B",
+    "floor": 8,
+    "area": 61.6,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B805",
+    "building": "B",
+    "floor": 8,
+    "area": 32.3,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B806",
+    "building": "B",
+    "floor": 8,
+    "area": 32.7,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B807",
+    "building": "B",
+    "floor": 8,
+    "area": 33.2,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B808",
+    "building": "B",
+    "floor": 8,
+    "area": 33.6,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B809",
+    "building": "B",
+    "floor": 8,
+    "area": 34.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B810",
+    "building": "B",
+    "floor": 8,
+    "area": 34.5,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B811",
+    "building": "B",
+    "floor": 8,
+    "area": 68.2,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B812",
+    "building": "B",
+    "floor": 8,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B901",
+    "building": "B",
+    "floor": 9,
+    "area": 46.4,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B902",
+    "building": "B",
+    "floor": 9,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B903",
+    "building": "B",
+    "floor": 9,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B904",
+    "building": "B",
+    "floor": 9,
+    "area": 68.3,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B905",
+    "building": "B",
+    "floor": 9,
+    "area": 34.6,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B906",
+    "building": "B",
+    "floor": 9,
+    "area": 34.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B907",
+    "building": "B",
+    "floor": 9,
+    "area": 33.7,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B908",
+    "building": "B",
+    "floor": 9,
+    "area": 33.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B911",
+    "building": "B",
+    "floor": 9,
+    "area": 61.5,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B912",
+    "building": "B",
+    "floor": 9,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1001",
+    "building": "B",
+    "floor": 10,
+    "area": 46.4,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B1002",
+    "building": "B",
+    "floor": 10,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B1003",
+    "building": "B",
+    "floor": 10,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1004",
+    "building": "B",
+    "floor": 10,
+    "area": 68.3,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1005",
+    "building": "B",
+    "floor": 10,
+    "area": 34.6,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1006",
+    "building": "B",
+    "floor": 10,
+    "area": 34.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1007",
+    "building": "B",
+    "floor": 10,
+    "area": 33.7,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1008",
+    "building": "B",
+    "floor": 10,
+    "area": 33.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1009",
+    "building": "B",
+    "floor": 10,
+    "area": 32.8,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1010",
+    "building": "B",
+    "floor": 10,
+    "area": 32.2,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1011",
+    "building": "B",
+    "floor": 10,
+    "area": 61.5,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1012",
+    "building": "B",
+    "floor": 10,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1101",
+    "building": "B",
+    "floor": 11,
+    "area": 46.4,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B1102",
+    "building": "B",
+    "floor": 11,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B1103",
+    "building": "B",
+    "floor": 11,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1104",
+    "building": "B",
+    "floor": 11,
+    "area": 68.3,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1105",
+    "building": "B",
+    "floor": 11,
+    "area": 34.6,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1106",
+    "building": "B",
+    "floor": 11,
+    "area": 34.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1107",
+    "building": "B",
+    "floor": 11,
+    "area": 33.7,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1108",
+    "building": "B",
+    "floor": 11,
+    "area": 33.1,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1109",
+    "building": "B",
+    "floor": 11,
+    "area": 32.8,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1110",
+    "building": "B",
+    "floor": 11,
+    "area": 32.2,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1111",
+    "building": "B",
+    "floor": 11,
+    "area": 61.5,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1112",
+    "building": "B",
+    "floor": 11,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1202",
+    "building": "B",
+    "floor": 12,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B1203",
+    "building": "B",
+    "floor": 12,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1204",
+    "building": "B",
+    "floor": 12,
+    "area": 68.3,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1205",
+    "building": "B",
+    "floor": 12,
+    "area": 34.6,
+    "orientation": "Not specified",
+    "type": "Studio"
+  },
+  {
+    "code": "B1211",
+    "building": "B",
+    "floor": 12,
+    "area": 61.5,
+    "orientation": "Not specified",
+    "type": "Apartment"
+  },
+  {
+    "code": "B1212",
+    "building": "B",
+    "floor": 12,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1302",
+    "building": "B",
+    "floor": 13,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B1303",
+    "building": "B",
+    "floor": 13,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1304",
+    "building": "B",
+    "floor": 13,
+    "area": 62,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1311",
+    "building": "B",
+    "floor": 13,
+    "area": 64.8,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1312",
+    "building": "B",
+    "floor": 13,
+    "area": 59.1,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1402",
+    "building": "B",
+    "floor": 14,
+    "area": 53,
+    "orientation": "Not specified",
+    "type": "1 Bedroom"
+  },
+  {
+    "code": "B1403",
+    "building": "B",
+    "floor": 14,
+    "area": 65.9,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  },
+  {
+    "code": "B1404",
+    "building": "B",
+    "floor": 14,
+    "area": 62,
+    "orientation": "Not specified",
+    "type": "Apartment"
+  },
+  {
+    "code": "B1411",
+    "building": "B",
+    "floor": 14,
+    "area": 64.8,
+    "orientation": "Not specified",
+    "type": "2 Bedrooms"
+  }
+]

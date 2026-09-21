@@ -13,8 +13,8 @@ import {
   normalizeReveranceInputs,
   reveranceCalculatorAssumptions,
   reveranceCalculatorRanges,
-  additionalAvailableReveranceUnits,
-  approvedReveranceUnits,
+  regularReveranceUnits,
+  premiumReveranceUnits,
   type CalculatorInputs,
 } from "@/lib/reverance-investment-calculator";
 import { getGoldenPremiumUnit } from "@/data/golden-premium-apartments";
@@ -230,16 +230,16 @@ export function ReveranceInvestmentCalculator() {
                     onChange={(event) => updateInput("unitCode", event.target.value)}
                     className="min-h-14 w-full appearance-none border border-[#161616]/18 bg-[#FAF8F3] px-4 text-base font-medium text-[#161616] outline-none transition-colors focus:border-[#8B6A18] focus:ring-2 focus:ring-[#8B6A18]/20"
                   >
-                    <optgroup label={tx("Approved shortlist")}>
-                      {approvedReveranceUnits.map((candidate) => (
+                    <optgroup label={tx("Regular apartments")}>
+                      {regularReveranceUnits.map((candidate) => (
                         <option key={candidate.code} value={candidate.code}>
-                          {candidate.code} · {tx(candidate.type)} · {formatNumber(candidate.area, lang)} m² · {tx(candidate.orientation)}
+                          {candidate.code} · {tx(candidate.type)} · {formatNumber(candidate.area, lang)} m²
                         </option>
                       ))}
                     </optgroup>
-                    <optgroup label={tx("Other available Golden Premium apartments")}>
-                      {additionalAvailableReveranceUnits.map((candidate) => (
-                        <option key={candidate.code} value={candidate.code}>
+                    <optgroup label={tx("GOLDEN PREMIUM")}>
+                      {premiumReveranceUnits.map((candidate) => (
+                        <option key={candidate.code} value={candidate.code} style={{ color: "#9B6D15" }}>
                           {candidate.code} · {tx(candidate.type)} · {formatNumber(candidate.area, lang)} m² · {tx(candidate.orientation)}
                         </option>
                       ))}

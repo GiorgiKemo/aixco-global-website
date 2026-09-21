@@ -1,4 +1,5 @@
 import { GOLDEN_PREMIUM_APARTMENTS } from "@/data/golden-premium-apartments";
+import regularStock from "@/data/reverance-regular-stock.json";
 
 export type ReveranceUnit = {
   code: string;
@@ -7,8 +8,8 @@ export type ReveranceUnit = {
   area: number;
   livingArea?: number;
   terraceArea?: number;
-  orientation: "City side" | "Courtyard" | "Sea view" | "Adjara mountains";
-  type: "Studio" | "1 Bedroom";
+  orientation: "City side" | "Courtyard" | "Sea view" | "Adjara mountains" | "Not specified";
+  type: "Studio" | "1 Bedroom" | "2 Bedrooms" | "Apartment";
 };
 
 export type CalculatorInputs = {
@@ -112,7 +113,11 @@ export const additionalAvailableReveranceUnits: readonly ReveranceUnit[] = GOLDE
 export const reveranceUnits: readonly ReveranceUnit[] = [
   ...approvedReveranceUnits,
   ...additionalAvailableReveranceUnits,
+  ...regularStock as ReveranceUnit[],
 ];
+
+export const regularReveranceUnits: readonly ReveranceUnit[] = regularStock as ReveranceUnit[];
+export const premiumReveranceUnits = [...approvedReveranceUnits, ...additionalAvailableReveranceUnits];
 
 export function isApprovedReveranceUnit(unitOrCode: ReveranceUnit | string) {
   const code = typeof unitOrCode === "string" ? unitOrCode : unitOrCode.code;

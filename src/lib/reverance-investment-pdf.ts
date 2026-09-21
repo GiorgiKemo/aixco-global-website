@@ -11,6 +11,10 @@ import { isGoldenPremiumUnit } from "@/data/golden-premium-apartments";
 import catalog from "../../public/aixco-global-op2/images/reverance-offer/catalog.json";
 
 type ReveranceArtwork = {
+  planFile: string;
+  roomsFile: string | null;
+  floorFile: string;
+  floorReference?: boolean;
   floor: number;
   points: readonly { x: number; y: number }[];
   areas: readonly { type: string; size: number }[];
@@ -34,17 +38,18 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
   const t = (value: string) => translateReveranceCalculatorText(value, lang);
   const goldenPremium = isGoldenPremiumUnit(a.unit.code);
   const suppliedArtwork = artworkCatalog[a.unit.code];
-  const hasUnitArtwork = Boolean(suppliedArtwork);
-  const art = suppliedArtwork ?? { floor: a.unit.floor, points: [], areas: [] };
+  if (!suppliedArtwork) throw Error("Missing apartment artwork catalog entry");
+  const hasUnitArtwork = !suppliedArtwork.floorReference;
+  const art = suppliedArtwork;
   if (!c || (clientName?.length ?? 0) > 100 || (clientAddress?.length ?? 0) > 300) throw Error("Invalid PDF details");
   const planCaption = hasUnitArtwork ? c.plan : t("Floor reference");
   const planDescription = hasUnitArtwork
     ? c.planNote
     : t("The supplied workbook confirms this available unit. A unit-specific floor plan was not included in the supplied artwork; request and confirm the current plan before reservation.");
-  const roomHeading = hasUnitArtwork ? c.rooms : t("Furnished project reference");
-  const roomDescription = hasUnitArtwork
+  const roomHeading = art.roomsFile ? c.rooms : t("Room layout awaiting confirmation");
+  const roomDescription = art.roomsFile
     ? c.roomNote
-    : t("The selected unit's furnished room artwork was not supplied. This project reference is illustrative only; request the current approved room layout before reservation.");
+    : t("The room-plan area differs from the stock workbook. No substitute apartment is shown. Request the confirmed room layout before reservation.");
   const cash = calculateReveranceInvestment({ ...a.inputs, financingPercent: 0 });
   const money = (value: number) => new Intl.NumberFormat(lang, {style:"currency",currency:"EUR",maximumFractionDigits:0}).format(value);
   const num = (value: number, digits = 1) => new Intl.NumberFormat(lang,{maximumFractionDigits:digits}).format(value);
@@ -114,10 +119,12 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
     return p;
   }
   const assetDir=path.join(process.cwd(),"public/aixco-global-op2/images/reverance-offer");
-  const planFile = hasUnitArtwork ? a.unit.code+"-plan.png" : "floor-"+art.floor+".jpg";
-  const roomsFile = hasUnitArtwork ? a.unit.code+"-rooms.jpg" : "A1305-rooms.jpg";
-  const imageBytes = await Promise.all([planFile,roomsFile,"floor-"+art.floor+".jpg","hero.jpg"].map(file=>fs.readFile(path.join(assetDir,file))));
-  const [plan,rooms,floor,hero] = await Promise.all(imageBytes.map((bytes,i)=>i===0 && hasUnitArtwork?doc.embedPng(new Uint8Array(bytes)):doc.embedJpg(new Uint8Array(bytes))));
+  async function embed(file: string) {
+    const bytes = new Uint8Array(await fs.readFile(path.join(assetDir,file)));
+    return file.endsWith(".png") ? doc.embedPng(bytes) : doc.embedJpg(bytes);
+  }
+  const [plan,floor,hero] = await Promise.all([art.planFile,art.floorFile,"hero.jpg"].map(embed));
+  const rooms = art.roomsFile ? await embed(art.roomsFile) : null;
 
   // 1. The selected offer, with supplied individual artwork or a floor reference.
   {
@@ -195,7 +202,7 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
     if (art.areas.length) {
       for(const area of art.areas) {
         top=wrap(p,labels[area.type] ?? t("Area"),x,top,w,9);
-        text(p,num(area.size,2)+" m²",x,top+3,11,true); top+=32;
+        text(p,num(area.size,2)+" m²",x,top+3,11,true); top+=art.areas.length > 5 ? 19 : 32;
       }
     } else {
       top=wrap(p,t("Room measurements were not supplied for this unit."),x,top,w,9,false,C.muted);
@@ -210,14 +217,15 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
     } else {
       wrap(p,t("No apartment-specific floor outline was supplied for this unit."),M+20,507,WIDTH-40,8,false,C.muted);
     }
-    wrap(p,hasUnitArtwork ? c.mapNote : t("The floor image shows the building position; the apartment outline will be added after the current plan is confirmed."),M+12,733,WIDTH-24,8,true,C.bronze);
+    wrap(p,c.mapNote,M+12,733,WIDTH-24,8,true,C.bronze);
     text(p,c.source,M,772,7,false,C.muted);
   }
   // 4. A dedicated furnished-room example, not generic stock photography.
   {
     const p=page();
     heading(p,t("Apartment")+" "+a.unit.code,roomHeading,roomDescription);
-    contain(p,rooms,M,183,WIDTH,480);
+    if (rooms) contain(p,rooms,M,183,WIDTH,480);
+    else wrap(p,roomDescription,M,300,WIDTH,15,false,C.muted);
     rect(p,M,698,WIDTH,69,C.fog);
     wrap(p,roomDescription,M+14,711,WIDTH-28,9,false,C.muted);
     text(p,c.source,M,778,7,false,C.muted);
