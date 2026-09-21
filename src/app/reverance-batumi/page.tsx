@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { reveranceStockCopy } from "@/data/reverance-stock-copy";
 import { BrandbookLandingPage } from "@/components/sections/BrandbookLandingPage";
 import { ClientShell } from "../client-shell";
 import { fetchSiteContentForServer } from "@/lib/backend/site-content-server";
@@ -7,8 +8,7 @@ import { JsonLd } from "@/components/JsonLd";
 
 const routePath = "/reverance-batumi";
 const pageTitle = "Project Reverance Batumi | AIXCO.Global";
-const pageDescription =
-  "Explore Project Reverance in Batumi's New Boulevard with AIXCO.Global: 24 available apartments and 4 reserved units from a selected 28-apartment inventory, transparent guidance, and completion targeted for July 2028.";
+const pageDescription = reveranceStockCopy.metadata;
 
 export const metadata: Metadata = {
   title: pageTitle,

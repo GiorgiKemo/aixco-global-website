@@ -18,6 +18,8 @@ import { polishContentTranslations } from "./polish-content-translations";
 import { polishRuntimeTranslations } from "./polish-runtime-translations";
 import { propertyPageTranslations } from "./property-page-translations";
 import { reveranceCalculatorTranslations } from "./reverance-calculator-translations";
+import { reveranceStockTranslations } from "./reverance-stock-translations";
+import { reveranceStockCopy } from "@/data/reverance-stock-copy";
 import { russianTranslationFixes } from "./russian-translation-fixes";
 import { slovenianClientRevisions } from "./slovenian-client-revisions";
 import { slovenianTranslationFixes } from "./slovenian-translation-fixes";
@@ -29,8 +31,7 @@ const HOME_METADATA_TITLE = "AIXCO.Global | Real Estate Investment";
 const HOME_METADATA_DESCRIPTION =
   "Explore selected real estate opportunities with transparent euro pricing from EUR 45,000, brokerage, and property administration through AIXCO.";
 const REVERANCE_METADATA_TITLE = "Project Reverance Batumi | AIXCO.Global";
-const REVERANCE_METADATA_DESCRIPTION =
-  "Explore Project Reverance in Batumi's New Boulevard with AIXCO.Global: 24 available apartments and 4 reserved units from a selected 28-apartment inventory, transparent guidance, and completion targeted for July 2028.";
+const REVERANCE_METADATA_DESCRIPTION = reveranceStockCopy.metadata;
 const MEDICAL_TOURISM_METADATA_TITLE = "Medical Tourism in Georgia | AIXCO.Global";
 const MEDICAL_TOURISM_METADATA_DESCRIPTION =
   "Plan medical treatment in Georgia with AIXCO.Global: 50-80% lower costs than Western Europe, named private clinics, and recovery on the Black Sea coast in Batumi.";
@@ -1860,6 +1861,7 @@ const siteProgressTranslations: TranslationSource = {
 };
 
 const baseCatalogSources: TranslationSource[] = [
+  reveranceStockTranslations,
   landingPageReauditQualityTranslations,
   georgiaResidencyTranslations,
   medicalTourismTranslations,
@@ -1901,6 +1903,7 @@ function loadTranslationCatalogs() {
     return {
       attributes,
       sources: [
+        reveranceStockTranslations,
         landingPageReauditQualityTranslations,
         georgiaResidencyTranslations,
         medicalTourismTranslations,

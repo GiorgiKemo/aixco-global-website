@@ -16,10 +16,9 @@ describe("current Batumi project data", () => {
         { label: "Completion", value: "Jul 2028", subtext: "target" },
       ],
     });
-    expect(project?.summary).toContain("28-apartment inventory");
-    expect(project?.summary).toContain("24 are currently available");
-    expect(project?.summary).toContain("4 are reserved");
-    expect(project?.summary).toContain("13th and 14th floors");
+    expect(project?.summary).toContain("regular and Golden Premium apartments");
+    expect(project?.summary).toContain("both buildings");
+    expect(project?.summary).not.toMatch(/28-apartment|24 are|4 are reserved|13th and 14th/);
     expect(project?.summary).toContain("July 2028");
     expect(project?.summary).toMatch(/^Selected residences in one of Batumi's most dynamic coastal districts/);
     expect(JSON.stringify(project)).not.toMatch(/by Otium/i);
@@ -29,7 +28,7 @@ describe("current Batumi project data", () => {
     });
     expect(project?.highlights).toContainEqual({
       label: "Current availability",
-      value: "24 available apartments and 4 reserved units across the 13th and 14th floors.",
+      value: "Available regular and Golden Premium apartments across both buildings.",
     });
   });
 

@@ -121,6 +121,7 @@ function DetailRow({ label, value, strong = false }: { label: string; value: Rea
 export function ReveranceInvestmentCalculator() {
   const { lang, tx } = useI18n();
   const [inputs, setInputs] = useState<CalculatorInputs>(defaultReveranceCalculatorInputs);
+  const [showPriceControl, setShowPriceControl] = useState(true);
   const [clientName, setClientName] = useState("");
   const [clientAddress, setClientAddress] = useState("");
   const [pdfState, setPdfState] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -213,6 +214,15 @@ export function ReveranceInvestmentCalculator() {
               <p className="max-w-[30rem] text-base leading-[1.55] text-[#161616]/62">{tx("The model translates your inputs into purchase price, financing, net monthly rent and a projected net worth.")}</p>
             </div>
 
+            <div className="mt-8 flex flex-wrap gap-3" role="group" aria-label={tx("Calculator version")}>
+              {[true, false].map((full) => (
+                <button key={String(full)} type="button" aria-pressed={showPriceControl === full} onClick={() => setShowPriceControl(full)} className={`min-h-12 max-w-full border border-[#161616]/30 px-5 py-3 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8B6A18] ${showPriceControl === full ? "bg-[#002147] text-white" : "bg-white text-[#161616]"}`}>
+                  {tx(full ? "Full calculator" : "Without price control")}
+                </button>
+              ))}
+            </div>
+            {!showPriceControl && <p className="mt-4 max-w-[65ch] text-sm leading-relaxed text-[#161616]/70">{tx("This version retains the price assumption from the full calculator. Switching versions does not change the figures. This is not an approved apartment quote.")}</p>}
+
             <div className="mt-10 grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:gap-8">
               <section className="min-w-0 border border-[#161616]/12 bg-[#F3EDE1] p-4 sm:p-8 lg:p-10" aria-labelledby="calculator-controls-heading">
                 <div className="flex items-start justify-between gap-4">
@@ -262,7 +272,7 @@ export function ReveranceInvestmentCalculator() {
                 </div>
 
                 <div className="mt-8 grid gap-8">
-                  <ControlRange label={tx("Price per m²")} value={inputs.pricePerSquareMetre} min={reveranceCalculatorRanges.pricePerSquareMetre.min} max={reveranceCalculatorRanges.pricePerSquareMetre.max} step={reveranceCalculatorRanges.pricePerSquareMetre.step} display={<CurrencyValue value={inputs.pricePerSquareMetre} lang={lang} />} onChange={(value) => updateInput("pricePerSquareMetre", value)} />
+                  {showPriceControl && <ControlRange label={tx("Price per m²")} value={inputs.pricePerSquareMetre} min={reveranceCalculatorRanges.pricePerSquareMetre.min} max={reveranceCalculatorRanges.pricePerSquareMetre.max} step={reveranceCalculatorRanges.pricePerSquareMetre.step} display={<CurrencyValue value={inputs.pricePerSquareMetre} lang={lang} />} onChange={(value) => updateInput("pricePerSquareMetre", value)} />}
                   <ControlRange label={tx("Down payment")} value={inputs.downPaymentPercent} min={reveranceCalculatorRanges.downPaymentPercent.min} max={reveranceCalculatorRanges.downPaymentPercent.max} step={reveranceCalculatorRanges.downPaymentPercent.step} display={formatPercent(inputs.downPaymentPercent, lang)} suffix="%" onChange={(value) => updateInput("downPaymentPercent", value)} />
                   <ControlRange label={tx("Financing")} value={inputs.financingPercent} min={reveranceCalculatorRanges.financingPercent.min} max={Math.min(reveranceCalculatorRanges.financingPercent.max, 100 - inputs.downPaymentPercent)} step={reveranceCalculatorRanges.financingPercent.step} display={formatPercent(inputs.financingPercent, lang)} suffix="%" onChange={(value) => updateInput("financingPercent", value)} />
                   <p className="text-sm leading-relaxed text-[#161616]/70">{tx("Down payment + construction installments + financing = 100%. Increasing the down payment reduces financing automatically if needed. Illustrative only; confirm payment terms with the developer.")}</p>

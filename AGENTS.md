@@ -10,6 +10,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Reverance client offers
 
+- September 21 audit follow-up: retain the full calculator and provide a second view without its price-per-square-metre control. Both views share the same scenario and PDF inputs; switching must not change any amounts. Label the retained price as an illustrative assumption, never an approved quote. Do not change financing limits or infer prices for regular stock.
+
 - September 21 inventory correction: both owner lists govern the calculator: 141 available regular apartments plus 22 available Golden Premium apartments, deduplicated by block + number. Only Golden-list codes are premium. Exclude reserved and NFS units; newer Golden status overrides older Owned status. Use exact block-specific artwork and disclose conflicting room metadata without substituting another unit.
 
 - September 21, 2026: make the initial down-payment percentage adjustable, preserving the 10% default and 24-month construction schedule. Down payment, construction instalments and financing must sum to the price. Cap financing at the unpaid share (and the existing 70% limit); use the same normalized inputs in the UI and PDF. Payment percentages are illustrative, not approved developer terms.

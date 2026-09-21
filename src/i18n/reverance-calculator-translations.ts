@@ -3,6 +3,15 @@ import type { CatalogLang, Lang } from "./languages";
 type TranslationSource = Partial<Record<string, Partial<Record<CatalogLang, string>>>>;
 
 export const reveranceCalculatorTranslations: TranslationSource = {
+  "Calculator version": { de: "Rechnerversion", pl: "Wersja kalkulatora", sl: "Različica kalkulatorja", ru: "Версия калькулятора" },
+  "Full calculator": { de: "Vollständiger Rechner", pl: "Pełny kalkulator", sl: "Celoten kalkulator", ru: "Полный калькулятор" },
+  "Without price control": { de: "Ohne Preisregler", pl: "Bez regulacji ceny", sl: "Brez nastavitve cene", ru: "Без изменения цены" },
+  "This version retains the price assumption from the full calculator. Switching versions does not change the figures. This is not an approved apartment quote.": {
+    de: "Diese Version übernimmt die Preisannahme aus dem vollständigen Rechner. Ein Versionswechsel ändert die Zahlen nicht. Dies ist kein bestätigtes Wohnungsangebot.",
+    pl: "Ta wersja zachowuje założenie cenowe z pełnego kalkulatora. Zmiana wersji nie zmienia wyników. Nie jest to zatwierdzona oferta cenowa apartamentu.",
+    sl: "Ta različica ohrani cenovno predpostavko iz celotnega kalkulatorja. Preklop različice ne spremeni izračuna. To ni potrjena cenovna ponudba za apartma.",
+    ru: "Эта версия сохраняет ценовое допущение полного калькулятора. Переключение версий не меняет расчёт. Это не подтверждённое ценовое предложение на квартиру.",
+  },
   "Monthly construction payment": { de: "Monatliche Bauzahlung", pl: "Miesięczna rata budowlana", sl: "Mesečni obrok med gradnjo", ru: "Ежемесячный платёж на этапе строительства" },
   "Down payment + construction installments + financing = 100%. Increasing the down payment reduces financing automatically if needed. Illustrative only; confirm payment terms with the developer.": {
     de: "Anzahlung + Bauzahlungen + Finanzierung = 100 %. Eine höhere Anzahlung reduziert bei Bedarf automatisch die Finanzierung. Nur zur Veranschaulichung; Zahlungsbedingungen mit dem Bauträger bestätigen.",
