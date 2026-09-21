@@ -10,6 +10,14 @@ import { calculateReveranceInvestment, type InvestmentCalculation } from "./reve
 import { isGoldenPremiumUnit } from "@/data/golden-premium-apartments";
 import catalog from "../../public/aixco-global-op2/images/reverance-offer/catalog.json";
 
+type ReveranceArtwork = {
+  floor: number;
+  points: readonly { x: number; y: number }[];
+  areas: readonly { type: string; size: number }[];
+};
+
+const artworkCatalog = catalog as Record<string, ReveranceArtwork>;
+
 const W = 595.28, H = 841.89, M = 48, WIDTH = W - 2 * M;
 const C = {
   dark: rgb(16/255,28/255,24/255), ink: rgb(23/255,34/255,30/255),
@@ -25,8 +33,18 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
   const c = OFFER_COPY[lang];
   const t = (value: string) => translateReveranceCalculatorText(value, lang);
   const goldenPremium = isGoldenPremiumUnit(a.unit.code);
-  const art = catalog[a.unit.code as keyof typeof catalog];
-  if (!art || !c || (clientName?.length ?? 0) > 100 || (clientAddress?.length ?? 0) > 300) throw Error("Invalid PDF details");
+  const suppliedArtwork = artworkCatalog[a.unit.code];
+  const hasUnitArtwork = Boolean(suppliedArtwork);
+  const art = suppliedArtwork ?? { floor: a.unit.floor, points: [], areas: [] };
+  if (!c || (clientName?.length ?? 0) > 100 || (clientAddress?.length ?? 0) > 300) throw Error("Invalid PDF details");
+  const planCaption = hasUnitArtwork ? c.plan : t("Floor reference");
+  const planDescription = hasUnitArtwork
+    ? c.planNote
+    : t("The supplied workbook confirms this available unit. A unit-specific floor plan was not included in the supplied artwork; request and confirm the current plan before reservation.");
+  const roomHeading = hasUnitArtwork ? c.rooms : t("Furnished project reference");
+  const roomDescription = hasUnitArtwork
+    ? c.roomNote
+    : t("The selected unit's furnished room artwork was not supplied. This project reference is illustrative only; request the current approved room layout before reservation.");
   const cash = calculateReveranceInvestment({ ...a.inputs, financingPercent: 0 });
   const money = (value: number) => new Intl.NumberFormat(lang, {style:"currency",currency:"EUR",maximumFractionDigits:0}).format(value);
   const num = (value: number, digits = 1) => new Intl.NumberFormat(lang,{maximumFractionDigits:digits}).format(value);
@@ -96,10 +114,12 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
     return p;
   }
   const assetDir=path.join(process.cwd(),"public/aixco-global-op2/images/reverance-offer");
-  const imageBytes = await Promise.all([a.unit.code+"-plan.png",a.unit.code+"-rooms.jpg","floor-"+art.floor+".jpg","hero.jpg"].map(file=>fs.readFile(path.join(assetDir,file))));
-  const [plan,rooms,floor,hero] = await Promise.all(imageBytes.map((bytes,i)=>i===0?doc.embedPng(new Uint8Array(bytes)):doc.embedJpg(new Uint8Array(bytes))));
+  const planFile = hasUnitArtwork ? a.unit.code+"-plan.png" : "floor-"+art.floor+".jpg";
+  const roomsFile = hasUnitArtwork ? a.unit.code+"-rooms.jpg" : "A1305-rooms.jpg";
+  const imageBytes = await Promise.all([planFile,roomsFile,"floor-"+art.floor+".jpg","hero.jpg"].map(file=>fs.readFile(path.join(assetDir,file))));
+  const [plan,rooms,floor,hero] = await Promise.all(imageBytes.map((bytes,i)=>i===0 && hasUnitArtwork?doc.embedPng(new Uint8Array(bytes)):doc.embedJpg(new Uint8Array(bytes))));
 
-  // 1. The selected offer, with its actual individual plan on the cover.
+  // 1. The selected offer, with supplied individual artwork or a floor reference.
   {
     const p=page();
     rect(p,0,0,W,340,C.dark);
@@ -110,7 +130,7 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
     wrap(p,t("Apartment").toUpperCase(),M,144,260,24,true,C.white);
     rule(p,204,M,118,C.bronze);
     text(p,a.unit.code,M,227,23,true,C.white);
-    wrap(p,t(a.unit.type)+" | "+t("Building")+" A | "+t("Floor")+" "+a.unit.floor,M,267,260,10,false,C.light);
+    wrap(p,t(a.unit.type)+" | "+t("Building")+" "+a.unit.building+" | "+t("Floor")+" "+a.unit.floor,M,267,260,10,false,C.light);
     text(p,c.offer.toUpperCase(),M,365,9,true,C.bronze);
     if (goldenPremium) text(p,t("GOLDEN PREMIUM APARTMENT").toUpperCase(),M,384,9,true,C.bronze);
     text(p,c.prepared+": "+new Intl.DateTimeFormat(lang).format(new Date()),M,402,8,false,C.muted);
@@ -126,9 +146,9 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
       text(p,value,x+12,cardTop+29,13,true,i===2?C.bronze:C.ink);
     });
     const planTop=cardTop+77;
-    wrap(p,c.plan,M,planTop,265,8,true,C.bronze);
+    wrap(p,planCaption, M,planTop,265,8,true,C.bronze);
     contain(p,plan,M,planTop+22,270,145);
-    wrap(p,c.planNote,338,planTop+25,W-M-338,9,false,C.muted);
+    wrap(p,planDescription,338,planTop+25,W-M-338,9,false,C.muted);
     wrap(p,t("Illustrative only"),338,planTop+104,W-M-338,9,true,C.sea);
   }
   // 2. Both payment scenarios use exactly the website calculator formulas.
@@ -164,34 +184,42 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
   // 3. Architectural plan, room measurements, and exact floor position.
   {
     const p=page();
-    heading(p,t("The asset"),t("Apartment")+" "+a.unit.code,c.planNote);
+    heading(p,t("The asset"),t("Apartment")+" "+a.unit.code,planDescription);
     rect(p,M,168,275,266,C.fog);
-    wrap(p,c.plan,M+12,181,251,8,true,C.bronze);
+    wrap(p,planCaption,M+12,181,251,8,true,C.bronze);
     contain(p,plan,M+8,212,259,207);
     const x=342, w=W-M-x;
     text(p,c.roomAreas.toUpperCase(),x,181,8,true,C.bronze);
     let top=211;
     const labels:Record<string,string>={living_room_and_kitchen:c.living,bathroom:c.bathroom,bedroom:c.bedroom,balcony:c.balcony,hallway:c.hallway};
-    for(const area of art.areas) {
-      top=wrap(p,labels[area.type] ?? t("Area"),x,top,w,9);
-      text(p,num(area.size,2)+" m²",x,top+3,11,true); top+=32;
+    if (art.areas.length) {
+      for(const area of art.areas) {
+        top=wrap(p,labels[area.type] ?? t("Area"),x,top,w,9);
+        text(p,num(area.size,2)+" m²",x,top+3,11,true); top+=32;
+      }
+    } else {
+      top=wrap(p,t("Room measurements were not supplied for this unit."),x,top,w,9,false,C.muted);
     }
     wrap(p,c.areaNote,x,top+4,w,7.5,false,C.muted);
-    text(p,c.location.toUpperCase()+" | A / "+art.floor,M,468,8,true,C.bronze);
+    text(p,c.location.toUpperCase()+" | "+a.unit.building+" / "+art.floor,M,468,8,true,C.bronze);
     rect(p,M,492,WIDTH,268,C.fog);
     const box=contain(p,floor,M+10,499,WIDTH-20,229);
-    const polygon=art.points.map((point,i)=>(i?"L":"M")+" "+point.x*box.width/100+" "+point.y*box.height/100).join(" ")+" Z";
-    p.drawSvgPath(polygon,{x:box.x,y:box.y+box.height,color:C.bronze,opacity:.4,borderColor:C.bronze,borderWidth:1.3});
-    wrap(p,c.mapNote,M+12,733,WIDTH-24,8,true,C.bronze);
+    if (art.points.length > 2) {
+      const polygon=art.points.map((point,i)=>(i?"L":"M")+" "+point.x*box.width/100+" "+point.y*box.height/100).join(" ")+" Z";
+      p.drawSvgPath(polygon,{x:box.x,y:box.y+box.height,color:C.bronze,opacity:.4,borderColor:C.bronze,borderWidth:1.3});
+    } else {
+      wrap(p,t("No apartment-specific floor outline was supplied for this unit."),M+20,507,WIDTH-40,8,false,C.muted);
+    }
+    wrap(p,hasUnitArtwork ? c.mapNote : t("The floor image shows the building position; the apartment outline will be added after the current plan is confirmed."),M+12,733,WIDTH-24,8,true,C.bronze);
     text(p,c.source,M,772,7,false,C.muted);
   }
   // 4. A dedicated furnished-room example, not generic stock photography.
   {
     const p=page();
-    heading(p,t("Apartment")+" "+a.unit.code,c.rooms,c.roomNote);
+    heading(p,t("Apartment")+" "+a.unit.code,roomHeading,roomDescription);
     contain(p,rooms,M,183,WIDTH,480);
     rect(p,M,698,WIDTH,69,C.fog);
-    wrap(p,c.roomNote,M+14,711,WIDTH-28,9,false,C.muted);
+    wrap(p,roomDescription,M+14,711,WIDTH-28,9,false,C.muted);
     text(p,c.source,M,778,7,false,C.muted);
   }
   // 5. Financing and cash purchase remain separately labelled throughout.

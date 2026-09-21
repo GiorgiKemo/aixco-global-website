@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { PDFDocument } from "pdf-lib";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { reveranceUnits } from "./reverance-investment-calculator";
+import { additionalAvailableReveranceUnits, approvedReveranceUnits } from "./reverance-investment-calculator";
 import { OFFER_COPY } from "@/i18n/reverance-offer-copy";
 
 async function saveQa(name: string, bytes: Uint8Array) {
@@ -49,7 +49,12 @@ describe("Reverance localized PDF brief", () => {
     expect((await PDFDocument.load(bytes)).getPageCount()).toBe(6);
     await saveQa("long-ru", bytes);
   });
-  it.each(reveranceUnits)("uses the matching artwork for $code", async unit => {
+  it.each(approvedReveranceUnits)("uses the matching artwork for $code", async unit => {
+    const bytes = await generateReveranceInvestmentPdf({ calculation: calculateReveranceInvestment({unitCode:unit.code}), lang:"en" });
+    expect((await PDFDocument.load(bytes)).getPageCount()).toBe(6);
+    await saveQa(unit.code, bytes);
+  });
+  it.each(additionalAvailableReveranceUnits)("generates a six-page fallback brief for the available $code unit", async unit => {
     const bytes = await generateReveranceInvestmentPdf({ calculation: calculateReveranceInvestment({unitCode:unit.code}), lang:"en" });
     expect((await PDFDocument.load(bytes)).getPageCount()).toBe(6);
     await saveQa(unit.code, bytes);

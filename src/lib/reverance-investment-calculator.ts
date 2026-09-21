@@ -1,3 +1,5 @@
+import { GOLDEN_PREMIUM_APARTMENTS } from "@/data/golden-premium-apartments";
+
 export type ReveranceUnit = {
   code: string;
   building: "A" | "B";
@@ -75,7 +77,13 @@ export const reveranceCalculatorRanges = {
   holdingYears: { min: 1, max: 15, step: 1 },
 } as const;
 
-export const reveranceUnits: readonly ReveranceUnit[] = [
+export const APPROVED_REVERANCE_UNIT_CODES = [
+  "A1305", "A1306", "A1307", "A1308", "A1309", "A1310", "A1401", "A1405", "A1407", "A1408",
+] as const;
+
+const APPROVED_REVERANCE_UNIT_CODE_SET = new Set<string>(APPROVED_REVERANCE_UNIT_CODES);
+
+export const approvedReveranceUnits: readonly ReveranceUnit[] = [
   // Klem's approved sea-view shortlist, 21 September 2026.
   // Only total areas were supplied; do not infer interior/terrace measurements.
   { code: "A1305", building: "A", floor: 13, area: 32.4, orientation: "Sea view", type: "Studio" },
@@ -89,6 +97,27 @@ export const reveranceUnits: readonly ReveranceUnit[] = [
   { code: "A1407", building: "A", floor: 14, area: 32.4, orientation: "Sea view", type: "Studio" },
   { code: "A1408", building: "A", floor: 14, area: 32.3, orientation: "Sea view", type: "Studio" },
 ] as const;
+
+export const additionalAvailableReveranceUnits: readonly ReveranceUnit[] = GOLDEN_PREMIUM_APARTMENTS
+  .filter((unit) => unit.status === "available" && !APPROVED_REVERANCE_UNIT_CODE_SET.has(unit.code))
+  .map((unit) => ({
+    code: unit.code,
+    building: unit.building,
+    floor: unit.floor,
+    area: unit.area,
+    orientation: "Sea view" as const,
+    type: unit.area >= 40 ? "1 Bedroom" as const : "Studio" as const,
+  }));
+
+export const reveranceUnits: readonly ReveranceUnit[] = [
+  ...approvedReveranceUnits,
+  ...additionalAvailableReveranceUnits,
+];
+
+export function isApprovedReveranceUnit(unitOrCode: ReveranceUnit | string) {
+  const code = typeof unitOrCode === "string" ? unitOrCode : unitOrCode.code;
+  return APPROVED_REVERANCE_UNIT_CODE_SET.has(code);
+}
 
 export const defaultReveranceCalculatorInputs: CalculatorInputs = {
   unitCode: "A1305",

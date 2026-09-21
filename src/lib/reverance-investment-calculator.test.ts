@@ -5,6 +5,8 @@ import {
   defaultReveranceCalculatorInputs,
   normalizeReveranceInputs,
   remainingLoanBalance,
+  additionalAvailableReveranceUnits,
+  approvedReveranceUnits,
   reveranceUnits,
   findReveranceUnit,
 } from "./reverance-investment-calculator";
@@ -71,13 +73,19 @@ describe("Reverance investment model", () => {
     expect(normalizeReveranceInputs({ downPaymentPercent: -10 }).downPaymentPercent).toBe(0);
     expect(normalizeReveranceInputs({ downPaymentPercent: 110 }).downPaymentPercent).toBe(100);
   });
-  it("offers exactly Klem's approved sea-view units and areas", () => {
-    expect(reveranceUnits.map(({ code, area }) => [code, area])).toEqual([
+  it("offers the approved shortlist plus every other available Golden Premium apartment", () => {
+    expect(approvedReveranceUnits.map(({ code, area }) => [code, area])).toEqual([
       ["A1305", 32.4], ["A1306", 32.3], ["A1307", 32.4], ["A1308", 32.3],
       ["A1309", 32.4], ["A1310", 32.3], ["A1401", 46.4], ["A1405", 32.4],
       ["A1407", 32.4], ["A1408", 32.3],
     ]);
-    expect(reveranceUnits.every((unit) => unit.building === "A" && [13, 14].includes(unit.floor) && unit.orientation === "Sea view")).toBe(true);
+    expect(additionalAvailableReveranceUnits.map(({ code, area }) => [code, area])).toEqual([
+      ["B1301", 46.4], ["B1307", 32.4], ["B1308", 32.3], ["B1309", 32.4], ["B1310", 32.3],
+      ["B1401", 46.4], ["B1405", 32.4], ["B1406", 32.3], ["B1407", 32.4], ["B1408", 32.3],
+      ["B1409", 32.4], ["B1410", 32.3],
+    ]);
+    expect(reveranceUnits).toHaveLength(22);
+    expect(reveranceUnits.every((unit) => [13, 14].includes(unit.floor) && unit.orientation === "Sea view")).toBe(true);
     expect(findReveranceUnit("A1401").type).toBe("1 Bedroom");
     expect(reveranceUnits.every((unit) => isGoldenPremiumUnit(unit.code))).toBe(true);
     expect(findReveranceUnit("retired").code).toBe(defaultReveranceCalculatorInputs.unitCode);
