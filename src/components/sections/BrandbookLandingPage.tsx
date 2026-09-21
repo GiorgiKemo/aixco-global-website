@@ -26,6 +26,7 @@ import { aixcoCurrentProjectGalleryImages, aixcoLiveImages, aixcoLiveLogos } fro
 import { openAnalyticsPreferences } from "@/lib/analytics/client";
 import { LandingSiblingLinks } from "@/components/landing/LandingSiblingLinks";
 import { scrollToHash } from "@/lib/smooth-scroll";
+import { GOLDEN_PREMIUM_APARTMENTS, GOLDEN_PREMIUM_SUMMARY } from "@/data/golden-premium-apartments";
 
 const navigation = [
   { label: "Opportunity", href: "#opportunity" },
@@ -389,6 +390,7 @@ export function BrandbookLandingPage() {
   const currentProjectHref = currentProject.id === "current-project"
     ? "/reverance-batumi"
     : `/aixco-global-op2/${currentProject.url}`;
+  const goldenMoney = (value: number) => new Intl.NumberFormat(lang === "sl" ? "sl-SI" : lang, { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(value);
   const [menuOpen, setMenuOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -795,6 +797,31 @@ export function BrandbookLandingPage() {
                   <p key={highlight.label} className="border-l border-[#E6C767] pl-4"><strong className="font-semibold text-[#161616]">{tx(highlight.label)}:</strong> {tx(highlight.value)}</p>
                 ))}
               </div>
+              <section className="mt-12 border border-[#B38B2A]/55 bg-[#171717] p-5 text-white sm:p-7" aria-labelledby="golden-premium-title">
+                <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
+                  <div className="min-w-0">
+                    <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#E6C767]">{tx("GOLDEN PREMIUM")}</p>
+                    <h3 id="golden-premium-title" className="mt-3 max-w-[15ch] text-[clamp(1.65rem,3.5vw,3.4rem)] font-medium leading-[0.95] tracking-[-0.055em]">{tx("GOLDEN PREMIUM APARTMENTS")}</h3>
+                    <p className="mt-4 max-w-[34rem] text-sm leading-6 text-white/68">{tx("A separate premium tier across floors 13–14 with its own reference prices and availability.")}</p>
+                  </div>
+                  <strong className="shrink-0 font-display text-5xl font-medium tracking-[-0.07em] text-[#E6C767]">{GOLDEN_PREMIUM_SUMMARY.total}</strong>
+                </div>
+                <div className="mt-7 grid grid-cols-2 gap-px bg-white/15 sm:grid-cols-3">
+                  <div className="bg-[#171717] p-4"><strong className="block text-2xl font-medium text-white">{GOLDEN_PREMIUM_SUMMARY.total}</strong><span className="mt-2 block text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white/58">{tx("UNITS")}</span></div>
+                  <div className="bg-[#171717] p-4"><strong className="block text-2xl font-medium text-[#E6C767]">{GOLDEN_PREMIUM_SUMMARY.available}</strong><span className="mt-2 block text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white/58">{tx("22 available")}</span></div>
+                  <div className="bg-[#171717] p-4"><strong className="block text-2xl font-medium text-[#E6C767]">{GOLDEN_PREMIUM_SUMMARY.reserved}</strong><span className="mt-2 block text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-white/58">{tx("6 reserved")}</span></div>
+                </div>
+                <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                  {GOLDEN_PREMIUM_APARTMENTS.map((unit) => (
+                    <article key={unit.code} className="min-w-0 border border-white/15 bg-white/[0.04] p-3">
+                      <div className="flex items-baseline justify-between gap-2"><strong className="text-sm">{unit.code}</strong><span className="text-[0.68rem] text-white/62">{unit.area} m²</span></div>
+                      <p className={`mt-2 text-[0.56rem] font-semibold uppercase tracking-[0.14em] ${unit.status === "available" ? "text-[#9ad0a6]" : "text-[#E6C767]"}`}>{tx(unit.status === "available" ? "AVAILABLE" : "RESERVED")}</p>
+                      <p className="mt-2 text-xs text-white/65">{tx("Reference list price")}: <span className="font-semibold text-white">{goldenMoney(unit.price)}</span></p>
+                    </article>
+                  ))}
+                </div>
+                <p className="mt-5 text-xs leading-5 text-white/52">{tx("Golden Premium reference prices come from the supplied workbook and must be confirmed before reservation.")}</p>
+              </section>
             </div>
 
             <div className="relative min-h-[28rem] overflow-hidden bg-[#9A9A9A] lg:min-h-[44rem]">

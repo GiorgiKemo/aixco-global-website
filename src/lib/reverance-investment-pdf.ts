@@ -7,6 +7,7 @@ import type { Lang } from "@/i18n/languages";
 import { translateReveranceCalculatorText } from "@/i18n/reverance-calculator-translations";
 import { OFFER_COPY } from "@/i18n/reverance-offer-copy";
 import { calculateReveranceInvestment, type InvestmentCalculation } from "./reverance-investment-calculator";
+import { isGoldenPremiumUnit } from "@/data/golden-premium-apartments";
 import catalog from "../../public/aixco-global-op2/images/reverance-offer/catalog.json";
 
 const W = 595.28, H = 841.89, M = 48, WIDTH = W - 2 * M;
@@ -23,6 +24,7 @@ export type GenerateReverancePdfOptions = {
 export async function generateReveranceInvestmentPdf({ calculation: a, lang, clientName, clientAddress }: GenerateReverancePdfOptions) {
   const c = OFFER_COPY[lang];
   const t = (value: string) => translateReveranceCalculatorText(value, lang);
+  const goldenPremium = isGoldenPremiumUnit(a.unit.code);
   const art = catalog[a.unit.code as keyof typeof catalog];
   if (!art || !c || (clientName?.length ?? 0) > 100 || (clientAddress?.length ?? 0) > 300) throw Error("Invalid PDF details");
   const cash = calculateReveranceInvestment({ ...a.inputs, financingPercent: 0 });
@@ -110,7 +112,8 @@ export async function generateReveranceInvestmentPdf({ calculation: a, lang, cli
     text(p,a.unit.code,M,227,23,true,C.white);
     wrap(p,t(a.unit.type)+" | "+t("Building")+" A | "+t("Floor")+" "+a.unit.floor,M,267,260,10,false,C.light);
     text(p,c.offer.toUpperCase(),M,365,9,true,C.bronze);
-    text(p,c.prepared+": "+new Intl.DateTimeFormat(lang).format(new Date()),M,387,8,false,C.muted);
+    if (goldenPremium) text(p,t("GOLDEN PREMIUM APARTMENT").toUpperCase(),M,384,9,true,C.bronze);
+    text(p,c.prepared+": "+new Intl.DateTimeFormat(lang).format(new Date()),M,402,8,false,C.muted);
     let top=410;
     if(clientName?.trim()) top=wrap(p,clientName,M,top,WIDTH,10,true)+5;
     if(clientAddress?.trim()) top=wrap(p,clientAddress,M,top,WIDTH,9,false,C.muted);

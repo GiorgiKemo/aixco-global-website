@@ -34,6 +34,7 @@ export const reveranceCalculatorTranslations: TranslationSource = {
   },
   "Scenario calculator": { de: "Szenario-Rechner", pl: "Kalkulator scenariusza", sl: "Kalkulator scenarijev", ru: "Калькулятор сценария" },
   "Illustrative only": { de: "Nur zur Veranschaulichung", pl: "Tylko ilustracyjnie", sl: "Samo za ponazoritev", ru: "Только для иллюстрации" },
+  "GOLDEN PREMIUM APARTMENT": { de: "GOLDEN-PREMIUM-APARTMENT", pl: "APARTAMENT GOLDEN PREMIUM", sl: "APARTMA GOLDEN PREMIUM", ru: "АПАРТАМЕНТ GOLDEN PREMIUM" },
   "Illustrative investment brief": { de: "Illustrative Investitionszusammenfassung", pl: "Ilustracyjny brief inwestycyjny", sl: "Ilustrativni naložbeni povzetek", ru: "Иллюстративный инвестиционный бриф" },
   "Project Reverance · Batumi": { de: "Projekt Reverance · Batumi", pl: "Projekt Reverance · Batumi", sl: "Projekt Reverance · Batumi", ru: "Проект Reverance · Батуми" },
   "Project Reverance residential towers in Batumi": { de: "Wohnanlage Project Reverance in Batumi", pl: "Wieże mieszkalne Project Reverance w Batumi", sl: "Stanovanjski stolpi Project Reverance v Batumiju", ru: "Жилые башни проекта Reverance в Батуми" },

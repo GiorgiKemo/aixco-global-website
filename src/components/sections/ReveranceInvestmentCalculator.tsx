@@ -16,6 +16,7 @@ import {
   reveranceUnits,
   type CalculatorInputs,
 } from "@/lib/reverance-investment-calculator";
+import { getGoldenPremiumUnit } from "@/data/golden-premium-apartments";
 import styles from "./ReveranceInvestmentCalculator.module.css";
 
 const localeFor = (lang: string) => lang === "sl" ? "sl-SI" : lang;
@@ -124,6 +125,7 @@ export function ReveranceInvestmentCalculator() {
   const [pdfState, setPdfState] = useState<"idle" | "loading" | "success" | "error">("idle");
   const calculation = useMemo(() => calculateReveranceInvestment(inputs), [inputs]);
   const unit = calculation.unit;
+  const goldenPremium = getGoldenPremiumUnit(unit.code);
 
   const updateInput = <K extends keyof CalculatorInputs>(key: K, value: CalculatorInputs[K]) => {
     setInputs((current) => normalizeReveranceInputs({ ...current, [key]: value }));
@@ -234,6 +236,13 @@ export function ReveranceInvestmentCalculator() {
                     ))}
                   </select>
                 </label>
+
+                {goldenPremium ? (
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-[#B38B2A]/45 bg-[#FFF8DE] px-4 py-3 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-[#6A5417]">
+                    <span className="text-[#9B6D15]">{tx("GOLDEN PREMIUM")}</span>
+                    <span>{tx("Reference list price")}: <strong>{<CurrencyValue value={goldenPremium.price} lang={lang} />}</strong> · {tx(goldenPremium.status === "available" ? "AVAILABLE" : "RESERVED")}</span>
+                  </div>
+                ) : null}
 
                 <div className="mt-7 grid grid-cols-1 gap-3 border-y border-[#161616]/12 py-5 text-sm min-[360px]:grid-cols-2">
                   <div><p className="text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-[#161616]/70">{tx("Area")}</p><p className="mt-2 font-semibold">{formatNumber(unit.area, lang)} m²</p></div>

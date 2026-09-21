@@ -88,6 +88,66 @@ const keyedText: Record<string, string> = {
   "cta.contact": "Contact AIXCO",
 };
 const supplementalTranslations: Partial<Record<string, Partial<Record<CatalogLang, string>>>> = {
+  "GOLDEN PREMIUM": {
+    de: "GOLDEN PREMIUM",
+    pl: "GOLDEN PREMIUM",
+    sl: "GOLDEN PREMIUM",
+    ru: "GOLDEN PREMIUM",
+  },
+  "GOLDEN PREMIUM APARTMENTS": {
+    de: "GOLDEN-PREMIUM-APARTMENTS",
+    pl: "APARTAMENTY GOLDEN PREMIUM",
+    sl: "APARTMAJI GOLDEN PREMIUM",
+    ru: "АПАРТАМЕНТЫ GOLDEN PREMIUM",
+  },
+  "A separate premium tier across floors 13–14 with its own reference prices and availability.": {
+    de: "Eine eigene Premium-Kategorie auf den Etagen 13–14 mit eigenen Referenzpreisen und eigener Verfügbarkeit.",
+    pl: "Osobna oferta premium na piętrach 13–14 z własnymi cenami referencyjnymi i dostępnością.",
+    sl: "Ločena premium ponudba v nadstropjih 13–14 z lastnimi referenčnimi cenami in razpoložljivostjo.",
+    ru: "Отдельная премиальная категория на 13–14 этажах со своими справочными ценами и статусами.",
+  },
+  UNITS: {
+    de: "EINHEITEN",
+    pl: "LOKALE",
+    sl: "ENOTE",
+    ru: "ЛОТОВ",
+  },
+  "22 available": {
+    de: "22 VERFÜGBAR",
+    pl: "22 DOSTĘPNE",
+    sl: "22 NA VOLJO",
+    ru: "22 ДОСТУПНЫ",
+  },
+  "6 reserved": {
+    de: "6 RESERVIERT",
+    pl: "6 ZAREZERWOWANYCH",
+    sl: "6 REZERVIRANIH",
+    ru: "6 ЗАРЕЗЕРВИРОВАНЫ",
+  },
+  "Reference list price": {
+    de: "Referenzlistenpreis",
+    pl: "Referencyjna cena listowa",
+    sl: "Referenčna cena",
+    ru: "Справочная цена",
+  },
+  AVAILABLE: {
+    de: "VERFÜGBAR",
+    pl: "DOSTĘPNY",
+    sl: "NA VOLJO",
+    ru: "ДОСТУПЕН",
+  },
+  RESERVED: {
+    de: "RESERVIERT",
+    pl: "ZAREZERWOWANY",
+    sl: "REZERVIRANO",
+    ru: "ЗАРЕЗЕРВИРОВАН",
+  },
+  "Golden Premium reference prices come from the supplied workbook and must be confirmed before reservation.": {
+    de: "Die Golden-Premium-Referenzpreise stammen aus der bereitgestellten Arbeitsmappe und müssen vor der Reservierung bestätigt werden.",
+    pl: "Referencyjne ceny Golden Premium pochodzą z dostarczonego arkusza i wymagają potwierdzenia przed rezerwacją.",
+    sl: "Referenčne cene Golden Premium izhajajo iz priloženega delovnega zvezka in jih je treba pred rezervacijo potrditi.",
+    ru: "Справочные цены Golden Premium взяты из предоставленного файла и должны быть подтверждены до бронирования.",
+  },
   "Cookie preferences": {
     de: "Cookie-Einstellungen",
     pl: "Ustawienia plików cookie",

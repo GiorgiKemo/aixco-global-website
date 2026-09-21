@@ -8,6 +8,7 @@ import {
   reveranceUnits,
   findReveranceUnit,
 } from "./reverance-investment-calculator";
+import { isGoldenPremiumUnit } from "@/data/golden-premium-apartments";
 
 describe("Reverance investment model", () => {
   it("changes payment timing without inventing additional equity or returns", () => {
@@ -78,6 +79,7 @@ describe("Reverance investment model", () => {
     ]);
     expect(reveranceUnits.every((unit) => unit.building === "A" && [13, 14].includes(unit.floor) && unit.orientation === "Sea view")).toBe(true);
     expect(findReveranceUnit("A1401").type).toBe("1 Bedroom");
+    expect(reveranceUnits.every((unit) => isGoldenPremiumUnit(unit.code))).toBe(true);
     expect(findReveranceUnit("retired").code).toBe(defaultReveranceCalculatorInputs.unitCode);
   });
   it("matches the reference scenario mechanics for the default unit", () => {
