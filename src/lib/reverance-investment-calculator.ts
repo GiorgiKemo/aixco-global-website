@@ -12,6 +12,7 @@ export type ReveranceUnit = {
 export type CalculatorInputs = {
   unitCode: string;
   pricePerSquareMetre: number;
+  downPaymentPercent: number;
   financingPercent: number;
   grossYieldPercent: number;
   annualGrowthPercent: number;
@@ -67,6 +68,7 @@ export const reveranceCalculatorAssumptions: CalculatorAssumptions = {
 
 export const reveranceCalculatorRanges = {
   pricePerSquareMetre: { min: 1400, max: 2400, step: 25 },
+  downPaymentPercent: { min: 0, max: 100, step: 5 },
   financingPercent: { min: 0, max: 70, step: 5 },
   grossYieldPercent: { min: 5, max: 14, step: 0.5 },
   annualGrowthPercent: { min: 0, max: 10, step: 0.5 },
@@ -91,6 +93,7 @@ export const reveranceUnits: readonly ReveranceUnit[] = [
 export const defaultReveranceCalculatorInputs: CalculatorInputs = {
   unitCode: "A1305",
   pricePerSquareMetre: 1600,
+  downPaymentPercent: reveranceCalculatorAssumptions.downPaymentPercent,
   financingPercent: 60,
   grossYieldPercent: 12,
   annualGrowthPercent: 5,
@@ -112,12 +115,18 @@ export function findReveranceUnit(code: string) {
 
 export function normalizeReveranceInputs(value: Partial<CalculatorInputs> = {}): CalculatorInputs {
   const defaults = defaultReveranceCalculatorInputs;
+  const downPaymentPercent = clamp(
+    finite(value.downPaymentPercent, defaults.downPaymentPercent),
+    reveranceCalculatorRanges.downPaymentPercent.min,
+    reveranceCalculatorRanges.downPaymentPercent.max,
+  );
   const unitCode = typeof value.unitCode === "string" && reveranceUnits.some((unit) => unit.code === value.unitCode)
     ? value.unitCode
     : defaults.unitCode;
 
   return {
     unitCode,
+    downPaymentPercent,
     pricePerSquareMetre: clamp(
       finite(value.pricePerSquareMetre, defaults.pricePerSquareMetre),
       reveranceCalculatorRanges.pricePerSquareMetre.min,
@@ -126,7 +135,7 @@ export function normalizeReveranceInputs(value: Partial<CalculatorInputs> = {}):
     financingPercent: clamp(
       finite(value.financingPercent, defaults.financingPercent),
       reveranceCalculatorRanges.financingPercent.min,
-      reveranceCalculatorRanges.financingPercent.max,
+      Math.min(reveranceCalculatorRanges.financingPercent.max, 100 - downPaymentPercent),
     ),
     grossYieldPercent: clamp(
       finite(value.grossYieldPercent, defaults.grossYieldPercent),
@@ -165,7 +174,7 @@ export function remainingLoanBalance(loan: number, payment: number, ratePercent:
 
 export function calculateReveranceInvestment(rawInputs: Partial<CalculatorInputs> = {}): InvestmentCalculation {
   const inputs = normalizeReveranceInputs(rawInputs);
-  const assumptions = reveranceCalculatorAssumptions;
+  const assumptions = { ...reveranceCalculatorAssumptions, downPaymentPercent: inputs.downPaymentPercent };
   const unit = findReveranceUnit(inputs.unitCode);
   const listPrice = unit.area * inputs.pricePerSquareMetre;
   const downPayment = listPrice * (assumptions.downPaymentPercent / 100);

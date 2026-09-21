@@ -10,6 +10,66 @@ import {
 } from "./reverance-investment-calculator";
 
 describe("Reverance investment model", () => {
+  it("changes payment timing without inventing additional equity or returns", () => {
+    const baseline = calculateReveranceInvestment();
+    const result = calculateReveranceInvestment({ downPaymentPercent: 30, financingPercent: 60 });
+    expect(result.downPayment).toBeCloseTo(15_552, 8);
+    expect(result.constructionInstallments).toBeCloseTo(5_184, 8);
+    expect(result.constructionInstallments / 24).toBeCloseTo(216, 8);
+    expect(result.loanAmount).toBeCloseTo(31_104, 8);
+    expect(result.investedEquity).toBeCloseTo(20_736, 8);
+    expect(result.monthlyBankPayment).toBe(baseline.monthlyBankPayment);
+    expect(result.netMonthlyRent).toBe(baseline.netMonthlyRent);
+    expect(result.holdingProjection.netWorth).toBe(baseline.holdingProjection.netWorth);
+    expect(result.holdingProjection.multiple).toBeCloseTo(baseline.holdingProjection.multiple, 10);
+    expect(result.assumptions.downPaymentPercent).toBe(30);
+    expect(calculateReveranceInvestment().assumptions.downPaymentPercent).toBe(10);
+  });
+
+  it("limits bank financing to the unpaid share, including a fully prepaid purchase", () => {
+    const half = calculateReveranceInvestment({ downPaymentPercent: 50, financingPercent: 70 });
+    expect(half.inputs.financingPercent).toBe(50);
+    expect(half.loanAmount).toBeCloseTo(25_920, 8);
+    expect(half.constructionInstallments).toBe(0);
+    const full = calculateReveranceInvestment({ downPaymentPercent: 100, financingPercent: 70 });
+    expect(full.inputs.financingPercent).toBe(0);
+    expect(full.downPayment).toBe(full.listPrice);
+    expect(full.constructionInstallments).toBe(0);
+    expect(full.monthlyBankPayment).toBe(0);
+    expect(full.holdingProjection.remainingDebt).toBe(0);
+  });
+
+  it("balances every supported down-payment and financing combination for every unit", () => {
+    for (const unit of reveranceUnits) {
+      for (let downPaymentPercent = 0; downPaymentPercent <= 100; downPaymentPercent += 5) {
+        for (let financingPercent = 0; financingPercent <= 70; financingPercent += 5) {
+          const result = calculateReveranceInvestment({ unitCode: unit.code, downPaymentPercent, financingPercent });
+          expect(result.downPayment + result.constructionInstallments + result.loanAmount).toBeCloseTo(result.listPrice, 7);
+          expect(result.investedEquity).toBeCloseTo(result.listPrice - result.loanAmount, 7);
+          expect(result.constructionInstallments).toBeGreaterThanOrEqual(0);
+          expect(result.inputs.financingPercent + result.inputs.downPaymentPercent).toBeLessThanOrEqual(100);
+          expect(Number.isFinite(result.holdingProjection.multiple)).toBe(true);
+        }
+      }
+    }
+  });
+
+  it("uses an amortization schedule consistent with the adjusted loan", () => {
+    const result = calculateReveranceInvestment({ downPaymentPercent: 65, financingPercent: 60, holdingYears: 5 });
+    let balance = result.loanAmount;
+    for (let month = 0; month < 60; month++) balance = balance * (1 + 0.09 / 12) - result.monthlyBankPayment;
+    expect(result.holdingProjection.remainingDebt).toBeCloseTo(balance, 7);
+    for (let month = 60; month < 120; month++) balance = balance * (1 + 0.09 / 12) - result.monthlyBankPayment;
+    expect(balance).toBeCloseTo(0, 7);
+  });
+
+  it("normalizes missing, non-finite, and out-of-range down payments", () => {
+    expect(normalizeReveranceInputs().downPaymentPercent).toBe(10);
+    expect(normalizeReveranceInputs({ downPaymentPercent: Number.NaN }).downPaymentPercent).toBe(10);
+    expect(normalizeReveranceInputs({ downPaymentPercent: Infinity }).downPaymentPercent).toBe(10);
+    expect(normalizeReveranceInputs({ downPaymentPercent: -10 }).downPaymentPercent).toBe(0);
+    expect(normalizeReveranceInputs({ downPaymentPercent: 110 }).downPaymentPercent).toBe(100);
+  });
   it("offers exactly Klem's approved sea-view units and areas", () => {
     expect(reveranceUnits.map(({ code, area }) => [code, area])).toEqual([
       ["A1305", 32.4], ["A1306", 32.3], ["A1307", 32.4], ["A1308", 32.3],

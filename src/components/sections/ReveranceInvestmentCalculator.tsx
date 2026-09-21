@@ -10,6 +10,7 @@ import { aixcoLiveImages } from "@/lib/aixco-live-assets";
 import {
   calculateReveranceInvestment,
   defaultReveranceCalculatorInputs,
+  normalizeReveranceInputs,
   reveranceCalculatorAssumptions,
   reveranceCalculatorRanges,
   reveranceUnits,
@@ -49,7 +50,7 @@ function formatPercent(value: number, lang: string) {
 }
 
 function rangeProgress(value: number, min: number, max: number) {
-  return `${((value - min) / (max - min)) * 100}%`;
+  return max > min ? `${((value - min) / (max - min)) * 100}%` : "0%";
 }
 
 function ControlRange({
@@ -84,6 +85,7 @@ function ControlRange({
         max={max}
         step={step}
         value={value}
+        disabled={min === max}
         onChange={(event) => onChange(Number(event.target.value))}
         style={{ "--range-progress": rangeProgress(value, min, max) } as CSSProperties}
         aria-label={label}
@@ -124,7 +126,7 @@ export function ReveranceInvestmentCalculator() {
   const unit = calculation.unit;
 
   const updateInput = <K extends keyof CalculatorInputs>(key: K, value: CalculatorInputs[K]) => {
-    setInputs((current) => ({ ...current, [key]: value }));
+    setInputs((current) => normalizeReveranceInputs({ ...current, [key]: value }));
     setPdfState("idle");
   };
 
@@ -242,7 +244,9 @@ export function ReveranceInvestmentCalculator() {
 
                 <div className="mt-8 grid gap-8">
                   <ControlRange label={tx("Price per m²")} value={inputs.pricePerSquareMetre} min={reveranceCalculatorRanges.pricePerSquareMetre.min} max={reveranceCalculatorRanges.pricePerSquareMetre.max} step={reveranceCalculatorRanges.pricePerSquareMetre.step} display={<CurrencyValue value={inputs.pricePerSquareMetre} lang={lang} />} onChange={(value) => updateInput("pricePerSquareMetre", value)} />
-                  <ControlRange label={tx("Financing")} value={inputs.financingPercent} min={reveranceCalculatorRanges.financingPercent.min} max={reveranceCalculatorRanges.financingPercent.max} step={reveranceCalculatorRanges.financingPercent.step} display={formatPercent(inputs.financingPercent, lang)} suffix="%" onChange={(value) => updateInput("financingPercent", value)} />
+                  <ControlRange label={tx("Down payment")} value={inputs.downPaymentPercent} min={reveranceCalculatorRanges.downPaymentPercent.min} max={reveranceCalculatorRanges.downPaymentPercent.max} step={reveranceCalculatorRanges.downPaymentPercent.step} display={formatPercent(inputs.downPaymentPercent, lang)} suffix="%" onChange={(value) => updateInput("downPaymentPercent", value)} />
+                  <ControlRange label={tx("Financing")} value={inputs.financingPercent} min={reveranceCalculatorRanges.financingPercent.min} max={Math.min(reveranceCalculatorRanges.financingPercent.max, 100 - inputs.downPaymentPercent)} step={reveranceCalculatorRanges.financingPercent.step} display={formatPercent(inputs.financingPercent, lang)} suffix="%" onChange={(value) => updateInput("financingPercent", value)} />
+                  <p className="text-sm leading-relaxed text-[#161616]/70">{tx("Down payment + construction installments + financing = 100%. Increasing the down payment reduces financing automatically if needed. Illustrative only; confirm payment terms with the developer.")}</p>
                   <ControlRange label={tx("Gross rental yield")} value={inputs.grossYieldPercent} min={reveranceCalculatorRanges.grossYieldPercent.min} max={reveranceCalculatorRanges.grossYieldPercent.max} step={reveranceCalculatorRanges.grossYieldPercent.step} display={formatPercent(inputs.grossYieldPercent, lang)} suffix="%" onChange={(value) => updateInput("grossYieldPercent", value)} />
                   <ControlRange label={tx("Annual value growth")} value={inputs.annualGrowthPercent} min={reveranceCalculatorRanges.annualGrowthPercent.min} max={reveranceCalculatorRanges.annualGrowthPercent.max} step={reveranceCalculatorRanges.annualGrowthPercent.step} display={formatPercent(inputs.annualGrowthPercent, lang)} suffix="%" onChange={(value) => updateInput("annualGrowthPercent", value)} />
                   <ControlRange label={tx("Holding period")} value={inputs.holdingYears} min={reveranceCalculatorRanges.holdingYears.min} max={reveranceCalculatorRanges.holdingYears.max} step={reveranceCalculatorRanges.holdingYears.step} display={`${inputs.holdingYears} ${tx(inputs.holdingYears === 1 ? "year" : "years")}`} onChange={(value) => updateInput("holdingYears", value)} />
@@ -262,6 +266,9 @@ export function ReveranceInvestmentCalculator() {
                   </div>
                   <div className="mt-2 grid min-w-0 gap-0 sm:grid-cols-2 sm:gap-x-10">
                     <DetailRow label={tx("Purchase price")} value={<CurrencyValue value={calculation.listPrice} lang={lang} />} />
+                    <DetailRow label={`${tx("Down payment")} (${formatPercent(inputs.downPaymentPercent, lang)})`} value={<CurrencyValue value={calculation.downPayment} lang={lang} />} />
+                    <DetailRow label={tx("Construction installments")} value={<CurrencyValue value={calculation.constructionInstallments} lang={lang} />} />
+                    <DetailRow label={`${tx("Monthly construction payment")} (${calculation.assumptions.constructionInstallmentMonths} ${tx("months")})`} value={<CurrencyValue value={calculation.constructionInstallments / calculation.assumptions.constructionInstallmentMonths} lang={lang} />} />
                     <DetailRow label={tx("Financing amount")} value={<CurrencyValue value={calculation.loanAmount} lang={lang} />} />
                     <DetailRow label={tx("Net monthly rent")} value={<CurrencyValue value={calculation.netMonthlyRent} lang={lang} />} strong />
                     <DetailRow label={tx("Monthly bank payment")} value={<CurrencyValue value={calculation.monthlyBankPayment} lang={lang} prefix="−" />} />
@@ -276,14 +283,14 @@ export function ReveranceInvestmentCalculator() {
                   </div>
                 </div>
 
-                <div className="grid gap-6 border border-[#002147] bg-[#002147] p-6 text-white sm:p-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-10 lg:p-10">
-                  <div>
-                    <p className="brandbook-eyebrow brandbook-eyebrow-light max-w-[24ch]">04 — {tx("Download investment brief")}</p>
-                    <h3 className="mt-4 max-w-[13ch] font-display text-3xl font-medium leading-[0.92] tracking-[-0.055em] sm:text-4xl">{tx("Download localized PDF brief")}</h3>
+                <div className="grid min-w-0 gap-6 border border-[#002147] bg-[#002147] p-6 text-white sm:p-8 lg:gap-10 lg:p-10 2xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] 2xl:items-center">
+                  <div className="min-w-0 [overflow-wrap:anywhere]">
+                    <p className="brandbook-eyebrow brandbook-eyebrow-light !block max-w-full [overflow-wrap:anywhere]">04 — {tx("Download investment brief")}</p>
+                    <h3 className="mt-4 max-w-[18ch] font-display text-2xl font-medium leading-[1.1] tracking-[-0.045em] [overflow-wrap:anywhere] sm:text-3xl">{tx("Download localized PDF brief")}</h3>
                     <p className="mt-5 max-w-[28rem] text-sm leading-6 text-white/62">{tx("The figures are illustrative and depend on unit selection, financing, occupancy, market conditions and delivery.")}</p>
                     <Link href="/reverance-batumi" className="mt-6 inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#E6C767] transition-colors hover:text-white">{tx("Back to Reverance")} <MoveRight size={17} strokeWidth={1.5} /></Link>
                   </div>
-                  <div className="border border-white/18 bg-white/[0.035] p-5 sm:p-6">
+                  <div className="min-w-0 border border-white/18 bg-white/[0.035] p-5 [overflow-wrap:anywhere] sm:p-6">
                     <div className="flex items-center justify-between gap-4 border-b border-white/15 pb-4"><div><p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#E6C767]">{tx("Selected language")}</p><p className="mt-2 text-xl font-medium tracking-[-0.04em]">{lang.toUpperCase()}</p></div><ShieldCheck className="h-6 w-6 text-[#E6C767]" strokeWidth={1.2} aria-hidden="true" /></div>
                     <label className="mt-5 grid gap-2"><span className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/58">{tx("Your name (optional)")}</span><input value={clientName} onChange={(event) => { setClientName(event.target.value); setPdfState("idle"); }} placeholder={tx("Used for the cover only")} maxLength={100} className="min-h-12 w-full border border-white/20 bg-white/[0.06] px-4 text-base text-white outline-none placeholder:text-white/35 focus:border-[#E6C767] focus:ring-2 focus:ring-[#E6C767]/30" /></label>
                     <label className="mt-4 grid gap-2">

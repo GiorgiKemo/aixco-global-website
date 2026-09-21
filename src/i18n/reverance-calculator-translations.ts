@@ -3,6 +3,13 @@ import type { CatalogLang, Lang } from "./languages";
 type TranslationSource = Partial<Record<string, Partial<Record<CatalogLang, string>>>>;
 
 export const reveranceCalculatorTranslations: TranslationSource = {
+  "Monthly construction payment": { de: "Monatliche Bauzahlung", pl: "Miesięczna rata budowlana", sl: "Mesečni obrok med gradnjo", ru: "Ежемесячный платёж на этапе строительства" },
+  "Down payment + construction installments + financing = 100%. Increasing the down payment reduces financing automatically if needed. Illustrative only; confirm payment terms with the developer.": {
+    de: "Anzahlung + Bauzahlungen + Finanzierung = 100 %. Eine höhere Anzahlung reduziert bei Bedarf automatisch die Finanzierung. Nur zur Veranschaulichung; Zahlungsbedingungen mit dem Bauträger bestätigen.",
+    pl: "Zaliczka + raty budowlane + finansowanie = 100%. Zwiększenie zaliczki w razie potrzeby automatycznie zmniejsza finansowanie. Tylko ilustracyjnie; potwierdź warunki płatności z deweloperem.",
+    sl: "Polog + obroki med gradnjo + financiranje = 100 %. Višji polog po potrebi samodejno zmanjša financiranje. Samo za ponazoritev; plačilne pogoje potrdite z investitorjem.",
+    ru: "Первоначальный взнос + платежи на этапе строительства + финансирование = 100%. Увеличение взноса при необходимости автоматически уменьшает финансирование. Только для иллюстрации; условия оплаты уточняйте у застройщика.",
+  },
   Calculator: { de: "Rechner", pl: "Kalkulator", sl: "Kalkulator", ru: "Калькулятор" },
   "1 Bedroom": { de: "1 Schlafzimmer", pl: "1 sypialnia", sl: "1 spalnica", ru: "1 спальня" },
   "Client address (optional)": { de: "Kundenadresse (optional)", pl: "Adres klienta (opcjonalnie)", sl: "Naslov stranke (neobvezno)", ru: "Адрес клиента (необязательно)" },

@@ -61,6 +61,28 @@ describe("Reverance PDF API", () => {
     expect(mocks.generatePdf).not.toHaveBeenCalled();
   });
 
+  it("passes the chosen down payment and balanced financing into the PDF", async () => {
+    expect((await POST(request({ inputs: { ...validInputs, downPaymentPercent: 50 } }))).status).toBe(200);
+    expect(mocks.generatePdf).toHaveBeenCalledWith(expect.objectContaining({
+      calculation: expect.objectContaining({
+        inputs: expect.objectContaining({ downPaymentPercent: 50, financingPercent: 50 }),
+        downPayment: 25_920, constructionInstallments: 0, loanAmount: 25_920,
+      }),
+    }));
+  });
+
+  it("keeps old clients compatible with the 10 percent default", async () => {
+    expect((await POST(request({ inputs: validInputs }))).status).toBe(200);
+    expect(mocks.generatePdf).toHaveBeenCalledWith(expect.objectContaining({
+      calculation: expect.objectContaining({ inputs: expect.objectContaining({ downPaymentPercent: 10 }) }),
+    }));
+  });
+
+  it.each([-1, 101, null, "30"])("rejects invalid down-payment input %s", async downPaymentPercent => {
+    expect((await POST(request({ inputs: { ...validInputs, downPaymentPercent } }))).status).toBe(400);
+    expect(mocks.generatePdf).not.toHaveBeenCalled();
+  });
+
   it("accepts a 300-character address and the one-bedroom apartment", async () => {
     expect((await POST(request({ inputs: { ...validInputs, unitCode: "A1401" }, clientAddress: "Ж".repeat(300) }))).status).toBe(200);
     expect(mocks.generatePdf).toHaveBeenCalledWith(expect.objectContaining({

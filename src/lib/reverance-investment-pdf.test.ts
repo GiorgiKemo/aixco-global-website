@@ -14,6 +14,16 @@ import { calculateReveranceInvestment } from "./reverance-investment-calculator"
 import { generateReveranceInvestmentPdf } from "./reverance-investment-pdf";
 
 describe("Reverance localized PDF brief", () => {
+  it.each(["en", "de", "pl", "sl", "ru"] as const)("exports the adjusted down payment in %s", async lang => {
+    const bytes = await generateReveranceInvestmentPdf({ calculation: calculateReveranceInvestment({ downPaymentPercent: 30 }), lang });
+    expect((await PDFDocument.load(bytes)).getPageCount()).toBe(6);
+    await saveQa("down-payment-30-" + lang, bytes);
+  });
+  it.each([0, 50, 100])("exports the %s percent down-payment boundary", async downPaymentPercent => {
+    const bytes = await generateReveranceInvestmentPdf({ calculation: calculateReveranceInvestment({ downPaymentPercent }), lang: "en" });
+    expect((await PDFDocument.load(bytes)).getPageCount()).toBe(6);
+    await saveQa("down-payment-" + downPaymentPercent + "-en", bytes);
+  });
   it.each(["en", "de", "pl", "sl", "ru"] as const)("generates a six-page %s offer with exact plan and room artwork", async (lang) => {
     const bytes = await generateReveranceInvestmentPdf({
       calculation: calculateReveranceInvestment(),

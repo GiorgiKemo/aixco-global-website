@@ -17,6 +17,7 @@ const requestSchema = z.object({
   inputs: z.object({
     unitCode: z.string().trim().min(1).max(10).refine((code) => reveranceUnits.some((unit) => unit.code === code)),
     pricePerSquareMetre: z.number().finite(),
+    downPaymentPercent: z.number().finite().min(0).max(100).optional(),
     financingPercent: z.number().finite(),
     grossYieldPercent: z.number().finite(),
     annualGrowthPercent: z.number().finite(),
