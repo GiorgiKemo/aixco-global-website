@@ -117,6 +117,14 @@ describe("index.css motion rules", () => {
     expect(css).not.toContain(".dubai-image-marquee__motion-toggle");
   });
 
+  it("keeps the decorative hero video free of native playback controls", () => {
+    expect(desktopStoryHome).toContain('data-story-fixed-backdrop=""');
+    expect(desktopStoryHome).toContain("const ensurePlayback = () => {");
+    expect(desktopStoryHome).toContain('video.addEventListener("canplay", ensurePlayback);');
+    expect(css).toContain("[data-story-fixed-backdrop] video::-webkit-media-controls");
+    expect(css).toContain("video::-webkit-media-controls-start-playback-button");
+  });
+
   it("shows story text without animation when the browser prefers reduced motion", () => {
     expect(desktopStoryHome).toContain('const isAnimating = animationState === "animating";');
     expect(desktopStoryHome).toContain('const hasPlayed = animationState === "played";');

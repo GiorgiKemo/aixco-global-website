@@ -1289,9 +1289,38 @@ function FixedHeroBackdrop({ mediaReady, visible }: { mediaReady: boolean; visib
     return () => window.clearTimeout(visibilityTimer);
   }, [canAnimate, mediaReady, videoSrc, visible]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !shouldRenderVideo || !canAnimate || !visible || !videoSrc) return undefined;
+
+    const ensurePlayback = () => {
+      if (document.visibilityState === "visible" && video.paused) {
+        void video.play().catch(() => undefined);
+      }
+    };
+
+    ensurePlayback();
+    video.addEventListener("loadeddata", ensurePlayback);
+    video.addEventListener("canplay", ensurePlayback);
+    video.addEventListener("pause", ensurePlayback);
+    document.addEventListener("visibilitychange", ensurePlayback);
+    window.addEventListener("focus", ensurePlayback);
+    window.addEventListener("pageshow", ensurePlayback);
+
+    return () => {
+      video.removeEventListener("loadeddata", ensurePlayback);
+      video.removeEventListener("canplay", ensurePlayback);
+      video.removeEventListener("pause", ensurePlayback);
+      document.removeEventListener("visibilitychange", ensurePlayback);
+      window.removeEventListener("focus", ensurePlayback);
+      window.removeEventListener("pageshow", ensurePlayback);
+    };
+  }, [canAnimate, shouldRenderVideo, videoSrc, visible]);
+
   return (
     <div
         aria-hidden="true"
+        data-story-fixed-backdrop=""
         className={`pointer-events-none fixed bottom-0 end-0 top-0 z-0 overflow-hidden bg-[#11100e] transition-opacity duration-700 [transition-timing-function:var(--ease-apple)] ${
           visible ? "opacity-100" : "opacity-0"
         }`}
@@ -1318,6 +1347,7 @@ function FixedHeroBackdrop({ mediaReady, visible }: { mediaReady: boolean; visib
             muted
             loop
             playsInline
+            controls={false}
             preload="metadata"
             className="absolute inset-0 h-full w-full object-cover brightness-[1.08] saturate-[1.08]"
             style={{ visibility: visible ? "visible" : "hidden" }}

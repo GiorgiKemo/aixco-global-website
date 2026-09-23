@@ -7975,6 +7975,19 @@ html[lang='de'] [data-story-section] .story-letter-reveal {
   letter-spacing: 0.12em;
 }
 
+/* The hero video is decorative background media. Keep Safari's native
+   start-playback affordance from appearing over the hero while playback is
+   being recovered after mobile navigation or visibility changes. */
+[data-story-fixed-backdrop] video {
+  pointer-events: none;
+}
+
+[data-story-fixed-backdrop] video::-webkit-media-controls,
+[data-story-fixed-backdrop] video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 @media (min-width: 1280px) {
   html[data-home-experience='story'] {
     --story-top-nav-height: clamp(5.75rem, 8.5svh, 6.4rem);
