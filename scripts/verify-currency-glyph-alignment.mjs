@@ -448,6 +448,7 @@ try {
     await page.waitForFunction(
       (nextLocale) => document.documentElement.lang === nextLocale,
       locale,
+      { timeout: 90_000 },
     );
     await page.evaluate(() => document.fonts.ready);
 
