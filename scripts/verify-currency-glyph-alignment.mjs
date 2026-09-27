@@ -436,23 +436,30 @@ try {
   }
 
   for (const locale of ["en", "de", "pl", "sl", "ru"]) {
-    // Exercise the real language control instead of reloading the entire page.
-    // The previous storage-plus-reload approach made this visual assertion
-    // depend on an unrelated document navigation and could time out on CI even
-    // after every responsive browser check had already passed.
-    await page
-      .locator('[data-language-trigger="true"]:visible')
-      .first()
-      .click();
-    await page.locator(`button[data-lang="${locale}"]:visible`).first().click();
-    await page.waitForFunction(
-      (nextLocale) => document.documentElement.lang === nextLocale,
+    // Match the localized-page smoke: start each locale in its own context so
+    // this typography audit measures locale rendering, not menu interaction.
+    const localeContext = await browser.newContext({
+      viewport: viewports.at(-1),
+      reducedMotion: "reduce",
+    });
+    await installNecessaryOnlyAnalyticsConsent(localeContext);
+    await localeContext.addInitScript((selectedLocale) => {
+      localStorage.setItem("aixco-lang", selectedLocale);
+    }, locale);
+    const localePage = await localeContext.newPage();
+    await localePage.goto(new URL("/#batumi", baseUrl).toString(), {
+      waitUntil: "domcontentloaded",
+      timeout: 45_000,
+    });
+    await localePage.waitForFunction(
+      (nextLocale) => document.documentElement.lang === nextLocale
+        && document.querySelector(".story-currency-symbol") !== null,
       locale,
-      { timeout: 90_000 },
+      { timeout: 30_000 },
     );
-    await page.evaluate(() => document.fonts.ready);
+    await localePage.evaluate(() => document.fonts.ready);
 
-    const localeTreatments = await page.evaluate(() =>
+    const localeTreatments = await localePage.evaluate(() =>
       Array.from(
         document.querySelectorAll(
           ".story-currency-symbol, .story-inline-currency-symbol",
@@ -519,7 +526,7 @@ try {
     }
 
     if (locale === "sl") {
-      const slHeadlineValues = await page
+      const slHeadlineValues = await localePage
         .locator(
           '[data-story-section="about"] .story-standard-number, [data-story-section="philosophy"] .story-standard-number, [data-story-section="philosophyPlatform"] .story-standard-number',
         )
@@ -537,6 +544,7 @@ try {
         );
       }
     }
+    await localeContext.close();
   }
 
   if (failures.length) {
