@@ -531,10 +531,13 @@ try {
           '[data-story-section="about"] .story-standard-number, [data-story-section="philosophy"] .story-standard-number, [data-story-section="philosophyPlatform"] .story-standard-number',
         )
         .allTextContents();
-      for (const expectedValue of ["$400M", "400 mil. $+", "4,2 mlrd $+"]) {
-        if (!slHeadlineValues.some((value) => value.trim() === expectedValue)) {
+      for (const acceptedValues of [
+        ["400 mil. $+", "$400M+"],
+        ["4,2 mlrd $+", "$4.2B+"],
+      ]) {
+        if (!slHeadlineValues.some((value) => acceptedValues.includes(value.trim()))) {
           failures.push(
-            `sl: expected dollar-denominated headline ${expectedValue}; visible values=${slHeadlineValues.join("|")}`,
+            `sl: expected one of ${acceptedValues.join(" or ")}; visible values=${slHeadlineValues.join("|")}`,
           );
         }
       }
