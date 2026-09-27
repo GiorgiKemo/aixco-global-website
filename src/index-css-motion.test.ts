@@ -730,13 +730,13 @@ describe("index.css motion rules", () => {
     expect(css).toContain("min-height: auto");
   });
 
-  it("uses the selected portrait-phone hero composition without changing wider layouts", () => {
+  it("uses the selected centered portrait-phone hero composition without changing wider layouts", () => {
     expect(css).toContain("@media (max-width: 767px) and (orientation: portrait)");
     expect(css).toContain("justify-content: flex-start");
     expect(css).toContain("14.5svh");
     expect(css).toContain("[data-story-section='hero'] .story-hero-lockup {\n    width: 100%;");
-    expect(css).toContain("[data-story-section='hero'] .story-hero-statement {\n    width: 100%;\n    align-items: flex-start;");
-    expect(css).toContain("[data-story-section='hero'] .story-hero-statement__note {\n    max-width: 21rem;");
+    expect(css).toContain("[data-story-section='hero'] .story-hero-statement {\n    width: 100%;\n    align-items: center;\n    margin-inline: 0;");
+    expect(css).toContain("[data-story-section='hero'] .story-hero-statement__note {\n    display: none;");
   });
 
   it("balances the Dubai snapshot and lets its skyline scroll with the page", () => {

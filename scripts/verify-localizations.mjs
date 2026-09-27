@@ -45,6 +45,7 @@ const polishSources = [
   readCatalog("src/i18n/polish-translations.ts", "polishTranslations"),
   readCatalog("src/i18n/polish-translations-extra.ts", "polishTranslationsExtra"),
   readCatalog("src/i18n/polish-translations-final.ts", "polishTranslationsFinal"),
+  supplemental,
 ];
 const slovenian = readCatalog("src/i18n/slovenian-translations.ts", "slovenianTranslations");
 const slovenianFixes = readCatalog("src/i18n/slovenian-translation-fixes.ts", "slovenianTranslationFixes");
@@ -69,7 +70,7 @@ const requiredKeys = new Set([
   ...renderedDataKeys,
 ]);
 const intentionalGermanMatches = new Set([
-  "AIXCO.Global", "Batumi", "Broker", "Dubai", "Email", "Partner", "Reverance", "Risk", "Status", "Team",
+  "AIXCO.Global", "Batumi", "Broker", "Dubai", "Email", "GOLDEN PREMIUM", "Partner", "Reverance", "Risk", "Status", "Team",
 ]);
 const errors = [];
 
@@ -85,9 +86,9 @@ for (const key of requiredKeys) {
 
 const sharedSources = [slovenianFixes, germanFixes, localeFixes, passthroughFixes, curated, propertyPageTranslations, germanQuality, supplemental, textTranslations, assetTranslations, siteContentTranslations, slovenian];
 const intentionalMatchesByLocale = {
-  de: new Set(["AIXCO.Global", "Batumi", "Dubai", "Reverance"]),
-  ru: new Set(["AIXCO.Global", "Reverance"]),
-  sl: new Set(["AIXCO", "AIXCO.Global", "Batumi", "Dubai", "Eden House — The Canal & The Park (Dubai)", "Email", "FAQs", "Partner", "Reverance", "Risk", "Status", "Team", "USD"]),
+  de: new Set(["AIXCO.Global", "Batumi", "Dubai", "GOLDEN PREMIUM", "Reverance"]),
+  ru: new Set(["AIXCO.Global", "GOLDEN PREMIUM", "Reverance"]),
+  sl: new Set(["AIXCO", "AIXCO.Global", "Batumi", "Dubai", "Eden House — The Canal & The Park (Dubai)", "Email", "FAQs", "GOLDEN PREMIUM", "Partner", "Reverance", "Risk", "Status", "Team", "USD"]),
 };
 for (const locale of ["de", "ru", "sl"]) {
   for (const key of requiredKeys) {

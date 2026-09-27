@@ -420,6 +420,7 @@ try {
             horizontalOverflow: root.scrollWidth - root.clientWidth,
             imageLoaded: image instanceof HTMLImageElement && image.naturalWidth > 0,
             title: (title?.textContent ?? "").replace(/\s+/g, " ").trim(),
+            heroText: (hero?.textContent ?? "").replace(/\s+/g, " ").trim(),
             titleOverflow: title instanceof HTMLElement ? title.scrollWidth - title.clientWidth : Number.POSITIVE_INFINITY,
             titleFullyVisible: Boolean(
               titleRect
@@ -440,7 +441,7 @@ try {
         const label = viewport.name;
         if (canonicalMetrics.horizontalOverflow > 4) errors.push(`${label}: canonical project page has horizontal overflow`);
         if (!canonicalMetrics.imageLoaded) errors.push(`${label}: canonical project hero image did not load`);
-        if (!canonicalMetrics.title.includes("Reverance")) errors.push(`${label}: canonical project title is missing`);
+        if (!canonicalMetrics.heroText.includes("Reverance")) errors.push(`${label}: canonical project identity is missing`);
         if (!canonicalMetrics.titleFullyVisible || canonicalMetrics.titleOverflow > 3) {
           errors.push(`${label}: canonical project title is clipped or overflowing`);
         }

@@ -523,7 +523,7 @@ try {
           '[data-story-section="about"] .story-standard-number, [data-story-section="philosophy"] .story-standard-number, [data-story-section="philosophyPlatform"] .story-standard-number',
         )
         .allTextContents();
-      for (const expectedValue of ["$400M", "$400M+", "$4.2B+"]) {
+      for (const expectedValue of ["$400M", "400 mil. $+", "4,2 mlrd $+"]) {
         if (!slHeadlineValues.some((value) => value.trim() === expectedValue)) {
           failures.push(
             `sl: expected dollar-denominated headline ${expectedValue}; visible values=${slHeadlineValues.join("|")}`,

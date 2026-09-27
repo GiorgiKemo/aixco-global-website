@@ -31,10 +31,10 @@ describe("Reverance down-payment controls", () => {
   it.each([
     ["de", "Ohne Preisregler"], ["pl", "Bez regulacji ceny"],
     ["sl", "Brez nastavitve cene"], ["ru", "Без изменения цены"],
-  ])("localizes the second version in %s", (lang, label) => {
+  ])("localizes the second version in %s", async (lang, label) => {
     localStorage.setItem("aixco-lang", lang);
     render(<I18nProvider><ReveranceInvestmentCalculator /></I18nProvider>);
-    fireEvent.click(screen.getByRole("button", { name: label }));
+    fireEvent.click(await screen.findByRole("button", { name: label }));
     expect(screen.getAllByRole("slider")).toHaveLength(5);
     expect(screen.queryByText(/This version retains/)).not.toBeInTheDocument();
   });
@@ -60,10 +60,10 @@ describe("Reverance down-payment controls", () => {
   it.each([
     ["en", "Down payment"], ["de", "Anzahlung"], ["pl", "Zaliczka"],
     ["sl", "Polog"], ["ru", "Первоначальный взнос"],
-  ])("localizes the down-payment control in %s", (lang, label) => {
+  ])("localizes the down-payment control in %s", async (lang, label) => {
     localStorage.setItem("aixco-lang", lang);
     render(<I18nProvider><ReveranceInvestmentCalculator /></I18nProvider>);
-    expect(screen.getByRole("slider", { name: label })).toHaveValue("10");
+    expect(await screen.findByRole("slider", { name: label })).toHaveValue("10");
     if (lang !== "en") expect(screen.queryByText(/^Down payment \+ construction/)).not.toBeInTheDocument();
   });
 });

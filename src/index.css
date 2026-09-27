@@ -10610,6 +10610,13 @@ html[dir='rtl'] {
   white-space: nowrap;
 }
 
+@media (max-width: 359px) {
+  .story-philosophy-stat .story-standard-number,
+  [data-story-section='philosophy'] [data-layout='story-philosophy-stats'] dd.story-standard-number {
+    font-size: clamp(1.25rem, 7.5vw, 1.5rem) !important;
+  }
+}
+
 /* Currency and non-currency values must reserve the same physical line box.
    Inline fallback glyph metrics otherwise make neighboring Philosophy cards
    differ by a few pixels even when their declared font size and leading match. */

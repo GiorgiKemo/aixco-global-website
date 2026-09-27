@@ -1,29 +1,7 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { brandbookLandingTranslations } from "./brandbook-landing-translations";
-import { medicalTourismTranslations } from "./medical-tourism-translations";
-import { georgiaResidencyTranslations } from "./georgia-residency-translations";
-import { curatedVisibleTranslations } from "./curated-visible-translations";
-import { downloadGateTranslations } from "./download-gate-translations";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { normalizeGermanCompactMetricTranslation } from "./german-metric-notation";
-import { germanTranslationFixes } from "./german-translation-fixes";
 import { languageOptions, type CatalogLang, type Lang } from "./languages";
-import { landingPageReauditTranslations } from "./landing-page-reaudit-translations";
-import { landingPageReauditQualityTranslations } from "./landing-page-reaudit-quality-translations";
-import { localePassthroughFixes } from "./locale-passthrough-fixes";
-import { localeTranslationFixes } from "./locale-translation-fixes";
-import { polishTranslations } from "./polish-translations";
-import { polishTranslationsExtra } from "./polish-translations-extra";
-import { polishTranslationsFinal } from "./polish-translations-final";
-import { polishContentTranslations } from "./polish-content-translations";
-import { polishRuntimeTranslations } from "./polish-runtime-translations";
-import { propertyPageTranslations } from "./property-page-translations";
-import { reveranceCalculatorTranslations } from "./reverance-calculator-translations";
-import { reveranceStockTranslations } from "./reverance-stock-translations";
 import { reveranceStockCopy } from "@/data/reverance-stock-copy";
-import { russianTranslationFixes } from "./russian-translation-fixes";
-import { slovenianClientRevisions } from "./slovenian-client-revisions";
-import { slovenianTranslationFixes } from "./slovenian-translation-fixes";
-import { teamContentTranslations } from "./team-content-translations";
 
 export const LANGS = languageOptions;
 const DEFAULT_LANG: Lang = "en";
@@ -1466,6 +1444,7 @@ type LoadedTranslationCatalogs = {
   sources: TranslationSource[];
   attributes: AttributeTranslationCatalog;
 };
+const EMPTY_TRANSLATION_SOURCES: TranslationSource[] = [];
 
 const germanQualityTranslations: TranslationSource = {
   Home: { de: "Startseite" },
@@ -1860,35 +1839,6 @@ const siteProgressTranslations: TranslationSource = {
   },
 };
 
-const baseCatalogSources: TranslationSource[] = [
-  reveranceStockTranslations,
-  landingPageReauditQualityTranslations,
-  georgiaResidencyTranslations,
-  medicalTourismTranslations,
-  brandbookLandingTranslations,
-  siteProgressTranslations,
-  slovenianClientRevisions,
-  downloadGateTranslations,
-  russianTranslationFixes,
-  slovenianTranslationFixes,
-  germanTranslationFixes,
-  localeTranslationFixes,
-  polishTranslations,
-  polishTranslationsExtra,
-  polishTranslationsFinal,
-  polishRuntimeTranslations,
-  polishContentTranslations,
-  curatedVisibleTranslations,
-  propertyPageTranslations,
-  reveranceCalculatorTranslations,
-  germanQualityTranslations,
-  landingPageReauditTranslations,
-  localePassthroughFixes,
-  supplementalTranslations,
-  clientBriefPassthroughTranslations,
-  teamContentTranslations,
-];
-
 let translationCatalogPromise: Promise<LoadedTranslationCatalogs> | null = null;
 
 function loadTranslationCatalogs() {
@@ -1897,36 +1847,83 @@ function loadTranslationCatalogs() {
     import("./asset-translations"),
     import("./site-content-translations"),
     import("./slovenian-translations"),
-  ]).then(([translations, assets, siteContent, slovenian]) => {
+    import("./reverance-stock-translations"),
+    import("./landing-page-reaudit-quality-translations"),
+    import("./georgia-residency-translations"),
+    import("./medical-tourism-translations"),
+    import("./brandbook-landing-translations"),
+    import("./download-gate-translations"),
+    import("./russian-translation-fixes"),
+    import("./slovenian-translation-fixes"),
+    import("./slovenian-client-revisions"),
+    import("./german-translation-fixes"),
+    import("./locale-translation-fixes"),
+    import("./polish-translations"),
+    import("./polish-translations-extra"),
+    import("./polish-translations-final"),
+    import("./polish-runtime-translations"),
+    import("./polish-content-translations"),
+    import("./curated-visible-translations"),
+    import("./property-page-translations"),
+    import("./reverance-calculator-translations"),
+    import("./landing-page-reaudit-translations"),
+    import("./locale-passthrough-fixes"),
+  ]).then(([
+    translations,
+    assets,
+    siteContent,
+    slovenian,
+    reveranceStock,
+    landingPageReauditQuality,
+    georgiaResidency,
+    medicalTourism,
+    brandbookLanding,
+    downloadGate,
+    russianFixes,
+    slovenianFixes,
+    slovenianRevisions,
+    germanFixes,
+    localeFixes,
+    polish,
+    polishExtra,
+    polishFinal,
+    polishRuntime,
+    polishContent,
+    curated,
+    propertyPage,
+    reveranceCalculator,
+    landingPageReaudit,
+    localePassthrough,
+  ]) => {
     const attributes = translations.attributeTranslations as AttributeTranslationCatalog;
 
     return {
       attributes,
       sources: [
-        reveranceStockTranslations,
-        landingPageReauditQualityTranslations,
-        georgiaResidencyTranslations,
-        medicalTourismTranslations,
-        brandbookLandingTranslations,
+        reveranceStock.reveranceStockTranslations,
+        landingPageReauditQuality.landingPageReauditQualityTranslations,
+        georgiaResidency.georgiaResidencyTranslations,
+        medicalTourism.medicalTourismTranslations,
+        brandbookLanding.brandbookLandingTranslations,
         siteProgressTranslations,
-        slovenianClientRevisions,
-        downloadGateTranslations,
-        russianTranslationFixes,
-        slovenianTranslationFixes,
+        slovenianRevisions.slovenianClientRevisions,
+        downloadGate.downloadGateTranslations,
+        russianFixes.russianTranslationFixes,
+        slovenianFixes.slovenianTranslationFixes,
         slovenian.slovenianTranslations,
-        germanTranslationFixes,
-        localeTranslationFixes,
-        polishTranslations,
-        polishTranslationsExtra,
-        polishTranslationsFinal,
-        polishRuntimeTranslations,
-        polishContentTranslations,
-        curatedVisibleTranslations,
-        propertyPageTranslations,
-        reveranceCalculatorTranslations,
+        germanFixes.germanTranslationFixes,
+        localeFixes.localeTranslationFixes,
+        polish.polishTranslations,
+        polishExtra.polishTranslationsExtra,
+        polishFinal.polishTranslationsFinal,
+        polishRuntime.polishRuntimeTranslations,
+        polishContent.polishContentTranslations,
+        curated.curatedVisibleTranslations,
+        propertyPage.propertyPageTranslations,
+        reveranceCalculator.reveranceCalculatorTranslations,
         germanQualityTranslations,
-        landingPageReauditTranslations,
-        localePassthroughFixes,
+        landingPageReaudit.landingPageReauditTranslations,
+        localePassthrough.localePassthroughFixes,
         supplementalTranslations,
         translations.textTranslations,
         assets.assetTranslations,
@@ -1994,11 +1991,32 @@ type Ctx = {
 const I18nCtx = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(DEFAULT_LANG);
+  const [lang, setLangState] = useState<Lang>(DEFAULT_LANG);
   const [hasLoadedStoredLang, setHasLoadedStoredLang] = useState(false);
   const [translationCatalogs, setTranslationCatalogs] = useState<LoadedTranslationCatalogs | null>(null);
+  const pendingLanguageRef = useRef<Lang>(DEFAULT_LANG);
+  const setLang = useCallback((nextLang: Lang) => {
+    pendingLanguageRef.current = nextLang;
+
+    if (nextLang === DEFAULT_LANG) {
+      setLangState(DEFAULT_LANG);
+      setHasLoadedStoredLang(true);
+      return;
+    }
+
+    loadTranslationCatalogs()
+      .then((catalogs) => {
+        setTranslationCatalogs(catalogs);
+        const latestLanguage = pendingLanguageRef.current;
+        if (latestLanguage !== DEFAULT_LANG) setLangState(latestLanguage);
+        setHasLoadedStoredLang(true);
+      })
+      .catch(() => {
+        // Keep the current language until its catalog chunks can be loaded.
+      });
+  }, []);
   const dir = "ltr" as const;
-  const activeCatalogSources = translationCatalogs?.sources ?? baseCatalogSources;
+  const activeCatalogSources = translationCatalogs?.sources ?? EMPTY_TRANSLATION_SOURCES;
   const translationLookupCache = useMemo(() => ({
     lang,
     sources: activeCatalogSources,
@@ -2007,27 +2025,13 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const storedLang = readStoredLang();
-    setLang((currentLang) => (currentLang === storedLang ? currentLang : storedLang));
-    setHasLoadedStoredLang(true);
-  }, []);
+    if (storedLang === DEFAULT_LANG) {
+      setHasLoadedStoredLang(true);
+      return;
+    }
 
-  useEffect(() => {
-    if (lang === "en" || translationCatalogs) return;
-
-    let isMounted = true;
-    loadTranslationCatalogs()
-      .then((catalogs) => {
-        if (isMounted) setTranslationCatalogs(catalogs);
-      })
-      .catch(() => {
-        // The cache reset in loadTranslationCatalogs lets the next
-        // language switch retry after a transient chunk failure.
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [lang, translationCatalogs]);
+    setLang(storedLang);
+  }, [setLang]);
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -2103,7 +2107,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       translationLookupCache.entries.set(cacheKey, translated);
       return translated;
     },
-  }), [lang, dir, activeCatalogSources, translationLookupCache]);
+  }), [lang, setLang, dir, activeCatalogSources, translationLookupCache]);
 
   return <I18nCtx.Provider value={value}>{children}</I18nCtx.Provider>;
 }

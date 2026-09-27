@@ -19,8 +19,8 @@ const reverance = readSource("src/components/sections/BrandbookLandingPage.tsx")
 const invest = readSource("src/components/sections/InvestBatumiLandingPage.tsx");
 
 describe("landing page motion and responsiveness", () => {
-  it("enables Next.js view transitions and mounts the route veil", () => {
-    expect(nextConfig).toContain("viewTransition: true");
+  it("mounts the route veil and keeps CSS view transitions", () => {
+    expect(nextConfig).not.toContain("viewTransition: true");
     expect(layout).toContain("import { RouteTransition } from \"@/components/RouteTransition\"");
     expect(layout).toContain("<RouteTransition />");
     expect(template).toContain('className="aixco-page-shell"');
