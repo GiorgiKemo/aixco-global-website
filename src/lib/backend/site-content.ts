@@ -147,6 +147,9 @@ function readPayload<T>(
   return isRecord(payload) ? (payload as T) : fallback;
 }
 
+// Former team members stay hidden even while older database rows still list them.
+const removedTeamMembers = new Set(["Benjamin Fischer"]);
+
 export function buildSiteContent(rows: SiteContentRow[]): SiteContent {
   return sanitizeSiteContent({
     company: readPayload(rows, "company", "profile", siteContentDefaults.company, "object"),
@@ -156,7 +159,7 @@ export function buildSiteContent(rows: SiteContentRow[]): SiteContent {
     batumiProperties: readPayload(rows, "batumi_properties", "items", siteContentDefaults.batumiProperties, "array"),
     participationRoutes: readPayload(rows, "participation_routes", "items", siteContentDefaults.participationRoutes, "array"),
     journeys: readPayload(rows, "journeys", "items", siteContentDefaults.journeys, "array"),
-    team: readPayload(rows, "team", "items", siteContentDefaults.team, "array"),
+    team: readPayload(rows, "team", "items", siteContentDefaults.team, "array").filter((member) => !removedTeamMembers.has(member.name)),
     partners: readPayload(rows, "partners", "items", siteContentDefaults.partners, "array"),
     faqGroups: readPayload(rows, "faq_groups", "items", siteContentDefaults.faqGroups, "array"),
     newsTickerItems: readPayload(rows, "news_ticker", "items", siteContentDefaults.newsTickerItems, "array"),
