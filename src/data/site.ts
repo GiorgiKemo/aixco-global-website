@@ -198,18 +198,6 @@ export const journeys = [
 
 export const team = [
   {
-    name: "Benjamin Fischer",
-    role: "Founder",
-    image: "team-benjamin",
-    summary: "Leadership, vision, and overall group direction.",
-    bio:
-      "20+ years of experience in sales and marketing. Built sales channels across Europe with more than 300 active sales partners. Co-founded a major Swiss real estate portfolio now valued at over CHF 1 billion. Executed a successful real estate IPO.",
-    points: [
-      { title: "Primary role", text: "Leadership and group-level strategic direction." },
-      { title: "Focus", text: "Vision, growth, partnerships, and long-term platform positioning." },
-    ],
-  },
-  {
     name: "Owais Shaikh",
     role: "Partner",
     image: "team-owais",

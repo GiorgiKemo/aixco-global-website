@@ -918,7 +918,6 @@ export function PrivateClientAdvisoryLandingPage() {
           </div>
           <div className={styles.teamGrid}>
             {[
-              ["Benjamin Fischer", "Founder · Real estate strategy and international growth"],
               ["Walter Schuster", "Real estate leadership and institutional experience"],
               ["Owais Shaikh", "Banking, finance and digital transformation"],
               ["International partners", "Local execution and specialist market expertise"],
